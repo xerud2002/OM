@@ -1,5 +1,10 @@
 "use client";
+
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { Mail, Lock } from "lucide-react";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
   GoogleAuthProvider,
@@ -9,11 +14,8 @@ import {
   sendPasswordResetEmail,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "@/services/firebase";
-import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { Mail, Lock } from "lucide-react";
-import Image from "next/image";
+import { auth } from "@/services/firebase"; // ✅ make sure it matches your project
+// or "@/services/firebase" if your auth export lives there
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -23,7 +25,7 @@ export default function CustomerAuthPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
-  // 🔹 Redirect automat dacă userul e deja logat
+  // ✅ Redirect if already logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) router.push("/customer/dashboard");
@@ -31,6 +33,7 @@ export default function CustomerAuthPage() {
     return () => unsubscribe();
   }, [router]);
 
+  // ✅ Google sign-in
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
@@ -44,29 +47,32 @@ export default function CustomerAuthPage() {
     }
   };
 
+  // ✅ Email/password login or register
   const handleEmailAuth = async (e: React.FormEvent) => {
     e.preventDefault();
+    setMessage("");
     setLoading(true);
+
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
-        router.push("/customer/dashboard");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
-        router.push("/customer/dashboard");
       }
+      router.push("/customer/dashboard");
     } catch (err: any) {
-      setMessage(err.message);
+      setMessage(err.message || "A apărut o eroare neașteptată.");
     } finally {
       setLoading(false);
     }
   };
 
+  // ✅ Password reset
   const handlePasswordReset = async () => {
     if (!email) return setMessage("Introdu adresa de email pentru resetare.");
     try {
       await sendPasswordResetEmail(auth, email);
-      setMessage("Email de resetare trimis ✉️");
+      setMessage("✉️ Email de resetare trimis cu succes!");
     } catch (err: any) {
       setMessage(err.message);
     }
@@ -84,6 +90,7 @@ export default function CustomerAuthPage() {
             : "Creează un cont nou pentru a primi oferte personalizate."}
         </p>
 
+        {/* === Email Form === */}
         <form onSubmit={handleEmailAuth} className="space-y-4">
           <div className="flex items-center rounded-lg border px-3 py-2">
             <Mail size={18} className="mr-2 text-emerald-600" />
@@ -131,16 +138,23 @@ export default function CustomerAuthPage() {
         </form>
 
         <div className="my-4 text-gray-400">sau</div>
+
+        {/* === Google Login === */}
         <motion.button
           whileHover={{ scale: 1.05 }}
           onClick={handleGoogleLogin}
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2 transition hover:bg-gray-50"
         >
-          <Image src="/google.svg" alt="Google" width={20} height={20} /> Continuă cu Google
+          <Image src="/google.svg" alt="Google" width={20} height={20} />
+          Continuă cu Google
         </motion.button>
 
-        {message && <p className="mt-4 text-sm text-gray-600">{message}</p>}
+        {/* === Status Message === */}
+        {message && (
+          <p className="mt-4 rounded-lg bg-gray-50 py-2 text-sm text-gray-600">{message}</p>
+        )}
 
+        {/* === Toggle login/register === */}
         <div className="mt-6 text-sm">
           {isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
           <button onClick={() => setIsLogin(!isLogin)} className="text-emerald-600 hover:underline">
