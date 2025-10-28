@@ -5,8 +5,8 @@ import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
 import Services from "@/components/home/Services";
 import Articles from "@/components/home/Articles";
-// 🔹 Optional: once you add ClientAccount.tsx, import it too:
-// import ClientAccount from "@/components/home/ClientAccount";
+import ClientAccount from "@/components/home/ClientAccount";
+
 
 export default function HomePage() {
   return (
