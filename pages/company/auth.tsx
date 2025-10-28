@@ -13,6 +13,7 @@ import { auth } from "@/services/firebase";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
+import Image from "next/image";
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -136,7 +137,8 @@ export default function CustomerAuthPage() {
           onClick={handleGoogleLogin}
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2 transition hover:bg-gray-50"
         >
-          <img src="/google.svg" alt="Google" width={20} height={20} /> Continuă cu Google
+          <Image src="/pics/google.svg" alt="Google" width={20} height={20} />
+          Continuă cu Google
         </motion.button>
 
         {message && <p className="mt-4 text-sm text-gray-600">{message}</p>}

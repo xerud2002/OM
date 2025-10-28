@@ -14,8 +14,8 @@ import {
   sendPasswordResetEmail,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "@/services/firebase"; // ✅ make sure it matches your project
-// or "@/services/firebase" if your auth export lives there
+import { auth } from "@/services/firebase"; 
+
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -145,7 +145,7 @@ export default function CustomerAuthPage() {
           onClick={handleGoogleLogin}
           className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2 transition hover:bg-gray-50"
         >
-          <Image src="/google.svg" alt="Google" width={20} height={20} />
+          <Image src="/pics/google.svg" alt="Google" width={20} height={20} />
           Continuă cu Google
         </motion.button>
 
