@@ -11,7 +11,10 @@ import {
 } from "firebase/auth";
 import { collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { auth, firestore, storage, googleProvider } from "@/services/firebase";
+import { auth, db, storage } from "@/services/firebase";
+import { GoogleAuthProvider } from "firebase/auth";
+
+const googleProvider = new GoogleAuthProvider();
 
 // ---- Types
 export type UserRole = "customer" | "company";
@@ -54,7 +57,7 @@ export async function logout() {
 // ---- Role-aware profile helpers
 export async function ensureUserProfile(u: User, role: UserRole) {
   const col = COLLECTIONS[role];
-  const profileRef = doc(firestore, col, u.uid);
+  const profileRef = doc(db, col, u.uid);
   const snap = await getDoc(profileRef);
 
   if (!snap.exists()) {
@@ -76,9 +79,9 @@ export async function ensureUserProfile(u: User, role: UserRole) {
 
 export async function getUserRole(u: User): Promise<UserRole | null> {
   // Try in customers first, then companies
-  const customer = await getDoc(doc(firestore, COLLECTIONS.customer, u.uid));
+  const customer = await getDoc(doc(db, COLLECTIONS.customer, u.uid));
   if (customer.exists()) return "customer";
-  const company = await getDoc(doc(firestore, COLLECTIONS.company, u.uid));
+  const company = await getDoc(doc(db, COLLECTIONS.company, u.uid));
   if (company.exists()) return "company";
   return null;
 }

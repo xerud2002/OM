@@ -25,7 +25,7 @@ export default function CustomerAuthPage() {
   // 🔹 Redirect automat dacă userul e deja logat
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) router.push("/dashboard");
+      if (user) router.push("/company/dashboard");
     });
     return () => unsubscribe();
   }, [router]);
@@ -35,7 +35,7 @@ export default function CustomerAuthPage() {
       setLoading(true);
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
-      router.push("/dashboard");
+      router.push("/company/dashboard");
     } catch (err: any) {
       setMessage(err.message);
     } finally {
@@ -49,10 +49,10 @@ export default function CustomerAuthPage() {
     try {
       if (isLogin) {
         await signInWithEmailAndPassword(auth, email, password);
-        router.push("/dashboard");
+        router.push("/company/dashboard");
       } else {
         await createUserWithEmailAndPassword(auth, email, password);
-        router.push("/dashboard");
+        router.push("/company/dashboard");
       }
     } catch (err: any) {
       setMessage(err.message);
