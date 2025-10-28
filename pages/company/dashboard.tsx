@@ -2,43 +2,25 @@
 
 import { useEffect, useState } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
 import { db } from "@/services/firebase";
-import {
-  collectionGroup,
-  query,
-  where,
-  onSnapshot,
-  orderBy,
-} from "firebase/firestore";
-import { motion } from "framer-motion";
-import { TrendingUp, CheckCircle, Clock, XCircle } from "lucide-react";
-
-type Offer = {
-  id: string;
-  companyId: string;
-  companyName: string;
-  price: number;
-  message: string;
-  requestId: string;
-  status?: "pending" | "accepted" | "declined";
-  createdAt?: any;
-};
+import { onAuthChange } from "@/utils/firebaseHelpers";
+import { collectionGroup, query, where, orderBy, onSnapshot, doc, getDoc } from "firebase/firestore";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function CompanyDashboard() {
-  const [offers, setOffers] = useState<Offer[]>([]);
   const [company, setCompany] = useState<any>(null);
+  const [offers, setOffers] = useState<any[]>([]);
+  const [selectedOffer, setSelectedOffer] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [requestDetails, setRequestDetails] = useState<any | null>(null);
 
-  // 🔹 Listen to company authentication
+  // Track logged-in company
   useEffect(() => {
-    const unsub = onAuthChange((u) => {
-      setCompany(u);
-    });
+    const unsub = onAuthChange((user) => setCompany(user));
     return () => unsub();
   }, []);
 
-  // 🔹 Fetch all offers made by this company
+  // Real-time offers listener
   useEffect(() => {
     if (!company?.uid) return;
 
@@ -48,130 +30,181 @@ export default function CompanyDashboard() {
       orderBy("createdAt", "desc")
     );
 
-    const unsub = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map(
-        (d) => ({ id: d.id, ...d.data() } as Offer)
-      );
-      setOffers(data);
-      setLoading(false);
-    });
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        setOffers(data);
+        setLoading(false);
+      },
+      (err) => {
+        console.error("Error loading offers:", err);
+        setLoading(false);
+      }
+    );
 
     return () => unsub();
-  }, [company]);
+  }, [company?.uid]);
 
-  const stats = {
-    total: offers.length,
-    accepted: offers.filter((o) => o.status === "accepted").length,
-    pending: offers.filter((o) => !o.status || o.status === "pending").length,
-    declined: offers.filter((o) => o.status === "declined").length,
+  // Fetch request details for modal
+  const fetchRequestDetails = async (requestId: string) => {
+    try {
+      const reqRef = doc(db, "requests", requestId);
+      const reqSnap = await getDoc(reqRef);
+      if (reqSnap.exists()) {
+        setRequestDetails(reqSnap.data());
+      } else {
+        setRequestDetails(null);
+      }
+    } catch (err) {
+      console.error("Error fetching request details:", err);
+    }
   };
+
+  // Counts
+  const total = offers.length;
+  const accepted = offers.filter((o) => o.status === "accepted").length;
+  const pending = offers.filter((o) => !o.status || o.status === "pending").length;
+  const rejected = offers.filter((o) => o.status === "rejected").length;
 
   return (
     <LayoutWrapper>
-      <section className="mx-auto max-w-6xl px-4 py-10">
+      <section className="mx-auto max-w-5xl px-4 py-10">
         <h1 className="mb-6 text-center text-3xl font-bold text-emerald-700">
           Dashboard Companie
         </h1>
 
-        {/* STATS CARDS */}
-        <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          <StatCard
-            icon={<TrendingUp className="text-emerald-600" size={28} />}
-            label="Total oferte"
-            value={stats.total}
-          />
-          <StatCard
-            icon={<CheckCircle className="text-emerald-600" size={28} />}
-            label="Acceptate"
-            value={stats.accepted}
-          />
-          <StatCard
-            icon={<Clock className="text-yellow-500" size={28} />}
-            label="În așteptare"
-            value={stats.pending}
-          />
-          <StatCard
-            icon={<XCircle className="text-red-500" size={28} />}
-            label="Respinse"
-            value={stats.declined}
-          />
+        {/* Stats */}
+        <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {[
+            { label: "Total oferte", value: total, color: "emerald" },
+            { label: "Acceptate", value: accepted, color: "sky" },
+            { label: "În așteptare", value: pending, color: "amber" },
+            { label: "Respins", value: rejected, color: "rose" },
+          ].map((item) => (
+            <motion.div
+              key={item.label}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
+              className={`border- rounded-xl border bg-white/80 p-4 text-center shadow-sm${item.color}-100`}
+            >
+              <p className={`text-${item.color}-600 text-lg font-semibold`}>
+                {item.value}
+              </p>
+              <p className="text-sm text-gray-600">{item.label}</p>
+            </motion.div>
+          ))}
         </div>
 
-        {/* RECENT OFFERS */}
-        <div className="rounded-xl border bg-white/90 p-5 shadow backdrop-blur-md">
-          <h2 className="mb-4 text-xl font-semibold text-emerald-700">
-            Oferte recente
-          </h2>
+        {/* Recent offers */}
+        <h2 className="mb-3 text-xl font-semibold text-emerald-700">
+          Oferte recente
+        </h2>
 
-          {loading ? (
-            <p className="text-gray-500">Se încarcă datele...</p>
-          ) : offers.length === 0 ? (
-            <p className="italic text-gray-400">
-              Nu ai trimis încă nicio ofertă.
-            </p>
-          ) : (
-            <div className="space-y-3">
-              {offers.slice(0, 10).map((offer) => (
-                <motion.div
-                  key={offer.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="flex flex-col rounded-lg border bg-gray-50 p-3 transition hover:bg-emerald-50 sm:flex-row sm:items-center sm:justify-between"
+        {loading ? (
+          <p className="text-sm italic text-gray-500">Se încarcă datele...</p>
+        ) : Array.isArray(offers) && offers.length > 0 ? (
+          <div className="space-y-3">
+            {offers.slice(0, 5).map((offer) => (
+              <motion.div
+                key={offer.id}
+                whileHover={{ scale: 1.02 }}
+                onClick={() => {
+                  setSelectedOffer(offer);
+                  fetchRequestDetails(offer.requestId);
+                }}
+                className="cursor-pointer rounded-lg border border-emerald-100 bg-white/80 p-4 shadow-sm transition-all hover:shadow-md"
+              >
+                <p className="font-medium text-emerald-700">
+                  Cerere #{offer.requestId?.slice(0, 6) ?? "—"}
+                </p>
+                <p className="text-sm text-gray-600">
+                  Preț: <span className="font-semibold">{offer.price ?? "—"} lei</span>
+                </p>
+                <p className="text-sm text-gray-500">
+                  Status:{" "}
+                  <span
+                    className={`${
+                      offer.status === "accepted"
+                        ? "text-emerald-600"
+                        : offer.status === "rejected"
+                        ? "text-rose-600"
+                        : "text-amber-600"
+                    } font-medium`}
+                  >
+                    {offer.status ?? "În așteptare"}
+                  </span>
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm italic text-gray-500">
+            Nu există oferte recente de afișat.
+          </p>
+        )}
+
+        {/* Offer details modal */}
+        <AnimatePresence>
+          {selectedOffer && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
+              onClick={() => setSelectedOffer(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.9 }}
+                transition={{ duration: 0.2 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-md rounded-2xl bg-white p-6 text-gray-800 shadow-xl"
+              >
+                <h3 className="mb-2 text-lg font-bold text-emerald-700">
+                  Detalii ofertă
+                </h3>
+                <p className="mb-1 text-sm">
+                  <strong>Preț:</strong> {selectedOffer.price} lei
+                </p>
+                <p className="mb-1 text-sm">
+                  <strong>Status:</strong> {selectedOffer.status ?? "În așteptare"}
+                </p>
+                <p className="mb-3 text-sm">
+                  <strong>Mesaj:</strong>{" "}
+                  {selectedOffer.message || "Fără mesaj adăugat."}
+                </p>
+
+                {requestDetails && (
+                  <div className="mt-4 border-t pt-3">
+                    <h4 className="text-md mb-1 font-semibold text-gray-700">
+                      Detalii cerere:
+                    </h4>
+                    <p className="text-sm">
+                      {requestDetails.fromCity} → {requestDetails.toCity}
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Data mutării: {requestDetails.moveDate || "-"}
+                    </p>
+                    <p className="mt-1 text-sm text-gray-600">
+                      Detalii: {requestDetails.details || "—"}
+                    </p>
+                  </div>
+                )}
+
+                <button
+                  onClick={() => setSelectedOffer(null)}
+                  className="mt-6 w-full rounded-lg bg-gradient-to-r from-emerald-600 to-sky-500 py-2 font-semibold text-white transition hover:opacity-90"
                 >
-                  <div>
-                    <p className="text-sm font-medium text-gray-800">
-                      Cerere #{offer.requestId.slice(0, 6)}...
-                    </p>
-                    <p className="text-xs text-gray-500">{offer.message}</p>
-                  </div>
-                  <div className="mt-2 flex items-center gap-3 sm:mt-0">
-                    <p className="font-semibold text-emerald-700">
-                      {offer.price} lei
-                    </p>
-                    <span
-                      className={`rounded-full px-2 py-1 text-xs font-semibold ${
-                        offer.status === "accepted"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : offer.status === "declined"
-                          ? "bg-red-100 text-red-600"
-                          : "bg-yellow-100 text-yellow-600"
-                      }`}
-                    >
-                      {offer.status === "accepted"
-                        ? "Acceptată"
-                        : offer.status === "declined"
-                        ? "Respinsă"
-                        : "În așteptare"}
-                    </span>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+                  Închide
+                </button>
+              </motion.div>
+            </motion.div>
           )}
-        </div>
+        </AnimatePresence>
       </section>
     </LayoutWrapper>
-  );
-}
-
-function StatCard({
-  icon,
-  label,
-  value,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: number;
-}) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05 }}
-      className="flex flex-col items-center justify-center rounded-xl border border-emerald-100 bg-white p-4 text-center shadow"
-    >
-      <div className="mb-2">{icon}</div>
-      <p className="text-sm text-gray-500">{label}</p>
-      <p className="text-2xl font-bold text-emerald-700">{value}</p>
-    </motion.div>
   );
 }
