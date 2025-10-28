@@ -3,10 +3,12 @@
 import Head from "next/head";
 import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
+import ClientAccount from "@/components/home/ClientAccount";
 import Services from "@/components/home/Services";
 import Articles from "@/components/home/Articles";
-import ClientAccount from "@/components/home/ClientAccount";
-
+import PartnerSection from "@/components/home/PartnerSection";
+import Testimonials from "@/components/home/Testimonials";
+import CTASection from "@/components/home/CTASection";
 
 export default function HomePage() {
   return (
@@ -16,7 +18,7 @@ export default function HomePage() {
       =========================== */}
       <Head>
         <title>
-          Oferte mutare România | Firme de mutări verificate | ofertemutare.ro
+          Oferte Mutare România | Firme de mutări verificate | ofertemutare.ro
         </title>
         <meta
           name="description"
@@ -26,19 +28,6 @@ export default function HomePage() {
           name="keywords"
           content="firme de mutări, oferte mutare, mutări România, transport mobilă, servicii mutare"
         />
-        <meta
-          property="og:title"
-          content="ofertemutare.ro - Firme de mutări verificate"
-        />
-        <meta
-          property="og:description"
-          content="Cere oferte reale de la companii de mutări verificate din România. Rapid, sigur și fără stres."
-        />
-        <meta
-          property="og:image"
-          content="https://ofertemutare.ro/og-image.jpg"
-        />
-        <meta property="og:url" content="https://ofertemutare.ro" />
         <link rel="canonical" href="https://ofertemutare.ro" />
       </Head>
 
@@ -47,9 +36,12 @@ export default function HomePage() {
       =========================== */}
       <Hero />
       <Steps />
-      {/* <ClientAccount />  ← you can uncomment when added */}
+      <ClientAccount />
       <Services />
+      <PartnerSection />
+      <Testimonials />
       <Articles />
+      <CTASection />
     </>
   );
 }
