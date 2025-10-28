@@ -55,15 +55,15 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 w-full z-50 transition-all duration-500 ${
+      className={`fixed left-0 top-0 z-50 w-full transition-all duration-500 ${
         scrolled
-          ? "bg-white/90 backdrop-blur-xl shadow-md border-b border-emerald-100"
+          ? "border-b border-emerald-100 bg-white/90 shadow-md backdrop-blur-xl"
           : "bg-white/60 backdrop-blur-sm"
       }`}
     >
-      <div className="max-w-7xl mx-auto flex justify-between items-center px-6 py-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
         {/* === LOGO === */}
-        <Link href="/" aria-label="Acasă" className="flex items-center space-x-2 select-none">
+        <Link href="/" aria-label="Acasă" className="flex select-none items-center space-x-2">
           <Image
             src="/logo.png"
             alt="ofertemutare.ro logo"
@@ -75,15 +75,15 @@ export default function Navbar() {
         </Link>
 
         {/* === DESKTOP NAV === */}
-        <nav className="hidden md:flex items-center space-x-2">
+        <nav className="hidden items-center space-x-2 md:flex">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className={`px-4 py-2 rounded-full font-medium transition-all duration-300 ${
+              className={`rounded-full px-4 py-2 font-medium transition-all duration-300 ${
                 pathname === href
-                  ? "text-emerald-700 bg-emerald-50"
-                  : "text-gray-700 hover:text-emerald-700 hover:bg-emerald-50"
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
               }`}
             >
               {label}
@@ -94,7 +94,7 @@ export default function Navbar() {
             <button
               onClick={handleGetOffers}
               aria-label="Cont Client"
-              className="ml-3 inline-flex items-center gap-2 px-5 py-2 rounded-full text-white font-semibold bg-gradient-to-r from-emerald-500 to-sky-500 shadow-md hover:shadow-lg hover:scale-[1.04] transition-all"
+              className="ml-3 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-2 font-semibold text-white shadow-md transition-all hover:scale-[1.04] hover:shadow-lg"
             >
               <PhoneCall size={18} /> Cont Client
             </button>
@@ -104,10 +104,10 @@ export default function Navbar() {
                 onClick={() => setShowUserMenu((v) => !v)}
                 aria-haspopup="true"
                 aria-expanded={showUserMenu}
-                className="flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-semibold shadow-md hover:scale-[1.04] transition-all"
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-4 py-2 font-semibold text-white shadow-md transition-all hover:scale-[1.04]"
               >
                 <User size={18} />
-                <span className="truncate max-w-[140px]">{user.email?.split("@")[0]}</span>
+                <span className="max-w-[140px] truncate">{user.email?.split("@")[0]}</span>
               </button>
 
               {/* Dropdown menu */}
@@ -118,18 +118,18 @@ export default function Navbar() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -8 }}
                     transition={{ duration: 0.25 }}
-                    className="absolute right-0 mt-2 w-44 bg-white border border-emerald-100 rounded-xl shadow-lg overflow-hidden z-50"
+                    className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-xl border border-emerald-100 bg-white shadow-lg"
                   >
                     <Link
                       href="/customer/dashboard"
                       onClick={() => setShowUserMenu(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-emerald-50 transition-all"
+                      className="flex items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
                     >
                       <LayoutDashboard size={16} /> Dashboard
                     </Link>
                     <button
                       onClick={handleLogout}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 hover:bg-emerald-50 transition-all"
+                      className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
                     >
                       <LogOut size={16} /> Logout
                     </button>
@@ -144,7 +144,7 @@ export default function Navbar() {
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label="Menu"
-          className="md:hidden p-2 rounded-lg text-emerald-700 hover:bg-emerald-50 transition"
+          className="rounded-lg p-2 text-emerald-700 transition hover:bg-emerald-50 md:hidden"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -158,15 +158,15 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.25 }}
-            className="md:hidden bg-white/95 backdrop-blur-xl border-t border-emerald-100 shadow-lg"
+            className="border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl md:hidden"
           >
-            <div className="flex flex-col px-6 py-4 space-y-2">
+            <div className="flex flex-col space-y-2 px-6 py-4">
               {navLinks.map(({ href, label }) => (
                 <Link
                   key={href}
                   href={href}
                   onClick={() => setIsOpen(false)}
-                  className={`px-3 py-2 rounded-lg font-medium transition-all ${
+                  className={`rounded-lg px-3 py-2 font-medium transition-all ${
                     pathname === href
                       ? "bg-emerald-50 text-emerald-700"
                       : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
@@ -178,7 +178,7 @@ export default function Navbar() {
 
               <button
                 onClick={handleGetOffers}
-                className="mt-3 inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-semibold px-5 py-2 rounded-full shadow-md hover:shadow-lg transition-all"
+                className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-2 font-semibold text-white shadow-md transition-all hover:shadow-lg"
               >
                 <PhoneCall size={18} /> Obține Oferte
               </button>
@@ -186,7 +186,7 @@ export default function Navbar() {
               {user && (
                 <button
                   onClick={handleLogout}
-                  className="flex items-center justify-center gap-2 px-4 py-2 mt-3 text-gray-700 border border-gray-200 rounded-full hover:bg-emerald-50 transition-all"
+                  className="mt-3 flex items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
                 >
                   <LogOut size={18} /> Logout
                 </button>

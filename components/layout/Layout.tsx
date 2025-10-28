@@ -6,7 +6,7 @@ export default function LayoutWrapper({ children }: { children: React.ReactNode 
   return (
     <>
       <Navbar />
-      <main className="min-h-[80vh] pt-[80px] bg-gradient-to-b from-white to-emerald-50/30">
+      <main className="min-h-[80vh] bg-gradient-to-b from-white to-emerald-50/30 pt-[80px]">
         {children}
       </main>
       <Footer />

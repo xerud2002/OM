@@ -24,7 +24,7 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* A11y: skip link for keyboard users */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:z-[999] focus:top-3 focus:left-3 focus:bg-emerald-600 focus:text-white focus:px-4 focus:py-2 focus:rounded-lg"
+        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[999] focus:rounded-lg focus:bg-emerald-600 focus:px-4 focus:py-2 focus:text-white"
       >
         Sar peste navigare
       </a>
@@ -32,7 +32,7 @@ export default function App({ Component, pageProps }: AppProps) {
       <Navbar />
 
       {/* Offset content for the fixed navbar once, globally */}
-      <main id="main-content" className="pt-[80px] min-h-[60vh]">
+      <main id="main-content" className="min-h-[60vh] pt-[80px]">
         <Component {...pageProps} />
       </main>
 

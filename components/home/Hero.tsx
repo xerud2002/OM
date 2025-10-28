@@ -26,7 +26,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative h-[90vh] w-full flex flex-col justify-center items-center overflow-hidden bg-gradient-to-b from-emerald-700/90 to-emerald-900/80">
+    <section className="relative flex h-[90vh] w-full flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-emerald-700/90 to-emerald-900/80">
       {/* Background image */}
       <Image
         src="/pics/index.png"
@@ -44,28 +44,27 @@ export default function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="relative z-10 text-center px-6 max-w-3xl"
+        className="relative z-10 max-w-3xl px-6 text-center"
       >
-        <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight drop-shadow-lg mb-6">
-          Mută-te fără stres cu ajutorul{" "}
-          <span className="text-emerald-300">Ofertemutare.ro</span>
+        <h1 className="mb-6 text-4xl font-bold leading-tight text-white drop-shadow-lg md:text-6xl">
+          Mută-te fără stres cu ajutorul <span className="text-emerald-300">Ofertemutare.ro</span>
         </h1>
 
-        <p className="text-lg md:text-xl text-white/90 mb-8 leading-relaxed">
-          Primește rapid oferte reale de la firme de mutări verificate din România.
-          Compara prețuri, recenzii și alege varianta potrivită pentru tine.
+        <p className="mb-8 text-lg leading-relaxed text-white/90 md:text-xl">
+          Primește rapid oferte reale de la firme de mutări verificate din România. Compara prețuri,
+          recenzii și alege varianta potrivită pentru tine.
         </p>
 
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleCTA}
-          className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:shadow-emerald-400/40 transition-all"
+          className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-3 font-semibold text-white shadow-lg transition-all hover:shadow-emerald-400/40"
         >
           Obține oferte acum <ArrowRight size={20} />
         </motion.button>
 
-        <p className="text-white/70 text-sm mt-4">
+        <p className="mt-4 text-sm text-white/70">
           Fără costuri ascunse · Firme verificate · Timp economisit
         </p>
       </motion.div>

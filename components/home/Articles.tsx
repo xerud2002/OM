@@ -24,13 +24,13 @@ const articles = [
 
 export default function Articles() {
   return (
-    <section className="py-16 bg-gradient-to-b from-white to-emerald-50">
+    <section className="bg-gradient-to-b from-white to-emerald-50 py-16">
       <FadeInWhenVisible>
-        <div className="max-w-6xl mx-auto px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-center text-emerald-700 mb-14">
+        <div className="mx-auto max-w-6xl px-6">
+          <h2 className="mb-14 text-center text-3xl font-bold text-emerald-700 md:text-4xl">
             Sfaturi utile pentru o mutare reușită
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {articles.map((a, i) => (
               <motion.div
                 key={i}
@@ -38,19 +38,17 @@ export default function Articles() {
                 whileInView={{ opacity: 1, y: 0 }}
                 whileHover={{ scale: 1.04, y: -4 }}
                 transition={{ duration: 0.4, delay: i * 0.1 }}
-                className="bg-white/90 border border-emerald-100 shadow-md hover:shadow-emerald-200/60 p-8 rounded-3xl flex flex-col justify-between transition-all"
+                className="flex flex-col justify-between rounded-3xl border border-emerald-100 bg-white/90 p-8 shadow-md transition-all hover:shadow-emerald-200/60"
               >
                 <div>
-                  <h3 className="text-lg font-semibold text-emerald-700 mb-2 leading-snug">
+                  <h3 className="mb-2 text-lg font-semibold leading-snug text-emerald-700">
                     {a.title}
                   </h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">
-                    {a.desc}
-                  </p>
+                  <p className="text-sm leading-relaxed text-gray-600">{a.desc}</p>
                 </div>
                 <Link
                   href={a.link}
-                  className="mt-5 inline-flex items-center gap-1 text-emerald-600 font-medium hover:underline transition-all"
+                  className="mt-5 inline-flex items-center gap-1 font-medium text-emerald-600 transition-all hover:underline"
                 >
                   Citește mai mult <ArrowRight size={14} />
                 </Link>

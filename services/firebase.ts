@@ -15,7 +15,6 @@ const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
 
 export const auth = getAuth(app);
 
-export const onAuthChange = (callback: (user: any) => void) =>
-  onAuthStateChanged(auth, callback);
+export const onAuthChange = (callback: (user: any) => void) => onAuthStateChanged(auth, callback);
 
 export const logout = () => signOut(auth);

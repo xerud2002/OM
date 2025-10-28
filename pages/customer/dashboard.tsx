@@ -20,16 +20,16 @@ export default function CustomerDashboard() {
 
   return (
     <LayoutWrapper>
-      <section className="max-w-4xl mx-auto text-center py-10">
-        <h1 className="text-3xl font-bold text-emerald-700 mb-4">
+      <section className="mx-auto max-w-4xl py-10 text-center">
+        <h1 className="mb-4 text-3xl font-bold text-emerald-700">
           Bine ai venit, {user.displayName || user.email}
         </h1>
-        <p className="text-gray-600 mb-6">
+        <p className="mb-6 text-gray-600">
           Aici poți urmări cererile tale de mutare și ofertele primite.
         </p>
         <button
           onClick={logout}
-          className="px-6 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 shadow-md transition-all"
+          className="rounded-lg bg-red-500 px-6 py-2 text-white shadow-md transition-all hover:bg-red-600"
         >
           Logout
         </button>

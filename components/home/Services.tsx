@@ -33,23 +33,23 @@ export default function Services() {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-br from-white via-emerald-50/60 to-sky-50/60 relative overflow-hidden">
+    <section className="relative overflow-hidden bg-gradient-to-br from-white via-emerald-50/60 to-sky-50/60 py-20">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(16,185,129,0.08),transparent_70%)]" />
 
       <FadeInWhenVisible>
-        <div className="max-w-6xl mx-auto text-center mb-16 px-6 relative z-10">
-          <h2 className="text-3xl md:text-4xl font-bold text-emerald-700 mb-4">
+        <div className="relative z-10 mx-auto mb-16 max-w-6xl px-6 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-emerald-700 md:text-4xl">
             Servicii oferite de companiile partenere
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto leading-relaxed text-lg">
-            Indiferent dacă te muți în același oraș sau în alt colț al țării, 
-            partenerii noștri oferă servicii complete de mutare — rapide, sigure și flexibile.
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-600">
+            Indiferent dacă te muți în același oraș sau în alt colț al țării, partenerii noștri
+            oferă servicii complete de mutare — rapide, sigure și flexibile.
           </p>
         </div>
       </FadeInWhenVisible>
 
       {/* Grid of services */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 px-6 relative z-10">
+      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-5">
         {services.map((s, idx) => (
           <motion.div
             key={idx}
@@ -62,24 +62,22 @@ export default function Services() {
               y: -4,
               boxShadow: "0 10px 25px rgba(16,185,129,0.15)",
             }}
-            className="group bg-white/85 backdrop-blur-sm p-6 rounded-3xl shadow-md border border-emerald-100 hover:shadow-emerald-200/80 flex flex-col justify-start items-center text-center h-full min-h-[380px] transition-all duration-300"
+            className="group flex h-full min-h-[380px] flex-col items-center justify-start rounded-3xl border border-emerald-100 bg-white/85 p-6 text-center shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-emerald-200/80"
           >
             {/* Image */}
-            <div className="w-full h-[160px] flex items-center justify-center overflow-hidden rounded-2xl mb-5 bg-emerald-50/50">
+            <div className="mb-5 flex h-[160px] w-full items-center justify-center overflow-hidden rounded-2xl bg-emerald-50/50">
               <motion.img
                 src={s.img}
                 alt={s.title}
-                className="object-contain w-[90%] h-[140px] rounded-2xl transition-transform duration-500 group-hover:scale-105"
+                className="h-[140px] w-[90%] rounded-2xl object-contain transition-transform duration-500 group-hover:scale-105"
               />
             </div>
 
             {/* Title & Description */}
-            <h3 className="text-lg font-semibold text-emerald-700 mb-3 min-h-[56px] flex items-center justify-center">
+            <h3 className="mb-3 flex min-h-[56px] items-center justify-center text-lg font-semibold text-emerald-700">
               {s.title}
             </h3>
-            <p className="text-gray-600 text-sm leading-relaxed flex-grow">
-              {s.desc}
-            </p>
+            <p className="flex-grow text-sm leading-relaxed text-gray-600">{s.desc}</p>
           </motion.div>
         ))}
       </div>

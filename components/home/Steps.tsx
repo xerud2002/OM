@@ -25,20 +25,19 @@ export default function Steps() {
   ];
 
   return (
-    <section className="py-20 bg-gradient-to-b from-white via-emerald-50/50 to-sky-50/40">
+    <section className="bg-gradient-to-b from-white via-emerald-50/50 to-sky-50/40 py-20">
       <FadeInWhenVisible>
-        <div className="max-w-6xl mx-auto text-center px-6">
-          <h2 className="text-3xl md:text-4xl font-bold text-emerald-700 mb-4">
-            Cum funcționează{" "}
-            <span className="text-sky-500">Ofertemutare.ro</span>
+        <div className="mx-auto max-w-6xl px-6 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-emerald-700 md:text-4xl">
+            Cum funcționează <span className="text-sky-500">Ofertemutare.ro</span>
           </h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-12 text-lg leading-relaxed">
-            În doar câțiva pași simpli, primești rapid oferte de la firme
-            verificate și alegi mutarea ideală pentru tine.
+          <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-gray-600">
+            În doar câțiva pași simpli, primești rapid oferte de la firme verificate și alegi
+            mutarea ideală pentru tine.
           </p>
 
           {/* Steps grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
             {steps.map((step, i) => (
               <motion.div
                 key={i}
@@ -47,9 +46,9 @@ export default function Steps() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
                 whileHover={{ scale: 1.04, y: -6 }}
-                className="bg-white rounded-3xl shadow-md border border-emerald-100 p-8 transition-all hover:shadow-emerald-100/70 group"
+                className="group rounded-3xl border border-emerald-100 bg-white p-8 shadow-md transition-all hover:shadow-emerald-100/70"
               >
-                <div className="flex justify-center mb-5 text-emerald-600">
+                <div className="mb-5 flex justify-center text-emerald-600">
                   <motion.div
                     whileHover={{ rotate: 10 }}
                     transition={{ type: "spring", stiffness: 250 }}
@@ -57,15 +56,9 @@ export default function Steps() {
                     {step.icon}
                   </motion.div>
                 </div>
-                <h3 className="text-xl font-semibold text-emerald-700 mb-3">
-                  {step.title}
-                </h3>
-                <p className="text-gray-600 text-sm leading-relaxed">
-                  {step.desc}
-                </p>
-                <motion.div
-                  className="mt-5 h-1 w-0 bg-gradient-to-r from-emerald-400 to-sky-400 rounded-full group-hover:w-full transition-all duration-500"
-                />
+                <h3 className="mb-3 text-xl font-semibold text-emerald-700">{step.title}</h3>
+                <p className="text-sm leading-relaxed text-gray-600">{step.desc}</p>
+                <motion.div className="mt-5 h-1 w-0 rounded-full bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-500 group-hover:w-full" />
               </motion.div>
             ))}
           </div>
@@ -80,13 +73,11 @@ export default function Steps() {
           >
             <Link
               href="/form"
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-semibold px-8 py-3 rounded-full shadow-md hover:scale-105 hover:shadow-lg transition-all"
+              className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-3 font-semibold text-white shadow-md transition-all hover:scale-105 hover:shadow-lg"
             >
               Începe acum <ArrowRight size={20} />
             </Link>
-            <p className="text-gray-500 mt-3 text-sm">
-              Rapid · Gratuit · Fără stres
-            </p>
+            <p className="mt-3 text-sm text-gray-500">Rapid · Gratuit · Fără stres</p>
           </motion.div>
         </div>
       </FadeInWhenVisible>

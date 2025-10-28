@@ -4,7 +4,7 @@ import { motion, useAnimation, useInView } from "framer-motion";
 import { useEffect, useRef, PropsWithChildren, ElementType } from "react";
 
 interface FadeInProps extends PropsWithChildren {
-  as?: ElementType;              // ✅ More accurate type than keyof JSX.IntrinsicElements
+  as?: ElementType; // ✅ More accurate type than keyof JSX.IntrinsicElements
   delay?: number;
   y?: number;
   once?: boolean;

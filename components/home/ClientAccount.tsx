@@ -18,25 +18,25 @@ export default function ClientAccount() {
   }, []);
 
   return (
-    <section className="py-20 bg-gradient-to-r from-emerald-50 to-sky-50 overflow-hidden">
+    <section className="overflow-hidden bg-gradient-to-r from-emerald-50 to-sky-50 py-20">
       <FadeInWhenVisible>
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="max-w-6xl mx-auto rounded-3xl bg-white/85 backdrop-blur-md p-10 flex flex-col md:flex-row items-center justify-between gap-10 shadow-xl border border-emerald-100 relative overflow-hidden"
+          className="relative mx-auto flex max-w-6xl flex-col items-center justify-between gap-10 overflow-hidden rounded-3xl border border-emerald-100 bg-white/85 p-10 shadow-xl backdrop-blur-md md:flex-row"
         >
           {/* Decorative background */}
-          <div className="absolute inset-0 bg-gradient-to-r from-emerald-100/40 via-transparent to-sky-100/40 rounded-3xl" />
+          <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-emerald-100/40 via-transparent to-sky-100/40" />
 
           {/* Left: Text */}
-          <div className="flex-1 max-w-md relative z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-emerald-700 mb-4">
+          <div className="relative z-10 max-w-md flex-1">
+            <h2 className="mb-4 text-3xl font-bold text-emerald-700 md:text-4xl">
               Contul tău de client
             </h2>
-            <p className="text-gray-600 mb-6 leading-relaxed">
-              Urmărește cererile tale de mutare într-un singur loc, primește oferte personalizate și 
+            <p className="mb-6 leading-relaxed text-gray-600">
+              Urmărește cererile tale de mutare într-un singur loc, primește oferte personalizate și
               rămâi mereu la curent cu cele mai bune opțiuni oferite de firmele verificate.
             </p>
 
@@ -44,17 +44,17 @@ export default function ClientAccount() {
               <>
                 <Link
                   href="/customer/auth"
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-sky-500 text-white px-8 py-3 rounded-full font-medium shadow-lg hover:scale-105 hover:shadow-emerald-200/60 transition-all"
+                  className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-3 font-medium text-white shadow-lg transition-all hover:scale-105 hover:shadow-emerald-200/60"
                 >
                   <LogIn size={18} /> Autentificare / Înregistrare
                 </Link>
-                <p className="text-sm text-gray-500 mt-3">
+                <p className="mt-3 text-sm text-gray-500">
                   Creează-ți contul gratuit și gestionează toate cererile tale într-un singur loc.
                 </p>
               </>
             ) : (
               <>
-                <p className="text-gray-700 mb-4">
+                <p className="mb-4 text-gray-700">
                   Bun venit,{" "}
                   <span className="font-semibold text-emerald-600">
                     {user.displayName || user.email}
@@ -64,14 +64,14 @@ export default function ClientAccount() {
                 <div className="flex gap-4">
                   <Link
                     href="/customer/dashboard"
-                    className="px-6 py-2 bg-emerald-600 text-white rounded-lg shadow hover:bg-emerald-700 transition-all hover:scale-105"
+                    className="rounded-lg bg-emerald-600 px-6 py-2 text-white shadow transition-all hover:scale-105 hover:bg-emerald-700"
                   >
-                    <LayoutDashboard size={16} className="inline mr-2" />
+                    <LayoutDashboard size={16} className="mr-2 inline" />
                     Panou Client
                   </Link>
                   <button
                     onClick={logout}
-                    className="px-6 py-2 bg-red-500 text-white rounded-lg shadow hover:bg-red-600 transition-all hover:scale-105"
+                    className="rounded-lg bg-red-500 px-6 py-2 text-white shadow transition-all hover:scale-105 hover:bg-red-600"
                   >
                     Logout
                   </button>
@@ -86,7 +86,7 @@ export default function ClientAccount() {
             whileInView={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
-            className="flex-1 flex justify-center relative z-10"
+            className="relative z-10 flex flex-1 justify-center"
           >
             <motion.div
               whileHover={{ rotate: -2, scale: 1.05 }}
@@ -97,7 +97,7 @@ export default function ClientAccount() {
                 alt="Ofertă primită pe platformă"
                 width={260}
                 height={260}
-                className="rounded-2xl shadow-lg object-cover hidden md:block"
+                className="hidden rounded-2xl object-cover shadow-lg md:block"
                 priority
               />
             </motion.div>

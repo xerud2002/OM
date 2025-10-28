@@ -5,9 +5,9 @@ import { useEffect, useRef, PropsWithChildren, ElementType } from "react";
 
 interface SlideInProps extends PropsWithChildren {
   as?: ElementType;
-  direction?: "left" | "right";  // ✅ choose slide-in direction
+  direction?: "left" | "right"; // ✅ choose slide-in direction
   delay?: number;
-  distance?: number;             // how far it slides in px
+  distance?: number; // how far it slides in px
   once?: boolean;
   className?: string;
 }

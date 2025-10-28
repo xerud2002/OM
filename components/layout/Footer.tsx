@@ -3,15 +3,8 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  Facebook,
-  Instagram,
-  Linkedin,
-  PhoneCall,
-  Mail,
-  MapPin,
-} from "lucide-react";
-import { fadeUp, staggerContainer } from "@/utils/animations"; 
+import { Facebook, Instagram, Linkedin, PhoneCall, Mail, MapPin } from "lucide-react";
+import { fadeUp, staggerContainer } from "@/utils/animations";
 import { onAuthChange, logout } from "@/utils/firebaseHelpers";
 
 /* 🔹 Constant link groups */
@@ -47,12 +40,12 @@ const SOCIAL_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[radial-gradient(circle_at_center,_#012015,_#000)] text-gray-300 mt-28 overflow-hidden">
+    <footer className="relative mt-28 overflow-hidden bg-[radial-gradient(circle_at_center,_#012015,_#000)] text-gray-300">
       {/* Decorative top line */}
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-emerald-500/40 to-transparent" />
 
       {/* Pattern overlay */}
-      <div className="absolute inset-0 bg-[url('/patterns/mesh.svg')] opacity-[0.07] bg-cover" />
+      <div className="absolute inset-0 bg-[url('/patterns/mesh.svg')] bg-cover opacity-[0.07]" />
 
       {/* Main footer content */}
       <motion.div
@@ -60,11 +53,11 @@ export default function Footer() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true }}
-        className="relative max-w-7xl mx-auto px-6 py-14 md:py-20 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-10 sm:gap-12 z-10"
+        className="relative z-10 mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 sm:gap-12 md:grid-cols-[2fr_1fr_1fr_1fr] md:py-20"
       >
         {/* About section */}
         <motion.div variants={fadeUp}>
-          <div className="flex items-center mb-5 gap-3">
+          <div className="mb-5 flex items-center gap-3">
             <Image
               src="/logo.png"
               alt="Logo ofertemutare.ro"
@@ -75,9 +68,9 @@ export default function Footer() {
             />
           </div>
 
-          <p className="text-gray-400 leading-relaxed text-sm max-w-xs mb-4">
-            Platforma care conectează clienți și firme de mutări verificate din
-            România. Rapid, sigur și transparent.
+          <p className="mb-4 max-w-xs text-sm leading-relaxed text-gray-400">
+            Platforma care conectează clienți și firme de mutări verificate din România. Rapid,
+            sigur și transparent.
           </p>
 
           <div className="flex flex-col gap-1 text-sm text-gray-400">
@@ -102,16 +95,16 @@ export default function Footer() {
 
         {/* Legal + Social */}
         <motion.div variants={fadeUp}>
-          <h3 className="text-lg font-semibold text-emerald-400 mb-4">Legal</h3>
-          <ul className="space-y-2 text-sm mb-6">
+          <h3 className="mb-4 text-lg font-semibold text-emerald-400">Legal</h3>
+          <ul className="mb-6 space-y-2 text-sm">
             {LEGAL.map(({ href, label }) => (
               <li key={href}>
                 <Link
                   href={href}
-                  className="group relative inline-block hover:text-emerald-300 transition-all duration-300"
+                  className="group relative inline-block transition-all duration-300 hover:text-emerald-300"
                 >
                   {label}
-                  <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300 group-hover:w-full" />
                 </Link>
               </li>
             ))}
@@ -127,7 +120,7 @@ export default function Footer() {
                 aria-label={label}
                 whileHover={{ scale: 1.15, rotate: 4 }}
                 whileTap={{ scale: 0.9 }}
-                className="p-2 rounded-full bg-white/10 text-gray-200 hover:text-white hover:bg-gradient-to-r hover:from-emerald-500 hover:to-sky-500 transition-all duration-300 shadow-md hover:shadow-emerald-500/20"
+                className="rounded-full bg-white/10 p-2 text-gray-200 shadow-md transition-all duration-300 hover:bg-gradient-to-r hover:from-emerald-500 hover:to-sky-500 hover:text-white hover:shadow-emerald-500/20"
               >
                 <Icon size={18} />
               </motion.a>
@@ -137,11 +130,11 @@ export default function Footer() {
       </motion.div>
 
       {/* Sub-footer */}
-      <div className="relative border-t border-emerald-800/40 py-5 text-center text-gray-400 text-sm bg-black/40 backdrop-blur-sm shadow-inner">
+      <div className="relative border-t border-emerald-800/40 bg-black/40 py-5 text-center text-sm text-gray-400 shadow-inner backdrop-blur-sm">
         <p>
           © {new Date().getFullYear()}{" "}
-          <span className="text-emerald-400 font-medium">ofertemutare.ro</span>{" "}
-          · Toate drepturile rezervate
+          <span className="font-medium text-emerald-400">ofertemutare.ro</span> · Toate drepturile
+          rezervate
         </p>
       </div>
     </footer>
@@ -158,16 +151,16 @@ function FooterColumn({
 }) {
   return (
     <div>
-      <h3 className="text-lg font-semibold text-emerald-400 mb-4">{title}</h3>
+      <h3 className="mb-4 text-lg font-semibold text-emerald-400">{title}</h3>
       <ul className="space-y-2 text-sm">
         {links.map(({ href, label }) => (
           <li key={href}>
             <Link
               href={href}
-              className="group relative inline-block hover:text-emerald-300 transition-all duration-300"
+              className="group relative inline-block transition-all duration-300 hover:text-emerald-300"
             >
               {label}
-              <span className="absolute left-0 bottom-0 w-0 h-[1px] bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300 group-hover:w-full" />
+              <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-emerald-400 to-sky-400 transition-all duration-300 group-hover:w-full" />
             </Link>
           </li>
         ))}

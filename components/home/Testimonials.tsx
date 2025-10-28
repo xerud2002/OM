@@ -33,23 +33,22 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="py-20 bg-gradient-to-b from-white to-emerald-50/60 relative overflow-hidden">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-emerald-50/60 py-20">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_40%_20%,rgba(16,185,129,0.05),transparent_70%)]" />
 
       <FadeInWhenVisible>
-        <div className="max-w-6xl mx-auto px-6 text-center relative z-10 mb-14">
-          <h2 className="text-3xl md:text-4xl font-bold text-emerald-700 mb-4">
+        <div className="relative z-10 mx-auto mb-14 max-w-6xl px-6 text-center">
+          <h2 className="mb-4 text-3xl font-bold text-emerald-700 md:text-4xl">
             Ce spun clienții noștri
           </h2>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            Peste 5.000 de utilizatori au folosit{" "}
-            <strong>ofertemutare.ro</strong> pentru a compara oferte de mutare în
-            siguranță și fără bătăi de cap.
+          <p className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-600">
+            Peste 5.000 de utilizatori au folosit <strong>ofertemutare.ro</strong> pentru a compara
+            oferte de mutare în siguranță și fără bătăi de cap.
           </p>
         </div>
       </FadeInWhenVisible>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 px-6 relative z-10">
+      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4">
         {testimonials.map((t, idx) => (
           <motion.div
             key={idx}
@@ -58,25 +57,19 @@ export default function Testimonials() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: idx * 0.1 }}
             whileHover={{ scale: 1.03, y: -4 }}
-            className="bg-white/85 backdrop-blur-md border border-emerald-100 rounded-3xl shadow-md hover:shadow-emerald-200/70 p-6 flex flex-col items-center text-center transition-all duration-300"
+            className="flex flex-col items-center rounded-3xl border border-emerald-100 bg-white/85 p-6 text-center shadow-md backdrop-blur-md transition-all duration-300 hover:shadow-emerald-200/70"
           >
             {/* ⭐ Rating Stars */}
-            <div className="flex justify-center mb-4">
+            <div className="mb-4 flex justify-center">
               {Array.from({ length: t.rating }).map((_, i) => (
-                <Star
-                  key={i}
-                  size={18}
-                  className="text-amber-400 fill-amber-400 mx-[1px]"
-                />
+                <Star key={i} size={18} className="mx-[1px] fill-amber-400 text-amber-400" />
               ))}
             </div>
 
             {/* Text */}
-            <p className="text-gray-700 text-sm leading-relaxed mb-4 italic">
-              “{t.text}”
-            </p>
-            <h4 className="text-emerald-700 font-semibold">{t.name}</h4>
-            <span className="text-gray-500 text-xs">{t.role}</span>
+            <p className="mb-4 text-sm italic leading-relaxed text-gray-700">“{t.text}”</p>
+            <h4 className="font-semibold text-emerald-700">{t.name}</h4>
+            <span className="text-xs text-gray-500">{t.role}</span>
           </motion.div>
         ))}
       </div>

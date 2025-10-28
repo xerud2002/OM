@@ -73,19 +73,19 @@ export default function CustomerAuthPage() {
 
   return (
     <LayoutWrapper>
-      <section className="max-w-md mx-auto mt-10 bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-lg border border-emerald-100 text-center">
-        <h1 className="text-3xl font-bold text-emerald-700 mb-2">
+      <section className="mx-auto mt-10 max-w-md rounded-2xl border border-emerald-100 bg-white/80 p-8 text-center shadow-lg backdrop-blur-md">
+        <h1 className="mb-2 text-3xl font-bold text-emerald-700">
           {isLogin ? "Autentificare Firmă" : "Creare Cont Client"}
         </h1>
-        <p className="text-gray-600 mb-6">
+        <p className="mb-6 text-gray-600">
           {isLogin
             ? "Intră în contul tău pentru a gestiona cererile de mutare."
             : "Creează un cont nou pentru a primi oferte personalizate."}
         </p>
 
         <form onSubmit={handleEmailAuth} className="space-y-4">
-          <div className="flex items-center border rounded-lg px-3 py-2">
-            <Mail size={18} className="text-emerald-600 mr-2" />
+          <div className="flex items-center rounded-lg border px-3 py-2">
+            <Mail size={18} className="mr-2 text-emerald-600" />
             <input
               type="email"
               placeholder="Email"
@@ -96,8 +96,8 @@ export default function CustomerAuthPage() {
             />
           </div>
 
-          <div className="flex items-center border rounded-lg px-3 py-2">
-            <Lock size={18} className="text-emerald-600 mr-2" />
+          <div className="flex items-center rounded-lg border px-3 py-2">
+            <Lock size={18} className="mr-2 text-emerald-600" />
             <input
               type="password"
               placeholder="Parolă"
@@ -113,7 +113,7 @@ export default function CustomerAuthPage() {
             whileTap={{ scale: 0.95 }}
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-semibold py-2 rounded-lg shadow-md hover:shadow-lg transition"
+            className="w-full rounded-lg bg-gradient-to-r from-emerald-500 to-sky-500 py-2 font-semibold text-white shadow-md transition hover:shadow-lg"
           >
             {loading ? "Se procesează..." : isLogin ? "Autentificare" : "Înregistrare"}
           </motion.button>
@@ -134,7 +134,7 @@ export default function CustomerAuthPage() {
         <motion.button
           whileHover={{ scale: 1.05 }}
           onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-2 border border-gray-300 rounded-lg py-2 hover:bg-gray-50 transition"
+          className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2 transition hover:bg-gray-50"
         >
           <img src="/google.svg" alt="Google" width={20} height={20} /> Continuă cu Google
         </motion.button>

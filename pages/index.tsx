@@ -17,9 +17,7 @@ export default function HomePage() {
           🔹 SEO Meta Tags
       =========================== */}
       <Head>
-        <title>
-          Oferte Mutare România | Firme de mutări verificate | ofertemutare.ro
-        </title>
+        <title>Oferte Mutare România | Firme de mutări verificate | ofertemutare.ro</title>
         <meta
           name="description"
           content="Compara oferte reale de la firme de mutări verificate din România. Găsește rapid cea mai bună ofertă pentru mutarea ta."

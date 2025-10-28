@@ -11,7 +11,7 @@
 
 /* 🌿 BODY global */
 body {
-  font-family: theme('fontFamily.sans');
+  font-family: theme("fontFamily.sans");
   color: rgb(31, 41, 55); /* echivalent text-gray-800 */
   background: linear-gradient(to bottom right, #ecfdf5, #ffffff, #f0f9ff);
   background-attachment: fixed;
@@ -22,24 +22,24 @@ body {
 
 /* 🌿 CARD (folosit în MoveForm și alte componente) */
 .card {
-  @apply bg-white/70 backdrop-blur-sm rounded-3xl shadow-md border border-emerald-100 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100/50;
+  @apply rounded-3xl border border-emerald-100 bg-white/70 shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100/50;
 }
 
 /* 🌿 Butoane principale */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 bg-gradient-to-r from-emerald-500 to-sky-500 text-white font-medium py-2 px-6 rounded-xl shadow-md hover:opacity-95 hover:shadow-lg transition-all;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-medium text-white shadow-md transition-all hover:opacity-95 hover:shadow-lg;
 }
 
 /* 🌿 Butoane contur */
 .btn-outline {
-  @apply inline-flex items-center justify-center gap-2 border border-emerald-400 text-emerald-700 font-medium py-2 px-5 rounded-xl hover:bg-emerald-50 transition-all;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-400 px-5 py-2 font-medium text-emerald-700 transition-all hover:bg-emerald-50;
 }
 
 /* 🌿 INPUTS / SELECT / TEXTAREA */
 input,
 select,
 textarea {
-  @apply w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-emerald-300 focus:border-emerald-400 transition-all bg-white/70;
+  @apply w-full rounded-lg border border-gray-300 bg-white/70 p-3 transition-all focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-300;
 }
 
 /* 🌿 SELECT personalizat — paletă brand (emerald + sky) */
@@ -51,7 +51,8 @@ select {
   background-clip: padding-box;
   color: #064e3b;
   padding-right: 2rem;
-  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2310b981' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")
+  background: white
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2310b981' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")
     no-repeat right 0.75rem center/1rem;
 }
 
@@ -98,7 +99,7 @@ select option:checked {
 }
 
 .rdp-day_selected {
-  @apply bg-gradient-to-r from-emerald-500 to-sky-500 text-white shadow-md scale-105;
+  @apply scale-105 bg-gradient-to-r from-emerald-500 to-sky-500 text-white shadow-md;
 }
 
 .rdp-day_today {
@@ -107,12 +108,12 @@ select option:checked {
 
 /* 🌿 Calendar container */
 .calendar-box {
-  @apply bg-white/80 backdrop-blur-sm border border-emerald-100 rounded-3xl shadow-lg p-6 w-full max-w-md mx-auto transition-all hover:shadow-emerald-100;
+  @apply mx-auto w-full max-w-md rounded-3xl border border-emerald-100 bg-white/80 p-6 shadow-lg backdrop-blur-sm transition-all hover:shadow-emerald-100;
 }
 
 /* 🌿 HERO OVERLAY (pentru homepage) */
 .hero-overlay {
-  @apply bg-white/20 backdrop-blur-[2px] rounded-3xl border border-white/30 shadow-md p-8 text-center;
+  @apply rounded-3xl border border-white/30 bg-white/20 p-8 text-center shadow-md backdrop-blur-[2px];
 }
 
 /* 🌿 Animations */
