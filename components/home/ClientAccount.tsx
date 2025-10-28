@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, LogIn, LayoutDashboard } from "lucide-react";
+import { LogIn, LayoutDashboard } from "lucide-react";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { onAuthChange, logout } from "@/utils/firebaseHelpers";
