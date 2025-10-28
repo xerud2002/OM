@@ -43,7 +43,7 @@ export default function Services() {
           </h2>
           <p className="mx-auto max-w-2xl text-lg leading-relaxed text-gray-600">
             Indiferent dacă te muți în același oraș sau în alt colț al țării, partenerii noștri
-            oferă servicii complete de mutare — rapide, sigure și flexibile.
+            oferă servicii complete de mutare rapide, sigure și flexibile.
           </p>
         </div>
       </FadeInWhenVisible>
