@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
 import { db } from "@/services/firebase";
 import {
   collection,
@@ -14,85 +13,38 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
+import { onAuthChange } from "@/utils/firebaseHelpers";
+import { acceptOffer } from "@/utils/firestoreHelpers";
 
-// 🔹 Live offers list under each request
-function OffersList({ requestId }: { requestId: string }) {
-  const [offers, setOffers] = useState<any[]>([]);
-  const [expanded, setExpanded] = useState(false);
+// 🔹 Types
+type Request = {
+  id: string;
+  fromCity: string;
+  toCity: string;
+  moveDate: string;
+  details: string;
+};
 
-  useEffect(() => {
-    const offersRef = collection(db, "requests", requestId, "offers");
-    const q = query(offersRef, orderBy("createdAt", "desc"));
-    const unsub = onSnapshot(q, (snapshot) => {
-      setOffers(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
-    });
-    return () => unsub();
-  }, [requestId]);
-
-  return (
-    <div className="mt-3 border-t pt-3">
-      <button
-        onClick={() => setExpanded((prev) => !prev)}
-        className="text-sm font-medium text-emerald-600 hover:underline"
-      >
-        {expanded
-          ? "Ascunde ofertele ▲"
-          : `Afișează ofertele (${offers.length}) ▼`}
-      </button>
-
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.25 }}
-            className="mt-3 space-y-3"
-          >
-            {offers.length === 0 ? (
-              <p className="text-sm italic text-gray-400">
-                Nicio ofertă disponibilă momentan.
-              </p>
-            ) : (
-              offers.map((o) => (
-                <motion.div
-                  key={o.id}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  className="rounded-md border bg-emerald-50 p-3 shadow-sm"
-                >
-                  <div className="flex justify-between">
-                    <span className="font-semibold text-emerald-700">
-                      {o.companyName}
-                    </span>
-                    <span className="text-sm font-medium text-gray-700">
-                      💰 {o.price} lei
-                    </span>
-                  </div>
-                  <p className="mt-1 text-sm text-gray-600">{o.message}</p>
-                </motion.div>
-              ))
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
+type Offer = {
+  id: string;
+  companyName: string;
+  price: number;
+  message: string;
+  status?: "pending" | "accepted" | "declined";
+};
 
 export default function CustomerRequestsPage() {
   const [user, setUser] = useState<any>(null);
-  const [requests, setRequests] = useState<any[]>([]);
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [offers, setOffers] = useState<Record<string, Offer[]>>({});
   const [form, setForm] = useState({
     fromCity: "",
     toCity: "",
     moveDate: "",
     details: "",
   });
-  const [loading, setLoading] = useState(true);
 
-  // Listen for auth + live requests
+  // Auth + Requests
   useEffect(() => {
     const unsubAuth = onAuthChange((u) => {
       setUser(u);
@@ -102,11 +54,25 @@ export default function CustomerRequestsPage() {
           where("customerId", "==", u.uid),
           orderBy("createdAt", "desc")
         );
-        const unsubSnapshot = onSnapshot(q, (snapshot) => {
-          setRequests(snapshot.docs.map((d) => ({ id: d.id, ...d.data() })));
-          setLoading(false);
+        const unsubReq = onSnapshot(q, (snapshot) => {
+          const reqs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Request[];
+          setRequests(reqs);
+
+          // Listen to offers for each request
+          reqs.forEach((r) => {
+            const offersQuery = query(
+              collection(db, "requests", r.id, "offers"),
+              orderBy("price", "asc")
+            );
+            onSnapshot(offersQuery, (snap) => {
+              setOffers((prev) => ({
+                ...prev,
+                [r.id]: snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Offer[],
+              }));
+            });
+          });
         });
-        return () => unsubSnapshot();
+        return () => unsubReq();
       }
     });
     return () => unsubAuth();
@@ -127,12 +93,12 @@ export default function CustomerRequestsPage() {
 
   return (
     <LayoutWrapper>
-      <section className="mx-auto max-w-4xl px-4 py-10">
+      <section className="mx-auto max-w-4xl py-10">
         <h1 className="mb-6 text-center text-3xl font-bold text-emerald-700">
           Cererile tale de mutare
         </h1>
 
-        {/* === Form === */}
+        {/* Form */}
         <form
           onSubmit={handleSubmit}
           className="mb-8 grid grid-cols-1 gap-4 rounded-xl border bg-white/80 p-4 shadow backdrop-blur-sm md:grid-cols-2"
@@ -175,42 +141,86 @@ export default function CustomerRequestsPage() {
           </motion.button>
         </form>
 
-        {/* === Requests List === */}
-        {loading ? (
-          <p className="text-center text-gray-500">Se încarcă cererile...</p>
-        ) : requests.length === 0 ? (
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="text-center italic text-gray-500"
-          >
+        {/* Requests List */}
+        {requests.length === 0 ? (
+          <p className="text-center italic text-gray-500">
             Nu ai nicio cerere activă. Trimite una acum! 💪
-          </motion.p>
+          </p>
         ) : (
-          <div className="space-y-4">
-            <AnimatePresence>
-              {requests.map((r) => (
-                <motion.div
-                  key={r.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.3 }}
-                  className="rounded-xl border bg-white/90 p-4 shadow-sm backdrop-blur-md transition-all hover:shadow-md"
-                >
-                  <p className="font-semibold text-emerald-700">
-                    {r.fromCity} → {r.toCity}
-                  </p>
-                  <p className="text-sm text-gray-600">
-                    Mutare: {r.moveDate || "-"}
-                  </p>
-                  <p className="mt-2 text-sm text-gray-500">{r.details}</p>
+          <div className="space-y-6">
+            {requests.map((r) => (
+              <motion.div
+                key={r.id}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-xl border bg-white/90 p-5 shadow-md backdrop-blur-md"
+              >
+                <p className="font-semibold text-emerald-700">
+                  {r.fromCity} → {r.toCity}
+                </p>
+                <p className="mb-3 text-sm text-gray-600">
+                  Mutare: {r.moveDate}
+                </p>
+                <p className="text-sm text-gray-500">{r.details}</p>
 
-                  {/* 🔹 Offers displayed below each request */}
-                  <OffersList requestId={r.id} />
-                </motion.div>
-              ))}
-            </AnimatePresence>
+                {/* Offers */}
+                <div className="mt-4 border-t pt-3">
+                  <h4 className="mb-2 font-semibold text-gray-700">
+                    Oferte primite
+                  </h4>
+                  <AnimatePresence>
+                    {offers[r.id]?.length ? (
+                      offers[r.id].map((offer) => (
+                        <motion.div
+                          key={offer.id}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          className={`mb-2 rounded-md border p-3 ${
+                            offer.status === "accepted"
+                              ? "border-emerald-500 bg-emerald-50"
+                              : offer.status === "declined"
+                              ? "opacity-60"
+                              : ""
+                          }`}
+                        >
+                          <div className="flex justify-between">
+                            <p className="font-medium text-gray-800">
+                              {offer.companyName}
+                            </p>
+                            <p className="font-semibold text-emerald-600">
+                              {offer.price} lei
+                            </p>
+                          </div>
+                          <p className="mt-1 text-sm text-gray-600">
+                            {offer.message}
+                          </p>
+                          {offer.status === "accepted" ? (
+                            <p className="mt-2 text-xs text-emerald-700">
+                              ✅ Ofertă acceptată
+                            </p>
+                          ) : offer.status === "declined" ? (
+                            <p className="mt-2 text-xs text-gray-400">
+                              ❌ Ofertă respinsă
+                            </p>
+                          ) : (
+                            <button
+                              onClick={() => acceptOffer(r.id, offer.id)}
+                              className="mt-2 rounded-md bg-emerald-600 px-3 py-1 text-sm text-white hover:bg-emerald-700"
+                            >
+                              Acceptă ofertă
+                            </button>
+                          )}
+                        </motion.div>
+                      ))
+                    ) : (
+                      <p className="text-sm italic text-gray-400">
+                        Nu există oferte momentan.
+                      </p>
+                    )}
+                  </AnimatePresence>
+                </div>
+              </motion.div>
+            ))}
           </div>
         )}
       </section>
