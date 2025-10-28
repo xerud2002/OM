@@ -1,5 +1,5 @@
 import { db } from "@/services/firebase";
-import {  addDoc, doc, updateDoc, collection,  serverTimestamp,  getDocs,  query,  orderBy,  where, writeBatch} from "firebase/firestore";
+import {  addDoc, doc, collection,  serverTimestamp,  getDocs,  query,  orderBy,  where, writeBatch} from "firebase/firestore";
 
 export async function createRequest(data: any) {
   const docRef = await addDoc(collection(db, "requests"), {
