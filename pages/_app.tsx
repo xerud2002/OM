@@ -1,14 +1,16 @@
 import type { AppProps } from "next/app";
-import Head from "next/head";
 import "../globals.css";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Head>
-      <Component {...pageProps} />
+      <Navbar />
+      <main className="pt-[80px]">
+        <Component {...pageProps} />
+      </main>
+      <Footer />
     </>
   );
 }
