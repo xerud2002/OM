@@ -1,3 +1,9 @@
+import next from "eslint-config-next";
+import prettier from "eslint-config-prettier";
+import react from "eslint-plugin-react";
+import reactHooks from "eslint-plugin-react-hooks";
+import tailwindcss from "eslint-plugin-tailwindcss";
+
 const config = [
   ...next,
   {
