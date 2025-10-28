@@ -1,0 +1,10 @@
+<!-- /public/patterns/mesh.svg -->
+<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#10b981" stop-opacity="0.3"></stop>
+      <stop offset="100%" stop-color="#0ea5e9" stop-opacity="0"></stop>
+    </radialGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#g)"></rect>
+</svg>
