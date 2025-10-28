@@ -6,14 +6,14 @@ import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
-import { onAuthChange } from "@/services/firebase";
+import { onAuthChange } from "@/utils/firebaseHelpers";
 
 export default function Hero() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {
-    const unsub = onAuthChange(setUser);
+    const unsub = onAuthChange((user) => setUser(user));
     return () => unsub();
   }, []);
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { onAuthChange, logout } from "@/services/firebase";
+import { onAuthChange, logout } from "@/utils/firebaseHelpers";
 import { User } from "firebase/auth";
 import LayoutWrapper from "@/components/layout/Layout";
 import { useRouter } from "next/navigation";
