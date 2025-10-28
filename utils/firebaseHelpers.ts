@@ -47,7 +47,7 @@ const COLLECTIONS = {
 } as const;
 
 // ---- Auth state
-export function onAuthChange(cb: (user: User | null) => void) {
+export function onAuthChange(cb: (_user: User | null) => void) {
   return onAuthStateChanged(auth, cb);
 }
 
