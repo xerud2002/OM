@@ -9,13 +9,18 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@firebase/auth": "^1.11.0",
+    "@firebase/firestore": "^4.9.2",
+    "@firebase/functions": "^0.13.1",
+    "@firebase/storage": "^0.14.0",
     "emailjs-com": "^3.2.0",
-    "firebase": "^10.12.0",
+    "firebase": "^12.4.0",
     "framer-motion": "^10.16.0",
     "lucide-react": "^0.324.0",
-    "next": "14.2.3",
+    "next": "^14.2.33",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "sonner": "^2.0.7"
   },
   "devDependencies": {
     "@types/node": "^24.9.1",

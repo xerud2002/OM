@@ -2,31 +2,32 @@
 
 import { motion } from "framer-motion";
 import FadeInWhenVisible from "@/components/FadeInWhenVisible";
+import { Star } from "lucide-react";
 
 const testimonials = [
   {
     name: "Andreea Popescu",
     role: "Clientă – București",
     text: "Am primit 3 oferte în mai puțin de o oră și am economisit peste 400 lei. Totul a fost simplu și rapid!",
-    avatar: "/pics/avatar1.png",
+    rating: 5,
   },
   {
     name: "Mihai Ionescu",
     role: "Client – Cluj-Napoca",
     text: "O platformă foarte utilă. Am comparat prețurile ușor și am ales firma potrivită fără stres.",
-    avatar: "/pics/avatar2.png",
+    rating: 5,
   },
   {
     name: "Elena Marin",
     role: "Clientă – Brașov",
     text: "Firmele partenere au fost profesioniste, iar mutarea a decurs perfect. Recomand cu drag!",
-    avatar: "/pics/avatar3.png",
+    rating: 5,
   },
   {
     name: "Adrian Toma",
     role: "Client – Iași",
     text: "Mi-a plăcut claritatea și simplitatea formularului. Într-o zi aveam totul stabilit pentru mutare!",
-    avatar: "/pics/avatar4.png",
+    rating: 5,
   },
 ];
 
@@ -41,8 +42,9 @@ export default function Testimonials() {
             Ce spun clienții noștri
           </h2>
           <p className="text-gray-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            Peste 5.000 de utilizatori au folosit <strong>ofertemutare.ro</strong> pentru a
-            compara oferte de mutare în siguranță și fără bătăi de cap.
+            Peste 5.000 de utilizatori au folosit{" "}
+            <strong>ofertemutare.ro</strong> pentru a compara oferte de mutare în
+            siguranță și fără bătăi de cap.
           </p>
         </div>
       </FadeInWhenVisible>
@@ -58,19 +60,15 @@ export default function Testimonials() {
             whileHover={{ scale: 1.03, y: -4 }}
             className="bg-white/85 backdrop-blur-md border border-emerald-100 rounded-3xl shadow-md hover:shadow-emerald-200/70 p-6 flex flex-col items-center text-center transition-all duration-300"
           >
-            {/* Avatar */}
-            <div className="w-16 h-16 mb-4 rounded-full overflow-hidden border-2 border-emerald-100 shadow-sm bg-emerald-50 flex items-center justify-center">
-              {t.avatar ? (
-                <img
-                  src={t.avatar}
-                  alt={t.name}
-                  className="w-full h-full object-cover"
+            {/* ⭐ Rating Stars */}
+            <div className="flex justify-center mb-4">
+              {Array.from({ length: t.rating }).map((_, i) => (
+                <Star
+                  key={i}
+                  size={18}
+                  className="text-amber-400 fill-amber-400 mx-[1px]"
                 />
-              ) : (
-                <span className="text-emerald-600 font-bold text-xl">
-                  {t.name[0]}
-                </span>
-              )}
+              ))}
             </div>
 
             {/* Text */}
