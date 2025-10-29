@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
@@ -8,10 +9,11 @@ import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "
 import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
-import { Search, Download, Filter, PlusSquare, List, Inbox } from "lucide-react";
+import { Search, Download, Filter, PlusSquare, List, Inbox, Settings } from "lucide-react";
 import StatCard from "@/components/customer/StatCard";
 import RequestCard from "@/components/customer/RequestCard";
 import RequestForm from "@/components/customer/RequestForm";
+import { useDebouncedValue } from "@/utils/hooks";
 
 type Request = {
   id: string;
@@ -60,8 +62,18 @@ export default function CustomerDashboard() {
   const [search, setSearch] = useState<string>("");
   const [dateFrom, setDateFrom] = useState<string | null>(null);
   const [dateTo, setDateTo] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers">("requests");
-  const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false);
+  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers">(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("customerActiveTab");
+      if (saved === "new" || saved === "requests" || saved === "offers") return saved;
+    }
+    return "requests";
+  });
+  // Two-column layout: we render selected content on the right; no modal needed
+  const [loading, setLoading] = useState<boolean>(true);
+  const [sortBy, setSortBy] = useState<"date-desc" | "date-asc" | "offers-desc" | "offers-asc">(
+    "date-desc"
+  );
 
   const totalOffers = useMemo(
     () => Object.values(offersByRequest).flat().length,
@@ -69,10 +81,12 @@ export default function CustomerDashboard() {
   );
   const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
 
+  const debouncedSearch = useDebouncedValue(search, 250);
+
   const filteredRequests = useMemo(() => {
     let list = requests;
-    if (search) {
-      const q = search.toLowerCase();
+    if (debouncedSearch) {
+      const q = debouncedSearch.toLowerCase();
       list = list.filter((r) => {
         return (
           (r.fromCity || "").toLowerCase().includes(q) ||
@@ -84,7 +98,25 @@ export default function CustomerDashboard() {
     if (dateFrom) list = list.filter((r) => r.moveDate && r.moveDate >= dateFrom);
     if (dateTo) list = list.filter((r) => r.moveDate && r.moveDate <= dateTo);
     return list;
-  }, [requests, search, dateFrom, dateTo]);
+  }, [requests, debouncedSearch, dateFrom, dateTo]);
+
+  const sortedRequests = useMemo(() => {
+    const list = [...filteredRequests];
+    const getCreated = (r: any) =>
+      r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
+    const getOffers = (r: any) => offersByRequest[r.id]?.length ?? 0;
+    switch (sortBy) {
+      case "date-asc":
+        return list.sort((a: any, b: any) => getCreated(a) - getCreated(b));
+      case "offers-desc":
+        return list.sort((a: any, b: any) => getOffers(b) - getOffers(a));
+      case "offers-asc":
+        return list.sort((a: any, b: any) => getOffers(a) - getOffers(b));
+      case "date-desc":
+      default:
+        return list.sort((a: any, b: any) => getCreated(b) - getCreated(a));
+    }
+  }, [filteredRequests, sortBy, offersByRequest]);
 
   useEffect(() => {
     const unsubAuth = onAuthChange((u: any) => {
@@ -99,11 +131,19 @@ export default function CustomerDashboard() {
         const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
         setRequests(docs);
         setOffersByRequest({});
+        setLoading(false);
       });
       return () => unsub();
     });
     return () => unsubAuth();
   }, []);
+
+  // Persist activeTab across sessions
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("customerActiveTab", activeTab);
+    }
+  }, [activeTab]);
 
   const exportCSV = () => {
     try {
@@ -193,6 +233,12 @@ export default function CustomerDashboard() {
                   >
                     <Inbox size={16} /> Oferte ({totalOffers})
                   </button>
+                  <Link
+                    href="/customer/settings"
+                    className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                  >
+                    <Settings size={16} /> Setări profil
+                  </Link>
                 </nav>
 
                 <div className="mt-6 border-t pt-4">
@@ -213,14 +259,14 @@ export default function CustomerDashboard() {
               </div>
             </aside>
 
-            <main className="col-span-12 md:col-span-6">
+            <main className="col-span-12 md:col-span-9">
               <div className="mb-4 flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-emerald-700">Panou clienti</h1>
                 <div className="flex items-center gap-3">
-                  {/* mobile: open modal for new request */}
+                  {/* quick access: switch to new request tab */}
                   <button
-                    onClick={() => setIsFormModalOpen(true)}
-                    className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white md:hidden"
+                    onClick={() => setActiveTab("new")}
+                    className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white"
                   >
                     <PlusSquare size={14} /> Cerere nouă
                   </button>
@@ -268,6 +314,16 @@ export default function CustomerDashboard() {
                       />
                     </div>
                     <div className="flex items-center gap-2">
+                      <select
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as any)}
+                        className="rounded-lg border p-2 text-sm"
+                      >
+                        <option value="date-desc">Cele mai noi</option>
+                        <option value="date-asc">Cele mai vechi</option>
+                        <option value="offers-desc">Cele mai multe oferte</option>
+                        <option value="offers-asc">Cele mai puține oferte</option>
+                      </select>
                       <input
                         type="date"
                         value={dateFrom ?? ""}
@@ -299,11 +355,21 @@ export default function CustomerDashboard() {
                     </div>
                   </div>
 
-                  {filteredRequests.length === 0 ? (
-                    <p className="text-center italic text-gray-500">Nu ai nicio cerere activă.</p>
+                  {loading ? (
+                    <p className="text-center italic text-gray-500">Se încarcă…</p>
+                  ) : sortedRequests.length === 0 ? (
+                    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center text-gray-500">
+                      <p className="mb-3">Nu ai nicio cerere activă.</p>
+                      <button
+                        onClick={() => setActiveTab("new")}
+                        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:opacity-95"
+                      >
+                        Creează o cerere
+                      </button>
+                    </div>
                   ) : (
                     <div className="grid grid-cols-1 gap-4">
-                      {filteredRequests.map((r) => (
+                      {sortedRequests.map((r) => (
                         <motion.div
                           key={r.id}
                           initial={{ opacity: 0, y: 8 }}
@@ -315,6 +381,17 @@ export default function CustomerDashboard() {
                     </div>
                   )}
                 </>
+              )}
+
+              {activeTab === "new" && (
+                <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+                  <RequestForm
+                    form={form}
+                    setForm={setForm}
+                    onSubmit={handleSubmit}
+                    onReset={resetForm}
+                  />
+                </div>
               )}
 
               {activeTab === "offers" && (
@@ -343,51 +420,9 @@ export default function CustomerDashboard() {
                 </div>
               )}
             </main>
-
-            <aside className="col-span-12 md:col-span-3">
-              <div className="sticky top-28 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-                <RequestForm
-                  form={form}
-                  setForm={setForm}
-                  onSubmit={handleSubmit}
-                  onReset={resetForm}
-                />
-              </div>
-            </aside>
           </div>
         </section>
       </LayoutWrapper>
-      {/* Mobile modal for new request */}
-      {isFormModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
-          <div
-            className="absolute inset-0 bg-black/40"
-            onClick={() => setIsFormModalOpen(false)}
-            aria-hidden="true"
-          />
-          <div className="relative z-10 w-full rounded-t-2xl bg-white p-4 shadow-lg sm:max-w-md sm:rounded-2xl">
-            <div className="mb-2 flex items-center justify-between">
-              <h3 className="text-sm font-semibold text-gray-700">Cerere nouă</h3>
-              <button
-                onClick={() => setIsFormModalOpen(false)}
-                className="rounded p-1 text-gray-500 hover:bg-gray-100"
-                aria-label="Închide"
-              >
-                ✕
-              </button>
-            </div>
-            <RequestForm
-              form={form}
-              setForm={setForm}
-              onSubmit={(e) => {
-                handleSubmit(e);
-                setIsFormModalOpen(false);
-              }}
-              onReset={resetForm}
-            />
-          </div>
-        </div>
-      )}
     </RequireRole>
   );
 }
