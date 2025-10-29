@@ -1,10 +1,26 @@
 import { db } from "@/services/firebase";
-import {  addDoc, doc, collection,  serverTimestamp,  getDocs,  query,  orderBy,  where, writeBatch} from "firebase/firestore";
+import {
+  addDoc,
+  doc,
+  collection,
+  serverTimestamp,
+  getDocs,
+  query,
+  orderBy,
+  where,
+  writeBatch,
+} from "firebase/firestore";
 
 export async function createRequest(data: any) {
+  // Remove any undefined fields because Firestore rejects undefined values.
+  const clean: Record<string, any> = Object.fromEntries(
+    Object.entries(data).filter(([, v]) => v !== undefined)
+  );
+
   const docRef = await addDoc(collection(db, "requests"), {
-    ...data,
-    createdAt: new Date(),
+    ...clean,
+    // Use serverTimestamp for consistent server-side timestamps
+    createdAt: serverTimestamp(),
   });
   return docRef.id;
 }
@@ -32,10 +48,7 @@ export async function addOffer(requestId: string, data: any) {
 }
 
 export async function getOffers(requestId: string) {
-  const q = query(
-    collection(db, "requests", requestId, "offers"),
-    orderBy("createdAt", "desc")
-  );
+  const q = query(collection(db, "requests", requestId, "offers"), orderBy("createdAt", "desc"));
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
