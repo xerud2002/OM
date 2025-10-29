@@ -5,7 +5,7 @@ import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
 import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { Search, Download, Filter, PlusSquare, List, Inbox } from "lucide-react";
@@ -235,16 +235,47 @@ export default function CustomerDashboard() {
 
               {activeTab === "requests" && (
                 <>
-                  <div className="mb-4 flex flex-wrap gap-3">
-                    <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-white px-4 py-2 shadow-sm">
-                      <div className="text-sm text-gray-500">Cereri</div>
-                      <div className="text-lg font-semibold text-emerald-700">
-                        {requests.length}
+                  {/* Dashboard header: stat cards */}
+                  <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+                    <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+                      <div
+                        className="flex items-center justify-center rounded-md bg-emerald-50"
+                        style={{ height: 48, width: 48 }}
+                      >
+                        <List className="text-emerald-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-500">Cereri</div>
+                        <div className="text-2xl font-bold text-emerald-700">{requests.length}</div>
                       </div>
                     </div>
-                    <div className="flex items-center gap-3 rounded-lg border border-gray-100 bg-white px-4 py-2 shadow-sm">
-                      <div className="text-sm text-gray-500">Oferte</div>
-                      <div className="text-lg font-semibold text-emerald-700">{totalOffers}</div>
+
+                    <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+                      <div
+                        className="flex items-center justify-center rounded-md bg-sky-50"
+                        style={{ height: 48, width: 48 }}
+                      >
+                        <Inbox className="text-sky-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-500">Oferte</div>
+                        <div className="text-2xl font-bold text-emerald-700">{totalOffers}</div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+                      <div
+                        className="flex items-center justify-center rounded-md bg-amber-50"
+                        style={{ height: 48, width: 48 }}
+                      >
+                        <PlusSquare className="text-amber-600" />
+                      </div>
+                      <div>
+                        <div className="text-xs text-gray-500">Medie oferte / cerere</div>
+                        <div className="text-2xl font-bold text-emerald-700">
+                          {requests.length ? Math.round(totalOffers / requests.length) : 0}
+                        </div>
+                      </div>
                     </div>
                   </div>
 
@@ -293,77 +324,93 @@ export default function CustomerDashboard() {
                   {filteredRequests.length === 0 ? (
                     <p className="text-center italic text-gray-500">Nu ai nicio cerere activă.</p>
                   ) : (
-                    <div className="space-y-4">
+                    <div className="grid grid-cols-1 gap-4">
                       {filteredRequests.map((r) => (
                         <motion.div
                           key={r.id}
-                          initial={{ opacity: 0, y: 6 }}
+                          initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="rounded-xl border bg-white p-4 shadow-sm"
+                          className="relative overflow-hidden rounded-xl border bg-white p-4 shadow hover:shadow-md"
                         >
-                          <div className="flex items-start justify-between gap-4">
+                          <div className="absolute left-0 top-0 h-full w-1 bg-emerald-500/60" />
+                          <div className="relative flex items-start justify-between gap-4">
                             <div className="flex-1">
                               <div className="flex items-center gap-3">
                                 <h3 className="text-lg font-semibold text-emerald-700">
                                   {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                                 </h3>
-                                <span className="text-sm text-gray-500">{r.moveDate}</span>
+                                <span className="text-sm text-gray-400">{r.moveDate}</span>
                               </div>
                               <p className="mt-2 text-sm text-gray-600">{r.details}</p>
-                              <div className="mt-2 text-sm text-gray-500">
-                                {r.rooms && <span>Camere: {r.rooms} • </span>}
+
+                              <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-500">
+                                {r.rooms && (
+                                  <span>
+                                    Camere:{" "}
+                                    <span className="font-medium text-gray-700">{r.rooms}</span>
+                                  </span>
+                                )}
                                 {typeof r.volumeM3 !== "undefined" && (
-                                  <span>Volum: {r.volumeM3} m³ • </span>
+                                  <span>
+                                    Volum:{" "}
+                                    <span className="font-medium text-gray-700">
+                                      {r.volumeM3} m³
+                                    </span>
+                                  </span>
                                 )}
-                                {r.budgetEstimate && <span>Buget: {r.budgetEstimate} RON • </span>}
-                                {r.needPacking ? (
-                                  <span>Ambalare: Da</span>
-                                ) : (
-                                  <span>Ambalare: Nu</span>
+                                {r.budgetEstimate && (
+                                  <span>
+                                    Buget:{" "}
+                                    <span className="font-medium text-gray-700">
+                                      {r.budgetEstimate} RON
+                                    </span>
+                                  </span>
                                 )}
+                                <span>
+                                  Ambalare:{" "}
+                                  <span className="font-medium text-gray-700">
+                                    {r.needPacking ? "Da" : "Nu"}
+                                  </span>
+                                </span>
                               </div>
                             </div>
-                            <div className="w-40 text-right">
-                              <div className="text-sm text-gray-500">
-                                Oferte:{" "}
-                                <span className="font-semibold">
-                                  {(offersByRequest[r.id] || []).length}
-                                </span>
+
+                            <div className="flex w-40 flex-col items-end gap-2">
+                              <div className="text-sm text-gray-500">Oferte</div>
+                              <div className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">
+                                {(offersByRequest[r.id] || []).length}
                               </div>
                             </div>
                           </div>
 
-                          <div className="mt-3 border-t pt-3">
-                            <h4 className="mb-2 text-sm font-semibold">Oferte primite</h4>
-                            <AnimatePresence>
+                          <div className="mt-4 border-t pt-4">
+                            <h4 className="mb-2 text-sm font-semibold text-gray-700">
+                              Oferte primite
+                            </h4>
+                            <div className="space-y-2">
                               {(offersByRequest[r.id] || []).length ? (
                                 (offersByRequest[r.id] || []).map((o) => (
-                                  <motion.div
+                                  <div
                                     key={o.id}
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    className="mb-2 rounded-md border bg-white p-3"
+                                    className="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-3"
                                   >
-                                    <div className="flex items-center justify-between">
-                                      <div>
-                                        <p className="font-medium text-gray-800">{o.companyName}</p>
-                                        {o.message && (
-                                          <p className="text-sm text-gray-500">{o.message}</p>
-                                        )}
-                                      </div>
-                                      <div className="text-right">
-                                        <p className="text-lg font-semibold text-emerald-700">
-                                          {o.price} lei
-                                        </p>
-                                      </div>
+                                    <div>
+                                      <p className="font-medium text-gray-800">{o.companyName}</p>
+                                      {o.message && (
+                                        <p className="text-sm text-gray-500">{o.message}</p>
+                                      )}
                                     </div>
-                                  </motion.div>
+                                    <div className="text-right">
+                                      <p className="text-lg font-semibold text-emerald-700">
+                                        {o.price} lei
+                                      </p>
+                                    </div>
+                                  </div>
                                 ))
                               ) : (
                                 <p className="text-sm italic text-gray-400">Nicio ofertă.</p>
                               )}
-                            </AnimatePresence>
+                            </div>
                           </div>
                         </motion.div>
                       ))}
