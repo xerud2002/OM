@@ -9,6 +9,9 @@ import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { Search, Download, Filter, PlusSquare, List, Inbox } from "lucide-react";
+import StatCard from "@/components/customer/StatCard";
+import RequestCard from "@/components/customer/RequestCard";
+import RequestForm from "@/components/customer/RequestForm";
 
 type Request = {
   id: string;
@@ -54,45 +57,11 @@ export default function CustomerDashboard() {
     phone: "",
   });
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState<string>("");
   const [dateFrom, setDateFrom] = useState<string | null>(null);
   const [dateTo, setDateTo] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers">("requests");
-
-  useEffect(() => {
-    const unsubAuth = onAuthChange((u) => {
-      setUser(u);
-      if (!u) return;
-
-      const q = query(
-        collection(db, "requests"),
-        where("customerId", "==", u.uid),
-        orderBy("createdAt", "desc")
-      );
-      const unsub = onSnapshot(q, (snap) => {
-        const rs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as Request[];
-        setRequests(rs);
-
-        // subscribe to offers for each request
-        rs.forEach((r) => {
-          const offersQ = query(
-            collection(db, "requests", r.id, "offers"),
-            orderBy("price", "asc")
-          );
-          onSnapshot(offersQ, (os) => {
-            setOffersByRequest((prev) => ({
-              ...prev,
-              [r.id]: os.docs.map((d) => ({ id: d.id, ...(d.data() as any) })),
-            }));
-          });
-        });
-      });
-
-      return () => unsub();
-    });
-
-    return () => unsubAuth();
-  }, []);
+  const [isFormModalOpen, setIsFormModalOpen] = useState<boolean>(false);
 
   const totalOffers = useMemo(
     () => Object.values(offersByRequest).flat().length,
@@ -101,52 +70,63 @@ export default function CustomerDashboard() {
   const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
 
   const filteredRequests = useMemo(() => {
-    const s = search.trim().toLowerCase();
-    return requests.filter((r) => {
-      if (s) {
-        const hay =
-          `${r.fromCounty ?? ""} ${r.fromCity ?? ""} ${r.toCounty ?? ""} ${r.toCity ?? ""} ${r.details ?? ""}`.toLowerCase();
-        if (!hay.includes(s)) return false;
-      }
-      if (dateFrom && r.moveDate && new Date(r.moveDate) < new Date(dateFrom)) return false;
-      if (dateTo && r.moveDate && new Date(r.moveDate) > new Date(dateTo)) return false;
-      return true;
-    });
+    let list = requests;
+    if (search) {
+      const q = search.toLowerCase();
+      list = list.filter((r) => {
+        return (
+          (r.fromCity || "").toLowerCase().includes(q) ||
+          (r.toCity || "").toLowerCase().includes(q) ||
+          (r.details || "").toLowerCase().includes(q)
+        );
+      });
+    }
+    if (dateFrom) list = list.filter((r) => r.moveDate && r.moveDate >= dateFrom);
+    if (dateTo) list = list.filter((r) => r.moveDate && r.moveDate <= dateTo);
+    return list;
   }, [requests, search, dateFrom, dateTo]);
 
-  const exportCSV = () => {
-    const rows = filteredRequests.map((r) => ({
-      id: r.id,
-      fromCounty: r.fromCounty ?? "",
-      fromCity: r.fromCity ?? "",
-      toCounty: r.toCounty ?? "",
-      toCity: r.toCity ?? "",
-      moveDate: r.moveDate ?? "",
-      rooms: r.rooms ?? "",
-      volumeM3: r.volumeM3 ?? "",
-      budgetEstimate: r.budgetEstimate ?? "",
-      needPacking: r.needPacking ? "Da" : "Nu",
-      hasElevator: r.hasElevator ? "Da" : "Nu",
-      phone: r.phone ?? "",
-      details: (r.details ?? "").replace(/\n/g, " "),
-    }));
+  useEffect(() => {
+    const unsubAuth = onAuthChange((u: any) => {
+      setUser(u);
+      if (!u) return;
+      const q = query(
+        collection(db, "requests"),
+        where("customerId", "==", u.uid),
+        orderBy("createdAt", "desc")
+      );
+      const unsub = onSnapshot(q, (snap) => {
+        const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+        setRequests(docs);
+        setOffersByRequest({});
+      });
+      return () => unsub();
+    });
+    return () => unsubAuth();
+  }, []);
 
-    if (!rows.length) return;
-    const header = Object.keys(rows[0]);
-    const csv = [header.join(",")]
-      .concat(
-        rows.map((row) =>
-          header.map((h) => `"${String((row as any)[h] ?? "").replace(/"/g, '""')}"`).join(",")
-        )
-      )
-      .join("\n");
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `requests-${new Date().toISOString().slice(0, 10)}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
+  const exportCSV = () => {
+    try {
+      const headers = ["from", "to", "moveDate", "details", "offersCount"];
+      const rows = requests.map((r) => [
+        r.fromCity || r.fromCounty || "",
+        r.toCity || r.toCounty || "",
+        r.moveDate || "",
+        (offersByRequest[r.id] || []).length,
+      ]);
+      const csv = [headers.join(";"), ...rows.map((row) => row.join(";"))].join("\n");
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `requests.csv`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error("CSV export failed", err);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -172,6 +152,19 @@ export default function CustomerDashboard() {
     });
     setActiveTab("requests");
   };
+
+  const resetForm = () =>
+    setForm({
+      fromCity: "",
+      fromCounty: "",
+      toCity: "",
+      toCounty: "",
+      moveDate: "",
+      details: "",
+      rooms: "",
+      volumeM3: "",
+      phone: "",
+    });
 
   return (
     <RequireRole allowedRole="customer">
@@ -223,12 +216,22 @@ export default function CustomerDashboard() {
             <main className="col-span-12 md:col-span-6">
               <div className="mb-4 flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-emerald-700">Panou clienti</h1>
-                <div className="hidden items-center gap-3 md:flex">
-                  <div className="text-sm text-gray-600">
-                    Cereri: <span className="font-semibold">{requests.length}</span>
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    Oferte: <span className="font-semibold">{totalOffers}</span>
+                <div className="flex items-center gap-3">
+                  {/* mobile: open modal for new request */}
+                  <button
+                    onClick={() => setIsFormModalOpen(true)}
+                    className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white md:hidden"
+                  >
+                    <PlusSquare size={14} /> Cerere nouă
+                  </button>
+
+                  <div className="hidden items-center gap-3 md:flex">
+                    <div className="text-sm text-gray-600">
+                      Cereri: <span className="font-semibold">{requests.length}</span>
+                    </div>
+                    <div className="text-sm text-gray-600">
+                      Oferte: <span className="font-semibold">{totalOffers}</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -237,46 +240,21 @@ export default function CustomerDashboard() {
                 <>
                   {/* Dashboard header: stat cards */}
                   <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-                      <div
-                        className="flex items-center justify-center rounded-md bg-emerald-50"
-                        style={{ height: 48, width: 48 }}
-                      >
-                        <List className="text-emerald-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500">Cereri</div>
-                        <div className="text-2xl font-bold text-emerald-700">{requests.length}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-                      <div
-                        className="flex items-center justify-center rounded-md bg-sky-50"
-                        style={{ height: 48, width: 48 }}
-                      >
-                        <Inbox className="text-sky-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500">Oferte</div>
-                        <div className="text-2xl font-bold text-emerald-700">{totalOffers}</div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-4 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-                      <div
-                        className="flex items-center justify-center rounded-md bg-amber-50"
-                        style={{ height: 48, width: 48 }}
-                      >
-                        <PlusSquare className="text-amber-600" />
-                      </div>
-                      <div>
-                        <div className="text-xs text-gray-500">Medie oferte / cerere</div>
-                        <div className="text-2xl font-bold text-emerald-700">
-                          {requests.length ? Math.round(totalOffers / requests.length) : 0}
-                        </div>
-                      </div>
-                    </div>
+                    <StatCard
+                      title="Cereri"
+                      value={requests.length}
+                      icon={<List className="text-emerald-600" />}
+                    />
+                    <StatCard
+                      title="Oferte"
+                      value={totalOffers}
+                      icon={<Inbox className="text-sky-600" />}
+                    />
+                    <StatCard
+                      title="Medie oferte / cerere"
+                      value={requests.length ? Math.round(totalOffers / requests.length) : 0}
+                      icon={<PlusSquare className="text-amber-600" />}
+                    />
                   </div>
 
                   <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
@@ -330,88 +308,8 @@ export default function CustomerDashboard() {
                           key={r.id}
                           initial={{ opacity: 0, y: 8 }}
                           animate={{ opacity: 1, y: 0 }}
-                          className="relative overflow-hidden rounded-xl border bg-white p-4 shadow hover:shadow-md"
                         >
-                          <div className="absolute left-0 top-0 h-full w-1 bg-emerald-500/60" />
-                          <div className="relative flex items-start justify-between gap-4">
-                            <div className="flex-1">
-                              <div className="flex items-center gap-3">
-                                <h3 className="text-lg font-semibold text-emerald-700">
-                                  {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
-                                </h3>
-                                <span className="text-sm text-gray-400">{r.moveDate}</span>
-                              </div>
-                              <p className="mt-2 text-sm text-gray-600">{r.details}</p>
-
-                              <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-500">
-                                {r.rooms && (
-                                  <span>
-                                    Camere:{" "}
-                                    <span className="font-medium text-gray-700">{r.rooms}</span>
-                                  </span>
-                                )}
-                                {typeof r.volumeM3 !== "undefined" && (
-                                  <span>
-                                    Volum:{" "}
-                                    <span className="font-medium text-gray-700">
-                                      {r.volumeM3} m³
-                                    </span>
-                                  </span>
-                                )}
-                                {r.budgetEstimate && (
-                                  <span>
-                                    Buget:{" "}
-                                    <span className="font-medium text-gray-700">
-                                      {r.budgetEstimate} RON
-                                    </span>
-                                  </span>
-                                )}
-                                <span>
-                                  Ambalare:{" "}
-                                  <span className="font-medium text-gray-700">
-                                    {r.needPacking ? "Da" : "Nu"}
-                                  </span>
-                                </span>
-                              </div>
-                            </div>
-
-                            <div className="flex w-40 flex-col items-end gap-2">
-                              <div className="text-sm text-gray-500">Oferte</div>
-                              <div className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">
-                                {(offersByRequest[r.id] || []).length}
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="mt-4 border-t pt-4">
-                            <h4 className="mb-2 text-sm font-semibold text-gray-700">
-                              Oferte primite
-                            </h4>
-                            <div className="space-y-2">
-                              {(offersByRequest[r.id] || []).length ? (
-                                (offersByRequest[r.id] || []).map((o) => (
-                                  <div
-                                    key={o.id}
-                                    className="flex items-center justify-between rounded-md border border-gray-100 bg-gray-50 p-3"
-                                  >
-                                    <div>
-                                      <p className="font-medium text-gray-800">{o.companyName}</p>
-                                      {o.message && (
-                                        <p className="text-sm text-gray-500">{o.message}</p>
-                                      )}
-                                    </div>
-                                    <div className="text-right">
-                                      <p className="text-lg font-semibold text-emerald-700">
-                                        {o.price} lei
-                                      </p>
-                                    </div>
-                                  </div>
-                                ))
-                              ) : (
-                                <p className="text-sm italic text-gray-400">Nicio ofertă.</p>
-                              )}
-                            </div>
-                          </div>
+                          <RequestCard r={r} offers={offersByRequest[r.id] || []} />
                         </motion.div>
                       ))}
                     </div>
@@ -448,108 +346,48 @@ export default function CustomerDashboard() {
 
             <aside className="col-span-12 md:col-span-3">
               <div className="sticky top-28 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-                <h3 className="mb-3 text-sm font-semibold text-gray-600">Trimite o cerere</h3>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-2">
-                  <div>
-                    <label className="block text-xs text-gray-600">Localitate plecare</label>
-                    <input
-                      value={form.fromCity}
-                      onChange={(e) => setForm((s: any) => ({ ...s, fromCity: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600">Județ plecare</label>
-                    <input
-                      value={form.fromCounty}
-                      onChange={(e) => setForm((s: any) => ({ ...s, fromCounty: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600">Localitate destinație</label>
-                    <input
-                      value={form.toCity}
-                      onChange={(e) => setForm((s: any) => ({ ...s, toCity: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600">Județ destinație</label>
-                    <input
-                      value={form.toCounty}
-                      onChange={(e) => setForm((s: any) => ({ ...s, toCounty: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600">Data</label>
-                    <input
-                      type="date"
-                      value={form.moveDate}
-                      onChange={(e) => setForm((s: any) => ({ ...s, moveDate: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600">Camere (estimare)</label>
-                    <input
-                      value={form.rooms}
-                      onChange={(e) => setForm((s: any) => ({ ...s, rooms: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600">Telefon</label>
-                    <input
-                      value={form.phone}
-                      onChange={(e) => setForm((s: any) => ({ ...s, phone: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs text-gray-600">Detalii</label>
-                    <textarea
-                      value={form.details}
-                      onChange={(e) => setForm((s: any) => ({ ...s, details: e.target.value }))}
-                      className="w-full rounded-md border p-2 text-sm"
-                      rows={4}
-                    />
-                  </div>
-
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="submit"
-                      className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow hover:opacity-95"
-                    >
-                      Trimite
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() =>
-                        setForm({
-                          fromCity: "",
-                          fromCounty: "",
-                          toCity: "",
-                          toCounty: "",
-                          moveDate: "",
-                          details: "",
-                          rooms: "",
-                          volumeM3: "",
-                          phone: "",
-                        })
-                      }
-                      className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm"
-                    >
-                      Reset
-                    </button>
-                  </div>
-                </form>
+                <RequestForm
+                  form={form}
+                  setForm={setForm}
+                  onSubmit={handleSubmit}
+                  onReset={resetForm}
+                />
               </div>
             </aside>
           </div>
         </section>
       </LayoutWrapper>
+      {/* Mobile modal for new request */}
+      {isFormModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setIsFormModalOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="relative z-10 w-full rounded-t-2xl bg-white p-4 shadow-lg sm:max-w-md sm:rounded-2xl">
+            <div className="mb-2 flex items-center justify-between">
+              <h3 className="text-sm font-semibold text-gray-700">Cerere nouă</h3>
+              <button
+                onClick={() => setIsFormModalOpen(false)}
+                className="rounded p-1 text-gray-500 hover:bg-gray-100"
+                aria-label="Închide"
+              >
+                ✕
+              </button>
+            </div>
+            <RequestForm
+              form={form}
+              setForm={setForm}
+              onSubmit={(e) => {
+                handleSubmit(e);
+                setIsFormModalOpen(false);
+              }}
+              onReset={resetForm}
+            />
+          </div>
+        </div>
+      )}
     </RequireRole>
   );
 }
