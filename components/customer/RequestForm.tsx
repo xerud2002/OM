@@ -19,13 +19,14 @@ type FormShape = {
   toFloor?: string;
   toElevator?: boolean;
   rooms?: string | number;
-  volumeM3?: number;
-  needPacking?: boolean;
-  hasElevator?: boolean;
-  budgetEstimate?: number;
   phone?: string;
-  specialItems?: string;
   details?: string;
+  // Services
+  serviceMoving?: boolean;
+  servicePacking?: boolean;
+  serviceDisassembly?: boolean;
+  serviceCleanout?: boolean;
+  serviceStorage?: boolean;
 };
 
 export default function RequestForm({
@@ -42,57 +43,55 @@ export default function RequestForm({
   const countyCities = (county?: string) =>
     county && (cities as any)[county] ? (cities as any)[county] : [];
 
-  const setPreset = (preset: string) => {
-    const map: Record<string, { rooms: string; volumeM3: number }> = {
-      Garsonieră: { rooms: "1", volumeM3: 12 },
-      "2 camere": { rooms: "2", volumeM3: 18 },
-      "3 camere": { rooms: "3", volumeM3: 25 },
-      "4+ camere": { rooms: "4", volumeM3: 35 },
-    };
-    if (map[preset]) {
-      setForm((s) => ({ ...s, rooms: map[preset].rooms, volumeM3: map[preset].volumeM3 }));
-    }
-  };
-
   return (
-    <div className="rounded-lg border bg-white p-4 md:p-6">
-      <h3 className="mb-4 text-lg font-semibold">Cerere nouă</h3>
+    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-6 shadow-lg">
+      <div className="mb-6 flex items-center gap-3 border-b border-emerald-100 pb-4">
+        <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+        </svg>
+        <h3 className="text-xl font-bold text-gray-800">Cerere nouă de mutare</h3>
+      </div>
       <form onSubmit={onSubmit} className="space-y-6">
-        {/* Pickup and Destination */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {/* From county/city */}
-          <div>
-            <label className="block text-xs text-gray-600">Județ plecare</label>
-            <select
-              required
-              value={form.fromCounty || ""}
-              onChange={(e) => setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))}
-              className="w-full rounded-md border p-2 text-sm"
-            >
-              <option value="">Selectează județ</option>
-              {counties.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+        {/* Pickup Location */}
+        <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5">
+          <div className="mb-4 flex items-center gap-2 border-b border-emerald-200 pb-2">
+            <svg className="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <h4 className="text-sm font-semibold text-emerald-900">Punct de plecare</h4>
           </div>
-          <div>
-            <label className="block text-xs text-gray-600">Localitate plecare</label>
-            {form.fromCityManual ? (
-              <input
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
+              <select
                 required
-                value={form.fromCity || ""}
-                onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
-                placeholder="Introdu localitatea"
-                className="w-full rounded-md border p-2 text-sm"
-              />
-            ) : (
+                value={form.fromCounty || ""}
+                onChange={(e) => setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              >
+                <option value="">Selectează județ</option>
+                {counties.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
               <select
                 required
                 value={form.fromCity || ""}
-                onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
-                className="w-full rounded-md border p-2 text-sm"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setForm((s) => ({ 
+                    ...s, 
+                    fromCity: value,
+                    fromCityManual: value === "__other__"
+                  }));
+                }}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                 disabled={!form.fromCounty}
               >
                 <option value="">Selectează localitatea</option>
@@ -101,53 +100,121 @@ export default function RequestForm({
                     {city}
                   </option>
                 ))}
+                <option value="__other__">Altă localitate</option>
               </select>
-            )}
-            <label className="mt-2 flex items-center gap-2 text-xs text-gray-600">
-              <input
-                type="checkbox"
-                checked={!!form.fromCityManual}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, fromCityManual: e.target.checked, fromCity: "" }))
-                }
-              />
-              Localitatea nu e în listă? Introdu manual
-            </label>
+              {form.fromCityManual && (
+                <input
+                  required
+                  value={form.fromCity === "__other__" ? "" : form.fromCity || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
+                  placeholder="Introdu localitatea"
+                  className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                />
+              )}
+            </div>
           </div>
-
-          {/* To county/city */}
           <div>
-            <label className="block text-xs text-gray-600">Județ destinație</label>
-            <select
+            <label className="mb-1 block text-xs font-medium text-gray-700">Adresă completă</label>
+            <input
               required
-              value={form.toCounty || ""}
-              onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
-              className="w-full rounded-md border p-2 text-sm"
-            >
-              <option value="">Selectează județ</option>
-              {counties.map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-            </select>
+              value={form.fromAddress || ""}
+              onChange={(e) => setForm((s) => ({ ...s, fromAddress: e.target.value }))}
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              placeholder="Stradă, număr, bloc/scară/apartament"
+            />
           </div>
-          <div>
-            <label className="block text-xs text-gray-600">Localitate destinație</label>
-            {form.toCityManual ? (
-              <input
+          
+          {/* Property Details - Pickup */}
+          <div className="mt-4 space-y-3 rounded-lg border border-emerald-100 bg-white p-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Tip proprietate</label>
+                <select
+                  value={form.fromType || "house"}
+                  onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                >
+                  <option value="house">Casă</option>
+                  <option value="flat">Apartament</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
+                <input
+                  type="text"
+                  value={form.rooms || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  placeholder="ex: 2"
+                />
+              </div>
+            </div>
+            {form.fromType === "flat" && (
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Etaj</label>
+                  <input
+                    placeholder="ex: 3"
+                    value={form.fromFloor || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  />
+                </div>
+                <div className="flex items-end">
+                  <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={!!form.fromElevator}
+                      onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
+                      className="rounded border-gray-300"
+                    />
+                    Lift
+                  </label>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Destination Location */}
+        <div className="rounded-xl border border-sky-200 bg-sky-50/50 p-5">
+          <div className="mb-4 flex items-center gap-2 border-b border-sky-200 pb-2">
+            <svg className="h-5 w-5 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            <h4 className="text-sm font-semibold text-sky-900">Destinație</h4>
+          </div>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
+              <select
                 required
-                value={form.toCity || ""}
-                onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
-                placeholder="Introdu localitatea"
-                className="w-full rounded-md border p-2 text-sm"
-              />
-            ) : (
+                value={form.toCounty || ""}
+                onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+              >
+                <option value="">Selectează județ</option>
+                {counties.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
               <select
                 required
                 value={form.toCity || ""}
-                onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
-                className="w-full rounded-md border p-2 text-sm"
+                onChange={(e) => {
+                  const value = e.target.value;
+                  setForm((s) => ({ 
+                    ...s, 
+                    toCity: value,
+                    toCityManual: value === "__other__"
+                  }));
+                }}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                 disabled={!form.toCounty}
               >
                 <option value="">Selectează localitatea</option>
@@ -156,240 +223,137 @@ export default function RequestForm({
                     {city}
                   </option>
                 ))}
+                <option value="__other__">Altă localitate</option>
               </select>
-            )}
-            <label className="mt-2 flex items-center gap-2 text-xs text-gray-600">
-              <input
-                type="checkbox"
-                checked={!!form.toCityManual}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, toCityManual: e.target.checked, toCity: "" }))
-                }
-              />
-              Localitatea nu e în listă? Introdu manual
-            </label>
+              {form.toCityManual && (
+                <input
+                  required
+                  value={form.toCity === "__other__" ? "" : form.toCity || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
+                  placeholder="Introdu localitatea"
+                  className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                />
+              )}
+            </div>
           </div>
-
-          {/* Addresses */}
-          <div className="md:col-span-2">
-            <label className="block text-xs text-gray-600">Adresă plecare</label>
-            <input
-              required
-              value={form.fromAddress || ""}
-              onChange={(e) => setForm((s) => ({ ...s, fromAddress: e.target.value }))}
-              className="w-full rounded-md border p-2 text-sm"
-              placeholder="Stradă, număr, bloc/scară/apartament (dacă e cazul)"
-            />
-          </div>
-          <div className="md:col-span-2">
-            <label className="block text-xs text-gray-600">Adresă destinație</label>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-700">Adresă completă</label>
             <input
               required
               value={form.toAddress || ""}
               onChange={(e) => setForm((s) => ({ ...s, toAddress: e.target.value }))}
-              className="w-full rounded-md border p-2 text-sm"
-              placeholder="Stradă, număr, bloc/scară/apartament (dacă e cazul)"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+              placeholder="Stradă, număr, bloc/scară/apartament"
             />
           </div>
-        </div>
 
-        {/* Date + preset */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <label className="block text-xs text-gray-600">Data mutării</label>
-            <input
-              required
-              type="date"
-              value={form.moveDate || ""}
-              onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-              className="w-full rounded-md border p-2 text-sm"
-            />
-          </div>
-          <div>
-            <label className="block text-xs text-gray-600">Tip locuință (preset)</label>
-            <select
-              onChange={(e) => setPreset(e.target.value)}
-              defaultValue=""
-              className="w-full rounded-md border p-2 text-sm"
-            >
-              <option value="" disabled>
-                Selectează preset
-              </option>
-              <option>Garsonieră</option>
-              <option>2 camere</option>
-              <option>3 camere</option>
-              <option>4+ camere</option>
-            </select>
-          </div>
-        </div>
-
-        {/* From/To dwelling details */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div className="grid grid-cols-2 items-center gap-2">
-            <label className="text-xs text-gray-600">Plecare: tip locuință</label>
-            <select
-              value={form.fromType || "house"}
-              onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
-              className="rounded-md border p-2 text-sm"
-            >
-              <option value="house">Casă</option>
-              <option value="flat">Apartament</option>
-            </select>
-            {form.fromType === "flat" && (
-              <>
+          {/* Property Details - Destination */}
+          <div className="mt-4 space-y-3 rounded-lg border border-sky-100 bg-white p-3">
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Tip proprietate</label>
+                <select
+                  value={form.toType || "house"}
+                  onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                >
+                  <option value="house">Casă</option>
+                  <option value="flat">Apartament</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
                 <input
-                  placeholder="Etaj plecare"
-                  value={form.fromFloor || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                  className="col-span-2 rounded-md border p-2 text-sm"
+                  type="text"
+                  value={form.rooms || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  placeholder="ex: 2"
                 />
-                <label className="col-span-2 flex items-center gap-2 text-sm text-gray-700">
-                  <input
-                    type="checkbox"
-                    checked={!!form.fromElevator}
-                    onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
-                  />
-                  Bloc cu lift (plecare)
-                </label>
-              </>
-            )}
-          </div>
-          <div className="grid grid-cols-2 items-center gap-2">
-            <label className="text-xs text-gray-600">Destinație: tip locuință</label>
-            <select
-              value={form.toType || "house"}
-              onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
-              className="rounded-md border p-2 text-sm"
-            >
-              <option value="house">Casă</option>
-              <option value="flat">Apartament</option>
-            </select>
+              </div>
+            </div>
             {form.toType === "flat" && (
-              <>
-                <input
-                  placeholder="Etaj destinație"
-                  value={form.toFloor || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                  className="col-span-2 rounded-md border p-2 text-sm"
-                />
-                <label className="col-span-2 flex items-center gap-2 text-sm text-gray-700">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Etaj</label>
                   <input
-                    type="checkbox"
-                    checked={!!form.toElevator}
-                    onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
+                    placeholder="ex: 3"
+                    value={form.toFloor || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   />
-                  Bloc cu lift (destinație)
-                </label>
-              </>
+                </div>
+                <div className="flex items-end">
+                  <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
+                    <input
+                      type="checkbox"
+                      checked={!!form.toElevator}
+                      onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
+                      className="rounded border-gray-300"
+                    />
+                    Lift
+                  </label>
+                </div>
+              </div>
             )}
           </div>
         </div>
 
-        {/* Rooms and Volume */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <label className="block text-xs text-gray-600">Număr camere</label>
-            <input
-              type="text"
-              value={form.rooms || ""}
-              onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
-              className="w-full rounded-md border p-2 text-sm"
-              placeholder="ex: 2"
-            />
-          </div>
-          <div>
-            <label className="block text-xs text-gray-600">Volum estimat (m³)</label>
-            <input
-              type="number"
-              min={0}
-              value={form.volumeM3 ?? 0}
-              onChange={(e) => setForm((s) => ({ ...s, volumeM3: Number(e.target.value || 0) }))}
-              className="w-full rounded-md border p-2 text-sm"
-              placeholder="ex: 20"
-            />
-          </div>
+        {/* Date */}
+        <div>
+          <label className="mb-1 block text-xs font-medium text-gray-700">Data mutării</label>
+          <input
+            required
+            type="date"
+            value={form.moveDate || ""}
+            onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+          />
         </div>
 
-        {/* Misc options */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={!!form.needPacking}
-              onChange={(e) => setForm((s) => ({ ...s, needPacking: e.target.checked }))}
-            />
-            Necesit ambalare
-          </label>
-          <label className="flex items-center gap-2 text-sm text-gray-700">
-            <input
-              type="checkbox"
-              checked={!!form.hasElevator}
-              onChange={(e) => setForm((s) => ({ ...s, hasElevator: e.target.checked }))}
-            />
-            Bloc cu lift
-          </label>
-          <div>
-            <label className="block text-xs text-gray-600">Buget estimat (RON)</label>
-            <input
-              type="number"
-              min={0}
-              value={form.budgetEstimate ?? 0}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, budgetEstimate: Number(e.target.value || 0) }))
-              }
-              className="w-full rounded-md border p-2 text-sm"
-              placeholder="ex: 1500"
-            />
-          </div>
-        </div>
-
-        {/* Contact and details */}
+        {/* Contact and Additional Info */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
-            <label className="block text-xs text-gray-600">Telefon</label>
+            <label className="mb-1 block text-xs font-medium text-gray-700">Telefon</label>
             <input
               required
               value={form.phone || ""}
               onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-              className="w-full rounded-md border p-2 text-sm"
-              placeholder="ex: 07xx xxx xxx"
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              placeholder="07xx xxx xxx"
             />
           </div>
           <div>
-            <label className="block text-xs text-gray-600">Obiecte speciale (opțional)</label>
-            <input
-              value={form.specialItems || ""}
-              onChange={(e) => setForm((s) => ({ ...s, specialItems: e.target.value }))}
-              className="w-full rounded-md border p-2 text-sm"
-              placeholder="ex: pian, seif, vitrină mare"
+            <label className="mb-1 block text-xs font-medium text-gray-700">Detalii suplimentare</label>
+            <textarea
+              value={form.details || ""}
+              onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
+              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+              rows={3}
+              placeholder="Informații importante (acces, obiecte fragile, interval orar, etc.)"
             />
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs text-gray-600">Detalii</label>
-          <textarea
-            value={form.details || ""}
-            onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
-            className="w-full rounded-md border p-2 text-sm"
-            rows={4}
-            placeholder="Informații suplimentare (acces, etaj, interval orar preferat, etc.)"
-          />
-        </div>
-
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow hover:opacity-95"
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl hover:shadow-emerald-500/40"
           >
-            Trimite
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+            </svg>
+            Trimite cererea
           </button>
           <button
             type="button"
             onClick={onReset}
-            className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm"
+            className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 shadow-sm transition hover:border-gray-400 hover:bg-gray-50"
           >
-            Reset
+            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+            Resetează
           </button>
         </div>
       </form>

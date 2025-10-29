@@ -13,17 +13,22 @@ import RequireRole from "@/components/auth/RequireRole";
 type FormState = {
   fromCounty: string;
   fromCity: string;
+  fromCityManual?: boolean;
+  fromAddress?: string;
   toCounty: string;
   toCity: string;
+  toCityManual?: boolean;
+  toAddress?: string;
   moveDate: string;
-  details: string;
-  rooms?: number;
-  volumeM3?: number;
-  needPacking?: boolean;
-  hasElevator?: boolean;
-  specialItems?: string;
+  fromType?: "house" | "flat";
+  fromFloor?: string;
+  fromElevator?: boolean;
+  toType?: "house" | "flat";
+  toFloor?: string;
+  toElevator?: boolean;
+  rooms?: string | number;
   phone?: string;
-  budgetEstimate?: number;
+  details?: string;
 };
 
 export default function FormPage() {
@@ -39,17 +44,22 @@ export default function FormPage() {
   const [form, setForm] = useState<FormState>({
     fromCounty: defaultFromCounty,
     fromCity: defaultFromCity,
+    fromCityManual: false,
+    fromAddress: "",
     toCounty: defaultToCounty,
     toCity: defaultToCity,
+    toCityManual: false,
+    toAddress: "",
     moveDate: new Date().toISOString().split("T")[0],
-    details: "",
-    rooms: 2,
-    volumeM3: undefined,
-    needPacking: false,
-    hasElevator: true,
-    specialItems: "",
+    fromType: "house",
+    fromFloor: "",
+    fromElevator: false,
+    toType: "house",
+    toFloor: "",
+    toElevator: false,
+    rooms: "2",
     phone: "",
-    budgetEstimate: undefined,
+    details: "",
   });
 
   useEffect(() => {
@@ -84,10 +94,6 @@ export default function FormPage() {
       toast.error("Numărul de camere trebuie să fie cel puțin 1.");
       return;
     }
-    if (form.volumeM3 !== undefined && Number(form.volumeM3) <= 0) {
-      toast.error("Volumul trebuie să fie un număr pozitiv.");
-      return;
-    }
 
     setSubmitting(true);
     try {
@@ -95,10 +101,6 @@ export default function FormPage() {
       const payload: Record<string, any> = {
         ...form,
         rooms: form.rooms === undefined ? undefined : Number(form.rooms),
-        volumeM3: form.volumeM3 === undefined ? undefined : Number(form.volumeM3),
-        budgetEstimate: form.budgetEstimate === undefined ? undefined : Number(form.budgetEstimate),
-        needPacking: !!form.needPacking,
-        hasElevator: !!form.hasElevator,
         // user metadata
         userId: user.uid,
         customerId: user.uid,
@@ -236,7 +238,7 @@ export default function FormPage() {
             </label>
 
             {/* Additional move details */}
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-gray-700">Camere</span>
                 <input
@@ -255,66 +257,6 @@ export default function FormPage() {
 
               <label className="block">
                 <span className="mb-1 block text-sm font-medium text-gray-700">
-                  Volum estimat (m³)
-                </span>
-                <input
-                  type="number"
-                  min={0}
-                  step={0.1}
-                  value={form.volumeM3 ?? ""}
-                  onChange={(e) =>
-                    setForm((s) => ({
-                      ...s,
-                      volumeM3: e.target.value ? Number(e.target.value) : undefined,
-                    }))
-                  }
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
-                />
-              </label>
-
-              <label className="block">
-                <span className="mb-1 block text-sm font-medium text-gray-700">
-                  Buget estimat (RON)
-                </span>
-                <input
-                  type="number"
-                  min={0}
-                  step={1}
-                  value={form.budgetEstimate ?? ""}
-                  onChange={(e) =>
-                    setForm((s) => ({
-                      ...s,
-                      budgetEstimate: e.target.value ? Number(e.target.value) : undefined,
-                    }))
-                  }
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
-                />
-              </label>
-            </div>
-
-            <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={!!form.needPacking}
-                  onChange={(e) => setForm((s) => ({ ...s, needPacking: e.target.checked }))}
-                  className="h-4 w-4"
-                />
-                <span className="text-sm text-gray-700">Am nevoie de ambalare</span>
-              </label>
-
-              <label className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  checked={!!form.hasElevator}
-                  onChange={(e) => setForm((s) => ({ ...s, hasElevator: e.target.checked }))}
-                  className="h-4 w-4"
-                />
-                <span className="text-sm text-gray-700">Există lift</span>
-              </label>
-
-              <label className="block">
-                <span className="mb-1 block text-sm font-medium text-gray-700">
                   Telefon (de contact)
                 </span>
                 <input
@@ -328,19 +270,6 @@ export default function FormPage() {
               </label>
             </div>
 
-            <label className="block">
-              <span className="mb-1 block text-sm font-medium text-gray-700">
-                Articole speciale
-              </span>
-              <input
-                type="text"
-                value={form.specialItems}
-                onChange={(e) => setForm((s) => ({ ...s, specialItems: e.target.value }))}
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
-                placeholder="Ex: pian, seif, mobilier demontabil"
-              />
-            </label>
-
             {/* Summary */}
             <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
               <p className="text-sm text-gray-700">
@@ -348,10 +277,7 @@ export default function FormPage() {
               </p>
               <p className="text-sm text-gray-500">Data: {form.moveDate}</p>
               <p className="text-sm text-gray-500">
-                Camere: {form.rooms ?? "-"} • Volum: {form.volumeM3 ?? "-"} m³
-              </p>
-              <p className="text-sm text-gray-500">
-                Ambalare: {form.needPacking ? "Da" : "Nu"} • Lift: {form.hasElevator ? "Da" : "Nu"}
+                Camere: {form.rooms ?? "-"}
               </p>
             </div>
 
