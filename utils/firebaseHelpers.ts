@@ -47,7 +47,11 @@ const COLLECTIONS = {
 } as const;
 
 // ---- Auth state
-export function onAuthChange(cb: (_user: User | null) => void) {
+// The parameter name inside the function type is only used for clarity in the type
+// and can be incorrectly flagged by ESLint's no-unused-vars. Disable that rule
+// for this single line to keep the type annotation while avoiding a warning.
+// eslint-disable-next-line no-unused-vars
+export function onAuthChange(cb: (user: User | null) => void) {
   return onAuthStateChanged(auth, cb);
 }
 
