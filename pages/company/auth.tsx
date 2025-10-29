@@ -1,15 +1,14 @@
 "use client";
 import { useState, useEffect } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
-import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  onAuthStateChanged,
-} from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
+import {
+  loginWithGoogle,
+  registerWithEmail,
+  loginWithEmail,
+  resetPassword,
+} from "@/utils/firebaseHelpers";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
@@ -34,8 +33,7 @@ export default function CustomerAuthPage() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      await loginWithGoogle("company");
       router.push("/company/dashboard");
     } catch (err: any) {
       setMessage(err.message);
@@ -49,10 +47,10 @@ export default function CustomerAuthPage() {
     setLoading(true);
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        await loginWithEmail({ email, password });
         router.push("/company/dashboard");
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await registerWithEmail("company", { email, password });
         router.push("/company/dashboard");
       }
     } catch (err: any) {
@@ -65,7 +63,7 @@ export default function CustomerAuthPage() {
   const handlePasswordReset = async () => {
     if (!email) return setMessage("Introdu adresa de email pentru resetare.");
     try {
-      await sendPasswordResetEmail(auth, email);
+      await resetPassword(email);
       setMessage("Email de resetare trimis ✉️");
     } catch (err: any) {
       setMessage(err.message);

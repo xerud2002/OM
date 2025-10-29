@@ -6,16 +6,14 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { Mail, Lock } from "lucide-react";
 import LayoutWrapper from "@/components/layout/Layout";
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/services/firebase";
 import {
-  GoogleAuthProvider,
-  signInWithPopup,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-  onAuthStateChanged,
-} from "firebase/auth";
-import { auth } from "@/services/firebase"; 
-
+  loginWithGoogle,
+  registerWithEmail,
+  loginWithEmail,
+  resetPassword,
+} from "@/utils/firebaseHelpers";
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -37,11 +35,10 @@ export default function CustomerAuthPage() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const provider = new GoogleAuthProvider();
-      await signInWithPopup(auth, provider);
+      await loginWithGoogle("customer");
       router.push("/customer/dashboard");
     } catch (err: any) {
-      setMessage(err.message);
+      setMessage(err.message || "Eroare la autentificare cu Google.");
     } finally {
       setLoading(false);
     }
@@ -55,9 +52,9 @@ export default function CustomerAuthPage() {
 
     try {
       if (isLogin) {
-        await signInWithEmailAndPassword(auth, email, password);
+        await loginWithEmail({ email, password });
       } else {
-        await createUserWithEmailAndPassword(auth, email, password);
+        await registerWithEmail("customer", { email, password });
       }
       router.push("/customer/dashboard");
     } catch (err: any) {
@@ -71,7 +68,7 @@ export default function CustomerAuthPage() {
   const handlePasswordReset = async () => {
     if (!email) return setMessage("Introdu adresa de email pentru resetare.");
     try {
-      await sendPasswordResetEmail(auth, email);
+      await resetPassword(email);
       setMessage("✉️ Email de resetare trimis cu succes!");
     } catch (err: any) {
       setMessage(err.message);

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
+import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
 import {
   collection,
@@ -111,163 +112,171 @@ export default function CustomerRequestsPage() {
   };
 
   return (
-    <LayoutWrapper>
-      <section className="mx-auto max-w-4xl px-4 py-10">
-        <h1 className="mb-8 text-center text-3xl font-bold text-emerald-700">
-          Cererile tale de mutare
-        </h1>
+    <RequireRole allowedRole="customer">
+      <LayoutWrapper>
+        <section className="mx-auto max-w-4xl px-4 py-10">
+          <h1 className="mb-8 text-center text-3xl font-bold text-emerald-700">
+            Cererile tale de mutare
+          </h1>
 
-        {/* 🟩 Form */}
-        <motion.form
-          onSubmit={handleSubmit}
-          whileHover={{ scale: 1.01 }}
-          className="mb-10 grid grid-cols-1 gap-4 rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-lg backdrop-blur-sm md:grid-cols-2"
-        >
-          <input
-            placeholder="De la oraș"
-            value={form.fromCity}
-            onChange={(e) => setForm({ ...form, fromCity: e.target.value })}
-            className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400"
-            required
-          />
-          <input
-            placeholder="Spre oraș"
-            value={form.toCity}
-            onChange={(e) => setForm({ ...form, toCity: e.target.value })}
-            className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400"
-            required
-          />
-          <input
-            type="date"
-            value={form.moveDate}
-            onChange={(e) => setForm({ ...form, moveDate: e.target.value })}
-            className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400"
-            required
-          />
-          <textarea
-            placeholder="Detalii despre mutare (ex: volum, etaj, lift, etc.)"
-            value={form.details}
-            onChange={(e) => setForm({ ...form, details: e.target.value })}
-            className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400 md:col-span-2"
-            required
-          />
-          <motion.button
-            whileHover={{ scale: 1.03 }}
-            whileTap={{ scale: 0.97 }}
-            type="submit"
-            className="w-full rounded-lg bg-gradient-to-r from-emerald-600 to-sky-500 py-2.5 font-semibold text-white shadow-md transition-all hover:opacity-95 md:col-span-2"
+          {/* 🟩 Form */}
+          <motion.form
+            onSubmit={handleSubmit}
+            whileHover={{ scale: 1.01 }}
+            className="mb-10 grid grid-cols-1 gap-4 rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-lg backdrop-blur-sm md:grid-cols-2"
           >
-            Trimite cererea
-          </motion.button>
-        </motion.form>
+            <input
+              placeholder="De la oraș"
+              value={form.fromCity}
+              onChange={(e) => setForm({ ...form, fromCity: e.target.value })}
+              className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400"
+              required
+            />
+            <input
+              placeholder="Spre oraș"
+              value={form.toCity}
+              onChange={(e) => setForm({ ...form, toCity: e.target.value })}
+              className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400"
+              required
+            />
+            <input
+              type="date"
+              value={form.moveDate}
+              onChange={(e) => setForm({ ...form, moveDate: e.target.value })}
+              className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400"
+              required
+            />
+            <textarea
+              placeholder="Detalii despre mutare (ex: volum, etaj, lift, etc.)"
+              value={form.details}
+              onChange={(e) => setForm({ ...form, details: e.target.value })}
+              className="rounded-lg border border-gray-200 p-2.5 text-sm shadow-sm outline-none transition focus:border-emerald-400 focus:ring-2 focus:ring-emerald-400 md:col-span-2"
+              required
+            />
+            <motion.button
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              type="submit"
+              className="w-full rounded-lg bg-gradient-to-r from-emerald-600 to-sky-500 py-2.5 font-semibold text-white shadow-md transition-all hover:opacity-95 md:col-span-2"
+            >
+              Trimite cererea
+            </motion.button>
+          </motion.form>
 
-        {/* 🧾 Requests */}
-        {requests.length === 0 ? (
-          <p className="text-center italic text-gray-500">
-            Nu ai nicio cerere activă momentan. Trimite una nouă! 💪
-          </p>
-        ) : (
-          <div className="space-y-8">
-            {requests.map((r) => (
-              <motion.div
-                key={r.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-                className="rounded-2xl border border-gray-100 bg-white/95 p-6 shadow-sm transition-all hover:shadow-md"
-              >
-                <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                  <div>
-                    <h3 className="text-lg font-semibold text-emerald-700">
-                      {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
-                    </h3>
-                    <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
-                      <CalendarDays size={14} /> {r.moveDate}
-                    </p>
-                    <p className="mt-1 text-sm text-gray-600">{r.details}</p>
-                    <div className="mt-2 text-sm text-gray-500">
-                      {r.rooms && <span>Camere: {r.rooms} • </span>}
-                      {typeof r.volumeM3 !== "undefined" && <span>Volum: {r.volumeM3} m³ • </span>}
-                      {r.budgetEstimate && <span>Buget: {r.budgetEstimate} RON • </span>}
-                      {r.needPacking ? <span>Ambalare: Da • </span> : <span>Ambalare: Nu • </span>}
-                      {r.hasElevator ? <span>Lift: Da</span> : <span>Lift: Nu</span>}
+          {/* 🧾 Requests */}
+          {requests.length === 0 ? (
+            <p className="text-center italic text-gray-500">
+              Nu ai nicio cerere activă momentan. Trimite una nouă! 💪
+            </p>
+          ) : (
+            <div className="space-y-8">
+              {requests.map((r) => (
+                <motion.div
+                  key={r.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="rounded-2xl border border-gray-100 bg-white/95 p-6 shadow-sm transition-all hover:shadow-md"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+                    <div>
+                      <h3 className="text-lg font-semibold text-emerald-700">
+                        {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
+                      </h3>
+                      <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
+                        <CalendarDays size={14} /> {r.moveDate}
+                      </p>
+                      <p className="mt-1 text-sm text-gray-600">{r.details}</p>
+                      <div className="mt-2 text-sm text-gray-500">
+                        {r.rooms && <span>Camere: {r.rooms} • </span>}
+                        {typeof r.volumeM3 !== "undefined" && (
+                          <span>Volum: {r.volumeM3} m³ • </span>
+                        )}
+                        {r.budgetEstimate && <span>Buget: {r.budgetEstimate} RON • </span>}
+                        {r.needPacking ? (
+                          <span>Ambalare: Da • </span>
+                        ) : (
+                          <span>Ambalare: Nu • </span>
+                        )}
+                        {r.hasElevator ? <span>Lift: Da</span> : <span>Lift: Nu</span>}
+                      </div>
+                      {r.specialItems && (
+                        <p className="mt-2 text-sm text-gray-500">
+                          Articole speciale: {r.specialItems}
+                        </p>
+                      )}
+                      {(r.customerName || r.customerEmail) && (
+                        <p className="mt-2 text-xs text-gray-400">
+                          Contact: {r.customerName ?? ""}{" "}
+                          {r.customerEmail ? `• ${r.customerEmail}` : ""}
+                        </p>
+                      )}
+                      {r.phone && <p className="mt-1 text-sm text-gray-600">Telefon: {r.phone}</p>}
                     </div>
-                    {r.specialItems && (
-                      <p className="mt-2 text-sm text-gray-500">
-                        Articole speciale: {r.specialItems}
-                      </p>
-                    )}
-                    {(r.customerName || r.customerEmail) && (
-                      <p className="mt-2 text-xs text-gray-400">
-                        Contact: {r.customerName ?? ""}{" "}
-                        {r.customerEmail ? `• ${r.customerEmail}` : ""}
-                      </p>
-                    )}
-                    {r.phone && <p className="mt-1 text-sm text-gray-600">Telefon: {r.phone}</p>}
                   </div>
-                </div>
 
-                {/* Offers */}
-                <div className="mt-5 border-t border-gray-200 pt-4">
-                  <h4 className="mb-3 font-semibold text-gray-700">Oferte primite</h4>
+                  {/* Offers */}
+                  <div className="mt-5 border-t border-gray-200 pt-4">
+                    <h4 className="mb-3 font-semibold text-gray-700">Oferte primite</h4>
 
-                  <AnimatePresence>
-                    {offers[r.id]?.length ? (
-                      offers[r.id].map((offer) => (
-                        <motion.div
-                          key={offer.id}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ duration: 0.3 }}
-                          className={`mb-3 rounded-xl border p-4 ${
-                            offer.status === "accepted"
-                              ? "border-emerald-400 bg-emerald-50"
-                              : offer.status === "declined"
-                                ? "border-gray-200 bg-gray-50 opacity-70"
-                                : "border-gray-100 hover:border-emerald-300 hover:bg-emerald-50/30"
-                          } transition-all`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <div>
-                              <p className="flex items-center gap-2 font-medium text-gray-800">
-                                <Building2 size={16} className="text-emerald-500" />
-                                {offer.companyName}
-                              </p>
-                              <p className="mt-0.5 flex items-center gap-1 text-sm text-gray-600">
-                                <Coins size={14} className="text-emerald-500" />
-                                {offer.price} lei
-                              </p>
+                    <AnimatePresence>
+                      {offers[r.id]?.length ? (
+                        offers[r.id].map((offer) => (
+                          <motion.div
+                            key={offer.id}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                            className={`mb-3 rounded-xl border p-4 ${
+                              offer.status === "accepted"
+                                ? "border-emerald-400 bg-emerald-50"
+                                : offer.status === "declined"
+                                  ? "border-gray-200 bg-gray-50 opacity-70"
+                                  : "border-gray-100 hover:border-emerald-300 hover:bg-emerald-50/30"
+                            } transition-all`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <p className="flex items-center gap-2 font-medium text-gray-800">
+                                  <Building2 size={16} className="text-emerald-500" />
+                                  {offer.companyName}
+                                </p>
+                                <p className="mt-0.5 flex items-center gap-1 text-sm text-gray-600">
+                                  <Coins size={14} className="text-emerald-500" />
+                                  {offer.price} lei
+                                </p>
+                              </div>
+
+                              {offer.status === "accepted" ? (
+                                <p className="text-xs font-medium text-emerald-700">✅ Acceptată</p>
+                              ) : offer.status === "declined" ? (
+                                <p className="text-xs text-gray-400">❌ Respinsă</p>
+                              ) : (
+                                <button
+                                  onClick={() => acceptOffer(r.id, offer.id)}
+                                  className="rounded-md bg-emerald-600 px-3 py-1 text-sm font-medium text-white shadow transition hover:bg-emerald-700"
+                                >
+                                  Acceptă
+                                </button>
+                              )}
                             </div>
 
-                            {offer.status === "accepted" ? (
-                              <p className="text-xs font-medium text-emerald-700">✅ Acceptată</p>
-                            ) : offer.status === "declined" ? (
-                              <p className="text-xs text-gray-400">❌ Respinsă</p>
-                            ) : (
-                              <button
-                                onClick={() => acceptOffer(r.id, offer.id)}
-                                className="rounded-md bg-emerald-600 px-3 py-1 text-sm font-medium text-white shadow transition hover:bg-emerald-700"
-                              >
-                                Acceptă
-                              </button>
+                            {offer.message && (
+                              <p className="mt-2 text-sm italic text-gray-600">“{offer.message}”</p>
                             )}
-                          </div>
-
-                          {offer.message && (
-                            <p className="mt-2 text-sm italic text-gray-600">“{offer.message}”</p>
-                          )}
-                        </motion.div>
-                      ))
-                    ) : (
-                      <p className="text-sm italic text-gray-400">Nu există oferte momentan.</p>
-                    )}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        )}
-      </section>
-    </LayoutWrapper>
+                          </motion.div>
+                        ))
+                      ) : (
+                        <p className="text-sm italic text-gray-400">Nu există oferte momentan.</p>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </section>
+      </LayoutWrapper>
+    </RequireRole>
   );
 }

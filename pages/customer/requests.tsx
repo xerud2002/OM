@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
+import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
 import {
   collection,
@@ -96,83 +97,85 @@ export default function CustomerRequestsPage() {
   };
 
   return (
-    <LayoutWrapper>
-      <section className="mx-auto max-w-5xl px-4 py-10">
-        <div className="mb-10 text-center">
-          <h1 className="text-3xl font-bold text-emerald-700">Cererile mele de mutare</h1>
-          <p className="mt-2 text-gray-600">
-            Vizualizează cererile tale active și ofertele primite de la firme.
-          </p>
-          <button
-            onClick={handleNewRequest}
-            className="mt-6 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-semibold text-white shadow-md transition hover:shadow-lg"
-          >
-            + Creează o cerere nouă
-          </button>
-        </div>
-
-        {requests.length === 0 ? (
-          <div className="mt-10 text-center text-gray-500">
-            Nu ai nicio cerere momentan.
-            <br />
+    <RequireRole allowedRole="customer">
+      <LayoutWrapper>
+        <section className="mx-auto max-w-5xl px-4 py-10">
+          <div className="mb-10 text-center">
+            <h1 className="text-3xl font-bold text-emerald-700">Cererile mele de mutare</h1>
+            <p className="mt-2 text-gray-600">
+              Vizualizează cererile tale active și ofertele primite de la firme.
+            </p>
             <button
               onClick={handleNewRequest}
-              className="mt-4 rounded-lg bg-emerald-500 px-5 py-2 font-medium text-white shadow hover:bg-emerald-600"
+              className="mt-6 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-semibold text-white shadow-md transition hover:shadow-lg"
             >
-              Adaugă prima cerere
+              + Creează o cerere nouă
             </button>
           </div>
-        ) : (
-          <div className="space-y-6">
-            <AnimatePresence>
-              {requests.map((req) => (
-                <motion.div
-                  key={req.id}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="rounded-2xl border border-emerald-100 bg-white/80 p-6 shadow-sm backdrop-blur-sm"
-                >
-                  <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
-                    <div>
-                      <h2 className="text-lg font-semibold text-emerald-700">
-                        {req.fromCity} → {req.toCity}
-                      </h2>
-                      <p className="text-sm text-gray-600">Data mutării: {req.moveDate}</p>
-                      <p className="mt-1 text-sm text-gray-500">{req.details}</p>
-                    </div>
-                  </div>
 
-                  {/* === Oferte primite === */}
-                  <div className="mt-4 border-t border-gray-100 pt-4">
-                    <h3 className="mb-2 text-sm font-semibold text-gray-700">Oferte primite:</h3>
-                    {offers[req.id]?.length ? (
-                      <ul className="space-y-2">
-                        {offers[req.id].map((offer) => (
-                          <li
-                            key={offer.id}
-                            className="flex flex-col justify-between rounded-lg border border-gray-200 bg-gray-50 p-3 sm:flex-row sm:items-center"
-                          >
-                            <div>
-                              <p className="font-medium text-emerald-700">{offer.companyName}</p>
-                              <p className="text-sm text-gray-600">{offer.message}</p>
-                            </div>
-                            <p className="mt-2 text-right text-lg font-semibold text-sky-600 sm:mt-0">
-                              {offer.price} RON
-                            </p>
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <p className="text-sm text-gray-500">Nicio ofertă momentan.</p>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
-        )}
-      </section>
-    </LayoutWrapper>
+          {requests.length === 0 ? (
+            <div className="mt-10 text-center text-gray-500">
+              Nu ai nicio cerere momentan.
+              <br />
+              <button
+                onClick={handleNewRequest}
+                className="mt-4 rounded-lg bg-emerald-500 px-5 py-2 font-medium text-white shadow hover:bg-emerald-600"
+              >
+                Adaugă prima cerere
+              </button>
+            </div>
+          ) : (
+            <div className="space-y-6">
+              <AnimatePresence>
+                {requests.map((req) => (
+                  <motion.div
+                    key={req.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="rounded-2xl border border-emerald-100 bg-white/80 p-6 shadow-sm backdrop-blur-sm"
+                  >
+                    <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                      <div>
+                        <h2 className="text-lg font-semibold text-emerald-700">
+                          {req.fromCity} → {req.toCity}
+                        </h2>
+                        <p className="text-sm text-gray-600">Data mutării: {req.moveDate}</p>
+                        <p className="mt-1 text-sm text-gray-500">{req.details}</p>
+                      </div>
+                    </div>
+
+                    {/* === Oferte primite === */}
+                    <div className="mt-4 border-t border-gray-100 pt-4">
+                      <h3 className="mb-2 text-sm font-semibold text-gray-700">Oferte primite:</h3>
+                      {offers[req.id]?.length ? (
+                        <ul className="space-y-2">
+                          {offers[req.id].map((offer) => (
+                            <li
+                              key={offer.id}
+                              className="flex flex-col justify-between rounded-lg border border-gray-200 bg-gray-50 p-3 sm:flex-row sm:items-center"
+                            >
+                              <div>
+                                <p className="font-medium text-emerald-700">{offer.companyName}</p>
+                                <p className="text-sm text-gray-600">{offer.message}</p>
+                              </div>
+                              <p className="mt-2 text-right text-lg font-semibold text-sky-600 sm:mt-0">
+                                {offer.price} RON
+                              </p>
+                            </li>
+                          ))}
+                        </ul>
+                      ) : (
+                        <p className="text-sm text-gray-500">Nicio ofertă momentan.</p>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </div>
+          )}
+        </section>
+      </LayoutWrapper>
+    </RequireRole>
   );
 }
