@@ -5,11 +5,12 @@ import "../globals.css";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import ErrorBoundary from "@/components/ErrorBoundary";
 import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
-    <>
+    <ErrorBoundary>
       {/* Fallback meta for pages that don't set their own <Head> */}
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -40,6 +41,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
       {/* Toasts (success/error/info) from anywhere in the app */}
       <Toaster richColors position="top-right" closeButton />
-    </>
+    </ErrorBoundary>
   );
 }

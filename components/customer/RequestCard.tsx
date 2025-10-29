@@ -20,7 +20,7 @@ type Request = {
   needPacking?: boolean;
 };
 
-export default function RequestCard({ r, offers }: { r: Request; offers?: Offer[] }) {
+const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] }) => {
   return (
     <div className="relative overflow-hidden rounded-xl border bg-white p-4 shadow hover:shadow-md">
       <div className="absolute left-0 top-0 h-full w-1 bg-emerald-500/60" />
@@ -77,4 +77,8 @@ export default function RequestCard({ r, offers }: { r: Request; offers?: Offer[
       </div>
     </div>
   );
-}
+});
+
+RequestCard.displayName = "RequestCard";
+
+export default RequestCard;

@@ -70,10 +70,16 @@ export default function CustomerRequestsPage() {
       const offersRef = collection(db, "requests", req.id, "offers");
       const q = query(offersRef, orderBy("createdAt", "desc"));
 
-      return onSnapshot(q, (snap) => {
-        const offerList = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Offer[];
-        setOffers((prev) => ({ ...prev, [req.id]: offerList }));
-      });
+      return onSnapshot(
+        q,
+        (snap) => {
+          const offerList = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Offer[];
+          setOffers((prev) => ({ ...prev, [req.id]: offerList }));
+        },
+        (error) => {
+          console.error(`Error loading offers for request ${req.id}:`, error);
+        }
+      );
     });
 
     return () => unsubs.forEach((u) => u());
@@ -88,7 +94,9 @@ export default function CustomerRequestsPage() {
       toCity: "Cluj-Napoca",
       moveDate: new Date().toISOString().split("T")[0],
       details: "Mutare locuință completă, apartament 2 camere",
-      userId: user.uid,
+      customerId: user.uid,
+      customerName: user.displayName || user.email,
+      customerEmail: user.email,
       createdAt: serverTimestamp(),
     };
 
