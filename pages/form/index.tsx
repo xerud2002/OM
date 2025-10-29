@@ -29,12 +29,17 @@ export default function FormPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
+  // sensible defaults: pick the first counties/cities if available
+  const defaultFromCounty = counties[0] ?? "";
+  const defaultToCounty = counties.length > 1 ? counties[1] : (counties[0] ?? "");
+  const defaultFromCity = (cities[defaultFromCounty] || [])[0] ?? "";
+  const defaultToCity = (cities[defaultToCounty] || [])[0] ?? "";
 
   const [form, setForm] = useState<FormState>({
-    fromCounty: "",
-    fromCity: "",
-    toCounty: "",
-    toCity: "",
+    fromCounty: defaultFromCounty,
+    fromCity: defaultFromCity,
+    toCounty: defaultToCounty,
+    toCity: defaultToCity,
     moveDate: new Date().toISOString().split("T")[0],
     details: "",
     rooms: 2,
@@ -68,16 +73,39 @@ export default function FormPage() {
       return;
     }
 
+    // Basic client-side validation
+    const phoneRegex = /^\+?[0-9 \-]{7,20}$/;
+    if (!form.phone || !phoneRegex.test(form.phone)) {
+      toast.error("Introduceți un număr de telefon valid (ex: +407xxxxxxxx).");
+      return;
+    }
+    if (form.rooms !== undefined && Number(form.rooms) < 1) {
+      toast.error("Numărul de camere trebuie să fie cel puțin 1.");
+      return;
+    }
+    if (form.volumeM3 !== undefined && Number(form.volumeM3) <= 0) {
+      toast.error("Volumul trebuie să fie un număr pozitiv.");
+      return;
+    }
+
     setSubmitting(true);
     try {
-      await createRequest({
+      // Normalize numeric fields before sending
+      const payload: Record<string, any> = {
         ...form,
-        // include both keys because different pages/queries use different field names
+        rooms: form.rooms === undefined ? undefined : Number(form.rooms),
+        volumeM3: form.volumeM3 === undefined ? undefined : Number(form.volumeM3),
+        budgetEstimate: form.budgetEstimate === undefined ? undefined : Number(form.budgetEstimate),
+        needPacking: !!form.needPacking,
+        hasElevator: !!form.hasElevator,
+        // user metadata
         userId: user.uid,
         customerId: user.uid,
         customerName: user.displayName ?? user.email ?? null,
         customerEmail: user.email ?? null,
-      });
+      };
+
+      await createRequest(payload);
 
       toast.success("Cererea a fost trimisă. Vei primi oferte în curând.");
       router.push("/customer/requests");
@@ -200,6 +228,124 @@ export default function FormPage() {
               placeholder="Ex: apartament 2 camere, etaj 3, lift, obiecte voluminoase etc."
             />
           </label>
+
+          {/* Additional move details */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-gray-700">Camere</span>
+              <input
+                type="number"
+                min={1}
+                value={form.rooms ?? ""}
+                onChange={(e) =>
+                  setForm((s) => ({
+                    ...s,
+                    rooms: e.target.value ? Number(e.target.value) : undefined,
+                  }))
+                }
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-gray-700">
+                Volum estimat (m³)
+              </span>
+              <input
+                type="number"
+                min={0}
+                step={0.1}
+                value={form.volumeM3 ?? ""}
+                onChange={(e) =>
+                  setForm((s) => ({
+                    ...s,
+                    volumeM3: e.target.value ? Number(e.target.value) : undefined,
+                  }))
+                }
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
+              />
+            </label>
+
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-gray-700">
+                Buget estimat (RON)
+              </span>
+              <input
+                type="number"
+                min={0}
+                step={1}
+                value={form.budgetEstimate ?? ""}
+                onChange={(e) =>
+                  setForm((s) => ({
+                    ...s,
+                    budgetEstimate: e.target.value ? Number(e.target.value) : undefined,
+                  }))
+                }
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
+              />
+            </label>
+          </div>
+
+          <div className="grid grid-cols-1 items-end gap-4 sm:grid-cols-3">
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={!!form.needPacking}
+                onChange={(e) => setForm((s) => ({ ...s, needPacking: e.target.checked }))}
+                className="h-4 w-4"
+              />
+              <span className="text-sm text-gray-700">Am nevoie de ambalare</span>
+            </label>
+
+            <label className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                checked={!!form.hasElevator}
+                onChange={(e) => setForm((s) => ({ ...s, hasElevator: e.target.checked }))}
+                className="h-4 w-4"
+              />
+              <span className="text-sm text-gray-700">Există lift</span>
+            </label>
+
+            <label className="block">
+              <span className="mb-1 block text-sm font-medium text-gray-700">
+                Telefon (de contact)
+              </span>
+              <input
+                type="tel"
+                value={form.phone}
+                onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
+                placeholder="ex: +407xxxxxxxx"
+                required
+              />
+            </label>
+          </div>
+
+          <label className="block">
+            <span className="mb-1 block text-sm font-medium text-gray-700">Articole speciale</span>
+            <input
+              type="text"
+              value={form.specialItems}
+              onChange={(e) => setForm((s) => ({ ...s, specialItems: e.target.value }))}
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
+              placeholder="Ex: pian, seif, mobilier demontabil"
+            />
+          </label>
+
+          {/* Summary */}
+          <div className="rounded-lg border border-gray-100 bg-gray-50 p-4">
+            <p className="text-sm text-gray-700">
+              <strong>{form.fromCity}</strong> → <strong>{form.toCity}</strong>
+            </p>
+            <p className="text-sm text-gray-500">Data: {form.moveDate}</p>
+            <p className="text-sm text-gray-500">
+              Camere: {form.rooms ?? "-"} • Volum: {form.volumeM3 ?? "-"} m³
+            </p>
+            <p className="text-sm text-gray-500">
+              Ambalare: {form.needPacking ? "Da" : "Nu"} • Lift: {form.hasElevator ? "Da" : "Nu"}
+            </p>
+          </div>
 
           <div className="flex items-center justify-end">
             <button
