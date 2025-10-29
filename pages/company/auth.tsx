@@ -39,6 +39,20 @@ export default function CustomerAuthPage() {
       }
       router.push("/company/dashboard");
     } catch (err: any) {
+      if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
+        try {
+          const mod = await import("@/utils/firebaseHelpers");
+          const current = auth.currentUser;
+          const role = current ? await mod.getUserRole(current) : null;
+          if (role === "customer") {
+            setMessage("Contul tău este înregistrat ca client. Redirecționare...");
+            router.push("/customer/auth");
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
       setMessage(err.message);
     } finally {
       setLoading(false);
@@ -66,6 +80,20 @@ export default function CustomerAuthPage() {
         router.push("/company/dashboard");
       }
     } catch (err: any) {
+      if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
+        try {
+          const mod = await import("@/utils/firebaseHelpers");
+          const current = auth.currentUser;
+          const role = current ? await mod.getUserRole(current) : null;
+          if (role === "customer") {
+            setMessage("Acest cont este înregistrat ca client. Redirecționare...");
+            router.push("/customer/auth");
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
       setMessage(err.message);
     } finally {
       setLoading(false);

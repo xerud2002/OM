@@ -65,6 +65,18 @@ export async function ensureUserProfile(u: User, role: UserRole) {
   const profileRef = doc(db, col, u.uid);
   const snap = await getDoc(profileRef);
 
+  // Prevent creating a second role for the same user: if the opposite role doc exists,
+  // do not create the requested profile and surface a clear error so callers can redirect.
+  const otherRole: UserRole = role === "customer" ? "company" : "customer";
+  const otherRef = doc(db, COLLECTIONS[otherRole], u.uid);
+  const otherSnap = await getDoc(otherRef);
+
+  if (otherSnap.exists() && !snap.exists()) {
+    const err: any = new Error(`Account already registered as ${otherRole}`);
+    err.code = "ROLE_CONFLICT";
+    throw err;
+  }
+
   if (!snap.exists()) {
     await setDoc(profileRef, {
       uid: u.uid,

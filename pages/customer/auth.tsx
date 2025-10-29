@@ -42,6 +42,21 @@ export default function CustomerAuthPage() {
       }
       router.push("/customer/dashboard");
     } catch (err: any) {
+      // If role conflict occurred, attempt to detect existing role and redirect
+      if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
+        try {
+          const mod = await import("@/utils/firebaseHelpers");
+          const current = auth.currentUser;
+          const role = current ? await mod.getUserRole(current) : null;
+          if (role === "company") {
+            setMessage("Contul tău este înregistrat ca firmă. Redirecționare...");
+            router.push("/company/auth");
+            return;
+          }
+        } catch {
+          // fall back to generic message
+        }
+      }
       setMessage(err.message || "Eroare la autentificare cu Google.");
     } finally {
       setLoading(false);
@@ -72,6 +87,20 @@ export default function CustomerAuthPage() {
       }
       router.push("/customer/dashboard");
     } catch (err: any) {
+      if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
+        try {
+          const mod = await import("@/utils/firebaseHelpers");
+          const current = auth.currentUser;
+          const role = current ? await mod.getUserRole(current) : null;
+          if (role === "company") {
+            setMessage("Acest cont este înregistrat ca firmă. Redirecționare...");
+            router.push("/company/auth");
+            return;
+          }
+        } catch {
+          // ignore
+        }
+      }
       setMessage(err.message || "A apărut o eroare neașteptată.");
     } finally {
       setLoading(false);
