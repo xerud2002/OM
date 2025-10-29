@@ -299,6 +299,63 @@ export default function RequestForm({
           </div>
         </div>
 
+        {/* Services */}
+        <div className="rounded-xl border border-purple-200 bg-purple-50/50 p-5">
+          <div className="mb-4 flex items-center gap-2 border-b border-purple-200 pb-2">
+            <svg className="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+            <h4 className="text-sm font-semibold text-purple-900">Servicii căutate</h4>
+          </div>
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
+            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+              <input
+                type="checkbox"
+                checked={!!form.serviceMoving}
+                onChange={(e) => setForm((s) => ({ ...s, serviceMoving: e.target.checked }))}
+                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+              />
+              <span className="font-medium">Mutare</span>
+            </label>
+            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+              <input
+                type="checkbox"
+                checked={!!form.servicePacking}
+                onChange={(e) => setForm((s) => ({ ...s, servicePacking: e.target.checked }))}
+                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+              />
+              <span className="font-medium">Împachetare</span>
+            </label>
+            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+              <input
+                type="checkbox"
+                checked={!!form.serviceDisassembly}
+                onChange={(e) => setForm((s) => ({ ...s, serviceDisassembly: e.target.checked }))}
+                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+              />
+              <span className="font-medium">Demontare</span>
+            </label>
+            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+              <input
+                type="checkbox"
+                checked={!!form.serviceCleanout}
+                onChange={(e) => setForm((s) => ({ ...s, serviceCleanout: e.target.checked }))}
+                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+              />
+              <span className="font-medium">Debarasare</span>
+            </label>
+            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+              <input
+                type="checkbox"
+                checked={!!form.serviceStorage}
+                onChange={(e) => setForm((s) => ({ ...s, serviceStorage: e.target.checked }))}
+                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+              />
+              <span className="font-medium">Depozitare</span>
+            </label>
+          </div>
+        </div>
+
         {/* Date */}
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-700">Data mutării</label>

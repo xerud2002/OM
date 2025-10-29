@@ -29,6 +29,12 @@ type FormState = {
   rooms?: string | number;
   phone?: string;
   details?: string;
+  // Services
+  serviceMoving?: boolean;
+  servicePacking?: boolean;
+  serviceDisassembly?: boolean;
+  serviceCleanout?: boolean;
+  serviceStorage?: boolean;
 };
 
 export default function FormPage() {
@@ -60,6 +66,11 @@ export default function FormPage() {
     rooms: "2",
     phone: "",
     details: "",
+    serviceMoving: false,
+    servicePacking: false,
+    serviceDisassembly: false,
+    serviceCleanout: false,
+    serviceStorage: false,
   });
 
   useEffect(() => {
