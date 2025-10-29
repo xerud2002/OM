@@ -3,12 +3,6 @@ import { useState, useEffect } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
-import {
-  loginWithGoogle,
-  registerWithEmail,
-  loginWithEmail,
-  resetPassword,
-} from "@/utils/firebaseHelpers";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { Mail, Lock } from "lucide-react";
@@ -33,7 +27,14 @@ export default function CustomerAuthPage() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      await loginWithGoogle("company");
+      const mod = await import("@/utils/firebaseHelpers");
+      const user = await mod.loginWithGoogle("company");
+      const role = await mod.getUserRole(user);
+      if (role !== "company") {
+        setMessage("Contul tău este înregistrat ca client — folosește pagina de autentificare pentru clienți.");
+        router.push("/customer/auth");
+        return;
+      }
       router.push("/company/dashboard");
     } catch (err: any) {
       setMessage(err.message);
@@ -46,11 +47,18 @@ export default function CustomerAuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
+      const mod = await import("@/utils/firebaseHelpers");
       if (isLogin) {
-        await loginWithEmail({ email, password });
+        const user = await mod.loginWithEmail({ email, password });
+        const role = await mod.getUserRole(user);
+        if (role !== "company") {
+          setMessage("Acest cont este înregistrat ca client. Folosește pagina de autentificare pentru clienți.");
+          router.push("/customer/auth");
+          return;
+        }
         router.push("/company/dashboard");
       } else {
-        await registerWithEmail("company", { email, password });
+        await mod.registerWithEmail("company", { email, password });
         router.push("/company/dashboard");
       }
     } catch (err: any) {
@@ -63,7 +71,8 @@ export default function CustomerAuthPage() {
   const handlePasswordReset = async () => {
     if (!email) return setMessage("Introdu adresa de email pentru resetare.");
     try {
-      await resetPassword(email);
+      const mod = await import("@/utils/firebaseHelpers");
+      await mod.resetPassword(email);
       setMessage("Email de resetare trimis ✉️");
     } catch (err: any) {
       setMessage(err.message);

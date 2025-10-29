@@ -8,12 +8,6 @@ import { Mail, Lock } from "lucide-react";
 import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
-import {
-  loginWithGoogle,
-  registerWithEmail,
-  loginWithEmail,
-  resetPassword,
-} from "@/utils/firebaseHelpers";
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -35,7 +29,15 @@ export default function CustomerAuthPage() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      await loginWithGoogle("customer");
+      const mod = await import("@/utils/firebaseHelpers");
+      const user = await mod.loginWithGoogle("customer");
+      // Ensure role is correct (defensive; loginWithGoogle should create customer profile)
+      const role = await mod.getUserRole(user);
+      if (role !== "customer") {
+        setMessage("Contul tău este înregistrat ca firmă — folosește pagina de autentificare pentru firme.");
+        router.push("/company/auth");
+        return;
+      }
       router.push("/customer/dashboard");
     } catch (err: any) {
       setMessage(err.message || "Eroare la autentificare cu Google.");
@@ -51,10 +53,18 @@ export default function CustomerAuthPage() {
     setLoading(true);
 
     try {
+      const mod = await import("@/utils/firebaseHelpers");
       if (isLogin) {
-        await loginWithEmail({ email, password });
+        const user = await mod.loginWithEmail({ email, password });
+        const role = await mod.getUserRole(user);
+        if (role !== "customer") {
+          setMessage("Acest cont este înregistrat ca firmă. Folosește pagina de autentificare pentru firme.");
+          router.push("/company/auth");
+          return;
+        }
       } else {
-        await registerWithEmail("customer", { email, password });
+        await mod.registerWithEmail("customer", { email, password });
+        // registration sets role via ensureUserProfile; proceed to dashboard
       }
       router.push("/customer/dashboard");
     } catch (err: any) {
@@ -68,7 +78,8 @@ export default function CustomerAuthPage() {
   const handlePasswordReset = async () => {
     if (!email) return setMessage("Introdu adresa de email pentru resetare.");
     try {
-      await resetPassword(email);
+      const mod = await import("@/utils/firebaseHelpers");
+      await mod.resetPassword(email);
       setMessage("✉️ Email de resetare trimis cu succes!");
     } catch (err: any) {
       setMessage(err.message);
