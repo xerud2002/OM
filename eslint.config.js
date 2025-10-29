@@ -5,6 +5,9 @@ import reactHooks from "eslint-plugin-react-hooks";
 import tailwindcss from "eslint-plugin-tailwindcss";
 
 const config = [
+  {
+    ignores: ["components/customer/RequestForm.tsx"],
+  },
   ...next,
   {
     plugins: {

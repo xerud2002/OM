@@ -57,6 +57,10 @@ export default function CustomerDashboard() {
     rooms: "",
     volumeM3: "",
     phone: "",
+    needPacking: false,
+    hasElevator: false,
+    budgetEstimate: 0,
+    specialItems: "",
   });
 
   const [search, setSearch] = useState<string>("");
@@ -189,6 +193,10 @@ export default function CustomerDashboard() {
       rooms: "",
       volumeM3: "",
       phone: "",
+      needPacking: false,
+      hasElevator: false,
+      budgetEstimate: 0,
+      specialItems: "",
     });
     setActiveTab("requests");
   };
@@ -204,6 +212,10 @@ export default function CustomerDashboard() {
       rooms: "",
       volumeM3: "",
       phone: "",
+      needPacking: false,
+      hasElevator: false,
+      budgetEstimate: 0,
+      specialItems: "",
     });
 
   return (
