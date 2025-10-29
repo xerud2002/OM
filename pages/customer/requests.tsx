@@ -12,11 +12,10 @@ import {
   addDoc,
   serverTimestamp,
 } from "firebase/firestore";
-import { motion, AnimatePresence } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
-import { acceptOffer } from "@/utils/firestoreHelpers";
+import { motion, AnimatePresence } from "framer-motion";
+import { toast } from "sonner";
 
-// 🔹 Types
 type Request = {
   id: string;
   fromCity: string;
@@ -37,190 +36,141 @@ export default function CustomerRequestsPage() {
   const [user, setUser] = useState<any>(null);
   const [requests, setRequests] = useState<Request[]>([]);
   const [offers, setOffers] = useState<Record<string, Offer[]>>({});
-  const [form, setForm] = useState({
-    fromCity: "",
-    toCity: "",
-    moveDate: "",
-    details: "",
-  });
 
-  // Auth + Requests
+  // 🔹 Verificare autentificare
   useEffect(() => {
-    const unsubAuth = onAuthChange((u) => {
-      setUser(u);
-      if (u) {
-        const q = query(
-          collection(db, "requests"),
-          where("customerId", "==", u.uid),
-          orderBy("createdAt", "desc")
-        );
-        const unsubReq = onSnapshot(q, (snapshot) => {
-          const reqs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Request[];
-          setRequests(reqs);
-
-          // Listen to offers for each request
-          reqs.forEach((r) => {
-            const offersQuery = query(
-              collection(db, "requests", r.id, "offers"),
-              orderBy("price", "asc")
-            );
-            onSnapshot(offersQuery, (snap) => {
-              setOffers((prev) => ({
-                ...prev,
-                [r.id]: snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Offer[],
-              }));
-            });
-          });
-        });
-        return () => unsubReq();
-      }
-    });
-    return () => unsubAuth();
+    const unsub = onAuthChange((u) => setUser(u));
+    return () => unsub();
   }, []);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  // 🔹 Ascultă cererile utilizatorului
+  useEffect(() => {
     if (!user) return;
-    await addDoc(collection(db, "requests"), {
-      ...form,
-      customerId: user.uid,
-      customerName: user.displayName || user.email,
-      customerEmail: user.email,
-      createdAt: serverTimestamp(),
+    const q = query(
+      collection(db, "requests"),
+      where("userId", "==", user.uid),
+      orderBy("createdAt", "desc")
+    );
+
+    const unsub = onSnapshot(q, (snapshot) => {
+      const reqs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Request[];
+      setRequests(reqs);
     });
-    setForm({ fromCity: "", toCity: "", moveDate: "", details: "" });
+
+    return () => unsub();
+  }, [user]);
+
+  // 🔹 Ascultă ofertele pentru fiecare cerere
+  useEffect(() => {
+    if (!requests.length) return;
+
+    const unsubs = requests.map((req) => {
+      const offersRef = collection(db, "requests", req.id, "offers");
+      const q = query(offersRef, orderBy("createdAt", "desc"));
+
+      return onSnapshot(q, (snap) => {
+        const offerList = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Offer[];
+        setOffers((prev) => ({ ...prev, [req.id]: offerList }));
+      });
+    });
+
+    return () => unsubs.forEach((u) => u());
+  }, [requests]);
+
+  // 🔹 Trimitere nouă cerere
+  const handleNewRequest = async () => {
+    if (!user) return toast.error("Trebuie să fii autentificat pentru a trimite o cerere.");
+
+    const newRequest = {
+      fromCity: "București",
+      toCity: "Cluj-Napoca",
+      moveDate: new Date().toISOString().split("T")[0],
+      details: "Mutare locuință completă, apartament 2 camere",
+      userId: user.uid,
+      createdAt: serverTimestamp(),
+    };
+
+    await addDoc(collection(db, "requests"), newRequest);
+    toast.success("Cererea ta a fost trimisă cu succes!");
   };
 
   return (
     <LayoutWrapper>
-      <section className="mx-auto max-w-4xl py-10">
-        <h1 className="mb-6 text-center text-3xl font-bold text-emerald-700">
-          Cererile tale de mutare
-        </h1>
-
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit}
-          className="mb-8 grid grid-cols-1 gap-4 rounded-xl border bg-white/80 p-4 shadow backdrop-blur-sm md:grid-cols-2"
-        >
-          <input
-            placeholder="De la oraș"
-            value={form.fromCity}
-            onChange={(e) => setForm({ ...form, fromCity: e.target.value })}
-            className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            required
-          />
-          <input
-            placeholder="Spre oraș"
-            value={form.toCity}
-            onChange={(e) => setForm({ ...form, toCity: e.target.value })}
-            className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            required
-          />
-          <input
-            type="date"
-            value={form.moveDate}
-            onChange={(e) => setForm({ ...form, moveDate: e.target.value })}
-            className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-            required
-          />
-          <textarea
-            placeholder="Detalii mutare"
-            value={form.details}
-            onChange={(e) => setForm({ ...form, details: e.target.value })}
-            className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500 md:col-span-2"
-            required
-          />
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.96 }}
-            type="submit"
-            className="rounded-lg bg-gradient-to-r from-emerald-600 to-sky-500 py-2 font-semibold text-white shadow transition-all hover:shadow-lg md:col-span-2"
-          >
-            Trimite cererea
-          </motion.button>
-        </form>
-
-        {/* Requests List */}
-        {requests.length === 0 ? (
-          <p className="text-center italic text-gray-500">
-            Nu ai nicio cerere activă. Trimite una acum! 💪
+      <section className="mx-auto max-w-5xl px-4 py-10">
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl font-bold text-emerald-700">Cererile mele de mutare</h1>
+          <p className="mt-2 text-gray-600">
+            Vizualizează cererile tale active și ofertele primite de la firme.
           </p>
+          <button
+            onClick={handleNewRequest}
+            className="mt-6 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-semibold text-white shadow-md transition hover:shadow-lg"
+          >
+            + Creează o cerere nouă
+          </button>
+        </div>
+
+        {requests.length === 0 ? (
+          <div className="mt-10 text-center text-gray-500">
+            Nu ai nicio cerere momentan.
+            <br />
+            <button
+              onClick={handleNewRequest}
+              className="mt-4 rounded-lg bg-emerald-500 px-5 py-2 font-medium text-white shadow hover:bg-emerald-600"
+            >
+              Adaugă prima cerere
+            </button>
+          </div>
         ) : (
           <div className="space-y-6">
-            {requests.map((r) => (
-              <motion.div
-                key={r.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="rounded-xl border bg-white/90 p-5 shadow-md backdrop-blur-md"
-              >
-                <p className="font-semibold text-emerald-700">
-                  {r.fromCity} → {r.toCity}
-                </p>
-                <p className="mb-3 text-sm text-gray-600">
-                  Mutare: {r.moveDate}
-                </p>
-                <p className="text-sm text-gray-500">{r.details}</p>
+            <AnimatePresence>
+              {requests.map((req) => (
+                <motion.div
+                  key={req.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="rounded-2xl border border-emerald-100 bg-white/80 p-6 shadow-sm backdrop-blur-sm"
+                >
+                  <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
+                    <div>
+                      <h2 className="text-lg font-semibold text-emerald-700">
+                        {req.fromCity} → {req.toCity}
+                      </h2>
+                      <p className="text-sm text-gray-600">Data mutării: {req.moveDate}</p>
+                      <p className="mt-1 text-sm text-gray-500">{req.details}</p>
+                    </div>
+                  </div>
 
-                {/* Offers */}
-                <div className="mt-4 border-t pt-3">
-                  <h4 className="mb-2 font-semibold text-gray-700">
-                    Oferte primite
-                  </h4>
-                  <AnimatePresence>
-                    {offers[r.id]?.length ? (
-                      offers[r.id].map((offer) => (
-                        <motion.div
-                          key={offer.id}
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          className={`mb-2 rounded-md border p-3 ${
-                            offer.status === "accepted"
-                              ? "border-emerald-500 bg-emerald-50"
-                              : offer.status === "declined"
-                              ? "opacity-60"
-                              : ""
-                          }`}
-                        >
-                          <div className="flex justify-between">
-                            <p className="font-medium text-gray-800">
-                              {offer.companyName}
+                  {/* === Oferte primite === */}
+                  <div className="mt-4 border-t border-gray-100 pt-4">
+                    <h3 className="mb-2 text-sm font-semibold text-gray-700">Oferte primite:</h3>
+                    {offers[req.id]?.length ? (
+                      <ul className="space-y-2">
+                        {offers[req.id].map((offer) => (
+                          <li
+                            key={offer.id}
+                            className="flex flex-col justify-between rounded-lg border border-gray-200 bg-gray-50 p-3 sm:flex-row sm:items-center"
+                          >
+                            <div>
+                              <p className="font-medium text-emerald-700">
+                                {offer.companyName}
+                              </p>
+                              <p className="text-sm text-gray-600">{offer.message}</p>
+                            </div>
+                            <p className="mt-2 text-right text-lg font-semibold text-sky-600 sm:mt-0">
+                              {offer.price} RON
                             </p>
-                            <p className="font-semibold text-emerald-600">
-                              {offer.price} lei
-                            </p>
-                          </div>
-                          <p className="mt-1 text-sm text-gray-600">
-                            {offer.message}
-                          </p>
-                          {offer.status === "accepted" ? (
-                            <p className="mt-2 text-xs text-emerald-700">
-                              ✅ Ofertă acceptată
-                            </p>
-                          ) : offer.status === "declined" ? (
-                            <p className="mt-2 text-xs text-gray-400">
-                              ❌ Ofertă respinsă
-                            </p>
-                          ) : (
-                            <button
-                              onClick={() => acceptOffer(r.id, offer.id)}
-                              className="mt-2 rounded-md bg-emerald-600 px-3 py-1 text-sm text-white hover:bg-emerald-700"
-                            >
-                              Acceptă ofertă
-                            </button>
-                          )}
-                        </motion.div>
-                      ))
+                          </li>
+                        ))}
+                      </ul>
                     ) : (
-                      <p className="text-sm italic text-gray-400">
-                        Nu există oferte momentan.
-                      </p>
+                      <p className="text-sm text-gray-500">Nicio ofertă momentan.</p>
                     )}
-                  </AnimatePresence>
-                </div>
-              </motion.div>
-            ))}
+                  </div>
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
         )}
       </section>

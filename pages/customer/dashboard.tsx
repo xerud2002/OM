@@ -15,7 +15,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { acceptOffer } from "@/utils/firestoreHelpers";
-import { Building2, CalendarDays, Coins } from "lucide-react";
+import { CalendarDays, Building2, Coins } from "lucide-react";
 
 // 🔹 Types
 type Request = {
@@ -56,10 +56,13 @@ export default function CustomerRequestsPage() {
           orderBy("createdAt", "desc")
         );
         const unsubReq = onSnapshot(q, (snapshot) => {
-          const reqs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() })) as Request[];
+          const reqs = snapshot.docs.map((d) => ({
+            id: d.id,
+            ...d.data(),
+          })) as Request[];
           setRequests(reqs);
 
-          // Listen for offers on each request
+          // Listen for offers for each request
           reqs.forEach((r) => {
             const offersQuery = query(
               collection(db, "requests", r.id, "offers"),
@@ -68,7 +71,10 @@ export default function CustomerRequestsPage() {
             onSnapshot(offersQuery, (snap) => {
               setOffers((prev) => ({
                 ...prev,
-                [r.id]: snap.docs.map((d) => ({ id: d.id, ...d.data() })) as Offer[],
+                [r.id]: snap.docs.map((d) => ({
+                  id: d.id,
+                  ...d.data(),
+                })) as Offer[],
               }));
             });
           });
@@ -79,7 +85,7 @@ export default function CustomerRequestsPage() {
     return () => unsubAuth();
   }, []);
 
-  // 🔸 Submit new request
+  // 🔸 Submit request
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -100,11 +106,11 @@ export default function CustomerRequestsPage() {
           Cererile tale de mutare
         </h1>
 
-        {/* 🟢 Request form */}
+        {/* 🟩 Form */}
         <motion.form
           onSubmit={handleSubmit}
           whileHover={{ scale: 1.01 }}
-          className="mb-10 grid grid-cols-1 gap-4 rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-md backdrop-blur-sm md:grid-cols-2"
+          className="mb-10 grid grid-cols-1 gap-4 rounded-2xl border border-emerald-100 bg-white/90 p-6 shadow-lg backdrop-blur-sm md:grid-cols-2"
         >
           <input
             placeholder="De la oraș"
@@ -135,8 +141,8 @@ export default function CustomerRequestsPage() {
             required
           />
           <motion.button
-            whileHover={{ scale: 1.04 }}
-            whileTap={{ scale: 0.96 }}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.97 }}
             type="submit"
             className="w-full rounded-lg bg-gradient-to-r from-emerald-600 to-sky-500 py-2.5 font-semibold text-white shadow-md transition-all hover:opacity-95 md:col-span-2"
           >
@@ -144,7 +150,7 @@ export default function CustomerRequestsPage() {
           </motion.button>
         </motion.form>
 
-        {/* 🧳 Requests List */}
+        {/* 🧾 Requests */}
         {requests.length === 0 ? (
           <p className="text-center italic text-gray-500">
             Nu ai nicio cerere activă momentan. Trimite una nouă! 💪
@@ -156,19 +162,19 @@ export default function CustomerRequestsPage() {
                 key={r.id}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
                 className="rounded-2xl border border-gray-100 bg-white/95 p-6 shadow-sm transition-all hover:shadow-md"
               >
-                {/* Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-emerald-700">
                       {r.fromCity} → {r.toCity}
                     </h3>
-                    <p className="flex items-center gap-1 text-sm text-gray-500">
+                    <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
                       <CalendarDays size={14} /> {r.moveDate}
                     </p>
                   </div>
-                  <p className="mt-2 text-sm text-gray-600 md:mt-0">
+                  <p className="mt-3 text-sm text-gray-600 md:mt-0">
                     {r.details}
                   </p>
                 </div>
@@ -186,16 +192,17 @@ export default function CustomerRequestsPage() {
                           key={offer.id}
                           initial={{ opacity: 0 }}
                           animate={{ opacity: 1 }}
-                          className={`mb-3 rounded-xl border p-4 transition ${
+                          transition={{ duration: 0.3 }}
+                          className={`mb-3 rounded-xl border p-4 ${
                             offer.status === "accepted"
                               ? "border-emerald-400 bg-emerald-50"
                               : offer.status === "declined"
-                              ? "border-gray-200 opacity-70"
+                              ? "border-gray-200 bg-gray-50 opacity-70"
                               : "border-gray-100 hover:border-emerald-300 hover:bg-emerald-50/30"
-                          }`}
+                          } transition-all`}
                         >
                           <div className="flex items-center justify-between">
-                            <div className="flex flex-col">
+                            <div>
                               <p className="flex items-center gap-2 font-medium text-gray-800">
                                 <Building2 size={16} className="text-emerald-500" />
                                 {offer.companyName}
@@ -205,6 +212,7 @@ export default function CustomerRequestsPage() {
                                 {offer.price} lei
                               </p>
                             </div>
+
                             {offer.status === "accepted" ? (
                               <p className="text-xs font-medium text-emerald-700">
                                 ✅ Acceptată
@@ -220,16 +228,17 @@ export default function CustomerRequestsPage() {
                               </button>
                             )}
                           </div>
+
                           {offer.message && (
                             <p className="mt-2 text-sm italic text-gray-600">
-                              „{offer.message}”
+                              “{offer.message}”
                             </p>
                           )}
                         </motion.div>
                       ))
                     ) : (
                       <p className="text-sm italic text-gray-400">
-                        Nu există oferte pentru această cerere încă.
+                        Nu există oferte momentan.
                       </p>
                     )}
                   </AnimatePresence>
