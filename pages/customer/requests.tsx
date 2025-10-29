@@ -46,9 +46,10 @@ export default function CustomerRequestsPage() {
   // 🔹 Ascultă cererile utilizatorului
   useEffect(() => {
     if (!user) return;
+    // Use customerId for consistency with dashboard and form submissions
     const q = query(
       collection(db, "requests"),
-      where("userId", "==", user.uid),
+      where("customerId", "==", user.uid),
       orderBy("createdAt", "desc")
     );
 
@@ -153,9 +154,7 @@ export default function CustomerRequestsPage() {
                             className="flex flex-col justify-between rounded-lg border border-gray-200 bg-gray-50 p-3 sm:flex-row sm:items-center"
                           >
                             <div>
-                              <p className="font-medium text-emerald-700">
-                                {offer.companyName}
-                              </p>
+                              <p className="font-medium text-emerald-700">{offer.companyName}</p>
                               <p className="text-sm text-gray-600">{offer.message}</p>
                             </div>
                             <p className="mt-2 text-right text-lg font-semibold text-sky-600 sm:mt-0">

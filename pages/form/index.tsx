@@ -72,7 +72,11 @@ export default function FormPage() {
     try {
       await createRequest({
         ...form,
+        // include both keys because different pages/queries use different field names
         userId: user.uid,
+        customerId: user.uid,
+        customerName: user.displayName ?? user.email ?? null,
+        customerEmail: user.email ?? null,
       });
 
       toast.success("Cererea a fost trimisă. Vei primi oferte în curând.");
