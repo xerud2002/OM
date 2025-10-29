@@ -10,7 +10,7 @@
     "esModuleInterop": true,
     "module": "esnext",
     "typeRoots": ["./node_modules/@types", "./node_modules/tailwindcss/types"],
-    "types": ["node"], // ✅ adăugat
+    "types": ["node"],
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -23,7 +23,6 @@
       "@/utils/*": ["utils/*"],
       "@/components/*": ["components/*"]
     }
-
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
