@@ -31,7 +31,9 @@ export default function CustomerAuthPage() {
       const user = await mod.loginWithGoogle("company");
       const role = await mod.getUserRole(user);
       if (role !== "company") {
-        setMessage("Contul tău este înregistrat ca client — folosește pagina de autentificare pentru clienți.");
+        setMessage(
+          "Contul tău este înregistrat ca client — folosește pagina de autentificare pentru clienți."
+        );
         router.push("/customer/auth");
         return;
       }
@@ -52,7 +54,9 @@ export default function CustomerAuthPage() {
         const user = await mod.loginWithEmail({ email, password });
         const role = await mod.getUserRole(user);
         if (role !== "company") {
-          setMessage("Acest cont este înregistrat ca client. Folosește pagina de autentificare pentru clienți.");
+          setMessage(
+            "Acest cont este înregistrat ca client. Folosește pagina de autentificare pentru clienți."
+          );
           router.push("/customer/auth");
           return;
         }
