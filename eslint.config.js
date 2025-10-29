@@ -6,7 +6,8 @@ import tailwindcss from "eslint-plugin-tailwindcss";
 
 const config = [
   {
-    ignores: ["components/customer/RequestForm.tsx"],
+    // Removed temporary ignore for RequestForm.tsx as the file is now minimal and clean
+    // ignores: ["components/customer/RequestForm.tsx"],
   },
   ...next,
   {

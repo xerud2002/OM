@@ -2,16 +2,40 @@ import React from "react";
 import counties from "@/counties";
 import cities from "@/cities";
 
+type FormShape = {
+  fromCounty?: string;
+  fromCity?: string;
+  fromCityManual?: boolean;
+  fromAddress?: string;
+  toCounty?: string;
+  toCity?: string;
+  toCityManual?: boolean;
+  toAddress?: string;
+  moveDate?: string;
+  fromType?: "house" | "flat";
+  fromFloor?: string;
+  fromElevator?: boolean;
+  toType?: "house" | "flat";
+  toFloor?: string;
+  toElevator?: boolean;
+  rooms?: string | number;
+  volumeM3?: number;
+  needPacking?: boolean;
+  hasElevator?: boolean;
+  budgetEstimate?: number;
+  phone?: string;
+  specialItems?: string;
+  details?: string;
+};
+
 export default function RequestForm({
   form,
   setForm,
   onSubmit,
   onReset,
 }: {
-  form: any;
-  // eslint-disable-next-line no-unused-vars
-  setForm: (updater: any) => void;
-  // eslint-disable-next-line no-unused-vars
+  form: FormShape;
+  setForm: (updater: (s: FormShape) => FormShape) => void;
   onSubmit: (e: React.FormEvent) => void;
   onReset: () => void;
 }) {
@@ -26,7 +50,7 @@ export default function RequestForm({
       "4+ camere": { rooms: "4", volumeM3: 35 },
     };
     if (map[preset]) {
-      setForm((s: any) => ({ ...s, rooms: map[preset].rooms, volumeM3: map[preset].volumeM3 }));
+      setForm((s) => ({ ...s, rooms: map[preset].rooms, volumeM3: map[preset].volumeM3 }));
     }
   };
 
@@ -42,13 +66,11 @@ export default function RequestForm({
             <select
               required
               value={form.fromCounty || ""}
-              onChange={(e) =>
-                setForm((s: any) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))
-              }
+              onChange={(e) => setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))}
               className="w-full rounded-md border p-2 text-sm"
             >
               <option value="">Selectează județ</option>
-              {counties.map((c: string) => (
+              {counties.map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>
@@ -61,7 +83,7 @@ export default function RequestForm({
               <input
                 required
                 value={form.fromCity || ""}
-                onChange={(e) => setForm((s: any) => ({ ...s, fromCity: e.target.value }))}
+                onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
                 placeholder="Introdu localitatea"
                 className="w-full rounded-md border p-2 text-sm"
               />
@@ -69,7 +91,7 @@ export default function RequestForm({
               <select
                 required
                 value={form.fromCity || ""}
-                onChange={(e) => setForm((s: any) => ({ ...s, fromCity: e.target.value }))}
+                onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
                 className="w-full rounded-md border p-2 text-sm"
                 disabled={!form.fromCounty}
               >
@@ -86,7 +108,7 @@ export default function RequestForm({
                 type="checkbox"
                 checked={!!form.fromCityManual}
                 onChange={(e) =>
-                  setForm((s: any) => ({ ...s, fromCityManual: e.target.checked, fromCity: "" }))
+                  setForm((s) => ({ ...s, fromCityManual: e.target.checked, fromCity: "" }))
                 }
               />
               Localitatea nu e în listă? Introdu manual
@@ -99,13 +121,11 @@ export default function RequestForm({
             <select
               required
               value={form.toCounty || ""}
-              onChange={(e) =>
-                setForm((s: any) => ({ ...s, toCounty: e.target.value, toCity: "" }))
-              }
+              onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
               className="w-full rounded-md border p-2 text-sm"
             >
               <option value="">Selectează județ</option>
-              {counties.map((c: string) => (
+              {counties.map((c) => (
                 <option key={c} value={c}>
                   {c}
                 </option>
@@ -118,7 +138,7 @@ export default function RequestForm({
               <input
                 required
                 value={form.toCity || ""}
-                onChange={(e) => setForm((s: any) => ({ ...s, toCity: e.target.value }))}
+                onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
                 placeholder="Introdu localitatea"
                 className="w-full rounded-md border p-2 text-sm"
               />
@@ -126,7 +146,7 @@ export default function RequestForm({
               <select
                 required
                 value={form.toCity || ""}
-                onChange={(e) => setForm((s: any) => ({ ...s, toCity: e.target.value }))}
+                onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
                 className="w-full rounded-md border p-2 text-sm"
                 disabled={!form.toCounty}
               >
@@ -143,7 +163,7 @@ export default function RequestForm({
                 type="checkbox"
                 checked={!!form.toCityManual}
                 onChange={(e) =>
-                  setForm((s: any) => ({ ...s, toCityManual: e.target.checked, toCity: "" }))
+                  setForm((s) => ({ ...s, toCityManual: e.target.checked, toCity: "" }))
                 }
               />
               Localitatea nu e în listă? Introdu manual
@@ -156,7 +176,7 @@ export default function RequestForm({
             <input
               required
               value={form.fromAddress || ""}
-              onChange={(e) => setForm((s: any) => ({ ...s, fromAddress: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, fromAddress: e.target.value }))}
               className="w-full rounded-md border p-2 text-sm"
               placeholder="Stradă, număr, bloc/scară/apartament (dacă e cazul)"
             />
@@ -166,7 +186,7 @@ export default function RequestForm({
             <input
               required
               value={form.toAddress || ""}
-              onChange={(e) => setForm((s: any) => ({ ...s, toAddress: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, toAddress: e.target.value }))}
               className="w-full rounded-md border p-2 text-sm"
               placeholder="Stradă, număr, bloc/scară/apartament (dacă e cazul)"
             />
@@ -181,7 +201,7 @@ export default function RequestForm({
               required
               type="date"
               value={form.moveDate || ""}
-              onChange={(e) => setForm((s: any) => ({ ...s, moveDate: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
               className="w-full rounded-md border p-2 text-sm"
             />
           </div>
@@ -209,7 +229,7 @@ export default function RequestForm({
             <label className="text-xs text-gray-600">Plecare: tip locuință</label>
             <select
               value={form.fromType || "house"}
-              onChange={(e) => setForm((s: any) => ({ ...s, fromType: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
               className="rounded-md border p-2 text-sm"
             >
               <option value="house">Casă</option>
@@ -220,16 +240,14 @@ export default function RequestForm({
                 <input
                   placeholder="Etaj plecare"
                   value={form.fromFloor || ""}
-                  onChange={(e) => setForm((s: any) => ({ ...s, fromFloor: e.target.value }))}
+                  onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
                   className="col-span-2 rounded-md border p-2 text-sm"
                 />
                 <label className="col-span-2 flex items-center gap-2 text-sm text-gray-700">
                   <input
                     type="checkbox"
                     checked={!!form.fromElevator}
-                    onChange={(e) =>
-                      setForm((s: any) => ({ ...s, fromElevator: e.target.checked }))
-                    }
+                    onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
                   />
                   Bloc cu lift (plecare)
                 </label>
@@ -240,7 +258,7 @@ export default function RequestForm({
             <label className="text-xs text-gray-600">Destinație: tip locuință</label>
             <select
               value={form.toType || "house"}
-              onChange={(e) => setForm((s: any) => ({ ...s, toType: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
               className="rounded-md border p-2 text-sm"
             >
               <option value="house">Casă</option>
@@ -251,14 +269,14 @@ export default function RequestForm({
                 <input
                   placeholder="Etaj destinație"
                   value={form.toFloor || ""}
-                  onChange={(e) => setForm((s: any) => ({ ...s, toFloor: e.target.value }))}
+                  onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
                   className="col-span-2 rounded-md border p-2 text-sm"
                 />
                 <label className="col-span-2 flex items-center gap-2 text-sm text-gray-700">
                   <input
                     type="checkbox"
                     checked={!!form.toElevator}
-                    onChange={(e) => setForm((s: any) => ({ ...s, toElevator: e.target.checked }))}
+                    onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
                   />
                   Bloc cu lift (destinație)
                 </label>
@@ -274,7 +292,7 @@ export default function RequestForm({
             <input
               type="text"
               value={form.rooms || ""}
-              onChange={(e) => setForm((s: any) => ({ ...s, rooms: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
               className="w-full rounded-md border p-2 text-sm"
               placeholder="ex: 2"
             />
@@ -284,10 +302,8 @@ export default function RequestForm({
             <input
               type="number"
               min={0}
-              value={form.volumeM3 ?? ""}
-              onChange={(e) =>
-                setForm((s: any) => ({ ...s, volumeM3: Number(e.target.value || 0) }))
-              }
+              value={form.volumeM3 ?? 0}
+              onChange={(e) => setForm((s) => ({ ...s, volumeM3: Number(e.target.value || 0) }))}
               className="w-full rounded-md border p-2 text-sm"
               placeholder="ex: 20"
             />
@@ -300,7 +316,7 @@ export default function RequestForm({
             <input
               type="checkbox"
               checked={!!form.needPacking}
-              onChange={(e) => setForm((s: any) => ({ ...s, needPacking: e.target.checked }))}
+              onChange={(e) => setForm((s) => ({ ...s, needPacking: e.target.checked }))}
             />
             Necesit ambalare
           </label>
@@ -308,7 +324,7 @@ export default function RequestForm({
             <input
               type="checkbox"
               checked={!!form.hasElevator}
-              onChange={(e) => setForm((s: any) => ({ ...s, hasElevator: e.target.checked }))}
+              onChange={(e) => setForm((s) => ({ ...s, hasElevator: e.target.checked }))}
             />
             Bloc cu lift
           </label>
@@ -317,9 +333,9 @@ export default function RequestForm({
             <input
               type="number"
               min={0}
-              value={form.budgetEstimate ?? ""}
+              value={form.budgetEstimate ?? 0}
               onChange={(e) =>
-                setForm((s: any) => ({ ...s, budgetEstimate: Number(e.target.value || 0) }))
+                setForm((s) => ({ ...s, budgetEstimate: Number(e.target.value || 0) }))
               }
               className="w-full rounded-md border p-2 text-sm"
               placeholder="ex: 1500"
@@ -334,7 +350,7 @@ export default function RequestForm({
             <input
               required
               value={form.phone || ""}
-              onChange={(e) => setForm((s: any) => ({ ...s, phone: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
               className="w-full rounded-md border p-2 text-sm"
               placeholder="ex: 07xx xxx xxx"
             />
@@ -343,7 +359,7 @@ export default function RequestForm({
             <label className="block text-xs text-gray-600">Obiecte speciale (opțional)</label>
             <input
               value={form.specialItems || ""}
-              onChange={(e) => setForm((s: any) => ({ ...s, specialItems: e.target.value }))}
+              onChange={(e) => setForm((s) => ({ ...s, specialItems: e.target.value }))}
               className="w-full rounded-md border p-2 text-sm"
               placeholder="ex: pian, seif, vitrină mare"
             />
@@ -354,7 +370,7 @@ export default function RequestForm({
           <label className="block text-xs text-gray-600">Detalii</label>
           <textarea
             value={form.details || ""}
-            onChange={(e) => setForm((s: any) => ({ ...s, details: e.target.value }))}
+            onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
             className="w-full rounded-md border p-2 text-sm"
             rows={4}
             placeholder="Informații suplimentare (acces, etaj, interval orar preferat, etc.)"
