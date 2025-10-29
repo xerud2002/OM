@@ -24,6 +24,17 @@ type Request = {
   toCity: string;
   moveDate: string;
   details: string;
+  fromCounty?: string;
+  toCounty?: string;
+  rooms?: number | string;
+  volumeM3?: number;
+  phone?: string;
+  budgetEstimate?: number;
+  needPacking?: boolean;
+  hasElevator?: boolean;
+  specialItems?: string;
+  customerName?: string | null;
+  customerEmail?: string | null;
 };
 
 type Offer = {
@@ -168,22 +179,37 @@ export default function CustomerRequestsPage() {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-emerald-700">
-                      {r.fromCity} → {r.toCity}
+                      {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                     </h3>
                     <p className="mt-1 flex items-center gap-1 text-sm text-gray-500">
                       <CalendarDays size={14} /> {r.moveDate}
                     </p>
+                    <p className="mt-1 text-sm text-gray-600">{r.details}</p>
+                    <div className="mt-2 text-sm text-gray-500">
+                      {r.rooms && <span>Camere: {r.rooms} • </span>}
+                      {typeof r.volumeM3 !== "undefined" && <span>Volum: {r.volumeM3} m³ • </span>}
+                      {r.budgetEstimate && <span>Buget: {r.budgetEstimate} RON • </span>}
+                      {r.needPacking ? <span>Ambalare: Da • </span> : <span>Ambalare: Nu • </span>}
+                      {r.hasElevator ? <span>Lift: Da</span> : <span>Lift: Nu</span>}
+                    </div>
+                    {r.specialItems && (
+                      <p className="mt-2 text-sm text-gray-500">
+                        Articole speciale: {r.specialItems}
+                      </p>
+                    )}
+                    {(r.customerName || r.customerEmail) && (
+                      <p className="mt-2 text-xs text-gray-400">
+                        Contact: {r.customerName ?? ""}{" "}
+                        {r.customerEmail ? `• ${r.customerEmail}` : ""}
+                      </p>
+                    )}
+                    {r.phone && <p className="mt-1 text-sm text-gray-600">Telefon: {r.phone}</p>}
                   </div>
-                  <p className="mt-3 text-sm text-gray-600 md:mt-0">
-                    {r.details}
-                  </p>
                 </div>
 
                 {/* Offers */}
                 <div className="mt-5 border-t border-gray-200 pt-4">
-                  <h4 className="mb-3 font-semibold text-gray-700">
-                    Oferte primite
-                  </h4>
+                  <h4 className="mb-3 font-semibold text-gray-700">Oferte primite</h4>
 
                   <AnimatePresence>
                     {offers[r.id]?.length ? (
@@ -197,8 +223,8 @@ export default function CustomerRequestsPage() {
                             offer.status === "accepted"
                               ? "border-emerald-400 bg-emerald-50"
                               : offer.status === "declined"
-                              ? "border-gray-200 bg-gray-50 opacity-70"
-                              : "border-gray-100 hover:border-emerald-300 hover:bg-emerald-50/30"
+                                ? "border-gray-200 bg-gray-50 opacity-70"
+                                : "border-gray-100 hover:border-emerald-300 hover:bg-emerald-50/30"
                           } transition-all`}
                         >
                           <div className="flex items-center justify-between">
@@ -214,9 +240,7 @@ export default function CustomerRequestsPage() {
                             </div>
 
                             {offer.status === "accepted" ? (
-                              <p className="text-xs font-medium text-emerald-700">
-                                ✅ Acceptată
-                              </p>
+                              <p className="text-xs font-medium text-emerald-700">✅ Acceptată</p>
                             ) : offer.status === "declined" ? (
                               <p className="text-xs text-gray-400">❌ Respinsă</p>
                             ) : (
@@ -230,16 +254,12 @@ export default function CustomerRequestsPage() {
                           </div>
 
                           {offer.message && (
-                            <p className="mt-2 text-sm italic text-gray-600">
-                              “{offer.message}”
-                            </p>
+                            <p className="mt-2 text-sm italic text-gray-600">“{offer.message}”</p>
                           )}
                         </motion.div>
                       ))
                     ) : (
-                      <p className="text-sm italic text-gray-400">
-                        Nu există oferte momentan.
-                      </p>
+                      <p className="text-sm italic text-gray-400">Nu există oferte momentan.</p>
                     )}
                   </AnimatePresence>
                 </div>
