@@ -3,14 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  Facebook,
-  Instagram,
-  Linkedin,
-  PhoneCall,
-  Mail,
-  MapPin,
-} from "lucide-react";
+import { Facebook, Instagram, Linkedin, PhoneCall, Mail, MapPin } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/utils/animations";
 
 /* 🔹 Constants */
