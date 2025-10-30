@@ -44,6 +44,7 @@ type Offer = {
   companyName: string;
   price: number;
   message: string;
+  status?: "pending" | "accepted" | "declined" | "rejected";
   createdAt?: any;
 };
 
@@ -57,6 +58,7 @@ type OfferFormProps = {
 type OfferListProps = {
   requestId: string;
   company: CompanyUser;
+  onHasMine?: any;
 };
 
 // 🧩 Offer editing component
@@ -74,6 +76,8 @@ function OfferItem({
   const [message, setMessage] = useState(offer.message);
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const isOwn = company && offer.companyId === company.uid;
+  const isPending = (offer.status ?? "pending") === "pending";
 
   const handleSave = async () => {
     if (!company) return;
@@ -144,8 +148,21 @@ function OfferItem({
             <span className="font-semibold text-emerald-700">{offer.companyName}</span>
             <span className="text-sm font-medium text-gray-700">💰 {offer.price} lei</span>
           </div>
-          <p className="mt-1 text-sm text-gray-600">{offer.message}</p>
-          {company && offer.companyId === company.uid && (
+          <div className="mt-1 flex items-center justify-between gap-2">
+            <p className="text-sm text-gray-600">{offer.message}</p>
+            <span
+              className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                (offer.status ?? "pending") === "accepted"
+                  ? "bg-emerald-100 text-emerald-700"
+                  : (offer.status ?? "pending") === "rejected" || (offer.status ?? "pending") === "declined"
+                  ? "bg-rose-100 text-rose-700"
+                  : "bg-amber-100 text-amber-700"
+              }`}
+            >
+              {offer.status ?? "pending"}
+            </span>
+          </div>
+          {isOwn && isPending && (
             <div className="mt-2 flex gap-2 text-xs">
               <button onClick={() => setIsEditing(true)} className="text-sky-600 hover:underline">
                 ✏️ Editează
@@ -153,7 +170,7 @@ function OfferItem({
               <button
                 onClick={handleDelete}
                 disabled={removing}
-                className="text-red-500 hover:underline"
+                className="text-red-500 hover:underline disabled:text-red-300"
               >
                 🗑️ Retrage
               </button>
@@ -166,17 +183,22 @@ function OfferItem({
 }
 
 // 🧩 Offer list with real-time updates
-function OfferList({ requestId, company }: OfferListProps) {
+function OfferList({ requestId, company, onHasMine }: OfferListProps) {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
     const q = query(collection(db, "requests", requestId, "offers"), orderBy("createdAt", "desc"));
     const unsub = onSnapshot(q, (snapshot) => {
-      setOffers(snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Offer));
+      const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Offer);
+      setOffers(list);
+      if (company && onHasMine) {
+        const mine = list.some((o) => o.companyId === company.uid);
+        onHasMine(mine);
+      }
     });
     return () => unsub();
-  }, [requestId]);
+  }, [requestId, company, onHasMine]);
 
   return (
     <div className="mt-3 border-t pt-3">
@@ -215,16 +237,18 @@ function OfferForm({ requestId, company }: OfferFormProps) {
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const priceNum = Number(price);
+  const isPriceValid = !Number.isNaN(priceNum) && priceNum > 0;
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!company) return;
+    if (!company || !isPriceValid) return;
     setSending(true);
     try {
       await addOffer(requestId, {
         companyId: company.uid,
         companyName: company.displayName || company.email,
-        price: Number(price),
+        price: priceNum,
         message,
       });
       setPrice("");
@@ -243,7 +267,10 @@ function OfferForm({ requestId, company }: OfferFormProps) {
         placeholder="Preț estimativ (lei)"
         value={price}
         onChange={(e) => setPrice(e.target.value)}
-        className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        min={1}
+        className={`rounded-md border p-2 focus:outline-none focus:ring-2 ${
+          isPriceValid ? "focus:ring-emerald-500" : "border-rose-300 focus:ring-rose-400"
+        }`}
         required
       />
       <textarea
@@ -255,9 +282,11 @@ function OfferForm({ requestId, company }: OfferFormProps) {
       />
       <button
         type="submit"
-        disabled={sending}
+        disabled={sending || !isPriceValid}
         className={`rounded-md py-2 font-semibold text-white transition-all ${
-          sending ? "cursor-not-allowed bg-gray-400" : "bg-emerald-600 hover:bg-emerald-700"
+          sending || !isPriceValid
+            ? "cursor-not-allowed bg-gray-400"
+            : "bg-emerald-600 hover:bg-emerald-700"
         }`}
       >
         {sending ? "Se trimite..." : "Trimite ofertă"}
@@ -271,6 +300,7 @@ export default function CompanyRequestsPage() {
   const [requests, setRequests] = useState<MovingRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [company, setCompany] = useState<CompanyUser>(null);
+  const [hasMineMap, setHasMineMap] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     const unsubAuth = onAuthChange((u) => setCompany(u));
@@ -330,8 +360,20 @@ export default function CompanyRequestsPage() {
                     {/* Offer interaction area */}
                     {company ? (
                       <>
-                        <OfferForm requestId={r.id} company={company} />
-                        <OfferList requestId={r.id} company={company} />
+                        <OfferList
+                          requestId={r.id}
+                          company={company}
+                          onHasMine={(has: boolean) =>
+                            setHasMineMap((prev) => ({ ...prev, [r.id]: has }))
+                          }
+                        />
+                        {!hasMineMap[r.id] ? (
+                          <OfferForm requestId={r.id} company={company} />
+                        ) : (
+                          <p className="mt-2 text-xs text-gray-500">
+                            Ai trimis deja o ofertă pentru această cerere. O poți edita sau retrage mai sus.
+                          </p>
+                        )}
                       </>
                     ) : (
                       <p className="mt-3 text-sm italic text-gray-400">

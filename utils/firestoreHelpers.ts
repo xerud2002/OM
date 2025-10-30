@@ -41,8 +41,10 @@ export async function getAllRequests() {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 export async function addOffer(requestId: string, data: any) {
+  // Persist requestId on the subdocument so collectionGroup queries can reference it later
   await addDoc(collection(db, "requests", requestId, "offers"), {
     ...data,
+    requestId,
     createdAt: serverTimestamp(),
   });
 }
