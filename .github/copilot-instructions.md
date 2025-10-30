@@ -35,13 +35,26 @@ Helpers in `utils/firestoreHelpers.ts`:
 - `addOffer(requestId, data)` / `getOffers(requestId)`
 - `acceptOffer(requestId, offerId)` marks chosen as `accepted` and others `declined` in a batch
 
-## Media upload workflow
+## Media upload workflow (Complete Enterprise System)
 - When customer chooses `mediaUpload: "later"`:
   1. Request created in Firestore
   2. Call `/api/generateUploadLink` (POST) with `requestId`, `customerEmail`, `customerName`
-  3. API generates unique token, sends email with link to `/upload/[token]`
-  4. Customer visits link within 7 days to upload photos/videos
-- Upload page: `pages/upload/[token].tsx` allows file selection and upload (currently simulated; integrate with Firebase Storage in production)
+     - Generates 64-char hex token (`crypto.randomBytes(32)`)
+     - Saves to `uploadTokens/{token}` collection with expiration (7 days)
+     - Updates request doc with `mediaUploadToken`
+  3. Client-side EmailJS sends email with link to `/upload/[token]`
+  4. Customer visits link → Server validates token via `/api/validateUploadToken`
+  5. Upload UI features:
+     - **Real Firebase Storage uploads** with `uploadBytesResumable()`
+     - **Progress tracking** (0-100%) per file with visual bars
+     - **Thumbnail previews** for images (FileReader) and video (canvas extraction)
+     - **Multiple files** supported (images + video)
+  6. On completion:
+     - Updates `requests/{id}.mediaUrls[]` with Firebase Storage URLs
+     - Marks token as `used: true` in Firestore
+     - **Notifies companies** via `companies/{id}/notifications` subcollection
+- Reminder system: `/api/sendUploadReminders` checks tokens older than 3 days and unused
+- See `MEDIA_UPLOAD_SYSTEM.md` for complete documentation
 
 ## Role-gated pages
 - Wrap protected content in `components/auth/RequireRole.tsx` with `allowedRole="customer"|"company"`.

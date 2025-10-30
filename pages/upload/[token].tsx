@@ -205,14 +205,31 @@ export default function UploadMediaPage() {
     }
   };
 
-  if (!token) {
+  // Loading state while validating token
+  if (validating) {
+    return (
+      <LayoutWrapper>
+        <div className="flex min-h-[50vh] items-center justify-center">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-12 w-12 animate-spin text-blue-600" />
+            <p className="mt-4 text-gray-600">Se verifică token-ul...</p>
+          </div>
+        </div>
+      </LayoutWrapper>
+    );
+  }
+
+  // Invalid token state
+  if (!token || !tokenData?.valid) {
     return (
       <LayoutWrapper>
         <div className="flex min-h-[50vh] items-center justify-center">
           <div className="text-center">
             <XCircle className="mx-auto h-16 w-16 text-rose-500" />
-            <h2 className="mt-4 text-xl font-semibold text-gray-800">Link invalid</h2>
-            <p className="mt-2 text-gray-600">Token-ul de upload lipsește sau este invalid.</p>
+            <h2 className="mt-4 text-xl font-semibold text-gray-800">Link invalid sau expirat</h2>
+            <p className="mt-2 text-gray-600">
+              {tokenData?.message || "Token-ul de upload lipsește sau este invalid."}
+            </p>
           </div>
         </div>
       </LayoutWrapper>
@@ -249,8 +266,9 @@ export default function UploadMediaPage() {
                   onChange={handleFileChange}
                   className="hidden"
                   id="fileInput"
+                  disabled={uploading}
                 />
-                <label htmlFor="fileInput" className="cursor-pointer">
+                <label htmlFor="fileInput" className={uploading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}>
                   <Upload className="mx-auto h-16 w-16 text-blue-400" />
                   <p className="mt-4 text-lg font-medium text-gray-700">
                     Click pentru a selecta fișiere
@@ -262,27 +280,80 @@ export default function UploadMediaPage() {
               </div>
 
               {files.length > 0 && (
-                <div className="mb-6 space-y-2">
+                <div className="mb-6 space-y-3">
                   <p className="text-sm font-semibold text-gray-700">
                     Fișiere selectate ({files.length}):
                   </p>
-                  {files.map((file, i) => (
+                  {files.map((fileWithProgress, i) => (
                     <div
                       key={i}
-                      className="flex items-center justify-between rounded-lg border bg-white p-3"
+                      className="overflow-hidden rounded-lg border bg-white shadow-sm"
                     >
-                      <div className="flex-1">
-                        <p className="text-sm font-medium text-gray-800">{file.name}</p>
-                        <p className="text-xs text-gray-500">
-                          {(file.size / 1024 / 1024).toFixed(2)} MB
-                        </p>
+                      <div className="flex items-center gap-3 p-3">
+                        {/* Thumbnail preview */}
+                        {fileWithProgress.preview && (
+                          <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded border">
+                            {fileWithProgress.file.type.startsWith("image/") ? (
+                              // eslint-disable-next-line @next/next/no-img-element
+                              <img 
+                                src={fileWithProgress.preview} 
+                                alt="Preview" 
+                                className="h-full w-full object-cover"
+                              />
+                            ) : (
+                              <div className="flex h-full w-full items-center justify-center bg-gray-100">
+                                <FileVideo className="h-8 w-8 text-gray-400" />
+                              </div>
+                            )}
+                          </div>
+                        )}
+
+                        <div className="min-w-0 flex-1">
+                          <p className="truncate text-sm font-medium text-gray-800">
+                            {fileWithProgress.file.name}
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {(fileWithProgress.file.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+
+                          {/* Progress bar */}
+                          {uploading && (
+                            <div className="mt-2">
+                              <div className="h-2 w-full overflow-hidden rounded-full bg-gray-200">
+                                <div
+                                  className="h-full bg-blue-600 transition-all duration-300"
+                                  style={{ width: `${fileWithProgress.progress}%` }}
+                                />
+                              </div>
+                              <p className="mt-1 text-xs text-gray-600">
+                                {fileWithProgress.progress === 100 ? (
+                                  <span className="flex items-center gap-1 text-emerald-600">
+                                    <CheckCircle className="h-3 w-3" />
+                                    Încărcat
+                                  </span>
+                                ) : (
+                                  `${fileWithProgress.progress.toFixed(0)}%`
+                                )}
+                              </p>
+                            </div>
+                          )}
+
+                          {fileWithProgress.error && (
+                            <p className="mt-1 text-xs text-rose-600">
+                              Eroare: {fileWithProgress.error}
+                            </p>
+                          )}
+                        </div>
+
+                        {!uploading && (
+                          <button
+                            onClick={() => removeFile(i)}
+                            className="rounded-full p-2 text-rose-500 hover:bg-rose-50"
+                          >
+                            <XCircle className="h-5 w-5" />
+                          </button>
+                        )}
                       </div>
-                      <button
-                        onClick={() => removeFile(i)}
-                        className="rounded-full p-2 text-rose-500 hover:bg-rose-50"
-                      >
-                        <XCircle className="h-5 w-5" />
-                      </button>
                     </div>
                   ))}
                 </div>
