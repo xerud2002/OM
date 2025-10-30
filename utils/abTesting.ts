@@ -1,5 +1,5 @@
 // utils/abTesting.ts
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 type Variant = "A" | "B";
 
@@ -12,23 +12,21 @@ type Variant = "A" | "B";
  * return variant === "A" ? <HeadlineA /> : <HeadlineB />;
  */
 export function useABTest(testName: string): Variant {
-  const [variant, setVariant] = useState<Variant>("A");
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
+  const [variant] = useState<Variant>(() => {
+    if (typeof window === "undefined") return "A";
 
     const storageKey = `ab_test_${testName}`;
     const stored = localStorage.getItem(storageKey);
 
     if (stored === "A" || stored === "B") {
-      setVariant(stored);
-    } else {
-      // Randomly assign 50/50
-      const newVariant: Variant = Math.random() < 0.5 ? "A" : "B";
-      localStorage.setItem(storageKey, newVariant);
-      setVariant(newVariant);
+      return stored;
     }
-  }, [testName]);
+
+    // Randomly assign 50/50
+    const newVariant: Variant = Math.random() < 0.5 ? "A" : "B";
+    localStorage.setItem(storageKey, newVariant);
+    return newVariant;
+  });
 
   return variant;
 }
@@ -39,9 +37,6 @@ export function useABTest(testName: string): Variant {
  */
 export function trackConversion(testName: string, variantUsed: Variant, eventName: string = "conversion") {
   if (typeof window === "undefined") return;
-
-  // Log to console for now - integrate with Google Analytics or your analytics service
-  console.log(`[A/B Test] ${testName} - Variant ${variantUsed} - ${eventName}`);
 
   // Send to analytics (example for Google Analytics 4)
   if (typeof window !== "undefined" && (window as any).gtag) {

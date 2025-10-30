@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import FadeInWhenVisible from "@/components/FadeInWhenVisible";
 
 export default function Services() {
@@ -65,11 +66,14 @@ export default function Services() {
             className="group flex h-full min-h-[380px] flex-col items-center justify-start rounded-3xl border border-emerald-100 bg-white/85 p-6 text-center shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-emerald-200/80"
           >
             {/* Image */}
-            <div className="mb-5 flex h-[160px] w-full items-center justify-center overflow-hidden rounded-2xl bg-emerald-50/50">
-              <motion.img
+            <div className="relative mb-5 h-[160px] w-full overflow-hidden rounded-2xl bg-emerald-50/50">
+              <Image
                 src={s.img}
                 alt={s.title}
-                className="h-[140px] w-[90%] rounded-2xl object-contain transition-transform duration-500 group-hover:scale-105"
+                fill
+                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                className="object-contain transition-transform duration-500 group-hover:scale-105"
+                loading="lazy"
               />
             </div>
 

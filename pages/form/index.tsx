@@ -7,6 +7,7 @@ import cities from "@/cities";
 import counties from "@/counties";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest } from "@/utils/firestoreHelpers";
+import { trackConversion, useABTest } from "@/utils/abTesting";
 import { toast } from "sonner";
 import RequireRole from "@/components/auth/RequireRole";
 
@@ -41,6 +42,7 @@ export default function FormPage() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [submitting, setSubmitting] = useState(false);
+  const buttonVariant = useABTest("form-cta-button");
   // sensible defaults: pick the first counties/cities if available
   const defaultFromCounty = counties[0] ?? "";
   const defaultToCounty = counties.length > 1 ? counties[1] : (counties[0] ?? "");
@@ -120,6 +122,9 @@ export default function FormPage() {
       };
 
       await createRequest(payload);
+
+      // Track conversion for A/B test
+      trackConversion("form-cta-button", buttonVariant, "form_submission");
 
       toast.success("Cererea a fost trimisă. Vei primi oferte în curând.");
       router.push("/customer/requests");
@@ -323,7 +328,11 @@ export default function FormPage() {
                 disabled={submitting}
                 className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-3 text-lg font-bold text-white shadow-lg transition hover:scale-105 hover:shadow-xl disabled:opacity-60"
               >
-                {submitting ? "Se trimite..." : "🎁 PRIMEȘTE OFERTE GRATUITE"}
+                {submitting
+                  ? "Se trimite..."
+                  : buttonVariant === "A"
+                    ? "🎁 PRIMEȘTE OFERTE GRATUITE"
+                    : "💰 ECONOMISEȘTE ACUM"}
               </button>
             </div>
 

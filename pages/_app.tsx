@@ -7,6 +7,9 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import FloatingCTA from "@/components/FloatingCTA";
+import UrgencyBanner from "@/components/UrgencyBanner";
+import LiveActivityPopup from "@/components/LiveActivityPopup";
+import LiveChatWidget from "@/components/LiveChatWidget";
 import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -33,6 +36,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Navbar />
 
+      {/* Urgency banner - limited time offer */}
+      <UrgencyBanner />
+
       {/* Offset content for the fixed navbar once, globally */}
       <main id="main-content" className="min-h-[60vh] pt-[80px]">
         <Component {...pageProps} />
@@ -40,8 +46,10 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Footer />
 
-      {/* Floating CTA for mobile users */}
+      {/* Conversion optimization widgets */}
       <FloatingCTA />
+      <LiveActivityPopup />
+      <LiveChatWidget />
 
       {/* Toasts (success/error/info) from anywhere in the app */}
       <Toaster richColors position="top-right" closeButton />
