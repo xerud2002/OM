@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
@@ -301,6 +301,8 @@ export default function CompanyRequestsPage() {
   const [loading, setLoading] = useState(true);
   const [company, setCompany] = useState<CompanyUser>(null);
   const [hasMineMap, setHasMineMap] = useState<Record<string, boolean>>({});
+  const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
 
   useEffect(() => {
     const unsubAuth = onAuthChange((u) => setCompany(u));
@@ -316,6 +318,29 @@ export default function CompanyRequestsPage() {
     return () => unsub();
   }, []);
 
+  // Update current time every 60 seconds to refresh age indicators
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentTime(Date.now()), 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const sortedRequests = [...requests].sort((a, b) => {
+    const getTime = (r: MovingRequest) =>
+      r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
+    return sortBy === "date-desc" ? getTime(b) - getTime(a) : getTime(a) - getTime(b);
+  });
+
+  const getTimeAgo = useMemo(() => (createdAt: any) => {
+    if (!createdAt) return "";
+    const ms = createdAt.toMillis ? createdAt.toMillis() : createdAt;
+    const diff = currentTime - ms;
+    const hours = Math.floor(diff / (1000 * 60 * 60));
+    const days = Math.floor(hours / 24);
+    if (days > 0) return `${days}d`;
+    if (hours > 0) return `${hours}h`;
+    return "Nou!";
+  }, [currentTime]);
+
   return (
     <RequireRole allowedRole="company">
       <LayoutWrapper>
@@ -324,9 +349,23 @@ export default function CompanyRequestsPage() {
             Cereri primite de la clienți
           </h1>
 
+          <div className="mb-4 flex items-center justify-between">
+            <p className="text-sm text-gray-600">
+              Total cereri: <span className="font-semibold">{requests.length}</span>
+            </p>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="rounded-lg border px-3 py-2 text-sm"
+            >
+              <option value="date-desc">Cele mai noi</option>
+              <option value="date-asc">Cele mai vechi</option>
+            </select>
+          </div>
+
           {loading ? (
             <p className="text-center text-gray-500">Se încarcă cererile...</p>
-          ) : requests.length === 0 ? (
+          ) : sortedRequests.length === 0 ? (
             <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -337,7 +376,7 @@ export default function CompanyRequestsPage() {
           ) : (
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <AnimatePresence>
-                {requests.map((r) => (
+                {sortedRequests.map((r) => (
                   <motion.div
                     key={r.id}
                     initial={{ opacity: 0, y: 10 }}
@@ -346,6 +385,19 @@ export default function CompanyRequestsPage() {
                     transition={{ duration: 0.3 }}
                     className="rounded-xl border bg-white/90 p-5 shadow-md backdrop-blur-md transition-all hover:shadow-lg"
                   >
+                    {r.createdAt && (
+                      <div className="mb-2 flex items-center justify-between">
+                        <span
+                          className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                            getTimeAgo(r.createdAt) === "Nou!"
+                              ? "bg-emerald-100 text-emerald-700"
+                              : "bg-gray-100 text-gray-600"
+                          }`}
+                        >
+                          {getTimeAgo(r.createdAt)}
+                        </span>
+                      </div>
+                    )}
                     <div>
                       <h3 className="mb-1 text-lg font-semibold text-emerald-700">
                         {r.customerName || "Client anonim"}

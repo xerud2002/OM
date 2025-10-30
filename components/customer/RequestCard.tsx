@@ -1,11 +1,15 @@
 import React from "react";
+import { useState } from "react";
 import OfferItem from "@/components/customer/OfferItem";
+import { acceptOffer } from "@/utils/firestoreHelpers";
+import { toast } from "sonner";
 
 type Offer = {
   id?: string;
   companyName?: string;
   price?: number;
   message?: string;
+  status?: "pending" | "accepted" | "declined";
 };
 
 type Request = {
@@ -21,6 +25,45 @@ type Request = {
 };
 
 const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] }) => {
+  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+
+  const handleAccept = async (offerId: string) => {
+    if (!r.id) return;
+    try {
+      await acceptOffer(r.id, offerId);
+      toast.success("Oferta a fost acceptată!");
+    } catch (err) {
+      console.error("Failed to accept offer", err);
+      toast.error("Eroare la acceptarea ofertei");
+    }
+  };
+
+  const handleDecline = async (offerId: string) => {
+    if (!r.id) return;
+    try {
+      const { doc, updateDoc } = await import("firebase/firestore");
+      const { db } = await import("@/services/firebase");
+      const offerRef = doc(db, "requests", r.id, "offers", offerId);
+      await updateDoc(offerRef, { status: "declined" });
+      toast.success("Oferta a fost refuzată");
+    } catch (err) {
+      console.error("Failed to decline offer", err);
+      toast.error("Eroare la refuzarea ofertei");
+    }
+  };
+
+  const toggleFavorite = (offerId: string) => {
+    setFavorites((prev) => {
+      const next = new Set(prev);
+      if (next.has(offerId)) {
+        next.delete(offerId);
+      } else {
+        next.add(offerId);
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="relative overflow-hidden rounded-xl border bg-white p-4 shadow hover:shadow-md">
       <div className="absolute left-0 top-0 h-full w-1 bg-emerald-500/60" />
@@ -69,7 +112,17 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
         <h4 className="mb-2 text-sm font-semibold text-gray-700">Oferte primite</h4>
         <div className="space-y-2">
           {offers && offers.length ? (
-            offers.map((o) => <OfferItem key={o.id} offer={o} />)
+            offers.map((o) => (
+              <OfferItem
+                key={o.id}
+                offer={o}
+                requestId={r.id}
+                onAccept={handleAccept}
+                onDecline={handleDecline}
+                onToggleFavorite={toggleFavorite}
+                isFavorite={favorites.has(o.id!)}
+              />
+            ))
           ) : (
             <p className="text-sm italic text-gray-400">Nicio ofertă.</p>
           )}

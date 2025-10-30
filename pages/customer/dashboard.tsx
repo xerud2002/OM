@@ -5,7 +5,14 @@ import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
-import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+  serverTimestamp,
+} from "firebase/firestore";
 import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
@@ -134,13 +141,35 @@ export default function CustomerDashboard() {
       const unsub = onSnapshot(q, (snap) => {
         const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
         setRequests(docs);
-        setOffersByRequest({});
         setLoading(false);
       });
       return () => unsub();
     });
     return () => unsubAuth();
   }, []);
+
+  // Real-time offers listener for all user requests
+  useEffect(() => {
+    if (requests.length === 0) return;
+
+    const unsubscribers: Array<() => void> = [];
+
+    requests.forEach((r) => {
+      const offersQuery = query(
+        collection(db, "requests", r.id, "offers"),
+        orderBy("createdAt", "desc")
+      );
+      const unsub = onSnapshot(offersQuery, (snap) => {
+        const offersList = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+        setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
+      });
+      unsubscribers.push(unsub);
+    });
+
+    return () => {
+      unsubscribers.forEach((u) => u());
+    };
+  }, [requests]);
 
   // Persist activeTab across sessions
   useEffect(() => {
