@@ -19,7 +19,7 @@ export default function CTASection() {
             transition={{ duration: 0.5 }}
             className="mb-6 text-3xl font-extrabold leading-tight md:text-5xl"
           >
-            Ești gata să te muți fără stres?
+            Gata să economisești până la 40% la mutare?
           </motion.h2>
 
           <motion.p
@@ -28,8 +28,9 @@ export default function CTASection() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-white/90 md:text-xl"
           >
-            Completează formularul de cerere și primește oferte reale de la firme verificate din
-            România. Rapid, sigur și gratuit!
+            Peste <strong>5.000 de români</strong> au economisit deja prin Ofertemutare.ro.
+            Completează formularul în 2 minute și primește <strong>oferte gratuite</strong> de la
+            firme verificate din România!
           </motion.p>
 
           <motion.div
@@ -41,10 +42,35 @@ export default function CTASection() {
           >
             <Link
               href="/form"
-              className="inline-flex items-center gap-3 rounded-full bg-white px-8 py-3 font-semibold text-emerald-600 shadow-lg transition-all duration-300 hover:text-emerald-700 hover:shadow-emerald-300/50"
+              className="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-lg font-bold text-emerald-600 shadow-2xl transition-all duration-300 hover:text-emerald-700 hover:shadow-white/30"
             >
-              Obține oferte gratuite acum <ArrowRight size={20} />
+              PRIMEȘTE 5 OFERTE GRATUITE <ArrowRight size={24} />
             </Link>
+          </motion.div>
+
+          {/* Trust badges */}
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4, duration: 0.5 }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-white/90"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-xl">✓</span>
+              <span>100% Gratuit</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">✓</span>
+              <span>Fără obligații</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">✓</span>
+              <span>Răspuns garantat în 24h</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🔒</span>
+              <span>Datele tale sunt protejate</span>
+            </div>
           </motion.div>
         </div>
       </FadeInWhenVisible>

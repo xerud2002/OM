@@ -6,6 +6,7 @@ import "../globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import FloatingCTA from "@/components/FloatingCTA";
 import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -38,6 +39,9 @@ export default function App({ Component, pageProps }: AppProps) {
       </main>
 
       <Footer />
+
+      {/* Floating CTA for mobile users */}
+      <FloatingCTA />
 
       {/* Toasts (success/error/info) from anywhere in the app */}
       <Toaster richColors position="top-right" closeButton />

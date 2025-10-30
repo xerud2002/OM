@@ -93,10 +93,10 @@ export default function Navbar() {
           {!user ? (
             <button
               onClick={handleGetOffers}
-              aria-label="Cont Client"
-              className="ml-3 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-2 font-semibold text-white shadow-md transition-all hover:scale-[1.04] hover:shadow-lg"
+              aria-label="Primește Oferte Gratuite"
+              className="ml-3 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-2.5 font-bold text-white shadow-lg transition-all hover:scale-[1.06] hover:shadow-xl"
             >
-              <PhoneCall size={18} /> Cont Client
+              <PhoneCall size={18} /> Primește Oferte GRATUITE
             </button>
           ) : (
             <div className="relative ml-3">

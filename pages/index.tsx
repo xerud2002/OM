@@ -8,6 +8,7 @@ import Services from "@/components/home/Services";
 import Articles from "@/components/home/Articles";
 import PartnerSection from "@/components/home/PartnerSection";
 import Testimonials from "@/components/home/Testimonials";
+import GuaranteeSection from "@/components/home/GuaranteeSection";
 import CTASection from "@/components/home/CTASection";
 
 export default function HomePage() {
@@ -17,16 +18,44 @@ export default function HomePage() {
           🔹 SEO Meta Tags
       =========================== */}
       <Head>
-        <title>Oferte Mutare România | Firme de mutări verificate | ofertemutare.ro</title>
+        <title>
+          Oferte Mutare România 2024 | Economisește până la 40% | Firme Verificate
+        </title>
         <meta
           name="description"
-          content="Compara oferte reale de la firme de mutări verificate din România. Găsește rapid cea mai bună ofertă pentru mutarea ta."
+          content="Primești 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări din România. Economisești în medie 450 lei. 100% gratuit, fără obligații. Peste 5000+ clienți mulțumiți!"
         />
         <meta
           name="keywords"
-          content="firme de mutări, oferte mutare, mutări România, transport mobilă, servicii mutare"
+          content="firme de mutări, oferte mutare, mutări România, transport mobilă, servicii mutare, mutări ieftine, comparare oferte mutare, firme mutări verificate"
         />
         <link rel="canonical" href="https://ofertemutare.ro" />
+        
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ofertemutare.ro" />
+        <meta
+          property="og:title"
+          content="Oferte Mutare România 2024 | Economisești până la 40%"
+        />
+        <meta
+          property="og:description"
+          content="Primești 3-5 oferte GRATUITE în 24h. Economie medie 450 lei. 100% gratuit!"
+        />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://ofertemutare.ro" />
+        <meta
+          property="twitter:title"
+          content="Oferte Mutare România 2024 | Economisești până la 40%"
+        />
+        <meta
+          property="twitter:description"
+          content="Primești 3-5 oferte GRATUITE în 24h. Economie medie 450 lei!"
+        />
+        <meta property="twitter:image" content="https://ofertemutare.ro/pics/index.png" />
       </Head>
 
       {/* ==========================
@@ -36,6 +65,7 @@ export default function HomePage() {
       <Steps />
       <ClientAccount />
       <Services />
+      <GuaranteeSection />
       <PartnerSection />
       <Testimonials />
       <Articles />

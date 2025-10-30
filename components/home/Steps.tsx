@@ -73,11 +73,16 @@ export default function Steps() {
           >
             <Link
               href="/form"
-              className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-3 font-semibold text-white shadow-md transition-all hover:scale-105 hover:shadow-lg"
+              className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
             >
-              Începe acum <ArrowRight size={20} />
+              Primește oferte GRATUITE <ArrowRight size={24} />
             </Link>
-            <p className="mt-3 text-sm text-gray-500">Rapid · Gratuit · Fără stres</p>
+            <p className="mt-4 text-sm font-medium text-gray-600">
+              ✓ Completezi în 2 minute · ✓ Fără costuri · ✓ Fără obligații
+            </p>
+            <p className="mt-2 text-xs text-gray-500">
+              🔒 Datele tale sunt protejate și nu vor fi distribuite terților
+            </p>
           </motion.div>
         </div>
       </FadeInWhenVisible>

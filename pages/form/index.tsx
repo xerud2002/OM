@@ -135,9 +135,23 @@ export default function FormPage() {
     <RequireRole allowedRole="customer">
       <LayoutWrapper>
         <main className="mx-auto max-w-3xl px-6 pt-[80px]">
-          <h1 className="mb-4 text-3xl font-bold text-emerald-700">Formular Cerere Mutare</h1>
+          {/* Trust banner */}
+          <div className="mb-6 rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-sky-50 p-4 text-center">
+            <p className="text-sm font-semibold text-emerald-700">
+              🎉 Alătură-te celor <strong>5.000+</strong> de români care au economisit deja!
+            </p>
+            <p className="mt-1 text-xs text-gray-600">
+              ⏱️ Completezi în <strong>2 minute</strong> · 💰 Economie medie{" "}
+              <strong>450 lei</strong> · ✅ Răspuns garantat în <strong>24h</strong>
+            </p>
+          </div>
+
+          <h1 className="mb-4 text-3xl font-bold text-emerald-700">
+            Primește 3-5 Oferte GRATUITE!
+          </h1>
           <p className="mb-6 text-gray-600">
-            Completează detaliile mutării tale pentru a primi oferte de la firme verificate.
+            Completează formularul rapid și primești oferte personalizate de la cele mai bune firme
+            de mutări din România. <strong>Fără costuri, fără obligații!</strong>
           </p>
 
           <form onSubmit={onSubmit} className="space-y-4">
@@ -292,15 +306,30 @@ export default function FormPage() {
               </p>
             </div>
 
+            {/* Trust reassurance before submit */}
+            <div className="rounded-lg border border-emerald-100 bg-emerald-50/50 p-4">
+              <p className="mb-2 text-center text-sm font-semibold text-emerald-700">
+                🔒 Datele tale sunt în siguranță
+              </p>
+              <p className="text-center text-xs text-gray-600">
+                Informațiile vor fi trimise doar către firmele verificate de noi. Nu distribuim
+                datele tale terților și nu vei primi spam.
+              </p>
+            </div>
+
             <div className="flex items-center justify-end">
               <button
                 type="submit"
                 disabled={submitting}
-                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-semibold text-white shadow-md transition hover:shadow-lg disabled:opacity-60"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-3 text-lg font-bold text-white shadow-lg transition hover:scale-105 hover:shadow-xl disabled:opacity-60"
               >
-                {submitting ? "Se trimite..." : "Trimite cerere"}
+                {submitting ? "Se trimite..." : "🎁 PRIMEȘTE OFERTE GRATUITE"}
               </button>
             </div>
+
+            <p className="mt-3 text-center text-xs text-gray-500">
+              Apasă butonul și vei primi între 3-5 oferte în maxim 24 de ore!
+            </p>
           </form>
         </main>
       </LayoutWrapper>

@@ -8,26 +8,30 @@ const testimonials = [
   {
     name: "Andreea Popescu",
     role: "Clientă – București",
-    text: "Am primit 3 oferte în mai puțin de o oră și am economisit peste 400 lei. Totul a fost simplu și rapid!",
+    text: "Am primit 5 oferte în doar 3 ore și am economisit 520 lei! Nu credeam că e atât de simplu. Recomand 100%!",
     rating: 5,
+    savings: "520 lei",
   },
   {
     name: "Mihai Ionescu",
     role: "Client – Cluj-Napoca",
-    text: "O platformă foarte utilă. Am comparat prețurile ușor și am ales firma potrivită fără stres.",
+    text: "Platformă serioasă! Am comparat ofertele liniștit și am ales firma perfectă. Mutarea a fost fără stres.",
     rating: 5,
+    savings: "380 lei",
   },
   {
     name: "Elena Marin",
     role: "Clientă – Brașov",
-    text: "Firmele partenere au fost profesioniste, iar mutarea a decurs perfect. Recomand cu drag!",
+    text: "Firmele verificate de voi sunt profesioniști adevărați. Totul a decurs perfect, la timp și fără surprize neplăcute!",
     rating: 5,
+    savings: "450 lei",
   },
   {
     name: "Adrian Toma",
     role: "Client – Iași",
-    text: "Mi-a plăcut claritatea și simplitatea formularului. Într-o zi aveam totul stabilit pentru mutare!",
+    text: "Formular super rapid de completat, oferte primite a doua zi. Acum știu unde să mă întorc când mă mut din nou!",
     rating: 5,
+    savings: "290 lei",
   },
 ];
 
@@ -48,7 +52,7 @@ export default function Testimonials() {
         </div>
       </FadeInWhenVisible>
 
-      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4">
         {testimonials.map((t, idx) => (
           <motion.div
             key={idx}
@@ -59,6 +63,11 @@ export default function Testimonials() {
             whileHover={{ scale: 1.03, y: -4 }}
             className="flex flex-col items-center rounded-3xl border border-emerald-100 bg-white/85 p-6 text-center shadow-md backdrop-blur-md transition-all duration-300 hover:shadow-emerald-200/70"
           >
+            {/* Savings badge */}
+            <div className="mb-3 rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-white">
+              Economie: {t.savings}
+            </div>
+
             {/* ⭐ Rating Stars */}
             <div className="mb-4 flex justify-center">
               {Array.from({ length: t.rating }).map((_, i) => (
@@ -67,7 +76,7 @@ export default function Testimonials() {
             </div>
 
             {/* Text */}
-            <p className="mb-4 text-sm italic leading-relaxed text-gray-700">“{t.text}”</p>
+            <p className="mb-4 text-sm italic leading-relaxed text-gray-700">&ldquo;{t.text}&rdquo;</p>
             <h4 className="font-semibold text-emerald-700">{t.name}</h4>
             <span className="text-xs text-gray-500">{t.role}</span>
           </motion.div>

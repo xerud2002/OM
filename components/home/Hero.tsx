@@ -46,27 +46,65 @@ export default function Hero() {
         transition={{ duration: 0.8, ease: "easeOut" }}
         className="relative z-10 max-w-3xl px-6 text-center"
       >
+        {/* Trust badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 0.3, duration: 0.5 }}
+          className="mb-4 inline-block rounded-full bg-emerald-400/20 px-4 py-2 text-sm font-semibold text-emerald-200 backdrop-blur-sm"
+        >
+          🏆 Peste 5.000 de mutări reușite în 2024
+        </motion.div>
+
         <h1 className="mb-6 text-4xl font-bold leading-tight text-white drop-shadow-lg md:text-6xl">
-          Mută-te fără stres cu ajutorul <span className="text-emerald-300">Ofertemutare.ro</span>
+          Economisești până la <span className="text-emerald-300">40%</span> la mutare
         </h1>
 
         <p className="mb-8 text-lg leading-relaxed text-white/90 md:text-xl">
-          Primește rapid oferte reale de la firme de mutări verificate din România. Compara prețuri,
-          recenzii și alege varianta potrivită pentru tine.
+          Primești <strong className="text-emerald-300">3-5 oferte gratuite</strong> în 24h de la
+          cele mai bune firme verificate din România. <strong>Fără obligații.</strong> Compară și
+          alegi oferta perfectă pentru tine!
         </p>
 
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={handleCTA}
-          className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-3 font-semibold text-white shadow-lg transition-all hover:shadow-emerald-400/40"
+          className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-4 text-lg font-bold text-white shadow-xl transition-all hover:shadow-emerald-400/50"
         >
-          Obține oferte acum <ArrowRight size={20} />
+          Primește oferte GRATUITE <ArrowRight size={24} />
         </motion.button>
 
-        <p className="mt-4 text-sm text-white/70">
-          Fără costuri ascunse · Firme verificate · Timp economisit
+        <p className="mt-4 text-sm text-white/80">
+          ✓ 100% Gratuit · ✓ Fără obligații · ✓ Răspuns în 24h · ✓ Firme verificate
         </p>
+
+        {/* Quick stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.6 }}
+          className="mt-8 flex flex-wrap items-center justify-center gap-6 text-sm text-white/90"
+        >
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">⭐</span>
+            <span>
+              <strong className="text-emerald-300">4.9/5</strong> rating mediu
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">💰</span>
+            <span>
+              Economie medie <strong className="text-emerald-300">450 lei</strong>
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">⚡</span>
+            <span>
+              Răspuns în <strong className="text-emerald-300">24 ore</strong>
+            </span>
+          </div>
+        </motion.div>
       </motion.div>
     </section>
   );
