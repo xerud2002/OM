@@ -1,20 +1,97 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LayoutWrapper from "@/components/layout/Layout";
-import { Upload, CheckCircle, XCircle } from "lucide-react";
+import { Upload, CheckCircle, XCircle, Loader2, FileImage, FileVideo } from "lucide-react";
 import { toast } from "sonner";
+import { storage, db } from "@/services/firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { doc, updateDoc, arrayUnion, setDoc, collection, getDocs, query, where } from "firebase/firestore";
+
+interface FileWithProgress {
+  file: File;
+  progress: number;
+  url?: string;
+  preview?: string;
+  error?: string;
+}
+
+interface TokenData {
+  valid: boolean;
+  requestId?: string;
+  customerEmail?: string;
+  customerName?: string;
+  reason?: string;
+  message?: string;
+}
 
 export default function UploadMediaPage() {
   const router = useRouter();
   const { token } = router.query;
-  const [files, setFiles] = useState<File[]>([]);
+  const [files, setFiles] = useState<FileWithProgress[]>([]);
   const [uploading, setUploading] = useState(false);
   const [uploaded, setUploaded] = useState(false);
+  const [tokenData, setTokenData] = useState<TokenData | null>(null);
+  const [validating, setValidating] = useState(true);
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Validate token on mount
+  useEffect(() => {
+    if (!token || typeof token !== "string") return;
+
+    const validateToken = async () => {
+      try {
+        const resp = await fetch(`/api/validateUploadToken?token=${token}`);
+        const data = await resp.json();
+        setTokenData(data);
+      } catch (err) {
+        console.error("Token validation error:", err);
+        setTokenData({ valid: false, message: "Eroare la validarea token-ului" });
+      } finally {
+        setValidating(false);
+      }
+    };
+
+    validateToken();
+  }, [token]);
+
+  // Generate preview thumbnails
+  const generatePreview = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
+      if (file.type.startsWith("image/")) {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target?.result as string);
+        reader.readAsDataURL(file);
+      } else if (file.type.startsWith("video/")) {
+        const video = document.createElement("video");
+        video.preload = "metadata";
+        video.onloadedmetadata = () => {
+          video.currentTime = 1;
+        };
+        video.onseeked = () => {
+          const canvas = document.createElement("canvas");
+          canvas.width = video.videoWidth;
+          canvas.height = video.videoHeight;
+          const ctx = canvas.getContext("2d");
+          ctx?.drawImage(video, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL());
+        };
+        video.src = URL.createObjectURL(file);
+      } else {
+        resolve("");
+      }
+    });
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
-      setFiles((prev) => [...prev, ...newFiles]);
+      const filesWithProgress: FileWithProgress[] = await Promise.all(
+        newFiles.map(async (file) => ({
+          file,
+          progress: 0,
+          preview: await generatePreview(file),
+        }))
+      );
+      setFiles((prev) => [...prev, ...filesWithProgress]);
     }
   };
 
@@ -28,26 +105,103 @@ export default function UploadMediaPage() {
       return;
     }
 
+    if (!tokenData?.valid || !tokenData.requestId) {
+      toast.error("Token invalid. Te rugăm să accesezi link-ul din email.");
+      return;
+    }
+
     setUploading(true);
+    const uploadedUrls: string[] = [];
+
     try {
-      // In a real implementation, you would upload files to Firebase Storage
-      // and then update the request document with the URLs
-      
-      // Simulate upload delay
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      
+      // Upload each file to Firebase Storage
+      for (let i = 0; i < files.length; i++) {
+        const fileWithProgress = files[i];
+        const file = fileWithProgress.file;
+        const fileExtension = file.name.split(".").pop();
+        const fileName = `${Date.now()}_${i}.${fileExtension}`;
+        const storageRef = ref(storage, `requests/${tokenData.requestId}/${fileName}`);
+
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        await new Promise<void>((resolve, reject) => {
+          uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              setFiles((prev) =>
+                prev.map((f, idx) => (idx === i ? { ...f, progress } : f))
+              );
+            },
+            (error) => {
+              console.error("Upload error:", error);
+              setFiles((prev) =>
+                prev.map((f, idx) => (idx === i ? { ...f, error: error.message } : f))
+              );
+              reject(error);
+            },
+            async () => {
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+              uploadedUrls.push(downloadURL);
+              setFiles((prev) =>
+                prev.map((f, idx) => (idx === i ? { ...f, url: downloadURL, progress: 100 } : f))
+              );
+              resolve();
+            }
+          );
+        });
+      }
+
+      // Update request document with media URLs
+      const requestRef = doc(db, "requests", tokenData.requestId);
+      await updateDoc(requestRef, {
+        mediaUrls: arrayUnion(...uploadedUrls),
+      });
+
+      // Mark token as used
+      const tokenRef = doc(db, "uploadTokens", token as string);
+      await updateDoc(tokenRef, {
+        used: true,
+        uploadedAt: new Date().toISOString(),
+      });
+
+      // Notify companies with offers
+      await notifyCompanies(tokenData.requestId);
+
       setUploaded(true);
       toast.success("Fișierele au fost încărcate cu succes!");
-      
-      // Clear files after successful upload
-      setTimeout(() => {
-        setFiles([]);
-      }, 3000);
     } catch (err) {
       console.error("Upload failed", err);
       toast.error("Eroare la încărcarea fișierelor. Te rugăm să încerci din nou.");
     } finally {
       setUploading(false);
+    }
+  };
+
+  const notifyCompanies = async (requestId: string) => {
+    try {
+      // Get all companies that made offers for this request
+      const offersQuery = query(
+        collection(db, "requests", requestId, "offers"),
+        where("status", "==", "pending")
+      );
+      const offersSnap = await getDocs(offersQuery);
+
+      // Send notification to each company
+      for (const offerDoc of offersSnap.docs) {
+        const offer = offerDoc.data();
+        // Create notification in companies' notifications subcollection
+        const notificationRef = doc(collection(db, "companies", offer.companyId, "notifications"));
+        await setDoc(notificationRef, {
+          type: "media_uploaded",
+          requestId,
+          message: "Clientul a încărcat poze și video pentru cererea de mutare.",
+          createdAt: new Date().toISOString(),
+          read: false,
+        });
+      }
+    } catch (err) {
+      console.error("Failed to notify companies:", err);
     }
   };
 
