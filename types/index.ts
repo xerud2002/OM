@@ -26,6 +26,20 @@ export type CompanyProfile = BaseProfile & {
   county?: string;
   description?: string;
   verified?: boolean;
+  averageRating?: number;
+  totalReviews?: number;
+};
+
+export type Review = {
+  id: string;
+  companyId: string;
+  customerId: string;
+  customerName: string;
+  requestId: string;
+  rating: number; // 1-5
+  comment: string;
+  createdAt: Timestamp;
+  helpful?: number; // Count of helpful votes (optional pentru viitor)
 };
 
 export type MovingRequest = {
