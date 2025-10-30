@@ -69,6 +69,14 @@ export default function CustomerDashboard() {
     hasElevator: false,
     budgetEstimate: 0,
     specialItems: "",
+    serviceMoving: false,
+    servicePacking: false,
+    serviceDisassembly: false,
+    serviceCleanout: false,
+    serviceStorage: false,
+    surveyType: "quick-estimate",
+    mediaUpload: "later",
+    mediaFiles: [],
   });
 
   const [search, setSearch] = useState<string>("");
@@ -234,29 +242,94 @@ export default function CustomerDashboard() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
-    await createRequestHelper({
-      ...form,
-      customerId: user.uid,
-      customerName: user.displayName || user.email,
-      customerEmail: user.email,
-      createdAt: serverTimestamp(),
-    } as any);
-    setForm({
-      fromCity: "",
-      fromCounty: "",
-      toCity: "",
-      toCounty: "",
-      moveDate: "",
-      details: "",
-      rooms: "",
-      volumeM3: "",
-      phone: "",
-      needPacking: false,
-      hasElevator: false,
-      budgetEstimate: 0,
-      specialItems: "",
-    });
-    setActiveTab("requests");
+    
+    const { toast } = await import("sonner");
+    
+    try {
+      // Create request in Firestore
+      const requestId = await createRequestHelper({
+        ...form,
+        customerId: user.uid,
+        customerName: user.displayName || user.email,
+        customerEmail: user.email,
+        createdAt: serverTimestamp(),
+      } as any);
+
+      // If user chose "later" for media upload, generate upload link and send email
+      if (form.mediaUpload === "later") {
+        try {
+          const resp = await fetch("/api/generateUploadLink", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              requestId,
+              customerEmail: user.email,
+              customerName: user.displayName || user.email,
+            }),
+          });
+          const result = await resp.json();
+          
+          if (result.ok && result.uploadLink) {
+            // Send email via EmailJS
+            const emailjs = (await import("@emailjs/browser")).default;
+            
+            const emailParams = {
+              to_email: result.customerEmail,
+              to_name: result.customerName || "Client",
+              upload_link: result.uploadLink,
+            };
+
+            try {
+              await emailjs.send(
+                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+                emailParams,
+                process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+              );
+              toast.success("Cererea a fost trimisă! Vei primi un email cu link pentru upload poze.");
+            } catch (emailError) {
+              console.error("EmailJS error:", emailError);
+              toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
+            }
+          } else {
+            toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
+          }
+        } catch (err) {
+          console.warn("Failed to generate upload link", err);
+          toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
+        }
+      } else {
+        toast.success("Cererea a fost trimisă cu succes!");
+      }
+
+      setForm({
+        fromCity: "",
+        fromCounty: "",
+        toCity: "",
+        toCounty: "",
+        moveDate: "",
+        details: "",
+        rooms: "",
+        volumeM3: "",
+        phone: "",
+        needPacking: false,
+        hasElevator: false,
+        budgetEstimate: 0,
+        specialItems: "",
+        serviceMoving: false,
+        servicePacking: false,
+        serviceDisassembly: false,
+        serviceCleanout: false,
+        serviceStorage: false,
+        surveyType: "quick-estimate",
+        mediaUpload: "later",
+        mediaFiles: [],
+      });
+      setActiveTab("requests");
+    } catch (err) {
+      console.error("Failed to submit request", err);
+      toast.error("Eroare la trimiterea cererii. Te rugăm să încerci din nou.");
+    }
   };
 
   const resetForm = () =>
@@ -274,6 +347,14 @@ export default function CustomerDashboard() {
       hasElevator: false,
       budgetEstimate: 0,
       specialItems: "",
+      serviceMoving: false,
+      servicePacking: false,
+      serviceDisassembly: false,
+      serviceCleanout: false,
+      serviceStorage: false,
+      surveyType: "quick-estimate",
+      mediaUpload: "later",
+      mediaFiles: [],
     });
 
   return (

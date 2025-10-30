@@ -19,7 +19,13 @@ Helpers in `utils/firebaseHelpers.ts`:
 - Auth: `loginWithGoogle(role)`, `registerWithEmail(role, { email, password, displayName? })`, `loginWithEmail({ email, password })`, `resetPassword(email)`.
 
 ## Firestore data model and helpers
-- Requests collection: `requests/{requestId}` with fields like `fromCounty`, `fromCity`, `toCounty`, `toCity`, `moveDate`, `details`, `rooms`, `phone`, etc., plus `customerId`, `createdAt`.
+- Requests collection: `requests/{requestId}` with extensive fields:
+  - Location: `fromCounty`, `fromCity`, `fromAddress`, `fromType` (house|flat), `fromFloor`, `fromElevator`, `toCounty`, `toCity`, `toAddress`, `toType`, `toFloor`, `toElevator`
+  - Details: `moveDate`, `details`, `rooms`, `phone`
+  - Services: `serviceMoving`, `servicePacking`, `serviceDisassembly`, `serviceCleanout`, `serviceStorage`
+  - Survey: `surveyType` (in-person|video|quick-estimate)
+  - Media: `mediaUpload` (now|later), `mediaUploadToken`, `mediaUrls[]`
+  - Meta: `customerId`, `customerName`, `customerEmail`, `createdAt`, `status`
 - Offers subcollection: `requests/{requestId}/offers/{offerId}` with `companyId`, `companyName`, `price`, `message`, `status` (`pending|accepted|declined|rejected`), `createdAt`.
 - Use `serverTimestamp()` for server times. Avoid `undefined` fields — `createRequest()` strips them.
 
@@ -28,6 +34,14 @@ Helpers in `utils/firestoreHelpers.ts`:
 - `getCustomerRequests(customerId)` / `getAllRequests()`
 - `addOffer(requestId, data)` / `getOffers(requestId)`
 - `acceptOffer(requestId, offerId)` marks chosen as `accepted` and others `declined` in a batch
+
+## Media upload workflow
+- When customer chooses `mediaUpload: "later"`:
+  1. Request created in Firestore
+  2. Call `/api/generateUploadLink` (POST) with `requestId`, `customerEmail`, `customerName`
+  3. API generates unique token, sends email with link to `/upload/[token]`
+  4. Customer visits link within 7 days to upload photos/videos
+- Upload page: `pages/upload/[token].tsx` allows file selection and upload (currently simulated; integrate with Firebase Storage in production)
 
 ## Role-gated pages
 - Wrap protected content in `components/auth/RequireRole.tsx` with `allowedRole="customer"|"company"`.

@@ -35,8 +35,16 @@ export type MovingRequest = {
   customerEmail?: string;
   fromCity: string;
   fromCounty?: string;
+  fromAddress?: string;
+  fromType?: "house" | "flat";
+  fromFloor?: string;
+  fromElevator?: boolean;
   toCity: string;
   toCounty?: string;
+  toAddress?: string;
+  toType?: "house" | "flat";
+  toFloor?: string;
+  toElevator?: boolean;
   moveDate?: string;
   details?: string;
   rooms?: number | string;
@@ -46,6 +54,18 @@ export type MovingRequest = {
   needPacking?: boolean;
   hasElevator?: boolean;
   specialItems?: string;
+  // Services
+  serviceMoving?: boolean;
+  servicePacking?: boolean;
+  serviceDisassembly?: boolean;
+  serviceCleanout?: boolean;
+  serviceStorage?: boolean;
+  // Survey & Estimate
+  surveyType?: "in-person" | "video" | "quick-estimate";
+  // Media upload
+  mediaUpload?: "now" | "later";
+  mediaUploadToken?: string;
+  mediaUrls?: string[];
   createdAt: Timestamp;
   status?: "pending" | "in-progress" | "completed" | "cancelled";
 };
