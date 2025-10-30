@@ -170,7 +170,7 @@ function OfferItem({
 function OfferList({ requestId, company, onHasMine }: {
   requestId: string;
   company: CompanyUser;
-  onHasMine?: (has: boolean) => void;
+  onHasMine?: (arg0: boolean) => void;
 }) {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [expanded, setExpanded] = useState(false);
