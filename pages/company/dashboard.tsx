@@ -16,6 +16,7 @@ export default function CompanyDashboard() {
   const [requestDetails, setRequestDetails] = useState<any | null>(null);
   const [statusFilter, setStatusFilter] = useState<"all" | "accepted" | "pending" | "rejected" | "declined">("all");
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState<"offers" | "requests">("offers");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editPrice, setEditPrice] = useState<string>("");
   const [editMessage, setEditMessage] = useState<string>("");
@@ -112,10 +113,28 @@ export default function CompanyDashboard() {
     <RequireRole allowedRole="company">
       <LayoutWrapper>
         <section className="mx-auto max-w-5xl px-4 py-10">
-          <h1 className="mb-6 text-center text-3xl font-bold text-emerald-700">
-            Dashboard Companie
-          </h1>
+          <h1 className="mb-2 text-center text-3xl font-bold text-emerald-700">Dashboard Companie</h1>
+          <div className="mb-8 flex justify-center gap-3">
+            <button
+              onClick={() => setActiveTab("offers")}
+              className={`rounded-full px-4 py-2 text-sm font-semibold ${
+                activeTab === "offers" ? "bg-emerald-600 text-white" : "border bg-white text-gray-700"
+              }`}
+            >
+              Ofertele mele
+            </button>
+            <button
+              onClick={() => setActiveTab("requests")}
+              className={`rounded-full px-4 py-2 text-sm font-semibold ${
+                activeTab === "requests" ? "bg-emerald-600 text-white" : "border bg-white text-gray-700"
+              }`}
+            >
+              Cereri clienți
+            </button>
+          </div>
 
+          {activeTab === "offers" && (
+          <>
           {/* Stats */}
           <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
             {[
@@ -288,6 +307,8 @@ export default function CompanyDashboard() {
           ) : (
             <p className="text-sm italic text-gray-500">Nu există oferte de afișat.</p>
           )}
+          </>
+          )}
 
           {/* Offer details modal */}
           <AnimatePresence>
@@ -343,6 +364,20 @@ export default function CompanyDashboard() {
               </motion.div>
             )}
           </AnimatePresence>
+
+          {activeTab === "requests" && (
+            <div className="mt-6">
+              {/** Reuse the same requests view from company requests page */}
+              {company ? (
+                (() => {
+                  const RequestsView = require("@/components/company/RequestsView").default;
+                  return <RequestsView companyFromParent={company} />;
+                })()
+              ) : (
+                <p className="text-center text-sm italic text-gray-500">Se încarcă utilizatorul...</p>
+              )}
+            </div>
+          )}
         </section>
       </LayoutWrapper>
     </RequireRole>

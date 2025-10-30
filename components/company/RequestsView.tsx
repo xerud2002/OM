@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useRef, useCallback } from "react";
 import { db } from "@/services/firebase";
 import {
   collection,
@@ -10,9 +10,15 @@ import {
   updateDoc,
   deleteDoc,
   doc,
+  getDocs,
+  startAfter,
+  limit,
+  QueryDocumentSnapshot,
+  DocumentData,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { addOffer } from "@/utils/firestoreHelpers";
+import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 
 // Types
@@ -239,6 +245,9 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
         price: priceNum,
         message,
       });
+      try {
+        trackEvent("offer_submitted", { requestId, companyId: company.uid, price: priceNum });
+      } catch {}
       setPrice("");
       setMessage("");
     } catch (err) {
@@ -283,11 +292,17 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
 
 export default function RequestsView({ companyFromParent }: { companyFromParent?: CompanyUser }) {
   const [company, setCompany] = useState<CompanyUser>(companyFromParent ?? null);
-  const [requests, setRequests] = useState<MovingRequest[]>([]);
+  const PAGE_SIZE = 10;
+  const [firstPage, setFirstPage] = useState<MovingRequest[]>([]);
+  const [extra, setExtra] = useState<MovingRequest[]>([]);
+  const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [hasMore, setHasMore] = useState(false);
   const [hasMineMap, setHasMineMap] = useState<Record<string, boolean>>({});
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
   const [currentTime, setCurrentTime] = useState(() => Date.now());
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   // Auth (if not provided by parent)
   useEffect(() => {
@@ -297,10 +312,14 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   }, [companyFromParent]);
 
   useEffect(() => {
-    const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "requests"), orderBy("createdAt", "desc"), limit(PAGE_SIZE));
     const unsub = onSnapshot(q, (snapshot) => {
-      setRequests(snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as MovingRequest));
+      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as MovingRequest);
+      setFirstPage(list);
       setLoading(false);
+      const last = snapshot.docs[snapshot.docs.length - 1] || null;
+      setLastDoc(last);
+      setHasMore(snapshot.size === PAGE_SIZE);
     });
     return () => unsub();
   }, []);
@@ -310,11 +329,57 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     return () => clearInterval(interval);
   }, []);
 
+  const loadMore = useCallback(async () => {
+    if (!lastDoc) return;
+    setLoadingMore(true);
+    try {
+      const q2 = query(
+        collection(db, "requests"),
+        orderBy("createdAt", "desc"),
+        startAfter(lastDoc),
+        limit(PAGE_SIZE)
+      );
+      const snap = await getDocs(q2);
+      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as MovingRequest[];
+      setExtra((prev) => {
+        const seen = new Set(prev.map((p) => p.id).concat(firstPage.map((p) => p.id)));
+        return [...prev, ...list.filter((x) => !seen.has(x.id))];
+      });
+      const last = snap.docs[snap.docs.length - 1] || null;
+      setLastDoc(last);
+      setHasMore(snap.size === PAGE_SIZE);
+    } finally {
+      setLoadingMore(false);
+    }
+  }, [lastDoc, firstPage]);
+
+  useEffect(() => {
+    if (!hasMore || loadingMore) return;
+    const el = sentinelRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && hasMore && !loadingMore) {
+          loadMore();
+        }
+      });
+    }, { rootMargin: "200px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [hasMore, loadingMore, loadMore]);
+
+  const combinedRequests = useMemo(() => {
+    // Ensure uniqueness when combining pages
+    const map = new Map<string, MovingRequest>();
+    [...firstPage, ...extra].forEach((r) => map.set(r.id, r));
+    return Array.from(map.values());
+  }, [firstPage, extra]);
+
   const sortedRequests = useMemo(() => {
-    const arr = [...requests];
+    const arr = [...combinedRequests];
     const getTime = (r: MovingRequest) => (r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0);
     return sortBy === "date-desc" ? arr.sort((a, b) => getTime(b) - getTime(a)) : arr.sort((a, b) => getTime(a) - getTime(b));
-  }, [requests, sortBy]);
+  }, [combinedRequests, sortBy]);
 
   const getTimeAgo = useMemo(
     () => (createdAt: any) => {
@@ -334,7 +399,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     <div>
       <div className="mb-4 flex items-center justify-between">
         <p className="text-sm text-gray-600">
-          Total cereri: <span className="font-semibold">{requests.length}</span>
+          Total cereri: <span className="font-semibold">{sortedRequests.length}</span>
         </p>
         <select
           value={sortBy}
@@ -406,6 +471,18 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
               </motion.div>
             ))}
           </AnimatePresence>
+        </div>
+      )}
+      <div ref={sentinelRef} />
+      {hasMore && (
+        <div className="mt-6 flex justify-center">
+          <button
+            disabled={loadingMore || !lastDoc}
+            onClick={loadMore}
+            className="rounded-lg border px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-60"
+          >
+            {loadingMore ? "Se încarcă..." : "Încarcă mai multe"}
+          </button>
         </div>
       )}
     </div>

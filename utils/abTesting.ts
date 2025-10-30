@@ -32,6 +32,19 @@ export function useABTest(testName: string): Variant {
 }
 
 /**
+ * Track exposure event when a user sees a specific variant.
+ */
+export function trackExposure(testName: string, variantUsed: Variant) {
+  if (typeof window === "undefined") return;
+  if ((window as any).gtag) {
+    (window as any).gtag("event", "ab_exposure", {
+      test_name: testName,
+      variant: variantUsed,
+    });
+  }
+}
+
+/**
  * Track conversion events for A/B tests.
  * Call this when a user completes a desired action (form submit, signup, etc.)
  */

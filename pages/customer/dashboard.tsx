@@ -19,6 +19,7 @@ import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { Search, Download, Filter, PlusSquare, List, Inbox, Settings } from "lucide-react";
 import StatCard from "@/components/customer/StatCard";
 import RequestCard from "@/components/customer/RequestCard";
+import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
 import { useDebouncedValue } from "@/utils/hooks";
 
@@ -92,6 +93,34 @@ export default function CustomerDashboard() {
   );
   const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
 
+  // Handlers to accept/decline from aggregated view
+  const acceptFromAggregated = async (requestId: string, offerId: string) => {
+    const { acceptOffer } = await import("@/utils/firestoreHelpers");
+    const { toast } = await import("sonner");
+    try {
+      await acceptOffer(requestId, offerId);
+      toast.success("Oferta a fost acceptată!");
+    } catch (err) {
+      console.error("Failed to accept offer", err);
+      toast.error("Eroare la acceptarea ofertei");
+    }
+  };
+
+  const declineFromAggregated = async (requestId: string, offerId: string) => {
+    try {
+      const { doc, updateDoc } = await import("firebase/firestore");
+      const { db } = await import("@/services/firebase");
+      const offerRef = doc(db, "requests", requestId, "offers", offerId);
+      await updateDoc(offerRef, { status: "declined" });
+      const { toast } = await import("sonner");
+      toast.success("Oferta a fost refuzată");
+    } catch (err) {
+      console.error("Failed to decline offer", err);
+      const { toast } = await import("sonner");
+      toast.error("Eroare la refuzarea ofertei");
+    }
+  };
+
   const debouncedSearch = useDebouncedValue(search, 250);
 
   const filteredRequests = useMemo(() => {
@@ -160,7 +189,7 @@ export default function CustomerDashboard() {
         orderBy("createdAt", "desc")
       );
       const unsub = onSnapshot(offersQuery, (snap) => {
-        const offersList = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+        const offersList = snap.docs.map((d) => ({ id: d.id, requestId: r.id, ...(d.data() as any) }));
         setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
       });
       unsubscribers.push(unsub);
@@ -436,28 +465,49 @@ export default function CustomerDashboard() {
               )}
 
               {activeTab === "offers" && (
-                <div>
-                  <h3 className="mb-4 text-lg font-semibold">Toate ofertele</h3>
-                  {aggregatedOffers.length === 0 ? (
-                    <p className="text-sm italic text-gray-500">Nu există oferte.</p>
-                  ) : (
-                    <div className="space-y-3">
-                      {aggregatedOffers.map((o) => (
-                        <div
-                          key={o.id}
-                          className="flex items-center justify-between rounded-md border bg-white p-3 shadow-sm"
-                        >
-                          <div>
-                            <p className="font-medium">{o.companyName}</p>
-                            {o.message && <p className="text-sm text-gray-500">{o.message}</p>}
+                <div className="space-y-6">
+                  <div>
+                    <h3 className="mb-4 text-lg font-semibold">Toate ofertele</h3>
+                    {aggregatedOffers.length === 0 ? (
+                      <p className="text-sm italic text-gray-500">Nu există oferte.</p>
+                    ) : (
+                      <div className="space-y-3">
+                        {aggregatedOffers.map((o) => (
+                          <div
+                            key={o.id}
+                            className="flex items-center justify-between rounded-md border bg-white p-3 shadow-sm"
+                          >
+                            <div>
+                              <p className="font-medium">{o.companyName}</p>
+                              {o.message && <p className="text-sm text-gray-500">{o.message}</p>}
+                            </div>
+                            <div className="text-right">
+                              <p className="font-semibold text-emerald-700">{o.price} lei</p>
+                            </div>
                           </div>
-                          <div className="text-right">
-                            <p className="font-semibold text-emerald-700">{o.price} lei</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Comparison panel */}
+                  <div>
+                    <h3 className="mb-3 text-lg font-semibold">Compară oferte</h3>
+                    <OfferComparison
+                      offers={(aggregatedOffers as any[]).map((o) => ({
+                        id: o.id,
+                        requestId: (o as any).requestId,
+                        companyName: (o as any).companyName,
+                        price: (o as any).price,
+                        message: (o as any).message,
+                        status: (o as any).status,
+                        createdAt: (o as any).createdAt,
+                        favorite: false,
+                      }))}
+                      onAccept={acceptFromAggregated}
+                      onDecline={declineFromAggregated}
+                    />
+                  </div>
                 </div>
               )}
             </main>

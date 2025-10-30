@@ -3,6 +3,8 @@ import { useState } from "react";
 import OfferItem from "@/components/customer/OfferItem";
 import { acceptOffer } from "@/utils/firestoreHelpers";
 import { toast } from "sonner";
+import { notifyOfferAcceptedEmail } from "@/utils/notifications";
+import { trackEvent } from "@/utils/analytics";
 
 type Offer = {
   id?: string;
@@ -32,6 +34,42 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
     try {
       await acceptOffer(r.id, offerId);
       toast.success("Oferta a fost acceptată!");
+
+      const accepted: any = (offers || []).find((o) => o.id === offerId) || null;
+      try {
+        trackEvent("offer_accepted", {
+          requestId: r.id,
+          offerId,
+          price: accepted?.price,
+          companyId: accepted?.companyId,
+        });
+      } catch {}
+
+      // Notify company via email (best-effort, non-blocking)
+      try {
+        const companyId = accepted?.companyId;
+        if (companyId) {
+          const { doc, getDoc } = await import("firebase/firestore");
+          const { db } = await import("@/services/firebase");
+          const compRef = doc(db, "companies", companyId);
+          const compSnap = await getDoc(compRef);
+          const comp = compSnap.exists() ? (compSnap.data() as any) : null;
+          const email = comp?.email;
+          if (email) {
+            const route = `${r.fromCity || ""} → ${r.toCity || ""}`;
+            await notifyOfferAcceptedEmail({
+              to: email,
+              customerName: null,
+              requestId: r.id,
+              route,
+              price: accepted?.price,
+              companyName: comp?.companyName || null,
+            });
+          }
+        }
+      } catch (e) {
+        console.warn("Email notify skipped", e);
+      }
     } catch (err) {
       console.error("Failed to accept offer", err);
       toast.error("Eroare la acceptarea ofertei");
@@ -45,6 +83,9 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
       const { db } = await import("@/services/firebase");
       const offerRef = doc(db, "requests", r.id, "offers", offerId);
       await updateDoc(offerRef, { status: "declined" });
+      try {
+        trackEvent("offer_declined", { requestId: r.id, offerId });
+      } catch {}
       toast.success("Oferta a fost refuzată");
     } catch (err) {
       console.error("Failed to decline offer", err);
