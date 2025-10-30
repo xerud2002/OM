@@ -170,7 +170,7 @@ function OfferItem({
 function OfferList({ requestId, company, onHasMine }: {
   requestId: string;
   company: CompanyUser;
-  onHasMine?: (arg0: boolean) => void;
+  onHasMine?: any;
 }) {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [expanded, setExpanded] = useState(false);
@@ -390,7 +390,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                     <OfferList
                       requestId={r.id}
                       company={company}
-                      onHasMine={(has) => setHasMineMap((prev) => ({ ...prev, [r.id]: has }))}
+                      onHasMine={(has: boolean) => setHasMineMap((prev) => ({ ...prev, [r.id]: has }))}
                     />
                     {!hasMineMap[r.id] ? (
                       <OfferForm requestId={r.id} company={company} />
