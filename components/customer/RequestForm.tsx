@@ -1158,7 +1158,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
               {/* Inputs per mode */}
               {((form as any).moveDateMode ?? "exact") === "exact" && (
-                <div className="mx-auto max-w-md rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                <div className="mx-auto flex max-w-md justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                   <DayPicker
                     mode="single"
                     selected={parseYMD(form.moveDate)}
@@ -1175,7 +1175,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     weekStartsOn={1}
                     showOutsideDays
                     numberOfMonths={1}
-                    className="rdp mx-auto"
+                    className="rdp mx-auto w-fit"
                     classNames={{
                       months: "flex justify-center",
                       month: "w-full max-w-sm",
@@ -1204,7 +1204,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               )}
 
               {((form as any).moveDateMode ?? "exact") === "range" && (
-                <div className="mx-auto max-w-5xl rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                <div className="mx-auto flex max-w-md justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                   <DayPicker
                     mode="range"
                     selected={{
@@ -1223,11 +1223,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     fromDate={today}
                     weekStartsOn={1}
                     showOutsideDays
-                    numberOfMonths={2}
-                    className="rdp mx-auto"
+                    numberOfMonths={1}
+                    className="rdp mx-auto w-fit"
                     classNames={{
-                      months: "flex gap-6 justify-center sm:flex-nowrap flex-wrap",
-                      month: "min-w-[18rem]",
+                      months: "flex justify-center",
+                      month: "w-full max-w-sm",
                       caption: "flex items-center justify-between mb-4 px-2",
                       caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
                       nav: "flex items-center gap-2",
@@ -1280,7 +1280,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
               {((form as any).moveDateMode ?? "exact") === "flexible" && (
                 <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
-                  <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                  <div className="flex justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                     <DayPicker
                       mode="single"
                       selected={parseYMD(form.moveDate)}
@@ -1296,7 +1296,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       weekStartsOn={1}
                       showOutsideDays
                       numberOfMonths={1}
-                      className="rdp mx-auto"
+                      className="rdp mx-auto w-fit"
                       classNames={{
                         months: "flex justify-center",
                         month: "w-full max-w-sm",
