@@ -1138,7 +1138,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       cell: "text-center",
                       day: "h-10 w-10 grid place-items-center rounded-xl text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
                       day_selected:
-                        "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800 hover:bg-emerald-700",
+                        "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800",
                       day_today: "ring-2 ring-emerald-500 ring-offset-2 font-bold text-emerald-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_disabled: "text-gray-300 opacity-30 cursor-not-allowed",
