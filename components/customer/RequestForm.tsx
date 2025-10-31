@@ -1,4 +1,3 @@
-// @ts-nocheck
 import React from "react";
 import counties from "@/counties";
 import cities from "@/cities";
@@ -622,7 +621,12 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 name="surveyType"
                 value="in-person"
                 checked={form.surveyType === "in-person"}
-                onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value }))}
+                onChange={(e) =>
+                  setForm((s) => ({
+                    ...s,
+                    surveyType: e.target.value as "in-person" | "video" | "quick-estimate",
+                  }))
+                }
                 className="peer sr-only"
               />
               <div className="p-5">
@@ -668,7 +672,12 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 name="surveyType"
                 value="video"
                 checked={form.surveyType === "video"}
-                onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value }))}
+                onChange={(e) =>
+                  setForm((s) => ({
+                    ...s,
+                    surveyType: e.target.value as "in-person" | "video" | "quick-estimate",
+                  }))
+                }
                 className="peer sr-only"
               />
               <div className="p-5">
@@ -714,7 +723,12 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 name="surveyType"
                 value="quick-estimate"
                 checked={form.surveyType === "quick-estimate"}
-                onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value }))}
+                onChange={(e) =>
+                  setForm((s) => ({
+                    ...s,
+                    surveyType: e.target.value as "in-person" | "video" | "quick-estimate",
+                  }))
+                }
                 className="peer sr-only"
               />
               <div className="p-5">
@@ -783,7 +797,12 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   name="mediaUpload"
                   value="now"
                   checked={form.mediaUpload === "now"}
-                  onChange={(e) => setForm((s) => ({ ...s, mediaUpload: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((s) => ({
+                      ...s,
+                      mediaUpload: e.target.value as "now" | "later",
+                    }))
+                  }
                   className="mt-0.5 text-blue-600 focus:ring-2 focus:ring-blue-500/20"
                 />
                 <div className="flex-1">
@@ -797,7 +816,12 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   name="mediaUpload"
                   value="later"
                   checked={form.mediaUpload === "later"}
-                  onChange={(e) => setForm((s) => ({ ...s, mediaUpload: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((s) => ({
+                      ...s,
+                      mediaUpload: e.target.value as "now" | "later",
+                    }))
+                  }
                   className="mt-0.5 text-blue-600 focus:ring-2 focus:ring-blue-500/20"
                 />
                 <div className="flex-1">

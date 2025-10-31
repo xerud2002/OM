@@ -1,4 +1,4 @@
-import emailjs from "@emailjs/browser";
+import emailjs from "emailjs-com";
 
 /**
  * Trimite reminder email pentru upload media
@@ -49,11 +49,7 @@ export async function checkAndSendReminders(): Promise<{ sent: number; failed: n
 
     // Send emails one by one
     for (const reminder of data.reminders) {
-      const success = await sendUploadReminder(
-        reminder.email,
-        reminder.name,
-        reminder.link
-      );
+      const success = await sendUploadReminder(reminder.email, reminder.name, reminder.link);
 
       if (success) {
         sent++;

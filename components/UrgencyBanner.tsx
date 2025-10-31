@@ -10,8 +10,7 @@ type UrgencyBannerProps = {
 };
 
 export default function UrgencyBanner({
-  offerText =
-    "🎁 Ofertă limitată: Bonus 50 lei la prima ofertă acceptată. Te conectăm cu firme de mutări și transportatori (van/camion) — nu prestăm serviciul direct.",
+  offerText = "🎁 Ofertă limitată: Bonus 50 lei la prima ofertă acceptată. Te conectăm cu firme de mutări și transportatori (van/camion) — nu prestăm serviciul direct.",
   expiresInHours = 24,
 }: UrgencyBannerProps) {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
@@ -26,7 +25,8 @@ export default function UrgencyBanner({
     if (!visible) return;
     // Calculate end time (today end of day)
     const getEndTime = () => {
-      const stored = typeof window !== "undefined" ? localStorage.getItem("urgency_offer_end") : null;
+      const stored =
+        typeof window !== "undefined" ? localStorage.getItem("urgency_offer_end") : null;
       if (stored) return new Date(stored);
       const endTime = new Date();
       endTime.setHours(23, 59, 59, 999);
