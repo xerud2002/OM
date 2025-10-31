@@ -391,7 +391,7 @@ export default function CustomerDashboard() {
   return (
     <RequireRole allowedRole="customer">
       <LayoutWrapper>
-        <section className="mx-auto max-w-[1400px] px-4 py-8">
+        <section className="mx-auto max-w-[1400px] px-0 py-8 sm:px-4">
           {/* Modern Header */}
           <div className="mb-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -640,7 +640,7 @@ export default function CustomerDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-gray-100 bg-white p-8 shadow-lg"
+              className="rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
             >
               <RequestForm
                 form={form}
