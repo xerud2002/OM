@@ -52,6 +52,32 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   const countyCities = (county?: string) =>
     county && (cities as any)[county] ? (cities as any)[county] : [];
 
+  // Width helpers for compact selects sized to longest option
+  const longestLen = React.useCallback(
+    (arr: string[]) => arr.reduce((m, s) => Math.max(m, (s || "").length), 0),
+    []
+  );
+  const countyMaxCh = React.useMemo(
+    () => longestLen(counties as unknown as string[]) + 4,
+    [longestLen]
+  );
+  const fromCityMaxCh = React.useMemo(() => {
+    const options = [
+      ...countyCities(form.fromCounty),
+      "Altă localitate",
+      "Selectează localitatea",
+    ] as string[];
+    return longestLen(options) + 4;
+  }, [form.fromCounty, longestLen]);
+  const toCityMaxCh = React.useMemo(() => {
+    const options = [
+      ...countyCities(form.toCounty),
+      "Altă localitate",
+      "Selectează localitatea",
+    ] as string[];
+    return longestLen(options) + 4;
+  }, [form.toCounty, longestLen]);
+
   // Date helpers
   const today = React.useMemo(() => {
     const n = new Date();
@@ -139,7 +165,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               <p className="text-xs text-gray-600">Detalii despre locația actuală</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[max-content_max-content_1fr]">
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
               <select
@@ -148,7 +174,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 onChange={(e) =>
                   setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))
                 }
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                className="inline-block rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                style={{ width: `${countyMaxCh}ch` }}
               >
                 <option value="">Selectează județ</option>
                 {counties.map((c) => (
@@ -171,7 +198,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     fromCityManual: value === "__other__",
                   }));
                 }}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                className="inline-block rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                style={{ width: `${fromCityMaxCh}ch` }}
                 disabled={!form.fromCounty}
               >
                 <option value="">Selectează localitatea</option>
@@ -192,16 +220,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               )}
             </div>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Adresă completă</label>
-            <input
-              required
-              value={form.fromAddress || ""}
-              onChange={(e) => setForm((s) => ({ ...s, fromAddress: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-              placeholder="Stradă, număr, bloc/scară/apartament"
-            />
+            <div className="md:ml-2">
+              <label className="mb-1 block text-xs font-medium text-gray-700">
+                Adresă completă
+              </label>
+              <input
+                required
+                value={form.fromAddress || ""}
+                onChange={(e) => setForm((s) => ({ ...s, fromAddress: e.target.value }))}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                placeholder="Stradă, număr, bloc/scară/apartament"
+              />
+            </div>
           </div>
           <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
             <div className="mb-2 flex items-center gap-2">
@@ -297,14 +327,15 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               <p className="text-xs text-gray-600">Unde te muți</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[max-content_max-content_1fr]">
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
               <select
                 required
                 value={form.toCounty || ""}
                 onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                className="inline-block rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                style={{ width: `${countyMaxCh}ch` }}
               >
                 <option value="">Selectează județ</option>
                 {counties.map((c) => (
@@ -323,7 +354,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   const value = e.target.value;
                   setForm((s) => ({ ...s, toCity: value, toCityManual: value === "__other__" }));
                 }}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                className="inline-block rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                style={{ width: `${toCityMaxCh}ch` }}
                 disabled={!form.toCounty}
               >
                 <option value="">Selectează localitatea</option>
@@ -344,16 +376,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               )}
             </div>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Adresă completă</label>
-            <input
-              required
-              value={form.toAddress || ""}
-              onChange={(e) => setForm((s) => ({ ...s, toAddress: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-              placeholder="Stradă, număr, bloc/scară/apartament"
-            />
+            <div className="md:ml-2">
+              <label className="mb-1 block text-xs font-medium text-gray-700">
+                Adresă completă
+              </label>
+              <input
+                required
+                value={form.toAddress || ""}
+                onChange={(e) => setForm((s) => ({ ...s, toAddress: e.target.value }))}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                placeholder="Stradă, număr, bloc/scară/apartament"
+              />
+            </div>
           </div>
           <div className="mt-4 rounded-lg border border-sky-100 bg-white p-3">
             <div className="mb-2 flex items-center gap-2">
@@ -1194,7 +1228,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       cell: "text-center",
                       day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                       day_selected:
-                        "bg-emerald-700 text-white font-bold shadow-sm border border-emerald-800",
+                        "bg-emerald-800 text-white font-bold shadow-md border-2 border-emerald-900",
                       day_today: "font-medium text-gray-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_disabled: "text-gray-300 opacity-30 cursor-not-allowed",
@@ -1241,14 +1275,14 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       cell: "text-center",
                       day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                       day_selected:
-                        "bg-emerald-700 text-white font-bold shadow-sm border border-emerald-800",
+                        "bg-emerald-800 text-white font-bold shadow-md border-2 border-emerald-900",
                       day_today: "font-medium text-gray-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_range_start:
-                        "bg-emerald-700 text-white font-bold rounded-l-xl border border-emerald-800",
+                        "bg-emerald-800 text-white font-bold rounded-l-xl border-2 border-emerald-900",
                       day_range_end:
-                        "bg-emerald-700 text-white font-bold rounded-r-xl border border-emerald-800",
-                      day_range_middle: "bg-emerald-700 text-white rounded-none",
+                        "bg-emerald-800 text-white font-bold rounded-r-xl border-2 border-emerald-900",
+                      day_range_middle: "bg-emerald-800 text-white rounded-none",
                     }}
                   />
                 </div>
@@ -1313,7 +1347,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         cell: "text-center",
                         day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                         day_selected:
-                          "bg-emerald-700 text-white font-bold shadow-sm border border-emerald-800",
+                          "bg-emerald-800 text-white font-bold shadow-md border-2 border-emerald-900",
                         day_today: "font-medium text-gray-700",
                         day_outside: "text-gray-400 opacity-50",
                       }}
