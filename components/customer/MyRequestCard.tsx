@@ -33,44 +33,43 @@ export default function MyRequestCard({
 }: MyRequestCardProps) {
   const [showMenu, setShowMenu] = useState(false);
 
-  const status = request.status || "active";
-
-  const statusConfig = {
-    active: {
-      label: "Activă",
-      color: "emerald",
-      bg: "bg-emerald-50",
-      text: "text-emerald-700",
-      border: "border-emerald-200",
-      gradient: "from-emerald-500 to-sky-500",
-    },
-    closed: {
-      label: "Închisă",
-      color: "gray",
-      bg: "bg-gray-50",
-      text: "text-gray-700",
-      border: "border-gray-200",
-      gradient: "from-gray-400 to-gray-500",
-    },
-    paused: {
-      label: "În așteptare",
-      color: "amber",
-      bg: "bg-amber-50",
-      text: "text-amber-700",
-      border: "border-amber-200",
-      gradient: "from-amber-500 to-orange-500",
-    },
-    cancelled: {
-      label: "Anulată",
-      color: "red",
-      bg: "bg-red-50",
-      text: "text-red-700",
-      border: "border-red-200",
-      gradient: "from-red-500 to-rose-500",
-    },
+  // Normalize status to valid values
+  const getStatus = (): "active" | "closed" | "paused" | "cancelled" => {
+    const reqStatus = request.status;
+    if (reqStatus === "active" || reqStatus === "closed" || reqStatus === "paused" || reqStatus === "cancelled") {
+      return reqStatus;
+    }
+    return "active";
   };
 
-  const currentStatus = statusConfig[status];
+  const status = getStatus();
+
+  // Get label for status
+  const getStatusLabel = () => {
+    switch (status) {
+      case "active": return "Activă";
+      case "closed": return "Închisă";
+      case "paused": return "În așteptare";
+      case "cancelled": return "Anulată";
+      default: return "Activă";
+    }
+  };
+
+  // Get gradient class for accent bar
+  const getGradientClass = () => {
+    switch (status) {
+      case "active":
+        return "bg-gradient-to-r from-emerald-500 to-sky-500";
+      case "closed":
+        return "bg-gradient-to-r from-gray-400 to-gray-500";
+      case "paused":
+        return "bg-gradient-to-r from-amber-500 to-orange-500";
+      case "cancelled":
+        return "bg-gradient-to-r from-red-500 to-rose-500";
+      default:
+        return "bg-gradient-to-r from-emerald-500 to-sky-500";
+    }
+  };
 
   return (
     <motion.div
@@ -81,7 +80,7 @@ export default function MyRequestCard({
       className="group relative rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50/50 shadow-sm transition-all hover:shadow-lg"
     >
       {/* Gradient accent bar */}
-      <div className={`h-1.5 w-full overflow-hidden rounded-t-2xl bg-gradient-to-r ${currentStatus.gradient}`} />
+      <div className={`h-1.5 w-full overflow-hidden rounded-t-2xl ${getGradientClass()}`} />
 
       <div className="p-6">
         <div className="flex items-start justify-between gap-4">
@@ -89,7 +88,15 @@ export default function MyRequestCard({
           <div className="min-w-0 flex-1">
             {/* Route */}
             <div className="mb-3 flex items-center gap-2">
-              <MapPin size={20} className={`shrink-0 ${currentStatus.text}`} />
+              <MapPin 
+                size={20} 
+                className={
+                  status === "active" ? "shrink-0 text-emerald-700" :
+                  status === "closed" ? "shrink-0 text-gray-700" :
+                  status === "paused" ? "shrink-0 text-amber-700" :
+                  "shrink-0 text-red-700"
+                }
+              />
               <h3 className="truncate text-xl font-bold text-gray-900">
                 {request.fromCity || request.fromCounty}
                 <span className="mx-2 text-gray-400">→</span>
@@ -101,13 +108,21 @@ export default function MyRequestCard({
             <div className="mb-4 flex flex-wrap gap-2">
               {/* Status badge */}
               <span
-                className={`inline-flex items-center gap-1.5 rounded-lg ${currentStatus.bg} ${currentStatus.border} border px-3 py-1.5 text-sm font-semibold ${currentStatus.text}`}
+                className={
+                  status === "active" 
+                    ? "inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-700"
+                    : status === "closed"
+                    ? "inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-semibold text-gray-700"
+                    : status === "paused"
+                    ? "inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700"
+                    : "inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-semibold text-red-700"
+                }
               >
                 {status === "active" && <CheckCircle2 size={14} />}
                 {status === "closed" && <XCircle size={14} />}
                 {status === "paused" && <PauseCircle size={14} />}
                 {status === "cancelled" && <XCircle size={14} />}
-                {currentStatus.label}
+                {getStatusLabel()}
               </span>
 
               {/* Date badge */}
