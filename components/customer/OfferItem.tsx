@@ -81,8 +81,16 @@ export default function OfferItem({
     <div className="relative flex flex-col gap-3 rounded-md border border-gray-100 bg-gray-50 p-3">
       <div className="flex items-start justify-between">
         <div className="flex-1">
-        <p className="font-medium text-gray-800">{offer.companyName}</p>
-        {offer.message && <p className="text-sm text-gray-500">{offer.message}</p>}
+          <p className="font-medium text-gray-800">{offer.companyName}</p>
+          {companyRating && companyRating.total > 0 && (
+            <div className="mt-1 flex items-center gap-1">
+              <StarRating rating={companyRating.average} size="sm" />
+              <span className="text-xs text-gray-500">
+                ({companyRating.total} {companyRating.total === 1 ? "review" : "reviews"})
+              </span>
+            </div>
+          )}
+          {offer.message && <p className="mt-1 text-sm text-gray-500">{offer.message}</p>}
         </div>
         <div className="flex items-center gap-2">
           <p className="text-lg font-semibold text-emerald-700">{offer.price} lei</p>
