@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { db } from "@/services/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { adminDb } from "@/lib/firebaseAdmin";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
@@ -15,14 +14,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     // Get token from Firestore
-    const tokenRef = doc(db, "uploadTokens", token);
-    const tokenSnap = await getDoc(tokenRef);
+    const tokenRef = adminDb.doc(`uploadTokens/${token}`);
+    const tokenSnap = await tokenRef.get();
 
-    if (!tokenSnap.exists()) {
+    if (!tokenSnap.exists) {
       return res.status(404).json({ error: "Token not found", valid: false });
     }
 
-    const tokenData = tokenSnap.data();
+    const tokenData = tokenSnap.data() as any;
 
     // Check if token is already used
     if (tokenData.used) {

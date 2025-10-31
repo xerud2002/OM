@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LayoutWrapper from "@/components/layout/Layout";
-import { Upload, CheckCircle, XCircle, Loader2, FileImage, FileVideo } from "lucide-react";
+import { Upload, CheckCircle, XCircle, Loader2, FileVideo } from "lucide-react";
 import { toast } from "sonner";
-import { storage, db } from "@/services/firebase";
+import { storage, db, auth } from "@/services/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, updateDoc, arrayUnion, setDoc, collection, getDocs, query, where } from "firebase/firestore";
+import { doc, updateDoc, arrayUnion } from "firebase/firestore";
+import Link from "next/link";
+import { onAuthStateChanged, User } from "firebase/auth";
 
 interface FileWithProgress {
   file: File;
@@ -32,6 +34,8 @@ export default function UploadMediaPage() {
   const [uploaded, setUploaded] = useState(false);
   const [tokenData, setTokenData] = useState<TokenData | null>(null);
   const [validating, setValidating] = useState(true);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [authChecking, setAuthChecking] = useState(true);
 
   // Validate token on mount
   useEffect(() => {
@@ -52,6 +56,15 @@ export default function UploadMediaPage() {
 
     validateToken();
   }, [token]);
+
+  // Observe auth state (require sign-in for secure upload path)
+  useEffect(() => {
+    const unsub = onAuthStateChanged(auth, (u) => {
+      setCurrentUser(u);
+      setAuthChecking(false);
+    });
+    return () => unsub();
+  }, []);
 
   // Generate preview thumbnails
   const generatePreview = (file: File): Promise<string> => {
@@ -110,6 +123,11 @@ export default function UploadMediaPage() {
       return;
     }
 
+    if (!currentUser) {
+      toast.error("Te rugăm să te autentifici pentru a încărca fișierele.");
+      return;
+    }
+
     setUploading(true);
     const uploadedUrls: string[] = [];
 
@@ -120,7 +138,10 @@ export default function UploadMediaPage() {
         const file = fileWithProgress.file;
         const fileExtension = file.name.split(".").pop();
         const fileName = `${Date.now()}_${i}.${fileExtension}`;
-        const storageRef = ref(storage, `requests/${tokenData.requestId}/${fileName}`);
+        const storageRef = ref(
+          storage,
+          `requests/${tokenData.requestId}/customers/${currentUser.uid}/${fileName}`
+        );
 
         const uploadTask = uploadBytesResumable(storageRef, file);
 
@@ -159,14 +180,19 @@ export default function UploadMediaPage() {
       });
 
       // Mark token as used
-      const tokenRef = doc(db, "uploadTokens", token as string);
-      await updateDoc(tokenRef, {
-        used: true,
-        uploadedAt: new Date().toISOString(),
-      });
+      try {
+        const tokenRef = doc(db, "uploadTokens", token as string);
+        await updateDoc(tokenRef, {
+          used: true,
+          uploadedAt: new Date().toISOString(),
+        });
+      } catch (e: any) {
+        console.error("Failed to update token status:", e?.message || e);
+        toast.error("Nu am putut marca link-ul ca folosit. Verifică dacă ești autentificat cu contul corect.");
+      }
 
       // Notify companies with offers
-      await notifyCompanies(tokenData.requestId);
+  await notifyCompanies(tokenData.requestId);
 
       setUploaded(true);
       toast.success("Fișierele au fost încărcate cu succes!");
@@ -180,25 +206,13 @@ export default function UploadMediaPage() {
 
   const notifyCompanies = async (requestId: string) => {
     try {
-      // Get all companies that made offers for this request
-      const offersQuery = query(
-        collection(db, "requests", requestId, "offers"),
-        where("status", "==", "pending")
-      );
-      const offersSnap = await getDocs(offersQuery);
-
-      // Send notification to each company
-      for (const offerDoc of offersSnap.docs) {
-        const offer = offerDoc.data();
-        // Create notification in companies' notifications subcollection
-        const notificationRef = doc(collection(db, "companies", offer.companyId, "notifications"));
-        await setDoc(notificationRef, {
-          type: "media_uploaded",
-          requestId,
-          message: "Clientul a încărcat poze și video pentru cererea de mutare.",
-          createdAt: new Date().toISOString(),
-          read: false,
-        });
+      const resp = await fetch("/api/notifyCompaniesOnUpload", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ requestId }),
+      });
+      if (!resp.ok) {
+        throw new Error(`notifyCompaniesOnUpload failed: ${resp.status}`);
       }
     } catch (err) {
       console.error("Failed to notify companies:", err);
@@ -206,7 +220,7 @@ export default function UploadMediaPage() {
   };
 
   // Loading state while validating token
-  if (validating) {
+  if (validating || authChecking) {
     return (
       <LayoutWrapper>
         <div className="flex min-h-[50vh] items-center justify-center">
@@ -232,6 +246,27 @@ export default function UploadMediaPage() {
             </p>
           </div>
         </div>
+      </LayoutWrapper>
+    );
+  }
+
+  // Require sign-in before allowing uploads
+  if (!currentUser) {
+    return (
+      <LayoutWrapper>
+        <section className="mx-auto max-w-2xl px-4 py-16 text-center">
+          <XCircle className="mx-auto h-16 w-16 text-amber-500" />
+          <h2 className="mt-4 text-xl font-semibold text-gray-800">Autentificare necesară</h2>
+          <p className="mt-2 text-gray-600">
+            Te rugăm să te autentifici cu contul care a creat cererea pentru a încărca fișierele.
+          </p>
+          <Link
+            href="/customer/auth"
+            className="mt-6 inline-flex items-center justify-center rounded-lg bg-emerald-600 px-5 py-2 font-semibold text-white shadow hover:bg-emerald-700"
+          >
+            Mergi la autentificare
+          </Link>
+        </section>
       </LayoutWrapper>
     );
   }

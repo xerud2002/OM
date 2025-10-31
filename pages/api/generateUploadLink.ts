@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes } from "crypto";
-import { db } from "@/services/firebase";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { adminDb } from "@/lib/firebaseAdmin";
+import { FieldValue } from "firebase-admin/firestore";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -24,21 +24,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     expiresAt.setDate(expiresAt.getDate() + 7);
 
     // Save token to Firestore
-    const tokenRef = doc(db, "uploadTokens", uploadToken);
-    await setDoc(tokenRef, {
+    const tokenRef = adminDb.doc(`uploadTokens/${uploadToken}`);
+    await tokenRef.set({
       requestId,
       customerEmail,
       customerName,
       uploadLink,
-      createdAt: serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(),
       expiresAt: expiresAt.toISOString(),
       used: false,
       uploadedAt: null,
     });
 
     // Also update the request with the token
-    const requestRef = doc(db, "requests", requestId);
-    await setDoc(requestRef, { mediaUploadToken: uploadToken }, { merge: true });
+    const requestRef = adminDb.doc(`requests/${requestId}`);
+    await requestRef.set({ mediaUploadToken: uploadToken }, { merge: true });
 
     // Return token - email will be sent client-side via EmailJS
     return res.status(200).json({ 
