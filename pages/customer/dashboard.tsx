@@ -472,8 +472,28 @@ export default function CustomerDashboard() {
             </div>
           </div>
 
-          {/* Navigation Tabs */}
+          {/* Navigation Tabs (order: Cerere Nouă, Oferte, Cererile mele) */}
           <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200">
+            {/* Cerere Nouă */}
+            <button
+              onClick={() => setActiveTab("new")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "new" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <PlusSquare size={18} />
+                <span>Cerere Nouă</span>
+              </div>
+              {activeTab === "new" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
+
+            {/* Oferte */}
             <button
               onClick={() => setActiveTab("offers")}
               className={`relative px-6 py-3 font-medium transition-colors ${
@@ -497,24 +517,7 @@ export default function CustomerDashboard() {
               )}
             </button>
 
-            <button
-              onClick={() => setActiveTab("new")}
-              className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "new" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <PlusSquare size={18} />
-                <span>Cerere Nouă</span>
-              </div>
-              {activeTab === "new" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
-                />
-              )}
-            </button>
-
+            {/* Cererile mele */}
             <button
               onClick={() => setActiveTab("requests")}
               className={`relative px-6 py-3 font-medium transition-colors ${

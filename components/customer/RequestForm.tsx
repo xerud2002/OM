@@ -1228,7 +1228,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       cell: "text-center",
                       day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                       day_selected:
-                        "bg-emerald-800 text-white font-bold shadow-md border-2 border-emerald-900",
+                        "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
                       day_today: "font-medium text-gray-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_disabled: "text-gray-300 opacity-30 cursor-not-allowed",
@@ -1275,14 +1275,14 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       cell: "text-center",
                       day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                       day_selected:
-                        "bg-emerald-800 text-white font-bold shadow-md border-2 border-emerald-900",
+                        "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
                       day_today: "font-medium text-gray-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_range_start:
-                        "bg-emerald-800 text-white font-bold rounded-l-xl border-2 border-emerald-900",
+                        "bg-emerald-900 text-white font-bold rounded-l-xl border-2 border-emerald-900",
                       day_range_end:
-                        "bg-emerald-800 text-white font-bold rounded-r-xl border-2 border-emerald-900",
-                      day_range_middle: "bg-emerald-800 text-white rounded-none",
+                        "bg-emerald-900 text-white font-bold rounded-r-xl border-2 border-emerald-900",
+                      day_range_middle: "bg-emerald-900 text-white rounded-none",
                     }}
                   />
                 </div>
@@ -1347,7 +1347,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         cell: "text-center",
                         day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                         day_selected:
-                          "bg-emerald-800 text-white font-bold shadow-md border-2 border-emerald-900",
+                          "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
                         day_today: "font-medium text-gray-700",
                         day_outside: "text-gray-400 opacity-50",
                       }}
