@@ -619,7 +619,7 @@ export default function CustomerDashboard() {
                                     {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                                   </p>
                                   <p className="mt-0.5 text-xs text-gray-500">
-                                    {r.moveDate ? formatDateRO(r.moveDate) : "fără dată"}
+                                    {r.moveDate ? formatDateRO(r.moveDate, { month: "short" }) : "fără dată"}
                                   </p>
                                 </div>
                                 <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
@@ -777,7 +777,7 @@ function OfferRow({
           {offer.message && <p className="mt-1 text-sm text-gray-600">{offer.message}</p>}
             {offer.createdAt?.toDate && (
               <p className="mt-1 text-xs text-gray-400">
-                {formatDateRO(offer.createdAt)}
+                {formatDateRO(offer.createdAt, { month: "short" })}
               </p>
             )}
         </div>

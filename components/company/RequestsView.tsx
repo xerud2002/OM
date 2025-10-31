@@ -484,7 +484,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
-                  <p className="text-sm text-gray-500">Mutare: {r.moveDate ? formatDateRO(r.moveDate) : "-"}</p>
+                  <p className="text-sm text-gray-500">Mutare: {r.moveDate ? formatDateRO(r.moveDate, { month: "short" }) : "-"}</p>
                   <p className="mt-2 text-sm text-gray-600">{r.details}</p>
                 </div>
 

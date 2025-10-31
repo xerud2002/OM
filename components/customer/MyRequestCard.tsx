@@ -130,7 +130,7 @@ export default function MyRequestCard({
               {request.moveDate && (
                 <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700">
                   <Calendar size={14} />
-                  {formatDateRO(request.moveDate)}
+                  {formatDateRO(request.moveDate, { month: "short" })}
                 </span>
               )}
 

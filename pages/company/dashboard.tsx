@@ -592,7 +592,7 @@ export default function CompanyDashboard() {
                         {requestDetails.fromCity} → {requestDetails.toCity}
                       </p>
                       <p className="text-sm text-gray-600">
-                        Data mutării: {requestDetails.moveDate ? formatDateRO(requestDetails.moveDate) : "-"}
+                        Data mutării: {requestDetails.moveDate ? formatDateRO(requestDetails.moveDate, { month: "short" }) : "-"}
                       </p>
                       <p className="mt-1 text-sm text-gray-600">
                         Detalii: {requestDetails.details || "—"}
