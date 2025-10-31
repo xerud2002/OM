@@ -14,6 +14,9 @@ import RequestCard from "@/components/customer/RequestCard";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
 import { useDebouncedValue } from "@/utils/hooks";
+import { MessageSquare } from "lucide-react";
+import { auth } from "@/services/firebase";
+import { toast } from "sonner";
 
 type Request = {
   id: string;
@@ -744,50 +747,14 @@ export default function CustomerDashboard() {
                           <div className="space-y-3">
                             {(offersByRequest[selectedRequestId] || []).map(
                               (o: any, index: number) => (
-                                <motion.div
+                                <OfferRow
                                   key={o.id}
-                                  initial={{ opacity: 0, y: 10 }}
-                                  animate={{ opacity: 1, y: 0 }}
-                                  transition={{ delay: index * 0.04 }}
-                                  className="flex flex-col items-start justify-between gap-3 rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 p-4 sm:flex-row sm:items-center"
-                                >
-                                  <div className="flex-1">
-                                    <p className="text-sm font-semibold text-gray-900">
-                                      {o.companyName}
-                                    </p>
-                                    {o.message && (
-                                      <p className="mt-1 text-sm text-gray-600">{o.message}</p>
-                                    )}
-                                    {o.createdAt?.toDate && (
-                                      <p className="mt-1 text-xs text-gray-400">
-                                        {o.createdAt.toDate().toLocaleDateString()}
-                                      </p>
-                                    )}
-                                  </div>
-                                  <div className="flex items-center gap-3">
-                                    <p className="text-2xl font-bold text-emerald-600">
-                                      {o.price} lei
-                                    </p>
-                                    <div className="flex gap-2">
-                                      <button
-                                        onClick={() =>
-                                          acceptFromAggregated(selectedRequestId, o.id)
-                                        }
-                                        className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
-                                      >
-                                        Acceptă
-                                      </button>
-                                      <button
-                                        onClick={() =>
-                                          declineFromAggregated(selectedRequestId, o.id)
-                                        }
-                                        className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                                      >
-                                        Refuză
-                                      </button>
-                                    </div>
-                                  </div>
-                                </motion.div>
+                                  index={index}
+                                  requestId={selectedRequestId}
+                                  offer={o}
+                                  onAccept={acceptFromAggregated}
+                                  onDecline={declineFromAggregated}
+                                />
                               )
                             )}
                           </div>
@@ -825,5 +792,124 @@ export default function CustomerDashboard() {
         </section>
       </LayoutWrapper>
     </RequireRole>
+  );
+}
+
+function OfferRow({
+  index,
+  requestId,
+  offer,
+  onAccept,
+  onDecline,
+}: {
+  index: number;
+  requestId: string;
+  offer: any;
+  onAccept: (requestId: string, offerId: string) => Promise<void> | void;
+  onDecline: (requestId: string, offerId: string) => Promise<void> | void;
+}) {
+  const [showMessage, setShowMessage] = useState(false);
+  const [text, setText] = useState("");
+
+  const sendMessage = async () => {
+    const t = text.trim();
+    if (!t) {
+      toast.error("Scrie un mesaj înainte de a trimite.");
+      return;
+    }
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        toast.error("Trebuie să fii autentificat pentru a trimite mesajul.");
+        return;
+      }
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/offers/message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ requestId, offerId: offer.id, text: t }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
+      toast.success("Mesaj trimis");
+      setText("");
+      setShowMessage(false);
+    } catch (err) {
+      console.error("sendMessage failed", err);
+      const msg = err instanceof Error ? err.message : "Eroare necunoscută";
+      toast.error(`Eroare la trimiterea mesajului: ${msg}`);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 p-4"
+    >
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-gray-900">{offer.companyName}</p>
+          {offer.message && <p className="mt-1 text-sm text-gray-600">{offer.message}</p>}
+          {offer.createdAt?.toDate && (
+            <p className="mt-1 text-xs text-gray-400">
+              {offer.createdAt.toDate().toLocaleDateString()}
+            </p>
+          )}
+        </div>
+        <div className="flex items-center gap-3">
+          <p className="text-2xl font-bold text-emerald-600">{offer.price} lei</p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => onAccept(requestId, offer.id)}
+              className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+            >
+              Acceptă
+            </button>
+            <button
+              onClick={() => onDecline(requestId, offer.id)}
+              className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+              Refuză
+            </button>
+            <button
+              onClick={() => setShowMessage((s) => !s)}
+              className="inline-flex items-center justify-center gap-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+              <MessageSquare size={16} /> Mesaj
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {showMessage && (
+        <div className="rounded-lg border border-gray-200 bg-white p-3">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            rows={3}
+            placeholder="Scrie un mesaj către firmă..."
+            className="w-full resize-y rounded-md border border-gray-200 p-2 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-200"
+          />
+          <div className="mt-2 flex justify-end gap-2">
+            <button
+              onClick={() => setShowMessage(false)}
+              className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm"
+            >
+              Anulează
+            </button>
+            <button
+              onClick={sendMessage}
+              className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+            >
+              Trimite
+            </button>
+          </div>
+        </div>
+      )}
+    </motion.div>
   );
 }

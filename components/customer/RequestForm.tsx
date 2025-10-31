@@ -52,6 +52,16 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   const countyCities = (county?: string) =>
     county && (cities as any)[county] ? (cities as any)[county] : [];
 
+  // Special-case: București sectors as locality options
+  const bucharestSectors = React.useMemo(
+    () => ["Sector 1", "Sector 2", "Sector 3", "Sector 4", "Sector 5", "Sector 6"],
+    []
+  );
+  const getCityOptions = React.useCallback(
+    (county?: string) => (county === "București" ? bucharestSectors : countyCities(county)),
+    [bucharestSectors]
+  );
+
   // Width helpers for compact selects sized to longest option
   const longestLen = React.useCallback(
     (arr: string[]) => arr.reduce((m, s) => Math.max(m, (s || "").length), 0),
@@ -63,20 +73,20 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   );
   const fromCityMaxCh = React.useMemo(() => {
     const options = [
-      ...countyCities(form.fromCounty),
+      ...getCityOptions(form.fromCounty),
       "Altă localitate",
       "Selectează localitatea",
     ] as string[];
     return longestLen(options) + 4;
-  }, [form.fromCounty, longestLen]);
+  }, [form.fromCounty, longestLen, getCityOptions]);
   const toCityMaxCh = React.useMemo(() => {
     const options = [
-      ...countyCities(form.toCounty),
+      ...getCityOptions(form.toCounty),
       "Altă localitate",
       "Selectează localitatea",
     ] as string[];
     return longestLen(options) + 4;
-  }, [form.toCounty, longestLen]);
+  }, [form.toCounty, longestLen, getCityOptions]);
 
   // Date helpers
   const today = React.useMemo(() => {
@@ -203,7 +213,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 disabled={!form.fromCounty}
               >
                 <option value="">Selectează localitatea</option>
-                {countyCities(form.fromCounty).map((city: string) => (
+                {getCityOptions(form.fromCounty).map((city: string) => (
                   <option key={city} value={city}>
                     {city}
                   </option>
@@ -359,7 +369,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 disabled={!form.toCounty}
               >
                 <option value="">Selectează localitatea</option>
-                {countyCities(form.toCounty).map((city: string) => (
+                {getCityOptions(form.toCounty).map((city: string) => (
                   <option key={city} value={city}>
                     {city}
                   </option>
