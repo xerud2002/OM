@@ -413,7 +413,7 @@ export default function CustomerDashboard() {
             </div>
 
             {/* Stats Cards */}
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -449,48 +449,12 @@ export default function CustomerDashboard() {
                 <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-sky-100 opacity-20" />
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="group relative overflow-hidden rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-6 shadow-sm transition-all hover:shadow-lg"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-amber-600">Medie oferte</p>
-                    <p className="mt-2 text-3xl font-bold text-gray-900">
-                      {requests.length ? (totalOffers / requests.length).toFixed(1) : "0"}
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-amber-100 p-3">
-                    <PlusSquare size={24} className="text-amber-600" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-amber-100 opacity-20" />
-              </motion.div>
+              {/* Removed "Medie oferte" card as requested */}
             </div>
           </div>
 
           {/* Navigation Tabs */}
           <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200">
-            <button
-              onClick={() => setActiveTab("requests")}
-              className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "requests" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
-                <List size={18} />
-                <span>Cererile mele</span>
-              </div>
-              {activeTab === "requests" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
-                />
-              )}
-            </button>
-
             <button
               onClick={() => setActiveTab("offers")}
               className={`relative px-6 py-3 font-medium transition-colors ${
@@ -522,9 +486,27 @@ export default function CustomerDashboard() {
             >
               <div className="flex items-center gap-2">
                 <PlusSquare size={18} />
-                <span>Cerere nouă</span>
+                <span>Cerere Nouă</span>
               </div>
               {activeTab === "new" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab("requests")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "requests" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <List size={18} />
+                <span>Cererile mele</span>
+              </div>
+              {activeTab === "requests" && (
                 <motion.div
                   layoutId="activeTab"
                   className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
@@ -534,9 +516,13 @@ export default function CustomerDashboard() {
           </div>
 
           {activeTab === "requests" && (
-            <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+            >
               {/* Filters & Search */}
-              <div className="mb-6 flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm sm:flex-row sm:items-center">
+              <div className="mb-6 flex flex-col gap-3 rounded-xl bg-gray-50 p-4 shadow-sm sm:flex-row sm:items-center">
                 <div className="relative flex-1">
                   <Search
                     className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
@@ -546,7 +532,7 @@ export default function CustomerDashboard() {
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Caută după oraș sau detalii..."
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-12 pr-4 text-sm outline-none transition-all focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100"
+                    className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-12 pr-4 text-sm outline-none transition-all focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100"
                   />
                 </div>
                 <div className="flex flex-wrap items-center gap-2">
@@ -633,7 +619,7 @@ export default function CustomerDashboard() {
                   ))}
                 </div>
               )}
-            </>
+            </motion.div>
           )}
 
           {activeTab === "new" && (
