@@ -1,6 +1,17 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb } from "@/lib/firebaseAdmin";
 
+type UploadTokenData = {
+  requestId: string;
+  customerEmail: string;
+  customerName?: string;
+  uploadLink: string;
+  createdAt: string;
+  expiresAt: string;
+  used: boolean;
+  uploadedAt: string | null;
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
@@ -21,7 +32,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(404).json({ error: "Token not found", valid: false });
     }
 
-    const tokenData = tokenSnap.data() as any;
+    const tokenData = tokenSnap.data() as UploadTokenData;
 
     // Check if token is already used
     if (tokenData.used) {

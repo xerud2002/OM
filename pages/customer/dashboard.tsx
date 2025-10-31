@@ -103,10 +103,25 @@ export default function CustomerDashboard() {
 
   // Handlers to accept/decline from aggregated view
   const acceptFromAggregated = async (requestId: string, offerId: string) => {
-    const { acceptOffer } = await import("@/utils/firestoreHelpers");
     const { toast } = await import("sonner");
     try {
-      await acceptOffer(requestId, offerId);
+      if (!user) {
+        toast.error("Trebuie să fii autentificat");
+        return;
+      }
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/offers/accept", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId, offerId }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
       toast.success("Oferta a fost acceptată!");
     } catch (err) {
       console.error("Failed to accept offer", err);
@@ -115,16 +130,28 @@ export default function CustomerDashboard() {
   };
 
   const declineFromAggregated = async (requestId: string, offerId: string) => {
+    const { toast } = await import("sonner");
     try {
-      const { doc, updateDoc } = await import("firebase/firestore");
-      const { db } = await import("@/services/firebase");
-      const offerRef = doc(db, "requests", requestId, "offers", offerId);
-      await updateDoc(offerRef, { status: "declined" });
-      const { toast } = await import("sonner");
+      if (!user) {
+        toast.error("Trebuie să fii autentificat");
+        return;
+      }
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/offers/decline", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId, offerId }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
       toast.success("Oferta a fost refuzată");
     } catch (err) {
       console.error("Failed to decline offer", err);
-      const { toast } = await import("sonner");
       toast.error("Eroare la refuzarea ofertei");
     }
   };

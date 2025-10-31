@@ -10,11 +10,19 @@ type UrgencyBannerProps = {
 };
 
 export default function UrgencyBanner({
-  offerText = "🎁 Ofertă Limitată: Primești bonus 50 lei reducere la prima mutare!",
+  offerText =
+    "🎁 Ofertă limitată: Bonus 50 lei la prima ofertă acceptată. Te conectăm cu firme de mutări și transportatori (van/camion) — nu prestăm serviciul direct.",
   expiresInHours = 24,
 }: UrgencyBannerProps) {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  const [visible, setVisible] = useState(true);
+  // Hide banner on internal dashboards and utility pages by default
+  const visibleByPath = (() => {
+    if (typeof window === "undefined") return true;
+    const disabledPrefixes = ["/customer", "/company", "/upload"]; // dashboards & upload flow
+    const path = window.location.pathname;
+    return !disabledPrefixes.some((p) => path.startsWith(p));
+  })();
+  const [visible, setVisible] = useState(visibleByPath);
 
   useEffect(() => {
     // Calculate end time (24 hours from first visit or today midnight)

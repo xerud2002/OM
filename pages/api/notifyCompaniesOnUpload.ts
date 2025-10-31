@@ -1,6 +1,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb } from "@/lib/firebaseAdmin";
 
+type OfferDoc = {
+  companyId: string;
+  companyName: string;
+  status: string;
+  price: number;
+  message: string;
+  requestId: string;
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
@@ -19,10 +28,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const batch = adminDb.batch();
     let count = 0;
 
-  pendingOffersSnap.forEach((offerDoc: any) => {
-      const data = offerDoc.data();
-      const companyId = data.companyId as string | undefined;
-      if (!companyId) return;
+    for (const offerDoc of pendingOffersSnap.docs) {
+      const data = offerDoc.data() as OfferDoc;
+      const companyId = data.companyId;
+      if (!companyId) continue;
       const notifRef = adminDb.collection(`companies/${companyId}/notifications`).doc();
       batch.set(notifRef, {
         type: "media_uploaded",
@@ -32,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         read: false,
       });
       count++;
-    });
+    }
 
     if (count > 0) {
       await batch.commit();

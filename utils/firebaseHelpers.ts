@@ -9,7 +9,6 @@ import {
   updateProfile,
   sendPasswordResetEmail,
 } from "firebase/auth";
-// import { collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/services/firebase";

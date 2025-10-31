@@ -1,10 +1,10 @@
 import React from "react";
 import { useState } from "react";
 import OfferItem from "@/components/customer/OfferItem";
-import { acceptOffer } from "@/utils/firestoreHelpers";
 import { toast } from "sonner";
 import { notifyOfferAcceptedEmail } from "@/utils/notifications";
 import { trackEvent } from "@/utils/analytics";
+import { auth } from "@/services/firebase";
 
 type Offer = {
   id?: string;
@@ -32,7 +32,24 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
   const handleAccept = async (offerId: string) => {
     if (!r.id) return;
     try {
-      await acceptOffer(r.id, offerId);
+      const user = auth.currentUser;
+      if (!user) {
+        toast.error("Trebuie să fii autentificat pentru a accepta o ofertă");
+        return;
+      }
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/offers/accept", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId: r.id, offerId }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
       toast.success("Oferta a fost acceptată!");
 
       const accepted: any = (offers || []).find((o) => o.id === offerId) || null;
@@ -79,10 +96,24 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
   const handleDecline = async (offerId: string) => {
     if (!r.id) return;
     try {
-      const { doc, updateDoc } = await import("firebase/firestore");
-      const { db } = await import("@/services/firebase");
-      const offerRef = doc(db, "requests", r.id, "offers", offerId);
-      await updateDoc(offerRef, { status: "declined" });
+      const user = auth.currentUser;
+      if (!user) {
+        toast.error("Trebuie să fii autentificat pentru a refuza o ofertă");
+        return;
+      }
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/offers/decline", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId: r.id, offerId }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
       try {
         trackEvent("offer_declined", { requestId: r.id, offerId });
       } catch {}
