@@ -8,7 +8,7 @@ import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "
 import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
-import { PlusSquare, List, Inbox } from "lucide-react";
+import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
 import { formatDateRO } from "@/utils/date";
 import { sendEmail } from "@/utils/emailHelpers";
 import OfferComparison from "@/components/customer/OfferComparison";
@@ -36,6 +36,7 @@ type Request = {
   specialItems?: string;
   customerName?: string | null;
   customerEmail?: string | null;
+  archived?: boolean;
 };
 
 type Offer = {
@@ -48,7 +49,8 @@ type Offer = {
 
 export default function CustomerDashboard() {
   const [user, setUser] = useState<any>(null);
-  const [requests, setRequests] = useState<Request[]>([]);
+  const [requests, setRequests] = useState<Request[]>([]); // active (non-archived)
+  const [archivedRequests, setArchivedRequests] = useState<Request[]>([]);
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
 
   const [form, setForm] = useState<any>({
@@ -82,10 +84,10 @@ export default function CustomerDashboard() {
     mediaFiles: [],
   });
 
-  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers">(() => {
+  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers" | "archive">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("customerActiveTab");
-      if (saved === "new" || saved === "requests" || saved === "offers") return saved;
+      if (saved === "new" || saved === "requests" || saved === "offers" || saved === "archive") return saved as any;
     }
     return "requests";
   });
@@ -184,10 +186,11 @@ export default function CustomerDashboard() {
         orderBy("createdAt", "desc")
       );
       const unsub = onSnapshot(q, (snap) => {
-        const docs = snap.docs
-          .map((d) => ({ id: d.id, ...(d.data() as any) }))
-          .filter((doc) => !doc.archived); // Exclude archived requests
-        setRequests(docs);
+        const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+        const activeDocs = docs.filter((doc: any) => !doc.archived);
+        const archivedDocs = docs.filter((doc: any) => !!doc.archived);
+        setRequests(activeDocs);
+        setArchivedRequests(archivedDocs);
         setLoading(false);
       });
       return () => unsub();
@@ -482,6 +485,25 @@ export default function CustomerDashboard() {
                 />
               )}
             </button>
+
+            {/* Arhivă */}
+            <button
+              onClick={() => setActiveTab("archive")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "archive" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <ArchiveIcon size={18} />
+                <span>Arhivă</span>
+              </div>
+              {activeTab === "archive" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
           </div>
 
           {activeTab === "requests" && (
@@ -553,10 +575,6 @@ export default function CustomerDashboard() {
                             console.error("Error archiving request:", error);
                             toast.error("Nu s-a putut arhiva cererea");
                           }
-                        }}
-                        onViewDetails={(requestId) => {
-                          setSelectedRequestId(requestId);
-                          setActiveTab("offers");
                         }}
                       />
                     </motion.div>
@@ -707,6 +725,56 @@ export default function CustomerDashboard() {
                 </div>
               )}
             </div>
+          )}
+
+          {activeTab === "archive" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="overflow-visible rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                    <p className="mt-4 text-sm text-gray-500">Se încarcă arhiva...</p>
+                  </div>
+                </div>
+              ) : archivedRequests.length === 0 ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
+                >
+                  <div className="rounded-full bg-gray-100 p-4">
+                    <ArchiveIcon size={32} className="text-gray-500" />
+                  </div>
+                  <h3 className="mt-4 text-lg font-semibold text-gray-900">Arhivă goală</h3>
+                  <p className="mt-2 max-w-sm text-sm text-gray-500">
+                    Cererile arhivate vor apărea aici.
+                  </p>
+                </motion.div>
+              ) : (
+                <div className="grid grid-cols-1 gap-5">
+                  {archivedRequests.map((r: any, index: number) => (
+                    <motion.div
+                      key={r.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <MyRequestCard
+                        request={r as any}
+                        offersCount={0}
+                        readOnly
+                        onStatusChange={() => {}}
+                        onArchive={() => {}}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              )}
+            </motion.div>
           )}
         </section>
       </LayoutWrapper>

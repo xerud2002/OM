@@ -10,29 +10,32 @@ import {
   Archive,
   XCircle,
   Eye,
+  RotateCcw,
 } from "lucide-react";
 import { MovingRequest } from "../../types";
 import { formatDateRO } from "@/utils/date";
+import RequestDetailsModal from "./RequestDetailsModal";
+import { toast } from "sonner";
 
 type MyRequestCardProps = {
   request: MovingRequest;
   offersCount: number;
+  readOnly?: boolean;
   // eslint-disable-next-line no-unused-vars
   onStatusChange: (requestId: string, newStatus: "active" | "closed" | "paused") => void;
   // eslint-disable-next-line no-unused-vars
   onArchive: (requestId: string) => void;
-  // eslint-disable-next-line no-unused-vars
-  onViewDetails: (requestId: string) => void;
 };
 
 export default function MyRequestCard({
   request,
   offersCount,
+  readOnly = false,
   onStatusChange,
   onArchive,
-  onViewDetails,
 }: MyRequestCardProps) {
   const [showMenu, setShowMenu] = useState(false);
+  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   // Normalize status to valid values
   const getStatus = (): "active" | "closed" | "paused" | "cancelled" => {
@@ -196,8 +199,8 @@ export default function MyRequestCard({
 
             {/* Menu dropdown */}
             <div className="relative z-30">
-              {/* Only show menu for active requests */}
-              {status === "active" && (
+              {/* Show menu for active, closed, or paused requests (not cancelled, not read-only) */}
+              {!readOnly && (status === "active" || status === "closed" || status === "paused") && (
                 <button
                   onClick={() => setShowMenu(!showMenu)}
                   className="rounded-lg p-2 transition-colors hover:bg-gray-100"
@@ -226,13 +229,13 @@ export default function MyRequestCard({
                         {/* View Details */}
                         <button
                           onClick={() => {
-                            onViewDetails(request.id);
+                            setShowDetailsModal(true);
                             setShowMenu(false);
                           }}
                           className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
                         >
                           <Eye size={16} />
-                          Vezi detalii și oferte
+                          Vezi detalii cerere
                         </button>
 
                         <div className="my-1 h-px bg-gray-100" />
@@ -263,6 +266,20 @@ export default function MyRequestCard({
                           </>
                         )}
 
+                        {/* Reopen closed or paused requests */}
+                        {(status === "closed" || status === "paused") && (
+                          <button
+                            onClick={() => {
+                              onStatusChange(request.id, "active");
+                              setShowMenu(false);
+                            }}
+                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
+                          >
+                            <RotateCcw size={16} />
+                            Redeschide cererea
+                          </button>
+                        )}
+
                         <div className="my-1 h-px bg-gray-100" />
 
                         {/* Archive */}
@@ -291,6 +308,16 @@ export default function MyRequestCard({
           </div>
         </div>
       </div>
+
+      {/* Details Modal */}
+      <RequestDetailsModal
+        request={request}
+        isOpen={showDetailsModal}
+        onClose={() => setShowDetailsModal(false)}
+        onRequestEdit={() => {
+          toast.info("Pentru modificarea cererii, te rugăm să ne contactezi la support@ofertemutare.ro");
+        }}
+      />
     </motion.div>
   );
 }
