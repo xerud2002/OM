@@ -37,6 +37,8 @@ type FormShape = {
   moveDateEnd?: string;
   moveDateFlexDays?: number;
   contactName?: string;
+  contactFirstName?: string;
+  contactLastName?: string;
 };
 
 type Props = {
@@ -1368,12 +1370,40 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <label className="mb-2 block text-xs font-semibold text-gray-700">
                     Nume și prenume
                   </label>
-                  <input
-                    value={(form as any).contactName || ""}
-                    onChange={(e) => setForm((s: any) => ({ ...s, contactName: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                    placeholder="Ex: Popescu Andrei"
-                  />
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <input
+                      value={(form as any).contactFirstName || ""}
+                      onChange={(e) =>
+                        setForm((s: any) => {
+                          const contactFirstName = e.target.value;
+                          const contactLastName = (s as any).contactLastName || "";
+                          const contactName = [contactFirstName, contactLastName]
+                            .map((v) => (v || "").trim())
+                            .filter(Boolean)
+                            .join(" ");
+                          return { ...s, contactFirstName, contactName };
+                        })
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      placeholder="Prenume"
+                    />
+                    <input
+                      value={(form as any).contactLastName || ""}
+                      onChange={(e) =>
+                        setForm((s: any) => {
+                          const contactLastName = e.target.value;
+                          const contactFirstName = (s as any).contactFirstName || "";
+                          const contactName = [contactFirstName, contactLastName]
+                            .map((v) => (v || "").trim())
+                            .filter(Boolean)
+                            .join(" ");
+                          return { ...s, contactLastName, contactName };
+                        })
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      placeholder="Nume"
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="mb-2 block text-xs font-semibold text-gray-700">
