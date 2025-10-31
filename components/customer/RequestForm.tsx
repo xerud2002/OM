@@ -42,6 +42,26 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   const countyCities = (county?: string) =>
     county && (cities as any)[county] ? (cities as any)[county] : [];
 
+  // Media upload helpers
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const handleAddFiles = (list: FileList | null) => {
+    if (!list) return;
+    const newFiles = Array.from(list);
+    setForm((s) => ({
+      ...s,
+      mediaFiles: [...(s.mediaFiles || []), ...newFiles],
+    }));
+  };
+  const handleRemoveFile = (idx: number) => {
+    setForm((s) => ({
+      ...s,
+      mediaFiles: (s.mediaFiles || []).filter((_, i) => i !== idx),
+    }));
+  };
+  const handleClearFiles = () => {
+    setForm((s) => ({ ...s, mediaFiles: [] }));
+  };
+
   return (
     <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-6 shadow-lg">
       <div className="mb-6 flex items-center gap-3 border-b border-emerald-100 pb-4">
@@ -886,15 +906,15 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             {form.mediaUpload === "now" && (
               <div className="rounded-lg border-2 border-dashed border-blue-300 bg-white p-6 text-center">
                 <input
+                  ref={fileInputRef}
                   type="file"
                   multiple
                   accept="image/*,video/*"
-                  onChange={(e) =>
-                    setForm((s) => ({
-                      ...s,
-                      mediaFiles: e.target.files ? Array.from(e.target.files) : [],
-                    }))
-                  }
+                  onChange={(e) => {
+                    handleAddFiles(e.target.files);
+                    // reset input so the same file can be selected again if removed
+                    e.currentTarget.value = "";
+                  }}
                   className="hidden"
                   id="mediaUploadInput"
                 />
@@ -918,12 +938,49 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <p className="mt-1 text-xs text-gray-500">Poze sau video (max 50MB per fișier)</p>
                 </label>
                 {form.mediaFiles && form.mediaFiles.length > 0 && (
-                  <div className="mt-4 space-y-1 text-left">
-                    <p className="text-xs font-semibold text-gray-700">Fișiere selectate:</p>
+                  <div className="mt-4 space-y-2 text-left">
+                    <div className="mb-1 flex items-center justify-between">
+                      <p className="text-xs font-semibold text-gray-700">Fișiere selectate:</p>
+                      <button
+                        type="button"
+                        onClick={handleClearFiles}
+                        className="text-xs font-medium text-red-600 hover:underline"
+                      >
+                        Șterge toate
+                      </button>
+                    </div>
                     {form.mediaFiles.map((file, i) => (
-                      <p key={i} className="text-xs text-gray-600">
-                        • {file.name} ({(file.size / 1024 / 1024).toFixed(2)} MB)
-                      </p>
+                      <div
+                        key={i}
+                        className="flex items-center justify-between rounded-md border border-gray-200 bg-gray-50 px-3 py-2"
+                      >
+                        <div className="min-w-0 pr-3">
+                          <p className="truncate text-xs font-medium text-gray-800">{file.name}</p>
+                          <p className="text-[10px] text-gray-500">
+                            {(file.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveFile(i)}
+                          className="inline-flex items-center gap-1 rounded-md border border-red-200 bg-white px-2 py-1 text-xs font-medium text-red-600 transition hover:border-red-300 hover:bg-red-50"
+                        >
+                          <svg
+                            className="h-3.5 w-3.5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                            />
+                          </svg>
+                          Șterge
+                        </button>
+                      </div>
                     ))}
                   </div>
                 )}

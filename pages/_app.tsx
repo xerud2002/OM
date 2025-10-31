@@ -13,6 +13,9 @@ import LiveChatWidget from "@/components/LiveChatWidget";
 import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }: AppProps) {
+  // Feature flags (default disabled). Toggle with NEXT_PUBLIC_ENABLE_URGENCY_BANNER / NEXT_PUBLIC_ENABLE_LIVE_POPUP
+  const enableUrgencyBanner = process.env.NEXT_PUBLIC_ENABLE_URGENCY_BANNER === "true";
+  const enableLiveActivityPopup = process.env.NEXT_PUBLIC_ENABLE_LIVE_POPUP === "true";
   return (
     <ErrorBoundary>
       {/* Fallback meta for pages that don't set their own <Head> */}
@@ -36,8 +39,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Navbar />
 
-      {/* Urgency banner - limited time offer */}
-      <UrgencyBanner />
+      {/* Urgency banner - limited time offer (feature-flagged) */}
+      {enableUrgencyBanner && <UrgencyBanner />}
 
       {/* Offset content for the fixed navbar once, globally */}
       <main id="main-content" className="min-h-[60vh] pt-[80px]">
@@ -48,7 +51,8 @@ export default function App({ Component, pageProps }: AppProps) {
 
       {/* Conversion optimization widgets */}
       <FloatingCTA />
-      <LiveActivityPopup />
+      {/* Live activity popup (feature-flagged) */}
+      {enableLiveActivityPopup && <LiveActivityPopup />}
       <LiveChatWidget />
 
       {/* Toasts (success/error/info) from anywhere in the app */}
