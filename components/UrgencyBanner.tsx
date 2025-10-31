@@ -15,55 +15,61 @@ export default function UrgencyBanner({
   expiresInHours = 24,
 }: UrgencyBannerProps) {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  // Hide banner on internal dashboards and utility pages by default
-  const visibleByPath = (() => {
-    if (typeof window === "undefined") return true;
-    const disabledPrefixes = ["/customer", "/company", "/upload"]; // dashboards & upload flow
-    const path = window.location.pathname;
-    return !disabledPrefixes.some((p) => path.startsWith(p));
-  })();
-  const [visible, setVisible] = useState(visibleByPath);
+  // Defer rendering to client to avoid SSR/CSR mismatch
+  const [hasMounted, setHasMounted] = useState(false);
+  const [dismissed, setDismissed] = useState(false);
 
   useEffect(() => {
-    // Calculate end time (24 hours from first visit or today midnight)
-    const getEndTime = () => {
-      const stored = localStorage.getItem("urgency_offer_end");
-      if (stored) {
-        return new Date(stored);
-      }
+    setHasMounted(true);
+  }, []);
 
-      // Set to end of day (midnight)
+  // Start countdown only when visible to user
+  useEffect(() => {
+    if (!hasMounted) return;
+    const disabledPrefixes = ["/customer", "/company", "/upload"]; // dashboards & upload flow
+    const path = typeof window !== "undefined" ? window.location.pathname : "";
+    const shouldShow = !disabledPrefixes.some((p) => path.startsWith(p));
+    const visible = shouldShow && !dismissed;
+    if (!visible) return;
+    // Calculate end time (today end of day)
+    const getEndTime = () => {
+      const stored = typeof window !== "undefined" ? localStorage.getItem("urgency_offer_end") : null;
+      if (stored) return new Date(stored);
       const endTime = new Date();
       endTime.setHours(23, 59, 59, 999);
-      localStorage.setItem("urgency_offer_end", endTime.toISOString());
+      if (typeof window !== "undefined") {
+        localStorage.setItem("urgency_offer_end", endTime.toISOString());
+      }
       return endTime;
     };
 
     const endTime = getEndTime();
-
     const updateTimer = () => {
       const now = new Date();
       const diff = endTime.getTime() - now.getTime();
-
       if (diff <= 0) {
-        // Reset for next day
-        localStorage.removeItem("urgency_offer_end");
-        setVisible(false);
+        if (typeof window !== "undefined") localStorage.removeItem("urgency_offer_end");
+        setDismissed(true);
         return;
       }
-
       const hours = Math.floor(diff / (1000 * 60 * 60));
       const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
       setTimeLeft({ hours, minutes, seconds });
     };
 
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
-
     return () => clearInterval(interval);
-  }, [expiresInHours]);
+  }, [hasMounted, dismissed, expiresInHours]);
+
+  // Until mounted, render nothing to avoid hydration mismatch
+  if (!hasMounted) return null;
+
+  const disabledPrefixes = ["/customer", "/company", "/upload"]; // dashboards & upload flow
+  const path = typeof window !== "undefined" ? window.location.pathname : "";
+  const shouldShow = !disabledPrefixes.some((p) => path.startsWith(p));
+  const visible = shouldShow && !dismissed;
 
   if (!visible) return null;
 
@@ -88,7 +94,7 @@ export default function UrgencyBanner({
             </span>
           </span>
           <button
-            onClick={() => setVisible(false)}
+            onClick={() => setDismissed(true)}
             className="ml-2 rounded-full bg-white/20 px-3 py-1 text-xs transition hover:bg-white/30"
             aria-label="Închide banner"
           >

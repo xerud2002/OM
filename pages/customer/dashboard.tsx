@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
@@ -16,8 +15,7 @@ import {
 import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
-import { Search, Download, Filter, PlusSquare, List, Inbox, Settings } from "lucide-react";
-import StatCard from "@/components/customer/StatCard";
+import { Search, Download, Filter, PlusSquare, List, Inbox } from "lucide-react";
 import RequestCard from "@/components/customer/RequestCard";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
@@ -387,115 +385,172 @@ export default function CustomerDashboard() {
   return (
     <RequireRole allowedRole="customer">
       <LayoutWrapper>
-        <section className="mx-auto max-w-7xl px-4 py-10">
-          <div className="grid grid-cols-12 gap-6">
-            <aside className="col-span-12 md:col-span-3">
-              <div className="sticky top-28 rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
-                <h3 className="mb-3 text-sm font-semibold text-gray-600">Meniu</h3>
-                <nav className="flex flex-col gap-2">
-                  <button
-                    onClick={() => setActiveTab("new")}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition ${activeTab === "new" ? "bg-emerald-50 text-emerald-700" : "hover:bg-gray-50"}`}
-                  >
-                    <PlusSquare size={16} /> Cerere nouă
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("requests")}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition ${activeTab === "requests" ? "bg-emerald-50 text-emerald-700" : "hover:bg-gray-50"}`}
-                  >
-                    <List size={16} /> Cererile mele
-                  </button>
-                  <button
-                    onClick={() => setActiveTab("offers")}
-                    className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition ${activeTab === "offers" ? "bg-emerald-50 text-emerald-700" : "hover:bg-gray-50"}`}
-                  >
-                    <Inbox size={16} /> Oferte ({totalOffers})
-                  </button>
-                  <Link
-                    href="/customer/settings"
-                    className="flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                  >
-                    <Settings size={16} /> Setări profil
-                  </Link>
-                </nav>
+        <section className="mx-auto max-w-[1400px] px-4 py-8">
+          {/* Modern Header */}
+          <div className="mb-8">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h1 className="text-3xl font-bold text-gray-900">
+                  Bună, {user?.displayName || "Client"}!
+                </h1>
+                <p className="mt-1 text-sm text-gray-500">
+                  Gestionează cererile tale de mutare și ofertele primite
+                </p>
+              </div>
+              <button
+                onClick={() => setActiveTab("new")}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
+              >
+                <PlusSquare size={20} />
+                Cerere nouă
+              </button>
+            </div>
 
-                <div className="mt-6 border-t pt-4">
-                  <p className="text-xs text-gray-500">Scurtaturi</p>
-                  <div className="mt-2 flex flex-col gap-2">
-                    <button
-                      onClick={() => {
-                        setSearch("");
-                        setDateFrom(null);
-                        setDateTo(null);
-                      }}
-                      className="text-left text-sm text-gray-600 hover:text-gray-800"
-                    >
-                      Reset filtre
-                    </button>
+            {/* Stats Cards */}
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-6 shadow-sm transition-all hover:shadow-lg"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-emerald-600">Cereri active</p>
+                    <p className="mt-2 text-3xl font-bold text-gray-900">{requests.length}</p>
+                  </div>
+                  <div className="rounded-xl bg-emerald-100 p-3">
+                    <List size={24} className="text-emerald-600" />
                   </div>
                 </div>
-              </div>
-            </aside>
+                <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-emerald-100 opacity-20" />
+              </motion.div>
 
-            <main className="col-span-12 md:col-span-9">
-              <div className="mb-4 flex items-center justify-between">
-                <h1 className="text-2xl font-bold text-emerald-700">Panou clienti</h1>
-                <div className="flex items-center gap-3">
-                  {/* quick access: switch to new request tab */}
-                  <button
-                    onClick={() => setActiveTab("new")}
-                    className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white"
-                  >
-                    <PlusSquare size={14} /> Cerere nouă
-                  </button>
-
-                  <div className="hidden items-center gap-3 md:flex">
-                    <div className="text-sm text-gray-600">
-                      Cereri: <span className="font-semibold">{requests.length}</span>
-                    </div>
-                    <div className="text-sm text-gray-600">
-                      Oferte: <span className="font-semibold">{totalOffers}</span>
-                    </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="group relative overflow-hidden rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-white p-6 shadow-sm transition-all hover:shadow-lg"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-sky-600">Oferte primite</p>
+                    <p className="mt-2 text-3xl font-bold text-gray-900">{totalOffers}</p>
+                  </div>
+                  <div className="rounded-xl bg-sky-100 p-3">
+                    <Inbox size={24} className="text-sky-600" />
                   </div>
                 </div>
+                <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-sky-100 opacity-20" />
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="group relative overflow-hidden rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-6 shadow-sm transition-all hover:shadow-lg"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-amber-600">Medie oferte</p>
+                    <p className="mt-2 text-3xl font-bold text-gray-900">
+                      {requests.length ? (totalOffers / requests.length).toFixed(1) : "0"}
+                    </p>
+                  </div>
+                  <div className="rounded-xl bg-amber-100 p-3">
+                    <PlusSquare size={24} className="text-amber-600" />
+                  </div>
+                </div>
+                <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-amber-100 opacity-20" />
+              </motion.div>
+            </div>
+          </div>
+
+          {/* Navigation Tabs */}
+          <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200">
+            <button
+              onClick={() => setActiveTab("requests")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "requests"
+                  ? "text-emerald-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <List size={18} />
+                <span>Cererile mele</span>
               </div>
+              {activeTab === "requests" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab("offers")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "offers"
+                  ? "text-emerald-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <Inbox size={18} />
+                <span>Oferte</span>
+                {totalOffers > 0 && (
+                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-600">
+                    {totalOffers}
+                  </span>
+                )}
+              </div>
+              {activeTab === "offers" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
+
+            <button
+              onClick={() => setActiveTab("new")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "new"
+                  ? "text-emerald-600"
+                  : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <PlusSquare size={18} />
+                <span>Cerere nouă</span>
+              </div>
+              {activeTab === "new" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
+          </div>
 
               {activeTab === "requests" && (
                 <>
-                  {/* Dashboard header: stat cards */}
-                  <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-                    <StatCard
-                      title="Cereri"
-                      value={requests.length}
-                      icon={<List className="text-emerald-600" />}
-                    />
-                    <StatCard
-                      title="Oferte"
-                      value={totalOffers}
-                      icon={<Inbox className="text-sky-600" />}
-                    />
-                    <StatCard
-                      title="Medie oferte / cerere"
-                      value={requests.length ? Math.round(totalOffers / requests.length) : 0}
-                      icon={<PlusSquare className="text-amber-600" />}
-                    />
-                  </div>
-
-                  <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center">
+                  {/* Filters & Search */}
+                  <div className="mb-6 flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm sm:flex-row sm:items-center">
                     <div className="relative flex-1">
-                      <Search className="absolute left-3 top-3 text-gray-400" />
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" size={20} />
                       <input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Caută oraș, detalii..."
-                        className="w-full rounded-lg border border-gray-200 bg-white px-10 py-2 text-sm outline-none"
+                        placeholder="Caută după oraș sau detalii..."
+                        className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-12 pr-4 text-sm outline-none transition-all focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100"
                       />
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <select
                         value={sortBy}
                         onChange={(e) => setSortBy(e.target.value as any)}
-                        className="rounded-lg border p-2 text-sm"
+                        className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium outline-none transition-all hover:border-gray-300"
                       >
                         <option value="date-desc">Cele mai noi</option>
                         <option value="date-asc">Cele mai vechi</option>
@@ -506,19 +561,19 @@ export default function CustomerDashboard() {
                         type="date"
                         value={dateFrom ?? ""}
                         onChange={(e) => setDateFrom(e.target.value || null)}
-                        className="rounded-lg border p-2 text-sm"
+                        className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition-all hover:border-gray-300"
                       />
                       <input
                         type="date"
                         value={dateTo ?? ""}
                         onChange={(e) => setDateTo(e.target.value || null)}
-                        className="rounded-lg border p-2 text-sm"
+                        className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition-all hover:border-gray-300"
                       />
                       <button
                         onClick={exportCSV}
-                        className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow hover:opacity-95"
+                        className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-gray-800"
                       >
-                        <Download size={14} /> Export CSV
+                        <Download size={16} /> Export
                       </button>
                       <button
                         onClick={() => {
@@ -526,32 +581,51 @@ export default function CustomerDashboard() {
                           setDateFrom(null);
                           setDateTo(null);
                         }}
-                        className="inline-flex items-center gap-2 rounded-lg border px-3 py-2 text-sm"
+                        className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium transition-all hover:border-gray-300"
                       >
-                        <Filter size={14} /> Reset
+                        <Filter size={16} /> Reset
                       </button>
                     </div>
                   </div>
 
                   {loading ? (
-                    <p className="text-center italic text-gray-500">Se încarcă…</p>
+                    <div className="flex items-center justify-center py-12">
+                      <div className="text-center">
+                        <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                        <p className="mt-4 text-sm text-gray-500">Se încarcă cererile...</p>
+                      </div>
+                    </div>
                   ) : sortedRequests.length === 0 ? (
-                    <div className="flex flex-col items-center justify-center rounded-lg border border-dashed p-8 text-center text-gray-500">
-                      <p className="mb-3">Nu ai nicio cerere activă.</p>
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
+                    >
+                      <div className="rounded-full bg-emerald-100 p-4">
+                        <List size={32} className="text-emerald-600" />
+                      </div>
+                      <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                        Nicio cerere încă
+                      </h3>
+                      <p className="mt-2 max-w-sm text-sm text-gray-500">
+                        Creează prima ta cerere de mutare și primește oferte de la firme verificate
+                      </p>
                       <button
                         onClick={() => setActiveTab("new")}
-                        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow hover:opacity-95"
+                        className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
                       >
-                        Creează o cerere
+                        <PlusSquare size={20} />
+                        Creează prima cerere
                       </button>
-                    </div>
+                    </motion.div>
                   ) : (
-                    <div className="grid grid-cols-1 gap-4">
-                      {sortedRequests.map((r) => (
+                    <div className="grid grid-cols-1 gap-5">
+                      {sortedRequests.map((r, index) => (
                         <motion.div
                           key={r.id}
-                          initial={{ opacity: 0, y: 8 }}
+                          initial={{ opacity: 0, y: 20 }}
                           animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.05 }}
                         >
                           <RequestCard r={r} offers={offersByRequest[r.id] || []} />
                         </motion.div>
@@ -562,64 +636,86 @@ export default function CustomerDashboard() {
               )}
 
               {activeTab === "new" && (
-                <div className="rounded-lg border border-gray-100 bg-white p-4 shadow-sm">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="rounded-2xl border border-gray-100 bg-white p-8 shadow-lg"
+                >
                   <RequestForm
                     form={form}
                     setForm={setForm}
                     onSubmit={handleSubmit}
                     onReset={resetForm}
                   />
-                </div>
+                </motion.div>
               )}
 
               {activeTab === "offers" && (
                 <div className="space-y-6">
-                  <div>
-                    <h3 className="mb-4 text-lg font-semibold">Toate ofertele</h3>
-                    {aggregatedOffers.length === 0 ? (
-                      <p className="text-sm italic text-gray-500">Nu există oferte.</p>
-                    ) : (
-                      <div className="space-y-3">
-                        {aggregatedOffers.map((o) => (
-                          <div
-                            key={o.id}
-                            className="flex items-center justify-between rounded-md border bg-white p-3 shadow-sm"
-                          >
-                            <div>
-                              <p className="font-medium">{o.companyName}</p>
-                              {o.message && <p className="text-sm text-gray-500">{o.message}</p>}
-                            </div>
-                            <div className="text-right">
-                              <p className="font-semibold text-emerald-700">{o.price} lei</p>
-                            </div>
-                          </div>
-                        ))}
+                  {aggregatedOffers.length === 0 ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
+                    >
+                      <div className="rounded-full bg-sky-100 p-4">
+                        <Inbox size={32} className="text-sky-600" />
                       </div>
-                    )}
-                  </div>
+                      <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                        Nicio ofertă primită
+                      </h3>
+                      <p className="mt-2 max-w-sm text-sm text-gray-500">
+                        Ofertele vor apărea aici după ce firmele de mutări vor răspunde la cererile tale
+                      </p>
+                    </motion.div>
+                  ) : (
+                    <>
+                      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                        <h3 className="mb-4 text-lg font-semibold text-gray-900">Toate ofertele</h3>
+                        <div className="space-y-3">
+                          {aggregatedOffers.map((o, index) => (
+                            <motion.div
+                              key={o.id}
+                              initial={{ opacity: 0, x: -20 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: index * 0.05 }}
+                              className="flex items-center justify-between rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50 to-white p-4 transition-all hover:shadow-md"
+                            >
+                              <div className="flex-1">
+                                <p className="font-semibold text-gray-900">{o.companyName}</p>
+                                {o.message && (
+                                  <p className="mt-1 text-sm text-gray-500">{o.message}</p>
+                                )}
+                              </div>
+                              <div className="text-right">
+                                <p className="text-2xl font-bold text-emerald-600">{o.price} lei</p>
+                              </div>
+                            </motion.div>
+                          ))}
+                        </div>
+                      </div>
 
-                  {/* Comparison panel */}
-                  <div>
-                    <h3 className="mb-3 text-lg font-semibold">Compară oferte</h3>
-                    <OfferComparison
-                      offers={(aggregatedOffers as any[]).map((o) => ({
-                        id: o.id,
-                        requestId: (o as any).requestId,
-                        companyName: (o as any).companyName,
-                        price: (o as any).price,
-                        message: (o as any).message,
-                        status: (o as any).status,
-                        createdAt: (o as any).createdAt,
-                        favorite: false,
-                      }))}
-                      onAccept={acceptFromAggregated}
-                      onDecline={declineFromAggregated}
-                    />
-                  </div>
+                      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                        <h3 className="mb-4 text-lg font-semibold text-gray-900">Compară oferte</h3>
+                        <OfferComparison
+                          offers={(aggregatedOffers as any[]).map((o) => ({
+                            id: o.id,
+                            requestId: (o as any).requestId,
+                            companyName: (o as any).companyName,
+                            price: (o as any).price,
+                            message: (o as any).message,
+                            status: (o as any).status,
+                            createdAt: (o as any).createdAt,
+                            favorite: false,
+                          }))}
+                          onAccept={acceptFromAggregated}
+                          onDecline={declineFromAggregated}
+                        />
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
-            </main>
-          </div>
         </section>
       </LayoutWrapper>
     </RequireRole>

@@ -127,7 +127,7 @@ export default function FormPage() {
       trackConversion("form-cta-button", buttonVariant, "form_submission");
 
       toast.success("Cererea a fost trimisă. Vei primi oferte în curând.");
-      router.push("/customer/requests");
+      router.push("/customer/dashboard");
     } catch (err) {
       console.error(err);
       toast.error("A apărut o eroare la trimitere. Încearcă din nou.");

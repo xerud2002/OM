@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import OfferItem from "@/components/customer/OfferItem";
 import { toast } from "sonner";
-import { notifyOfferAcceptedEmail } from "@/utils/notifications";
 import { trackEvent } from "@/utils/analytics";
 import { auth } from "@/services/firebase";
 
@@ -62,35 +61,10 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
           companyId: accepted?.companyId,
         });
       } catch {}
-
-      // Notify company via email (best-effort, non-blocking)
-      try {
-        const companyId = accepted?.companyId;
-        if (companyId) {
-          const { doc, getDoc } = await import("firebase/firestore");
-          const { db } = await import("@/services/firebase");
-          const compRef = doc(db, "companies", companyId);
-          const compSnap = await getDoc(compRef);
-          const comp = compSnap.exists() ? (compSnap.data() as any) : null;
-          const email = comp?.email;
-          if (email) {
-            const route = `${r.fromCity || ""} → ${r.toCity || ""}`;
-            await notifyOfferAcceptedEmail({
-              to: email,
-              customerName: null,
-              requestId: r.id,
-              route,
-              price: accepted?.price,
-              companyName: comp?.companyName || null,
-            });
-          }
-        }
-      } catch (e) {
-        console.warn("Email notify skipped", e);
-      }
     } catch (err) {
       console.error("Failed to accept offer", err);
-      toast.error("Eroare la acceptarea ofertei");
+      const errMsg = err instanceof Error ? err.message : "Eroare necunoscută";
+      toast.error(`Eroare la acceptarea ofertei: ${errMsg}`);
     }
   };
 
@@ -118,10 +92,14 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
       try {
         trackEvent("offer_declined", { requestId: r.id, offerId });
       } catch {}
+      try {
+        trackEvent("offer_declined", { requestId: r.id, offerId });
+      } catch {}
       toast.success("Oferta a fost refuzată");
     } catch (err) {
       console.error("Failed to decline offer", err);
-      toast.error("Eroare la refuzarea ofertei");
+      const errMsg = err instanceof Error ? err.message : "Eroare necunoscută";
+      toast.error(`Eroare la refuzarea ofertei: ${errMsg}`);
     }
   };
 
@@ -138,91 +116,125 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
   };
 
   return (
-    <div className="relative overflow-hidden rounded-xl border bg-white p-4 shadow hover:shadow-md">
-      <div className="absolute left-0 top-0 h-full w-1 bg-emerald-500/60" />
-      <div className="relative flex items-start justify-between gap-4">
-        <div className="flex-1">
-          <div className="flex flex-wrap items-center gap-3">
-            <h3 className="text-lg font-semibold text-emerald-700">
-              {r.fromCity} → {r.toCity}
-            </h3>
-            <span className="text-sm text-gray-400">{r.moveDate}</span>
-            {r.status && (
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                  r.status === "accepted" || r.status === "in-progress"
-                    ? "bg-emerald-100 text-emerald-700"
+    <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50/50 shadow-sm transition-all hover:shadow-xl">
+      {/* Gradient accent */}
+      <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-emerald-500 to-sky-500" />
+      
+      <div className="relative p-6">
+        {/* Header Section */}
+        <div className="mb-4 flex items-start justify-between gap-4">
+          <div className="flex-1">
+            <div className="mb-2 flex flex-wrap items-center gap-3">
+              <h3 className="text-xl font-bold text-gray-900">
+                {r.fromCity} → {r.toCity}
+              </h3>
+              {r.status && (
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-bold shadow-sm ${
+                    r.status === "accepted" || r.status === "in-progress"
+                      ? "bg-emerald-100 text-emerald-700"
+                      : r.status === "completed"
+                      ? "bg-blue-100 text-blue-700"
+                      : r.status === "cancelled"
+                      ? "bg-gray-100 text-gray-700"
+                      : "bg-amber-100 text-amber-700"
+                  }`}
+                >
+                  {r.status === "accepted"
+                    ? "Acceptată"
+                    : r.status === "in-progress"
+                    ? "În desfășurare"
                     : r.status === "completed"
-                    ? "bg-blue-100 text-blue-700"
+                    ? "Finalizată"
                     : r.status === "cancelled"
-                    ? "bg-gray-100 text-gray-700"
-                    : "bg-amber-100 text-amber-700"
-                }`}
-              >
-                {r.status === "accepted"
-                  ? "Acceptată"
-                  : r.status === "in-progress"
-                  ? "În desfășurare"
-                  : r.status === "completed"
-                  ? "Finalizată"
-                  : r.status === "cancelled"
-                  ? "Anulată"
-                  : "În așteptare"}
-              </span>
-            )}
-          </div>
-          <p className="mt-2 text-sm text-gray-600">{r.details}</p>
+                    ? "Anulată"
+                    : "În așteptare"}
+                </span>
+              )}
+            </div>
+            
+            <div className="mb-3 flex items-center gap-2 text-sm text-gray-500">
+              <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <span className="font-medium">{r.moveDate}</span>
+            </div>
 
-          <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-gray-500">
-            {r.rooms && (
-              <span>
-                Camere: <span className="font-medium text-gray-700">{r.rooms}</span>
-              </span>
+            {r.details && (
+              <p className="mb-4 text-sm leading-relaxed text-gray-600">{r.details}</p>
             )}
-            {typeof r.volumeM3 !== "undefined" && (
-              <span>
-                Volum: <span className="font-medium text-gray-700">{r.volumeM3} m³</span>
-              </span>
-            )}
-            {r.budgetEstimate && (
-              <span>
-                Buget: <span className="font-medium text-gray-700">{r.budgetEstimate} RON</span>
-              </span>
-            )}
-            <span>
-              Ambalare:{" "}
-              <span className="font-medium text-gray-700">{r.needPacking ? "Da" : "Nu"}</span>
-            </span>
+
+            <div className="flex flex-wrap gap-3">
+              {r.rooms && (
+                <div className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm">
+                  <span className="font-semibold text-gray-900">{r.rooms}</span>
+                  <span className="ml-1 text-gray-600">camere</span>
+                </div>
+              )}
+              {typeof r.volumeM3 !== "undefined" && (
+                <div className="rounded-lg bg-gray-100 px-3 py-1.5 text-sm">
+                  <span className="font-semibold text-gray-900">{r.volumeM3}</span>
+                  <span className="ml-1 text-gray-600">m³</span>
+                </div>
+              )}
+              {r.budgetEstimate && (
+                <div className="rounded-lg bg-emerald-50 px-3 py-1.5 text-sm">
+                  <span className="font-semibold text-emerald-700">{r.budgetEstimate}</span>
+                  <span className="ml-1 text-emerald-600">RON</span>
+                </div>
+              )}
+              {r.needPacking && (
+                <div className="rounded-lg bg-sky-50 px-3 py-1.5 text-sm font-medium text-sky-700">
+                  Necesită ambalare
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Offers Badge */}
+          <div className="flex flex-col items-center gap-1">
+            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-sky-500 shadow-lg">
+              <span className="text-2xl font-bold text-white">{offers?.length ?? 0}</span>
+            </div>
+            <span className="text-xs font-medium text-gray-500">oferte</span>
           </div>
         </div>
 
-        <div className="flex w-40 flex-col items-end gap-2">
-          <div className="text-sm text-gray-500">Oferte</div>
-          <div className="rounded-full bg-emerald-50 px-3 py-1 text-sm font-semibold text-emerald-700">
-            {offers?.length ?? 0}
+        {/* Offers Section */}
+        {offers && offers.length > 0 && (
+          <div className="mt-6 border-t border-gray-100 pt-6">
+            <h4 className="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-700">
+              <svg className="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+              </svg>
+              Oferte primite ({offers.length})
+            </h4>
+            <div className="space-y-3">
+              {offers.map((o) => (
+                <OfferItem
+                  key={o.id}
+                  offer={o}
+                  requestId={r.id}
+                  onAccept={handleAccept}
+                  onDecline={handleDecline}
+                  onToggleFavorite={toggleFavorite}
+                  isFavorite={favorites.has(o.id!)}
+                />
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        )}
 
-      <div className="mt-4 border-t pt-4">
-        <h4 className="mb-2 text-sm font-semibold text-gray-700">Oferte primite</h4>
-        <div className="space-y-2">
-          {offers && offers.length ? (
-            offers.map((o) => (
-              <OfferItem
-                key={o.id}
-                offer={o}
-                requestId={r.id}
-                onAccept={handleAccept}
-                onDecline={handleDecline}
-                onToggleFavorite={toggleFavorite}
-                isFavorite={favorites.has(o.id!)}
-              />
-            ))
-          ) : (
-            <p className="text-sm italic text-gray-400">Nicio ofertă.</p>
-          )}
-        </div>
+        {/* No offers state */}
+        {(!offers || offers.length === 0) && (
+          <div className="mt-6 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-6 text-center">
+            <svg className="mx-auto h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            </svg>
+            <p className="mt-2 text-sm font-medium text-gray-500">Nicio ofertă încă</p>
+            <p className="mt-1 text-xs text-gray-400">Firmele vor răspunde în curând</p>
+          </div>
+        )}
       </div>
     </div>
   );

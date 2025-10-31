@@ -306,112 +306,218 @@ export default function RequestForm({
         </div>
 
         {/* Services */}
-        <div className="rounded-xl border border-purple-200 bg-purple-50/50 p-5">
-          <div className="mb-4 flex items-center gap-2 border-b border-purple-200 pb-2">
-            <svg className="h-5 w-5 text-purple-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
-            </svg>
-            <h4 className="text-sm font-semibold text-purple-900">Servicii căutate</h4>
+        <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
+              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Servicii căutate</h4>
+              <p className="text-xs text-gray-600">Selectează serviciile de care ai nevoie</p>
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceMoving}
                 onChange={(e) => setForm((s) => ({ ...s, serviceMoving: e.target.checked }))}
-                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+                className="peer sr-only"
               />
-              <span className="font-medium">Mutare</span>
+              <div className="p-4">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 transition-colors group-hover:bg-purple-200 peer-checked:bg-purple-500">
+                  <svg className="h-6 w-6 text-purple-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                  </svg>
+                </div>
+                <h5 className="mb-1 font-semibold text-gray-900">Mutare</h5>
+                <p className="text-xs text-gray-600">Transport și manipulare obiecte</p>
+              </div>
+              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
             </label>
-            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.servicePacking}
                 onChange={(e) => setForm((s) => ({ ...s, servicePacking: e.target.checked }))}
-                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+                className="peer sr-only"
               />
-              <span className="font-medium">Împachetare</span>
+              <div className="p-4">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 transition-colors group-hover:bg-purple-200 peer-checked:bg-purple-500">
+                  <svg className="h-6 w-6 text-purple-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                  </svg>
+                </div>
+                <h5 className="mb-1 font-semibold text-gray-900">Împachetare</h5>
+                <p className="text-xs text-gray-600">Materiale și ambalare profesională</p>
+              </div>
+              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
             </label>
-            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceDisassembly}
                 onChange={(e) => setForm((s) => ({ ...s, serviceDisassembly: e.target.checked }))}
-                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+                className="peer sr-only"
               />
-              <span className="font-medium">Demontare</span>
+              <div className="p-4">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 transition-colors group-hover:bg-purple-200 peer-checked:bg-purple-500">
+                  <svg className="h-6 w-6 text-purple-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                </div>
+                <h5 className="mb-1 font-semibold text-gray-900">Demontare</h5>
+                <p className="text-xs text-gray-600">Demontare mobilier și recondiționare</p>
+              </div>
+              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
             </label>
-            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceCleanout}
                 onChange={(e) => setForm((s) => ({ ...s, serviceCleanout: e.target.checked }))}
-                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+                className="peer sr-only"
               />
-              <span className="font-medium">Debarasare</span>
+              <div className="p-4">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 transition-colors group-hover:bg-purple-200 peer-checked:bg-purple-500">
+                  <svg className="h-6 w-6 text-purple-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </div>
+                <h5 className="mb-1 font-semibold text-gray-900">Debarasare</h5>
+                <p className="text-xs text-gray-600">Eliminare obiecte vechi nedorite</p>
+              </div>
+              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
             </label>
-            <label className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white p-3 text-sm text-gray-700 transition hover:border-purple-300 hover:bg-purple-50/30">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceStorage}
                 onChange={(e) => setForm((s) => ({ ...s, serviceStorage: e.target.checked }))}
-                className="rounded border-gray-300 text-purple-600 focus:ring-2 focus:ring-purple-500/20"
+                className="peer sr-only"
               />
-              <span className="font-medium">Depozitare</span>
+              <div className="p-4">
+                <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 transition-colors group-hover:bg-purple-200 peer-checked:bg-purple-500">
+                  <svg className="h-6 w-6 text-purple-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+                  </svg>
+                </div>
+                <h5 className="mb-1 font-semibold text-gray-900">Depozitare</h5>
+                <p className="text-xs text-gray-600">Spațiu depozitare temporară/permanentă</p>
+              </div>
+              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
             </label>
           </div>
         </div>
 
         {/* Survey & Estimate */}
-        <div className="rounded-xl border border-amber-200 bg-amber-50/50 p-5">
-          <div className="mb-4 flex items-center gap-2 border-b border-amber-200 pb-2">
-            <svg className="h-5 w-5 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-            </svg>
-            <h4 className="text-sm font-semibold text-amber-900">Survey și estimare</h4>
+        <div className="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg">
+              <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Survey și estimare</h4>
+              <p className="text-xs text-gray-600">Alege modalitatea de evaluare</p>
+            </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg border-2 bg-white p-4 transition hover:border-amber-400 hover:bg-amber-50/30 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
                 value="in-person"
                 checked={form.surveyType === "in-person"}
                 onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value }))}
-                className="mt-0.5 text-amber-600 focus:ring-2 focus:ring-amber-500/20"
+                className="peer sr-only"
               />
-              <div>
-                <p className="font-semibold text-gray-800">Survey la fața locului</p>
-                <p className="text-xs text-gray-600">Un reprezentant va veni să evalueze</p>
+              <div className="p-5">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-100 transition-colors group-hover:bg-amber-200 peer-checked:bg-amber-500">
+                  <svg className="h-7 w-7 text-amber-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                </div>
+                <h5 className="mb-2 font-bold text-gray-900">Survey la fața locului</h5>
+                <p className="text-sm leading-relaxed text-gray-600">Un reprezentant va veni să evalueze bunurile și să ofere o estimare precisă</p>
+              </div>
+              <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
               </div>
             </label>
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg border-2 bg-white p-4 transition hover:border-amber-400 hover:bg-amber-50/30 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
                 value="video"
                 checked={form.surveyType === "video"}
                 onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value }))}
-                className="mt-0.5 text-amber-600 focus:ring-2 focus:ring-amber-500/20"
+                className="peer sr-only"
               />
-              <div>
-                <p className="font-semibold text-gray-800">Survey video</p>
-                <p className="text-xs text-gray-600">Programare video call pentru evaluare</p>
+              <div className="p-5">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-100 transition-colors group-hover:bg-amber-200 peer-checked:bg-amber-500">
+                  <svg className="h-7 w-7 text-amber-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <h5 className="mb-2 font-bold text-gray-900">Survey video</h5>
+                <p className="text-sm leading-relaxed text-gray-600">Programare video call pentru evaluare online rapidă și convenabilă</p>
+              </div>
+              <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
               </div>
             </label>
-            <label className="flex cursor-pointer items-start gap-3 rounded-lg border-2 bg-white p-4 transition hover:border-amber-400 hover:bg-amber-50/30 has-[:checked]:border-amber-500 has-[:checked]:bg-amber-50">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
                 value="quick-estimate"
                 checked={form.surveyType === "quick-estimate"}
                 onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value }))}
-                className="mt-0.5 text-amber-600 focus:ring-2 focus:ring-amber-500/20"
+                className="peer sr-only"
               />
-              <div>
-                <p className="font-semibold text-gray-800">Estimare rapidă</p>
-                <p className="text-xs text-gray-600">Bazată pe informațiile furnizate</p>
+              <div className="p-5">
+                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-amber-100 transition-colors group-hover:bg-amber-200 peer-checked:bg-amber-500">
+                  <svg className="h-7 w-7 text-amber-600 transition-colors peer-checked:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                  </svg>
+                </div>
+                <h5 className="mb-2 font-bold text-gray-900">Estimare rapidă</h5>
+                <p className="text-sm leading-relaxed text-gray-600">Primește oferte estimate bazate pe informațiile furnizate în formular</p>
+              </div>
+              <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
+                <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
+                </svg>
               </div>
             </label>
           </div>

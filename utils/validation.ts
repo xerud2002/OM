@@ -47,6 +47,8 @@ export const validators = {
 };
 
 export type ValidationRule = {
+  // Param name is part of the type signature; suppress unused-var lint in type context
+  // eslint-disable-next-line no-unused-vars
   validator: (value: any) => boolean;
   message: string;
 };
