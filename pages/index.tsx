@@ -57,14 +57,19 @@ export default function HomePage() {
           🔹 Page Sections
       =========================== */}
       <Hero />
-      <Steps />
-      <ClientAccount />
-      <Services />
-      <GuaranteeSection />
-      <PartnerSection />
-      <Testimonials />
-      <Articles />
-      <CTASection />
+      {/* Wrap content sections for consistent mobile padding/background */}
+      <div className="bg-gradient-to-b from-white to-emerald-50">
+        <div className="container mx-auto px-3 py-6 sm:px-4 sm:py-10">
+          <Steps />
+          <ClientAccount />
+          <Services />
+          <GuaranteeSection />
+          <PartnerSection />
+          <Testimonials />
+          <Articles />
+          <CTASection />
+        </div>
+      </div>
     </>
   );
 }

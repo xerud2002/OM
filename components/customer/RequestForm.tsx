@@ -84,7 +84,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-6 shadow-lg">
+    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-4 shadow-lg sm:p-6">
       <div className="mb-6 flex items-center gap-3 border-b border-emerald-100 pb-4">
         <svg
           className="h-6 w-6 text-emerald-600"
