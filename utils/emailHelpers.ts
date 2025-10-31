@@ -19,10 +19,5 @@ function assertEnv() {
 export async function sendEmail(params: EmailParams, templateId?: string): Promise<void> {
   assertEnv();
   const emailjs = (await import("emailjs-com")).default;
-  await emailjs.send(
-    SERVICE_ID!,
-    templateId || DEFAULT_TEMPLATE_ID!,
-    params,
-    PUBLIC_KEY!
-  );
+  await emailjs.send(SERVICE_ID!, templateId || DEFAULT_TEMPLATE_ID!, params, PUBLIC_KEY!);
 }
