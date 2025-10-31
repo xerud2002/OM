@@ -8,15 +8,15 @@ import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "
 import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
-import { Search, Download, Filter, PlusSquare, List, Inbox } from "lucide-react";
+import { PlusSquare, List, Inbox } from "lucide-react";
 import { sendEmail } from "@/utils/emailHelpers";
-import RequestCard from "@/components/customer/RequestCard";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
-import { useDebouncedValue } from "@/utils/hooks";
+import MyRequestCard from "@/components/customer/MyRequestCard";
 import { MessageSquare } from "lucide-react";
 import { auth } from "@/services/firebase";
 import { toast } from "sonner";
+import { updateRequestStatus, deleteRequest } from "@/utils/firestoreHelpers";
 
 type Request = {
   id: string;
@@ -81,9 +81,6 @@ export default function CustomerDashboard() {
     mediaFiles: [],
   });
 
-  const [search, setSearch] = useState<string>("");
-  const [dateFrom, setDateFrom] = useState<string | null>(null);
-  const [dateTo, setDateTo] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("customerActiveTab");
@@ -93,9 +90,6 @@ export default function CustomerDashboard() {
   });
   // Two-column layout: we render selected content on the right; no modal needed
   const [loading, setLoading] = useState<boolean>(true);
-  const [sortBy, setSortBy] = useState<"date-desc" | "date-asc" | "offers-desc" | "offers-asc">(
-    "date-desc"
-  );
 
   const totalOffers = useMemo(
     () => Object.values(offersByRequest).flat().length,
@@ -171,42 +165,13 @@ export default function CustomerDashboard() {
     }
   };
 
-  const debouncedSearch = useDebouncedValue(search, 250);
-
-  const filteredRequests = useMemo(() => {
-    let list = requests;
-    if (debouncedSearch) {
-      const q = debouncedSearch.toLowerCase();
-      list = list.filter((r) => {
-        return (
-          (r.fromCity || "").toLowerCase().includes(q) ||
-          (r.toCity || "").toLowerCase().includes(q) ||
-          (r.details || "").toLowerCase().includes(q)
-        );
-      });
-    }
-    if (dateFrom) list = list.filter((r) => r.moveDate && r.moveDate >= dateFrom);
-    if (dateTo) list = list.filter((r) => r.moveDate && r.moveDate <= dateTo);
-    return list;
-  }, [requests, debouncedSearch, dateFrom, dateTo]);
-
+  // Sort requests by creation date (newest first)
   const sortedRequests = useMemo(() => {
-    const list = [...filteredRequests];
+    const list = [...requests];
     const getCreated = (r: any) =>
       r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
-    const getOffers = (r: any) => offersByRequest[r.id]?.length ?? 0;
-    switch (sortBy) {
-      case "date-asc":
-        return list.sort((a: any, b: any) => getCreated(a) - getCreated(b));
-      case "offers-desc":
-        return list.sort((a: any, b: any) => getOffers(b) - getOffers(a));
-      case "offers-asc":
-        return list.sort((a: any, b: any) => getOffers(a) - getOffers(b));
-      case "date-desc":
-      default:
-        return list.sort((a: any, b: any) => getCreated(b) - getCreated(a));
-    }
-  }, [filteredRequests, sortBy, offersByRequest]);
+    return list.sort((a: any, b: any) => getCreated(b) - getCreated(a));
+  }, [requests]);
 
   useEffect(() => {
     const unsubAuth = onAuthChange((u: any) => {
@@ -260,30 +225,6 @@ export default function CustomerDashboard() {
       localStorage.setItem("customerActiveTab", activeTab);
     }
   }, [activeTab]);
-
-  const exportCSV = () => {
-    try {
-      const headers = ["from", "to", "moveDate", "details", "offersCount"];
-      const rows = requests.map((r) => [
-        r.fromCity || r.fromCounty || "",
-        r.toCity || r.toCounty || "",
-        r.moveDate || "",
-        (offersByRequest[r.id] || []).length,
-      ]);
-      const csv = [headers.join(";"), ...rows.map((row) => row.join(";"))].join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `requests.csv`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("CSV export failed", err);
-    }
-  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -544,64 +485,8 @@ export default function CustomerDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+              className="overflow-visible rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
             >
-              {/* Filters & Search */}
-              <div className="mb-6 flex flex-col gap-3 rounded-xl bg-gray-50 p-4 shadow-sm sm:flex-row sm:items-center">
-                <div className="relative flex-1">
-                  <Search
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
-                  />
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Caută după oraș sau detalii..."
-                    className="w-full rounded-xl border border-gray-200 bg-white py-3 pl-12 pr-4 text-sm outline-none transition-all focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100"
-                  />
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium outline-none transition-all hover:border-gray-300"
-                  >
-                    <option value="date-desc">Cele mai noi</option>
-                    <option value="date-asc">Cele mai vechi</option>
-                    <option value="offers-desc">Cele mai multe oferte</option>
-                    <option value="offers-asc">Cele mai puține oferte</option>
-                  </select>
-                  <input
-                    type="date"
-                    value={dateFrom ?? ""}
-                    onChange={(e) => setDateFrom(e.target.value || null)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition-all hover:border-gray-300"
-                  />
-                  <input
-                    type="date"
-                    value={dateTo ?? ""}
-                    onChange={(e) => setDateTo(e.target.value || null)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition-all hover:border-gray-300"
-                  />
-                  <button
-                    onClick={exportCSV}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-gray-800"
-                  >
-                    <Download size={16} /> Export
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSearch("");
-                      setDateFrom(null);
-                      setDateTo(null);
-                    }}
-                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium transition-all hover:border-gray-300"
-                  >
-                    <Filter size={16} /> Reset
-                  </button>
-                </div>
-              </div>
-
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
@@ -639,7 +524,38 @@ export default function CustomerDashboard() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <RequestCard r={r} offers={offersByRequest[r.id] || []} />
+                      <MyRequestCard
+                        request={r as any}
+                        offersCount={(offersByRequest[r.id] || []).length}
+                        onStatusChange={async (requestId, newStatus) => {
+                          try {
+                            await updateRequestStatus(requestId, newStatus);
+                            toast.success(
+                              newStatus === "closed"
+                                ? "Cererea a fost marcată ca închisă"
+                                : newStatus === "paused"
+                                ? "Cererea a fost pusă în așteptare"
+                                : "Cererea a fost reactivată"
+                            );
+                          } catch (error) {
+                            console.error("Error updating status:", error);
+                            toast.error("Nu s-a putut actualiza statusul cererii");
+                          }
+                        }}
+                        onDelete={async (requestId) => {
+                          try {
+                            await deleteRequest(requestId);
+                            toast.success("Cererea a fost ștearsă");
+                          } catch (error) {
+                            console.error("Error deleting request:", error);
+                            toast.error("Nu s-a putut șterge cererea");
+                          }
+                        }}
+                        onViewDetails={(requestId) => {
+                          setSelectedRequestId(requestId);
+                          setActiveTab("offers");
+                        }}
+                      />
                     </motion.div>
                   ))}
                 </div>
@@ -805,7 +721,9 @@ function OfferRow({
   index: number;
   requestId: string;
   offer: any;
+  // eslint-disable-next-line no-unused-vars
   onAccept: (requestId: string, offerId: string) => Promise<void> | void;
+  // eslint-disable-next-line no-unused-vars
   onDecline: (requestId: string, offerId: string) => Promise<void> | void;
 }) {
   const [showMessage, setShowMessage] = useState(false);

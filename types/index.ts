@@ -81,7 +81,7 @@ export type MovingRequest = {
   mediaUploadToken?: string;
   mediaUrls?: string[];
   createdAt: Timestamp;
-  status?: "pending" | "in-progress" | "completed" | "cancelled";
+  status?: "active" | "closed" | "paused" | "cancelled";
 };
 
 export type Offer = {

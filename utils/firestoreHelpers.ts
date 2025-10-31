@@ -52,3 +52,28 @@ export async function getOffers(requestId: string) {
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
+
+export async function updateRequestStatus(
+  requestId: string,
+  status: "active" | "closed" | "paused" | "cancelled"
+) {
+  const { doc, updateDoc } = await import("firebase/firestore");
+  const requestRef = doc(db, "requests", requestId);
+  await updateDoc(requestRef, {
+    status,
+    updatedAt: serverTimestamp(),
+  });
+}
+
+export async function deleteRequest(requestId: string) {
+  const { doc, deleteDoc, getDocs, collection } = await import("firebase/firestore");
+  
+  // Delete all offers in the subcollection first
+  const offersSnapshot = await getDocs(collection(db, "requests", requestId, "offers"));
+  const deletePromises = offersSnapshot.docs.map((offerDoc) => deleteDoc(offerDoc.ref));
+  await Promise.all(deletePromises);
+  
+  // Delete the request document
+  const requestRef = doc(db, "requests", requestId);
+  await deleteDoc(requestRef);
+}
