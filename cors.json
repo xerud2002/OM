@@ -1,0 +1,13 @@
+[
+  {
+    "origin": [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "https://omro-e5a88.web.app",
+      "https://omro-e5a88.firebaseapp.com"
+    ],
+    "method": ["GET", "POST", "PUT", "DELETE", "HEAD"],
+    "responseHeader": ["Authorization", "Content-Type", "x-goog-resumable"],
+    "maxAgeSeconds": 3600
+  }
+]

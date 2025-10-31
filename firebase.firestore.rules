@@ -5,10 +5,23 @@ service cloud.firestore {
     function isAuthenticated() { return request.auth != null; }
     function isCustomer() { return isAuthenticated() && exists(/databases/$(database)/documents/customers/$(request.auth.uid)); }
     function isCompany() { return isAuthenticated() && exists(/databases/$(database)/documents/companies/$(request.auth.uid)); }
+    function isRequestOwner(reqId) {
+      return isAuthenticated()
+        && get(/databases/$(database)/documents/requests/$(reqId)).data.customerId == request.auth.uid;
+    }
 
     // Customers can manage only their document
     match /customers/{customerId} {
-      allow read, create, update: if isAuthenticated() && request.auth.uid == customerId;
+      // Everyone can read their own customer profile; block cross-user reads
+      allow read: if isAuthenticated() && request.auth.uid == customerId;
+
+      // Prevent dual-role: cannot create customer profile if a company profile exists
+      allow create: if isAuthenticated()
+        && request.auth.uid == customerId
+        && !exists(/databases/$(database)/documents/companies/$(request.auth.uid));
+
+      // Update only own document
+      allow update: if isAuthenticated() && request.auth.uid == customerId;
     }
 
     // Companies
@@ -16,9 +29,13 @@ service cloud.firestore {
       // Public company profiles
       allow read: if true;
 
-      // Company can create/update its own profile, but cannot change rating aggregates
-      allow create, update: if isAuthenticated() && request.auth.uid == companyId
-        && !(request.resource.data.diff(resource.data).changedKeys().hasAny(["averageRating","totalReviews"]));
+      // Company can create its own profile (prevent dual-role if a customer doc already exists)
+      allow create: if isAuthenticated()
+        && request.auth.uid == companyId
+        && !exists(/databases/$(database)/documents/customers/$(request.auth.uid));
+
+      // Update only own profile (optional: protect aggregates if you add them later)
+      allow update: if isAuthenticated() && request.auth.uid == companyId;
 
       // Reviews subcollection
       match /reviews/{reviewId} {
@@ -41,16 +58,30 @@ service cloud.firestore {
           && request.time < resource.data.createdAt + duration.value(24, 'h');
       }
 
-      // Notifications subcollection: server-only creation; company can manage its own
+      // Notifications subcollection
       match /notifications/{notifId} {
+        // Companies can read/manage their own notifications
         allow read, update, delete: if isCompany() && request.auth.uid == companyId;
-        allow create: if false;
+
+        // Allow the owner of a request to create a notification for a company
+        // (used when client actualizează o cerere și vrea să notifice companiile interesate)
+        allow create: if isAuthenticated()
+          && request.resource.data.requestId is string
+          && isRequestOwner(request.resource.data.requestId);
       }
     }
 
     // Requests
     match /requests/{requestId} {
-      allow read: if isAuthenticated();
+      // Customers: can read doar propriile cereri
+      // Companies: pot citi doar cererile active și nearhivate
+      allow read: if (
+          isCustomer() && resource.data.customerId == request.auth.uid
+        ) || (
+          isCompany() && resource.data.archived != true && (
+            resource.data.status == "active" || !("status" in resource.data)
+          )
+        );
 
       // Customers create their own requests
       allow create: if isCustomer() && request.resource.data.customerId == request.auth.uid;
@@ -60,11 +91,25 @@ service cloud.firestore {
 
       // Offers subcollection
       match /offers/{offerId} {
-        allow read: if isAuthenticated();
-        // Companies can create offers for requests; must be pending and owned by the company
+        // Read:
+        // - Customer: poate citi ofertele la cererea proprie
+        // - Company: poate citi doar ofertele proprii
+        allow read: if (
+            isCustomer() && isRequestOwner(requestId)
+          ) || (
+            isCompany() && resource.data.companyId == request.auth.uid
+          );
+
+        // Create: company postează ofertă doar pe cereri active și nearhivate
         allow create: if isCompany()
           && request.resource.data.companyId == request.auth.uid
-          && request.resource.data.status == "pending";
+          && request.resource.data.status == "pending"
+          && get(/databases/$(database)/documents/requests/$(requestId)).data.archived != true
+          && (
+            get(/databases/$(database)/documents/requests/$(requestId)).data.status == "active" ||
+            !("status" in get(/databases/$(database)/documents/requests/$(requestId)).data)
+          );
+
         // Companies can update/delete only their own offers
         allow update, delete: if isCompany() && resource.data.companyId == request.auth.uid;
       }

@@ -1,0 +1,31 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    function isAuthenticated() { return request.auth != null; }
+    
+    // Per-user uploads
+    match /users/{userId}/{allPaths=**} {
+      // User can upload to their own directory (typical for profile pics, etc.)
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+      
+      // Anyone authenticated can read uploads (adjust as needed)
+      allow read: if isAuthenticated();
+    }
+
+    // Media for requests, keyed by request ID and uploader
+    match /requests/{requestId}/customers/{customerId}/{allPaths=**} {
+      // Read: typically anyone with valid upload link or the creator can read from localhost
+      allow read: if isAuthenticated();
+      
+      // Write: customer must be authenticated and must own the media path
+      // Alternatively, check that customerId matches request owner via Firestore (requires call to Firestore in rule)
+      allow write: if isAuthenticated() && request.auth.uid == customerId;
+    }
+
+    // Default deny
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}

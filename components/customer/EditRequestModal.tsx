@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Save, AlertCircle } from "lucide-react";
 import { MovingRequest } from "../../types";
@@ -21,9 +21,9 @@ export default function EditRequestModal({
   const [form, setForm] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Initialize form when modal opens
-  useState(() => {
-    if (request && isOpen && !form) {
+  // Initialize/refresh form values when opening or when request changes
+  useEffect(() => {
+    if (request && isOpen) {
       setForm({
         fromCity: request.fromCity || "",
         fromCounty: request.fromCounty || "",
@@ -63,7 +63,7 @@ export default function EditRequestModal({
         mediaFiles: [],
       });
     }
-  });
+  }, [request, isOpen]);
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,7 +71,42 @@ export default function EditRequestModal({
 
     setIsSaving(true);
     try {
-      await onSave(request.id, form);
+      // Upload new media files if any
+      let newMediaUrls: string[] = [];
+      if (form.mediaFiles && form.mediaFiles.length > 0) {
+        const { ref, uploadBytesResumable, getDownloadURL } = await import("firebase/storage");
+        const { storage } = await import("@/services/firebase");
+        
+        const uploadPromises = (Array.from(form.mediaFiles) as File[]).map(async (file) => {
+          const storageRef = ref(
+            storage,
+            `requests/${request.id}/customers/${request.customerId}/${Date.now()}_${file.name}`
+          );
+          const uploadTask = uploadBytesResumable(storageRef, file);
+          
+          return new Promise<string>((resolve, reject) => {
+            uploadTask.on(
+              "state_changed",
+              null,
+              reject,
+              async () => {
+                const url = await getDownloadURL(uploadTask.snapshot.ref);
+                resolve(url);
+              }
+            );
+          });
+        });
+
+        newMediaUrls = await Promise.all(uploadPromises);
+      }
+
+      // Merge new URLs with existing ones
+      const updatedData = {
+        ...form,
+        mediaUrls: [...(request.mediaUrls || []), ...newMediaUrls],
+      };
+
+      await onSave(request.id, updatedData);
       onClose();
     } catch (error) {
       console.error("Failed to save changes:", error);
@@ -92,11 +127,11 @@ export default function EditRequestModal({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[100] bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[120] bg-black/50 backdrop-blur-sm"
           />
 
           {/* Modal */}
-          <div className="fixed inset-0 z-[101] flex items-center justify-center p-4">
+          <div className="fixed inset-0 z-[121] flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -136,14 +171,23 @@ export default function EditRequestModal({
 
               {/* Content */}
               <div className="max-h-[calc(90vh-220px)] overflow-y-auto p-6">
-                <RequestForm
-                  form={form}
-                  setForm={setForm}
-                  onSubmit={handleSave}
-                  onReset={() => {
-                    onClose();
-                  }}
-                />
+                {isSaving && form.mediaFiles && form.mediaFiles.length > 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12">
+                    <div className="h-16 w-16 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                    <p className="mt-4 text-sm text-gray-600">
+                      Se încarcă fișierele ({form.mediaFiles.length})...
+                    </p>
+                  </div>
+                ) : (
+                  <RequestForm
+                    form={form}
+                    setForm={setForm}
+                    onSubmit={handleSave}
+                    onReset={() => {
+                      onClose();
+                    }}
+                  />
+                )}
               </div>
 
               {/* Footer - only shown if not using form buttons */}

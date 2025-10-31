@@ -92,6 +92,7 @@ export async function updateRequest(requestId: string, data: any) {
   const { doc, updateDoc, getDocs, collection, addDoc } = await import("firebase/firestore");
   
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
+  // Note: mediaUrls is allowed (it's an array of strings/URLs)
   const excludeFields = ['mediaFiles', 'contactName', 'contactFirstName', 'contactLastName', 'moveDateMode', 'moveDateStart', 'moveDateEnd', 'moveDateFlexDays', 'mediaUpload'];
   const clean: Record<string, any> = Object.fromEntries(
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
