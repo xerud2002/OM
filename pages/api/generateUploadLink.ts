@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes } from "crypto";
 import { adminDb } from "@/lib/firebaseAdmin";
-import { FieldValue } from "firebase-admin/firestore";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -30,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       customerEmail,
       customerName,
       uploadLink,
-      createdAt: FieldValue.serverTimestamp(),
+  createdAt: new Date().toISOString(),
       expiresAt: expiresAt.toISOString(),
       used: false,
       uploadedAt: null,
