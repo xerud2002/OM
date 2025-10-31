@@ -35,6 +35,7 @@ type FormShape = {
   moveDateStart?: string;
   moveDateEnd?: string;
   moveDateFlexDays?: number;
+  contactName?: string;
 };
 
 type Props = {
@@ -1037,7 +1038,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Date & Contact */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-700">Data mutării</label>
             {/* Mode selector */}
@@ -1078,7 +1079,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
             {/* Inputs per mode */}
             {((form as any).moveDateMode ?? "exact") === "exact" && (
-              <div className="rounded-lg border border-gray-200 bg-white p-2">
+              <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-3 shadow-sm">
                 <DayPicker
                   mode="single"
                   selected={parseYMD(form.moveDate)}
@@ -1090,13 +1091,29 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       moveDateEnd: "",
                     }))
                   }
+                  weekStartsOn={1}
+                  showOutsideDays
                   numberOfMonths={1}
+                  className="rdp"
+                  classNames={{
+                    months: "flex",
+                    month: "w-full",
+                    caption: "flex items-center justify-between mb-2",
+                    nav: "flex items-center gap-2",
+                    table: "w-full border-collapse",
+                    head_row: "grid grid-cols-7 text-[11px] text-gray-500",
+                    row: "grid grid-cols-7",
+                    day: "h-10 w-10 grid place-items-center rounded-md text-sm hover:bg-emerald-50",
+                    day_selected: "bg-emerald-600 text-white hover:bg-emerald-600",
+                    day_today: "ring-2 ring-emerald-400",
+                    day_outside: "text-gray-300",
+                  }}
                 />
               </div>
             )}
 
             {((form as any).moveDateMode ?? "exact") === "range" && (
-              <div className="rounded-lg border border-gray-200 bg-white p-2">
+              <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-3 shadow-sm">
                 <DayPicker
                   mode="range"
                   selected={{
@@ -1111,7 +1128,26 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       moveDate: range?.from ? formatYMD(range.from) : "",
                     }))
                   }
+                  weekStartsOn={1}
+                  showOutsideDays
                   numberOfMonths={2}
+                  className="rdp"
+                  classNames={{
+                    months: "flex gap-4",
+                    month: "w-full",
+                    caption: "flex items-center justify-between mb-2",
+                    nav: "flex items-center gap-2",
+                    table: "w-full border-collapse",
+                    head_row: "grid grid-cols-7 text-[11px] text-gray-500",
+                    row: "grid grid-cols-7",
+                    day: "h-10 w-10 grid place-items-center rounded-md text-sm hover:bg-emerald-50",
+                    day_selected: "bg-emerald-600 text-white hover:bg-emerald-600",
+                    day_today: "ring-2 ring-emerald-400",
+                    day_outside: "text-gray-300",
+                    day_range_start: "bg-emerald-600 text-white",
+                    day_range_end: "bg-emerald-600 text-white",
+                    day_range_middle: "bg-emerald-100",
+                  }}
                 />
               </div>
             )}
@@ -1123,8 +1159,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             )}
 
             {((form as any).moveDateMode ?? "exact") === "flexible" && (
-              <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-lg border border-gray-200 bg-white p-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-3 shadow-sm">
                   <DayPicker
                     mode="single"
                     selected={parseYMD(form.moveDate)}
@@ -1135,7 +1171,23 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         moveDateStart: date ? formatYMD(date) : "",
                       }))
                     }
+                    weekStartsOn={1}
+                    showOutsideDays
                     numberOfMonths={1}
+                    className="rdp"
+                    classNames={{
+                      months: "flex",
+                      month: "w-full",
+                      caption: "flex items-center justify-between mb-2",
+                      nav: "flex items-center gap-2",
+                      table: "w-full border-collapse",
+                      head_row: "grid grid-cols-7 text-[11px] text-gray-500",
+                      row: "grid grid-cols-7",
+                      day: "h-10 w-10 grid place-items-center rounded-md text-sm hover:bg-emerald-50",
+                      day_selected: "bg-emerald-600 text-white hover:bg-emerald-600",
+                      day_today: "ring-2 ring-emerald-400",
+                      day_outside: "text-gray-300",
+                    }}
                   />
                 </div>
                 <div>
@@ -1160,15 +1212,28 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             )}
           </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Telefon</label>
-            <input
-              required
-              value={form.phone || ""}
-              onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-              placeholder="07xx xxx xxx"
-            />
+          {/* Contact under calendar */}
+          <div className="mt-1 grid grid-cols-1 gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-700">
+                Nume și prenume
+              </label>
+              <input
+                value={(form as any).contactName || ""}
+                onChange={(e) => setForm((s: any) => ({ ...s, contactName: e.target.value }))}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                placeholder="Ex: Popescu Andrei"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-700">Telefon</label>
+              <input
+                value={form.phone || ""}
+                onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                placeholder="07xx xxx xxx"
+              />
+            </div>
           </div>
         </div>
 
