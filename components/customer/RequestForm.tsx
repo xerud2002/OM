@@ -1,5 +1,6 @@
 import React from "react";
 import { DayPicker } from "react-day-picker";
+import { ro } from "date-fns/locale";
 import counties from "@/counties";
 import cities from "@/cities";
 
@@ -50,6 +51,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
     county && (cities as any)[county] ? (cities as any)[county] : [];
 
   // Date helpers
+  const today = React.useMemo(() => {
+    const n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  }, []);
   const formatYMD = (d: Date) => {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -1163,6 +1168,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         moveDateEnd: "",
                       }))
                     }
+                    locale={ro}
+                    fromDate={today}
                     weekStartsOn={1}
                     showOutsideDays
                     numberOfMonths={1}
@@ -1210,6 +1217,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         moveDate: range?.from ? formatYMD(range.from) : "",
                       }))
                     }
+                    locale={ro}
+                    fromDate={today}
                     weekStartsOn={1}
                     showOutsideDays
                     numberOfMonths={2}
@@ -1280,6 +1289,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           moveDateStart: date ? formatYMD(date) : "",
                         }))
                       }
+                      locale={ro}
+                      fromDate={today}
                       weekStartsOn={1}
                       showOutsideDays
                       numberOfMonths={1}
