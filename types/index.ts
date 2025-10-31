@@ -82,6 +82,7 @@ export type MovingRequest = {
   mediaUrls?: string[];
   createdAt: Timestamp;
   status?: "active" | "closed" | "paused" | "cancelled";
+  archived?: boolean;
 };
 
 export type Offer = {

@@ -77,3 +77,12 @@ export async function deleteRequest(requestId: string) {
   const requestRef = doc(db, "requests", requestId);
   await deleteDoc(requestRef);
 }
+
+export async function archiveRequest(requestId: string) {
+  const { doc, updateDoc } = await import("firebase/firestore");
+  const requestRef = doc(db, "requests", requestId);
+  await updateDoc(requestRef, {
+    archived: true,
+    updatedAt: serverTimestamp(),
+  });
+}

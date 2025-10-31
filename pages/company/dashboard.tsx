@@ -17,6 +17,7 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
+import { formatDateRO } from "@/utils/date";
 
 export default function CompanyDashboard() {
   const [company, setCompany] = useState<any>(null);
@@ -591,7 +592,7 @@ export default function CompanyDashboard() {
                         {requestDetails.fromCity} → {requestDetails.toCity}
                       </p>
                       <p className="text-sm text-gray-600">
-                        Data mutării: {requestDetails.moveDate || "-"}
+                        Data mutării: {requestDetails.moveDate ? formatDateRO(requestDetails.moveDate) : "-"}
                       </p>
                       <p className="mt-1 text-sm text-gray-600">
                         Detalii: {requestDetails.details || "—"}

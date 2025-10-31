@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { addOffer } from "@/utils/firestoreHelpers";
+import { formatDateRO } from "@/utils/date";
 import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 
@@ -318,9 +319,20 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   }, [companyFromParent]);
 
   useEffect(() => {
-    const q = query(collection(db, "requests"), orderBy("createdAt", "desc"), limit(PAGE_SIZE));
+    const q = query(
+      collection(db, "requests"),
+      orderBy("createdAt", "desc"),
+      limit(PAGE_SIZE)
+    );
     const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as MovingRequest);
+      const list = snapshot.docs
+  .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
+        .filter((req) => {
+          // Only show active (or undefined status) and non-archived requests
+          const isActive = !req.status || req.status === "active";
+          const notArchived = !req.archived;
+          return isActive && notArchived;
+        });
       setFirstPage(list);
       setLoading(false);
       const last = snapshot.docs[snapshot.docs.length - 1] || null;
@@ -346,7 +358,13 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         limit(PAGE_SIZE)
       );
       const snap = await getDocs(q2);
-      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as MovingRequest[];
+      const list = snap.docs
+        .map((d) => ({ id: d.id, ...d.data() }) as any)
+        .filter((req: any) => {
+          const isActive = !req.status || req.status === "active";
+          const notArchived = !req.archived;
+          return isActive && notArchived;
+        });
       setExtra((prev) => {
         const seen = new Set(prev.map((p) => p.id).concat(firstPage.map((p) => p.id)));
         return [...prev, ...list.filter((x) => !seen.has(x.id))];
@@ -466,7 +484,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
-                  <p className="text-sm text-gray-500">Mutare: {r.moveDate || "-"}</p>
+                  <p className="text-sm text-gray-500">Mutare: {r.moveDate ? formatDateRO(r.moveDate) : "-"}</p>
                   <p className="mt-2 text-sm text-gray-600">{r.details}</p>
                 </div>
 

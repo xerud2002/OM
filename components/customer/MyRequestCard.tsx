@@ -7,11 +7,12 @@ import {
   MoreVertical,
   CheckCircle2,
   PauseCircle,
-  Trash2,
+  Archive,
   XCircle,
   Eye,
 } from "lucide-react";
 import { MovingRequest } from "../../types";
+import { formatDateRO } from "@/utils/date";
 
 type MyRequestCardProps = {
   request: MovingRequest;
@@ -19,7 +20,7 @@ type MyRequestCardProps = {
   // eslint-disable-next-line no-unused-vars
   onStatusChange: (requestId: string, newStatus: "active" | "closed" | "paused") => void;
   // eslint-disable-next-line no-unused-vars
-  onDelete: (requestId: string) => void;
+  onArchive: (requestId: string) => void;
   // eslint-disable-next-line no-unused-vars
   onViewDetails: (requestId: string) => void;
 };
@@ -28,7 +29,7 @@ export default function MyRequestCard({
   request,
   offersCount,
   onStatusChange,
-  onDelete,
+  onArchive,
   onViewDetails,
 }: MyRequestCardProps) {
   const [showMenu, setShowMenu] = useState(false);
@@ -129,7 +130,7 @@ export default function MyRequestCard({
               {request.moveDate && (
                 <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700">
                   <Calendar size={14} />
-                  {request.moveDate}
+                  {formatDateRO(request.moveDate)}
                 </span>
               )}
 
@@ -195,12 +196,15 @@ export default function MyRequestCard({
 
             {/* Menu dropdown */}
             <div className="relative z-30">
-              <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="rounded-lg p-2 transition-colors hover:bg-gray-100"
-              >
-                <MoreVertical size={20} className="text-gray-600" />
-              </button>
+              {/* Only show menu for active requests */}
+              {status === "active" && (
+                <button
+                  onClick={() => setShowMenu(!showMenu)}
+                  className="rounded-lg p-2 transition-colors hover:bg-gray-100"
+                >
+                  <MoreVertical size={20} className="text-gray-600" />
+                </button>
+              )}
 
               <AnimatePresence>
                 {showMenu && (
@@ -259,37 +263,24 @@ export default function MyRequestCard({
                           </>
                         )}
 
-                        {(status === "closed" || status === "paused") && (
-                          <button
-                            onClick={() => {
-                              onStatusChange(request.id, "active");
-                              setShowMenu(false);
-                            }}
-                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
-                          >
-                            <CheckCircle2 size={16} />
-                            Reactivează cererea
-                          </button>
-                        )}
-
                         <div className="my-1 h-px bg-gray-100" />
 
-                        {/* Delete */}
+                        {/* Archive */}
                         <button
                           onClick={() => {
                             if (
                               confirm(
-                                "Sigur vrei să ștergi această cerere? Această acțiune este permanentă."
+                                "Sigur vrei să arhivezi această cerere? O vei putea vedea în secțiunea Arhivă."
                               )
                             ) {
-                              onDelete(request.id);
+                              onArchive(request.id);
                               setShowMenu(false);
                             }
                           }}
-                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-red-600 transition-colors hover:bg-red-50"
+                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
                         >
-                          <Trash2 size={16} />
-                          Șterge cererea
+                          <Archive size={16} />
+                          Arhivează cererea
                         </button>
                       </div>
                     </motion.div>

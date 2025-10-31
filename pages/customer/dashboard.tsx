@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { PlusSquare, List, Inbox } from "lucide-react";
+import { formatDateRO } from "@/utils/date";
 import { sendEmail } from "@/utils/emailHelpers";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
@@ -16,7 +17,7 @@ import MyRequestCard from "@/components/customer/MyRequestCard";
 import { MessageSquare } from "lucide-react";
 import { auth } from "@/services/firebase";
 import { toast } from "sonner";
-import { updateRequestStatus, deleteRequest } from "@/utils/firestoreHelpers";
+import { updateRequestStatus, archiveRequest } from "@/utils/firestoreHelpers";
 
 type Request = {
   id: string;
@@ -183,7 +184,9 @@ export default function CustomerDashboard() {
         orderBy("createdAt", "desc")
       );
       const unsub = onSnapshot(q, (snap) => {
-        const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+        const docs = snap.docs
+          .map((d) => ({ id: d.id, ...(d.data() as any) }))
+          .filter((doc) => !doc.archived); // Exclude archived requests
         setRequests(docs);
         setLoading(false);
       });
@@ -542,13 +545,13 @@ export default function CustomerDashboard() {
                             toast.error("Nu s-a putut actualiza statusul cererii");
                           }
                         }}
-                        onDelete={async (requestId) => {
+                        onArchive={async (requestId) => {
                           try {
-                            await deleteRequest(requestId);
-                            toast.success("Cererea a fost ștearsă");
+                            await archiveRequest(requestId);
+                            toast.success("Cererea a fost arhivată");
                           } catch (error) {
-                            console.error("Error deleting request:", error);
-                            toast.error("Nu s-a putut șterge cererea");
+                            console.error("Error archiving request:", error);
+                            toast.error("Nu s-a putut arhiva cererea");
                           }
                         }}
                         onViewDetails={(requestId) => {
@@ -616,7 +619,7 @@ export default function CustomerDashboard() {
                                     {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                                   </p>
                                   <p className="mt-0.5 text-xs text-gray-500">
-                                    {r.moveDate || "fără dată"}
+                                    {r.moveDate ? formatDateRO(r.moveDate) : "fără dată"}
                                   </p>
                                 </div>
                                 <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
@@ -772,11 +775,11 @@ function OfferRow({
         <div className="flex-1">
           <p className="text-sm font-semibold text-gray-900">{offer.companyName}</p>
           {offer.message && <p className="mt-1 text-sm text-gray-600">{offer.message}</p>}
-          {offer.createdAt?.toDate && (
-            <p className="mt-1 text-xs text-gray-400">
-              {offer.createdAt.toDate().toLocaleDateString()}
-            </p>
-          )}
+            {offer.createdAt?.toDate && (
+              <p className="mt-1 text-xs text-gray-400">
+                {formatDateRO(offer.createdAt)}
+              </p>
+            )}
         </div>
         <div className="flex items-center gap-3">
           <p className="text-2xl font-bold text-emerald-600">{offer.price} lei</p>
