@@ -2,6 +2,7 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import "../globals.css";
+import "react-day-picker/dist/style.css";
 
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";

@@ -1,4 +1,5 @@
 import React from "react";
+import { DayPicker } from "react-day-picker";
 import counties from "@/counties";
 import cities from "@/cities";
 
@@ -29,6 +30,11 @@ type FormShape = {
   surveyType?: "in-person" | "video" | "quick-estimate";
   mediaUpload?: "now" | "later";
   mediaFiles?: File[];
+  // Enhanced date fields
+  moveDateMode?: "exact" | "range" | "none" | "flexible";
+  moveDateStart?: string;
+  moveDateEnd?: string;
+  moveDateFlexDays?: number;
 };
 
 type Props = {
@@ -41,6 +47,20 @@ type Props = {
 export default function RequestForm({ form, setForm, onSubmit, onReset }: Props) {
   const countyCities = (county?: string) =>
     county && (cities as any)[county] ? (cities as any)[county] : [];
+
+  // Date helpers
+  const formatYMD = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+  const parseYMD = (s?: string) => {
+    if (!s) return undefined as unknown as Date | undefined;
+    const [y, m, d] = s.split("-").map((x) => parseInt(x, 10));
+    if (!y || !m || !d) return undefined as unknown as Date | undefined;
+    return new Date(y, m - 1, d);
+  };
 
   // Media upload helpers
   const fileInputRef = React.useRef<HTMLInputElement>(null);
@@ -1020,13 +1040,125 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-700">Data mutării</label>
-            <input
-              type="date"
-              required
-              value={form.moveDate || ""}
-              onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-            />
+            {/* Mode selector */}
+            {(() => {
+              const dateModes = [
+                { key: "exact" as const, label: "Exactă" },
+                { key: "range" as const, label: "Interval" },
+                { key: "none" as const, label: "Nu știu încă" },
+                { key: "flexible" as const, label: "Flexibilă" },
+              ];
+              return (
+                <div className="mb-2 inline-flex rounded-lg border border-gray-200 bg-white p-1 text-xs">
+                  {dateModes.map(({ key, label }) => (
+                    <button
+                      key={key}
+                      type="button"
+                      onClick={() =>
+                        setForm((s) => ({
+                          ...s,
+                          moveDateMode: key,
+                          // Keep moveDate in sync for downstream filters/exports
+                          ...(key === "none" ? { moveDate: "" } : {}),
+                        }))
+                      }
+                      className={`rounded-md px-3 py-1 transition ${
+                        (form as any).moveDateMode === key ||
+                        (!(form as any).moveDateMode && key === "exact")
+                          ? "bg-emerald-600 text-white"
+                          : "text-gray-700 hover:bg-gray-50"
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              );
+            })()}
+
+            {/* Inputs per mode */}
+            {((form as any).moveDateMode ?? "exact") === "exact" && (
+              <div className="rounded-lg border border-gray-200 bg-white p-2">
+                <DayPicker
+                  mode="single"
+                  selected={parseYMD(form.moveDate)}
+                  onSelect={(date) =>
+                    setForm((s) => ({
+                      ...s,
+                      moveDate: date ? formatYMD(date) : "",
+                      moveDateStart: date ? formatYMD(date) : "",
+                      moveDateEnd: "",
+                    }))
+                  }
+                  numberOfMonths={1}
+                />
+              </div>
+            )}
+
+            {((form as any).moveDateMode ?? "exact") === "range" && (
+              <div className="rounded-lg border border-gray-200 bg-white p-2">
+                <DayPicker
+                  mode="range"
+                  selected={{
+                    from: parseYMD((form as any).moveDateStart),
+                    to: parseYMD((form as any).moveDateEnd),
+                  }}
+                  onSelect={(range) =>
+                    setForm((s: any) => ({
+                      ...s,
+                      moveDateStart: range?.from ? formatYMD(range.from) : "",
+                      moveDateEnd: range?.to ? formatYMD(range.to) : "",
+                      moveDate: range?.from ? formatYMD(range.from) : "",
+                    }))
+                  }
+                  numberOfMonths={2}
+                />
+              </div>
+            )}
+
+            {((form as any).moveDateMode ?? "exact") === "none" && (
+              <p className="text-xs text-gray-600">
+                Nu ai data stabilită. Poți continua fără dată.
+              </p>
+            )}
+
+            {((form as any).moveDateMode ?? "exact") === "flexible" && (
+              <div className="grid grid-cols-2 gap-2">
+                <div className="rounded-lg border border-gray-200 bg-white p-2">
+                  <DayPicker
+                    mode="single"
+                    selected={parseYMD(form.moveDate)}
+                    onSelect={(date) =>
+                      setForm((s: any) => ({
+                        ...s,
+                        moveDate: date ? formatYMD(date) : "",
+                        moveDateStart: date ? formatYMD(date) : "",
+                      }))
+                    }
+                    numberOfMonths={1}
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-[10px] font-medium text-gray-500">
+                    Flexibilitate
+                  </label>
+                  <select
+                    value={(form as any).moveDateFlexDays ?? 3}
+                    onChange={(e) =>
+                      setForm((s: any) => ({
+                        ...s,
+                        moveDateFlexDays: Number(e.target.value),
+                      }))
+                    }
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  >
+                    <option value={3}>±3 zile</option>
+                    <option value={7}>±7 zile</option>
+                    <option value={14}>±14 zile</option>
+                  </select>
+                </div>
+              </div>
+            )}
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-700">Telefon</label>
