@@ -98,7 +98,20 @@ export default function CustomerDashboard() {
     () => Object.values(offersByRequest).flat().length,
     [offersByRequest]
   );
-  const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
+  // Aggregated no longer needed for UI; keep if future export requires it
+  // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+
+  // Choose a default selected request for the Oferte tab (the first with offers, else first request)
+  useEffect(() => {
+    if (requests.length === 0) {
+      setSelectedRequestId(null);
+      return;
+    }
+    // prefer a request that has offers
+    const withOffers = requests.find((r) => (offersByRequest[r.id] || []).length > 0)?.id;
+    setSelectedRequestId((prev) => prev || withOffers || requests[0].id);
+  }, [requests, offersByRequest]);
 
   // Handlers to accept/decline from aggregated view
   const acceptFromAggregated = async (requestId: string, offerId: string) => {
@@ -644,64 +657,165 @@ export default function CustomerDashboard() {
           )}
 
           {activeTab === "offers" && (
-            <div className="space-y-6">
-              {aggregatedOffers.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
-                >
-                  <div className="rounded-full bg-sky-100 p-4">
+            <div className="rounded-2xl border border-gray-100 bg-white p-0 shadow-sm">
+              {requests.length === 0 ? (
+                <div className="p-10 text-center">
+                  <div className="mx-auto mb-3 w-fit rounded-full bg-sky-100 p-4">
                     <Inbox size={32} className="text-sky-600" />
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900">Nicio ofertă primită</h3>
-                  <p className="mt-2 max-w-sm text-sm text-gray-500">
-                    Ofertele vor apărea aici după ce firmele de mutări vor răspunde la cererile tale
+                  <h3 className="text-lg font-semibold text-gray-900">Nu ai încă cereri</h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Creează o cerere pentru a primi oferte.
                   </p>
-                </motion.div>
+                </div>
               ) : (
-                <>
-                  <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 text-lg font-semibold text-gray-900">Toate ofertele</h3>
-                    <div className="space-y-3">
-                      {aggregatedOffers.map((o, index) => (
-                        <motion.div
-                          key={o.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="flex items-center justify-between rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50 to-white p-4 transition-all hover:shadow-md"
-                        >
-                          <div className="flex-1">
-                            <p className="font-semibold text-gray-900">{o.companyName}</p>
-                            {o.message && <p className="mt-1 text-sm text-gray-500">{o.message}</p>}
-                          </div>
-                          <div className="text-right">
-                            <p className="text-2xl font-bold text-emerald-600">{o.price} lei</p>
-                          </div>
-                        </motion.div>
-                      ))}
+                <div className="grid grid-cols-1 gap-0 sm:grid-cols-[300px,1fr]">
+                  {/* Sidebar: requests list */}
+                  <aside className="border-b border-gray-100 sm:border-b-0 sm:border-r">
+                    <div className="sticky top-[80px] max-h-[calc(100vh-120px)] overflow-auto p-4">
+                      <h3 className="mb-3 text-sm font-semibold text-gray-800">Cererile mele</h3>
+                      <div className="space-y-2">
+                        {requests.map((r) => {
+                          const cnt = (offersByRequest[r.id] || []).length;
+                          const active = selectedRequestId === r.id;
+                          return (
+                            <button
+                              key={r.id}
+                              onClick={() => setSelectedRequestId(r.id)}
+                              className={`w-full rounded-xl border px-4 py-3 text-left transition-all ${
+                                active
+                                  ? "border-emerald-300 bg-emerald-50 shadow-sm"
+                                  : "border-gray-200 bg-white hover:bg-gray-50"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between gap-3">
+                                <div className="min-w-0">
+                                  <p className="truncate text-sm font-semibold text-gray-900">
+                                    {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
+                                  </p>
+                                  <p className="mt-0.5 text-xs text-gray-500">
+                                    {r.moveDate || "fără dată"}
+                                  </p>
+                                </div>
+                                <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                                  {cnt}
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
-                  </div>
+                  </aside>
 
-                  <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 text-lg font-semibold text-gray-900">Compară oferte</h3>
-                    <OfferComparison
-                      offers={(aggregatedOffers as any[]).map((o) => ({
-                        id: o.id,
-                        requestId: (o as any).requestId,
-                        companyName: (o as any).companyName,
-                        price: (o as any).price,
-                        message: (o as any).message,
-                        status: (o as any).status,
-                        createdAt: (o as any).createdAt,
-                        favorite: false,
-                      }))}
-                      onAccept={acceptFromAggregated}
-                      onDecline={declineFromAggregated}
-                    />
-                  </div>
-                </>
+                  {/* Main: offers for selected request */}
+                  <main className="p-4 sm:p-6">
+                    {!selectedRequestId ? (
+                      <div className="py-10 text-center text-sm text-gray-500">
+                        Selectează o cerere din stânga pentru a vedea ofertele.
+                      </div>
+                    ) : (
+                      <>
+                        <div className="mb-4 flex items-center justify-between">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Oferte primite</h3>
+                            <p className="text-sm text-gray-500">
+                              Relevante pentru cererea selectată
+                            </p>
+                          </div>
+                        </div>
+
+                        {!(offersByRequest[selectedRequestId] || []).length ? (
+                          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-10 text-center">
+                            <div className="rounded-full bg-sky-100 p-4">
+                              <Inbox size={32} className="text-sky-600" />
+                            </div>
+                            <h4 className="mt-3 text-base font-semibold text-gray-900">
+                              Nicio ofertă încă
+                            </h4>
+                            <p className="mt-1 max-w-sm text-sm text-gray-500">
+                              Firmele vor trimite oferte aici după ce procesează cererea ta.
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {(offersByRequest[selectedRequestId] || []).map(
+                              (o: any, index: number) => (
+                                <motion.div
+                                  key={o.id}
+                                  initial={{ opacity: 0, y: 10 }}
+                                  animate={{ opacity: 1, y: 0 }}
+                                  transition={{ delay: index * 0.04 }}
+                                  className="flex flex-col items-start justify-between gap-3 rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 p-4 sm:flex-row sm:items-center"
+                                >
+                                  <div className="flex-1">
+                                    <p className="text-sm font-semibold text-gray-900">
+                                      {o.companyName}
+                                    </p>
+                                    {o.message && (
+                                      <p className="mt-1 text-sm text-gray-600">{o.message}</p>
+                                    )}
+                                    {o.createdAt?.toDate && (
+                                      <p className="mt-1 text-xs text-gray-400">
+                                        {o.createdAt.toDate().toLocaleDateString()}
+                                      </p>
+                                    )}
+                                  </div>
+                                  <div className="flex items-center gap-3">
+                                    <p className="text-2xl font-bold text-emerald-600">
+                                      {o.price} lei
+                                    </p>
+                                    <div className="flex gap-2">
+                                      <button
+                                        onClick={() =>
+                                          acceptFromAggregated(selectedRequestId, o.id)
+                                        }
+                                        className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                                      >
+                                        Acceptă
+                                      </button>
+                                      <button
+                                        onClick={() =>
+                                          declineFromAggregated(selectedRequestId, o.id)
+                                        }
+                                        className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                                      >
+                                        Refuză
+                                      </button>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              )
+                            )}
+                          </div>
+                        )}
+
+                        {/* Comparison for selected request only */}
+                        {(offersByRequest[selectedRequestId] || []).length > 1 && (
+                          <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                              Compară oferte
+                            </h3>
+                            <OfferComparison
+                              offers={(offersByRequest[selectedRequestId] as any[]).map((o) => ({
+                                id: o.id,
+                                requestId: selectedRequestId,
+                                companyName: (o as any).companyName,
+                                price: (o as any).price,
+                                message: (o as any).message,
+                                status: (o as any).status,
+                                createdAt: (o as any).createdAt,
+                                favorite: false,
+                              }))}
+                              onAccept={acceptFromAggregated}
+                              onDecline={declineFromAggregated}
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </main>
+                </div>
               )}
             </div>
           )}

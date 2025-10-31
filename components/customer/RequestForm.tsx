@@ -1192,9 +1192,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
                       row: "grid grid-cols-7 gap-1 mb-1",
                       cell: "text-center",
-                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                       day_selected:
-                        "bg-gradient-to-br from-sky-600 to-sky-700 text-white font-bold shadow-lg ring-4 ring-sky-500 ring-offset-2 ring-offset-white hover:from-sky-700 hover:to-sky-800",
+                        "bg-emerald-700 text-white font-bold shadow-sm border border-emerald-800",
                       day_today: "font-medium text-gray-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_disabled: "text-gray-300 opacity-30 cursor-not-allowed",
@@ -1226,8 +1226,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     numberOfMonths={2}
                     className="rdp mx-auto"
                     classNames={{
-                      months: "flex gap-6 justify-center flex-wrap",
-                      month: "w-full max-w-sm",
+                      months: "flex gap-6 justify-center sm:flex-nowrap flex-wrap",
+                      month: "min-w-[18rem]",
                       caption: "flex items-center justify-between mb-4 px-2",
                       caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
                       nav: "flex items-center gap-2",
@@ -1239,17 +1239,16 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
                       row: "grid grid-cols-7 gap-1 mb-1",
                       cell: "text-center",
-                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                       day_selected:
-                        "bg-gradient-to-br from-sky-600 to-sky-700 text-white font-bold shadow-lg ring-4 ring-sky-500 ring-offset-2 ring-offset-white hover:from-sky-700 hover:to-sky-800",
+                        "bg-emerald-700 text-white font-bold shadow-sm border border-emerald-800",
                       day_today: "font-medium text-gray-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_range_start:
-                        "bg-gradient-to-br from-sky-600 to-sky-700 text-white font-bold rounded-l-xl ring-4 ring-sky-500 ring-offset-2 ring-offset-white",
+                        "bg-emerald-700 text-white font-bold rounded-l-xl border border-emerald-800",
                       day_range_end:
-                        "bg-gradient-to-br from-sky-600 to-sky-700 text-white font-bold rounded-r-xl ring-4 ring-sky-500 ring-offset-2 ring-offset-white",
-                      day_range_middle:
-                        "bg-sky-200 text-sky-900 rounded-none ring-2 ring-sky-300 ring-offset-2 ring-offset-white",
+                        "bg-emerald-700 text-white font-bold rounded-r-xl border border-emerald-800",
+                      day_range_middle: "bg-emerald-700 text-white rounded-none",
                     }}
                   />
                 </div>
@@ -1312,9 +1311,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
                         row: "grid grid-cols-7 gap-1 mb-1",
                         cell: "text-center",
-                        day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                        day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
                         day_selected:
-                          "bg-gradient-to-br from-sky-600 to-sky-700 text-white font-bold shadow-lg ring-4 ring-sky-500 ring-offset-2 ring-offset-white hover:from-sky-700 hover:to-sky-800",
+                          "bg-emerald-700 text-white font-bold shadow-sm border border-emerald-800",
                         day_today: "font-medium text-gray-700",
                         day_outside: "text-gray-400 opacity-50",
                       }}
