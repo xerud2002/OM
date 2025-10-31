@@ -21,15 +21,12 @@ type FormShape = {
   rooms?: string | number;
   phone?: string;
   details?: string;
-  // Services
   serviceMoving?: boolean;
   servicePacking?: boolean;
   serviceDisassembly?: boolean;
   serviceCleanout?: boolean;
   serviceStorage?: boolean;
-  // Survey & Estimate
   surveyType?: "in-person" | "video" | "quick-estimate";
-  // Media upload
   mediaUpload?: "now" | "later";
   mediaFiles?: File[];
 };
@@ -63,6 +60,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </svg>
         <h3 className="text-xl font-bold text-gray-800">Cerere nouă de mutare</h3>
       </div>
+
       <form onSubmit={onSubmit} className="space-y-6">
         {/* Pickup Location */}
         <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5">
@@ -152,8 +150,6 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               placeholder="Stradă, număr, bloc/scară/apartament"
             />
           </div>
-
-          {/* Property Details - Pickup */}
           <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               <div>
@@ -207,7 +203,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
         </div>
 
-        {/* Destination Location */}
+        {/* Destination */}
         <div className="rounded-xl border border-sky-200 bg-sky-50/50 p-5">
           <div className="mb-4 flex items-center gap-2 border-b border-sky-200 pb-2">
             <svg
@@ -249,11 +245,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 value={form.toCity || ""}
                 onChange={(e) => {
                   const value = e.target.value;
-                  setForm((s) => ({
-                    ...s,
-                    toCity: value,
-                    toCityManual: value === "__other__",
-                  }));
+                  setForm((s) => ({ ...s, toCity: value, toCityManual: value === "__other__" }));
                 }}
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                 disabled={!form.toCounty}
@@ -287,8 +279,6 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               placeholder="Stradă, număr, bloc/scară/apartament"
             />
           </div>
-
-          {/* Property Details - Destination */}
           <div className="mt-4 rounded-lg border border-sky-100 bg-white p-3">
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               <div>
@@ -366,6 +356,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {/* Mutare */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
@@ -408,6 +399,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </svg>
               </div>
             </label>
+            {/* Împachetare */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
@@ -450,6 +442,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </svg>
               </div>
             </label>
+            {/* Demontare */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
@@ -465,12 +458,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     viewBox="0 0 24 24"
                     stroke="currentColor"
                   >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                    />
+                    <path d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -498,6 +486,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </svg>
               </div>
             </label>
+            {/* Debarasare */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
@@ -540,6 +529,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </svg>
               </div>
             </label>
+            {/* Depozitare */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
@@ -585,7 +575,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
         </div>
 
-        {/* Survey & Estimate */}
+        {/* Survey */}
         <div className="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg">
@@ -615,6 +605,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {/* In-person */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
@@ -647,7 +638,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
                 <h5 className="mb-2 font-bold text-gray-900">Survey la fața locului</h5>
                 <p className="text-sm leading-relaxed text-gray-600">
-                  Un reprezentant va veni să evalueze bunurile și să ofere o estimare precisă
+                  Un reprezentant va veni să evalueze bunurile
                 </p>
               </div>
               <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
@@ -666,6 +657,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </svg>
               </div>
             </label>
+            {/* Video */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
@@ -697,9 +689,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   </svg>
                 </div>
                 <h5 className="mb-2 font-bold text-gray-900">Survey video</h5>
-                <p className="text-sm leading-relaxed text-gray-600">
-                  Programare video call pentru evaluare online rapidă și convenabilă
-                </p>
+                <p className="text-sm leading-relaxed text-gray-600">Evaluare online rapidă</p>
               </div>
               <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
                 <svg
@@ -717,6 +707,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </svg>
               </div>
             </label>
+            {/* Quick estimate */}
             <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
@@ -749,7 +740,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
                 <h5 className="mb-2 font-bold text-gray-900">Estimare rapidă</h5>
                 <p className="text-sm leading-relaxed text-gray-600">
-                  Primește oferte estimate bazate pe informațiile furnizate în formular
+                  Ofertă estimativă pe baza informațiilor
                 </p>
               </div>
               <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
@@ -771,62 +762,123 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
         </div>
 
-        {/* Media Upload */}
-        <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-5">
-          <div className="mb-4 flex items-center gap-2 border-b border-blue-200 pb-2">
-            <svg
-              className="h-5 w-5 text-blue-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            <h4 className="text-sm font-semibold text-blue-900">Poze și video</h4>
+        {/* Media (cards) */}
+        <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+              <svg
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Poze și video</h4>
+              <p className="text-xs text-gray-600">Alege cum vrei să trimiți media</p>
+            </div>
           </div>
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              <label className="flex cursor-pointer items-start gap-3 rounded-lg border-2 bg-white p-4 transition hover:border-blue-400 hover:bg-blue-50/30 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+          <div className="space-y-5">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              {/* Upload now */}
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"
                   value="now"
                   checked={form.mediaUpload === "now"}
                   onChange={(e) =>
-                    setForm((s) => ({
-                      ...s,
-                      mediaUpload: e.target.value as "now" | "later",
-                    }))
+                    setForm((s) => ({ ...s, mediaUpload: e.target.value as "now" | "later" }))
                   }
-                  className="mt-0.5 text-blue-600 focus:ring-2 focus:ring-blue-500/20"
+                  className="peer sr-only"
                 />
-                <div className="flex-1">
-                  <p className="font-semibold text-gray-800">Upload acum</p>
+                <div className="p-5">
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 transition-colors group-hover:bg-blue-200 peer-checked:bg-blue-500">
+                    <svg
+                      className="h-6 w-6 text-blue-600 transition-colors peer-checked:text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                      />
+                    </svg>
+                  </div>
+                  <h5 className="mb-1 font-semibold text-gray-900">Upload acum</h5>
                   <p className="text-xs text-gray-600">Încarcă fotografii/video imediat</p>
                 </div>
+                <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
+                  <svg
+                    className="h-4 w-4 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
               </label>
-              <label className="flex cursor-pointer items-start gap-3 rounded-lg border-2 bg-white p-4 transition hover:border-blue-400 hover:bg-blue-50/30 has-[:checked]:border-blue-500 has-[:checked]:bg-blue-50">
+              {/* Upload later */}
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"
                   value="later"
                   checked={form.mediaUpload === "later"}
                   onChange={(e) =>
-                    setForm((s) => ({
-                      ...s,
-                      mediaUpload: e.target.value as "now" | "later",
-                    }))
+                    setForm((s) => ({ ...s, mediaUpload: e.target.value as "now" | "later" }))
                   }
-                  className="mt-0.5 text-blue-600 focus:ring-2 focus:ring-blue-500/20"
+                  className="peer sr-only"
                 />
-                <div className="flex-1">
-                  <p className="font-semibold text-gray-800">Primesc link pe email</p>
+                <div className="p-5">
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 transition-colors group-hover:bg-blue-200 peer-checked:bg-blue-500">
+                    <svg
+                      className="h-6 w-6 text-blue-600 transition-colors peer-checked:text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                      />
+                    </svg>
+                  </div>
+                  <h5 className="mb-1 font-semibold text-gray-900">Primesc link pe email</h5>
                   <p className="text-xs text-gray-600">Vei primi un link pentru upload ulterior</p>
+                </div>
+                <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
+                  <svg
+                    className="h-4 w-4 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
                 </div>
               </label>
             </div>
@@ -837,14 +889,16 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   type="file"
                   multiple
                   accept="image/*,video/*"
-                  onChange={(e) => {
-                    const files = e.target.files ? Array.from(e.target.files) : [];
-                    setForm((s) => ({ ...s, mediaFiles: files }));
-                  }}
+                  onChange={(e) =>
+                    setForm((s) => ({
+                      ...s,
+                      mediaFiles: e.target.files ? Array.from(e.target.files) : [],
+                    }))
+                  }
                   className="hidden"
-                  id="mediaUpload"
+                  id="mediaUploadInput"
                 />
-                <label htmlFor="mediaUpload" className="cursor-pointer">
+                <label htmlFor="mediaUploadInput" className="cursor-pointer">
                   <svg
                     className="mx-auto h-12 w-12 text-blue-400"
                     fill="none"
@@ -905,13 +959,13 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
         </div>
 
-        {/* Date and Contact - on same row */}
+        {/* Date & Contact */}
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-700">Data mutării</label>
             <input
-              required
               type="date"
+              required
               value={form.moveDate || ""}
               onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
               className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
@@ -929,7 +983,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
         </div>
 
-        {/* Additional Info */}
+        {/* Details */}
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-700">
             Detalii suplimentare
