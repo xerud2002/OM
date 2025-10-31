@@ -1,9 +1,13 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star, Check, X } from "lucide-react";
+import StarRating from "@/components/reviews/StarRating";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/services/firebase";
 
 type Offer = {
   id?: string;
+  companyId?: string;
   companyName?: string;
   price?: number;
   message?: string;
@@ -27,6 +31,31 @@ export default function OfferItem({
 }) {
   const [accepting, setAccepting] = useState(false);
   const [declining, setDeclining] = useState(false);
+  const [companyRating, setCompanyRating] = useState<{
+    average: number;
+    total: number;
+  } | null>(null);
+
+  // Fetch company rating if companyId is available
+  useEffect(() => {
+    if (!offer.companyId) return;
+    const fetchRating = async () => {
+      try {
+        const compRef = doc(db, "companies", offer.companyId!);
+        const compSnap = await getDoc(compRef);
+        if (compSnap.exists()) {
+          const data = compSnap.data();
+          setCompanyRating({
+            average: data.averageRating || 0,
+            total: data.totalReviews || 0,
+          });
+        }
+      } catch (err) {
+        console.warn("Failed to fetch company rating", err);
+      }
+    };
+    fetchRating();
+  }, [offer.companyId]);
 
   const handleAccept = async () => {
     if (!onAccept || !offer.id) return;
