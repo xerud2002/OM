@@ -1178,7 +1178,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       months: "flex justify-center",
                       month: "w-full max-w-sm",
                       caption: "flex items-center justify-between mb-4 px-2",
-                      caption_label: "text-sm sm:text-base font-bold text-gray-800",
+                      caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
                       nav: "flex items-center gap-2",
                       nav_button:
                         "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
@@ -1187,7 +1187,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       table: "w-full border-collapse mt-2",
                       head_row: "grid grid-cols-7 gap-1 mb-2",
                       head_cell:
-                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10",
+                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
                       row: "grid grid-cols-7 gap-1 mb-1",
                       cell: "text-center",
                       day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
@@ -1227,14 +1227,14 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       months: "flex gap-6 justify-center flex-wrap",
                       month: "w-full max-w-sm",
                       caption: "flex items-center justify-between mb-4 px-2",
-                      caption_label: "text-sm sm:text-base font-bold text-gray-800",
+                      caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
                       nav: "flex items-center gap-2",
                       nav_button:
                         "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
                       table: "w-full border-collapse mt-2",
                       head_row: "grid grid-cols-7 gap-1 mb-2",
                       head_cell:
-                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10",
+                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
                       row: "grid grid-cols-7 gap-1 mb-1",
                       cell: "text-center",
                       day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
@@ -1300,14 +1300,14 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         months: "flex justify-center",
                         month: "w-full max-w-sm",
                         caption: "flex items-center justify-between mb-4 px-2",
-                        caption_label: "text-sm sm:text-base font-bold text-gray-800",
+                        caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
                         nav: "flex items-center gap-2",
                         nav_button:
                           "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
                         table: "w-full border-collapse mt-2",
                         head_row: "grid grid-cols-7 gap-1 mb-2",
                         head_cell:
-                          "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10",
+                          "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
                         row: "grid grid-cols-7 gap-1 mb-1",
                         cell: "text-center",
                         day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
