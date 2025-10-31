@@ -15,17 +15,10 @@ export default function UrgencyBanner({
   expiresInHours = 24,
 }: UrgencyBannerProps) {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
-  // Defer rendering to client to avoid SSR/CSR mismatch
-  const [hasMounted, setHasMounted] = useState(false);
   const [dismissed, setDismissed] = useState(false);
-
-  useEffect(() => {
-    setHasMounted(true);
-  }, []);
 
   // Start countdown only when visible to user
   useEffect(() => {
-    if (!hasMounted) return;
     const disabledPrefixes = ["/customer", "/company", "/upload"]; // dashboards & upload flow
     const path = typeof window !== "undefined" ? window.location.pathname : "";
     const shouldShow = !disabledPrefixes.some((p) => path.startsWith(p));
@@ -61,10 +54,7 @@ export default function UrgencyBanner({
     updateTimer();
     const interval = setInterval(updateTimer, 1000);
     return () => clearInterval(interval);
-  }, [hasMounted, dismissed, expiresInHours]);
-
-  // Until mounted, render nothing to avoid hydration mismatch
-  if (!hasMounted) return null;
+  }, [dismissed, expiresInHours]);
 
   const disabledPrefixes = ["/customer", "/company", "/upload"]; // dashboards & upload flow
   const path = typeof window !== "undefined" ? window.location.pathname : "";
