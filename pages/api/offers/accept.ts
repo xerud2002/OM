@@ -45,16 +45,69 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const offersSnap = await offersRef.get();
     const batch = adminDb.batch();
 
+    let acceptedOffer: any = null;
+
     for (const docSnap of offersSnap.docs) {
       const ref = offersRef.doc(docSnap.id);
       if (docSnap.id === offerId) {
         batch.set(ref, { status: "accepted" }, { merge: true });
+        acceptedOffer = docSnap.data();
       } else {
         batch.set(ref, { status: "declined" }, { merge: true });
       }
     }
 
+    // Update request status to "accepted" (or "in-progress")
+    batch.set(requestRef, { status: "accepted" }, { merge: true });
+
     await batch.commit();
+
+    // Send email notification to company (best-effort, non-blocking)
+    if (acceptedOffer?.companyId) {
+      try {
+        const companyRef = adminDb.doc(`companies/${acceptedOffer.companyId}`);
+        const companySnap = await companyRef.get();
+        if (companySnap.exists) {
+          const companyData = companySnap.data();
+          const companyEmail = companyData?.email;
+          if (companyEmail) {
+            const route = `${requestData.fromCity || ""} → ${requestData.toCity || ""}`;
+            const subject = `Oferta ta a fost acceptată`;
+            const html = `
+              <div style="font-family:Arial,sans-serif;line-height:1.5;color:#111">
+                <h2>Oferta ta a fost acceptată</h2>
+                <p>Bună, <strong>${companyData.companyName || "Partener"}</strong>!</p>
+                <p>O ofertă de mutare ți-a fost acceptată${requestData.customerName ? ` de <strong>${requestData.customerName}</strong>` : ""}.</p>
+                <ul>
+                  <li><strong>Cerere:</strong> ${requestId}</li>
+                  <li><strong>Rută:</strong> ${route}</li>
+                  <li><strong>Preț:</strong> ${acceptedOffer.price} lei</li>
+                </ul>
+                <p>Accesează panoul companiei pentru a confirma detaliile.</p>
+              </div>
+            `;
+            const text = `Oferta ta pentru cererea ${requestId} (${route}) a fost acceptată. Preț: ${acceptedOffer.price} lei.`;
+
+            await fetch(
+              `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/api/notifyOfferAccepted`,
+              {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  to: companyEmail,
+                  subject,
+                  html,
+                  text,
+                }),
+              }
+            );
+          }
+        }
+      } catch (emailErr) {
+        console.error("Failed to send company email notification", emailErr);
+        // Don't fail the API call if email fails
+      }
+    }
 
     return res.status(200).json({ ok: true });
   } catch (err) {

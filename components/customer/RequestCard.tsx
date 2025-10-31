@@ -24,6 +24,7 @@ type Request = {
   volumeM3?: number;
   budgetEstimate?: number;
   needPacking?: boolean;
+  status?: "pending" | "accepted" | "in-progress" | "completed" | "cancelled";
 };
 
 const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] }) => {
@@ -141,11 +142,34 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
       <div className="absolute left-0 top-0 h-full w-1 bg-emerald-500/60" />
       <div className="relative flex items-start justify-between gap-4">
         <div className="flex-1">
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-3">
             <h3 className="text-lg font-semibold text-emerald-700">
               {r.fromCity} → {r.toCity}
             </h3>
             <span className="text-sm text-gray-400">{r.moveDate}</span>
+            {r.status && (
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                  r.status === "accepted" || r.status === "in-progress"
+                    ? "bg-emerald-100 text-emerald-700"
+                    : r.status === "completed"
+                    ? "bg-blue-100 text-blue-700"
+                    : r.status === "cancelled"
+                    ? "bg-gray-100 text-gray-700"
+                    : "bg-amber-100 text-amber-700"
+                }`}
+              >
+                {r.status === "accepted"
+                  ? "Acceptată"
+                  : r.status === "in-progress"
+                  ? "În desfășurare"
+                  : r.status === "completed"
+                  ? "Finalizată"
+                  : r.status === "cancelled"
+                  ? "Anulată"
+                  : "În așteptare"}
+              </span>
+            )}
           </div>
           <p className="mt-2 text-sm text-gray-600">{r.details}</p>
 
