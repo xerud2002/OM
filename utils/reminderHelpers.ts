@@ -1,4 +1,4 @@
-import emailjs from "emailjs-com";
+import { sendEmail } from "@/utils/emailHelpers";
 
 /**
  * Trimite reminder email pentru upload media
@@ -16,12 +16,7 @@ export async function sendUploadReminder(
       reminder: true, // Flag pentru template diferit (opțional)
     };
 
-    await emailjs.send(
-      process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-      process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!, // Sau un template special pentru reminders
-      emailParams,
-      process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-    );
+    await sendEmail(emailParams);
 
     return true;
   } catch (error) {

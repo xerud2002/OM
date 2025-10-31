@@ -9,6 +9,7 @@ import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { Search, Download, Filter, PlusSquare, List, Inbox } from "lucide-react";
+import { sendEmail } from "@/utils/emailHelpers";
 import RequestCard from "@/components/customer/RequestCard";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
@@ -292,27 +293,18 @@ export default function CustomerDashboard() {
           const result = await resp.json();
 
           if (result.ok && result.uploadLink) {
-            // Send email via EmailJS (using emailjs-com which is already installed)
-            const emailjs = (await import("emailjs-com")).default;
-
             const emailParams = {
               to_email: result.customerEmail,
               to_name: result.customerName || "Client",
               upload_link: result.uploadLink,
             };
-
             try {
-              await emailjs.send(
-                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-                emailParams,
-                process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
-              );
+              await sendEmail(emailParams);
               toast.success(
                 "Cererea a fost trimisă! Vei primi un email cu link pentru upload poze."
               );
             } catch (emailError) {
-              console.error("EmailJS error:", emailError);
+              console.error("Email send error:", emailError);
               toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
             }
           } else {
