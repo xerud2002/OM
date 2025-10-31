@@ -104,28 +104,33 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
       <form onSubmit={onSubmit} className="space-y-6">
         {/* Pickup Location */}
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5">
-          <div className="mb-4 flex items-center gap-2 border-b border-emerald-200 pb-2">
-            <svg
-              className="h-5 w-5 text-emerald-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            <h4 className="text-sm font-semibold text-emerald-900">Punct de plecare</h4>
+        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+              <svg
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Punct de plecare</h4>
+              <p className="text-xs text-gray-600">Detalii despre locația actuală</p>
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <div>
@@ -192,6 +197,24 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             />
           </div>
           <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100">
+                <svg
+                  className="h-4 w-4 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-8 4h10M7 8h10"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-emerald-900">Detalii proprietate</span>
+            </div>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
@@ -245,22 +268,27 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Destination */}
-        <div className="rounded-xl border border-sky-200 bg-sky-50/50 p-5">
-          <div className="mb-4 flex items-center gap-2 border-b border-sky-200 pb-2">
-            <svg
-              className="h-5 w-5 text-sky-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            <h4 className="text-sm font-semibold text-sky-900">Destinație</h4>
+        <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 shadow-lg">
+              <svg
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                />
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Destinație</h4>
+              <p className="text-xs text-gray-600">Unde te muți</p>
+            </div>
           </div>
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             <div>
@@ -321,6 +349,24 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             />
           </div>
           <div className="mt-4 rounded-lg border border-sky-100 bg-white p-3">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-100">
+                <svg
+                  className="h-4 w-4 text-sky-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-8 4h10M7 8h10"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-sky-900">Detalii proprietate</span>
+            </div>
             <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
@@ -1064,7 +1110,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           <div className="space-y-5">
             {/* Date picker section */}
             <div>
-              <label className="mb-2 block text-sm font-semibold text-gray-800">
+              <label className="mb-2 block text-center text-sm font-semibold text-gray-800">
                 Când dorești să te muți?
               </label>
               {/* Mode selector */}
@@ -1076,7 +1122,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   { key: "flexible" as const, label: "Flexibilă" },
                 ];
                 return (
-                  <div className="mb-4 inline-flex rounded-lg border border-emerald-300 bg-white p-1 text-xs shadow-sm">
+                  <div className="mb-4 flex flex-wrap justify-center gap-2 rounded-lg border border-emerald-300 bg-white p-1 text-xs shadow-sm">
                     {dateModes.map(({ key, label }) => (
                       <button
                         key={key}
@@ -1105,7 +1151,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
               {/* Inputs per mode */}
               {((form as any).moveDateMode ?? "exact") === "exact" && (
-                <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                <div className="mx-auto max-w-md rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                   <DayPicker
                     mode="single"
                     selected={parseYMD(form.moveDate)}
@@ -1125,7 +1171,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       months: "flex justify-center",
                       month: "w-full max-w-sm",
                       caption: "flex items-center justify-between mb-4 px-2",
-                      caption_label: "text-base font-bold text-gray-800",
+                      caption_label: "text-sm sm:text-base font-bold text-gray-800",
                       nav: "flex items-center gap-2",
                       nav_button:
                         "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
@@ -1133,10 +1179,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       nav_button_next: "",
                       table: "w-full border-collapse mt-2",
                       head_row: "grid grid-cols-7 gap-1 mb-2",
-                      head_cell: "text-center text-xs font-bold text-emerald-700 w-10",
+                      head_cell:
+                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10",
                       row: "grid grid-cols-7 gap-1 mb-1",
                       cell: "text-center",
-                      day: "h-10 w-10 grid place-items-center rounded-xl text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
                       day_selected:
                         "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800",
                       day_today: "ring-2 ring-emerald-500 ring-offset-2 font-bold text-emerald-700",
@@ -1148,7 +1195,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               )}
 
               {((form as any).moveDateMode ?? "exact") === "range" && (
-                <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                <div className="mx-auto max-w-5xl rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                   <DayPicker
                     mode="range"
                     selected={{
@@ -1171,16 +1218,17 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       months: "flex gap-6 justify-center flex-wrap",
                       month: "w-full max-w-sm",
                       caption: "flex items-center justify-between mb-4 px-2",
-                      caption_label: "text-base font-bold text-gray-800",
+                      caption_label: "text-sm sm:text-base font-bold text-gray-800",
                       nav: "flex items-center gap-2",
                       nav_button:
                         "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
                       table: "w-full border-collapse mt-2",
                       head_row: "grid grid-cols-7 gap-1 mb-2",
-                      head_cell: "text-center text-xs font-bold text-emerald-700 w-10",
+                      head_cell:
+                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10",
                       row: "grid grid-cols-7 gap-1 mb-1",
                       cell: "text-center",
-                      day: "h-10 w-10 grid place-items-center rounded-xl text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
                       day_selected:
                         "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800",
                       day_today: "ring-2 ring-emerald-500 ring-offset-2 font-bold text-emerald-700",
@@ -1220,7 +1268,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               )}
 
               {((form as any).moveDateMode ?? "exact") === "flexible" && (
-                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
                   <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                     <DayPicker
                       mode="single"
@@ -1240,16 +1288,17 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         months: "flex justify-center",
                         month: "w-full max-w-sm",
                         caption: "flex items-center justify-between mb-4 px-2",
-                        caption_label: "text-base font-bold text-gray-800",
+                        caption_label: "text-sm sm:text-base font-bold text-gray-800",
                         nav: "flex items-center gap-2",
                         nav_button:
                           "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
                         table: "w-full border-collapse mt-2",
                         head_row: "grid grid-cols-7 gap-1 mb-2",
-                        head_cell: "text-center text-xs font-bold text-emerald-700 w-10",
+                        head_cell:
+                          "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10",
                         row: "grid grid-cols-7 gap-1 mb-1",
                         cell: "text-center",
-                        day: "h-10 w-10 grid place-items-center rounded-xl text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                        day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
                         day_selected:
                           "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800",
                         day_today:
@@ -1286,7 +1335,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
 
             {/* Contact fields below calendar */}
-            <div className="rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
+            <div className="mx-auto max-w-5xl rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
               <h5 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-800">
                 <svg
                   className="h-5 w-5 text-emerald-600"
