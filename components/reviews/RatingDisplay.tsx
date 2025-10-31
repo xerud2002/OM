@@ -77,9 +77,7 @@ export default function RatingDisplay({
                     </div>
                   </div>
 
-                  <span className="w-12 text-right text-sm text-gray-600">
-                    {count}
-                  </span>
+                  <span className="w-12 text-right text-sm text-gray-600">{count}</span>
                 </div>
               );
             })}
@@ -91,9 +89,7 @@ export default function RatingDisplay({
       <div className="mt-4 grid grid-cols-3 gap-4 text-center">
         <div>
           <div className="text-2xl font-bold text-emerald-600">
-            {distribution
-              ? ((distribution[5] / totalReviews) * 100).toFixed(0)
-              : 0}%
+            {distribution ? ((distribution[5] / totalReviews) * 100).toFixed(0) : 0}%
           </div>
           <div className="text-xs text-gray-600">5 Stele</div>
         </div>
@@ -101,7 +97,8 @@ export default function RatingDisplay({
           <div className="text-2xl font-bold text-blue-600">
             {distribution
               ? (((distribution[5] + distribution[4]) / totalReviews) * 100).toFixed(0)
-              : 0}%
+              : 0}
+            %
           </div>
           <div className="text-xs text-gray-600">4+ Stele</div>
         </div>

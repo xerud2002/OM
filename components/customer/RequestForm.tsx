@@ -1038,201 +1038,295 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Date & Contact */}
-        <div className="grid grid-cols-1 gap-4">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Data mutării</label>
-            {/* Mode selector */}
-            {(() => {
-              const dateModes = [
-                { key: "exact" as const, label: "Exactă" },
-                { key: "range" as const, label: "Interval" },
-                { key: "none" as const, label: "Nu știu încă" },
-                { key: "flexible" as const, label: "Flexibilă" },
-              ];
-              return (
-                <div className="mb-2 inline-flex rounded-lg border border-gray-200 bg-white p-1 text-xs">
-                  {dateModes.map(({ key, label }) => (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() =>
-                        setForm((s) => ({
-                          ...s,
-                          moveDateMode: key,
-                          // Keep moveDate in sync for downstream filters/exports
-                          ...(key === "none" ? { moveDate: "" } : {}),
-                        }))
-                      }
-                      className={`rounded-md px-3 py-1 transition ${
-                        (form as any).moveDateMode === key ||
-                        (!(form as any).moveDateMode && key === "exact")
-                          ? "bg-emerald-600 text-white"
-                          : "text-gray-700 hover:bg-gray-50"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              );
-            })()}
-
-            {/* Inputs per mode */}
-            {((form as any).moveDateMode ?? "exact") === "exact" && (
-              <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-3 shadow-sm">
-                <DayPicker
-                  mode="single"
-                  selected={parseYMD(form.moveDate)}
-                  onSelect={(date) =>
-                    setForm((s) => ({
-                      ...s,
-                      moveDate: date ? formatYMD(date) : "",
-                      moveDateStart: date ? formatYMD(date) : "",
-                      moveDateEnd: "",
-                    }))
-                  }
-                  weekStartsOn={1}
-                  showOutsideDays
-                  numberOfMonths={1}
-                  className="rdp"
-                  classNames={{
-                    months: "flex",
-                    month: "w-full",
-                    caption: "flex items-center justify-between mb-2",
-                    nav: "flex items-center gap-2",
-                    table: "w-full border-collapse",
-                    head_row: "grid grid-cols-7 text-[11px] text-gray-500",
-                    row: "grid grid-cols-7",
-                    day: "h-10 w-10 grid place-items-center rounded-md text-sm hover:bg-emerald-50",
-                    day_selected: "bg-emerald-600 text-white hover:bg-emerald-600",
-                    day_today: "ring-2 ring-emerald-400",
-                    day_outside: "text-gray-300",
-                  }}
+        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+              <svg
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
-              </div>
-            )}
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Data mutării și contact</h4>
+              <p className="text-xs text-gray-600">Alege data și introdu datele tale de contact</p>
+            </div>
+          </div>
 
-            {((form as any).moveDateMode ?? "exact") === "range" && (
-              <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-3 shadow-sm">
-                <DayPicker
-                  mode="range"
-                  selected={{
-                    from: parseYMD((form as any).moveDateStart),
-                    to: parseYMD((form as any).moveDateEnd),
-                  }}
-                  onSelect={(range) =>
-                    setForm((s: any) => ({
-                      ...s,
-                      moveDateStart: range?.from ? formatYMD(range.from) : "",
-                      moveDateEnd: range?.to ? formatYMD(range.to) : "",
-                      moveDate: range?.from ? formatYMD(range.from) : "",
-                    }))
-                  }
-                  weekStartsOn={1}
-                  showOutsideDays
-                  numberOfMonths={2}
-                  className="rdp"
-                  classNames={{
-                    months: "flex gap-4",
-                    month: "w-full",
-                    caption: "flex items-center justify-between mb-2",
-                    nav: "flex items-center gap-2",
-                    table: "w-full border-collapse",
-                    head_row: "grid grid-cols-7 text-[11px] text-gray-500",
-                    row: "grid grid-cols-7",
-                    day: "h-10 w-10 grid place-items-center rounded-md text-sm hover:bg-emerald-50",
-                    day_selected: "bg-emerald-600 text-white hover:bg-emerald-600",
-                    day_today: "ring-2 ring-emerald-400",
-                    day_outside: "text-gray-300",
-                    day_range_start: "bg-emerald-600 text-white",
-                    day_range_end: "bg-emerald-600 text-white",
-                    day_range_middle: "bg-emerald-100",
-                  }}
-                />
-              </div>
-            )}
+          <div className="space-y-5">
+            {/* Date picker section */}
+            <div>
+              <label className="mb-2 block text-sm font-semibold text-gray-800">
+                Când dorești să te muți?
+              </label>
+              {/* Mode selector */}
+              {(() => {
+                const dateModes = [
+                  { key: "exact" as const, label: "Exactă" },
+                  { key: "range" as const, label: "Interval" },
+                  { key: "none" as const, label: "Nu știu încă" },
+                  { key: "flexible" as const, label: "Flexibilă" },
+                ];
+                return (
+                  <div className="mb-4 inline-flex rounded-lg border border-emerald-300 bg-white p-1 text-xs shadow-sm">
+                    {dateModes.map(({ key, label }) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() =>
+                          setForm((s) => ({
+                            ...s,
+                            moveDateMode: key,
+                            // Keep moveDate in sync for downstream filters/exports
+                            ...(key === "none" ? { moveDate: "" } : {}),
+                          }))
+                        }
+                        className={`rounded-md px-4 py-2 font-medium transition-all duration-200 ${
+                          (form as any).moveDateMode === key ||
+                          (!(form as any).moveDateMode && key === "exact")
+                            ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md"
+                            : "text-gray-700 hover:bg-emerald-50"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                );
+              })()}
 
-            {((form as any).moveDateMode ?? "exact") === "none" && (
-              <p className="text-xs text-gray-600">
-                Nu ai data stabilită. Poți continua fără dată.
-              </p>
-            )}
-
-            {((form as any).moveDateMode ?? "exact") === "flexible" && (
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-white to-emerald-50 p-3 shadow-sm">
+              {/* Inputs per mode */}
+              {((form as any).moveDateMode ?? "exact") === "exact" && (
+                <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                   <DayPicker
                     mode="single"
                     selected={parseYMD(form.moveDate)}
                     onSelect={(date) =>
-                      setForm((s: any) => ({
+                      setForm((s) => ({
                         ...s,
                         moveDate: date ? formatYMD(date) : "",
                         moveDateStart: date ? formatYMD(date) : "",
+                        moveDateEnd: "",
                       }))
                     }
                     weekStartsOn={1}
                     showOutsideDays
                     numberOfMonths={1}
-                    className="rdp"
+                    className="rdp mx-auto"
                     classNames={{
-                      months: "flex",
-                      month: "w-full",
-                      caption: "flex items-center justify-between mb-2",
+                      months: "flex justify-center",
+                      month: "w-full max-w-sm",
+                      caption: "flex items-center justify-between mb-4 px-2",
+                      caption_label: "text-base font-bold text-gray-800",
                       nav: "flex items-center gap-2",
-                      table: "w-full border-collapse",
-                      head_row: "grid grid-cols-7 text-[11px] text-gray-500",
-                      row: "grid grid-cols-7",
-                      day: "h-10 w-10 grid place-items-center rounded-md text-sm hover:bg-emerald-50",
-                      day_selected: "bg-emerald-600 text-white hover:bg-emerald-600",
-                      day_today: "ring-2 ring-emerald-400",
-                      day_outside: "text-gray-300",
+                      nav_button:
+                        "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                      nav_button_previous: "",
+                      nav_button_next: "",
+                      table: "w-full border-collapse mt-2",
+                      head_row: "grid grid-cols-7 gap-1 mb-2",
+                      head_cell: "text-center text-xs font-bold text-emerald-700 w-10",
+                      row: "grid grid-cols-7 gap-1 mb-1",
+                      cell: "text-center",
+                      day: "h-10 w-10 grid place-items-center rounded-xl text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                      day_selected:
+                        "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800 hover:bg-emerald-700",
+                      day_today: "ring-2 ring-emerald-500 ring-offset-2 font-bold text-emerald-700",
+                      day_outside: "text-gray-400 opacity-50",
+                      day_disabled: "text-gray-300 opacity-30 cursor-not-allowed",
                     }}
                   />
                 </div>
-                <div>
-                  <label className="mb-1 block text-[10px] font-medium text-gray-500">
-                    Flexibilitate
-                  </label>
-                  <select
-                    value={(form as any).moveDateFlexDays ?? 3}
-                    onChange={(e) =>
+              )}
+
+              {((form as any).moveDateMode ?? "exact") === "range" && (
+                <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                  <DayPicker
+                    mode="range"
+                    selected={{
+                      from: parseYMD((form as any).moveDateStart),
+                      to: parseYMD((form as any).moveDateEnd),
+                    }}
+                    onSelect={(range) =>
                       setForm((s: any) => ({
                         ...s,
-                        moveDateFlexDays: Number(e.target.value),
+                        moveDateStart: range?.from ? formatYMD(range.from) : "",
+                        moveDateEnd: range?.to ? formatYMD(range.to) : "",
+                        moveDate: range?.from ? formatYMD(range.from) : "",
                       }))
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                  >
-                    <option value={3}>±3 zile</option>
-                    <option value={7}>±7 zile</option>
-                    <option value={14}>±14 zile</option>
-                  </select>
+                    weekStartsOn={1}
+                    showOutsideDays
+                    numberOfMonths={2}
+                    className="rdp mx-auto"
+                    classNames={{
+                      months: "flex gap-6 justify-center flex-wrap",
+                      month: "w-full max-w-sm",
+                      caption: "flex items-center justify-between mb-4 px-2",
+                      caption_label: "text-base font-bold text-gray-800",
+                      nav: "flex items-center gap-2",
+                      nav_button:
+                        "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                      table: "w-full border-collapse mt-2",
+                      head_row: "grid grid-cols-7 gap-1 mb-2",
+                      head_cell: "text-center text-xs font-bold text-emerald-700 w-10",
+                      row: "grid grid-cols-7 gap-1 mb-1",
+                      cell: "text-center",
+                      day: "h-10 w-10 grid place-items-center rounded-xl text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                      day_selected:
+                        "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800",
+                      day_today: "ring-2 ring-emerald-500 ring-offset-2 font-bold text-emerald-700",
+                      day_outside: "text-gray-400 opacity-50",
+                      day_range_start:
+                        "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold rounded-l-xl",
+                      day_range_end:
+                        "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold rounded-r-xl",
+                      day_range_middle: "bg-emerald-200 text-emerald-900 rounded-none",
+                    }}
+                  />
+                </div>
+              )}
+
+              {((form as any).moveDateMode ?? "exact") === "none" && (
+                <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                  <div className="flex items-start gap-3">
+                    <svg
+                      className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <p className="text-sm text-emerald-900">
+                      Nu ai data stabilită? Nu-i problemă! Poți continua fără a selecta o dată și
+                      companiile îți vor oferi mai multe opțiuni.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {((form as any).moveDateMode ?? "exact") === "flexible" && (
+                <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+                  <div className="rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                    <DayPicker
+                      mode="single"
+                      selected={parseYMD(form.moveDate)}
+                      onSelect={(date) =>
+                        setForm((s: any) => ({
+                          ...s,
+                          moveDate: date ? formatYMD(date) : "",
+                          moveDateStart: date ? formatYMD(date) : "",
+                        }))
+                      }
+                      weekStartsOn={1}
+                      showOutsideDays
+                      numberOfMonths={1}
+                      className="rdp mx-auto"
+                      classNames={{
+                        months: "flex justify-center",
+                        month: "w-full max-w-sm",
+                        caption: "flex items-center justify-between mb-4 px-2",
+                        caption_label: "text-base font-bold text-gray-800",
+                        nav: "flex items-center gap-2",
+                        nav_button:
+                          "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                        table: "w-full border-collapse mt-2",
+                        head_row: "grid grid-cols-7 gap-1 mb-2",
+                        head_cell: "text-center text-xs font-bold text-emerald-700 w-10",
+                        row: "grid grid-cols-7 gap-1 mb-1",
+                        cell: "text-center",
+                        day: "h-10 w-10 grid place-items-center rounded-xl text-sm font-medium transition-all hover:bg-emerald-100 hover:shadow-md hover:scale-105",
+                        day_selected:
+                          "bg-gradient-to-br from-emerald-600 to-emerald-700 text-white font-bold shadow-lg hover:from-emerald-700 hover:to-emerald-800",
+                        day_today:
+                          "ring-2 ring-emerald-500 ring-offset-2 font-bold text-emerald-700",
+                        day_outside: "text-gray-400 opacity-50",
+                      }}
+                    />
+                  </div>
+                  <div className="rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
+                    <label className="mb-2 block text-sm font-semibold text-gray-800">
+                      Flexibilitate
+                    </label>
+                    <select
+                      value={(form as any).moveDateFlexDays ?? 3}
+                      onChange={(e) =>
+                        setForm((s: any) => ({
+                          ...s,
+                          moveDateFlexDays: Number(e.target.value),
+                        }))
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    >
+                      <option value={3}>±3 zile</option>
+                      <option value={7}>±7 zile</option>
+                      <option value={14}>±14 zile</option>
+                    </select>
+                    <p className="mt-3 text-xs text-gray-600">
+                      Selectează câte zile înainte sau după data aleasă ești disponibil/ă pentru
+                      mutare.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Contact fields below calendar */}
+            <div className="rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
+              <h5 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-800">
+                <svg
+                  className="h-5 w-5 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                Datele tale de contact
+              </h5>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-xs font-semibold text-gray-700">
+                    Nume și prenume
+                  </label>
+                  <input
+                    value={(form as any).contactName || ""}
+                    onChange={(e) => setForm((s: any) => ({ ...s, contactName: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    placeholder="Ex: Popescu Andrei"
+                  />
+                </div>
+                <div>
+                  <label className="mb-2 block text-xs font-semibold text-gray-700">
+                    Număr de telefon
+                  </label>
+                  <input
+                    value={form.phone || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    placeholder="07xx xxx xxx"
+                  />
                 </div>
               </div>
-            )}
-          </div>
-          {/* Contact under calendar */}
-          <div className="mt-1 grid grid-cols-1 gap-3 sm:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">
-                Nume și prenume
-              </label>
-              <input
-                value={(form as any).contactName || ""}
-                onChange={(e) => setForm((s: any) => ({ ...s, contactName: e.target.value }))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                placeholder="Ex: Popescu Andrei"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Telefon</label>
-              <input
-                value={form.phone || ""}
-                onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                placeholder="07xx xxx xxx"
-              />
             </div>
           </div>
         </div>

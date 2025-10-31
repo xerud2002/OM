@@ -97,8 +97,8 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
                       o.status === "accepted"
                         ? "bg-emerald-100 text-emerald-700"
                         : o.status === "declined"
-                        ? "bg-rose-100 text-rose-700"
-                        : "bg-amber-100 text-amber-700"
+                          ? "bg-rose-100 text-rose-700"
+                          : "bg-amber-100 text-amber-700"
                     }`}
                   >
                     {o.status}

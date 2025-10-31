@@ -18,9 +18,7 @@ export default function HomePage() {
           🔹 SEO Meta Tags
       =========================== */}
       <Head>
-        <title>
-          Oferte Mutare România 2024 | Economisește până la 40% | Firme Verificate
-        </title>
+        <title>Oferte Mutare România 2024 | Economisește până la 40% | Firme Verificate</title>
         <meta
           name="description"
           content="Primești 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări din România. Economisești în medie 450 lei. 100% gratuit, fără obligații. Peste 5000+ clienți mulțumiți!"
@@ -30,14 +28,11 @@ export default function HomePage() {
           content="firme de mutări, oferte mutare, mutări România, transport mobilă, servicii mutare, mutări ieftine, comparare oferte mutare, firme mutări verificate"
         />
         <link rel="canonical" href="https://ofertemutare.ro" />
-        
+
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro" />
-        <meta
-          property="og:title"
-          content="Oferte Mutare România 2024 | Economisești până la 40%"
-        />
+        <meta property="og:title" content="Oferte Mutare România 2024 | Economisești până la 40%" />
         <meta
           property="og:description"
           content="Primești 3-5 oferte GRATUITE în 24h. Economie medie 450 lei. 100% gratuit!"

@@ -52,7 +52,7 @@ export default function Testimonials() {
         </div>
       </FadeInWhenVisible>
 
-            <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 gap-6 px-6 sm:grid-cols-2 lg:grid-cols-4">
         {testimonials.map((t, idx) => (
           <motion.div
             key={idx}
@@ -76,7 +76,9 @@ export default function Testimonials() {
             </div>
 
             {/* Text */}
-            <p className="mb-4 text-sm italic leading-relaxed text-gray-700">&ldquo;{t.text}&rdquo;</p>
+            <p className="mb-4 text-sm italic leading-relaxed text-gray-700">
+              &ldquo;{t.text}&rdquo;
+            </p>
             <h4 className="font-semibold text-emerald-700">{t.name}</h4>
             <span className="text-xs text-gray-500">{t.role}</span>
           </motion.div>

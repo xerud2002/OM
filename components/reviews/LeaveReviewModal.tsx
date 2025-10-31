@@ -45,7 +45,7 @@ export default function LeaveReviewModal({
 
     try {
       const { addReview } = await import("@/utils/reviewHelpers");
-      
+
       await addReview({
         companyId,
         customerId,
@@ -56,19 +56,21 @@ export default function LeaveReviewModal({
       });
 
       toast.success("Mulțumim pentru review! 🎉");
-      
+
       // Reset form
       setRating(5);
       setComment("");
-      
+
       if (onSuccess) {
         onSuccess();
       }
-      
+
       onClose();
     } catch (error: any) {
       console.error("Failed to submit review:", error);
-      toast.error(error.message || "Eroare la trimiterea review-ului. Te rugăm să încerci din nou.");
+      toast.error(
+        error.message || "Eroare la trimiterea review-ului. Te rugăm să încerci din nou."
+      );
     } finally {
       setSubmitting(false);
     }
@@ -103,12 +105,7 @@ export default function LeaveReviewModal({
               Cum a fost experiența ta?
             </label>
             <div className="flex items-center gap-4">
-              <StarRating
-                rating={rating}
-                size="lg"
-                interactive
-                onRatingChange={setRating}
-              />
+              <StarRating rating={rating} size="lg" interactive onRatingChange={setRating} />
               <span className="text-2xl font-bold text-amber-600">{rating}.0</span>
             </div>
             <div className="mt-2 text-sm text-gray-500">
@@ -189,7 +186,8 @@ export default function LeaveReviewModal({
 
         {/* Privacy Note */}
         <div className="mt-4 rounded-lg bg-blue-50 p-3 text-xs text-blue-900">
-          <strong>Notă:</strong> Review-ul tău va fi public și vizibil pentru toți utilizatorii platformei.
+          <strong>Notă:</strong> Review-ul tău va fi public și vizibil pentru toți utilizatorii
+          platformei.
         </div>
       </div>
     </div>

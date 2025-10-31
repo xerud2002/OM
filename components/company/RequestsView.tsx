@@ -145,9 +145,9 @@ function OfferItem({
                 (offer.status ?? "pending") === "accepted"
                   ? "bg-emerald-100 text-emerald-700"
                   : (offer.status ?? "pending") === "rejected" ||
-                    (offer.status ?? "pending") === "declined"
-                  ? "bg-rose-100 text-rose-700"
-                  : "bg-amber-100 text-amber-700"
+                      (offer.status ?? "pending") === "declined"
+                    ? "bg-rose-100 text-rose-700"
+                    : "bg-amber-100 text-amber-700"
               }`}
             >
               {offer.status ?? "pending"}
@@ -173,7 +173,11 @@ function OfferItem({
   );
 }
 
-function OfferList({ requestId, company, onHasMine }: {
+function OfferList({
+  requestId,
+  company,
+  onHasMine,
+}: {
   requestId: string;
   company: CompanyUser;
   onHasMine?: any;
@@ -281,7 +285,9 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
         type="submit"
         disabled={sending || !isPriceValid}
         className={`rounded-md py-2 font-semibold text-white transition-all ${
-          sending || !isPriceValid ? "cursor-not-allowed bg-gray-400" : "bg-emerald-600 hover:bg-emerald-700"
+          sending || !isPriceValid
+            ? "cursor-not-allowed bg-gray-400"
+            : "bg-emerald-600 hover:bg-emerald-700"
         }`}
       >
         {sending ? "Se trimite..." : "Trimite ofertă"}
@@ -357,13 +363,16 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     if (!hasMore || loadingMore) return;
     const el = sentinelRef.current;
     if (!el) return;
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting && hasMore && !loadingMore) {
-          loadMore();
-        }
-      });
-    }, { rootMargin: "200px" });
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && hasMore && !loadingMore) {
+            loadMore();
+          }
+        });
+      },
+      { rootMargin: "200px" }
+    );
     io.observe(el);
     return () => io.disconnect();
   }, [hasMore, loadingMore, loadMore]);
@@ -377,8 +386,11 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
   const sortedRequests = useMemo(() => {
     const arr = [...combinedRequests];
-    const getTime = (r: MovingRequest) => (r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0);
-    return sortBy === "date-desc" ? arr.sort((a, b) => getTime(b) - getTime(a)) : arr.sort((a, b) => getTime(a) - getTime(b));
+    const getTime = (r: MovingRequest) =>
+      r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
+    return sortBy === "date-desc"
+      ? arr.sort((a, b) => getTime(b) - getTime(a))
+      : arr.sort((a, b) => getTime(a) - getTime(b));
   }, [combinedRequests, sortBy]);
 
   const getTimeAgo = useMemo(
@@ -414,7 +426,11 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       {loading ? (
         <p className="text-center text-gray-500">Se încarcă cererile...</p>
       ) : sortedRequests.length === 0 ? (
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center italic text-gray-500">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="text-center italic text-gray-500"
+        >
           Momentan nu există cereri noi. 💤
         </motion.p>
       ) : (
@@ -433,7 +449,9 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   <div className="mb-2 flex items-center justify-between">
                     <span
                       className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                        getTimeAgo(r.createdAt) === "Nou!" ? "bg-emerald-100 text-emerald-700" : "bg-gray-100 text-gray-600"
+                        getTimeAgo(r.createdAt) === "Nou!"
+                          ? "bg-emerald-100 text-emerald-700"
+                          : "bg-gray-100 text-gray-600"
                       }`}
                     >
                       {getTimeAgo(r.createdAt)}
@@ -442,7 +460,9 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 )}
 
                 <div>
-                  <h3 className="mb-1 text-lg font-semibold text-emerald-700">{r.customerName || "Client anonim"}</h3>
+                  <h3 className="mb-1 text-lg font-semibold text-emerald-700">
+                    {r.customerName || "Client anonim"}
+                  </h3>
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
@@ -455,18 +475,23 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                     <OfferList
                       requestId={r.id}
                       company={company}
-                      onHasMine={(has: boolean) => setHasMineMap((prev) => ({ ...prev, [r.id]: has }))}
+                      onHasMine={(has: boolean) =>
+                        setHasMineMap((prev) => ({ ...prev, [r.id]: has }))
+                      }
                     />
                     {!hasMineMap[r.id] ? (
                       <OfferForm requestId={r.id} company={company} />
                     ) : (
                       <p className="mt-2 text-xs text-gray-500">
-                        Ai trimis deja o ofertă pentru această cerere. O poți edita sau retrage mai sus.
+                        Ai trimis deja o ofertă pentru această cerere. O poți edita sau retrage mai
+                        sus.
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="mt-3 text-sm italic text-gray-400">Trebuie să fii autentificat pentru a trimite oferte.</p>
+                  <p className="mt-3 text-sm italic text-gray-400">
+                    Trebuie să fii autentificat pentru a trimite oferte.
+                  </p>
                 )}
               </motion.div>
             ))}

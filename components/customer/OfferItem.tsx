@@ -113,15 +113,15 @@ export default function OfferItem({
               offer.status === "accepted"
                 ? "bg-emerald-100 text-emerald-700"
                 : offer.status === "declined"
-                ? "bg-rose-100 text-rose-700"
-                : "bg-amber-100 text-amber-700"
+                  ? "bg-rose-100 text-rose-700"
+                  : "bg-amber-100 text-amber-700"
             }`}
           >
             {offer.status === "accepted"
               ? "Acceptată"
               : offer.status === "declined"
-              ? "Refuzată"
-              : "În așteptare"}
+                ? "Refuzată"
+                : "În așteptare"}
           </span>
         </div>
       )}

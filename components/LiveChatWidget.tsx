@@ -4,12 +4,12 @@ import { useEffect } from "react";
 
 /**
  * Tawk.to Live Chat Widget
- * 
+ *
  * To use:
  * 1. Sign up at https://www.tawk.to (FREE)
  * 2. Get your Property ID and Widget ID from dashboard
  * 3. Replace TAWK_PROPERTY_ID and TAWK_WIDGET_ID below with your actual IDs
- * 
+ *
  * Alternative chat services:
  * - Crisp.chat (free tier available)
  * - Tidio (free tier available)
@@ -41,7 +41,7 @@ export default function LiveChatWidget() {
       // Remove Tawk widget on unmount
       const tawkScript = document.querySelector(`script[src*="tawk.to"]`);
       if (tawkScript) tawkScript.remove();
-      
+
       // Clean up Tawk API
       if ((window as any).Tawk_API) {
         delete (window as any).Tawk_API;

@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Generate unique upload token
     const uploadToken = randomBytes(32).toString("hex");
     const uploadLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/upload/${uploadToken}`;
-    
+
     // Calculate expiration (7 days from now)
     const expiresAt = new Date();
     expiresAt.setDate(expiresAt.getDate() + 7);
@@ -29,7 +29,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       customerEmail,
       customerName,
       uploadLink,
-  createdAt: new Date().toISOString(),
+      createdAt: new Date().toISOString(),
       expiresAt: expiresAt.toISOString(),
       used: false,
       uploadedAt: null,
@@ -40,12 +40,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     await requestRef.set({ mediaUploadToken: uploadToken }, { merge: true });
 
     // Return token - email will be sent client-side via EmailJS
-    return res.status(200).json({ 
-      ok: true, 
-      uploadToken, 
+    return res.status(200).json({
+      ok: true,
+      uploadToken,
       uploadLink,
       customerEmail,
-      customerName
+      customerName,
     });
   } catch (error) {
     console.error("Error generating upload link:", error);
