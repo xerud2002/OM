@@ -1,15 +1,17 @@
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Edit2, MapPin, Calendar, Package, Phone, User, FileText, Wrench } from "lucide-react";
 import { MovingRequest } from "../../types";
 import { formatDateRO } from "@/utils/date";
 import Image from "next/image";
+import EditRequestModal from "./EditRequestModal";
 
 type RequestDetailsModalProps = {
   request: MovingRequest | null;
   isOpen: boolean;
   onClose: () => void;
   // eslint-disable-next-line no-unused-vars
-  onRequestEdit: (request: MovingRequest) => void;
+  onRequestEdit: (request: MovingRequest, updatedData: any) => Promise<void>;
 };
 
 export default function RequestDetailsModal({
@@ -18,6 +20,8 @@ export default function RequestDetailsModal({
   onClose,
   onRequestEdit,
 }: RequestDetailsModalProps) {
+  const [showEditModal, setShowEditModal] = useState(false);
+
   if (!request) return null;
 
   return (
@@ -289,17 +293,28 @@ export default function RequestDetailsModal({
                 </button>
                 <button
                   onClick={() => {
-                    onRequestEdit(request);
-                    onClose();
+                    setShowEditModal(true);
                   }}
                   className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-2 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
                 >
                   <Edit2 size={18} />
-                  Cere modificare cerere
+                  Modifică cererea
                 </button>
               </div>
             </motion.div>
           </div>
+
+          {/* Edit Modal */}
+          <EditRequestModal
+            request={request}
+            isOpen={showEditModal}
+            onClose={() => setShowEditModal(false)}
+            onSave={async (requestId, updatedData) => {
+              await onRequestEdit(request, updatedData);
+              setShowEditModal(false);
+              onClose();
+            }}
+          />
         </>
       )}
     </AnimatePresence>

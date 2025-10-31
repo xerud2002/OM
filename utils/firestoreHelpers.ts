@@ -86,3 +86,43 @@ export async function archiveRequest(requestId: string) {
     updatedAt: serverTimestamp(),
   });
 }
+
+export async function updateRequest(requestId: string, data: any) {
+  const { doc, updateDoc, getDocs, collection, addDoc } = await import("firebase/firestore");
+  
+  // Remove any undefined fields
+  const clean: Record<string, any> = Object.fromEntries(
+    Object.entries(data).filter(([, v]) => v !== undefined)
+  );
+
+  const requestRef = doc(db, "requests", requestId);
+  await updateDoc(requestRef, {
+    ...clean,
+    updatedAt: serverTimestamp(),
+  });
+
+  // Get all companies that have submitted offers for this request
+  const offersSnapshot = await getDocs(collection(db, "requests", requestId, "offers"));
+  const companyIds = new Set<string>();
+  
+  offersSnapshot.docs.forEach((offerDoc) => {
+    const offerData = offerDoc.data();
+    if (offerData.companyId) {
+      companyIds.add(offerData.companyId);
+    }
+  });
+
+  // Create notifications for each company
+  const notificationPromises = Array.from(companyIds).map(async (companyId) => {
+    await addDoc(collection(db, "companies", companyId, "notifications"), {
+      type: "request_updated",
+      requestId,
+      message: "Clientul a modificat detaliile cererii. Te rugăm să revizuiești cererea actualizată.",
+      title: "Cerere actualizată",
+      read: false,
+      createdAt: serverTimestamp(),
+    });
+  });
+
+  await Promise.all(notificationPromises);
+}
