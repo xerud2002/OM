@@ -10,9 +10,10 @@ import {
 } from "firebase/firestore";
 
 export async function createRequest(data: any) {
-  // Remove any undefined fields because Firestore rejects undefined values.
+  // Remove any undefined fields and non-serializable fields (File objects, etc.)
+  const excludeFields = ['mediaFiles', 'contactName', 'contactFirstName', 'contactLastName', 'moveDateMode', 'moveDateStart', 'moveDateEnd', 'moveDateFlexDays', 'mediaUpload'];
   const clean: Record<string, any> = Object.fromEntries(
-    Object.entries(data).filter(([, v]) => v !== undefined)
+    Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
   const docRef = await addDoc(collection(db, "requests"), {
@@ -90,9 +91,10 @@ export async function archiveRequest(requestId: string) {
 export async function updateRequest(requestId: string, data: any) {
   const { doc, updateDoc, getDocs, collection, addDoc } = await import("firebase/firestore");
   
-  // Remove any undefined fields
+  // Remove any undefined fields and non-serializable fields (File objects, etc.)
+  const excludeFields = ['mediaFiles', 'contactName', 'contactFirstName', 'contactLastName', 'moveDateMode', 'moveDateStart', 'moveDateEnd', 'moveDateFlexDays', 'mediaUpload'];
   const clean: Record<string, any> = Object.fromEntries(
-    Object.entries(data).filter(([, v]) => v !== undefined)
+    Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
   const requestRef = doc(db, "requests", requestId);

@@ -21,9 +21,9 @@ export default function EditRequestModal({
   const [form, setForm] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
 
-  // Initialize form when request changes
+  // Initialize form when modal opens
   useState(() => {
-    if (request && isOpen) {
+    if (request && isOpen && !form) {
       setForm({
         fromCity: request.fromCity || "",
         fromCounty: request.fromCounty || "",
