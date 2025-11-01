@@ -59,6 +59,7 @@ const cities: Record<string, string[]> = {
     "Râșnov",
     "Rupea",
     "Săcele",
+    "Tărlungeni",
     "Victoria",
     "Zărnești",
   ],

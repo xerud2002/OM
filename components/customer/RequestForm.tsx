@@ -198,7 +198,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
               <select
-                required
+                required={!form.fromCityManual}
                 value={form.fromCity || ""}
                 onChange={(e) => {
                   const value = e.target.value;
@@ -358,7 +358,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
               <select
-                required
+                required={!form.toCityManual}
                 value={form.toCity || ""}
                 onChange={(e) => {
                   const value = e.target.value;
