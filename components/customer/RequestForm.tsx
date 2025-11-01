@@ -185,7 +185,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               <p className="text-xs text-gray-600">Detalii despre locația actuală</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[max-content_max-content_1fr]">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[max-content_max-content_1fr_max-content] md:items-end">
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
               <select
@@ -240,10 +240,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               )}
             </div>
-          </div>
-          {/* Adresă detaliată */}
-          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
-            <div>
+            <div className="md:ml-2">
               <label className="mb-1 block text-xs font-medium text-gray-700">
                 Strada <span className="text-red-500">*</span>
               </label>
@@ -255,7 +252,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 placeholder="Numele străzii"
               />
             </div>
-            <div>
+            <div className="md:ml-2" style={{ width: "8rem" }}>
               <label className="mb-1 block text-xs font-medium text-gray-700">
                 Număr <span className="text-red-500">*</span>
               </label>
@@ -264,7 +261,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 value={form.fromNumber || ""}
                 onChange={(e) => setForm((s) => ({ ...s, fromNumber: e.target.value }))}
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                placeholder="Număr"
+                placeholder="Nr."
               />
             </div>
           </div>
@@ -393,7 +390,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               <p className="text-xs text-gray-600">Unde te muți</p>
             </div>
           </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-[max-content_max-content_1fr]">
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[max-content_max-content_1fr_max-content] md:items-end">
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
               <select
@@ -442,10 +439,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               )}
             </div>
-          </div>
-          {/* Adresă detaliată destinație */}
-          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-2">
-            <div>
+            <div className="md:ml-2">
               <label className="mb-1 block text-xs font-medium text-gray-700">
                 Strada <span className="text-red-500">*</span>
               </label>
@@ -457,7 +451,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 placeholder="Numele străzii"
               />
             </div>
-            <div>
+            <div className="md:ml-2" style={{ width: "8rem" }}>
               <label className="mb-1 block text-xs font-medium text-gray-700">
                 Număr <span className="text-red-500">*</span>
               </label>
@@ -466,7 +460,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 value={form.toNumber || ""}
                 onChange={(e) => setForm((s) => ({ ...s, toNumber: e.target.value }))}
                 className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                placeholder="Număr"
+                placeholder="Nr."
               />
             </div>
           </div>
