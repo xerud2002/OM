@@ -63,10 +63,7 @@ export default function Testimonials() {
             whileHover={{ scale: 1.03, y: -4 }}
             className="flex flex-col items-center rounded-3xl border border-emerald-100 bg-white/85 p-6 text-center shadow-md backdrop-blur-md transition-all duration-300 hover:shadow-emerald-200/70"
           >
-            {/* Savings badge */}
-            <div className="mb-3 rounded-full bg-emerald-500 px-3 py-1 text-xs font-bold text-white">
-              Economie: {t.savings}
-            </div>
+            {/* Savings badge removed at user request */}
 
             {/* ⭐ Rating Stars */}
             <div className="mb-4 flex justify-center">

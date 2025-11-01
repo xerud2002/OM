@@ -227,15 +227,15 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
-                  <div>
-                    <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
+                  <div className="flex items-center">
+                    <label className="inline-flex items-center gap-2 text-sm text-gray-700">
                       <input
                         type="checkbox"
                         checked={!!form.fromElevator}
                         onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
-                        className="rounded border-gray-300"
+                        className="h-4 w-4 rounded border-gray-300"
                       />
-                      Lift
+                      <span>Lift</span>
                     </label>
                   </div>
                 </>
@@ -454,15 +454,15 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                     />
                   </div>
-                  <div>
-                    <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
+                  <div className="flex items-center">
+                    <label className="inline-flex items-center gap-2 text-sm text-gray-700">
                       <input
                         type="checkbox"
                         checked={!!form.toElevator}
                         onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
-                        className="rounded border-gray-300"
+                        className="h-4 w-4 rounded border-gray-300"
                       />
-                      Lift
+                      <span>Lift</span>
                     </label>
                   </div>
                 </>
