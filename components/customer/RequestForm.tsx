@@ -185,6 +185,148 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               <p className="text-xs text-gray-600">Detalii despre locația actuală</p>
             </div>
           </div>
+          {/* Detalii proprietate (mutat deasupra campurilor locatie) */}
+          <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100">
+                <svg
+                  className="h-4 w-4 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-8 4h10M7 8h10"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-emerald-900">Detalii proprietate</span>
+            </div>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Tip proprietate
+                </label>
+                <select
+                  value={form.fromType || "house"}
+                  onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                >
+                  <option value="house">Casă</option>
+                  <option value="flat">Apartament</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
+                <input
+                  type="text"
+                  value={form.rooms || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
+                  className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  placeholder="ex: 2"
+                />
+              </div>
+              {form.fromType === "flat" && (
+                <>
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-gray-700">Etaj</label>
+                    <input
+                      placeholder="ex: 3"
+                      value={form.fromFloor || ""}
+                      onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
+                      <input
+                        type="checkbox"
+                        checked={!!form.fromElevator}
+                        onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
+                        className="rounded border-gray-300"
+                      />
+                      Lift
+                    </label>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Detalii proprietate (mutat deasupra campurilor locatie) */}
+          <div className="mt-4 rounded-lg border border-sky-100 bg-white p-3">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-100">
+                <svg
+                  className="h-4 w-4 text-sky-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-8 4h10M7 8h10"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-sky-900">Detalii proprietate</span>
+            </div>
+            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Tip proprietate
+                </label>
+                <select
+                  value={form.toType || "house"}
+                  onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                >
+                  <option value="house">Casă</option>
+                  <option value="flat">Apartament</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
+                <input
+                  type="text"
+                  value={form.rooms || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
+                  className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  placeholder="ex: 2"
+                />
+              </div>
+              {form.toType === "flat" && (
+                <>
+                  <div>
+                    <label className="mb-1 block text-xs font-medium text-gray-700">Etaj</label>
+                    <input
+                      placeholder="ex: 3"
+                      value={form.toFloor || ""}
+                      onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    />
+                  </div>
+                  <div className="flex items-end">
+                    <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
+                      <input
+                        type="checkbox"
+                        checked={!!form.toElevator}
+                        onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
+                        className="rounded border-gray-300"
+                      />
+                      Lift
+                    </label>
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 gap-3 md:grid-cols-[max-content_max-content_1fr_max-content] md:items-end">
             <div>
               <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
@@ -248,11 +390,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 required
                 value={form.fromStreet || ""}
                 onChange={(e) => setForm((s) => ({ ...s, fromStreet: e.target.value }))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 md:w-[24ch]"
                 placeholder="Numele străzii"
               />
             </div>
-            <div className="md:ml-2" style={{ width: "8rem" }}>
+            <div className="md:ml-2 md:w-[6ch]">
               <label className="mb-1 block text-xs font-medium text-gray-700">
                 Număr <span className="text-red-500">*</span>
               </label>
@@ -296,75 +438,6 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </div>
           )}
-          <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
-            <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100">
-                <svg
-                  className="h-4 w-4 text-emerald-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-8 4h10M7 8h10"
-                  />
-                </svg>
-              </div>
-              <span className="text-xs font-semibold text-emerald-900">Detalii proprietate</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Tip proprietate
-                </label>
-                <select
-                  value={form.fromType || "house"}
-                  onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                >
-                  <option value="house">Casă</option>
-                  <option value="flat">Apartament</option>
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
-                <input
-                  type="text"
-                  value={form.rooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                  placeholder="ex: 2"
-                />
-              </div>
-              {form.fromType === "flat" && (
-                <>
-                  <div>
-                    <label className="mb-1 block text-xs font-medium text-gray-700">Etaj</label>
-                    <input
-                      placeholder="ex: 3"
-                      value={form.fromFloor || ""}
-                      onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                    />
-                  </div>
-                  <div className="flex items-end">
-                    <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
-                      <input
-                        type="checkbox"
-                        checked={!!form.fromElevator}
-                        onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
-                        className="rounded border-gray-300"
-                      />
-                      Lift
-                    </label>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
         </div>
 
         {/* Destination */}
@@ -447,11 +520,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 required
                 value={form.toStreet || ""}
                 onChange={(e) => setForm((s) => ({ ...s, toStreet: e.target.value }))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20 md:w-[24ch]"
                 placeholder="Numele străzii"
               />
             </div>
-            <div className="md:ml-2" style={{ width: "8rem" }}>
+            <div className="md:ml-2 md:w-[6ch]">
               <label className="mb-1 block text-xs font-medium text-gray-700">
                 Număr <span className="text-red-500">*</span>
               </label>
@@ -495,75 +568,6 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </div>
           )}
-          <div className="mt-4 rounded-lg border border-sky-100 bg-white p-3">
-            <div className="mb-2 flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-100">
-                <svg
-                  className="h-4 w-4 text-sky-600"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-8 4h10M7 8h10"
-                  />
-                </svg>
-              </div>
-              <span className="text-xs font-semibold text-sky-900">Detalii proprietate</span>
-            </div>
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-              <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Tip proprietate
-                </label>
-                <select
-                  value={form.toType || "house"}
-                  onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                >
-                  <option value="house">Casă</option>
-                  <option value="flat">Apartament</option>
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
-                <input
-                  type="text"
-                  value={form.rooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                  placeholder="ex: 2"
-                />
-              </div>
-              {form.toType === "flat" && (
-                <>
-                  <div>
-                    <label className="mb-1 block text-xs font-medium text-gray-700">Etaj</label>
-                    <input
-                      placeholder="ex: 3"
-                      value={form.toFloor || ""}
-                      onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                    />
-                  </div>
-                  <div className="flex items-end">
-                    <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
-                      <input
-                        type="checkbox"
-                        checked={!!form.toElevator}
-                        onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
-                        className="rounded border-gray-300"
-                      />
-                      Lift
-                    </label>
-                  </div>
-                </>
-              )}
-            </div>
-          </div>
         </div>
 
         {/* Services */}
