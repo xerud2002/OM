@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Edit2, MapPin, Calendar, Package, Phone, User, FileText, Wrench } from "lucide-react";
+import { X, Edit2, MapPin, Calendar, Package, Phone, User, FileText, Wrench, Trash2 } from "lucide-react";
 import { MovingRequest } from "../../types";
 import { formatDateRO } from "@/utils/date";
 import Image from "next/image";
@@ -21,6 +21,63 @@ export default function RequestDetailsModal({
   onRequestEdit,
 }: RequestDetailsModalProps) {
   const [showEditModal, setShowEditModal] = useState(false);
+  const [localMediaUrls, setLocalMediaUrls] = useState<string[]>(request?.mediaUrls || []);
+  const [isOwner, setIsOwner] = useState<boolean>(false);
+  const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
+
+  // Sync local media when modal opens or request changes
+  useEffect(() => {
+    if (request) setLocalMediaUrls(request.mediaUrls || []);
+  }, [request, isOpen]);
+
+  // Determine if current user owns the request
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const { auth } = await import("@/services/firebase");
+        const uid = auth.currentUser?.uid;
+        if (!mounted) return;
+        if (!request) {
+          setIsOwner(false);
+        } else {
+          setIsOwner(!!uid && uid === request.customerId);
+        }
+      } catch {
+        setIsOwner(false);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [request, isOpen]);
+
+  const handleDeleteMedia = async (url: string) => {
+    if (!isOwner) return;
+    const { toast } = await import("sonner");
+    const confirmed = window.confirm("Ștergi acest fișier din cerere?");
+    if (!confirmed) return;
+    try {
+      setDeletingUrl(url);
+      // Delete from storage (URL-based ref supported)
+      const { storage } = await import("@/services/firebase");
+      const { ref, deleteObject } = await import("firebase/storage");
+      const fileRef = ref(storage, url);
+      await deleteObject(fileRef);
+
+      // Update Firestore document by removing URL
+      const updated = localMediaUrls.filter((u) => u !== url);
+      setLocalMediaUrls(updated); // optimistic UI
+  await onRequestEdit(request as MovingRequest, { mediaUrls: updated });
+      toast.success("Fișierul a fost șters");
+    } catch (err) {
+      console.error("Failed to delete media", err);
+      const { toast } = await import("sonner");
+      toast.error("Nu s-a putut șterge fișierul");
+    } finally {
+      setDeletingUrl(null);
+    }
+  };
 
   if (!request) return null;
 
@@ -255,28 +312,47 @@ export default function RequestDetailsModal({
                 )}
 
                 {/* Media URLs */}
-                {request.mediaUrls && request.mediaUrls.length > 0 && (
+                {localMediaUrls && localMediaUrls.length > 0 && (
                   <div className="mb-6 rounded-xl border border-gray-200 bg-white p-5">
                     <div className="mb-3 flex items-center gap-2">
                       <Package size={20} className="text-amber-600" />
                       <h3 className="text-lg font-semibold text-gray-900">Media încărcată</h3>
                     </div>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                      {request.mediaUrls.map((url, index) => (
-                        <a
-                          key={index}
-                          href={url}
-                          target="_blank"
-                          rel="noopener noreferrer"
+                      {localMediaUrls.map((url, index) => (
+                        <div
+                          key={url}
                           className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 transition-all hover:border-emerald-300 hover:shadow-md"
                         >
+                          <a
+                            href={url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="absolute inset-0"
+                            aria-label={`Deschide media ${index + 1}`}
+                          />
                           <Image
                             src={url}
                             alt={`Media ${index + 1}`}
                             fill
                             className="object-cover transition-transform group-hover:scale-110"
                           />
-                        </a>
+                          {isOwner && (
+                            <button
+                              type="button"
+                              onClick={() => handleDeleteMedia(url)}
+                              disabled={deletingUrl === url}
+                              title="Șterge"
+                              className="absolute right-2 top-2 z-10 hidden h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-md transition hover:bg-red-600 disabled:cursor-wait group-hover:flex"
+                            >
+                              {deletingUrl === url ? (
+                                <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                              ) : (
+                                <Trash2 size={16} />
+                              )}
+                            </button>
+                          )}
+                        </div>
                       ))}
                     </div>
                   </div>
