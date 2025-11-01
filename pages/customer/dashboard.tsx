@@ -54,37 +54,53 @@ export default function CustomerDashboard() {
   const [archivedRequests, setArchivedRequests] = useState<Request[]>([]);
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
 
-  const [form, setForm] = useState<any>({
-    fromCity: "",
-    fromCounty: "",
-    toCity: "",
-    toCounty: "",
-    moveDate: "",
-    moveDateMode: "exact",
-    moveDateStart: "",
-    moveDateEnd: "",
-    moveDateFlexDays: 3,
-    details: "",
-    fromRooms: "",
-    toRooms: "",
-    rooms: "", // legacy aggregation for UI
-    volumeM3: "",
-    phone: "",
-    contactName: "",
-    contactFirstName: "",
-    contactLastName: "",
-    needPacking: false,
-    hasElevator: false,
-    budgetEstimate: 0,
-    specialItems: "",
-    serviceMoving: false,
-    servicePacking: false,
-    serviceDisassembly: false,
-    serviceCleanout: false,
-    serviceStorage: false,
-    surveyType: "quick-estimate",
-    mediaUpload: "later",
-    mediaFiles: [],
+  const [form, setForm] = useState<any>(() => {
+    // Try to restore form from localStorage on mount
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("customerDashboardForm");
+      if (saved) {
+        try {
+          const parsed = JSON.parse(saved);
+          // mediaFiles can't be serialized, so always reset to empty array
+          return { ...parsed, mediaFiles: [] };
+        } catch (err) {
+          console.warn("Failed to parse saved form", err);
+        }
+      }
+    }
+    // Default form state
+    return {
+      fromCity: "",
+      fromCounty: "",
+      toCity: "",
+      toCounty: "",
+      moveDate: "",
+      moveDateMode: "exact",
+      moveDateStart: "",
+      moveDateEnd: "",
+      moveDateFlexDays: 3,
+      details: "",
+      fromRooms: "",
+      toRooms: "",
+      rooms: "", // legacy aggregation for UI
+      volumeM3: "",
+      phone: "",
+      contactName: "",
+      contactFirstName: "",
+      contactLastName: "",
+      needPacking: false,
+      hasElevator: false,
+      budgetEstimate: 0,
+      specialItems: "",
+      serviceMoving: false,
+      servicePacking: false,
+      serviceDisassembly: false,
+      serviceCleanout: false,
+      serviceStorage: false,
+      surveyType: "quick-estimate",
+      mediaUpload: "later",
+      mediaFiles: [],
+    };
   });
 
   const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers" | "archive">(() => {
@@ -234,6 +250,19 @@ export default function CustomerDashboard() {
       localStorage.setItem("customerActiveTab", activeTab);
     }
   }, [activeTab]);
+
+  // Persist form state to localStorage on every change
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      try {
+        // Exclude mediaFiles (not serializable) from localStorage
+        const { mediaFiles, ...serializableForm } = form;
+        localStorage.setItem("customerDashboardForm", JSON.stringify(serializableForm));
+      } catch (err) {
+        console.warn("Failed to save form to localStorage", err);
+      }
+    }
+  }, [form]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
