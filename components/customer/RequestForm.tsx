@@ -1626,12 +1626,15 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   </label>
                   <input
                     value={form.phone || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-                    inputMode="tel"
-                    pattern="^(\\+?40|0)?7\\d{8}$"
+                    onChange={(e) => {
+                      // Allow numbers only; no length restriction
+                      const digits = e.target.value.replace(/\D/g, "");
+                      setForm((s) => ({ ...s, phone: digits }));
+                    }}
+                    inputMode="numeric"
                     required
                     className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
-                    placeholder="07xx xxx xxx"
+                    placeholder="Număr de telefon"
                   />
                 </div>
               </div>
