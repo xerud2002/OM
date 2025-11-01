@@ -16,13 +16,13 @@ import { useEffect } from "react";
  * - Intercom (paid)
  */
 
-const TAWK_PROPERTY_ID = "YOUR_PROPERTY_ID"; // Replace with your Tawk.to property ID
-const TAWK_WIDGET_ID = "default"; // Replace with your widget ID
+const TAWK_PROPERTY_ID = "690674904a15fd1950a7dc1d"; // Replace with your Tawk.to property ID
+const TAWK_WIDGET_ID = "1j90jelq9"; // Replace with your widget ID
 
 export default function LiveChatWidget() {
   useEffect(() => {
     // Don't load if IDs not configured
-    if (TAWK_PROPERTY_ID === "YOUR_PROPERTY_ID") {
+    if (TAWK_PROPERTY_ID === "690674904a15fd1950a7dc1d") {
       return;
     }
 

@@ -18,6 +18,7 @@ import { MessageSquare } from "lucide-react";
 import { auth } from "@/services/firebase";
 import { toast } from "sonner";
 import { updateRequestStatus, archiveRequest } from "@/utils/firestoreHelpers";
+import { validators } from "@/utils/validation";
 
 type Request = {
   id: string;
@@ -241,6 +242,48 @@ export default function CustomerDashboard() {
     const { toast } = await import("sonner");
 
     try {
+      // Client-side validation for mandatory fields
+      const errors: string[] = [];
+
+      const hasAtLeastOneService =
+        !!form.serviceMoving ||
+        !!form.servicePacking ||
+        !!form.serviceDisassembly ||
+        !!form.serviceCleanout ||
+        !!form.serviceStorage;
+
+      const digitsOnly = (v: any) => typeof v === "number" ? Number.isInteger(v) : /^\d+$/.test((v || "").toString());
+
+      // Property details (both ends)
+      if (!form.fromType) errors.push("Tip proprietate (plecare)");
+      if (!form.toType) errors.push("Tip proprietate (destinație)");
+      if (!form.fromRooms || !digitsOnly(form.fromRooms)) errors.push("Număr camere (plecare – doar cifre)");
+      if (!form.toRooms || !digitsOnly(form.toRooms)) errors.push("Număr camere (destinație – doar cifre)");
+
+      // Address essentials
+      if (!form.fromCounty) errors.push("Județ (plecare)");
+      if (!form.fromCity) errors.push("Localitate (plecare)");
+      if (!form.toCounty) errors.push("Județ (destinație)");
+      if (!form.toCity) errors.push("Localitate (destinație)");
+
+      // Contact
+      if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
+      if (!(form as any).contactLastName?.trim()) errors.push("Nume");
+      if (!validators.phone(form.phone || "")) errors.push("Telefon (format valid: 07xxxxxxxx sau +407xxxxxxxx)");
+
+      // Services at least one
+      if (!hasAtLeastOneService) errors.push("Alege cel puțin un serviciu");
+
+      // Survey type chosen (defensive)
+      if (!form.surveyType) errors.push("Survey / estimare");
+
+      if (errors.length) {
+        toast.error(
+          `Te rugăm să completezi corect câmpurile obligatorii: ${errors.join(", ")}`
+        );
+        return;
+      }
+
       // Compute legacy rooms for cards (prefer destination, then pickup)
       const aggregatedRooms = (form.toRooms ?? form.fromRooms ?? form.rooms) || "";
 

@@ -43,7 +43,10 @@ type FormShape = {
   serviceCleanout?: boolean;
   serviceStorage?: boolean;
   surveyType?: "in-person" | "video" | "quick-estimate";
-  mediaUpload?: "now" | "later";
+  // allow opting out of media uploads
+  // values: now | later | none
+  // none: user opts not to add photos/videos
+  mediaUpload?: "now" | "later" | "none";
   mediaFiles?: File[];
   // Enhanced date fields
   moveDateMode?: "exact" | "range" | "none" | "flexible";
@@ -186,7 +189,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Tip proprietate
+                  Tip proprietate <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={form.fromType || "house"}
@@ -198,11 +201,17 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={form.fromRooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, fromRooms: e.target.value }))}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "");
+                    setForm((s) => ({ ...s, fromRooms: digits }));
+                  }}
+                  required
                   className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   placeholder="ex: 2"
                 />
@@ -309,11 +318,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 )}
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Strada <span className="text-red-500">*</span>
-                </label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
                 <input
-                  required
                   value={form.fromStreet || ""}
                   onChange={(e) => setForm((s) => ({ ...s, fromStreet: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
@@ -321,11 +327,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Număr <span className="text-red-500">*</span>
-                </label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
                 <input
-                  required
                   value={form.fromNumber || ""}
                   onChange={(e) => setForm((s) => ({ ...s, fromNumber: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
@@ -413,7 +416,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Tip proprietate
+                  Tip proprietate <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={form.toType || "house"}
@@ -425,11 +428,17 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
                   value={form.toRooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, toRooms: e.target.value }))}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "");
+                    setForm((s) => ({ ...s, toRooms: digits }));
+                  }}
+                  required
                   className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   placeholder="ex: 2"
                 />
@@ -528,11 +537,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 )}
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Strada <span className="text-red-500">*</span>
-                </label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
                 <input
-                  required
                   value={form.toStreet || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toStreet: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
@@ -540,11 +546,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Număr <span className="text-red-500">*</span>
-                </label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
                 <input
-                  required
                   value={form.toNumber || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toNumber: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
@@ -605,7 +608,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900">Servicii căutate</h4>
+              <h4 className="text-base font-bold text-gray-900">Servicii căutate <span className="text-red-500">*</span></h4>
               <p className="text-xs text-gray-600">Selectează serviciile de care ai nevoie</p>
             </div>
           </div>
@@ -827,6 +830,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
           </div>
+          {!(form.serviceMoving || form.servicePacking || form.serviceDisassembly || form.serviceCleanout || form.serviceStorage) && (
+            <p className="mt-2 text-xs font-medium text-red-600">Selectează cel puțin un serviciu.</p>
+          )}
         </div>
 
         {/* Survey */}
@@ -854,7 +860,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900">Survey și estimare</h4>
+              <h4 className="text-base font-bold text-gray-900">Survey și estimare <span className="text-red-500">*</span></h4>
               <p className="text-xs text-gray-600">Alege modalitatea de evaluare</p>
             </div>
           </div>
@@ -1040,7 +1046,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
           </div>
           <div className="space-y-5">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {/* Upload now */}
               <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
                 <input
@@ -1118,6 +1124,54 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   </div>
                   <h5 className="mb-1 font-semibold text-gray-900">Primesc link pe email</h5>
                   <p className="text-xs text-gray-600">Vei primi un link pentru upload ulterior</p>
+                </div>
+                <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
+                  <svg
+                    className="h-4 w-4 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              </label>
+
+              {/* No media */}
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+                <input
+                  type="radio"
+                  name="mediaUpload"
+                  value="none"
+                  checked={form.mediaUpload === "none"}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, mediaUpload: e.target.value as any }))
+                  }
+                  className="peer sr-only"
+                />
+                <div className="p-5">
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 transition-colors group-hover:bg-blue-200 peer-checked:bg-blue-500">
+                    <svg
+                      className="h-6 w-6 text-blue-600 transition-colors peer-checked:text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                  <h5 className="mb-1 font-semibold text-gray-900">Nu doresc să adaug poze</h5>
+                  <p className="text-xs text-gray-600">Continui fără a trimite fotografii/video</p>
                 </div>
                 <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
                   <svg
@@ -1527,7 +1581,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <div>
                   <label className="mb-2 block text-xs font-semibold text-gray-700">
-                    Nume și prenume
+                    Nume și prenume <span className="text-red-500">*</span>
                   </label>
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <input
@@ -1543,6 +1597,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           return { ...s, contactFirstName, contactName };
                         })
                       }
+                      required
                       className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
                       placeholder="Prenume"
                     />
@@ -1559,6 +1614,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           return { ...s, contactLastName, contactName };
                         })
                       }
+                      required
                       className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
                       placeholder="Nume"
                     />
@@ -1566,11 +1622,14 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
                 <div>
                   <label className="mb-2 block text-xs font-semibold text-gray-700">
-                    Număr de telefon
+                    Număr de telefon <span className="text-red-500">*</span>
                   </label>
                   <input
                     value={form.phone || ""}
                     onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+                    inputMode="tel"
+                    pattern="^(\\+?40|0)?7\\d{8}$"
+                    required
                     className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
                     placeholder="07xx xxx xxx"
                   />
