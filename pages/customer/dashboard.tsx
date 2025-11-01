@@ -257,22 +257,19 @@ export default function CustomerDashboard() {
       // If user chose "now" for media upload, upload files immediately
       if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
         try {
-          console.log(`Auth UID: ${user.uid}, attempting upload to: requests/${requestId}/customers/${user.uid}/`);
+          console.log(`Auth UID: ${user.uid}, uploading ${form.mediaFiles.length} file(s) via API route`);
           
-          const { uploadFileDirectly } = await import("@/utils/storageUpload");
+          const { uploadFileViaAPI } = await import("@/utils/storageUpload");
           const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
 
           const uploadedUrls: string[] = [];
 
           for (let i = 0; i < form.mediaFiles.length; i++) {
             const file = form.mediaFiles[i];
-            const fileExtension = file.name.split(".").pop();
-            const fileName = `${Date.now()}_${i}.${fileExtension}`;
-            const storagePath = `requests/${requestId}/customers/${user.uid}/${fileName}`;
 
-            console.log(`Uploading via REST API: ${storagePath}`);
-            // Upload directly via Firebase REST API (bypasses SDK CORS issues)
-            const downloadURL = await uploadFileDirectly(file, storagePath);
+            console.log(`Uploading ${file.name} (${i + 1}/${form.mediaFiles.length})`);
+            // Upload via Next.js API route (server-side, no CORS issues)
+            const downloadURL = await uploadFileViaAPI(file, requestId, user.uid);
             uploadedUrls.push(downloadURL);
             console.log(`Upload success: ${downloadURL}`);
           }

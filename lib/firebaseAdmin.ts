@@ -8,6 +8,8 @@ if (!admin.apps.length) {
   // Private key might contain escaped newlines
   const privateKeyRaw = process.env.FIREBASE_ADMIN_PRIVATE_KEY || "";
   const privateKey = privateKeyRaw.replace(/\\n/g, "\n");
+  const storageBucket =
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || `${projectId}.appspot.com`;
 
   if (!projectId || !clientEmail || !privateKey) {
     throw new Error(
@@ -21,6 +23,7 @@ if (!admin.apps.length) {
       clientEmail,
       privateKey,
     }),
+    storageBucket,
   });
 }
 

@@ -1,13 +1,14 @@
 /**
- * Direct Firebase Storage upload via REST API
- * Bypasses Firebase SDK entirely to avoid CORS preflight issues on localhost
+ * Upload file via Next.js API route (server-side)
+ * Bypasses client-side CORS issues on localhost
  */
 
 import { auth } from "@/services/firebase";
 
-export async function uploadFileDirectly(
+export async function uploadFileViaAPI(
   file: File,
-  storagePath: string
+  requestId: string,
+  customerId: string
 ): Promise<string> {
   const user = auth.currentUser;
   if (!user) throw new Error("User not authenticated");
@@ -15,31 +16,31 @@ export async function uploadFileDirectly(
   // Get fresh ID token
   const token = await user.getIdToken();
 
-  // Encode path for URL
-  const encodedPath = encodeURIComponent(storagePath);
-  const bucketName = process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET;
-  
-  // Upload directly via Firebase Storage REST API
-  const uploadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o?name=${encodedPath}`;
+  // Create FormData
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("requestId", requestId);
+  formData.append("customerId", customerId);
 
-  const response = await fetch(uploadUrl, {
+  // Upload via API route
+  const response = await fetch("/api/uploadMedia", {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${token}`,
-      "Content-Type": file.type || "application/octet-stream",
     },
-    body: file,
+    body: formData,
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Upload failed: ${response.status} - ${errorText}`);
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `Upload failed: ${response.status}`);
   }
 
   const result = await response.json();
   
-  // Construct public download URL
-  const downloadUrl = `https://firebasestorage.googleapis.com/v0/b/${bucketName}/o/${encodedPath}?alt=media&token=${result.downloadTokens}`;
-  
-  return downloadUrl;
+  if (!result.ok || !result.urls || result.urls.length === 0) {
+    throw new Error("Upload failed: No URLs returned");
+  }
+
+  return result.urls[0];
 }

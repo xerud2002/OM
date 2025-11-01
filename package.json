@@ -20,6 +20,7 @@
     "emailjs-com": "^3.2.0",
     "firebase": "^12.4.0",
     "firebase-admin": "^12.7.0",
+    "formidable": "^3.5.4",
     "framer-motion": "^10.16.0",
     "lucide-react": "^0.324.0",
     "next": "^14.2.3",
@@ -29,6 +30,7 @@
     "sonner": "^2.0.7"
   },
   "devDependencies": {
+    "@types/formidable": "^3.4.6",
     "@types/node": "^24.9.1",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
