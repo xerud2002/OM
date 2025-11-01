@@ -100,7 +100,7 @@ export default function EditRequestModal({
       if (form.mediaFiles && form.mediaFiles.length > 0) {
   toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
 
-        const { ref, uploadBytesResumable, uploadBytes, getDownloadURL } = await import(
+        const { ref, uploadBytes, getDownloadURL } = await import(
           "firebase/storage"
         );
         const { storage } = await import("@/services/firebase");
@@ -113,46 +113,10 @@ export default function EditRequestModal({
           );
 
           try {
-            const uploadTask = uploadBytesResumable(storageRef, file);
-
-            const url = await new Promise<string>((resolve, reject) => {
-              // Safety timeout to avoid hanging UI on network/CORS issues
-              const timeout = setTimeout(() => {
-                try {
-                  // @ts-ignore
-                  if (typeof uploadTask.cancel === "function") uploadTask.cancel();
-                } catch {}
-                reject(new Error("Timeout la încărcarea fișierului (resumable)"));
-              }, 30000);
-
-              uploadTask.on(
-                "state_changed",
-                (snapshot) => {
-                  const progress =
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                  console.warn(`Upload ${file.name}: ${progress.toFixed(0)}%`);
-                },
-                async (error) => {
-                  clearTimeout(timeout);
-                  console.error(`Resumable failed for ${file.name}:`, error);
-                  // Fallback to non-resumable simple upload
-                  try {
-                    await uploadBytes(storageRef, file);
-                    const downloadURL = await getDownloadURL(storageRef);
-                    resolve(downloadURL);
-                  } catch (fallbackErr) {
-                    reject(fallbackErr);
-                  }
-                },
-                async () => {
-                  clearTimeout(timeout);
-                  const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                  resolve(downloadURL);
-                }
-              );
-            });
-
-            newMediaUrls.push(url);
+            // Use simple upload (no preflight/CORS issues on localhost)
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            newMediaUrls.push(downloadURL);
           } catch (uploadError) {
             console.error(`Failed to upload ${file.name}:`, uploadError);
             toast.error(`Nu s-a putut încărca fișierul ${file.name}`);

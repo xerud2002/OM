@@ -257,7 +257,7 @@ export default function CustomerDashboard() {
       // If user chose "now" for media upload, upload files immediately
       if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
         try {
-          const { ref, uploadBytesResumable, uploadBytes, getDownloadURL } = await import("firebase/storage");
+          const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
           const { storage } = await import("@/services/firebase");
           const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
 
@@ -272,40 +272,10 @@ export default function CustomerDashboard() {
               `requests/${requestId}/customers/${user.uid}/${fileName}`
             );
 
-            const uploadTask = uploadBytesResumable(storageRef, file);
-
-            await new Promise<void>((resolve, reject) => {
-              const timeout = setTimeout(() => {
-                try {
-                  // @ts-ignore
-                  if (typeof uploadTask.cancel === "function") uploadTask.cancel();
-                } catch {}
-                reject(new Error("Timeout la încărcarea fișierului (resumable)"));
-              }, 30000);
-
-              uploadTask.on(
-                "state_changed",
-                null,
-                async () => {
-                  clearTimeout(timeout);
-                  // Fallback to non-resumable upload
-                  try {
-                    await uploadBytes(storageRef, file);
-                    const downloadURL = await getDownloadURL(storageRef);
-                    uploadedUrls.push(downloadURL);
-                    resolve();
-                  } catch (fallbackErr) {
-                    reject(fallbackErr);
-                  }
-                },
-                async () => {
-                  clearTimeout(timeout);
-                  const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-                  uploadedUrls.push(downloadURL);
-                  resolve();
-                }
-              );
-            });
+            // Use simple upload (no preflight/CORS issues on localhost)
+            await uploadBytes(storageRef, file);
+            const downloadURL = await getDownloadURL(storageRef);
+            uploadedUrls.push(downloadURL);
           }
 
           // Update request document with media URLs
