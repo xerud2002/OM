@@ -183,7 +183,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
               <span className="text-xs font-semibold text-emerald-900">Detalii proprietate</span>
             </div>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
                   Tip proprietate
@@ -191,7 +191,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <select
                   value={form.fromType || "house"}
                   onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                 >
                   <option value="house">Casă</option>
                   <option value="flat">Apartament</option>
@@ -203,7 +203,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   type="text"
                   value={form.fromRooms || ""}
                   onChange={(e) => setForm((s) => ({ ...s, fromRooms: e.target.value }))}
-                  className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   placeholder="ex: 2"
                 />
               </div>
@@ -215,7 +215,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.fromFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                      className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
                   <div>
@@ -264,7 +264,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   onChange={(e) =>
                     setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))
                   }
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                 >
                   <option value="">Selectează județ</option>
                   {counties.map((c) => (
@@ -287,7 +287,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       fromCityManual: value === "__other__",
                     }));
                   }}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   disabled={!form.fromCounty}
                 >
                   <option value="">Selectează localitatea</option>
@@ -410,7 +410,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
               <span className="text-xs font-semibold text-sky-900">Detalii proprietate</span>
             </div>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
                   Tip proprietate
@@ -418,7 +418,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <select
                   value={form.toType || "house"}
                   onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                 >
                   <option value="house">Casă</option>
                   <option value="flat">Apartament</option>
@@ -430,7 +430,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   type="text"
                   value={form.toRooms || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toRooms: e.target.value }))}
-                  className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   placeholder="ex: 2"
                 />
               </div>
@@ -442,7 +442,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.toFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                      className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                     />
                   </div>
                   <div>
@@ -487,7 +487,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   required
                   value={form.toCounty || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                 >
                   <option value="">Selectează județ</option>
                   {counties.map((c) => (
@@ -506,7 +506,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     const value = e.target.value;
                     setForm((s) => ({ ...s, toCity: value, toCityManual: value === "__other__" }));
                   }}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   disabled={!form.toCounty}
                 >
                   <option value="">Selectează localitatea</option>

@@ -59,10 +59,39 @@ export default function RequestDetailsModal({
     if (!confirmed) return;
     try {
       setDeletingUrl(url);
-      // Delete from storage (URL-based ref supported)
+      // Derive Storage path from either signed URL (storage.googleapis.com) or Firebase download URL
+      const extractPath = (u: string): string => {
+        try {
+          if (u.startsWith("gs://")) {
+            const without = u.replace(/^gs:\/\//, "");
+            const idx = without.indexOf("/");
+            return idx >= 0 ? without.slice(idx + 1) : "";
+          }
+          const parsed = new URL(u);
+          const host = parsed.hostname;
+          if (host.includes("storage.googleapis.com")) {
+            // /<bucket>/<path>
+            const parts = parsed.pathname.split("/").filter(Boolean);
+            // remove bucket segment
+            return decodeURIComponent(parts.slice(1).join("/"));
+          }
+          if (host.includes("firebasestorage.googleapis.com")) {
+            // /v0/b/<bucket>/o/<encodedPath>
+            const match = parsed.pathname.match(/\/o\/(.+)$/);
+            if (match && match[1]) {
+              const end = match[1].split("?")[0];
+              return decodeURIComponent(end);
+            }
+          }
+        } catch {}
+        // Fallback: assume we already have a path
+        return u;
+      };
+
+      const storagePath = extractPath(url);
       const { storage } = await import("@/services/firebase");
       const { ref, deleteObject } = await import("firebase/storage");
-      const fileRef = ref(storage, url);
+      const fileRef = ref(storage, storagePath);
       await deleteObject(fileRef);
 
       // Update Firestore document by removing URL
