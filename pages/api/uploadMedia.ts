@@ -57,7 +57,13 @@ export default async function handler(
     const uploadedUrls: string[] = [];
     const fileArray = Array.isArray(files.file) ? files.file : files.file ? [files.file] : [];
 
-    const bucket = admin.storage().bucket();
+    // Resolve bucket name explicitly to avoid default-bucket config issues
+    const bucketName =
+      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || `${process.env.FIREBASE_ADMIN_PROJECT_ID}.appspot.com`;
+    const bucket = admin.storage().bucket(bucketName);
+    if (!bucket.name) {
+      throw new Error("Bucket name not specified or invalid. Configure NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET in .env");
+    }
 
     for (const file of fileArray) {
       if (!file) continue;
