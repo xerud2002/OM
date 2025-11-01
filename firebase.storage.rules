@@ -21,8 +21,8 @@ service firebase.storage {
       // Only the customer who owns this path can upload
       allow write: if isOwner(customerId);
       
-      // No deletion (archives handle removal)
-      allow delete: if false;
+  // Only the customer who owns this path can delete
+  allow delete: if isOwner(customerId);
     }
     
     // === COMPANY LOGOS (optional future feature) ===

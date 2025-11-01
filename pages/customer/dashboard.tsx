@@ -248,8 +248,54 @@ export default function CustomerDashboard() {
         createdAt: serverTimestamp(),
       } as any);
 
+      // If user chose "now" for media upload, upload files immediately
+      if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
+        try {
+          const { ref, uploadBytesResumable, getDownloadURL } = await import("firebase/storage");
+          const { storage } = await import("@/services/firebase");
+          const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
+
+          const uploadedUrls: string[] = [];
+
+          for (let i = 0; i < form.mediaFiles.length; i++) {
+            const file = form.mediaFiles[i];
+            const fileExtension = file.name.split(".").pop();
+            const fileName = `${Date.now()}_${i}.${fileExtension}`;
+            const storageRef = ref(
+              storage,
+              `requests/${requestId}/customers/${user.uid}/${fileName}`
+            );
+
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            await new Promise<void>((resolve, reject) => {
+              uploadTask.on(
+                "state_changed",
+                null,
+                reject,
+                async () => {
+                  const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                  uploadedUrls.push(downloadURL);
+                  resolve();
+                }
+              );
+            });
+          }
+
+          // Update request document with media URLs
+          const requestRef = doc(db, "requests", requestId);
+          await updateDoc(requestRef, {
+            mediaUrls: arrayUnion(...uploadedUrls),
+          });
+
+          toast.success(`Cererea și ${uploadedUrls.length} fișier(e) au fost încărcate cu succes!`);
+        } catch (uploadError) {
+          console.error("Media upload error:", uploadError);
+          toast.warning("Cererea a fost creată, dar fișierele nu au putut fi încărcate.");
+        }
+      }
       // If user chose "later" for media upload, generate upload link and send email
-      if (form.mediaUpload === "later") {
+      else if (form.mediaUpload === "later") {
         try {
           const resp = await fetch("/api/generateUploadLink", {
             method: "POST",

@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Save, AlertCircle } from "lucide-react";
+import { X, Save, AlertCircle, Trash2, ImageIcon, Upload } from "lucide-react";
 import { MovingRequest } from "../../types";
 import RequestForm from "./RequestForm";
+import Image from "next/image";
 
 type EditRequestModalProps = {
   request: MovingRequest | null;
@@ -20,6 +21,8 @@ export default function EditRequestModal({
 }: EditRequestModalProps) {
   const [form, setForm] = useState<any>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [existingMediaUrls, setExistingMediaUrls] = useState<string[]>([]);
+  const [deletedMediaUrls, setDeletedMediaUrls] = useState<string[]>([]);
 
   // Initialize/refresh form values when opening or when request changes
   useEffect(() => {
@@ -28,12 +31,22 @@ export default function EditRequestModal({
         fromCity: request.fromCity || "",
         fromCounty: request.fromCounty || "",
         fromAddress: request.fromAddress || "",
+        fromStreet: request.fromStreet || "",
+        fromNumber: request.fromNumber || "",
+        fromBloc: request.fromBloc || "",
+        fromStaircase: request.fromStaircase || "",
+        fromApartment: request.fromApartment || "",
         fromType: request.fromType || "",
         fromFloor: request.fromFloor ?? "",
         fromElevator: request.fromElevator ?? false,
         toCity: request.toCity || "",
         toCounty: request.toCounty || "",
         toAddress: request.toAddress || "",
+        toStreet: request.toStreet || "",
+        toNumber: request.toNumber || "",
+        toBloc: request.toBloc || "",
+        toStaircase: request.toStaircase || "",
+        toApartment: request.toApartment || "",
         toType: request.toType || "",
         toFloor: request.toFloor ?? "",
         toElevator: request.toElevator ?? false,
@@ -62,54 +75,104 @@ export default function EditRequestModal({
         mediaUpload: "now",
         mediaFiles: [],
       });
+      setExistingMediaUrls(request.mediaUrls || []);
+      setDeletedMediaUrls([]);
     }
   }, [request, isOpen]);
+
+  const handleDeleteMedia = (url: string) => {
+    setExistingMediaUrls((prev) => prev.filter((u) => u !== url));
+    setDeletedMediaUrls((prev) => [...prev, url]);
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!request || !form) return;
 
     setIsSaving(true);
+  const { toast } = await import("sonner");
+
     try {
       // Upload new media files if any
       let newMediaUrls: string[] = [];
       if (form.mediaFiles && form.mediaFiles.length > 0) {
-        const { ref, uploadBytesResumable, getDownloadURL } = await import("firebase/storage");
+  toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
+
+        const { ref, uploadBytesResumable, getDownloadURL } = await import(
+          "firebase/storage"
+        );
         const { storage } = await import("@/services/firebase");
         
-        const uploadPromises = (Array.from(form.mediaFiles) as File[]).map(async (file) => {
+        for (const file of Array.from(form.mediaFiles) as File[]) {
+          const fileName = `${Date.now()}_${file.name}`;
           const storageRef = ref(
             storage,
-            `requests/${request.id}/customers/${request.customerId}/${Date.now()}_${file.name}`
+            `requests/${request.id}/customers/${request.customerId}/${fileName}`
           );
-          const uploadTask = uploadBytesResumable(storageRef, file);
-          
-          return new Promise<string>((resolve, reject) => {
-            uploadTask.on(
-              "state_changed",
-              null,
-              reject,
-              async () => {
-                const url = await getDownloadURL(uploadTask.snapshot.ref);
-                resolve(url);
-              }
-            );
-          });
-        });
 
-        newMediaUrls = await Promise.all(uploadPromises);
+          try {
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            const url = await new Promise<string>((resolve, reject) => {
+              uploadTask.on(
+                "state_changed",
+                (snapshot) => {
+                  const progress =
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                  console.warn(`Upload ${file.name}: ${progress.toFixed(0)}%`);
+                },
+                (error) => {
+                  console.error(`Upload failed for ${file.name}:`, error);
+                  reject(error);
+                },
+                async () => {
+                  const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                  resolve(downloadURL);
+                }
+              );
+            });
+
+            newMediaUrls.push(url);
+          } catch (uploadError) {
+            console.error(`Failed to upload ${file.name}:`, uploadError);
+            toast.error(`Nu s-a putut încărca fișierul ${file.name}`);
+            throw uploadError;
+          }
+        }
       }
 
-      // Merge new URLs with existing ones
+      // Delete removed media files from storage
+      if (deletedMediaUrls.length > 0) {
+        const { ref, deleteObject } = await import("firebase/storage");
+        const { storage } = await import("@/services/firebase");
+        
+        await Promise.all(
+          deletedMediaUrls.map(async (url) => {
+            try {
+              const fileRef = ref(storage, url);
+              await deleteObject(fileRef);
+            } catch (err) {
+              console.warn("Failed to delete media file:", url, err);
+            }
+          })
+        );
+      }
+
+      // Combine existing (not deleted) + new URLs
+      const finalMediaUrls = [...existingMediaUrls, ...newMediaUrls];
+
       const updatedData = {
         ...form,
-        mediaUrls: [...(request.mediaUrls || []), ...newMediaUrls],
+        mediaUrls: finalMediaUrls,
       };
 
-      await onSave(request.id, updatedData);
+    await onSave(request.id, updatedData);
+    toast.success("Cererea a fost actualizată cu succes!");
       onClose();
     } catch (error) {
-      console.error("Failed to save changes:", error);
+    console.error("Failed to save changes:", error);
+    const errorMessage = error instanceof Error ? error.message : "Eroare necunoscută";
+    toast.error(`Eroare la actualizare: ${errorMessage}`);
     } finally {
       setIsSaving(false);
     }
@@ -179,14 +242,109 @@ export default function EditRequestModal({
                     </p>
                   </div>
                 ) : (
-                  <RequestForm
-                    form={form}
-                    setForm={setForm}
-                    onSubmit={handleSave}
-                    onReset={() => {
-                      onClose();
-                    }}
-                  />
+                  <>
+                    {/* Media Management Section */}
+                    {(existingMediaUrls.length > 0 || (form.mediaFiles && form.mediaFiles.length > 0)) && (
+                      <div className="mb-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-5">
+                        <div className="mb-4 flex items-center gap-2">
+                          <ImageIcon size={20} className="text-amber-600" />
+                          <h3 className="text-lg font-semibold text-gray-900">Poze și video</h3>
+                        </div>
+
+                        {/* Existing Media */}
+                        {existingMediaUrls.length > 0 && (
+                          <div className="mb-4">
+                            <p className="mb-3 text-sm font-medium text-gray-700">
+                              Fișiere existente ({existingMediaUrls.length})
+                            </p>
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                              {existingMediaUrls.map((url, index) => (
+                                <div
+                                  key={url}
+                                  className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 bg-gray-100"
+                                >
+                                  <Image
+                                    src={url}
+                                    alt={`Media ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                  />
+                                  <button
+                                    onClick={() => handleDeleteMedia(url)}
+                                    className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity hover:bg-red-600 group-hover:opacity-100"
+                                    title="Șterge"
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
+                                  <a
+                                    href={url}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all hover:bg-black/30 hover:opacity-100"
+                                  >
+                                    <span className="text-xs font-medium text-white">
+                                      Vezi
+                                    </span>
+                                  </a>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+
+                        {/* New Files Preview */}
+                        {form.mediaFiles && form.mediaFiles.length > 0 && (
+                          <div>
+                            <p className="mb-3 text-sm font-medium text-emerald-700">
+                              Fișiere noi de încărcat ({form.mediaFiles.length})
+                            </p>
+                            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+                              {(Array.from(form.mediaFiles) as File[]).map((file, index) => (
+                                <div
+                                  key={index}
+                                  className="group relative aspect-square overflow-hidden rounded-lg border-2 border-emerald-200 bg-emerald-50"
+                                >
+                                  {file.type.startsWith("image/") ? (
+                                    <Image
+                                      src={URL.createObjectURL(file)}
+                                      alt={file.name}
+                                      fill
+                                      className="object-cover"
+                                    />
+                                  ) : (
+                                    <div className="flex h-full items-center justify-center">
+                                      <Upload size={32} className="text-emerald-600" />
+                                    </div>
+                                  )}
+                                  <button
+                                    onClick={() => {
+                                      const newFiles = (Array.from(form.mediaFiles) as File[]).filter(
+                                        (_, i) => i !== index
+                                      );
+                                      setForm((s: any) => ({ ...s, mediaFiles: newFiles }));
+                                    }}
+                                    className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity hover:bg-red-600 group-hover:opacity-100"
+                                    title="Șterge"
+                                  >
+                                    <X size={16} />
+                                  </button>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    <RequestForm
+                      form={form}
+                      setForm={setForm}
+                      onSubmit={handleSave}
+                      onReset={() => {
+                        onClose();
+                      }}
+                    />
+                  </>
                 )}
               </div>
 
