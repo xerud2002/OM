@@ -306,6 +306,16 @@ export default function CustomerDashboard() {
           const result = await resp.json();
 
           if (result.ok && result.uploadLink) {
+            // Helpful UX: copy link to clipboard so user can access it immediately
+            try {
+              if (typeof window !== "undefined" && navigator?.clipboard) {
+                await navigator.clipboard.writeText(result.uploadLink);
+                toast.info("Link-ul pentru upload a fost copiat în clipboard.");
+              }
+            } catch (copyErr) {
+              console.warn("Could not copy upload link to clipboard", copyErr);
+            }
+
             const emailParams = {
               to_email: result.customerEmail,
               to_name: result.customerName || "Client",
@@ -318,7 +328,9 @@ export default function CustomerDashboard() {
               );
             } catch (emailError) {
               console.error("Email send error:", emailError);
-              toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
+              toast.warning(
+                "Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis. Link-ul este în clipboard."
+              );
             }
           } else {
             toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
