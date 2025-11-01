@@ -257,6 +257,8 @@ export default function CustomerDashboard() {
       // If user chose "now" for media upload, upload files immediately
       if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
         try {
+          console.log(`Auth UID: ${user.uid}, attempting upload to: requests/${requestId}/customers/${user.uid}/`);
+          
           const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
           const { storage } = await import("@/services/firebase");
           const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
@@ -267,15 +269,15 @@ export default function CustomerDashboard() {
             const file = form.mediaFiles[i];
             const fileExtension = file.name.split(".").pop();
             const fileName = `${Date.now()}_${i}.${fileExtension}`;
-            const storageRef = ref(
-              storage,
-              `requests/${requestId}/customers/${user.uid}/${fileName}`
-            );
+            const storagePath = `requests/${requestId}/customers/${user.uid}/${fileName}`;
+            const storageRef = ref(storage, storagePath);
 
+            console.log(`Uploading: ${storagePath}`);
             // Use simple upload (no preflight/CORS issues on localhost)
             await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(storageRef);
             uploadedUrls.push(downloadURL);
+            console.log(`Upload success: ${downloadURL}`);
           }
 
           // Update request document with media URLs
@@ -287,6 +289,11 @@ export default function CustomerDashboard() {
           toast.success(`Cererea și ${uploadedUrls.length} fișier(e) au fost încărcate cu succes!`);
         } catch (uploadError) {
           console.error("Media upload error:", uploadError);
+          console.error("Upload error details:", {
+            code: (uploadError as any)?.code,
+            message: (uploadError as any)?.message,
+            serverResponse: (uploadError as any)?.serverResponse
+          });
           toast.warning("Cererea a fost creată, dar fișierele nu au putut fi încărcate.");
         }
       }

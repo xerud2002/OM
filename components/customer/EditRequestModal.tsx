@@ -98,7 +98,23 @@ export default function EditRequestModal({
       // Upload new media files if any
       let newMediaUrls: string[] = [];
       if (form.mediaFiles && form.mediaFiles.length > 0) {
-  toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
+        // Check auth before attempting upload
+        const { auth } = await import("@/services/firebase");
+        const currentUser = auth.currentUser;
+        
+        if (!currentUser) {
+          toast.error("Trebuie să fii autentificat pentru a încărca fișiere");
+          throw new Error("User not authenticated");
+        }
+
+        // Verify user owns this request
+        if (currentUser.uid !== request.customerId) {
+          toast.error("Nu ai permisiunea să modifici această cerere");
+          console.error(`Auth mismatch: user ${currentUser.uid} != customer ${request.customerId}`);
+          throw new Error("Permission denied: user does not own this request");
+        }
+
+        toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
 
         const { ref, uploadBytes, getDownloadURL } = await import(
           "firebase/storage"
@@ -113,19 +129,26 @@ export default function EditRequestModal({
           );
 
           try {
+            console.log(`Uploading to: requests/${request.id}/customers/${request.customerId}/${fileName}`);
+            console.log(`Auth UID: ${currentUser.uid}, Customer ID: ${request.customerId}`);
+            
             // Use simple upload (no preflight/CORS issues on localhost)
             await uploadBytes(storageRef, file);
             const downloadURL = await getDownloadURL(storageRef);
             newMediaUrls.push(downloadURL);
+            console.log(`Upload success: ${downloadURL}`);
           } catch (uploadError) {
             console.error(`Failed to upload ${file.name}:`, uploadError);
+            console.error("Upload error details:", {
+              code: (uploadError as any)?.code,
+              message: (uploadError as any)?.message,
+              serverResponse: (uploadError as any)?.serverResponse
+            });
             toast.error(`Nu s-a putut încărca fișierul ${file.name}`);
             throw uploadError;
           }
         }
-      }
-
-      // Delete removed media files from storage
+      }      // Delete removed media files from storage
       if (deletedMediaUrls.length > 0) {
         const { ref, deleteObject } = await import("firebase/storage");
         const { storage } = await import("@/services/firebase");

@@ -1,0 +1,27 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // === TEMPORARY DEBUG: Allow ALL authenticated writes ===
+    match /requests/{requestId}/customers/{customerId}/{filename} {
+      allow read, write, delete: if request.auth != null;
+    }
+    
+    // === COMPANY LOGOS (optional future feature) ===
+    match /companies/{companyId}/{filename} {
+      allow read: if true;
+      allow write, delete: if request.auth != null;
+    }
+    
+    // === CUSTOMER PROFILE IMAGES (optional) ===
+    match /customers/{customerId}/{filename} {
+      allow read, write, delete: if request.auth != null;
+    }
+    
+    // Deny everything else by default
+    match /{allPaths=**} {
+      allow read, write: if false;
+    }
+  }
+}
