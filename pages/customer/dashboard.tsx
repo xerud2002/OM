@@ -259,8 +259,7 @@ export default function CustomerDashboard() {
         try {
           console.log(`Auth UID: ${user.uid}, attempting upload to: requests/${requestId}/customers/${user.uid}/`);
           
-          const { ref, uploadBytes, getDownloadURL } = await import("firebase/storage");
-          const { storage } = await import("@/services/firebase");
+          const { uploadFileDirectly } = await import("@/utils/storageUpload");
           const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
 
           const uploadedUrls: string[] = [];
@@ -270,12 +269,10 @@ export default function CustomerDashboard() {
             const fileExtension = file.name.split(".").pop();
             const fileName = `${Date.now()}_${i}.${fileExtension}`;
             const storagePath = `requests/${requestId}/customers/${user.uid}/${fileName}`;
-            const storageRef = ref(storage, storagePath);
 
-            console.log(`Uploading: ${storagePath}`);
-            // Use simple upload (no preflight/CORS issues on localhost)
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
+            console.log(`Uploading via REST API: ${storagePath}`);
+            // Upload directly via Firebase REST API (bypasses SDK CORS issues)
+            const downloadURL = await uploadFileDirectly(file, storagePath);
             uploadedUrls.push(downloadURL);
             console.log(`Upload success: ${downloadURL}`);
           }

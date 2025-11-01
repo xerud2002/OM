@@ -116,25 +116,18 @@ export default function EditRequestModal({
 
         toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
 
-        const { ref, uploadBytes, getDownloadURL } = await import(
-          "firebase/storage"
-        );
-        const { storage } = await import("@/services/firebase");
+        const { uploadFileDirectly } = await import("@/utils/storageUpload");
         
         for (const file of Array.from(form.mediaFiles) as File[]) {
           const fileName = `${Date.now()}_${file.name}`;
-          const storageRef = ref(
-            storage,
-            `requests/${request.id}/customers/${request.customerId}/${fileName}`
-          );
+          const storagePath = `requests/${request.id}/customers/${request.customerId}/${fileName}`;
 
           try {
-            console.log(`Uploading to: requests/${request.id}/customers/${request.customerId}/${fileName}`);
+            console.log(`Uploading via REST API to: ${storagePath}`);
             console.log(`Auth UID: ${currentUser.uid}, Customer ID: ${request.customerId}`);
             
-            // Use simple upload (no preflight/CORS issues on localhost)
-            await uploadBytes(storageRef, file);
-            const downloadURL = await getDownloadURL(storageRef);
+            // Upload directly via Firebase REST API (bypasses SDK CORS issues)
+            const downloadURL = await uploadFileDirectly(file, storagePath);
             newMediaUrls.push(downloadURL);
             console.log(`Upload success: ${downloadURL}`);
           } catch (uploadError) {
