@@ -49,13 +49,23 @@ export type MovingRequest = {
   customerEmail?: string;
   fromCity: string;
   fromCounty?: string;
-  fromAddress?: string;
+  fromAddress?: string; // Deprecated: folosit pentru compatibilitate backward
+  fromStreet?: string;
+  fromNumber?: string;
+  fromBloc?: string;
+  fromStaircase?: string;
+  fromApartment?: string;
   fromType?: "house" | "flat";
   fromFloor?: string;
   fromElevator?: boolean;
   toCity: string;
   toCounty?: string;
-  toAddress?: string;
+  toAddress?: string; // Deprecated: folosit pentru compatibilitate backward
+  toStreet?: string;
+  toNumber?: string;
+  toBloc?: string;
+  toStaircase?: string;
+  toApartment?: string;
   toType?: "house" | "flat";
   toFloor?: string;
   toElevator?: boolean;
@@ -81,7 +91,8 @@ export type MovingRequest = {
   mediaUploadToken?: string;
   mediaUrls?: string[];
   createdAt: Timestamp;
-  status?: "pending" | "in-progress" | "completed" | "cancelled";
+  status?: "active" | "closed" | "paused" | "cancelled";
+  archived?: boolean;
 };
 
 export type Offer = {

@@ -52,9 +52,7 @@ export default function StarRating({
             {/* Half-filled star overlay */}
             {halfFilled && (
               <div className="absolute inset-0 overflow-hidden" style={{ width: "50%" }}>
-                <Star
-                  className={`${sizeClasses[size]} fill-amber-400 text-amber-400`}
-                />
+                <Star className={`${sizeClasses[size]} fill-amber-400 text-amber-400`} />
               </div>
             )}
           </div>
@@ -62,9 +60,7 @@ export default function StarRating({
       })}
 
       {showNumber && (
-        <span className="ml-1 text-sm font-medium text-gray-700">
-          {rating.toFixed(1)}
-        </span>
+        <span className="ml-1 text-sm font-medium text-gray-700">{rating.toFixed(1)}</span>
       )}
     </div>
   );

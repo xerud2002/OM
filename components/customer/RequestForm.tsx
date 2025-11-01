@@ -1,5 +1,6 @@
 import React from "react";
 import { DayPicker } from "react-day-picker";
+import { ro } from "date-fns/locale";
 import counties from "@/counties";
 import cities from "@/cities";
 
@@ -8,10 +9,20 @@ type FormShape = {
   fromCity?: string;
   fromCityManual?: boolean;
   fromAddress?: string;
+  fromStreet?: string;
+  fromNumber?: string;
+  fromBloc?: string;
+  fromStaircase?: string;
+  fromApartment?: string;
   toCounty?: string;
   toCity?: string;
   toCityManual?: boolean;
   toAddress?: string;
+  toStreet?: string;
+  toNumber?: string;
+  toBloc?: string;
+  toStaircase?: string;
+  toApartment?: string;
   moveDate?: string;
   fromType?: "house" | "flat";
   fromFloor?: string;
@@ -19,6 +30,10 @@ type FormShape = {
   toType?: "house" | "flat";
   toFloor?: string;
   toElevator?: boolean;
+  // Separate room counts for each location
+  fromRooms?: string | number;
+  toRooms?: string | number;
+  // Legacy aggregated rooms (kept for backward compatibility in some UI pieces)
   rooms?: string | number;
   phone?: string;
   details?: string;
@@ -28,13 +43,19 @@ type FormShape = {
   serviceCleanout?: boolean;
   serviceStorage?: boolean;
   surveyType?: "in-person" | "video" | "quick-estimate";
-  mediaUpload?: "now" | "later";
+  // allow opting out of media uploads
+  // values: now | later | none
+  // none: user opts not to add photos/videos
+  mediaUpload?: "now" | "later" | "none";
   mediaFiles?: File[];
   // Enhanced date fields
   moveDateMode?: "exact" | "range" | "none" | "flexible";
   moveDateStart?: string;
   moveDateEnd?: string;
   moveDateFlexDays?: number;
+  contactName?: string;
+  contactFirstName?: string;
+  contactLastName?: string;
 };
 
 type Props = {
@@ -48,7 +69,21 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   const countyCities = (county?: string) =>
     county && (cities as any)[county] ? (cities as any)[county] : [];
 
+  // Special-case: București sectors as locality options
+  const bucharestSectors = React.useMemo(
+    () => ["Sector 1", "Sector 2", "Sector 3", "Sector 4", "Sector 5", "Sector 6"],
+    []
+  );
+  const getCityOptions = React.useCallback(
+    (county?: string) => (county === "București" ? bucharestSectors : countyCities(county)),
+    [bucharestSectors]
+  );
+
   // Date helpers
+  const today = React.useMemo(() => {
+    const n = new Date();
+    return new Date(n.getFullYear(), n.getMonth(), n.getDate());
+  }, []);
   const formatYMD = (d: Date) => {
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, "0");
@@ -83,7 +118,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-6 shadow-lg">
+    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-4 shadow-lg sm:p-6">
       <div className="mb-6 flex items-center gap-3 border-b border-emerald-100 pb-4">
         <svg
           className="h-6 w-6 text-emerald-600"
@@ -103,115 +138,81 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
       <form onSubmit={onSubmit} className="space-y-6">
         {/* Pickup Location */}
-        <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5">
-          <div className="mb-4 flex items-center gap-2 border-b border-emerald-200 pb-2">
-            <svg
-              className="h-5 w-5 text-emerald-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-            <h4 className="text-sm font-semibold text-emerald-900">Punct de plecare</h4>
-          </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
-              <select
-                required
-                value={form.fromCounty || ""}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))
-                }
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+              <svg
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <option value="">Selectează județ</option>
-                {counties.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
-              <select
-                required
-                value={form.fromCity || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setForm((s) => ({
-                    ...s,
-                    fromCity: value,
-                    fromCityManual: value === "__other__",
-                  }));
-                }}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                disabled={!form.fromCounty}
-              >
-                <option value="">Selectează localitatea</option>
-                {countyCities(form.fromCounty).map((city: string) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-                <option value="__other__">Altă localitate</option>
-              </select>
-              {form.fromCityManual && (
-                <input
-                  required
-                  value={form.fromCity === "__other__" ? "" : form.fromCity || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
-                  placeholder="Introdu localitatea"
-                  className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
                 />
-              )}
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Punct de plecare</h4>
+              <p className="text-xs text-gray-600">Detalii despre locația actuală</p>
             </div>
           </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Adresă completă</label>
-            <input
-              required
-              value={form.fromAddress || ""}
-              onChange={(e) => setForm((s) => ({ ...s, fromAddress: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-              placeholder="Stradă, număr, bloc/scară/apartament"
-            />
-          </div>
+          {/* Detalii proprietate */}
           <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100">
+                <svg
+                  className="h-4 w-4 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-8 4h10M7 8h10"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-emerald-900">Detalii proprietate</span>
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Tip proprietate
+                  Tip proprietate <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={form.fromType || "house"}
                   onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                 >
                   <option value="house">Casă</option>
                   <option value="flat">Apartament</option>
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
                 <input
                   type="text"
-                  value={form.rooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={form.fromRooms || ""}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "");
+                    setForm((s) => ({ ...s, fromRooms: digits }));
+                  }}
+                  required
+                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   placeholder="ex: 2"
                 />
               </div>
@@ -223,10 +224,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.fromFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
-                  <div className="flex items-end">
+                  <div>
                     <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
                       <input
                         type="checkbox"
@@ -241,106 +242,204 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               )}
             </div>
           </div>
+
+
+          {/* Detalii adresă */}
+          <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100">
+                <svg
+                  className="h-4 w-4 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-emerald-900">Detalii adresă</span>
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
+                <select
+                  required
+                  value={form.fromCounty || ""}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))
+                  }
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                >
+                  <option value="">Selectează județ</option>
+                  {counties.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
+                <select
+                  required={!form.fromCityManual}
+                  value={form.fromCity || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setForm((s) => ({
+                      ...s,
+                      fromCity: value,
+                      fromCityManual: value === "__other__",
+                    }));
+                  }}
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  disabled={!form.fromCounty}
+                >
+                  <option value="">Selectează localitatea</option>
+                  {getCityOptions(form.fromCounty).map((city: string) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                  <option value="__other__">Altă localitate</option>
+                </select>
+                {form.fromCityManual && (
+                  <input
+                    required
+                    value={form.fromCity === "__other__" ? "" : form.fromCity || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
+                    placeholder="Introdu localitatea"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  />
+                )}
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
+                <input
+                  value={form.fromStreet || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, fromStreet: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  placeholder="Numele străzii"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
+                <input
+                  value={form.fromNumber || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, fromNumber: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  placeholder="Nr."
+                />
+              </div>
+            </div>
+            {form.fromType === "flat" && (
+              <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Bloc</label>
+                  <input
+                    value={form.fromBloc || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, fromBloc: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    placeholder="Bloc"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Scară</label>
+                  <input
+                    value={form.fromStaircase || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, fromStaircase: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    placeholder="Scară"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Apartament</label>
+                  <input
+                    value={form.fromApartment || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, fromApartment: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    placeholder="Ap."
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Destination */}
-        <div className="rounded-xl border border-sky-200 bg-sky-50/50 p-5">
-          <div className="mb-4 flex items-center gap-2 border-b border-sky-200 pb-2">
-            <svg
-              className="h-5 w-5 text-sky-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-              />
-            </svg>
-            <h4 className="text-sm font-semibold text-sky-900">Destinație</h4>
-          </div>
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
-              <select
-                required
-                value={form.toCounty || ""}
-                onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+        <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 shadow-lg">
+              <svg
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <option value="">Selectează județ</option>
-                {counties.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
-              <select
-                required
-                value={form.toCity || ""}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  setForm((s) => ({ ...s, toCity: value, toCityManual: value === "__other__" }));
-                }}
-                className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-                disabled={!form.toCounty}
-              >
-                <option value="">Selectează localitatea</option>
-                {countyCities(form.toCounty).map((city: string) => (
-                  <option key={city} value={city}>
-                    {city}
-                  </option>
-                ))}
-                <option value="__other__">Altă localitate</option>
-              </select>
-              {form.toCityManual && (
-                <input
-                  required
-                  value={form.toCity === "__other__" ? "" : form.toCity || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
-                  placeholder="Introdu localitatea"
-                  className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
                 />
-              )}
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Destinație</h4>
+              <p className="text-xs text-gray-600">Unde te muți</p>
             </div>
           </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Adresă completă</label>
-            <input
-              required
-              value={form.toAddress || ""}
-              onChange={(e) => setForm((s) => ({ ...s, toAddress: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
-              placeholder="Stradă, număr, bloc/scară/apartament"
-            />
-          </div>
+          {/* Detalii proprietate */}
           <div className="mt-4 rounded-lg border border-sky-100 bg-white p-3">
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-100">
+                <svg
+                  className="h-4 w-4 text-sky-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 12h6m-8 4h10M7 8h10"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-sky-900">Detalii proprietate</span>
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
-                  Tip proprietate
+                  Tip proprietate <span className="text-red-500">*</span>
                 </label>
                 <select
                   value={form.toType || "house"}
                   onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                 >
                   <option value="house">Casă</option>
                   <option value="flat">Apartament</option>
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
                 <input
                   type="text"
-                  value={form.rooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  value={form.toRooms || ""}
+                  onChange={(e) => {
+                    const digits = e.target.value.replace(/\D/g, "");
+                    setForm((s) => ({ ...s, toRooms: digits }));
+                  }}
+                  required
+                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   placeholder="ex: 2"
                 />
               </div>
@@ -352,10 +451,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.toFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                     />
                   </div>
-                  <div className="flex items-end">
+                  <div>
                     <label className="flex h-[42px] items-center gap-2 text-sm text-gray-700">
                       <input
                         type="checkbox"
@@ -369,6 +468,124 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </>
               )}
             </div>
+          </div>
+          {/* Detalii adresă */}
+          <div className="mt-4 rounded-lg border border-sky-100 bg-white p-3">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-100">
+                <svg
+                  className="h-4 w-4 text-sky-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+              </div>
+              <span className="text-xs font-semibold text-sky-900">Detalii adresă</span>
+            </div>
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
+                <select
+                  required
+                  value={form.toCounty || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                >
+                  <option value="">Selectează județ</option>
+                  {counties.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
+                <select
+                  required={!form.toCityManual}
+                  value={form.toCity || ""}
+                  onChange={(e) => {
+                    const value = e.target.value;
+                    setForm((s) => ({ ...s, toCity: value, toCityManual: value === "__other__" }));
+                  }}
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  disabled={!form.toCounty}
+                >
+                  <option value="">Selectează localitatea</option>
+                  {getCityOptions(form.toCounty).map((city: string) => (
+                    <option key={city} value={city}>
+                      {city}
+                    </option>
+                  ))}
+                  <option value="__other__">Altă localitate</option>
+                </select>
+                {form.toCityManual && (
+                  <input
+                    required
+                    value={form.toCity === "__other__" ? "" : form.toCity || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
+                    placeholder="Introdu localitatea"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  />
+                )}
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
+                <input
+                  value={form.toStreet || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, toStreet: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  placeholder="Numele străzii"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
+                <input
+                  value={form.toNumber || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, toNumber: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  placeholder="Nr."
+                />
+              </div>
+            </div>
+            {form.toType === "flat" && (
+              <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Bloc</label>
+                  <input
+                    value={form.toBloc || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, toBloc: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    placeholder="Bloc"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Scară</label>
+                  <input
+                    value={form.toStaircase || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, toStaircase: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    placeholder="Scară"
+                  />
+                </div>
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-700">Apartament</label>
+                  <input
+                    value={form.toApartment || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, toApartment: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    placeholder="Ap."
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -391,7 +608,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900">Servicii căutate</h4>
+              <h4 className="text-base font-bold text-gray-900">Servicii căutate <span className="text-red-500">*</span></h4>
               <p className="text-xs text-gray-600">Selectează serviciile de care ai nevoie</p>
             </div>
           </div>
@@ -613,6 +830,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
           </div>
+          {!(form.serviceMoving || form.servicePacking || form.serviceDisassembly || form.serviceCleanout || form.serviceStorage) && (
+            <p className="mt-2 text-xs font-medium text-red-600">Selectează cel puțin un serviciu.</p>
+          )}
         </div>
 
         {/* Survey */}
@@ -640,7 +860,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900">Survey și estimare</h4>
+              <h4 className="text-base font-bold text-gray-900">Survey și estimare <span className="text-red-500">*</span></h4>
               <p className="text-xs text-gray-600">Alege modalitatea de evaluare</p>
             </div>
           </div>
@@ -826,7 +1046,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
           </div>
           <div className="space-y-5">
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {/* Upload now */}
               <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
                 <input
@@ -904,6 +1124,54 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   </div>
                   <h5 className="mb-1 font-semibold text-gray-900">Primesc link pe email</h5>
                   <p className="text-xs text-gray-600">Vei primi un link pentru upload ulterior</p>
+                </div>
+                <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
+                  <svg
+                    className="h-4 w-4 text-white"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={3}
+                      d="M5 13l4 4L19 7"
+                    />
+                  </svg>
+                </div>
+              </label>
+
+              {/* No media */}
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+                <input
+                  type="radio"
+                  name="mediaUpload"
+                  value="none"
+                  checked={form.mediaUpload === "none"}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, mediaUpload: e.target.value as any }))
+                  }
+                  className="peer sr-only"
+                />
+                <div className="p-5">
+                  <div className="mb-3 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 transition-colors group-hover:bg-blue-200 peer-checked:bg-blue-500">
+                    <svg
+                      className="h-6 w-6 text-blue-600 transition-colors peer-checked:text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </div>
+                  <h5 className="mb-1 font-semibold text-gray-900">Nu doresc să adaug poze</h5>
+                  <p className="text-xs text-gray-600">Continui fără a trimite fotografii/video</p>
                 </div>
                 <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
                   <svg
@@ -1037,138 +1305,337 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Date & Contact */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Data mutării</label>
-            {/* Mode selector */}
-            {(() => {
-              const dateModes = [
-                { key: "exact" as const, label: "Exactă" },
-                { key: "range" as const, label: "Interval" },
-                { key: "none" as const, label: "Nu știu încă" },
-                { key: "flexible" as const, label: "Flexibilă" },
-              ];
-              return (
-                <div className="mb-2 inline-flex rounded-lg border border-gray-200 bg-white p-1 text-xs">
-                  {dateModes.map(({ key, label }) => (
-                    <button
-                      key={key}
-                      type="button"
-                      onClick={() =>
-                        setForm((s) => ({
-                          ...s,
-                          moveDateMode: key,
-                          // Keep moveDate in sync for downstream filters/exports
-                          ...(key === "none" ? { moveDate: "" } : {}),
-                        }))
-                      }
-                      className={`rounded-md px-3 py-1 transition ${
-                        (form as any).moveDateMode === key ||
-                        (!(form as any).moveDateMode && key === "exact")
-                          ? "bg-emerald-600 text-white"
-                          : "text-gray-700 hover:bg-gray-50"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              );
-            })()}
-
-            {/* Inputs per mode */}
-            {((form as any).moveDateMode ?? "exact") === "exact" && (
-              <div className="rounded-lg border border-gray-200 bg-white p-2">
-                <DayPicker
-                  mode="single"
-                  selected={parseYMD(form.moveDate)}
-                  onSelect={(date) =>
-                    setForm((s) => ({
-                      ...s,
-                      moveDate: date ? formatYMD(date) : "",
-                      moveDateStart: date ? formatYMD(date) : "",
-                      moveDateEnd: "",
-                    }))
-                  }
-                  numberOfMonths={1}
+        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+          <div className="mb-5 flex items-center gap-3">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+              <svg
+                className="h-5 w-5 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
-              </div>
-            )}
+              </svg>
+            </div>
+            <div>
+              <h4 className="text-base font-bold text-gray-900">Data mutării și contact</h4>
+              <p className="text-xs text-gray-600">Alege data și introdu datele tale de contact</p>
+            </div>
+          </div>
 
-            {((form as any).moveDateMode ?? "exact") === "range" && (
-              <div className="rounded-lg border border-gray-200 bg-white p-2">
-                <DayPicker
-                  mode="range"
-                  selected={{
-                    from: parseYMD((form as any).moveDateStart),
-                    to: parseYMD((form as any).moveDateEnd),
-                  }}
-                  onSelect={(range) =>
-                    setForm((s: any) => ({
-                      ...s,
-                      moveDateStart: range?.from ? formatYMD(range.from) : "",
-                      moveDateEnd: range?.to ? formatYMD(range.to) : "",
-                      moveDate: range?.from ? formatYMD(range.from) : "",
-                    }))
-                  }
-                  numberOfMonths={2}
-                />
-              </div>
-            )}
+          <div className="space-y-5">
+            {/* Date picker section */}
+            <div>
+              <label className="mb-2 block text-center text-sm font-semibold text-gray-800">
+                Când dorești să te muți?
+              </label>
+              {/* Mode selector */}
+              {(() => {
+                const dateModes = [
+                  { key: "exact" as const, label: "Exactă" },
+                  { key: "range" as const, label: "Interval" },
+                  { key: "none" as const, label: "Nu știu încă" },
+                  { key: "flexible" as const, label: "Flexibilă" },
+                ];
+                return (
+                  <div className="mb-4 flex flex-wrap justify-center gap-2 rounded-lg border border-emerald-300 bg-white p-1 text-xs shadow-sm">
+                    {dateModes.map(({ key, label }) => (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() =>
+                          setForm((s) => ({
+                            ...s,
+                            moveDateMode: key,
+                            // Keep moveDate in sync for downstream filters/exports
+                            ...(key === "none" ? { moveDate: "" } : {}),
+                          }))
+                        }
+                        className={`rounded-md px-4 py-2 font-medium transition-all duration-200 ${
+                          (form as any).moveDateMode === key ||
+                          (!(form as any).moveDateMode && key === "exact")
+                            ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md"
+                            : "text-gray-700 hover:bg-emerald-50"
+                        }`}
+                      >
+                        {label}
+                      </button>
+                    ))}
+                  </div>
+                );
+              })()}
 
-            {((form as any).moveDateMode ?? "exact") === "none" && (
-              <p className="text-xs text-gray-600">
-                Nu ai data stabilită. Poți continua fără dată.
-              </p>
-            )}
-
-            {((form as any).moveDateMode ?? "exact") === "flexible" && (
-              <div className="grid grid-cols-2 gap-2">
-                <div className="rounded-lg border border-gray-200 bg-white p-2">
+              {/* Inputs per mode */}
+              {((form as any).moveDateMode ?? "exact") === "exact" && (
+                <div className="mx-auto flex max-w-md justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                   <DayPicker
                     mode="single"
                     selected={parseYMD(form.moveDate)}
                     onSelect={(date) =>
-                      setForm((s: any) => ({
+                      setForm((s) => ({
                         ...s,
                         moveDate: date ? formatYMD(date) : "",
                         moveDateStart: date ? formatYMD(date) : "",
+                        moveDateEnd: "",
                       }))
                     }
+                    locale={ro}
+                    fromDate={today}
+                    weekStartsOn={1}
+                    showOutsideDays
                     numberOfMonths={1}
+                    className="rdp mx-auto w-fit"
+                    classNames={{
+                      months: "flex justify-center",
+                      month: "w-full max-w-sm",
+                      caption: "flex items-center justify-between mb-4 px-2",
+                      caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
+                      nav: "flex items-center gap-2",
+                      nav_button:
+                        "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                      nav_button_previous: "",
+                      nav_button_next: "",
+                      table: "w-full border-collapse mt-2",
+                      head_row: "grid grid-cols-7 gap-1 mb-2",
+                      head_cell:
+                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
+                      row: "grid grid-cols-7 gap-1 mb-1",
+                      cell: "text-center",
+                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
+                      day_selected:
+                        "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
+                      day_today: "font-medium text-gray-700",
+                      day_outside: "text-gray-400 opacity-50",
+                      day_disabled: "text-gray-300 opacity-30 cursor-not-allowed",
+                    }}
                   />
                 </div>
-                <div>
-                  <label className="mb-1 block text-[10px] font-medium text-gray-500">
-                    Flexibilitate
-                  </label>
-                  <select
-                    value={(form as any).moveDateFlexDays ?? 3}
-                    onChange={(e) =>
+              )}
+
+              {((form as any).moveDateMode ?? "exact") === "range" && (
+                <div className="mx-auto flex max-w-md justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                  <DayPicker
+                    mode="range"
+                    selected={{
+                      from: parseYMD((form as any).moveDateStart),
+                      to: parseYMD((form as any).moveDateEnd),
+                    }}
+                    onSelect={(range) =>
                       setForm((s: any) => ({
                         ...s,
-                        moveDateFlexDays: Number(e.target.value),
+                        moveDateStart: range?.from ? formatYMD(range.from) : "",
+                        moveDateEnd: range?.to ? formatYMD(range.to) : "",
+                        moveDate: range?.from ? formatYMD(range.from) : "",
                       }))
                     }
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                  >
-                    <option value={3}>±3 zile</option>
-                    <option value={7}>±7 zile</option>
-                    <option value={14}>±14 zile</option>
-                  </select>
+                    locale={ro}
+                    fromDate={today}
+                    weekStartsOn={1}
+                    showOutsideDays
+                    numberOfMonths={1}
+                    className="rdp mx-auto w-fit"
+                    classNames={{
+                      months: "flex justify-center",
+                      month: "w-full max-w-sm",
+                      caption: "flex items-center justify-between mb-4 px-2",
+                      caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
+                      nav: "flex items-center gap-2",
+                      nav_button:
+                        "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                      table: "w-full border-collapse mt-2",
+                      head_row: "grid grid-cols-7 gap-1 mb-2",
+                      head_cell:
+                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
+                      row: "grid grid-cols-7 gap-1 mb-1",
+                      cell: "text-center",
+                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
+                      day_selected:
+                        "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
+                      day_today: "font-medium text-gray-700",
+                      day_outside: "text-gray-400 opacity-50",
+                      day_range_start:
+                        "bg-emerald-900 text-white font-bold rounded-l-xl border-2 border-emerald-900",
+                      day_range_end:
+                        "bg-emerald-900 text-white font-bold rounded-r-xl border-2 border-emerald-900",
+                      day_range_middle: "bg-emerald-900 text-white rounded-none",
+                    }}
+                  />
+                </div>
+              )}
+
+              {((form as any).moveDateMode ?? "exact") === "none" && (
+                <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                  <div className="flex items-start gap-3">
+                    <svg
+                      className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      />
+                    </svg>
+                    <p className="text-sm text-emerald-900">
+                      Nu ai data stabilită? Nu-i problemă! Poți continua fără a selecta o dată și
+                      companiile îți vor oferi mai multe opțiuni.
+                    </p>
+                  </div>
+                </div>
+              )}
+
+              {((form as any).moveDateMode ?? "exact") === "flexible" && (
+                <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
+                  <div className="flex justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                    <DayPicker
+                      mode="single"
+                      selected={parseYMD(form.moveDate)}
+                      onSelect={(date) =>
+                        setForm((s: any) => ({
+                          ...s,
+                          moveDate: date ? formatYMD(date) : "",
+                          moveDateStart: date ? formatYMD(date) : "",
+                        }))
+                      }
+                      locale={ro}
+                      fromDate={today}
+                      weekStartsOn={1}
+                      showOutsideDays
+                      numberOfMonths={1}
+                      className="rdp mx-auto w-fit"
+                      classNames={{
+                        months: "flex justify-center",
+                        month: "w-full max-w-sm",
+                        caption: "flex items-center justify-between mb-4 px-2",
+                        caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
+                        nav: "flex items-center gap-2",
+                        nav_button:
+                          "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                        table: "w-full border-collapse mt-2",
+                        head_row: "grid grid-cols-7 gap-1 mb-2",
+                        head_cell:
+                          "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
+                        row: "grid grid-cols-7 gap-1 mb-1",
+                        cell: "text-center",
+                        day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
+                        day_selected:
+                          "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
+                        day_today: "font-medium text-gray-700",
+                        day_outside: "text-gray-400 opacity-50",
+                      }}
+                    />
+                  </div>
+                  <div className="rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
+                    <label className="mb-2 block text-sm font-semibold text-gray-800">
+                      Flexibilitate
+                    </label>
+                    <select
+                      value={(form as any).moveDateFlexDays ?? 3}
+                      onChange={(e) =>
+                        setForm((s: any) => ({
+                          ...s,
+                          moveDateFlexDays: Number(e.target.value),
+                        }))
+                      }
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    >
+                      <option value={3}>±3 zile</option>
+                      <option value={7}>±7 zile</option>
+                      <option value={14}>±14 zile</option>
+                    </select>
+                    <p className="mt-3 text-xs text-gray-600">
+                      Selectează câte zile înainte sau după data aleasă ești disponibil/ă pentru
+                      mutare.
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Contact fields below calendar */}
+            <div className="mx-auto max-w-5xl rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
+              <h5 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-800">
+                <svg
+                  className="h-5 w-5 text-emerald-600"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  />
+                </svg>
+                Datele tale de contact
+              </h5>
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <div>
+                  <label className="mb-2 block text-xs font-semibold text-gray-700">
+                    Nume și prenume <span className="text-red-500">*</span>
+                  </label>
+                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                    <input
+                      value={(form as any).contactFirstName || ""}
+                      onChange={(e) =>
+                        setForm((s: any) => {
+                          const contactFirstName = e.target.value;
+                          const contactLastName = (s as any).contactLastName || "";
+                          const contactName = [contactFirstName, contactLastName]
+                            .map((v) => (v || "").trim())
+                            .filter(Boolean)
+                            .join(" ");
+                          return { ...s, contactFirstName, contactName };
+                        })
+                      }
+                      required
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      placeholder="Prenume"
+                    />
+                    <input
+                      value={(form as any).contactLastName || ""}
+                      onChange={(e) =>
+                        setForm((s: any) => {
+                          const contactLastName = e.target.value;
+                          const contactFirstName = (s as any).contactFirstName || "";
+                          const contactName = [contactFirstName, contactLastName]
+                            .map((v) => (v || "").trim())
+                            .filter(Boolean)
+                            .join(" ");
+                          return { ...s, contactLastName, contactName };
+                        })
+                      }
+                      required
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      placeholder="Nume"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <label className="mb-2 block text-xs font-semibold text-gray-700">
+                    Număr de telefon <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    value={form.phone || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+                    inputMode="tel"
+                    pattern="^(\\+?40|0)?7\\d{8}$"
+                    required
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    placeholder="07xx xxx xxx"
+                  />
                 </div>
               </div>
-            )}
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Telefon</label>
-            <input
-              required
-              value={form.phone || ""}
-              onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-              className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-              placeholder="07xx xxx xxx"
-            />
+            </div>
           </div>
         </div>
 

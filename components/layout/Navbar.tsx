@@ -7,12 +7,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { User as FirebaseUser } from "firebase/auth";
-import { onAuthChange, logout } from "@/utils/firebaseHelpers";
+import { onAuthChange, logout, getUserRole } from "@/utils/firebaseHelpers";
+import NotificationBell from "@/components/company/NotificationBell";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<FirebaseUser | null>(null);
+  const [userRole, setUserRole] = useState<"customer" | "company" | null>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
@@ -26,7 +28,15 @@ export default function Navbar() {
 
   /* 🔹 Firebase user state */
   useEffect(() => {
-    const unsub = onAuthChange(setUser);
+    const unsub = onAuthChange(async (u) => {
+      setUser(u);
+      if (u) {
+        const role = await getUserRole(u);
+        setUserRole(role);
+      } else {
+        setUserRole(null);
+      }
+    });
     return () => unsub();
   }, []);
 
@@ -61,7 +71,7 @@ export default function Navbar() {
           : "bg-white/60 backdrop-blur-sm"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
         {/* === LOGO === */}
         <Link href="/" aria-label="Acasă" className="flex select-none items-center space-x-2">
           <Image
@@ -99,7 +109,12 @@ export default function Navbar() {
               <PhoneCall size={18} /> Primește Oferte GRATUITE
             </button>
           ) : (
-            <div className="relative ml-3">
+            <div className="relative ml-3 flex items-center gap-3">
+              {/* Notification Bell for Companies */}
+              {userRole === "company" && user?.uid && (
+                <NotificationBell companyId={user.uid} />
+              )}
+
               <button
                 onClick={() => setShowUserMenu((v) => !v)}
                 aria-haspopup="true"

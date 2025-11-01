@@ -5,8 +5,8 @@ import { collection, getDocs, query, where, Timestamp } from "firebase/firestore
 /**
  * API pentru verificarea token-urilor nefolosite și trimiterea reminder-elor
  * Rulează periodic (cron job) pentru a verifica token-uri create acum 3+ zile și nefolosite
- * 
- * USAGE: 
+ *
+ * USAGE:
  * - Setează un cron job care apelează: GET /api/sendUploadReminders
  * - Sau rulează manual pentru testare
  */

@@ -1,5 +1,5 @@
 // services/firebase.ts
-import { initializeApp } from "firebase/app";
+import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -13,7 +13,8 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = initializeApp(firebaseConfig);
+// Avoid duplicate initialization in dev/SSR hot reloads
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig);
 
 // ✅ EXPORT EVERYTHING YOU NEED
 export const auth = getAuth(app);

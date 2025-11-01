@@ -37,11 +37,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(403).json({ error: "Not authorized to modify this request" });
     }
 
-    const offerRef = adminDb.doc(`requests/${requestId}/offers/${offerId}`);
-    await offerRef.set({ status: "accepted" }, { merge: true });
-
-    // Optionally mark the request as accepted (non-breaking if field unused)
-    await requestRef.set({ status: "accepted" }, { merge: true });
+    // Accept selected offer and decline the rest in a batch
+    const offersCol = adminDb.collection(`requests/${requestId}/offers`);
+    const snap = await offersCol.get();
+    const batch = adminDb.batch();
+    snap.forEach((doc) => {
+      const ref = offersCol.doc(doc.id);
+      if (doc.id === offerId) {
+        batch.set(ref, { status: "accepted" }, { merge: true });
+      } else {
+        batch.set(ref, { status: "declined" }, { merge: true });
+      }
+    });
+    batch.set(requestRef, { status: "accepted" }, { merge: true });
+    await batch.commit();
 
     return res.status(200).json({ ok: true });
   } catch (err) {
@@ -49,4 +58,3 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(500).json({ error: "Internal server error" });
   }
 }
-

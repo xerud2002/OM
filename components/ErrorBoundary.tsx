@@ -30,9 +30,7 @@ export default class ErrorBoundary extends Component<Props, State> {
         this.props.fallback || (
           <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 p-4">
             <div className="rounded-lg bg-white p-6 shadow-lg">
-              <h2 className="mb-2 text-xl font-bold text-red-600">
-                Ceva nu a mers bine
-              </h2>
+              <h2 className="mb-2 text-xl font-bold text-red-600">Ceva nu a mers bine</h2>
               <p className="text-gray-600">
                 Ne cerem scuze pentru inconvenient. Te rugăm să reîncarci pagina.
               </p>

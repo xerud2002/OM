@@ -8,12 +8,17 @@ import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "
 import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
-import { Search, Download, Filter, PlusSquare, List, Inbox } from "lucide-react";
+import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
+import { formatDateRO } from "@/utils/date";
 import { sendEmail } from "@/utils/emailHelpers";
-import RequestCard from "@/components/customer/RequestCard";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
-import { useDebouncedValue } from "@/utils/hooks";
+import MyRequestCard from "@/components/customer/MyRequestCard";
+import { MessageSquare } from "lucide-react";
+import { auth } from "@/services/firebase";
+import { toast } from "sonner";
+import { updateRequestStatus, archiveRequest } from "@/utils/firestoreHelpers";
+import { validators } from "@/utils/validation";
 
 type Request = {
   id: string;
@@ -32,6 +37,7 @@ type Request = {
   specialItems?: string;
   customerName?: string | null;
   customerEmail?: string | null;
+  archived?: boolean;
 };
 
 type Offer = {
@@ -44,7 +50,8 @@ type Offer = {
 
 export default function CustomerDashboard() {
   const [user, setUser] = useState<any>(null);
-  const [requests, setRequests] = useState<Request[]>([]);
+  const [requests, setRequests] = useState<Request[]>([]); // active (non-archived)
+  const [archivedRequests, setArchivedRequests] = useState<Request[]>([]);
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
 
   const [form, setForm] = useState<any>({
@@ -58,9 +65,14 @@ export default function CustomerDashboard() {
     moveDateEnd: "",
     moveDateFlexDays: 3,
     details: "",
-    rooms: "",
+    fromRooms: "",
+    toRooms: "",
+    rooms: "", // legacy aggregation for UI
     volumeM3: "",
     phone: "",
+    contactName: "",
+    contactFirstName: "",
+    contactLastName: "",
     needPacking: false,
     hasElevator: false,
     budgetEstimate: 0,
@@ -75,27 +87,34 @@ export default function CustomerDashboard() {
     mediaFiles: [],
   });
 
-  const [search, setSearch] = useState<string>("");
-  const [dateFrom, setDateFrom] = useState<string | null>(null);
-  const [dateTo, setDateTo] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers">(() => {
+  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers" | "archive">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("customerActiveTab");
-      if (saved === "new" || saved === "requests" || saved === "offers") return saved;
+      if (saved === "new" || saved === "requests" || saved === "offers" || saved === "archive") return saved as any;
     }
     return "requests";
   });
   // Two-column layout: we render selected content on the right; no modal needed
   const [loading, setLoading] = useState<boolean>(true);
-  const [sortBy, setSortBy] = useState<"date-desc" | "date-asc" | "offers-desc" | "offers-asc">(
-    "date-desc"
-  );
 
   const totalOffers = useMemo(
     () => Object.values(offersByRequest).flat().length,
     [offersByRequest]
   );
-  const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
+  // Aggregated no longer needed for UI; keep if future export requires it
+  // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+
+  // Choose a default selected request for the Oferte tab (the first with offers, else first request)
+  useEffect(() => {
+    if (requests.length === 0) {
+      setSelectedRequestId(null);
+      return;
+    }
+    // prefer a request that has offers
+    const withOffers = requests.find((r) => (offersByRequest[r.id] || []).length > 0)?.id;
+    setSelectedRequestId((prev) => prev || withOffers || requests[0].id);
+  }, [requests, offersByRequest]);
 
   // Handlers to accept/decline from aggregated view
   const acceptFromAggregated = async (requestId: string, offerId: string) => {
@@ -152,42 +171,13 @@ export default function CustomerDashboard() {
     }
   };
 
-  const debouncedSearch = useDebouncedValue(search, 250);
-
-  const filteredRequests = useMemo(() => {
-    let list = requests;
-    if (debouncedSearch) {
-      const q = debouncedSearch.toLowerCase();
-      list = list.filter((r) => {
-        return (
-          (r.fromCity || "").toLowerCase().includes(q) ||
-          (r.toCity || "").toLowerCase().includes(q) ||
-          (r.details || "").toLowerCase().includes(q)
-        );
-      });
-    }
-    if (dateFrom) list = list.filter((r) => r.moveDate && r.moveDate >= dateFrom);
-    if (dateTo) list = list.filter((r) => r.moveDate && r.moveDate <= dateTo);
-    return list;
-  }, [requests, debouncedSearch, dateFrom, dateTo]);
-
+  // Sort requests by creation date (newest first)
   const sortedRequests = useMemo(() => {
-    const list = [...filteredRequests];
+    const list = [...requests];
     const getCreated = (r: any) =>
       r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
-    const getOffers = (r: any) => offersByRequest[r.id]?.length ?? 0;
-    switch (sortBy) {
-      case "date-asc":
-        return list.sort((a: any, b: any) => getCreated(a) - getCreated(b));
-      case "offers-desc":
-        return list.sort((a: any, b: any) => getOffers(b) - getOffers(a));
-      case "offers-asc":
-        return list.sort((a: any, b: any) => getOffers(a) - getOffers(b));
-      case "date-desc":
-      default:
-        return list.sort((a: any, b: any) => getCreated(b) - getCreated(a));
-    }
-  }, [filteredRequests, sortBy, offersByRequest]);
+    return list.sort((a: any, b: any) => getCreated(b) - getCreated(a));
+  }, [requests]);
 
   useEffect(() => {
     const unsubAuth = onAuthChange((u: any) => {
@@ -200,7 +190,10 @@ export default function CustomerDashboard() {
       );
       const unsub = onSnapshot(q, (snap) => {
         const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
-        setRequests(docs);
+        const activeDocs = docs.filter((doc: any) => !doc.archived);
+        const archivedDocs = docs.filter((doc: any) => !!doc.archived);
+        setRequests(activeDocs);
+        setArchivedRequests(archivedDocs);
         setLoading(false);
       });
       return () => unsub();
@@ -242,30 +235,6 @@ export default function CustomerDashboard() {
     }
   }, [activeTab]);
 
-  const exportCSV = () => {
-    try {
-      const headers = ["from", "to", "moveDate", "details", "offersCount"];
-      const rows = requests.map((r) => [
-        r.fromCity || r.fromCounty || "",
-        r.toCity || r.toCounty || "",
-        r.moveDate || "",
-        (offersByRequest[r.id] || []).length,
-      ]);
-      const csv = [headers.join(";"), ...rows.map((row) => row.join(";"))].join("\n");
-      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = `requests.csv`;
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-      URL.revokeObjectURL(url);
-    } catch (err) {
-      console.error("CSV export failed", err);
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
@@ -273,17 +242,100 @@ export default function CustomerDashboard() {
     const { toast } = await import("sonner");
 
     try {
+      // Client-side validation for mandatory fields
+      const errors: string[] = [];
+
+      const hasAtLeastOneService =
+        !!form.serviceMoving ||
+        !!form.servicePacking ||
+        !!form.serviceDisassembly ||
+        !!form.serviceCleanout ||
+        !!form.serviceStorage;
+
+      const digitsOnly = (v: any) => typeof v === "number" ? Number.isInteger(v) : /^\d+$/.test((v || "").toString());
+
+      // Property details (both ends)
+      if (!form.fromType) errors.push("Tip proprietate (plecare)");
+      if (!form.toType) errors.push("Tip proprietate (destinație)");
+      if (!form.fromRooms || !digitsOnly(form.fromRooms)) errors.push("Număr camere (plecare – doar cifre)");
+      if (!form.toRooms || !digitsOnly(form.toRooms)) errors.push("Număr camere (destinație – doar cifre)");
+
+      // Address essentials
+      if (!form.fromCounty) errors.push("Județ (plecare)");
+      if (!form.fromCity) errors.push("Localitate (plecare)");
+      if (!form.toCounty) errors.push("Județ (destinație)");
+      if (!form.toCity) errors.push("Localitate (destinație)");
+
+      // Contact
+      if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
+      if (!(form as any).contactLastName?.trim()) errors.push("Nume");
+      if (!validators.phone(form.phone || "")) errors.push("Telefon (format valid: 07xxxxxxxx sau +407xxxxxxxx)");
+
+      // Services at least one
+      if (!hasAtLeastOneService) errors.push("Alege cel puțin un serviciu");
+
+      // Survey type chosen (defensive)
+      if (!form.surveyType) errors.push("Survey / estimare");
+
+      if (errors.length) {
+        toast.error(
+          `Te rugăm să completezi corect câmpurile obligatorii: ${errors.join(", ")}`
+        );
+        return;
+      }
+
+      // Compute legacy rooms for cards (prefer destination, then pickup)
+      const aggregatedRooms = (form.toRooms ?? form.fromRooms ?? form.rooms) || "";
+
       // Create request in Firestore
       const requestId = await createRequestHelper({
         ...form,
+        rooms: aggregatedRooms,
         customerId: user.uid,
         customerName: user.displayName || user.email,
         customerEmail: user.email,
         createdAt: serverTimestamp(),
       } as any);
 
+      // If user chose "now" for media upload, upload files immediately
+      if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
+        try {
+          console.warn(`Auth UID: ${user.uid}, uploading ${form.mediaFiles.length} file(s) via API route`);
+          
+          const { uploadFileViaAPI } = await import("@/utils/storageUpload");
+          const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
+
+          const uploadedUrls: string[] = [];
+
+          for (let i = 0; i < form.mediaFiles.length; i++) {
+            const file = form.mediaFiles[i];
+
+            console.warn(`Uploading ${file.name} (${i + 1}/${form.mediaFiles.length})`);
+            // Upload via Next.js API route (server-side, no CORS issues)
+            const downloadURL = await uploadFileViaAPI(file, requestId, user.uid);
+            uploadedUrls.push(downloadURL);
+            console.warn(`Upload success: ${downloadURL}`);
+          }
+
+          // Update request document with media URLs
+          const requestRef = doc(db, "requests", requestId);
+          await updateDoc(requestRef, {
+            mediaUrls: arrayUnion(...uploadedUrls),
+          });
+
+          toast.success(`Cererea și ${uploadedUrls.length} fișier(e) au fost încărcate cu succes!`);
+        } catch (uploadError) {
+          console.error("Media upload error:", uploadError);
+          console.error("Upload error details:", {
+            code: (uploadError as any)?.code,
+            message: (uploadError as any)?.message,
+            serverResponse: (uploadError as any)?.serverResponse
+          });
+          toast.warning("Cererea a fost creată, dar fișierele nu au putut fi încărcate.");
+        }
+      }
       // If user chose "later" for media upload, generate upload link and send email
-      if (form.mediaUpload === "later") {
+      else if (form.mediaUpload === "later") {
         try {
           const resp = await fetch("/api/generateUploadLink", {
             method: "POST",
@@ -297,6 +349,16 @@ export default function CustomerDashboard() {
           const result = await resp.json();
 
           if (result.ok && result.uploadLink) {
+            // Helpful UX: copy link to clipboard so user can access it immediately
+            try {
+              if (typeof window !== "undefined" && navigator?.clipboard) {
+                await navigator.clipboard.writeText(result.uploadLink);
+                toast.info("Link-ul pentru upload a fost copiat în clipboard.");
+              }
+            } catch (copyErr) {
+              console.warn("Could not copy upload link to clipboard", copyErr);
+            }
+
             const emailParams = {
               to_email: result.customerEmail,
               to_name: result.customerName || "Client",
@@ -309,7 +371,9 @@ export default function CustomerDashboard() {
               );
             } catch (emailError) {
               console.error("Email send error:", emailError);
-              toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
+              toast.warning(
+                "Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis. Link-ul este în clipboard."
+              );
             }
           } else {
             toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
@@ -333,9 +397,14 @@ export default function CustomerDashboard() {
         moveDateEnd: "",
         moveDateFlexDays: 3,
         details: "",
+        fromRooms: "",
+        toRooms: "",
         rooms: "",
         volumeM3: "",
         phone: "",
+        contactName: "",
+        contactFirstName: "",
+        contactLastName: "",
         needPacking: false,
         hasElevator: false,
         budgetEstimate: 0,
@@ -368,9 +437,14 @@ export default function CustomerDashboard() {
       moveDateEnd: "",
       moveDateFlexDays: 3,
       details: "",
+      fromRooms: "",
+      toRooms: "",
       rooms: "",
       volumeM3: "",
       phone: "",
+      contactName: "",
+      contactFirstName: "",
+      contactLastName: "",
       needPacking: false,
       hasElevator: false,
       budgetEstimate: 0,
@@ -388,7 +462,7 @@ export default function CustomerDashboard() {
   return (
     <RequireRole allowedRole="customer">
       <LayoutWrapper>
-        <section className="mx-auto max-w-[1400px] px-4 py-8">
+        <section className="mx-auto max-w-[1400px] px-0 py-8 sm:px-4">
           {/* Modern Header */}
           <div className="mb-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -410,7 +484,7 @@ export default function CustomerDashboard() {
             </div>
 
             {/* Stats Cards */}
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -446,41 +520,24 @@ export default function CustomerDashboard() {
                 <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-sky-100 opacity-20" />
               </motion.div>
 
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="group relative overflow-hidden rounded-2xl border border-amber-100 bg-gradient-to-br from-amber-50 to-white p-6 shadow-sm transition-all hover:shadow-lg"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-amber-600">Medie oferte</p>
-                    <p className="mt-2 text-3xl font-bold text-gray-900">
-                      {requests.length ? (totalOffers / requests.length).toFixed(1) : "0"}
-                    </p>
-                  </div>
-                  <div className="rounded-xl bg-amber-100 p-3">
-                    <PlusSquare size={24} className="text-amber-600" />
-                  </div>
-                </div>
-                <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-amber-100 opacity-20" />
-              </motion.div>
+              {/* Removed "Medie oferte" card as requested */}
             </div>
           </div>
 
-          {/* Navigation Tabs */}
+          {/* Navigation Tabs (order: Cerere Nouă, Oferte, Cererile mele) */}
           <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200">
+            {/* Cerere Nouă */}
             <button
-              onClick={() => setActiveTab("requests")}
+              onClick={() => setActiveTab("new")}
               className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "requests" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+                activeTab === "new" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-2">
-                <List size={18} />
-                <span>Cererile mele</span>
+                <PlusSquare size={18} />
+                <span>Cerere Nouă</span>
               </div>
-              {activeTab === "requests" && (
+              {activeTab === "new" && (
                 <motion.div
                   layoutId="activeTab"
                   className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
@@ -488,6 +545,7 @@ export default function CustomerDashboard() {
               )}
             </button>
 
+            {/* Oferte */}
             <button
               onClick={() => setActiveTab("offers")}
               className={`relative px-6 py-3 font-medium transition-colors ${
@@ -511,17 +569,37 @@ export default function CustomerDashboard() {
               )}
             </button>
 
+            {/* Cererile mele */}
             <button
-              onClick={() => setActiveTab("new")}
+              onClick={() => setActiveTab("requests")}
               className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "new" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+                activeTab === "requests" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-2">
-                <PlusSquare size={18} />
-                <span>Cerere nouă</span>
+                <List size={18} />
+                <span>Cererile mele</span>
               </div>
-              {activeTab === "new" && (
+              {activeTab === "requests" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
+
+            {/* Arhivă */}
+            <button
+              onClick={() => setActiveTab("archive")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "archive" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <ArchiveIcon size={18} />
+                <span>Arhivă</span>
+              </div>
+              {activeTab === "archive" && (
                 <motion.div
                   layoutId="activeTab"
                   className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
@@ -531,63 +609,11 @@ export default function CustomerDashboard() {
           </div>
 
           {activeTab === "requests" && (
-            <>
-              {/* Filters & Search */}
-              <div className="mb-6 flex flex-col gap-3 rounded-xl bg-white p-4 shadow-sm sm:flex-row sm:items-center">
-                <div className="relative flex-1">
-                  <Search
-                    className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"
-                    size={20}
-                  />
-                  <input
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    placeholder="Caută după oraș sau detalii..."
-                    className="w-full rounded-xl border border-gray-200 bg-gray-50 py-3 pl-12 pr-4 text-sm outline-none transition-all focus:border-emerald-300 focus:bg-white focus:ring-2 focus:ring-emerald-100"
-                  />
-                </div>
-                <div className="flex flex-wrap items-center gap-2">
-                  <select
-                    value={sortBy}
-                    onChange={(e) => setSortBy(e.target.value as any)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium outline-none transition-all hover:border-gray-300"
-                  >
-                    <option value="date-desc">Cele mai noi</option>
-                    <option value="date-asc">Cele mai vechi</option>
-                    <option value="offers-desc">Cele mai multe oferte</option>
-                    <option value="offers-asc">Cele mai puține oferte</option>
-                  </select>
-                  <input
-                    type="date"
-                    value={dateFrom ?? ""}
-                    onChange={(e) => setDateFrom(e.target.value || null)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition-all hover:border-gray-300"
-                  />
-                  <input
-                    type="date"
-                    value={dateTo ?? ""}
-                    onChange={(e) => setDateTo(e.target.value || null)}
-                    className="rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm outline-none transition-all hover:border-gray-300"
-                  />
-                  <button
-                    onClick={exportCSV}
-                    className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-gray-800"
-                  >
-                    <Download size={16} /> Export
-                  </button>
-                  <button
-                    onClick={() => {
-                      setSearch("");
-                      setDateFrom(null);
-                      setDateTo(null);
-                    }}
-                    className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium transition-all hover:border-gray-300"
-                  >
-                    <Filter size={16} /> Reset
-                  </button>
-                </div>
-              </div>
-
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="overflow-visible rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+            >
               {loading ? (
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
@@ -625,19 +651,46 @@ export default function CustomerDashboard() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
                     >
-                      <RequestCard r={r} offers={offersByRequest[r.id] || []} />
+                      <MyRequestCard
+                        request={r as any}
+                        offersCount={(offersByRequest[r.id] || []).length}
+                        onStatusChange={async (requestId, newStatus) => {
+                          try {
+                            await updateRequestStatus(requestId, newStatus);
+                            toast.success(
+                              newStatus === "closed"
+                                ? "Cererea a fost marcată ca închisă"
+                                : newStatus === "paused"
+                                ? "Cererea a fost pusă în așteptare"
+                                : "Cererea a fost reactivată"
+                            );
+                          } catch (error) {
+                            console.error("Error updating status:", error);
+                            toast.error("Nu s-a putut actualiza statusul cererii");
+                          }
+                        }}
+                        onArchive={async (requestId) => {
+                          try {
+                            await archiveRequest(requestId);
+                            toast.success("Cererea a fost arhivată");
+                          } catch (error) {
+                            console.error("Error archiving request:", error);
+                            toast.error("Nu s-a putut arhiva cererea");
+                          }
+                        }}
+                      />
                     </motion.div>
                   ))}
                 </div>
               )}
-            </>
+            </motion.div>
           )}
 
           {activeTab === "new" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-2xl border border-gray-100 bg-white p-8 shadow-lg"
+              className="rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
             >
               <RequestForm
                 form={form}
@@ -649,69 +702,305 @@ export default function CustomerDashboard() {
           )}
 
           {activeTab === "offers" && (
-            <div className="space-y-6">
-              {aggregatedOffers.length === 0 ? (
+            <div className="rounded-2xl border border-gray-100 bg-white p-0 shadow-sm">
+              {requests.length === 0 ? (
+                <div className="p-10 text-center">
+                  <div className="mx-auto mb-3 w-fit rounded-full bg-sky-100 p-4">
+                    <Inbox size={32} className="text-sky-600" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900">Nu ai încă cereri</h3>
+                  <p className="mt-1 text-sm text-gray-500">
+                    Creează o cerere pentru a primi oferte.
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 gap-0 sm:grid-cols-[300px,1fr]">
+                  {/* Sidebar: requests list */}
+                  <aside className="border-b border-gray-100 sm:border-b-0 sm:border-r">
+                    <div className="sticky top-[80px] max-h-[calc(100vh-120px)] overflow-auto p-4">
+                      <h3 className="mb-3 text-sm font-semibold text-gray-800">Cererile mele</h3>
+                      <div className="space-y-2">
+                        {requests.map((r) => {
+                          const cnt = (offersByRequest[r.id] || []).length;
+                          const active = selectedRequestId === r.id;
+                          return (
+                            <button
+                              key={r.id}
+                              onClick={() => setSelectedRequestId(r.id)}
+                              className={`w-full rounded-xl border px-4 py-3 text-left transition-all ${
+                                active
+                                  ? "border-emerald-300 bg-emerald-50 shadow-sm"
+                                  : "border-gray-200 bg-white hover:bg-gray-50"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between gap-3">
+                                <div className="min-w-0">
+                                  <p className="truncate text-sm font-semibold text-gray-900">
+                                    {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
+                                  </p>
+                                  <p className="mt-0.5 text-xs text-gray-500">
+                                    {r.moveDate ? formatDateRO(r.moveDate, { month: "short" }) : "fără dată"}
+                                  </p>
+                                </div>
+                                <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                                  {cnt}
+                                </span>
+                              </div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </aside>
+
+                  {/* Main: offers for selected request */}
+                  <main className="p-4 sm:p-6">
+                    {!selectedRequestId ? (
+                      <div className="py-10 text-center text-sm text-gray-500">
+                        Selectează o cerere din stânga pentru a vedea ofertele.
+                      </div>
+                    ) : (
+                      <>
+                        <div className="mb-4 flex items-center justify-between">
+                          <div>
+                            <h3 className="text-lg font-semibold text-gray-900">Oferte primite</h3>
+                            <p className="text-sm text-gray-500">
+                              Relevante pentru cererea selectată
+                            </p>
+                          </div>
+                        </div>
+
+                        {!(offersByRequest[selectedRequestId] || []).length ? (
+                          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-10 text-center">
+                            <div className="rounded-full bg-sky-100 p-4">
+                              <Inbox size={32} className="text-sky-600" />
+                            </div>
+                            <h4 className="mt-3 text-base font-semibold text-gray-900">
+                              Nicio ofertă încă
+                            </h4>
+                            <p className="mt-1 max-w-sm text-sm text-gray-500">
+                              Firmele vor trimite oferte aici după ce procesează cererea ta.
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="space-y-3">
+                            {(offersByRequest[selectedRequestId] || []).map(
+                              (o: any, index: number) => (
+                                <OfferRow
+                                  key={o.id}
+                                  index={index}
+                                  requestId={selectedRequestId}
+                                  offer={o}
+                                  onAccept={acceptFromAggregated}
+                                  onDecline={declineFromAggregated}
+                                />
+                              )
+                            )}
+                          </div>
+                        )}
+
+                        {/* Comparison for selected request only */}
+                        {(offersByRequest[selectedRequestId] || []).length > 1 && (
+                          <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                              Compară oferte
+                            </h3>
+                            <OfferComparison
+                              offers={(offersByRequest[selectedRequestId] as any[]).map((o) => ({
+                                id: o.id,
+                                requestId: selectedRequestId,
+                                companyName: (o as any).companyName,
+                                price: (o as any).price,
+                                message: (o as any).message,
+                                status: (o as any).status,
+                                createdAt: (o as any).createdAt,
+                                favorite: false,
+                              }))}
+                              onAccept={acceptFromAggregated}
+                              onDecline={declineFromAggregated}
+                            />
+                          </div>
+                        )}
+                      </>
+                    )}
+                  </main>
+                </div>
+              )}
+            </div>
+          )}
+
+          {activeTab === "archive" && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="overflow-visible rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center py-12">
+                  <div className="text-center">
+                    <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                    <p className="mt-4 text-sm text-gray-500">Se încarcă arhiva...</p>
+                  </div>
+                </div>
+              ) : archivedRequests.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
                 >
-                  <div className="rounded-full bg-sky-100 p-4">
-                    <Inbox size={32} className="text-sky-600" />
+                  <div className="rounded-full bg-gray-100 p-4">
+                    <ArchiveIcon size={32} className="text-gray-500" />
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900">Nicio ofertă primită</h3>
+                  <h3 className="mt-4 text-lg font-semibold text-gray-900">Arhivă goală</h3>
                   <p className="mt-2 max-w-sm text-sm text-gray-500">
-                    Ofertele vor apărea aici după ce firmele de mutări vor răspunde la cererile tale
+                    Cererile arhivate vor apărea aici.
                   </p>
                 </motion.div>
               ) : (
-                <>
-                  <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 text-lg font-semibold text-gray-900">Toate ofertele</h3>
-                    <div className="space-y-3">
-                      {aggregatedOffers.map((o, index) => (
-                        <motion.div
-                          key={o.id}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.05 }}
-                          className="flex items-center justify-between rounded-xl border border-gray-100 bg-gradient-to-r from-gray-50 to-white p-4 transition-all hover:shadow-md"
-                        >
-                          <div className="flex-1">
-                            <p className="font-semibold text-gray-900">{o.companyName}</p>
-                            {o.message && <p className="mt-1 text-sm text-gray-500">{o.message}</p>}
-                          </div>
-                          <div className="text-right">
-                            <p className="text-2xl font-bold text-emerald-600">{o.price} lei</p>
-                          </div>
-                        </motion.div>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                    <h3 className="mb-4 text-lg font-semibold text-gray-900">Compară oferte</h3>
-                    <OfferComparison
-                      offers={(aggregatedOffers as any[]).map((o) => ({
-                        id: o.id,
-                        requestId: (o as any).requestId,
-                        companyName: (o as any).companyName,
-                        price: (o as any).price,
-                        message: (o as any).message,
-                        status: (o as any).status,
-                        createdAt: (o as any).createdAt,
-                        favorite: false,
-                      }))}
-                      onAccept={acceptFromAggregated}
-                      onDecline={declineFromAggregated}
-                    />
-                  </div>
-                </>
+                <div className="grid grid-cols-1 gap-5">
+                  {archivedRequests.map((r: any, index: number) => (
+                    <motion.div
+                      key={r.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                    >
+                      <MyRequestCard
+                        request={r as any}
+                        offersCount={0}
+                        readOnly
+                        onStatusChange={() => {}}
+                        onArchive={() => {}}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
               )}
-            </div>
+            </motion.div>
           )}
         </section>
       </LayoutWrapper>
     </RequireRole>
+  );
+}
+
+function OfferRow({
+  index,
+  requestId,
+  offer,
+  onAccept,
+  onDecline,
+}: {
+  index: number;
+  requestId: string;
+  offer: any;
+  // eslint-disable-next-line no-unused-vars
+  onAccept: (requestId: string, offerId: string) => Promise<void> | void;
+  // eslint-disable-next-line no-unused-vars
+  onDecline: (requestId: string, offerId: string) => Promise<void> | void;
+}) {
+  const [showMessage, setShowMessage] = useState(false);
+  const [text, setText] = useState("");
+
+  const sendMessage = async () => {
+    const t = text.trim();
+    if (!t) {
+      toast.error("Scrie un mesaj înainte de a trimite.");
+      return;
+    }
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        toast.error("Trebuie să fii autentificat pentru a trimite mesajul.");
+        return;
+      }
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/offers/message", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ requestId, offerId: offer.id, text: t }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
+      toast.success("Mesaj trimis");
+      setText("");
+      setShowMessage(false);
+    } catch (err) {
+      console.error("sendMessage failed", err);
+      const msg = err instanceof Error ? err.message : "Eroare necunoscută";
+      toast.error(`Eroare la trimiterea mesajului: ${msg}`);
+    }
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 p-4"
+    >
+      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+        <div className="flex-1">
+          <p className="text-sm font-semibold text-gray-900">{offer.companyName}</p>
+          {offer.message && <p className="mt-1 text-sm text-gray-600">{offer.message}</p>}
+            {offer.createdAt?.toDate && (
+              <p className="mt-1 text-xs text-gray-400">
+                {formatDateRO(offer.createdAt, { month: "short" })}
+              </p>
+            )}
+        </div>
+        <div className="flex items-center gap-3">
+          <p className="text-2xl font-bold text-emerald-600">{offer.price} lei</p>
+          <div className="flex gap-2">
+            <button
+              onClick={() => onAccept(requestId, offer.id)}
+              className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+            >
+              Acceptă
+            </button>
+            <button
+              onClick={() => onDecline(requestId, offer.id)}
+              className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+              Refuză
+            </button>
+            <button
+              onClick={() => setShowMessage((s) => !s)}
+              className="inline-flex items-center justify-center gap-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+              <MessageSquare size={16} /> Mesaj
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {showMessage && (
+        <div className="rounded-lg border border-gray-200 bg-white p-3">
+          <textarea
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+            rows={3}
+            placeholder="Scrie un mesaj către firmă..."
+            className="w-full resize-y rounded-md border border-gray-200 p-2 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-200"
+          />
+          <div className="mt-2 flex justify-end gap-2">
+            <button
+              onClick={() => setShowMessage(false)}
+              className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm"
+            >
+              Anulează
+            </button>
+            <button
+              onClick={sendMessage}
+              className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+            >
+              Trimite
+            </button>
+          </div>
+        </div>
+      )}
+    </motion.div>
   );
 }

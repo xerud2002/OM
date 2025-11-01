@@ -20,9 +20,15 @@ export default function FloatingCTA() {
 
   // Show FAB after scrolling down a bit, but hide on form/dashboard pages
   useEffect(() => {
-    const hiddenPaths = ["/form", "/customer/dashboard", "/company/dashboard", "/customer/auth", "/company/auth"];
+    const hiddenPaths = [
+      "/form",
+      "/customer/dashboard",
+      "/company/dashboard",
+      "/customer/auth",
+      "/company/auth",
+    ];
     const shouldHide = hiddenPaths.some((path) => pathname?.startsWith(path));
-    
+
     if (shouldHide) {
       return;
     }
@@ -36,9 +42,15 @@ export default function FloatingCTA() {
   }, [pathname]);
 
   // Hide FAB on specific pages
-  const hiddenPaths = ["/form", "/customer/dashboard", "/company/dashboard", "/customer/auth", "/company/auth"];
+  const hiddenPaths = [
+    "/form",
+    "/customer/dashboard",
+    "/company/dashboard",
+    "/customer/auth",
+    "/company/auth",
+  ];
   const shouldHide = hiddenPaths.some((path) => pathname?.startsWith(path));
-  
+
   if (shouldHide) return null;
 
   const handleClick = () => {

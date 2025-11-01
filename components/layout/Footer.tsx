@@ -39,7 +39,7 @@ const SOCIAL_LINKS = [
 
 export default function Footer() {
   return (
-  <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
+    <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
       {/* Main content */}
       <motion.div
         variants={staggerContainer}

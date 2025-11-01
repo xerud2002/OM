@@ -306,9 +306,7 @@ export default function FormPage() {
                 <strong>{form.fromCity}</strong> → <strong>{form.toCity}</strong>
               </p>
               <p className="text-sm text-gray-500">Data: {form.moveDate}</p>
-              <p className="text-sm text-gray-500">
-                Camere: {form.rooms ?? "-"}
-              </p>
+              <p className="text-sm text-gray-500">Camere: {form.rooms ?? "-"}</p>
             </div>
 
             {/* Trust reassurance before submit */}

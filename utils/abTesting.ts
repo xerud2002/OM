@@ -6,7 +6,7 @@ type Variant = "A" | "B";
 /**
  * Simple A/B testing hook that randomly assigns users to variant A or B
  * and persists the choice in localStorage for consistency.
- * 
+ *
  * Usage:
  * const variant = useABTest("hero-headline");
  * return variant === "A" ? <HeadlineA /> : <HeadlineB />;
@@ -48,7 +48,11 @@ export function trackExposure(testName: string, variantUsed: Variant) {
  * Track conversion events for A/B tests.
  * Call this when a user completes a desired action (form submit, signup, etc.)
  */
-export function trackConversion(testName: string, variantUsed: Variant, eventName: string = "conversion") {
+export function trackConversion(
+  testName: string,
+  variantUsed: Variant,
+  eventName: string = "conversion"
+) {
   if (typeof window === "undefined") return;
 
   // Send to analytics (example for Google Analytics 4)

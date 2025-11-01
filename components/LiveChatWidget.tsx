@@ -4,25 +4,25 @@ import { useEffect } from "react";
 
 /**
  * Tawk.to Live Chat Widget
- * 
+ *
  * To use:
  * 1. Sign up at https://www.tawk.to (FREE)
  * 2. Get your Property ID and Widget ID from dashboard
  * 3. Replace TAWK_PROPERTY_ID and TAWK_WIDGET_ID below with your actual IDs
- * 
+ *
  * Alternative chat services:
  * - Crisp.chat (free tier available)
  * - Tidio (free tier available)
  * - Intercom (paid)
  */
 
-const TAWK_PROPERTY_ID = "YOUR_PROPERTY_ID"; // Replace with your Tawk.to property ID
-const TAWK_WIDGET_ID = "default"; // Replace with your widget ID
+const TAWK_PROPERTY_ID = "690674904a15fd1950a7dc1d"; // Replace with your Tawk.to property ID
+const TAWK_WIDGET_ID = "1j90jelq9"; // Replace with your widget ID
 
 export default function LiveChatWidget() {
   useEffect(() => {
     // Don't load if IDs not configured
-    if (TAWK_PROPERTY_ID === "YOUR_PROPERTY_ID") {
+    if (TAWK_PROPERTY_ID === "690674904a15fd1950a7dc1d") {
       return;
     }
 
@@ -41,7 +41,7 @@ export default function LiveChatWidget() {
       // Remove Tawk widget on unmount
       const tawkScript = document.querySelector(`script[src*="tawk.to"]`);
       if (tawkScript) tawkScript.remove();
-      
+
       // Clean up Tawk API
       if ((window as any).Tawk_API) {
         delete (window as any).Tawk_API;

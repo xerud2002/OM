@@ -119,7 +119,7 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
     <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50/50 shadow-sm transition-all hover:shadow-xl">
       {/* Gradient accent */}
       <div className="absolute left-0 top-0 h-full w-1 bg-gradient-to-b from-emerald-500 to-sky-500" />
-      
+
       <div className="relative p-6">
         {/* Header Section */}
         <div className="mb-4 flex items-start justify-between gap-4">
@@ -134,35 +134,38 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
                     r.status === "accepted" || r.status === "in-progress"
                       ? "bg-emerald-100 text-emerald-700"
                       : r.status === "completed"
-                      ? "bg-blue-100 text-blue-700"
-                      : r.status === "cancelled"
-                      ? "bg-gray-100 text-gray-700"
-                      : "bg-amber-100 text-amber-700"
+                        ? "bg-blue-100 text-blue-700"
+                        : r.status === "cancelled"
+                          ? "bg-gray-100 text-gray-700"
+                          : "bg-amber-100 text-amber-700"
                   }`}
                 >
                   {r.status === "accepted"
                     ? "Acceptată"
                     : r.status === "in-progress"
-                    ? "În desfășurare"
-                    : r.status === "completed"
-                    ? "Finalizată"
-                    : r.status === "cancelled"
-                    ? "Anulată"
-                    : "În așteptare"}
+                      ? "În desfășurare"
+                      : r.status === "completed"
+                        ? "Finalizată"
+                        : r.status === "cancelled"
+                          ? "Anulată"
+                          : "În așteptare"}
                 </span>
               )}
             </div>
-            
+
             <div className="mb-3 flex items-center gap-2 text-sm text-gray-500">
               <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
               </svg>
               <span className="font-medium">{r.moveDate}</span>
             </div>
 
-            {r.details && (
-              <p className="mb-4 text-sm leading-relaxed text-gray-600">{r.details}</p>
-            )}
+            {r.details && <p className="mb-4 text-sm leading-relaxed text-gray-600">{r.details}</p>}
 
             <div className="flex flex-wrap gap-3">
               {r.rooms && (
@@ -204,8 +207,18 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
         {offers && offers.length > 0 && (
           <div className="mt-6 border-t border-gray-100 pt-6">
             <h4 className="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-700">
-              <svg className="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+              <svg
+                className="h-5 w-5 text-emerald-600"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+                />
               </svg>
               Oferte primite ({offers.length})
             </h4>
@@ -228,8 +241,18 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
         {/* No offers state */}
         {(!offers || offers.length === 0) && (
           <div className="mt-6 rounded-xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-6 text-center">
-            <svg className="mx-auto h-10 w-10 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+            <svg
+              className="mx-auto h-10 w-10 text-gray-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+              />
             </svg>
             <p className="mt-2 text-sm font-medium text-gray-500">Nicio ofertă încă</p>
             <p className="mt-1 text-xs text-gray-400">Firmele vor răspunde în curând</p>

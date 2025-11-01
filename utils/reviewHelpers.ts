@@ -56,7 +56,7 @@ export async function addReview(params: {
     // Adaugă review în subcollection
     const reviewsRef = collection(db, "companies", companyId, "reviews");
     const newReviewRef = doc(reviewsRef);
-    
+
     transaction.set(newReviewRef, {
       companyId,
       customerId,
@@ -126,7 +126,7 @@ export async function canUserReview(
 
   // Check dacă user-ul nu are deja review pentru acest request
   const hasReview = await hasUserReviewedRequest(customerId, requestId);
-  
+
   return !hasReview;
 }
 
@@ -140,10 +140,10 @@ export async function hasUserReviewedRequest(
   // Query all companies reviews pentru acest customer + request
   // Nota: Pentru performanță optimă, ar trebui să adăugăm o colecție separată
   // "reviews" la nivel de root cu compound index pe customerId + requestId
-  
+
   // Pentru simplitate, căutăm în toate companiile (nu e scalabil la 1000+ companii)
   // TODO: Migrate to root-level reviews collection pentru query performance
-  
+
   const companiesRef = collection(db, "companies");
   const companiesSnap = await getDocs(companiesRef);
 
@@ -175,7 +175,7 @@ export async function getRatingDistribution(companyId: string): Promise<{
   5: number;
 }> {
   const reviews = await getCompanyReviews(companyId);
-  
+
   const distribution = {
     1: 0,
     2: 0,

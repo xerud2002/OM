@@ -1,85 +1,87 @@
 rules_version = '2';
+
 service cloud.firestore {
   match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() { return request.auth != null; }
 
-    function isAuthenticated() { return request.auth != null; }
-    function isCustomer() { return isAuthenticated() && exists(/databases/$(database)/documents/customers/$(request.auth.uid)); }
-    function isCompany() { return isAuthenticated() && exists(/databases/$(database)/documents/companies/$(request.auth.uid)); }
+    // Role helpers (no dynamic path concatenation)
+    function isCustomer() { return exists(/databases/$(database)/documents/customers/$(request.auth.uid)); }
+    function isCompany() { return exists(/databases/$(database)/documents/companies/$(request.auth.uid)); }
+    function canCreateCustomer() { return !isCompany(); }
+    function canCreateCompany() { return !isCustomer(); }
 
-    // Customers can manage only their document
+    // === CUSTOMERS COLLECTION ===
     match /customers/{customerId} {
-      allow read, create, update: if isAuthenticated() && request.auth.uid == customerId;
+      allow read: if isSignedIn() && request.auth.uid == customerId;
+      allow create: if isSignedIn() && request.auth.uid == customerId && canCreateCustomer();
+      allow update: if isSignedIn() && request.auth.uid == customerId;
+      allow delete: if false; // Prevent deletion
     }
 
-    // Companies
+    // === COMPANIES COLLECTION ===
     match /companies/{companyId} {
-      // Public company profiles
-      allow read: if true;
+      allow read: if isSignedIn() && request.auth.uid == companyId;
+      allow create: if isSignedIn() && request.auth.uid == companyId && canCreateCompany();
+      allow update: if isSignedIn() && request.auth.uid == companyId;
+      allow delete: if false; // Prevent deletion
 
-      // Company can create/update its own profile, but cannot change rating aggregates
-      allow create, update: if isAuthenticated() && request.auth.uid == companyId
-        && !(request.resource.data.diff(resource.data).changedKeys().hasAny(["averageRating","totalReviews"]));
-
-      // Reviews subcollection
-      match /reviews/{reviewId} {
-        allow read: if true;
-
-        // Customers can create reviews only for completed requests they own
-        allow create: if isAuthenticated()
-          && request.resource.data.companyId == companyId
-          && request.resource.data.customerId == request.auth.uid
-          && request.resource.data.rating is int
-          && request.resource.data.rating >= 1 && request.resource.data.rating <= 5
-          && request.resource.data.requestId is string
-          && get(/databases/$(database)/documents/requests/$(request.resource.data.requestId)).data.customerId == request.auth.uid
-          && get(/databases/$(database)/documents/requests/$(request.resource.data.requestId)).data.status == "completed";
-
-        // Optional: author can edit/delete within 24h
-        allow update, delete: if isAuthenticated()
-          && resource.data.customerId == request.auth.uid
-          && resource.data.createdAt != null
-          && request.time < resource.data.createdAt + duration.value(24, 'h');
-      }
-
-      // Notifications subcollection: server-only creation; company can manage its own
-      match /notifications/{notifId} {
-        allow read, update, delete: if isCompany() && request.auth.uid == companyId;
-        allow create: if false;
+      // Company notifications subcollection
+      match /notifications/{notificationId} {
+        allow read: if isSignedIn() && request.auth.uid == companyId;
+        allow write: if false; // Created by server or Cloud Functions
       }
     }
 
-    // Requests
+    // === REQUESTS COLLECTION ===
     match /requests/{requestId} {
-      allow read: if isAuthenticated();
+      // Customers can read their own requests; companies can read active (non-archived) requests
+      allow read: if isSignedIn() && (
+        resource.data.customerId == request.auth.uid ||
+        (isCompany() && !(resource.data.archived == true))
+      );
 
-      // Customers create their own requests
-      allow create: if isCustomer() && request.resource.data.customerId == request.auth.uid;
+      // Only customers can create requests
+      allow create: if isSignedIn() && isCustomer() && request.resource.data.customerId == request.auth.uid;
 
-      // Customers can update/delete only their own requests
-      allow update, delete: if isAuthenticated() && resource.data.customerId == request.auth.uid;
+      // Only request owner can update their request
+      allow update: if isSignedIn() && resource.data.customerId == request.auth.uid;
 
-      // Offers subcollection
+      // No hard deletes (use archived flag instead)
+      allow delete: if false;
+
+      // === OFFERS SUBCOLLECTION ===
       match /offers/{offerId} {
-        allow read: if isAuthenticated();
-        // Companies can create offers for requests; must be pending and owned by the company
-        allow create: if isCompany()
-          && request.resource.data.companyId == request.auth.uid
-          && request.resource.data.status == "pending";
-        // Companies can update/delete only their own offers
-        allow update, delete: if isCompany() && resource.data.companyId == request.auth.uid;
+        // Request owner and offer company can read
+        allow read: if isSignedIn() && (
+          resource.data.companyId == request.auth.uid ||
+          get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid
+        );
+
+        // Only companies can create offers for requests
+        allow create: if isSignedIn() && isCompany() && request.resource.data.companyId == request.auth.uid;
+
+        // Company can update their own offers, customer can update status (accept/decline)
+        allow update: if isSignedIn() && (
+          resource.data.companyId == request.auth.uid ||
+          get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid
+        );
+
+        // No deletion
+        allow delete: if false;
       }
     }
 
-    // Upload tokens - server-generated; customers can only mark them as used
-    match /uploadTokens/{token} {
-      // Server/Admin only (API using Admin SDK bypasses rules)
-      allow read, create: if false;
+    // === UPLOAD TOKENS COLLECTION ===
+    match /uploadTokens/{tokenId} {
+      // Tokens are readable by system only (API routes with admin SDK)
+      allow read: if false;
+      allow write: if false;
+    }
 
-      // Customer who owns the related request can mark the token as used
-      allow update: if isAuthenticated()
-        && get(/databases/$(database)/documents/requests/$(resource.data.requestId)).data.customerId == request.auth.uid
-        && request.resource.data.diff(resource.data).changedKeys().hasOnly(["used","uploadedAt"]) 
-        && request.resource.data.used == true;
+    // Deny everything else by default
+    match /{document=**} {
+      allow read, write: if false;
     }
   }
 }

@@ -1,9 +1,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { Star, Check, X } from "lucide-react";
+import { Star, Check, X, MessageSquare } from "lucide-react";
 import StarRating from "@/components/reviews/StarRating";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/services/firebase";
+import { auth } from "@/services/firebase";
+import { toast } from "sonner";
 
 type Offer = {
   id?: string;
@@ -35,6 +37,8 @@ export default function OfferItem({
     average: number;
     total: number;
   } | null>(null);
+  const [showMessage, setShowMessage] = useState(false);
+  const [messageText, setMessageText] = useState("");
 
   // Fetch company rating if companyId is available
   useEffect(() => {
@@ -77,6 +81,42 @@ export default function OfferItem({
     }
   };
 
+  const handleSendMessage = async () => {
+    if (!requestId || !offer.id) return;
+    const text = messageText.trim();
+    if (!text) {
+      toast.error("Scrie un mesaj înainte de a trimite.");
+      return;
+    }
+    try {
+      const user = auth.currentUser;
+      if (!user) {
+        toast.error("Trebuie să fii autentificat pentru a trimite mesajul.");
+        return;
+      }
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/offers/message", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId, offerId: offer.id, text }),
+      });
+      if (!resp.ok) {
+        const data = await resp.json().catch(() => ({}));
+        throw new Error(data.error || `HTTP ${resp.status}`);
+      }
+      toast.success("Mesaj trimis");
+      setMessageText("");
+      setShowMessage(false);
+    } catch (err) {
+      console.error("Failed to send message", err);
+      const errMsg = err instanceof Error ? err.message : "Eroare necunoscută";
+      toast.error(`Eroare la trimiterea mesajului: ${errMsg}`);
+    }
+  };
+
   return (
     <div className="relative flex flex-col gap-3 rounded-md border border-gray-100 bg-gray-50 p-3">
       <div className="flex items-start justify-between">
@@ -113,37 +153,71 @@ export default function OfferItem({
               offer.status === "accepted"
                 ? "bg-emerald-100 text-emerald-700"
                 : offer.status === "declined"
-                ? "bg-rose-100 text-rose-700"
-                : "bg-amber-100 text-amber-700"
+                  ? "bg-rose-100 text-rose-700"
+                  : "bg-amber-100 text-amber-700"
             }`}
           >
             {offer.status === "accepted"
               ? "Acceptată"
               : offer.status === "declined"
-              ? "Refuzată"
-              : "În așteptare"}
+                ? "Refuzată"
+                : "În așteptare"}
           </span>
         </div>
       )}
 
       {requestId && onAccept && onDecline && (!offer.status || offer.status === "pending") && (
-        <div className="flex items-center gap-2 border-t pt-2">
-          <button
-            onClick={handleAccept}
-            disabled={accepting || declining}
-            className="flex flex-1 items-center justify-center gap-1 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:opacity-60"
-          >
-            <Check size={14} />
-            {accepting ? "Se acceptă..." : "Acceptă"}
-          </button>
-          <button
-            onClick={handleDecline}
-            disabled={accepting || declining}
-            className="flex flex-1 items-center justify-center gap-1 rounded-md border border-rose-200 bg-white px-3 py-1.5 text-sm font-medium text-rose-600 transition hover:bg-rose-50 disabled:opacity-60"
-          >
-            <X size={14} />
-            {declining ? "Se refuză..." : "Refuză"}
-          </button>
+        <div className="flex flex-col gap-2 border-t pt-2">
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleAccept}
+              disabled={accepting || declining}
+              className="flex flex-1 items-center justify-center gap-1 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white transition hover:bg-emerald-700 disabled:opacity-60"
+            >
+              <Check size={14} />
+              {accepting ? "Se acceptă..." : "Acceptă"}
+            </button>
+            <button
+              onClick={handleDecline}
+              disabled={accepting || declining}
+              className="flex flex-1 items-center justify-center gap-1 rounded-md border border-rose-200 bg-white px-3 py-1.5 text-sm font-medium text-rose-600 transition hover:bg-rose-50 disabled:opacity-60"
+            >
+              <X size={14} />
+              {declining ? "Se refuză..." : "Refuză"}
+            </button>
+            <button
+              onClick={() => setShowMessage((s) => !s)}
+              className="flex flex-1 items-center justify-center gap-1 rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+            >
+              <MessageSquare size={14} />
+              Mesaj
+            </button>
+          </div>
+          {showMessage && (
+            <div className="flex w-full flex-col gap-2 rounded-md border border-gray-200 bg-white p-2">
+              <textarea
+                value={messageText}
+                onChange={(e) => setMessageText(e.target.value)}
+                rows={3}
+                placeholder="Scrie un mesaj către firmă..."
+                className="w-full resize-y rounded-md border border-gray-200 p-2 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-200"
+              />
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => setShowMessage(false)}
+                  className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm"
+                >
+                  Anulează
+                </button>
+                <button
+                  onClick={handleSendMessage}
+                  className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+                >
+                  Trimite
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

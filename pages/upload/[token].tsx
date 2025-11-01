@@ -150,9 +150,7 @@ export default function UploadMediaPage() {
             "state_changed",
             (snapshot) => {
               const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-              setFiles((prev) =>
-                prev.map((f, idx) => (idx === i ? { ...f, progress } : f))
-              );
+              setFiles((prev) => prev.map((f, idx) => (idx === i ? { ...f, progress } : f)));
             },
             (error) => {
               console.error("Upload error:", error);
@@ -188,11 +186,13 @@ export default function UploadMediaPage() {
         });
       } catch (e: any) {
         console.error("Failed to update token status:", e?.message || e);
-        toast.error("Nu am putut marca link-ul ca folosit. Verifică dacă ești autentificat cu contul corect.");
+        toast.error(
+          "Nu am putut marca link-ul ca folosit. Verifică dacă ești autentificat cu contul corect."
+        );
       }
 
       // Notify companies with offers
-  await notifyCompanies(tokenData.requestId);
+      await notifyCompanies(tokenData.requestId);
 
       setUploaded(true);
       toast.success("Fișierele au fost încărcate cu succes!");
@@ -286,9 +286,12 @@ export default function UploadMediaPage() {
           {uploaded ? (
             <div className="flex flex-col items-center justify-center py-12 text-center">
               <CheckCircle className="h-20 w-20 text-emerald-500" />
-              <h3 className="mt-4 text-xl font-semibold text-gray-800">Fișierele au fost încărcate!</h3>
+              <h3 className="mt-4 text-xl font-semibold text-gray-800">
+                Fișierele au fost încărcate!
+              </h3>
               <p className="mt-2 text-gray-600">
-                Mulțumim! Companiile vor avea acces la materialele tale pentru a-ți oferi cele mai precise oferte.
+                Mulțumim! Companiile vor avea acces la materialele tale pentru a-ți oferi cele mai
+                precise oferte.
               </p>
             </div>
           ) : (
@@ -303,7 +306,10 @@ export default function UploadMediaPage() {
                   id="fileInput"
                   disabled={uploading}
                 />
-                <label htmlFor="fileInput" className={uploading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}>
+                <label
+                  htmlFor="fileInput"
+                  className={uploading ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+                >
                   <Upload className="mx-auto h-16 w-16 text-blue-400" />
                   <p className="mt-4 text-lg font-medium text-gray-700">
                     Click pentru a selecta fișiere
@@ -320,19 +326,16 @@ export default function UploadMediaPage() {
                     Fișiere selectate ({files.length}):
                   </p>
                   {files.map((fileWithProgress, i) => (
-                    <div
-                      key={i}
-                      className="overflow-hidden rounded-lg border bg-white shadow-sm"
-                    >
+                    <div key={i} className="overflow-hidden rounded-lg border bg-white shadow-sm">
                       <div className="flex items-center gap-3 p-3">
                         {/* Thumbnail preview */}
                         {fileWithProgress.preview && (
                           <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded border">
                             {fileWithProgress.file.type.startsWith("image/") ? (
                               // eslint-disable-next-line @next/next/no-img-element
-                              <img 
-                                src={fileWithProgress.preview} 
-                                alt="Preview" 
+                              <img
+                                src={fileWithProgress.preview}
+                                alt="Preview"
                                 className="h-full w-full object-cover"
                               />
                             ) : (
@@ -402,8 +405,20 @@ export default function UploadMediaPage() {
                 {uploading ? (
                   <>
                     <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                        fill="none"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
                     </svg>
                     Se încarcă...
                   </>
