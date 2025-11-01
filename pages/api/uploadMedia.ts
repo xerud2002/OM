@@ -59,10 +59,25 @@ export default async function handler(
 
     // Resolve bucket name explicitly to avoid default-bucket config issues
     const bucketName =
-      process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || `${process.env.FIREBASE_ADMIN_PROJECT_ID}.appspot.com`;
-    const bucket = admin.storage().bucket(bucketName);
-    if (!bucket.name) {
-      throw new Error("Bucket name not specified or invalid. Configure NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET in .env");
+      (process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "").trim() || `${process.env.FIREBASE_ADMIN_PROJECT_ID}.appspot.com`;
+  const bucket = admin.storage().bucket(bucketName);
+  console.warn("[uploadMedia] Using bucket:", bucketName);
+
+    // Debug: verify bucket existence before attempting upload
+    try {
+      const [exists] = await bucket.exists();
+      if (!exists) {
+        console.error("[uploadMedia] Bucket does not exist:", bucketName);
+        throw new Error(
+          `The specified bucket does not exist: ${bucketName}. Open Firebase Console → Storage and ensure the default bucket is created, or set NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET to your bucket (e.g. omro-e5a88.appspot.com).`
+        );
+      }
+    } catch (existErr: any) {
+      // If exists() itself fails, surface a clearer message
+      if (existErr?.message?.includes("does not exist")) {
+        throw existErr;
+      }
+      console.error("[uploadMedia] Bucket exists() check failed:", existErr);
     }
 
     for (const file of fileArray) {
@@ -83,18 +98,19 @@ export default async function handler(
         },
       });
 
-      // Make file publicly readable
       const fileRef = bucket.file(storagePath);
-      await fileRef.makePublic();
-
-      // Get public URL
-      const publicUrl = `https://storage.googleapis.com/${bucket.name}/${storagePath}`;
-      uploadedUrls.push(publicUrl);
+      // Generate a long-lived signed URL for reading
+      const [signedUrl] = await fileRef.getSignedUrl({
+        action: "read",
+        // Far future expiry; for tighter control store short-lived and refresh on access
+        expires: "03-01-2500",
+      });
+      uploadedUrls.push(signedUrl);
 
       // Clean up temp file
       try {
         fs.unlinkSync(formFile.filepath);
-      } catch (e) {
+      } catch {
         // Ignore cleanup errors
       }
     }
