@@ -16,6 +16,27 @@ export async function createRequest(data: any) {
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
+  // Build full address strings for backward compatibility
+  if (clean.fromStreet || clean.fromNumber) {
+    const parts = [clean.fromStreet, clean.fromNumber];
+    if (clean.fromType === 'flat') {
+      if (clean.fromBloc) parts.push(`Bl. ${clean.fromBloc}`);
+      if (clean.fromStaircase) parts.push(`Sc. ${clean.fromStaircase}`);
+      if (clean.fromApartment) parts.push(`Ap. ${clean.fromApartment}`);
+    }
+    clean.fromAddress = parts.filter(Boolean).join(', ');
+  }
+
+  if (clean.toStreet || clean.toNumber) {
+    const parts = [clean.toStreet, clean.toNumber];
+    if (clean.toType === 'flat') {
+      if (clean.toBloc) parts.push(`Bl. ${clean.toBloc}`);
+      if (clean.toStaircase) parts.push(`Sc. ${clean.toStaircase}`);
+      if (clean.toApartment) parts.push(`Ap. ${clean.toApartment}`);
+    }
+    clean.toAddress = parts.filter(Boolean).join(', ');
+  }
+
   const docRef = await addDoc(collection(db, "requests"), {
     ...clean,
     // Use serverTimestamp for consistent server-side timestamps
@@ -97,6 +118,27 @@ export async function updateRequest(requestId: string, data: any) {
   const clean: Record<string, any> = Object.fromEntries(
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
+
+  // Build full address strings for backward compatibility
+  if (clean.fromStreet || clean.fromNumber) {
+    const parts = [clean.fromStreet, clean.fromNumber];
+    if (clean.fromType === 'flat') {
+      if (clean.fromBloc) parts.push(`Bl. ${clean.fromBloc}`);
+      if (clean.fromStaircase) parts.push(`Sc. ${clean.fromStaircase}`);
+      if (clean.fromApartment) parts.push(`Ap. ${clean.fromApartment}`);
+    }
+    clean.fromAddress = parts.filter(Boolean).join(', ');
+  }
+
+  if (clean.toStreet || clean.toNumber) {
+    const parts = [clean.toStreet, clean.toNumber];
+    if (clean.toType === 'flat') {
+      if (clean.toBloc) parts.push(`Bl. ${clean.toBloc}`);
+      if (clean.toStaircase) parts.push(`Sc. ${clean.toStaircase}`);
+      if (clean.toApartment) parts.push(`Ap. ${clean.toApartment}`);
+    }
+    clean.toAddress = parts.filter(Boolean).join(', ');
+  }
 
   const requestRef = doc(db, "requests", requestId);
   await updateDoc(requestRef, {
