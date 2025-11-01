@@ -30,6 +30,10 @@ type FormShape = {
   toType?: "house" | "flat";
   toFloor?: string;
   toElevator?: boolean;
+  // Separate room counts for each location
+  fromRooms?: string | number;
+  toRooms?: string | number;
+  // Legacy aggregated rooms (kept for backward compatibility in some UI pieces)
   rooms?: string | number;
   phone?: string;
   details?: string;
@@ -197,8 +201,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
                 <input
                   type="text"
-                  value={form.rooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
+                  value={form.fromRooms || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, fromRooms: e.target.value }))}
                   className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   placeholder="ex: 2"
                 />
@@ -424,8 +428,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere</label>
                 <input
                   type="text"
-                  value={form.rooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, rooms: e.target.value }))}
+                  value={form.toRooms || ""}
+                  onChange={(e) => setForm((s) => ({ ...s, toRooms: e.target.value }))}
                   className="w-[6ch] rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   placeholder="ex: 2"
                 />

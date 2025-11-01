@@ -56,6 +56,8 @@ export default function EditRequestModal({
         moveDateEnd: "",
         moveDateFlexDays: 3,
         details: request.details || "",
+        fromRooms: (request as any).fromRooms ?? request.rooms ?? "",
+        toRooms: (request as any).toRooms ?? request.rooms ?? "",
         rooms: request.rooms || "",
         volumeM3: request.volumeM3 || "",
         phone: request.phone || "",
@@ -98,7 +100,7 @@ export default function EditRequestModal({
       if (form.mediaFiles && form.mediaFiles.length > 0) {
   toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
 
-        const { ref, uploadBytesResumable, getDownloadURL } = await import(
+        const { ref, uploadBytesResumable, uploadBytes, getDownloadURL } = await import(
           "firebase/storage"
         );
         const { storage } = await import("@/services/firebase");
@@ -114,6 +116,15 @@ export default function EditRequestModal({
             const uploadTask = uploadBytesResumable(storageRef, file);
 
             const url = await new Promise<string>((resolve, reject) => {
+              // Safety timeout to avoid hanging UI on network/CORS issues
+              const timeout = setTimeout(() => {
+                try {
+                  // @ts-ignore
+                  if (typeof uploadTask.cancel === "function") uploadTask.cancel();
+                } catch {}
+                reject(new Error("Timeout la încărcarea fișierului (resumable)"));
+              }, 30000);
+
               uploadTask.on(
                 "state_changed",
                 (snapshot) => {
@@ -121,11 +132,20 @@ export default function EditRequestModal({
                     (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                   console.warn(`Upload ${file.name}: ${progress.toFixed(0)}%`);
                 },
-                (error) => {
-                  console.error(`Upload failed for ${file.name}:`, error);
-                  reject(error);
+                async (error) => {
+                  clearTimeout(timeout);
+                  console.error(`Resumable failed for ${file.name}:`, error);
+                  // Fallback to non-resumable simple upload
+                  try {
+                    await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(storageRef);
+                    resolve(downloadURL);
+                  } catch (fallbackErr) {
+                    reject(fallbackErr);
+                  }
                 },
                 async () => {
+                  clearTimeout(timeout);
                   const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                   resolve(downloadURL);
                 }
@@ -163,6 +183,8 @@ export default function EditRequestModal({
 
       const updatedData = {
         ...form,
+        // keep legacy rooms field updated for UI that still reads it
+        rooms: form.toRooms || form.fromRooms || form.rooms || "",
         mediaUrls: finalMediaUrls,
       };
 

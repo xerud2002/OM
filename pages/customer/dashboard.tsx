@@ -64,7 +64,9 @@ export default function CustomerDashboard() {
     moveDateEnd: "",
     moveDateFlexDays: 3,
     details: "",
-    rooms: "",
+    fromRooms: "",
+    toRooms: "",
+    rooms: "", // legacy aggregation for UI
     volumeM3: "",
     phone: "",
     contactName: "",
@@ -239,9 +241,13 @@ export default function CustomerDashboard() {
     const { toast } = await import("sonner");
 
     try {
+      // Compute legacy rooms for cards (prefer destination, then pickup)
+      const aggregatedRooms = (form.toRooms ?? form.fromRooms ?? form.rooms) || "";
+
       // Create request in Firestore
       const requestId = await createRequestHelper({
         ...form,
+        rooms: aggregatedRooms,
         customerId: user.uid,
         customerName: user.displayName || user.email,
         customerEmail: user.email,
@@ -251,7 +257,7 @@ export default function CustomerDashboard() {
       // If user chose "now" for media upload, upload files immediately
       if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
         try {
-          const { ref, uploadBytesResumable, getDownloadURL } = await import("firebase/storage");
+          const { ref, uploadBytesResumable, uploadBytes, getDownloadURL } = await import("firebase/storage");
           const { storage } = await import("@/services/firebase");
           const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
 
@@ -269,11 +275,31 @@ export default function CustomerDashboard() {
             const uploadTask = uploadBytesResumable(storageRef, file);
 
             await new Promise<void>((resolve, reject) => {
+              const timeout = setTimeout(() => {
+                try {
+                  // @ts-ignore
+                  if (typeof uploadTask.cancel === "function") uploadTask.cancel();
+                } catch {}
+                reject(new Error("Timeout la încărcarea fișierului (resumable)"));
+              }, 30000);
+
               uploadTask.on(
                 "state_changed",
                 null,
-                reject,
                 async () => {
+                  clearTimeout(timeout);
+                  // Fallback to non-resumable upload
+                  try {
+                    await uploadBytes(storageRef, file);
+                    const downloadURL = await getDownloadURL(storageRef);
+                    uploadedUrls.push(downloadURL);
+                    resolve();
+                  } catch (fallbackErr) {
+                    reject(fallbackErr);
+                  }
+                },
+                async () => {
+                  clearTimeout(timeout);
                   const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
                   uploadedUrls.push(downloadURL);
                   resolve();
@@ -345,6 +371,8 @@ export default function CustomerDashboard() {
         moveDateEnd: "",
         moveDateFlexDays: 3,
         details: "",
+        fromRooms: "",
+        toRooms: "",
         rooms: "",
         volumeM3: "",
         phone: "",
@@ -383,6 +411,8 @@ export default function CustomerDashboard() {
       moveDateEnd: "",
       moveDateFlexDays: 3,
       details: "",
+      fromRooms: "",
+      toRooms: "",
       rooms: "",
       volumeM3: "",
       phone: "",
