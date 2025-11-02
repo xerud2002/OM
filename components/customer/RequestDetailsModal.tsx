@@ -135,21 +135,16 @@ export default function RequestDetailsModal({
               <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-6 py-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Detalii cerere</h2>
-                  {request.requestCode && (
-                    <p className="mt-1 flex items-center gap-2">
+                  <p className="mt-1 flex items-center gap-2">
+                    {request.requestCode && (
                       <span className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-sky-500 px-3 py-1 text-xs font-bold text-white shadow-sm">
                         {request.requestCode}
                       </span>
-                      <span className="text-sm text-gray-600">
-                        Informații complete despre mutarea ta
-                      </span>
-                    </p>
-                  )}
-                  {!request.requestCode && (
-                    <p className="mt-1 text-sm text-gray-600">
+                    )}
+                    <span className="text-sm text-gray-600">
                       Informații complete despre mutarea ta
-                    </p>
-                  )}
+                    </span>
+                  </p>
                 </div>
                 <button
                   onClick={onClose}

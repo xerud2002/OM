@@ -80,11 +80,11 @@ service cloud.firestore {
     }
 
     // === META COLLECTION (for counters) ===
-    match /meta/{docId} {
-      // Allow authenticated users to read and write counters
-      // This is needed for generating sequential request codes
-      allow read: if isSignedIn();
-      allow write: if isSignedIn();
+    match /meta/counters {
+      // Allow authenticated customers to read and write the counters document
+      // This is needed for generating sequential request codes when creating requests
+      allow read: if isSignedIn() && isCustomer();
+      allow write: if isSignedIn() && isCustomer();
     }
 
     // Deny everything else by default
