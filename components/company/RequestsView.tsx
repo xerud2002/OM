@@ -6,6 +6,7 @@ import {
   collection,
   query,
   orderBy,
+  where,
   onSnapshot,
   updateDoc,
   deleteDoc,
@@ -266,17 +267,40 @@ function OfferList({
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const q = query(collection(db, "requests", requestId, "offers"), orderBy("createdAt", "desc"));
-    const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Offer);
-      setOffers(list);
-      if (company && onHasMine) {
-        const mine = list.some((o) => o.companyId === company.uid);
-        onHasMine(mine);
+    if (!company?.uid) return;
+    const q = query(
+      collection(db, "requests", requestId, "offers"),
+      where("companyId", "==", company.uid),
+      orderBy("createdAt", "desc")
+    );
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Offer);
+        setOffers(list);
+        if (onHasMine) onHasMine(list.length > 0);
+      },
+      async (err) => {
+        console.warn("OfferList snapshot error:", err);
+        // Fallback: read via admin API to avoid rules errors
+        try {
+          const u = (await import("@/services/firebase")).auth.currentUser;
+          const token = await u?.getIdToken();
+          if (!token) return;
+          const resp = await fetch(`/api/company/offers`, { headers: { Authorization: `Bearer ${token}` } });
+          if (resp.ok) {
+            const data = await resp.json();
+            const mine = (Array.isArray(data?.offers) ? data.offers : []).filter((o: any) => o.requestId === requestId);
+            setOffers(mine as any);
+            if (onHasMine) onHasMine(mine.length > 0);
+          }
+        } catch (e) {
+          console.warn("OfferList fallback failed", e);
+        }
       }
-    });
+    );
     return () => unsub();
-  }, [requestId, company, onHasMine]);
+  }, [requestId, company?.uid, onHasMine]);
 
   return (
     <div className="mt-3 border-t pt-3">
@@ -432,21 +456,44 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       orderBy("createdAt", "desc"),
       limit(PAGE_SIZE)
     );
-    const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs
-  .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
-        .filter((req) => {
-          // Only show active (or undefined status) and non-archived requests
-          const isActive = !req.status || req.status === "active";
-          const notArchived = !req.archived;
-          return isActive && notArchived;
-        });
-      setFirstPage(list);
-      setLoading(false);
-      const last = snapshot.docs[snapshot.docs.length - 1] || null;
-      setLastDoc(last);
-      setHasMore(snapshot.size === PAGE_SIZE);
-    });
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const list = snapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
+          .filter((req) => {
+            const isActive = !req.status || req.status === "active";
+            const notArchived = !req.archived;
+            return isActive && notArchived;
+          });
+        setFirstPage(list);
+        setLoading(false);
+        const last = snapshot.docs[snapshot.docs.length - 1] || null;
+        setLastDoc(last);
+        setHasMore(snapshot.size === PAGE_SIZE);
+      },
+      async (err) => {
+        console.warn("Requests snapshot error:", err);
+        setLoading(false);
+        if ((err as any)?.code === "permission-denied") {
+          try {
+            const u = (await import("@/services/firebase")).auth.currentUser;
+            const token = await u?.getIdToken();
+            if (!token) return;
+            const resp = await fetch(`/api/company/requests?limit=${PAGE_SIZE}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              setFirstPage(Array.isArray(data?.requests) ? data.requests : []);
+              setHasMore(false); // disable infinite loading in fallback
+            }
+          } catch (e) {
+            console.warn("Fallback requests fetch failed", e);
+          }
+        }
+      }
+    );
     return () => unsub();
   }, []);
 

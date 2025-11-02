@@ -18,6 +18,11 @@ import {
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
+import KPICard from "@/components/company/KPICard";
+import SectionHeader from "@/components/company/SectionHeader";
+import OffersPerformance from "@/components/company/OffersPerformance";
+import ActivityList from "@/components/company/ActivityList";
+import RequestsSnapshot from "@/components/company/RequestsSnapshot";
 
 export default function CompanyDashboard() {
   const [company, setCompany] = useState<any>(null);
@@ -64,9 +69,26 @@ export default function CompanyDashboard() {
         setOffers(data);
         setLoading(false);
       },
-      (err) => {
-        console.error("Error loading offers:", err);
+      async (err) => {
+        console.warn("Offers listener error:", err);
         setLoading(false);
+        // Fallback: fetch via server (admin) if rules block client read
+        if ((err as any)?.code === "permission-denied") {
+          try {
+            const u = (await import("@/services/firebase")).auth.currentUser;
+            const token = await u?.getIdToken();
+            if (!token) return;
+            const resp = await fetch("/api/company/offers", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              setOffers(Array.isArray(data?.offers) ? data.offers : []);
+            }
+          } catch (e) {
+            console.warn("Fallback offers fetch failed", e);
+          }
+        }
       }
     );
 
@@ -143,21 +165,7 @@ export default function CompanyDashboard() {
     return { dailyCounts: counts, dailyRevenue: revenue };
   }, [offers, now]);
 
-  // Tiny sparkline component
-  function Sparkline({ data, width = 220, height = 48, stroke = "#10b981" }: { data: number[]; width?: number; height?: number; stroke?: string }) {
-    const max = Math.max(1, ...data);
-    const step = data.length > 1 ? width / (data.length - 1) : width;
-    const points = data.map((v, i) => {
-      const x = i * step;
-      const y = height - (v / max) * height;
-      return `${x},${y}`;
-    });
-    return (
-      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
-        <polyline fill="none" stroke={stroke} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" points={points.join(" ")} />
-      </svg>
-    );
-  }
+  // Sparkline moved into OffersPerformance component
 
   // Edit/delete actions for an offer
   async function updateOffer(offer: any, fields: Partial<any>) {
@@ -241,154 +249,30 @@ export default function CompanyDashboard() {
             <>
               {/* Stats Cards */}
               <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-emerald-100">Total oferte</p>
-                    <p className="text-4xl font-bold">{total}</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-sky-500 to-sky-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-sky-100">Acceptate</p>
-                    <p className="text-4xl font-bold">{accepted}</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-amber-100">În așteptare</p>
-                    <p className="text-4xl font-bold">{pending}</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-rose-100">Respinse</p>
-                    <p className="text-4xl font-bold">{rejected}</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.4 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-indigo-100">Venit (acceptate)</p>
-                    <p className="text-4xl font-bold">{new Intl.NumberFormat("ro-RO").format(totalRevenue)} lei</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-fuchsia-500 to-fuchsia-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-fuchsia-100">Rată de câștig</p>
-                    <p className="text-4xl font-bold">{winRate}%</p>
-                  </div>
-                </motion.div>
+                <KPICard title="Total oferte" value={total} from="from-emerald-500" to="to-emerald-600" />
+                <KPICard title="Acceptate" value={accepted} from="from-sky-500" to="to-sky-600" delay={0.1} />
+                <KPICard title="În așteptare" value={pending} from="from-amber-500" to="to-amber-600" delay={0.2} />
+                <KPICard title="Respinse" value={rejected} from="from-rose-500" to="to-rose-600" delay={0.3} />
+                <KPICard title="Venit (acceptate)" value={`${new Intl.NumberFormat("ro-RO").format(totalRevenue)} lei`} from="from-indigo-500" to="to-indigo-600" delay={0.4} />
+                <KPICard title="Rată de câștig" value={`${winRate}%`} from="from-fuchsia-500" to="to-fuchsia-600" delay={0.5} />
               </div>
 
               {/* Overview row */}
               <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
                 {/* Performance sparkline */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:col-span-2">
-                  <div className="mb-4 flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-900">Performanță (7 zile)</h3>
-                    <div className="text-xs text-gray-500">Media ofertelor: {new Intl.NumberFormat("ro-RO").format(avgOfferValue)} lei</div>
-                  </div>
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <div>
-                      <p className="mb-2 text-xs font-medium text-gray-500">Număr oferte/zi</p>
-                      <Sparkline data={dailyCounts} width={320} height={64} stroke="#0ea5e9" />
-                      <div className="mt-2 text-xs text-gray-500">{dailyCounts.join("  •  ")}</div>
-                    </div>
-                    <div>
-                      <p className="mb-2 text-xs font-medium text-gray-500">Venit acceptat/zi (lei)</p>
-                      <Sparkline data={dailyRevenue} width={320} height={64} stroke="#10b981" />
-                      <div className="mt-2 text-xs text-gray-500">{dailyRevenue.map((v) => Math.round(v)).join("  •  ")}</div>
-                    </div>
-                  </div>
+                <div className="lg:col-span-2">
+                  <OffersPerformance dailyCounts={dailyCounts} dailyRevenue={dailyRevenue} avgOfferValue={avgOfferValue} />
                 </div>
 
                 {/* Recent activity */}
-                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                  <h3 className="mb-4 text-lg font-semibold text-gray-900">Activitate recentă</h3>
-                  <ul className="space-y-3">
-                    {offers.slice(0, 6).map((o) => {
-                      const ts: any = (o.createdAt as any) || null;
-                      const d: Date | null = ts?.toDate ? ts.toDate() : (typeof ts === "number" ? new Date(ts) : null);
-                      return (
-                        <li key={o.id} className="flex items-start justify-between gap-3">
-                          <div>
-                            <p className="text-sm font-medium text-gray-800">{o.requestCode ? o.requestCode : (o.requestId ? `REQ-${String(o.requestId).slice(0, 6).toUpperCase()}` : "—")}</p>
-                            <p className="text-xs text-gray-500">{d ? d.toLocaleDateString("ro-RO", { day: "2-digit", month: "short" }) : "—"}</p>
-                          </div>
-                          <div className="flex items-center gap-2">
-                            {typeof o.price === "number" && (
-                              <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">{new Intl.NumberFormat("ro-RO").format(o.price)} lei</span>
-                            )}
-                            <span className={`rounded-md px-2 py-1 text-xs font-semibold ${
-                              o.status === "accepted"
-                                ? "bg-emerald-100 text-emerald-700"
-                                : o.status === "rejected" || o.status === "declined"
-                                  ? "bg-rose-100 text-rose-700"
-                                  : "bg-amber-100 text-amber-700"
-                            }`}>
-                              {o.status ?? "pending"}
-                            </span>
-                          </div>
-                        </li>
-                      );
-                    })}
-                    {offers.length === 0 && (
-                      <li className="text-sm text-gray-500">Nu există activitate recentă.</li>
-                    )}
-                  </ul>
-                </div>
+                <ActivityList offers={offers} />
+                {/* Requests snapshot */}
+                <RequestsSnapshot onViewRequests={() => setActiveTab("requests")} />
               </div>
 
               {/* Filters */}
               <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <h2 className="text-xl font-bold text-gray-900">Ofertele mele</h2>
+                <SectionHeader title="Ofertele mele" right={
                   <div className="flex flex-1 items-center gap-3 md:justify-end">
                     <div className="relative flex-1 md:max-w-xs">
                       <svg
@@ -423,7 +307,7 @@ export default function CompanyDashboard() {
                       <option value="rejected">Respinse</option>
                     </select>
                   </div>
-                </div>
+                } />
               </div>
 
               {loading ? (
