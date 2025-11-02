@@ -42,6 +42,8 @@ export async function sendOfferMessage(
 
   const messagesRef = collection(db, "requests", requestId, "offers", offerId, "messages");
   const docRef = await addDoc(messagesRef, {
+    requestId,
+    offerId,
     senderType,
     senderId,
     senderName: senderName || undefined,
@@ -51,6 +53,69 @@ export async function sendOfferMessage(
   });
 
   return docRef.id;
+}
+
+/**
+ * Aggregate all messages across all offers for a request (client-side composition)
+ * Subscribes to offers first, then attaches a listener per offer messages and merges them.
+ */
+export function onRequestMessagesAggregate(
+  requestId: string,
+  // eslint-disable-next-line no-unused-vars
+  callback: (messages: Message[]) => void,
+  // eslint-disable-next-line no-unused-vars
+  onError?: (err: any) => void
+) {
+  // Lazy import to avoid heavy Firestore imports when unused
+  let unsubscribers: Array<() => void> = [];
+  const { collection, onSnapshot, orderBy, query } = require("firebase/firestore") as typeof import("firebase/firestore");
+
+  // Listen to offers for this request
+  const offersRef = collection(db, "requests", requestId, "offers");
+  const unsubOffers = onSnapshot(
+    offersRef,
+    (offersSnap: any) => {
+      // Clean previous message listeners
+      unsubscribers.forEach((u) => u());
+      unsubscribers = [];
+
+      const all: Message[] = [];
+      const pushAndEmit = () => {
+        const sorted = all.sort((a, b) => {
+          const ta = (a.createdAt?.toMillis ? a.createdAt.toMillis() : a.createdAt) || 0;
+          const tb = (b.createdAt?.toMillis ? b.createdAt.toMillis() : b.createdAt) || 0;
+          return ta - tb;
+        });
+        callback([...sorted]);
+      };
+
+      offersSnap.docs.forEach((offerDoc: any) => {
+        const offerId = offerDoc.id;
+        const msgsRef = collection(db, "requests", requestId, "offers", offerId, "messages");
+        const q = query(msgsRef, orderBy("createdAt", "asc"));
+        const unsub = onSnapshot(
+          q,
+          (snap: any) => {
+            // Remove existing from this offer
+            for (let i = all.length - 1; i >= 0; i--) {
+              if ((all[i] as any).offerId === offerId) all.splice(i, 1);
+            }
+            const msgs = snap.docs.map((d: any) => ({ id: d.id, offerId, requestId, ...d.data() })) as Message[];
+            all.push(...msgs);
+            pushAndEmit();
+          },
+          (err: any) => onError && onError(err)
+        );
+        unsubscribers.push(unsub);
+      });
+    },
+    (err: any) => onError && onError(err)
+  );
+
+  return () => {
+    try { unsubscribers.forEach((u) => u()); } catch {}
+    try { unsubOffers(); } catch {}
+  };
 }
 
 /**

@@ -24,7 +24,7 @@ import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { maskName } from "@/utils/masking";
 import { onCompanyUnlocks, unlockContact } from "@/utils/unlockHelpers";
-import { sendOfferMessage } from "@/utils/messagesHelpers";
+import { sendOfferMessage, onOfferMessages, Message } from "@/utils/messagesHelpers";
 import { FileText } from "lucide-react";
 import JobSheetModal from "@/components/company/JobSheetModal";
 import Alert from "@/components/ui/Alert";
@@ -83,9 +83,16 @@ function OfferItem({
   const [removing, setRemoving] = useState(false);
   const [messageText, setMessageText] = useState("");
   const [sendingMessage, setSendingMessage] = useState(false);
+  const [history, setHistory] = useState<Message[]>([]);
 
   const isOwn = company && offer.companyId === company.uid;
   const isPending = (offer.status ?? "pending") === "pending";
+
+  // Subscribe to messages for this offer
+  useEffect(() => {
+    const unsub = onOfferMessages(requestId, offer.id, (msgs: Message[]) => setHistory(msgs));
+    return () => unsub();
+  }, [requestId, offer.id]);
 
   const handleSave = async () => {
     if (!company) return;
@@ -224,6 +231,30 @@ function OfferItem({
           )}
 
           {/* Messaging UI - Only shown for own offers when unlocked */}
+          {history.length > 0 && (
+            <div className="mt-3 border-t border-gray-200 pt-3">
+              <p className="mb-2 text-xs font-semibold text-gray-700">Istoric mesaje</p>
+              <div className="space-y-2">
+                {history.slice(-3).map((msg) => {
+                  const isMsgOwn = msg.senderId === company?.uid;
+                  return (
+                    <div key={msg.id} className={`flex ${isMsgOwn ? "justify-end" : "justify-start"}`}>
+                      <div className={`max-w-[75%] rounded-lg px-3 py-1.5 text-sm ${isMsgOwn ? "bg-emerald-600 text-white" : "border border-gray-200 bg-white text-gray-900"}`}>
+                        {!isMsgOwn && (
+                          <p className="mb-0.5 text-[10px] font-semibold text-gray-600">{msg.senderName || "Client"}</p>
+                        )}
+                        <p>{msg.text}</p>
+                        <p className={`mt-0.5 text-[10px] ${isMsgOwn ? "text-emerald-100" : "text-gray-500"}`}>
+                          {msg.createdAt?.toDate ? new Date(msg.createdAt.toDate()).toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" }) : ""}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           {isOwn && unlocked && (
             <div className="mt-3 border-t border-emerald-200 pt-3">
               <p className="mb-2 text-xs font-semibold text-gray-700">✉️ Trimite mesaj clientului</p>

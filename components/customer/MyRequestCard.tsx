@@ -13,9 +13,11 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { MovingRequest } from "../../types";
+import RequestMessages from "@/components/customer/RequestMessages";
 import { formatMoveDateDisplay } from "@/utils/date";
 import RequestDetailsModal from "./RequestDetailsModal";
 import { toast } from "sonner";
+import { auth } from "@/services/firebase";
 
 type MyRequestCardProps = {
   request: MovingRequest;
@@ -86,7 +88,7 @@ export default function MyRequestCard({
       {/* Gradient accent bar */}
       <div className={`h-1.5 w-full overflow-hidden rounded-t-2xl ${getGradientClass()}`} />
 
-      <div className="p-6">
+  <div className="p-6">
         <div className="flex items-start justify-between gap-4">
           {/* Main content */}
           <div className="min-w-0 flex-1">
@@ -198,6 +200,9 @@ export default function MyRequestCard({
                 )}
               </div>
             )}
+
+            {/* Messages History for this request */}
+            <RequestMessages requestId={request.id} userId={auth.currentUser?.uid || ""} />
           </div>
 
           {/* Right side: Offers count + Menu */}

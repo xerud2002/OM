@@ -522,7 +522,8 @@ export default function CustomerDashboard() {
   return (
     <RequireRole allowedRole="customer">
       <LayoutWrapper>
-        <section className="mx-auto max-w-[1400px] px-0 py-8 sm:px-4">
+        {/* eslint-disable-next-line tailwindcss/classnames-order */}
+        <section className="mx-auto max-w-[1400px] px-0 sm:px-4 pt-8 pb-24 md:pb-8">
           {/* Modern Header */}
           <div className="mb-8">
             <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -584,8 +585,8 @@ export default function CustomerDashboard() {
             </div>
           </div>
 
-          {/* Navigation Tabs (order: Cerere Nouă, Oferte, Cererile mele) */}
-          <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200">
+          {/* Navigation Tabs (desktop/tablet); hidden on mobile in favor of sticky bottom nav */}
+          <div className="mb-6 hidden flex-wrap gap-2 border-b border-gray-200 md:flex">
             {/* Cerere Nouă */}
             <button
               onClick={() => setActiveTab("new")}
@@ -686,6 +687,72 @@ export default function CustomerDashboard() {
               )}
             </button>
           </div>
+
+          {/* Sticky bottom nav (mobile) */}
+          <nav
+            className="fixed bottom-0 left-0 right-0 z-40 border-t border-gray-200 bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80 md:hidden"
+            aria-label="Navigare dashboard client"
+          >
+            <div className="mx-auto max-w-[1400px]">
+              <div className="grid grid-cols-5 text-xs">
+                <button
+                  onClick={() => setActiveTab("new")}
+                  className={`flex flex-col items-center justify-center gap-1 py-2 ${
+                    activeTab === "new" ? "text-emerald-600" : "text-gray-500"
+                  }`}
+                  aria-current={activeTab === "new" ? "page" : undefined}
+                >
+                  <PlusSquare size={18} />
+                  <span>Cerere</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("offers")}
+                  className={`relative flex flex-col items-center justify-center gap-1 py-2 ${
+                    activeTab === "offers" ? "text-emerald-600" : "text-gray-500"
+                  }`}
+                  aria-current={activeTab === "offers" ? "page" : undefined}
+                >
+                  <Inbox size={18} />
+                  <span>Oferte</span>
+                  {totalOffers > 0 && (
+                    <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-emerald-500 px-1 text-[10px] font-bold text-white">
+                      {totalOffers}
+                    </span>
+                  )}
+                </button>
+                <button
+                  onClick={() => setActiveTab("requests")}
+                  className={`flex flex-col items-center justify-center gap-1 py-2 ${
+                    activeTab === "requests" ? "text-emerald-600" : "text-gray-500"
+                  }`}
+                  aria-current={activeTab === "requests" ? "page" : undefined}
+                >
+                  <List size={18} />
+                  <span>Cereri</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("messages")}
+                  className={`flex flex-col items-center justify-center gap-1 py-2 ${
+                    activeTab === "messages" ? "text-emerald-600" : "text-gray-500"
+                  }`}
+                  aria-current={activeTab === "messages" ? "page" : undefined}
+                >
+                  <MessageCircle size={18} />
+                  <span>Mesaje</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("archive")}
+                  className={`flex flex-col items-center justify-center gap-1 py-2 ${
+                    activeTab === "archive" ? "text-emerald-600" : "text-gray-500"
+                  }`}
+                  aria-current={activeTab === "archive" ? "page" : undefined}
+                >
+                  <ArchiveIcon size={18} />
+                  <span>Arhivă</span>
+                </button>
+              </div>
+            </div>
+          </nav>
 
           {activeTab === "requests" && (
             <motion.div
