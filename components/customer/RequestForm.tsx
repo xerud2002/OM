@@ -1338,9 +1338,8 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               {(() => {
                 const dateModes = [
                   { key: "exact" as const, label: "Exactă" },
-                  { key: "range" as const, label: "Interval" },
-                  { key: "none" as const, label: "Nu știu încă" },
                   { key: "flexible" as const, label: "Flexibilă" },
+                  { key: "none" as const, label: "Nu știu încă" },
                 ];
                 return (
                   <div className="mb-4 flex flex-wrap justify-center gap-2 rounded-lg border border-emerald-300 bg-white p-1 text-xs shadow-sm">
@@ -1417,56 +1416,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
               )}
 
-              {((form as any).moveDateMode ?? "exact") === "range" && (
-                <div className="mx-auto flex max-w-md justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
-                  <DayPicker
-                    mode="range"
-                    selected={{
-                      from: parseYMD((form as any).moveDateStart),
-                      to: parseYMD((form as any).moveDateEnd),
-                    }}
-                    onSelect={(range) =>
-                      setForm((s: any) => ({
-                        ...s,
-                        moveDateStart: range?.from ? formatYMD(range.from) : "",
-                        moveDateEnd: range?.to ? formatYMD(range.to) : "",
-                        moveDate: range?.from ? formatYMD(range.from) : "",
-                      }))
-                    }
-                    locale={ro}
-                    fromDate={today}
-                    weekStartsOn={1}
-                    showOutsideDays
-                    numberOfMonths={1}
-                    className="rdp mx-auto w-fit"
-                    classNames={{
-                      months: "flex justify-center",
-                      month: "w-full max-w-sm",
-                      caption: "flex items-center justify-between mb-4 px-2",
-                      caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
-                      nav: "flex items-center gap-2",
-                      nav_button:
-                        "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
-                      table: "w-full border-collapse mt-2",
-                      head_row: "grid grid-cols-7 gap-1 mb-2",
-                      head_cell:
-                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
-                      row: "grid grid-cols-7 gap-1 mb-1",
-                      cell: "text-center",
-                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
-                      day_selected:
-                        "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
-                      day_today: "font-medium text-gray-700",
-                      day_outside: "text-gray-400 opacity-50",
-                      day_range_start:
-                        "bg-emerald-900 text-white font-bold rounded-l-xl border-2 border-emerald-900",
-                      day_range_end:
-                        "bg-emerald-900 text-white font-bold rounded-r-xl border-2 border-emerald-900",
-                      day_range_middle: "bg-emerald-900 text-white rounded-none",
-                    }}
-                  />
-                </div>
-              )}
+              {/* Interval mode removed */}
 
               {((form as any).moveDateMode ?? "exact") === "none" && (
                 <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
