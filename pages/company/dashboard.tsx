@@ -23,6 +23,8 @@ import SectionHeader from "@/components/company/SectionHeader";
 import OffersPerformance from "@/components/company/OffersPerformance";
 import ActivityList from "@/components/company/ActivityList";
 import RequestsSnapshot from "@/components/company/RequestsSnapshot";
+import CompanyMessagesView from "@/components/company/MessagesView";
+import { MessageCircle } from "lucide-react";
 
 export default function CompanyDashboard() {
   const [company, setCompany] = useState<any>(null);
@@ -34,7 +36,7 @@ export default function CompanyDashboard() {
     "all" | "accepted" | "pending" | "rejected" | "declined"
   >("all");
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<"offers" | "requests">("offers");
+  const [activeTab, setActiveTab] = useState<"offers" | "requests" | "messages">("offers");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editPrice, setEditPrice] = useState<string>("");
   const [editMessage, setEditMessage] = useState<string>("");
@@ -242,6 +244,26 @@ export default function CompanyDashboard() {
                 />
               )}
               <span className="relative z-10">Cereri clienți</span>
+            </button>
+            <button
+              onClick={() => setActiveTab("messages")}
+              className={`relative rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
+                activeTab === "messages"
+                  ? "bg-white text-emerald-700 shadow-md"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              {activeTab === "messages" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 rounded-lg bg-white shadow-md"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
+                <MessageCircle size={16} />
+                Mesaje
+              </span>
             </button>
           </div>
 
@@ -657,6 +679,21 @@ export default function CompanyDashboard() {
               )}
             </div>
           )}
+
+            {activeTab === "messages" && (
+              <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                {company ? (
+                  <CompanyMessagesView
+                    companyId={company.uid}
+                    companyName={company.displayName || company.email || "Companie"}
+                  />
+                ) : (
+                  <p className="text-center text-sm italic text-gray-500">
+                    Se încarcă utilizatorul...
+                  </p>
+                )}
+              </div>
+            )}
         </section>
       </LayoutWrapper>
     </RequireRole>

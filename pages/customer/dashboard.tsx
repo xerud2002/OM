@@ -14,10 +14,11 @@ import { sendEmail } from "@/utils/emailHelpers";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
 import MyRequestCard from "@/components/customer/MyRequestCard";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, MessageCircle } from "lucide-react";
 import { auth } from "@/services/firebase";
 import { toast } from "sonner";
 import { updateRequestStatus, archiveRequest } from "@/utils/firestoreHelpers";
+import MessagesView from "@/components/customer/MessagesView";
 
 type Request = {
   id: string;
@@ -108,10 +109,10 @@ export default function CustomerDashboard() {
     };
   });
 
-  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers" | "archive">(() => {
+  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers" | "messages" | "archive">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("customerActiveTab");
-      if (saved === "new" || saved === "requests" || saved === "offers" || saved === "archive") return saved as any;
+      if (saved === "new" || saved === "requests" || saved === "offers" || saved === "messages" || saved === "archive") return saved as any;
     }
     return "requests";
   });
@@ -647,6 +648,25 @@ export default function CustomerDashboard() {
               )}
             </button>
 
+            {/* Mesaje */}
+            <button
+              onClick={() => setActiveTab("messages")}
+              className={`relative px-6 py-3 font-medium transition-colors ${
+                activeTab === "messages" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+              }`}
+            >
+              <div className="flex items-center gap-2">
+                <MessageCircle size={18} />
+                <span>Mesaje</span>
+              </div>
+              {activeTab === "messages" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
+                />
+              )}
+            </button>
+
             {/* Arhivă */}
             <button
               onClick={() => setActiveTab("archive")}
@@ -890,6 +910,26 @@ export default function CustomerDashboard() {
               )}
             </div>
           )}
+
+            {activeTab === "messages" && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+              >
+                {user ? (
+                  <MessagesView
+                    requests={requests}
+                    userId={user.uid}
+                    userName={user.displayName || user.email || "Client"}
+                  />
+                ) : (
+                  <div className="py-12 text-center text-sm text-gray-500">
+                    Trebuie să fii autentificat pentru a vedea mesajele.
+                  </div>
+                )}
+              </motion.div>
+            )}
 
           {activeTab === "archive" && (
             <motion.div

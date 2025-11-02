@@ -64,18 +64,25 @@ export async function sendOfferMessage(
 export function onOfferMessages(
   requestId: string,
   offerId: string,
-  callback: (messages: Message[]) => void
+  callback: Function,
+  onError?: Function
 ) {
   const messagesRef = collection(db, "requests", requestId, "offers", offerId, "messages");
   const q = query(messagesRef, orderBy("createdAt", "asc"));
 
-  return onSnapshot(q, (snap) => {
-    const messages = snap.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    })) as Message[];
-    callback(messages);
-  });
+  return onSnapshot(
+    q,
+    (snap) => {
+      const messages = snap.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Message[];
+      callback(messages);
+    },
+    (err) => {
+      if (onError) onError(err);
+    }
+  );
 }
 
 /**

@@ -48,7 +48,7 @@ export default function JobSheetModal({ request, isOpen, onClose }: JobSheetModa
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative max-h-[90vh] w-full max-w-4xl overflow-hidden rounded-2xl bg-white shadow-2xl"
+              className="relative max-h-[90vh] w-full max-w-6xl overflow-hidden rounded-2xl bg-white shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-6 py-4">
@@ -82,12 +82,12 @@ export default function JobSheetModal({ request, isOpen, onClose }: JobSheetModa
               </div>
 
               {/* Content */}
-              <div className="max-h-[calc(90vh-160px)] overflow-y-auto p-8">
-                <div className="space-y-6">
+              <div className="max-h-[calc(90vh-160px)] overflow-y-auto p-10">
+                <div className="space-y-8">
                   {/* Customer Info */}
-                  <div className="rounded-xl border border-gray-200 bg-gray-50 p-6">
-                    <h3 className="mb-4 text-lg font-semibold text-gray-900">Informații Client</h3>
-                    <div className="grid grid-cols-2 gap-4">
+                  <div className="rounded-xl border border-gray-200 bg-gray-50 p-8">
+                    <h3 className="mb-6 text-xl font-semibold text-gray-900">Informații Client</h3>
+                    <div className="grid grid-cols-2 gap-6">
                       <div>
                         <p className="text-sm font-medium text-gray-500">Nume</p>
                         <p className="mt-1 text-base font-semibold text-gray-900">
@@ -122,9 +122,9 @@ export default function JobSheetModal({ request, isOpen, onClose }: JobSheetModa
                   </div>
 
                   {/* Route */}
-                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-6">
-                    <h3 className="mb-4 text-lg font-semibold text-emerald-900">Traseu</h3>
-                    <div className="grid grid-cols-2 gap-6">
+                  <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-8">
+                    <h3 className="mb-6 text-xl font-semibold text-emerald-900">Traseu</h3>
+                    <div className="grid grid-cols-2 gap-8">
                       <div>
                         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-emerald-600">
                           📍 Plecare
@@ -206,8 +206,8 @@ export default function JobSheetModal({ request, isOpen, onClose }: JobSheetModa
                     request.serviceDisassembly ||
                     request.serviceCleanout ||
                     request.serviceStorage) && (
-                    <div className="rounded-xl border border-purple-200 bg-purple-50 p-6">
-                      <h3 className="mb-3 text-lg font-semibold text-purple-900">
+                    <div className="rounded-xl border border-purple-200 bg-purple-50 p-8">
+                      <h3 className="mb-6 text-xl font-semibold text-purple-900">
                         Servicii solicitate
                       </h3>
                       <div className="flex flex-wrap gap-2">
@@ -242,18 +242,18 @@ export default function JobSheetModal({ request, isOpen, onClose }: JobSheetModa
 
                   {/* Additional Details */}
                   {request.details && (
-                    <div className="rounded-xl border border-gray-200 bg-white p-6">
-                      <h3 className="mb-3 text-lg font-semibold text-gray-900">
+                    <div className="rounded-xl border border-gray-200 bg-white p-8">
+                      <h3 className="mb-6 text-xl font-semibold text-gray-900">
                         Detalii suplimentare
                       </h3>
-                      <p className="whitespace-pre-wrap text-sm text-gray-700">{request.details}</p>
+                      <p className="whitespace-pre-wrap text-base text-gray-700">{request.details}</p>
                     </div>
                   )}
 
                   {/* Survey Type */}
                   {request.surveyType && (
-                    <div className="rounded-xl border border-sky-200 bg-sky-50 p-6">
-                      <h3 className="mb-2 text-lg font-semibold text-sky-900">Tip evaluare</h3>
+                    <div className="rounded-xl border border-sky-200 bg-sky-50 p-8">
+                      <h3 className="mb-6 text-xl font-semibold text-sky-900">Tip evaluare</h3>
                       <p className="text-base text-sky-800">
                         {request.surveyType === "in-person"
                           ? "📋 Vizită la fața locului"

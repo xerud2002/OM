@@ -387,12 +387,14 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
       try {
         trackEvent("offer_submitted", { requestId, companyId: company.uid, price: priceNum });
       } catch {}
+      // Reset form fields on success
       setPrice("");
       setMessage("");
       setProposedDate("");
+      setSending(false);
     } catch (err) {
       console.error("Error sending offer:", err);
-    } finally {
+      alert("A apărut o eroare la trimiterea ofertei. Te rog încearcă din nou.");
       setSending(false);
     }
   };
