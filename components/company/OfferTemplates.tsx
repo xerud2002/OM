@@ -21,7 +21,7 @@ export type OfferTemplate = {
 
 type OfferTemplatesProps = {
   companyId: string;
-  onApplyTemplate: (OfferTemplate) => void;
+  onApplyTemplate: (_template: OfferTemplate) => void;
 };
 
 export default function OfferTemplates({ companyId, onApplyTemplate }: OfferTemplatesProps) {
@@ -273,7 +273,7 @@ function TemplateForm({
   onCancel,
 }: {
   initialData?: OfferTemplate;
-  onSave: (Omit<OfferTemplate, "id">) => void;
+  onSave: (_data: Omit<OfferTemplate, "id">) => void;
   onCancel: () => void;
 }) {
   const [formData, setFormData] = useState({
