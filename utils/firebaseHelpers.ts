@@ -14,8 +14,6 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/services/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 
-const googleProvider = new GoogleAuthProvider();
-
 // ---- Types
 export type UserRole = "customer" | "company";
 
@@ -105,7 +103,10 @@ export async function getUserRole(u: User): Promise<UserRole | null> {
 // ---- Sign in / Sign up
 
 export async function loginWithGoogle(role: UserRole) {
-  const cred = await signInWithPopup(auth, googleProvider);
+  // Force account chooser so user can pick a different Google account
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({ prompt: "select_account" });
+  const cred = await signInWithPopup(auth, provider);
   await ensureUserProfile(cred.user, role);
   return cred.user;
 }
