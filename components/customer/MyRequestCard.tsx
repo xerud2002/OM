@@ -13,7 +13,7 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { MovingRequest } from "../../types";
-import { formatDateRO } from "@/utils/date";
+import { formatMoveDateDisplay } from "@/utils/date";
 import RequestDetailsModal from "./RequestDetailsModal";
 import { toast } from "sonner";
 
@@ -130,12 +130,15 @@ export default function MyRequestCard({
               </span>
 
               {/* Date badge */}
-              {request.moveDate && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700">
-                  <Calendar size={14} />
-                  {formatDateRO(request.moveDate, { month: "short" })}
-                </span>
-              )}
+              {(() => {
+                const display = formatMoveDateDisplay(request as any, { month: "short" });
+                return display && display !== "-" ? (
+                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700">
+                    <Calendar size={14} />
+                    {display}
+                  </span>
+                ) : null;
+              })()}
 
               {/* Rooms badge */}
               {request.rooms && (

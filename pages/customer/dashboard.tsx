@@ -9,7 +9,7 @@ import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
-import { formatDateRO } from "@/utils/date";
+import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
 import { sendEmail } from "@/utils/emailHelpers";
 import OfferComparison from "@/components/customer/OfferComparison";
 import RequestForm from "@/components/customer/RequestForm";
@@ -798,7 +798,10 @@ export default function CustomerDashboard() {
                                     {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                                   </p>
                                   <p className="mt-0.5 text-xs text-gray-500">
-                                    {r.moveDate ? formatDateRO(r.moveDate, { month: "short" }) : "fără dată"}
+                                    {(() => {
+                                      const d = formatMoveDateDisplay(r as any, { month: "short" });
+                                      return d && d !== "-" ? d : "fără dată";
+                                    })()}
                                   </p>
                                 </div>
                                 <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">

@@ -69,7 +69,12 @@ export type MovingRequest = {
   toType?: "house" | "flat";
   toFloor?: string;
   toElevator?: boolean;
-  moveDate?: string;
+  // Dates
+  moveDate?: string; // legacy single date, kept for backward compatibility and quick filters
+  moveDateMode?: "exact" | "range" | "none" | "flexible";
+  moveDateStart?: string; // YYYY-MM-DD
+  moveDateEnd?: string;   // YYYY-MM-DD (only for range)
+  moveDateFlexDays?: number; // only for flexible
   details?: string;
   rooms?: number | string;
   volumeM3?: number;

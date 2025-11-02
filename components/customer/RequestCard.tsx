@@ -1,4 +1,5 @@
 import React from "react";
+import { formatMoveDateDisplay } from "@/utils/date";
 import { useState } from "react";
 import OfferItem from "@/components/customer/OfferItem";
 import { toast } from "sonner";
@@ -162,7 +163,12 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
                   d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
                 />
               </svg>
-              <span className="font-medium">{r.moveDate}</span>
+              <span className="font-medium">
+                {(() => {
+                  const d = formatMoveDateDisplay(r as any, { month: "short" });
+                  return d && d !== "-" ? d : r.moveDate || "-";
+                })()}
+              </span>
             </div>
 
             {r.details && <p className="mb-4 text-sm leading-relaxed text-gray-600">{r.details}</p>}

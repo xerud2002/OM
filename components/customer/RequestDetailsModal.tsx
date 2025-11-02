@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Edit2, MapPin, Calendar, Package, Phone, User, FileText, Wrench, Trash2 } from "lucide-react";
 import { MovingRequest } from "../../types";
-import { formatDateRO } from "@/utils/date";
+import { formatMoveDateDisplay } from "@/utils/date";
 import Image from "next/image";
 import EditRequestModal from "./EditRequestModal";
 
@@ -228,17 +228,18 @@ export default function RequestDetailsModal({
                 {/* Details Grid */}
                 <div className="mb-6 grid gap-4 sm:grid-cols-2">
                   {/* Date */}
-                  {request.moveDate && (
-                    <div className="rounded-xl border border-gray-200 bg-white p-4">
-                      <div className="mb-2 flex items-center gap-2">
-                        <Calendar size={18} className="text-sky-600" />
-                        <h4 className="font-semibold text-gray-900">Data mutării</h4>
+                  {(() => {
+                    const display = formatMoveDateDisplay(request as any, { month: "short" });
+                    return display && display !== "-" ? (
+                      <div className="rounded-xl border border-gray-200 bg-white p-4">
+                        <div className="mb-2 flex items-center gap-2">
+                          <Calendar size={18} className="text-sky-600" />
+                          <h4 className="font-semibold text-gray-900">Data mutării</h4>
+                        </div>
+                        <p className="text-lg font-medium text-gray-700">{display}</p>
                       </div>
-                      <p className="text-lg font-medium text-gray-700">
-                        {formatDateRO(request.moveDate, { month: "short" })}
-                      </p>
-                    </div>
-                  )}
+                    ) : null;
+                  })()}
 
                   {/* Rooms */}
                   {request.rooms && (

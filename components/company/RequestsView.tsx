@@ -18,7 +18,7 @@ import {
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { addOffer } from "@/utils/firestoreHelpers";
-import { formatDateRO } from "@/utils/date";
+import { formatMoveDateDisplay } from "@/utils/date";
 import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 
@@ -484,7 +484,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
-                  <p className="text-sm text-gray-500">Mutare: {r.moveDate ? formatDateRO(r.moveDate, { month: "short" }) : "-"}</p>
+                  <p className="text-sm text-gray-500">Mutare: {(() => { const d = formatMoveDateDisplay(r as any, { month: "short" }); return d && d !== "-" ? d : "-"; })()}</p>
                   <p className="mt-2 text-sm text-gray-600">{r.details}</p>
                 </div>
 
