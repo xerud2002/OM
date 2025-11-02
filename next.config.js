@@ -52,9 +52,9 @@ const nextConfig = {
   },
 
   // Allow cross-origin requests in development
-  ...(process.env.NODE_ENV === 'development' && {
+  experimental: {
     allowedDevOrigins: ['127.0.0.1:3000', 'localhost:3000'],
-  }),
+  },
 };
 
 export default nextConfig;
