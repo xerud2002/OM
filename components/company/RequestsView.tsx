@@ -6,6 +6,7 @@ import {
   collection,
   query,
   orderBy,
+  where,
   onSnapshot,
   updateDoc,
   deleteDoc,
@@ -21,6 +22,13 @@ import { addOffer } from "@/utils/firestoreHelpers";
 import { formatMoveDateDisplay } from "@/utils/date";
 import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import { maskName } from "@/utils/masking";
+import { onCompanyUnlocks, unlockContact } from "@/utils/unlockHelpers";
+import { sendOfferMessage, onOfferMessages, Message } from "@/utils/messagesHelpers";
+import { FileText } from "lucide-react";
+import JobSheetModal from "@/components/company/JobSheetModal";
+import Alert from "@/components/ui/Alert";
+import { toast } from "sonner";
 
 // Types
 export type MovingRequest = {
@@ -28,11 +36,14 @@ export type MovingRequest = {
   customerId: string;
   customerName?: string;
   customerEmail?: string;
+  phone?: string;
   fromCity: string;
   toCity: string;
   moveDate?: string;
   details?: string;
   createdAt?: any;
+  requestCode?: string;
+  status?: "active" | "closed" | "paused" | "cancelled";
 };
 
 export type CompanyUser = {
@@ -47,6 +58,7 @@ export type Offer = {
   companyName: string;
   price: number;
   message: string;
+  proposedDate?: string;
   status?: "pending" | "accepted" | "declined" | "rejected";
   createdAt?: any;
 };
@@ -56,31 +68,67 @@ function OfferItem({
   offer,
   requestId,
   company,
+  unlocked,
 }: {
   offer: Offer;
   requestId: string;
   company: CompanyUser;
+  unlocked: boolean;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [price, setPrice] = useState(offer.price.toString());
   const [message, setMessage] = useState(offer.message);
+  const [proposedDate, setProposedDate] = useState(offer.proposedDate || "");
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const [sendingMessage, setSendingMessage] = useState(false);
+  const [history, setHistory] = useState<Message[]>([]);
 
   const isOwn = company && offer.companyId === company.uid;
   const isPending = (offer.status ?? "pending") === "pending";
+
+  // Subscribe to messages for this offer
+  useEffect(() => {
+    const unsub = onOfferMessages(requestId, offer.id, (msgs: Message[]) => setHistory(msgs));
+    return () => unsub();
+  }, [requestId, offer.id]);
 
   const handleSave = async () => {
     if (!company) return;
     setSaving(true);
     try {
       const offerRef = doc(db, "requests", requestId, "offers", offer.id);
-      await updateDoc(offerRef, { price: Number(price), message });
+      await updateDoc(offerRef, {
+        price: Number(price),
+        message,
+        proposedDate: proposedDate || null,
+      });
       setIsEditing(false);
     } catch (err) {
       console.error("Error updating offer:", err);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!company || !messageText.trim()) return;
+    setSendingMessage(true);
+    try {
+      await sendOfferMessage(
+        requestId,
+        offer.id,
+        "company",
+        company.uid,
+        messageText,
+        company.displayName || company.email || "Companie"
+      );
+      setMessageText("");
+    } catch (err) {
+      console.error("Error sending message:", err);
+    } finally {
+      setSendingMessage(false);
     }
   };
 
@@ -106,16 +154,39 @@ function OfferItem({
     >
       {isEditing ? (
         <div className="space-y-2">
+          <label htmlFor={`edit-price-${offer.id}`} className="sr-only">
+            Editează preț
+          </label>
           <input
+            id={`edit-price-${offer.id}`}
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            placeholder="Preț (lei)"
             className="w-full rounded border p-2 text-sm"
+            aria-label="Editează preț"
           />
+          <label htmlFor={`edit-date-${offer.id}`} className="sr-only">
+            Editează data propusă
+          </label>
+          <input
+            id={`edit-date-${offer.id}`}
+            type="date"
+            value={proposedDate}
+            onChange={(e) => setProposedDate(e.target.value)}
+            className="w-full rounded border p-2 text-sm"
+            aria-label="Editează data propusă"
+          />
+          <label htmlFor={`edit-message-${offer.id}`} className="sr-only">
+            Editează mesaj
+          </label>
           <textarea
+            id={`edit-message-${offer.id}`}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            placeholder="Mesaj"
             className="w-full rounded border p-2 text-sm"
+            aria-label="Editează mesaj"
           />
           <div className="flex gap-2">
             <button
@@ -139,6 +210,11 @@ function OfferItem({
             <span className="font-semibold text-emerald-700">{offer.companyName}</span>
             <span className="text-sm font-medium text-gray-700">💰 {offer.price} lei</span>
           </div>
+          {offer.proposedDate && (
+            <p className="mt-1 text-xs text-gray-600">
+              📅 Data propusă: {new Date(offer.proposedDate).toLocaleDateString("ro-RO")}
+            </p>
+          )}
           <div className="mt-1 flex items-center justify-between gap-2">
             <p className="text-sm text-gray-600">{offer.message}</p>
             <span
@@ -168,9 +244,77 @@ function OfferItem({
               </button>
             </div>
           )}
+
+          {/* Messaging UI - Only shown for own offers when unlocked */}
+          {history.length > 0 && (
+            <div className="mt-3 border-t border-gray-200 pt-3">
+              <p className="mb-2 text-xs font-semibold text-gray-700">Istoric mesaje</p>
+              <div className="space-y-2">
+                {history.slice(-3).map((msg) => {
+                  const isMsgOwn = msg.senderId === company?.uid;
+                  return (
+                    <div key={msg.id} className={`flex ${isMsgOwn ? "justify-end" : "justify-start"}`}>
+                      <div className={`max-w-[75%] rounded-lg px-3 py-1.5 text-sm ${isMsgOwn ? "bg-emerald-600 text-white" : "border border-gray-200 bg-white text-gray-900"}`}>
+                        {!isMsgOwn && (
+                          <p className="mb-0.5 text-[10px] font-semibold text-gray-600">{msg.senderName || "Client"}</p>
+                        )}
+                        <p>{msg.text}</p>
+                        <p className={`mt-0.5 text-[10px] ${isMsgOwn ? "text-emerald-100" : "text-gray-500"}`}>
+                          {msg.createdAt?.toDate ? new Date(msg.createdAt.toDate()).toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" }) : ""}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {isOwn && unlocked && (
+            <div className="mt-3 border-t border-emerald-200 pt-3">
+              <p className="mb-2 text-xs font-semibold text-gray-700">✉️ Trimite mesaj clientului</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder="Scrie mesajul tău..."
+                  className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" && !sendingMessage) {
+                      handleSendMessage();
+                    }
+                  }}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={sendingMessage || !messageText.trim()}
+                  className="rounded bg-emerald-600 px-3 py-1 text-sm text-white hover:bg-emerald-700 disabled:bg-gray-400"
+                >
+                  {sendingMessage ? "..." : "Trimite"}
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </motion.div>
+  );
+}
+
+function JobSheetButton({ onClick }: { request: MovingRequest; onClick: () => void }) {
+  return (
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
+      title="Vizualizează Job Sheet"
+    >
+      <FileText size={14} />
+      Job Sheet
+    </button>
   );
 }
 
@@ -178,26 +322,51 @@ function OfferList({
   requestId,
   company,
   onHasMine,
+  unlocked,
 }: {
   requestId: string;
   company: CompanyUser;
   onHasMine?: any;
+  unlocked: boolean;
 }) {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [expanded, setExpanded] = useState(false);
 
   useEffect(() => {
-    const q = query(collection(db, "requests", requestId, "offers"), orderBy("createdAt", "desc"));
-    const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Offer);
-      setOffers(list);
-      if (company && onHasMine) {
-        const mine = list.some((o) => o.companyId === company.uid);
-        onHasMine(mine);
+    if (!company?.uid) return;
+    const q = query(
+      collection(db, "requests", requestId, "offers"),
+      where("companyId", "==", company.uid),
+      orderBy("createdAt", "desc")
+    );
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const list = snapshot.docs.map((d) => ({ id: d.id, ...d.data() }) as Offer);
+        setOffers(list);
+        if (onHasMine) onHasMine(list.length > 0);
+      },
+      async (err) => {
+        console.warn("OfferList snapshot error:", err);
+        // Fallback: read via admin API to avoid rules errors
+        try {
+          const u = (await import("@/services/firebase")).auth.currentUser;
+          const token = await u?.getIdToken();
+          if (!token) return;
+          const resp = await fetch(`/api/company/offers`, { headers: { Authorization: `Bearer ${token}` } });
+          if (resp.ok) {
+            const data = await resp.json();
+            const mine = (Array.isArray(data?.offers) ? data.offers : []).filter((o: any) => o.requestId === requestId);
+            setOffers(mine as any);
+            if (onHasMine) onHasMine(mine.length > 0);
+          }
+        } catch (e) {
+          console.warn("OfferList fallback failed", e);
+        }
       }
-    });
+    );
     return () => unsub();
-  }, [requestId, company, onHasMine]);
+  }, [requestId, company?.uid, onHasMine]);
 
   return (
     <div className="mt-3 border-t pt-3">
@@ -218,10 +387,16 @@ function OfferList({
             className="mt-3 space-y-3"
           >
             {offers.length === 0 ? (
-              <p className="text-sm italic text-gray-400">Nicio ofertă disponibilă momentan.</p>
+              <p className="text-sm italic text-gray-600">Nicio ofertă disponibilă momentan.</p>
             ) : (
               offers.map((offer) => (
-                <OfferItem key={offer.id} offer={offer} requestId={requestId} company={company} />
+                <OfferItem
+                  key={offer.id}
+                  offer={offer}
+                  requestId={requestId}
+                  company={company}
+                  unlocked={unlocked}
+                />
               ))
             )}
           </motion.div>
@@ -234,6 +409,7 @@ function OfferList({
 function OfferForm({ requestId, company }: { requestId: string; company: CompanyUser }) {
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState("");
+  const [proposedDate, setProposedDate] = useState("");
   const [sending, setSending] = useState(false);
 
   const priceNum = Number(price);
@@ -249,37 +425,69 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
         companyName: company.displayName || company.email || "Companie",
         price: priceNum,
         message,
+        ...(proposedDate ? { proposedDate } : {}),
       });
       try {
         trackEvent("offer_submitted", { requestId, companyId: company.uid, price: priceNum });
       } catch {}
+      // Reset form fields on success
       setPrice("");
       setMessage("");
+      setProposedDate("");
+      setSending(false);
     } catch (err) {
       console.error("Error sending offer:", err);
-    } finally {
+      alert("A apărut o eroare la trimiterea ofertei. Te rog încearcă din nou.");
       setSending(false);
     }
   };
 
   return (
     <form onSubmit={handleSend} className="mt-3 flex flex-col gap-2 border-t pt-3 text-sm">
+      <label htmlFor={`offer-price-${requestId}`} className="sr-only">
+        Preț estimativ în lei
+      </label>
       <input
+        id={`offer-price-${requestId}`}
         type="number"
         placeholder="Preț estimativ (lei)"
         value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        onChange={(e) => {
+          // Only allow positive numbers
+          const value = e.target.value;
+          if (value === '' || (/^\d+$/.test(value) && parseInt(value) > 0)) {
+            setPrice(value);
+          }
+        }}
         min={1}
         className={`rounded-md border p-2 focus:outline-none focus:ring-2 ${
           isPriceValid ? "focus:ring-emerald-500" : "border-rose-300 focus:ring-rose-400"
         }`}
         required
+        aria-label="Preț estimativ în lei"
       />
+      <label htmlFor={`offer-date-${requestId}`} className="sr-only">
+        Data propusă pentru mutare
+      </label>
+      <input
+        id={`offer-date-${requestId}`}
+        type="date"
+        placeholder="Data propusă pentru mutare"
+        value={proposedDate}
+        onChange={(e) => setProposedDate(e.target.value)}
+        className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        aria-label="Data propusă pentru mutare"
+      />
+      <label htmlFor={`offer-message-${requestId}`} className="sr-only">
+        Mesaj pentru client
+      </label>
       <textarea
+        id={`offer-message-${requestId}`}
         placeholder="Mesaj pentru client"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        aria-label="Mesaj pentru client"
         required
       />
       <button
@@ -310,6 +518,14 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  
+  // Unlock state management
+  const [unlockMap, setUnlockMap] = useState<Record<string, boolean>>({});
+  const [unlockingId, setUnlockingId] = useState<string | null>(null);
+
+  // Job Sheet modal state
+  const [jobSheetRequest, setJobSheetRequest] = useState<MovingRequest | null>(null);
+  const [showJobSheet, setShowJobSheet] = useState(false);
 
   // Auth (if not provided by parent)
   useEffect(() => {
@@ -318,27 +534,59 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     return () => unsubAuth();
   }, [companyFromParent]);
 
+  // Subscribe to unlock records for this company
+  useEffect(() => {
+    if (!company?.uid) return;
+    const unsub = onCompanyUnlocks(company.uid, (unlocks: Record<string, boolean>) => {
+      setUnlockMap(unlocks);
+    });
+    return () => unsub();
+  }, [company?.uid]);
+
   useEffect(() => {
     const q = query(
       collection(db, "requests"),
       orderBy("createdAt", "desc"),
       limit(PAGE_SIZE)
     );
-    const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs
-  .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
-        .filter((req) => {
-          // Only show active (or undefined status) and non-archived requests
-          const isActive = !req.status || req.status === "active";
-          const notArchived = !req.archived;
-          return isActive && notArchived;
-        });
-      setFirstPage(list);
-      setLoading(false);
-      const last = snapshot.docs[snapshot.docs.length - 1] || null;
-      setLastDoc(last);
-      setHasMore(snapshot.size === PAGE_SIZE);
-    });
+    const unsub = onSnapshot(
+      q,
+      (snapshot) => {
+        const list = snapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
+          .filter((req) => {
+            const isActive = !req.status || req.status === "active";
+            const notArchived = !req.archived;
+            return isActive && notArchived;
+          });
+        setFirstPage(list);
+        setLoading(false);
+        const last = snapshot.docs[snapshot.docs.length - 1] || null;
+        setLastDoc(last);
+        setHasMore(snapshot.size === PAGE_SIZE);
+      },
+      async (err) => {
+        console.warn("Requests snapshot error:", err);
+        setLoading(false);
+        if ((err as any)?.code === "permission-denied") {
+          try {
+            const u = (await import("@/services/firebase")).auth.currentUser;
+            const token = await u?.getIdToken();
+            if (!token) return;
+            const resp = await fetch(`/api/company/requests?limit=${PAGE_SIZE}`, {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              setFirstPage(Array.isArray(data?.requests) ? data.requests : []);
+              setHasMore(false); // disable infinite loading in fallback
+            }
+          } catch (e) {
+            console.warn("Fallback requests fetch failed", e);
+          }
+        }
+      }
+    );
     return () => unsub();
   }, []);
 
@@ -442,12 +690,12 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       </div>
 
       {loading ? (
-        <p className="text-center text-gray-500">Se încarcă cererile...</p>
+        <p className="text-center text-gray-600">Se încarcă cererile...</p>
       ) : sortedRequests.length === 0 ? (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center italic text-gray-500"
+          className="text-center italic text-gray-600"
         >
           Momentan nu există cereri noi. 💤
         </motion.p>
@@ -478,14 +726,107 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 )}
 
                 <div>
-                  <h3 className="mb-1 text-lg font-semibold text-emerald-700">
-                    {r.customerName || "Client anonim"}
-                  </h3>
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-emerald-700">
+                        {unlockMap[r.id]
+                          ? r.customerName || "Client anonim"
+                          : maskName(r.customerName)}
+                      </h3>
+                      {r.requestCode && (
+                        <span className="inline-flex items-center rounded-md bg-gradient-to-r from-emerald-100 to-sky-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                          {r.requestCode}
+                        </span>
+                      )}
+                    </div>
+                    <JobSheetButton request={r} onClick={() => { setJobSheetRequest(r); setShowJobSheet(true); }} />
+                  </div>
+
+                  {/* Status Badge */}
+                  {r.status && r.status !== "active" && (
+                    <span
+                      className={`mb-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        r.status === "closed"
+                          ? "bg-gray-100 text-gray-700"
+                          : r.status === "paused"
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-rose-100 text-rose-700"
+                      }`}
+                    >
+                      {r.status === "closed"
+                        ? "Închisă"
+                        : r.status === "paused"
+                          ? "În așteptare"
+                          : "Anulată"}
+                    </span>
+                  )}
+
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
-                  <p className="text-sm text-gray-500">Mutare: {(() => { const d = formatMoveDateDisplay(r as any, { month: "short" }); return d && d !== "-" ? d : "-"; })()}</p>
+                  <p className="text-sm text-gray-600">
+                    Mutare: {(() => {
+                      const d = formatMoveDateDisplay(r as any, { month: "short" });
+                      return d && d !== "-" ? d : "-";
+                    })()}
+                  </p>
                   <p className="mt-2 text-sm text-gray-600">{r.details}</p>
+
+                  {/* Contact Details - Hidden by default, shown after unlock */}
+                  {!unlockMap[r.id] ? (
+                    <div className="mt-3">
+                      <Alert
+                        variant="locked"
+                        title="Detaliile de contact sunt ascunse"
+                        action={
+                          <button
+                            onClick={async () => {
+                              if (!company?.uid) return;
+                              if (
+                                !confirm(
+                                  "Vrei să deblochezi detaliile de contact pentru această cerere? (simulare plată)"
+                                )
+                              )
+                                return;
+                              setUnlockingId(r.id);
+                              try {
+                                await unlockContact(r.id, company.uid);
+                                trackEvent("contact_unlocked", { requestId: r.id, companyId: company.uid });
+                                toast.success("Contactele au fost deblocate.");
+                              } catch (err) {
+                                console.error("Unlock failed:", err);
+                                toast.error("Nu am putut debloca contactele. Încearcă din nou.");
+                              } finally {
+                                setUnlockingId(null);
+                              }
+                            }}
+                            disabled={unlockingId === r.id}
+                            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:bg-gray-400"
+                          >
+                            {unlockingId === r.id ? "Se deblochează..." : "🔓 Deblochează contactele"}
+                          </button>
+                        }
+                      >
+                        <p className="text-xs">Deblochează pentru a vedea numele complet, email și telefon.</p>
+                      </Alert>
+                    </div>
+                  ) : (
+                    <div className="mt-3">
+                      <Alert variant="success" title="Detalii complete de contact">
+                        <div className="space-y-1 text-sm">
+                          <p>
+                            <span className="font-medium">Nume:</span> {r.customerName || "—"}
+                          </p>
+                          <p>
+                            <span className="font-medium">Email:</span> {r.customerEmail || "—"}
+                          </p>
+                          <p>
+                            <span className="font-medium">Telefon:</span> {r.phone || "—"}
+                          </p>
+                        </div>
+                      </Alert>
+                    </div>
+                  )}
                 </div>
 
                 {company ? (
@@ -493,6 +834,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                     <OfferList
                       requestId={r.id}
                       company={company}
+                      unlocked={!!unlockMap[r.id]}
                       onHasMine={(has: boolean) =>
                         setHasMineMap((prev) => ({ ...prev, [r.id]: has }))
                       }
@@ -500,14 +842,14 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                     {!hasMineMap[r.id] ? (
                       <OfferForm requestId={r.id} company={company} />
                     ) : (
-                      <p className="mt-2 text-xs text-gray-500">
+                      <p className="mt-2 text-xs text-gray-600">
                         Ai trimis deja o ofertă pentru această cerere. O poți edita sau retrage mai
                         sus.
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="mt-3 text-sm italic text-gray-400">
+                  <p className="mt-3 text-sm italic text-gray-600">
                     Trebuie să fii autentificat pentru a trimite oferte.
                   </p>
                 )}
@@ -528,6 +870,18 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
           </button>
         </div>
       )}
-    </div>
+
+
+      {/* Job Sheet Modal - Rendered at top level */}
+      {jobSheetRequest && (
+        <JobSheetModal
+          request={jobSheetRequest}
+          isOpen={showJobSheet}
+          onClose={() => {
+            setShowJobSheet(false);
+            setJobSheetRequest(null);
+          }}
+        />
+      )}    </div>
   );
 }

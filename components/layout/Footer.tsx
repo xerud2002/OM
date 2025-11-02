@@ -122,7 +122,7 @@ export default function Footer() {
       </motion.div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-200 bg-gray-50 py-5 text-center text-sm text-gray-500">
+      <div className="border-t border-gray-200 bg-gray-50 py-5 text-center text-sm text-gray-700">
         <p>
           © {new Date().getFullYear()}{" "}
           <span className="font-medium text-emerald-600">ofertemutare.ro</span> · Toate drepturile

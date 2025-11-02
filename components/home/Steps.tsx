@@ -80,7 +80,7 @@ export default function Steps() {
             <p className="mt-4 text-sm font-medium text-gray-600">
               ✓ Completezi în 2 minute · ✓ Fără costuri · ✓ Fără obligații
             </p>
-            <p className="mt-2 text-xs text-gray-500">
+            <p className="mt-2 text-xs text-gray-600">
               🔒 Datele tale sunt protejate și nu vor fi distribuite terților
             </p>
           </motion.div>

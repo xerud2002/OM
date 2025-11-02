@@ -149,7 +149,7 @@ select option:checked {
   width: 100%;
   background: transparent;
   border: none;
-  font-family: "Inter", "Poppins", sans-serif;
+  font-family: var(--font-inter), "Inter", sans-serif;
 }
 
 .react-calendar__tile {

@@ -1,4 +1,5 @@
 import { db } from "@/services/firebase";
+import { sanitizeFirestoreData } from "./sanitization";
 import {
   addDoc,
   collection,
@@ -32,10 +33,13 @@ async function generateRequestCode(): Promise<string> {
 }
 
 export async function createRequest(data: any) {
+  // Sanitize input data first
+  const sanitized = sanitizeFirestoreData(data);
+  
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
   const excludeFields = ['mediaFiles', 'contactName', 'contactFirstName', 'contactLastName', 'moveDateMode', 'moveDateStart', 'moveDateEnd', 'moveDateFlexDays', 'mediaUpload'];
   const clean: Record<string, any> = Object.fromEntries(
-    Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
+    Object.entries(sanitized).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
   // Handle move date logic based on mode
@@ -113,8 +117,11 @@ export async function addOffer(requestId: string, data: any) {
     requestCode = (snap.exists() ? (snap.data() as any).requestCode : undefined) as string | undefined;
   } catch {}
 
+  // Sanitize offer data
+  const sanitized = sanitizeFirestoreData(data);
+  
   await addDoc(collection(db, "requests", requestId, "offers"), {
-    ...data,
+    ...sanitized,
     requestId,
     ...(requestCode ? { requestCode } : {}),
     createdAt: serverTimestamp(),
@@ -164,11 +171,14 @@ export async function archiveRequest(requestId: string) {
 export async function updateRequest(requestId: string, data: any) {
   const { doc, updateDoc, getDocs, collection, addDoc } = await import("firebase/firestore");
   
+  // Sanitize input data first
+  const sanitized = sanitizeFirestoreData(data);
+  
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
   // Note: mediaUrls is allowed (it's an array of strings/URLs)
   const excludeFields = ['mediaFiles', 'contactName', 'contactFirstName', 'contactLastName', 'moveDateMode', 'moveDateStart', 'moveDateEnd', 'moveDateFlexDays', 'mediaUpload'];
   const clean: Record<string, any> = Object.fromEntries(
-    Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
+    Object.entries(sanitized).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
   // Handle move date logic based on mode

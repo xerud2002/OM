@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Head from "next/head";
 import LayoutWrapper from "@/components/layout/Layout";
 import cities from "@/cities";
 import counties from "@/counties";
@@ -137,8 +138,18 @@ export default function FormPage() {
   }
 
   return (
-    <RequireRole allowedRole="customer">
-      <LayoutWrapper>
+    <>
+      <Head>
+        <title>Solicită oferte de mutare gratuite - Ofertemutare.ro</title>
+        <meta
+          name="description"
+          content="Completează formularul în 2 minute și primește oferte gratuite de la cele mai bune firme de mutări din România. Economie medie 450 lei, răspuns în 24h."
+        />
+        <link rel="canonical" href="https://ofertemutare.ro/form" />
+      </Head>
+      
+      <RequireRole allowedRole="customer">
+        <LayoutWrapper>
         <main className="mx-auto max-w-3xl px-6 pt-[80px]">
           {/* Trust banner */}
           <div className="mb-6 rounded-xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-sky-50 p-4 text-center">
@@ -269,9 +280,10 @@ export default function FormPage() {
 
             {/* Additional move details */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-              <label className="block">
+              <label htmlFor="form-rooms-input" className="block">
                 <span className="mb-1 block text-sm font-medium text-gray-700">Camere</span>
                 <input
+                  id="form-rooms-input"
                   type="number"
                   min={1}
                   value={form.rooms ?? ""}
@@ -285,14 +297,19 @@ export default function FormPage() {
                 />
               </label>
 
-              <label className="block">
+              <label htmlFor="form-phone" className="block">
                 <span className="mb-1 block text-sm font-medium text-gray-700">
                   Telefon (de contact)
                 </span>
                 <input
+                  id="form-phone"
                   type="tel"
                   value={form.phone}
-                  onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+                  onChange={(e) => {
+                    // Sanitize phone input in real-time
+                    const sanitized = e.target.value.replace(/[^0-9\s+\-()]/g, '');
+                    setForm((s) => ({ ...s, phone: sanitized }));
+                  }}
                   className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2"
                   placeholder="ex: +407xxxxxxxx"
                   required
@@ -334,12 +351,13 @@ export default function FormPage() {
               </button>
             </div>
 
-            <p className="mt-3 text-center text-xs text-gray-500">
+            <p className="mt-3 text-center text-xs text-gray-600">
               Apasă butonul și vei primi între 3-5 oferte în maxim 24 de ore!
             </p>
           </form>
         </main>
       </LayoutWrapper>
     </RequireRole>
+    </>
   );
 }

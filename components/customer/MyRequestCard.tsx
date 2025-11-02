@@ -13,9 +13,12 @@ import {
   RotateCcw,
 } from "lucide-react";
 import { MovingRequest } from "../../types";
+import RequestMessages from "@/components/customer/RequestMessages";
+import RequestTimeline from "@/components/customer/RequestTimeline";
 import { formatMoveDateDisplay } from "@/utils/date";
 import RequestDetailsModal from "./RequestDetailsModal";
 import { toast } from "sonner";
+import { auth } from "@/services/firebase";
 
 type MyRequestCardProps = {
   request: MovingRequest;
@@ -86,10 +89,35 @@ export default function MyRequestCard({
       {/* Gradient accent bar */}
       <div className={`h-1.5 w-full overflow-hidden rounded-t-2xl ${getGradientClass()}`} />
 
-      <div className="p-6">
+  <div className="p-6">
         <div className="flex items-start justify-between gap-4">
           {/* Main content */}
           <div className="min-w-0 flex-1">
+            {/* Request Code */}
+            {request.requestCode && (
+              <div className="mb-2">
+                <button
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(request.requestCode || "");
+                      const { toast } = await import("sonner");
+                      toast.success("Cod copiat în clipboard!");
+                    } catch (err) {
+                      console.error("Failed to copy:", err);
+                    }
+                  }}
+                  className="group inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-100 to-sky-100 px-3 py-1 text-sm font-bold text-emerald-700 transition-all hover:from-emerald-200 hover:to-sky-200 hover:shadow-md active:scale-95"
+                  title="Copiază codul cererii"
+                >
+                  <span className="text-xs">📋</span>
+                  {request.requestCode}
+                  <svg className="h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
             {/* Route */}
             <div className="mb-3 flex items-center gap-2">
               <MapPin 
@@ -103,7 +131,7 @@ export default function MyRequestCard({
               />
               <h3 className="truncate text-xl font-bold text-gray-900">
                 {request.fromCity || request.fromCounty}
-                <span className="mx-2 text-gray-400">→</span>
+                <span className="mx-2 text-gray-600">→</span>
                 {request.toCity || request.toCounty}
               </h3>
             </div>
@@ -188,6 +216,48 @@ export default function MyRequestCard({
                 )}
               </div>
             )}
+
+            {/* Messages History for this request */}
+            <RequestMessages requestId={request.id} userId={auth.currentUser?.uid || ""} />
+            
+            {/* Request Timeline */}
+            <div className="mt-4">
+              <RequestTimeline
+                createdAt={request.createdAt}
+                offersCount={offersCount}
+                status={status}
+              />
+            </div>
+            
+            {/* Quick Actions */}
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                onClick={() => setShowDetailsModal(true)}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition-all hover:border-emerald-300 hover:bg-emerald-100 hover:shadow-md"
+              >
+                <Eye size={14} />
+                Vezi detalii
+              </button>
+              
+              {request.requestCode && (
+                <button
+                  onClick={async () => {
+                    try {
+                      await navigator.clipboard.writeText(request.requestCode || "");
+                      toast.success("Cod copiat: " + request.requestCode);
+                    } catch (err) {
+                      console.error(err);
+                    }
+                  }}
+                  className="inline-flex items-center gap-1.5 rounded-lg border border-sky-200 bg-sky-50 px-3 py-1.5 text-xs font-semibold text-sky-700 transition-all hover:border-sky-300 hover:bg-sky-100 hover:shadow-md"
+                >
+                  <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                  </svg>
+                  Copiază cod
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Right side: Offers count + Menu */}

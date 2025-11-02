@@ -79,6 +79,13 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // === META COLLECTION ===
+    // Used for counters like request sequence numbers
+    match /meta/{docId} {
+      // Only signed-in customers can read/write counters (for request code generation)
+      allow read, write: if isSignedIn() && isCustomer();
+    }
+
     // Deny everything else by default
     match /{document=**} {
       allow read, write: if false;

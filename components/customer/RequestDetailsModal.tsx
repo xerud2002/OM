@@ -135,6 +135,11 @@ export default function RequestDetailsModal({
               <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-6 py-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Detalii cerere</h2>
+                  {request.requestCode && (
+                    <p className="mt-1 text-sm font-semibold text-emerald-700">
+                      {request.requestCode}
+                    </p>
+                  )}
                   <p className="mt-1 text-sm text-gray-600">
                     Informații complete despre mutarea ta
                   </p>

@@ -1,8 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Head from "next/head";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
+import OnboardingTour from "@/components/ui/OnboardingTour";
+import DashboardErrorBoundary from "@/components/DashboardErrorBoundary";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import {
@@ -18,6 +21,13 @@ import {
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
+import KPICard from "@/components/company/KPICard";
+import SectionHeader from "@/components/company/SectionHeader";
+import OffersPerformance from "@/components/company/OffersPerformance";
+import ActivityList from "@/components/company/ActivityList";
+import RequestsSnapshot from "@/components/company/RequestsSnapshot";
+import CompanyMessagesView from "@/components/company/MessagesView";
+import { MessageCircle } from "lucide-react";
 
 export default function CompanyDashboard() {
   const [company, setCompany] = useState<any>(null);
@@ -29,11 +39,17 @@ export default function CompanyDashboard() {
     "all" | "accepted" | "pending" | "rejected" | "declined"
   >("all");
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<"offers" | "requests">("offers");
+  const [activeTab, setActiveTab] = useState<"offers" | "requests" | "messages">("offers");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editPrice, setEditPrice] = useState<string>("");
   const [editMessage, setEditMessage] = useState<string>("");
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [now, setNow] = useState<number>(() => Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(t);
+  }, []);
 
   // Track logged-in company
   useEffect(() => {
@@ -58,9 +74,26 @@ export default function CompanyDashboard() {
         setOffers(data);
         setLoading(false);
       },
-      (err) => {
-        console.error("Error loading offers:", err);
+      async (err) => {
+        console.warn("Offers listener error:", err);
         setLoading(false);
+        // Fallback: fetch via server (admin) if rules block client read
+        if ((err as any)?.code === "permission-denied") {
+          try {
+            const u = (await import("@/services/firebase")).auth.currentUser;
+            const token = await u?.getIdToken();
+            if (!token) return;
+            const resp = await fetch("/api/company/offers", {
+              headers: { Authorization: `Bearer ${token}` },
+            });
+            if (resp.ok) {
+              const data = await resp.json();
+              setOffers(Array.isArray(data?.offers) ? data.offers : []);
+            }
+          } catch (e) {
+            console.warn("Fallback offers fetch failed", e);
+          }
+        }
       }
     );
 
@@ -101,6 +134,44 @@ export default function CompanyDashboard() {
   const pending = offers.filter((o) => !o.status || o.status === "pending").length;
   const rejected = offers.filter((o) => o.status === "rejected" || o.status === "declined").length;
 
+  // Derived metrics
+  const pricedOffers = useMemo(() => offers.filter((o) => typeof o.price === "number"), [offers]);
+  const totalRevenue = useMemo(
+    () => offers.reduce((sum, o) => sum + (o.status === "accepted" && typeof o.price === "number" ? o.price : 0), 0),
+    [offers]
+  );
+  const avgOfferValue = useMemo(() => {
+    if (pricedOffers.length === 0) return 0;
+    const sum = pricedOffers.reduce((s, o) => s + (o.price as number), 0);
+    return Math.round((sum / pricedOffers.length) * 100) / 100;
+  }, [pricedOffers]);
+  const winRate = useMemo(() => (total > 0 ? Math.round((accepted / total) * 100) : 0), [accepted, total]);
+
+  // Trend (last 7 days)
+  const { dailyCounts, dailyRevenue } = useMemo(() => {
+    const days = 7;
+    const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const today = startOfDay(new Date(now));
+    const buckets = Array.from({ length: days }, (_, i) => new Date(today.getTime() - (days - 1 - i) * 86400000));
+    const counts = new Array(days).fill(0);
+    const revenue = new Array(days).fill(0);
+
+    offers.forEach((o) => {
+      const ts: any = (o.createdAt as any) || null;
+      const created: Date | null = ts?.toDate ? ts.toDate() : (typeof ts === "number" ? new Date(ts) : null);
+      if (!created) return;
+      const d = startOfDay(created).getTime();
+      const idx = buckets.findIndex((bd) => bd.getTime() === d);
+      if (idx >= 0) {
+        counts[idx] += 1;
+        if (o.status === "accepted" && typeof o.price === "number") revenue[idx] += o.price;
+      }
+    });
+    return { dailyCounts: counts, dailyRevenue: revenue };
+  }, [offers, now]);
+
+  // Sparkline moved into OffersPerformance component
+
   // Edit/delete actions for an offer
   async function updateOffer(offer: any, fields: Partial<any>) {
     try {
@@ -123,8 +194,44 @@ export default function CompanyDashboard() {
   }
 
   return (
-    <RequireRole allowedRole="company">
-      <LayoutWrapper>
+    <>
+      <Head>
+        <title>Panou Companie - Ofertemutare.ro</title>
+        <meta
+          name="description"
+          content="Monitorizează cererile de mutare, trimite oferte competitive și crește-ți afacerea cu clienți noi din întreaga România."
+        />
+        <link rel="canonical" href="https://ofertemutare.ro/company/dashboard" />
+      </Head>
+      
+      <RequireRole allowedRole="company">
+        <DashboardErrorBoundary dashboardType="company">
+          <LayoutWrapper>
+        <OnboardingTour
+          id="company_dashboard_v1"
+          steps={[
+            {
+              title: "Monitorizează ofertele",
+              description:
+                "În tab-ul 'Ofertele mele' vezi rapid statusul, performanța și poți edita sau retrage oferte.",
+            },
+            {
+              title: "Caută și filtrează",
+              description:
+                "Folosește căutarea și filtrul de status pentru a găsi rapid ofertele relevante.",
+            },
+            {
+              title: "Cereri clienți",
+              description:
+                "În tab-ul 'Cereri clienți' vezi toate solicitările disponibile și poți răspunde cu oferte.",
+            },
+            {
+              title: "Mesaje în timp real",
+              description:
+                "Tab-ul 'Mesaje' îți arată conversațiile; vezi indicator de tastare și istoric în timp real.",
+            },
+          ]}
+        />
         <section className="mx-auto max-w-7xl px-4 py-10">
           {/* Hero Header */}
           <div className="mb-10 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-sky-600 p-8 text-white shadow-xl">
@@ -177,73 +284,56 @@ export default function CompanyDashboard() {
               )}
               <span className="relative z-10">Cereri clienți</span>
             </button>
+            <button
+              onClick={() => setActiveTab("messages")}
+              className={`relative rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
+                activeTab === "messages"
+                  ? "bg-white text-emerald-700 shadow-md"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              {activeTab === "messages" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 rounded-lg bg-white shadow-md"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10 flex items-center gap-2">
+                <MessageCircle size={16} />
+                Mesaje
+              </span>
+            </button>
           </div>
 
           {activeTab === "offers" && (
             <>
               {/* Stats Cards */}
-              <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-emerald-100">Total oferte</p>
-                    <p className="text-4xl font-bold">{total}</p>
-                  </div>
-                </motion.div>
+              <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-6">
+                <KPICard title="Total oferte" value={total} from="from-emerald-500" to="to-emerald-600" />
+                <KPICard title="Acceptate" value={accepted} from="from-sky-500" to="to-sky-600" delay={0.1} />
+                <KPICard title="În așteptare" value={pending} from="from-amber-500" to="to-amber-600" delay={0.2} />
+                <KPICard title="Respinse" value={rejected} from="from-rose-500" to="to-rose-600" delay={0.3} />
+                <KPICard title="Venit (acceptate)" value={`${new Intl.NumberFormat("ro-RO").format(totalRevenue)} lei`} from="from-indigo-500" to="to-indigo-600" delay={0.4} />
+                <KPICard title="Rată de câștig" value={`${winRate}%`} from="from-fuchsia-500" to="to-fuchsia-600" delay={0.5} />
+              </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-sky-500 to-sky-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-sky-100">Acceptate</p>
-                    <p className="text-4xl font-bold">{accepted}</p>
-                  </div>
-                </motion.div>
+              {/* Overview row */}
+              <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+                {/* Performance sparkline */}
+                <div className="lg:col-span-2">
+                  <OffersPerformance dailyCounts={dailyCounts} dailyRevenue={dailyRevenue} avgOfferValue={avgOfferValue} />
+                </div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-amber-100">În așteptare</p>
-                    <p className="text-4xl font-bold">{pending}</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-rose-100">Respinse</p>
-                    <p className="text-4xl font-bold">{rejected}</p>
-                  </div>
-                </motion.div>
+                {/* Recent activity */}
+                <ActivityList offers={offers} />
+                {/* Requests snapshot */}
+                <RequestsSnapshot onViewRequests={() => setActiveTab("requests")} />
               </div>
 
               {/* Filters */}
               <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <h2 className="text-xl font-bold text-gray-900">Ofertele mele</h2>
+                <SectionHeader title="Ofertele mele" right={
                   <div className="flex flex-1 items-center gap-3 md:justify-end">
                     <div className="relative flex-1 md:max-w-xs">
                       <svg
@@ -278,7 +368,7 @@ export default function CompanyDashboard() {
                       <option value="rejected">Respinse</option>
                     </select>
                   </div>
-                </div>
+                } />
               </div>
 
               {loading ? (
@@ -549,7 +639,7 @@ export default function CompanyDashboard() {
                   <p className="mt-4 text-lg font-semibold text-gray-700">
                     Nu există oferte de afișat
                   </p>
-                  <p className="mt-2 text-sm text-gray-500">Ofertele tale vor apărea aici</p>
+                  <p className="mt-2 text-sm text-gray-600">Ofertele tale vor apărea aici</p>
                 </div>
               )}
             </>
@@ -622,14 +712,31 @@ export default function CompanyDashboard() {
                   return <RequestsView companyFromParent={company} />;
                 })()
               ) : (
-                <p className="text-center text-sm italic text-gray-500">
+                <p className="text-center text-sm italic text-gray-600">
                   Se încarcă utilizatorul...
                 </p>
               )}
             </div>
           )}
+
+            {activeTab === "messages" && (
+              <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                {company ? (
+                  <CompanyMessagesView
+                    companyId={company.uid}
+                    companyName={company.displayName || company.email || "Companie"}
+                  />
+                ) : (
+                  <p className="text-center text-sm italic text-gray-600">
+                    Se încarcă utilizatorul...
+                  </p>
+                )}
+              </div>
+            )}
         </section>
       </LayoutWrapper>
+        </DashboardErrorBoundary>
     </RequireRole>
+    </>
   );
 }

@@ -37,6 +37,14 @@ export default function CustomerAuthPage() {
         router.push("/customer/auth");
         return;
       }
+      
+      // Track Google authentication (could be new signup or existing login)
+      const { trackEvent } = await import("@/utils/analytics");
+      trackEvent("login", {
+        method: "google",
+        user_type: "company",
+      });
+      
       router.push("/company/dashboard");
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
@@ -74,9 +82,24 @@ export default function CustomerAuthPage() {
           router.push("/customer/auth");
           return;
         }
+        // Track login
+        const { trackEvent } = await import("@/utils/analytics");
+        trackEvent("login", {
+          method: "email",
+          user_type: "company",
+        });
+        
         router.push("/company/dashboard");
       } else {
         await mod.registerWithEmail("company", { email, password });
+        
+        // Track registration
+        const { trackEvent } = await import("@/utils/analytics");
+        trackEvent("sign_up", {
+          method: "email",
+          user_type: "company",
+        });
+        
         router.push("/company/dashboard");
       }
     } catch (err: any) {
@@ -124,28 +147,44 @@ export default function CustomerAuthPage() {
         </p>
 
         <form onSubmit={handleEmailAuth} className="space-y-4">
-          <div className="flex items-center rounded-lg border px-3 py-2">
-            <Mail size={18} className="mr-2 text-emerald-600" />
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-transparent outline-none"
-            />
+          <div className="space-y-1">
+            <label htmlFor="company-email" className="sr-only">
+              Adresa de email
+            </label>
+            <div className="flex items-center rounded-lg border px-3 py-2">
+              <Mail size={18} className="mr-2 text-emerald-600" />
+              <input
+                id="company-email"
+                type="email"
+                placeholder="Email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                autoComplete="email"
+                aria-label="Adresa de email"
+                className="w-full bg-transparent outline-none"
+              />
+            </div>
           </div>
 
-          <div className="flex items-center rounded-lg border px-3 py-2">
-            <Lock size={18} className="mr-2 text-emerald-600" />
-            <input
-              type="password"
-              placeholder="Parolă"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent outline-none"
-            />
+          <div className="space-y-1">
+            <label htmlFor="company-password" className="sr-only">
+              Parola
+            </label>
+            <div className="flex items-center rounded-lg border px-3 py-2">
+              <Lock size={18} className="mr-2 text-emerald-600" />
+              <input
+                id="company-password"
+                type="password"
+                placeholder="Parolă"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                autoComplete={isLogin ? "current-password" : "new-password"}
+                aria-label="Parola"
+                className="w-full bg-transparent outline-none"
+              />
+            </div>
           </div>
 
           <motion.button
@@ -169,7 +208,7 @@ export default function CustomerAuthPage() {
           )}
         </form>
 
-        <div className="my-4 text-gray-400">sau</div>
+        <div className="my-4 text-gray-600">sau</div>
 
         <motion.button
           whileHover={{ scale: 1.05 }}

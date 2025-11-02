@@ -177,6 +177,18 @@ export default function UploadMediaPage() {
         mediaUrls: arrayUnion(...uploadedUrls),
       });
 
+      // Track media upload completion
+      try {
+        const { trackEvent } = await import("@/utils/analytics");
+        trackEvent("media_upload_completed", {
+          requestId: tokenData.requestId,
+          filesCount: uploadedUrls.length,
+          uploadMethod: "token_link",
+        });
+      } catch (err) {
+        console.error("Analytics tracking failed:", err);
+      }
+
       // Mark token as used
       try {
         const tokenRef = doc(db, "uploadTokens", token as string);

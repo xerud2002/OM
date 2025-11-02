@@ -39,7 +39,7 @@ export default function DashboardRedirect() {
     <LayoutWrapper>
       <div className="flex min-h-[40vh] flex-col items-center justify-center gap-4 text-center">
         <LoadingSpinner />
-        <p className="text-sm text-gray-500">Se încarcă panoul tău personalizat…</p>
+        <p className="text-sm text-gray-600">Se încarcă panoul tău personalizat…</p>
       </div>
     </LayoutWrapper>
   );
