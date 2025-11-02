@@ -26,8 +26,8 @@ import { maskName } from "@/utils/masking";
 import { onCompanyUnlocks, unlockContact } from "@/utils/unlockHelpers";
 import { sendOfferMessage } from "@/utils/messagesHelpers";
 import { FileText } from "lucide-react";
-import JobSheetModal from "./JobSheetModal";
-import Alert from "@/components/ui/Alert";
+import JobSheetModal from "@/components/company/JobSheetModal";
+// import Alert from "@/components/ui/Alert"; // TODO: Apply to unlock contact boxes
 
 // Types
 export type MovingRequest = {
@@ -255,24 +255,19 @@ function OfferItem({
   );
 }
 
-function JobSheetButton({ request }: { request: MovingRequest }) {
-  const [showModal, setShowModal] = useState(false);
-
+function JobSheetButton({ onClick }: { request: MovingRequest; onClick: () => void }) {
   return (
-    <>
-      <button
-        onClick={(e) => {
-          e.stopPropagation();
-          setShowModal(true);
-        }}
-        className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
-        title="Vizualizează Job Sheet"
-      >
-        <FileText size={14} />
-        Job Sheet
-      </button>
-      <JobSheetModal request={request} isOpen={showModal} onClose={() => setShowModal(false)} />
-    </>
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
+      className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
+      title="Vizualizează Job Sheet"
+    >
+      <FileText size={14} />
+      Job Sheet
+    </button>
   );
 }
 
@@ -459,6 +454,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   // Unlock state management
   const [unlockMap, setUnlockMap] = useState<Record<string, boolean>>({});
   const [unlockingId, setUnlockingId] = useState<string | null>(null);
+
+  // Job Sheet modal state
+  const [jobSheetRequest, setJobSheetRequest] = useState<MovingRequest | null>(null);
+  const [showJobSheet, setShowJobSheet] = useState(false);
 
   // Auth (if not provided by parent)
   useEffect(() => {
@@ -672,7 +671,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                         </span>
                       )}
                     </div>
-                    <JobSheetButton request={r} />
+                    <JobSheetButton request={r} onClick={() => { setJobSheetRequest(r); setShowJobSheet(true); }} />
                   </div>
 
                   {/* Status Badge */}
@@ -800,6 +799,18 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
           </button>
         </div>
       )}
-    </div>
+
+
+      {/* Job Sheet Modal - Rendered at top level */}
+      {jobSheetRequest && (
+        <JobSheetModal
+          request={jobSheetRequest}
+          isOpen={showJobSheet}
+          onClose={() => {
+            setShowJobSheet(false);
+            setJobSheetRequest(null);
+          }}
+        />
+      )}    </div>
   );
 }

@@ -65,8 +65,8 @@ export default function MessagesView({ requests, userId, userName }: MessagesVie
           const offer = { id: offerDoc.id, ...offerDoc.data() } as Offer;
 
           // Subscribe to messages for this offer
-          const unsub = onOfferMessages(request.id, offer.id, (msgs) => {
-            const unreadCount = msgs.filter((m) => !m.read && m.senderId !== userId).length;
+          const unsub = onOfferMessages(request.id, offer.id, (msgs: Message[]) => {
+            const unreadCount = msgs.filter((m: Message) => !m.read && m.senderId !== userId).length;
 
             setOffersWithMessages((prev) => {
               const existing = prev.find((item) => item.offer.id === offer.id);
@@ -104,7 +104,7 @@ export default function MessagesView({ requests, userId, userName }: MessagesVie
     const unsub = onOfferMessages(
       selectedConversation.request.id,
       selectedConversation.offer.id,
-      (msgs) => {
+      (msgs: Message[]) => {
         setMessages(msgs);
       }
     );

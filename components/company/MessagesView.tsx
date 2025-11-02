@@ -147,7 +147,7 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
     const unsub = onOfferMessages(
       selectedConversation.requestId,
       selectedConversation.offer.id,
-      (msgs) => {
+      (msgs: Message[]) => {
         setMessages(msgs);
       }
     );
