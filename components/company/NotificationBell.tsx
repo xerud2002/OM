@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, X, Check, User, MessageSquare, FileText, CheckCircle, Image } from "lucide-react";
+import { Bell, X, Check, User, MessageSquare, FileText, CheckCircle, Image as ImageIcon } from "lucide-react";
 import { db } from "@/services/firebase";
 import { collection, query, orderBy, onSnapshot, updateDoc, doc } from "firebase/firestore";
 import { Notification } from "@/types";
@@ -102,15 +102,6 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  const markAsRead = async (notificationId: string) => {
-    try {
-      const notifRef = doc(db, "companies", companyId, "notifications", notificationId);
-      await updateDoc(notifRef, { read: true });
-    } catch (error) {
-      console.error("Error marking notification as read:", error);
-    }
-  };
-
   const markGroupAsRead = async (group: GroupedNotification) => {
     try {
       const promises = group.notifications
@@ -184,7 +175,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
       case "offer_accepted":
         return <CheckCircle size={16} className="text-emerald-600" />;
       case "media_uploaded":
-        return <Image size={16} className="text-amber-600" />;
+        return <ImageIcon size={16} className="text-amber-600" />;
       default:
         return <Bell size={16} className="text-gray-600" />;
     }
@@ -335,7 +326,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                               )}
                               {group.summary.media > 0 && (
                                 <div className="flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700">
-                                  <Image size={12} />
+                                  <ImageIcon size={12} />
                                   <span>{group.summary.media}</span>
                                 </div>
                               )}

@@ -1,13 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CheckCircle2, Clock, PackageCheck, MessageSquare } from "lucide-react";
+import { CheckCircle2, PackageCheck, MessageSquare } from "lucide-react";
 
 type TimelineProps = {
   createdAt?: any;
   offersCount: number;
   acceptedOfferExists?: boolean;
-  hasMessages?: boolean;
   status?: "active" | "closed" | "paused" | "cancelled";
 };
 
@@ -15,7 +14,6 @@ export default function RequestTimeline({
   createdAt,
   offersCount,
   acceptedOfferExists,
-  hasMessages,
   status,
 }: TimelineProps) {
   const steps = [

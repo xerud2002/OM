@@ -15,7 +15,7 @@ type FilterState = {
 };
 
 type CompanyFiltersProps = {
-  onFiltersChange: (filters: FilterState) => void;
+  onFiltersChange: Function;
   activeFiltersCount?: number;
 };
 

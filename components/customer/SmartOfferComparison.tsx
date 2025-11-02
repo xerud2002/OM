@@ -22,8 +22,8 @@ type Offer = {
 
 type SmartOfferComparisonProps = {
   offers: Offer[];
-  onAccept: (offerId: string) => void;
-  onDecline: (offerId: string) => void;
+  onAccept: Function;
+  onDecline: Function;
 };
 
 export default function SmartOfferComparison({
