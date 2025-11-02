@@ -114,7 +114,7 @@ export async function processPayment(
 ): Promise<{ success: boolean; transactionId?: string; error?: string }> {
   // TODO: Integrate with payment gateway (Stripe, PayPal, etc.)
   // For now, just simulate success
-  console.log("Payment simulation:", { requestId, companyId, amount });
+  console.warn("Payment simulation:", { requestId, companyId, amount });
   
   return {
     success: true,

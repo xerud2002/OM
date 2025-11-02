@@ -166,4 +166,4 @@ content = content.replace(oldSuccessAlert, newSuccessAlert);
 // Write the file
 fs.writeFileSync('components/company/RequestsView.tsx', content, 'utf8');
 
-console.log('✅ RequestsView.tsx updated successfully!');
+console.warn('RequestsView.tsx updated successfully!');
