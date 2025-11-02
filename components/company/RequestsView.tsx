@@ -33,6 +33,7 @@ export type MovingRequest = {
   moveDate?: string;
   details?: string;
   createdAt?: any;
+  requestCode?: string;
 };
 
 export type CompanyUser = {
@@ -482,9 +483,9 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                     <h3 className="text-lg font-semibold text-emerald-700">
                       {r.customerName || "Client anonim"}
                     </h3>
-                    {(r as any).requestCode && (
+                    {r.requestCode && (
                       <span className="inline-flex items-center rounded-md bg-gradient-to-r from-emerald-100 to-sky-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
-                        {(r as any).requestCode}
+                        {r.requestCode}
                       </span>
                     )}
                   </div>
