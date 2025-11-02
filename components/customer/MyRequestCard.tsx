@@ -90,6 +90,16 @@ export default function MyRequestCard({
         <div className="flex items-start justify-between gap-4">
           {/* Main content */}
           <div className="min-w-0 flex-1">
+            {/* Request Code */}
+            {request.requestCode && (
+              <div className="mb-2">
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-100 to-sky-100 px-3 py-1 text-sm font-bold text-emerald-700">
+                  <span className="text-xs">📋</span>
+                  {request.requestCode}
+                </span>
+              </div>
+            )}
+
             {/* Route */}
             <div className="mb-3 flex items-center gap-2">
               <MapPin 

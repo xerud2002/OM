@@ -478,9 +478,16 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 )}
 
                 <div>
-                  <h3 className="mb-1 text-lg font-semibold text-emerald-700">
-                    {r.customerName || "Client anonim"}
-                  </h3>
+                  <div className="mb-2 flex items-center gap-2">
+                    <h3 className="text-lg font-semibold text-emerald-700">
+                      {r.customerName || "Client anonim"}
+                    </h3>
+                    {(r as any).requestCode && (
+                      <span className="inline-flex items-center rounded-md bg-gradient-to-r from-emerald-100 to-sky-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                        {(r as any).requestCode}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
