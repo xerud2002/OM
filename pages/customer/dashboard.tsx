@@ -118,10 +118,13 @@ export default function CustomerDashboard() {
   // Two-column layout: we render selected content on the right; no modal needed
   const [loading, setLoading] = useState<boolean>(true);
 
-  const totalOffers = useMemo(
-    () => Object.values(offersByRequest).flat().length,
-    [offersByRequest]
-  );
+  const totalOffers = useMemo(() => {
+    const offers = Object.values(offersByRequest).flat();
+    // Debug: log what's being counted
+    console.log("Debug - offersByRequest:", offersByRequest);
+    console.log("Debug - total offers:", offers.length, offers);
+    return offers.length;
+  }, [offersByRequest]);
   // Aggregated no longer needed for UI; keep if future export requires it
   // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
@@ -203,7 +206,11 @@ export default function CustomerDashboard() {
   useEffect(() => {
     const unsubAuth = onAuthChange((u: any) => {
       setUser(u);
-      if (!u) return;
+      if (!u) {
+        // Clear offers when user logs out
+        setOffersByRequest({});
+        return;
+      }
       const q = query(
         collection(db, "requests"),
         where("customerId", "==", u.uid),
@@ -614,6 +621,7 @@ export default function CustomerDashboard() {
               <div className="flex items-center gap-2">
                 <Inbox size={18} />
                 <span>Oferte</span>
+                {/* Only show badge if there are actual offers */}
                 {totalOffers > 0 && (
                   <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-600">
                     {totalOffers}
