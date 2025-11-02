@@ -292,12 +292,21 @@ export default function JobSheetModal({ request, isOpen, onClose }: JobSheetModa
                         minute: "2-digit",
                       })}
                     </p>
-                    <button
-                      onClick={onClose}
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2 font-medium text-gray-700 transition-colors hover:bg-gray-100 sm:w-auto"
-                    >
-                      Închide
-                    </button>
+                    <div className="flex w-full items-center justify-end gap-2 sm:w-auto">
+                      <button
+                        onClick={handlePrint}
+                        className="rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
+                        title="Printează Job Sheet"
+                      >
+                        Printează
+                      </button>
+                      <button
+                        onClick={onClose}
+                        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-700"
+                      >
+                        Închide
+                      </button>
+                    </div>
                   </div>
                 </div>
               </motion.div>

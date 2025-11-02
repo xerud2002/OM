@@ -28,6 +28,7 @@ import { sendOfferMessage } from "@/utils/messagesHelpers";
 import { FileText } from "lucide-react";
 import JobSheetModal from "@/components/company/JobSheetModal";
 import Alert from "@/components/ui/Alert";
+import { toast } from "sonner";
 
 // Types
 export type MovingRequest = {
@@ -724,8 +725,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                               try {
                                 await unlockContact(r.id, company.uid);
                                 trackEvent("contact_unlocked", { requestId: r.id, companyId: company.uid });
+                                toast.success("Contactele au fost deblocate.");
                               } catch (err) {
                                 console.error("Unlock failed:", err);
+                                toast.error("Nu am putut debloca contactele. Încearcă din nou.");
                               } finally {
                                 setUnlockingId(null);
                               }
