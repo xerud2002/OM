@@ -110,6 +110,7 @@ export type Offer = {
   companyName: string;
   price: number;
   message: string;
+  proposedDate?: string; // YYYY-MM-DD format
   status?: "pending" | "accepted" | "declined" | "rejected";
   createdAt: Timestamp;
 };

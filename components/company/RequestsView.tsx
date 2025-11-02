@@ -21,6 +21,9 @@ import { addOffer } from "@/utils/firestoreHelpers";
 import { formatMoveDateDisplay } from "@/utils/date";
 import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import { maskName } from "@/utils/masking";
+import { onCompanyUnlocks, unlockContact } from "@/utils/unlockHelpers";
+import { sendOfferMessage } from "@/utils/messagesHelpers";
 
 // Types
 export type MovingRequest = {
@@ -28,12 +31,14 @@ export type MovingRequest = {
   customerId: string;
   customerName?: string;
   customerEmail?: string;
+  phone?: string;
   fromCity: string;
   toCity: string;
   moveDate?: string;
   details?: string;
   createdAt?: any;
   requestCode?: string;
+  status?: "active" | "closed" | "paused" | "cancelled";
 };
 
 export type CompanyUser = {
@@ -48,6 +53,7 @@ export type Offer = {
   companyName: string;
   price: number;
   message: string;
+  proposedDate?: string;
   status?: "pending" | "accepted" | "declined" | "rejected";
   createdAt?: any;
 };
@@ -57,16 +63,21 @@ function OfferItem({
   offer,
   requestId,
   company,
+  unlocked,
 }: {
   offer: Offer;
   requestId: string;
   company: CompanyUser;
+  unlocked: boolean;
 }) {
   const [isEditing, setIsEditing] = useState(false);
   const [price, setPrice] = useState(offer.price.toString());
   const [message, setMessage] = useState(offer.message);
+  const [proposedDate, setProposedDate] = useState(offer.proposedDate || "");
   const [saving, setSaving] = useState(false);
   const [removing, setRemoving] = useState(false);
+  const [messageText, setMessageText] = useState("");
+  const [sendingMessage, setSendingMessage] = useState(false);
 
   const isOwn = company && offer.companyId === company.uid;
   const isPending = (offer.status ?? "pending") === "pending";
@@ -76,12 +87,36 @@ function OfferItem({
     setSaving(true);
     try {
       const offerRef = doc(db, "requests", requestId, "offers", offer.id);
-      await updateDoc(offerRef, { price: Number(price), message });
+      await updateDoc(offerRef, {
+        price: Number(price),
+        message,
+        proposedDate: proposedDate || null,
+      });
       setIsEditing(false);
     } catch (err) {
       console.error("Error updating offer:", err);
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!company || !messageText.trim()) return;
+    setSendingMessage(true);
+    try {
+      await sendOfferMessage(
+        requestId,
+        offer.id,
+        "company",
+        company.uid,
+        messageText,
+        company.displayName || company.email || "Companie"
+      );
+      setMessageText("");
+    } catch (err) {
+      console.error("Error sending message:", err);
+    } finally {
+      setSendingMessage(false);
     }
   };
 
@@ -111,11 +146,19 @@ function OfferItem({
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
+            placeholder="Preț (lei)"
+            className="w-full rounded border p-2 text-sm"
+          />
+          <input
+            type="date"
+            value={proposedDate}
+            onChange={(e) => setProposedDate(e.target.value)}
             className="w-full rounded border p-2 text-sm"
           />
           <textarea
             value={message}
             onChange={(e) => setMessage(e.target.value)}
+            placeholder="Mesaj"
             className="w-full rounded border p-2 text-sm"
           />
           <div className="flex gap-2">
@@ -140,6 +183,11 @@ function OfferItem({
             <span className="font-semibold text-emerald-700">{offer.companyName}</span>
             <span className="text-sm font-medium text-gray-700">💰 {offer.price} lei</span>
           </div>
+          {offer.proposedDate && (
+            <p className="mt-1 text-xs text-gray-600">
+              📅 Data propusă: {new Date(offer.proposedDate).toLocaleDateString("ro-RO")}
+            </p>
+          )}
           <div className="mt-1 flex items-center justify-between gap-2">
             <p className="text-sm text-gray-600">{offer.message}</p>
             <span
@@ -169,6 +217,34 @@ function OfferItem({
               </button>
             </div>
           )}
+
+          {/* Messaging UI - Only shown for own offers when unlocked */}
+          {isOwn && unlocked && (
+            <div className="mt-3 border-t border-emerald-200 pt-3">
+              <p className="mb-2 text-xs font-semibold text-gray-700">✉️ Trimite mesaj clientului</p>
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  value={messageText}
+                  onChange={(e) => setMessageText(e.target.value)}
+                  placeholder="Scrie mesajul tău..."
+                  className="flex-1 rounded border border-gray-300 px-2 py-1 text-sm focus:border-emerald-500 focus:outline-none"
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter" && !sendingMessage) {
+                      handleSendMessage();
+                    }
+                  }}
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={sendingMessage || !messageText.trim()}
+                  className="rounded bg-emerald-600 px-3 py-1 text-sm text-white hover:bg-emerald-700 disabled:bg-gray-400"
+                >
+                  {sendingMessage ? "..." : "Trimite"}
+                </button>
+              </div>
+            </div>
+          )}
         </>
       )}
     </motion.div>
@@ -179,10 +255,12 @@ function OfferList({
   requestId,
   company,
   onHasMine,
+  unlocked,
 }: {
   requestId: string;
   company: CompanyUser;
   onHasMine?: any;
+  unlocked: boolean;
 }) {
   const [offers, setOffers] = useState<Offer[]>([]);
   const [expanded, setExpanded] = useState(false);
@@ -222,7 +300,13 @@ function OfferList({
               <p className="text-sm italic text-gray-400">Nicio ofertă disponibilă momentan.</p>
             ) : (
               offers.map((offer) => (
-                <OfferItem key={offer.id} offer={offer} requestId={requestId} company={company} />
+                <OfferItem
+                  key={offer.id}
+                  offer={offer}
+                  requestId={requestId}
+                  company={company}
+                  unlocked={unlocked}
+                />
               ))
             )}
           </motion.div>
@@ -235,6 +319,7 @@ function OfferList({
 function OfferForm({ requestId, company }: { requestId: string; company: CompanyUser }) {
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState("");
+  const [proposedDate, setProposedDate] = useState("");
   const [sending, setSending] = useState(false);
 
   const priceNum = Number(price);
@@ -250,12 +335,14 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
         companyName: company.displayName || company.email || "Companie",
         price: priceNum,
         message,
+        ...(proposedDate ? { proposedDate } : {}),
       });
       try {
         trackEvent("offer_submitted", { requestId, companyId: company.uid, price: priceNum });
       } catch {}
       setPrice("");
       setMessage("");
+      setProposedDate("");
     } catch (err) {
       console.error("Error sending offer:", err);
     } finally {
@@ -275,6 +362,13 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
           isPriceValid ? "focus:ring-emerald-500" : "border-rose-300 focus:ring-rose-400"
         }`}
         required
+      />
+      <input
+        type="date"
+        placeholder="Data propusă pentru mutare"
+        value={proposedDate}
+        onChange={(e) => setProposedDate(e.target.value)}
+        className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
       />
       <textarea
         placeholder="Mesaj pentru client"
@@ -311,6 +405,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  
+  // Unlock state management
+  const [unlockMap, setUnlockMap] = useState<Record<string, boolean>>({});
+  const [unlockingId, setUnlockingId] = useState<string | null>(null);
 
   // Auth (if not provided by parent)
   useEffect(() => {
@@ -318,6 +416,15 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     const unsubAuth = onAuthChange((u) => setCompany(u));
     return () => unsubAuth();
   }, [companyFromParent]);
+
+  // Subscribe to unlock records for this company
+  useEffect(() => {
+    if (!company?.uid) return;
+    const unsub = onCompanyUnlocks(company.uid, (unlocks: Record<string, boolean>) => {
+      setUnlockMap(unlocks);
+    });
+    return () => unsub();
+  }, [company?.uid]);
 
   useEffect(() => {
     const q = query(
@@ -481,7 +588,9 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 <div>
                   <div className="mb-2 flex items-center gap-2">
                     <h3 className="text-lg font-semibold text-emerald-700">
-                      {r.customerName || "Client anonim"}
+                      {unlockMap[r.id]
+                        ? r.customerName || "Client anonim"
+                        : maskName(r.customerName)}
                     </h3>
                     {r.requestCode && (
                       <span className="inline-flex items-center rounded-md bg-gradient-to-r from-emerald-100 to-sky-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
@@ -489,11 +598,89 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                       </span>
                     )}
                   </div>
+
+                  {/* Status Badge */}
+                  {r.status && r.status !== "active" && (
+                    <span
+                      className={`mb-2 inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium ${
+                        r.status === "closed"
+                          ? "bg-gray-100 text-gray-700"
+                          : r.status === "paused"
+                            ? "bg-amber-100 text-amber-700"
+                            : "bg-rose-100 text-rose-700"
+                      }`}
+                    >
+                      {r.status === "closed"
+                        ? "Închisă"
+                        : r.status === "paused"
+                          ? "În așteptare"
+                          : "Anulată"}
+                    </span>
+                  )}
+
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
-                  <p className="text-sm text-gray-500">Mutare: {(() => { const d = formatMoveDateDisplay(r as any, { month: "short" }); return d && d !== "-" ? d : "-"; })()}</p>
+                  <p className="text-sm text-gray-500">
+                    Mutare: {(() => {
+                      const d = formatMoveDateDisplay(r as any, { month: "short" });
+                      return d && d !== "-" ? d : "-";
+                    })()}
+                  </p>
                   <p className="mt-2 text-sm text-gray-600">{r.details}</p>
+
+                  {/* Contact Details - Hidden by default, shown after unlock */}
+                  {!unlockMap[r.id] ? (
+                    <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
+                      <p className="mb-2 text-xs font-medium text-amber-800">
+                        🔒 Detaliile complete de contact sunt ascunse
+                      </p>
+                      <p className="mb-3 text-xs text-amber-700">
+                        Deblochează pentru a vedea numele complet, email și telefon
+                      </p>
+                      <button
+                        onClick={async () => {
+                          if (!company?.uid) return;
+                          if (
+                            !confirm(
+                              "Vrei să deblochezi detaliile de contact pentru această cerere? (simulare plată)"
+                            )
+                          )
+                            return;
+                          setUnlockingId(r.id);
+                          try {
+                            await unlockContact(r.id, company.uid);
+                            trackEvent("contact_unlocked", { requestId: r.id, companyId: company.uid });
+                          } catch (err) {
+                            console.error("Unlock failed:", err);
+                          } finally {
+                            setUnlockingId(null);
+                          }
+                        }}
+                        disabled={unlockingId === r.id}
+                        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:bg-gray-400"
+                      >
+                        {unlockingId === r.id ? "Se deblochează..." : "🔓 Deblochează contactele"}
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
+                      <p className="mb-2 text-xs font-semibold text-emerald-800">
+                        ✅ Detalii complete de contact
+                      </p>
+                      <div className="space-y-1 text-sm text-emerald-900">
+                        <p>
+                          <span className="font-medium">Nume:</span> {r.customerName || "—"}
+                        </p>
+                        <p>
+                          <span className="font-medium">Email:</span> {r.customerEmail || "—"}
+                        </p>
+                        <p>
+                          <span className="font-medium">Telefon:</span> {r.phone || "—"}
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {company ? (
@@ -501,6 +688,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                     <OfferList
                       requestId={r.id}
                       company={company}
+                      unlocked={!!unlockMap[r.id]}
                       onHasMine={(has: boolean) =>
                         setHasMineMap((prev) => ({ ...prev, [r.id]: has }))
                       }
