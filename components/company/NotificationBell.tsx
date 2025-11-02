@@ -29,6 +29,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
 
   useEffect(() => {
     if (!companyId) return;
@@ -187,6 +188,18 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
       default:
         return <Bell size={16} className="text-gray-600" />;
     }
+  };
+
+  const toggleGroupExpansion = (groupKey: string) => {
+    setExpandedGroups((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(groupKey)) {
+        newSet.delete(groupKey);
+      } else {
+        newSet.add(groupKey);
+      }
+      return newSet;
+    });
   };
 
   return (
@@ -354,29 +367,44 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                               )}
                             </div>
 
-                            {/* Individual notifications (collapsed) */}
-                            <details className="mt-2">
-                              <summary className="cursor-pointer text-xs font-medium text-gray-500 hover:text-gray-700">
+                            {/* Individual notifications (expandable) */}
+                            <div className="mt-2">
+                              <button
+                                onClick={() => toggleGroupExpansion(`${group.customerId}_${group.requestId}`)}
+                                className="flex w-full cursor-pointer items-center gap-1 text-xs font-medium text-gray-500 transition-colors hover:text-gray-700"
+                              >
+                                <span className="text-base">
+                                  {expandedGroups.has(`${group.customerId}_${group.requestId}`) ? "▼" : "▶"}
+                                </span>
                                 Vezi toate ({group.notifications.length})
-                              </summary>
-                              <div className="mt-2 space-y-1 border-l-2 border-gray-200 pl-3">
-                                {group.notifications.map((notif) => (
-                                  <div
-                                    key={notif.id}
-                                    className="flex items-start gap-2 rounded-md p-2 text-xs hover:bg-gray-50"
-                                  >
-                                    {getNotificationIcon(notif.type)}
-                                    <div className="min-w-0 flex-1">
-                                      <p className="font-medium text-gray-700">{notif.title}</p>
-                                      <p className="text-gray-500">{notif.message}</p>
+                              </button>
+                              
+                              {expandedGroups.has(`${group.customerId}_${group.requestId}`) && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: 0.2 }}
+                                  className="mt-2 space-y-1 border-l-2 border-gray-200 pl-3"
+                                >
+                                  {group.notifications.map((notif) => (
+                                    <div
+                                      key={notif.id}
+                                      className="flex items-start gap-2 rounded-md p-2 text-xs hover:bg-gray-50"
+                                    >
+                                      {getNotificationIcon(notif.type)}
+                                      <div className="min-w-0 flex-1">
+                                        <p className="font-medium text-gray-700">{notif.title}</p>
+                                        <p className="text-gray-500">{notif.message}</p>
+                                      </div>
+                                      {!notif.read && (
+                                        <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
+                                      )}
                                     </div>
-                                    {!notif.read && (
-                                      <div className="h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-500" />
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </details>
+                                  ))}
+                                </motion.div>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
