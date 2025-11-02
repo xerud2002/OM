@@ -7,7 +7,29 @@ import {
   query,
   orderBy,
   where,
+  doc,
+  runTransaction,
+  getDoc,
 } from "firebase/firestore";
+
+// Generate a human-friendly sequential request code like REQ-141629
+async function generateRequestCode(): Promise<string> {
+  const countersRef = doc(db, "meta", "counters");
+  const nextSeq = await runTransaction(db, async (tx) => {
+    const snap = await tx.get(countersRef);
+    let current = 0;
+    if (snap.exists()) {
+      const data: any = snap.data() || {};
+      current = Number(data.requestSeq || 0);
+    }
+    // Start from a pleasant baseline if first time; choose 141000
+    const next = current > 0 ? current + 1 : 141000;
+    tx.set(countersRef, { requestSeq: next }, { merge: true });
+    return next;
+  });
+  const six = String(nextSeq).padStart(6, "0");
+  return `REQ-${six}`;
+}
 
 export async function createRequest(data: any) {
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
@@ -55,8 +77,12 @@ export async function createRequest(data: any) {
     clean.toAddress = parts.filter(Boolean).join(', ');
   }
 
+  // Generate friendly code for this request
+  const requestCode = await generateRequestCode();
+
   const docRef = await addDoc(collection(db, "requests"), {
     ...clean,
+    requestCode,
     // Use serverTimestamp for consistent server-side timestamps
     createdAt: serverTimestamp(),
   });
@@ -79,10 +105,18 @@ export async function getAllRequests() {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 export async function addOffer(requestId: string, data: any) {
-  // Persist requestId on the subdocument so collectionGroup queries can reference it later
+  // Persist requestId and requestCode on the subdocument so collectionGroup queries can reference it later
+  let requestCode: string | undefined = undefined;
+  try {
+    const reqRef = doc(db, "requests", requestId);
+    const snap = await getDoc(reqRef);
+    requestCode = (snap.exists() ? (snap.data() as any).requestCode : undefined) as string | undefined;
+  } catch {}
+
   await addDoc(collection(db, "requests", requestId, "offers"), {
     ...data,
     requestId,
+    ...(requestCode ? { requestCode } : {}),
     createdAt: serverTimestamp(),
   });
 }

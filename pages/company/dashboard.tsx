@@ -317,8 +317,7 @@ export default function CompanyDashboard() {
                           <div className="mb-3 flex items-start justify-between">
                             <div>
                               <p className="mb-1 text-lg font-bold text-gray-900">
-                                Cerere #
-                                {offer.requestId ? String(offer.requestId).slice(0, 8) : "—"}
+                                {offer.requestCode ? offer.requestCode : (offer.requestId ? `REQ-${String(offer.requestId).slice(0, 6).toUpperCase()}` : "—")}
                               </p>
                               <div className="flex items-center gap-2">
                                 <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">

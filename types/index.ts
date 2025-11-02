@@ -75,6 +75,8 @@ export type MovingRequest = {
   moveDateStart?: string; // YYYY-MM-DD
   moveDateEnd?: string;   // YYYY-MM-DD (only for range)
   moveDateFlexDays?: number; // only for flexible
+  // Friendly tracking code
+  requestCode?: string;
   details?: string;
   rooms?: number | string;
   volumeM3?: number;
@@ -103,6 +105,7 @@ export type MovingRequest = {
 export type Offer = {
   id: string;
   requestId: string;
+  requestCode?: string;
   companyId: string;
   companyName: string;
   price: number;
