@@ -1,9 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { onOfferMessages, sendOfferMessage, Message } from "@/utils/messagesHelpers";
+import {
+  onOfferMessages,
+  sendOfferMessage,
+  Message,
+  onTypingPresence,
+  setTypingStatus,
+  TypingPresence,
+} from "@/utils/messagesHelpers";
 import { MessageCircle, Send } from "lucide-react";
+import TypingDots from "@/components/ui/TypingDots";
 // no direct Firestore reads here; we use server APIs to avoid rules issues
 
 type Offer = {
@@ -44,6 +52,11 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
   const [messageText, setMessageText] = useState("");
   const [sending, setSending] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [otherTyping, setOtherTyping] = useState<{ active: boolean; name?: string }>(
+    { active: false, name: undefined }
+  );
+  const typingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const stopTypingTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Load all company's offers via server API and attach message listeners
   useEffect(() => {
@@ -141,6 +154,7 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
   useEffect(() => {
     if (!selectedConversation) {
       setMessages([]);
+      setOtherTyping({ active: false, name: undefined });
       return;
     }
 
@@ -154,6 +168,31 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
 
     return () => unsub();
   }, [selectedConversation]);
+
+  // Subscribe to typing presence for selected conversation (customer is the other side)
+  useEffect(() => {
+    if (!selectedConversation) return;
+    const { requestId, offer, customerName } = selectedConversation;
+
+    const unsub = onTypingPresence(
+      requestId,
+      offer.id,
+      (list: TypingPresence[]) => {
+        const now = Date.now();
+        const fresh = list.filter((p) => {
+          const t = p.updatedAt?.toMillis ? p.updatedAt.toMillis() : 0;
+          return p.isTyping && now - t < 7000 && p.userId !== companyId;
+        });
+        if (fresh.length > 0) {
+          const name = fresh[0]?.userName || customerName || "Client";
+          setOtherTyping({ active: true, name });
+        } else {
+          setOtherTyping({ active: false, name: undefined });
+        }
+      }
+    );
+    return () => unsub();
+  }, [selectedConversation, companyId]);
 
   const handleSendMessage = async () => {
     if (!selectedConversation || !messageText.trim()) return;
@@ -169,12 +208,45 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
         companyName
       );
       setMessageText("");
+      try {
+        await setTypingStatus(
+          selectedConversation.requestId,
+          selectedConversation.offer.id,
+          companyId,
+          "company",
+          false,
+          companyName
+        );
+      } catch {}
     } catch (err) {
       console.error("Error sending message:", err);
       alert("A apărut o eroare la trimiterea mesajului.");
     } finally {
       setSending(false);
     }
+  };
+
+  // Handle local typing status updates (debounced)
+  const handleTypingChange = (val: string) => {
+    setMessageText(val);
+    if (!selectedConversation) return;
+    const { requestId, offer } = selectedConversation;
+
+    if (!typingTimeoutRef.current) {
+      setTypingStatus(requestId, offer.id, companyId, "company", true, companyName).catch(
+        () => {}
+      );
+      typingTimeoutRef.current = setTimeout(() => {
+        typingTimeoutRef.current = null;
+      }, 1500);
+    }
+
+    if (stopTypingTimeoutRef.current) clearTimeout(stopTypingTimeoutRef.current);
+    stopTypingTimeoutRef.current = setTimeout(() => {
+      setTypingStatus(requestId, offer.id, companyId, "company", false, companyName).catch(
+        () => {}
+      );
+    }, 2000);
   };
 
   // Filter only offers with messages
@@ -314,7 +386,7 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
                 <input
                   type="text"
                   value={messageText}
-                  onChange={(e) => setMessageText(e.target.value)}
+                  onChange={(e) => handleTypingChange(e.target.value)}
                   placeholder="Scrie mesajul tău..."
                   className="flex-1 rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-emerald-500 focus:outline-none"
                   onKeyPress={(e) => {
@@ -337,6 +409,13 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
           </>
         )}
       </div>
+      {selectedConversation && otherTyping.active && (
+        <div className="-mt-3 lg:col-span-3">
+          <div className="px-4 pb-3">
+            <TypingDots label={`${otherTyping.name || "Cealaltă parte"} tastează`} />
+          </div>
+        </div>
+      )}
     </div>
   );
 }

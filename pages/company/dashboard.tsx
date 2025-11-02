@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
+import OnboardingTour from "@/components/ui/OnboardingTour";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import {
@@ -193,6 +194,31 @@ export default function CompanyDashboard() {
   return (
     <RequireRole allowedRole="company">
       <LayoutWrapper>
+        <OnboardingTour
+          id="company_dashboard_v1"
+          steps={[
+            {
+              title: "Monitorizează ofertele",
+              description:
+                "În tab-ul 'Ofertele mele' vezi rapid statusul, performanța și poți edita sau retrage oferte.",
+            },
+            {
+              title: "Caută și filtrează",
+              description:
+                "Folosește căutarea și filtrul de status pentru a găsi rapid ofertele relevante.",
+            },
+            {
+              title: "Cereri clienți",
+              description:
+                "În tab-ul 'Cereri clienți' vezi toate solicitările disponibile și poți răspunde cu oferte.",
+            },
+            {
+              title: "Mesaje în timp real",
+              description:
+                "Tab-ul 'Mesaje' îți arată conversațiile; vezi indicator de tastare și istoric în timp real.",
+            },
+          ]}
+        />
         <section className="mx-auto max-w-7xl px-4 py-10">
           {/* Hero Header */}
           <div className="mb-10 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-sky-600 p-8 text-white shadow-xl">

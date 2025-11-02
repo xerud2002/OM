@@ -4,7 +4,17 @@
  */
 
 import { db } from "@/services/firebase";
-import { collection, addDoc, serverTimestamp, query, orderBy, onSnapshot, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  serverTimestamp,
+  query,
+  orderBy,
+  onSnapshot,
+  getDocs,
+  doc,
+  setDoc,
+} from "firebase/firestore";
 
 export type Message = {
   id: string;
@@ -14,6 +24,14 @@ export type Message = {
   text: string;
   createdAt: any; // Firestore Timestamp
   read?: boolean;
+};
+
+export type TypingPresence = {
+  userId: string;
+  userType: "company" | "customer";
+  userName?: string;
+  isTyping: boolean;
+  updatedAt: any; // Firestore Timestamp
 };
 
 /**
@@ -145,6 +163,61 @@ export function onOfferMessages(
     (err) => {
       if (onError) onError(err);
     }
+  );
+}
+
+/**
+ * Update the typing status for the current user in an offer conversation.
+ * Stored under: /requests/{requestId}/offers/{offerId}/typing/{userId}
+ */
+export async function setTypingStatus(
+  requestId: string,
+  offerId: string,
+  userId: string,
+  userType: "company" | "customer",
+  isTyping: boolean,
+  userName?: string
+) {
+  const ref = doc(db, "requests", requestId, "offers", offerId, "typing", userId);
+  await setDoc(
+    ref,
+    {
+      userId,
+      userType,
+      userName: userName || null,
+      isTyping,
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
+}
+
+/**
+ * Listen to typing presence for an offer. Emits array of TypingPresence docs.
+ */
+export function onTypingPresence(
+  requestId: string,
+  offerId: string,
+  callback: Function,
+  onError?: Function
+) {
+  const typingRef = collection(db, "requests", requestId, "offers", offerId, "typing");
+  const q = query(typingRef);
+  return onSnapshot(
+    q,
+    (snap) => {
+      const list = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
+      // Normalize to TypingPresence shape
+      const result: TypingPresence[] = list.map((it) => ({
+        userId: it.userId || it.id,
+        userType: it.userType,
+        userName: it.userName,
+        isTyping: !!it.isTyping,
+        updatedAt: it.updatedAt,
+      }));
+      callback(result);
+    },
+    (err) => onError && onError(err)
   );
 }
 

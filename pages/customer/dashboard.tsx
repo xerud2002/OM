@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import OnboardingTour from "@/components/ui/OnboardingTour";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
@@ -522,6 +523,31 @@ export default function CustomerDashboard() {
   return (
     <RequireRole allowedRole="customer">
       <LayoutWrapper>
+        <OnboardingTour
+          id="customer_dashboard_v1"
+          steps={[
+            {
+              title: "Creează rapid o cerere",
+              description:
+                "Apasă 'Cerere nouă' pentru a completa formularul. Poți salva în timp real și reveni mai târziu.",
+            },
+            {
+              title: "Vezi cererile tale",
+              description:
+                "În tab-ul 'Cererile mele' poți urmări statusul, timeline-ul și poți face acțiuni rapide (pauză, arhivează).",
+            },
+            {
+              title: "Compară ofertele",
+              description:
+                "În 'Oferte' vezi toate ofertele pentru o cerere și le poți compara ușor înainte de a alege.",
+            },
+            {
+              title: "Discută în timp real",
+              description:
+                "Tab-ul 'Mesaje' îți arată conversațiile cu firmele. Vezi când celălalt tastează în timp real.",
+            },
+          ]}
+        />
         {/* eslint-disable-next-line tailwindcss/classnames-order */}
         <section className="mx-auto max-w-[1400px] px-0 sm:px-4 pt-8 pb-24 md:pb-8">
           {/* Modern Header */}
