@@ -34,6 +34,12 @@ export default function CompanyDashboard() {
   const [editPrice, setEditPrice] = useState<string>("");
   const [editMessage, setEditMessage] = useState<string>("");
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [now, setNow] = useState<number>(() => Date.now());
+
+  useEffect(() => {
+    const t = setInterval(() => setNow(Date.now()), 60_000);
+    return () => clearInterval(t);
+  }, []);
 
   // Track logged-in company
   useEffect(() => {
@@ -100,6 +106,58 @@ export default function CompanyDashboard() {
   const accepted = offers.filter((o) => o.status === "accepted").length;
   const pending = offers.filter((o) => !o.status || o.status === "pending").length;
   const rejected = offers.filter((o) => o.status === "rejected" || o.status === "declined").length;
+
+  // Derived metrics
+  const pricedOffers = useMemo(() => offers.filter((o) => typeof o.price === "number"), [offers]);
+  const totalRevenue = useMemo(
+    () => offers.reduce((sum, o) => sum + (o.status === "accepted" && typeof o.price === "number" ? o.price : 0), 0),
+    [offers]
+  );
+  const avgOfferValue = useMemo(() => {
+    if (pricedOffers.length === 0) return 0;
+    const sum = pricedOffers.reduce((s, o) => s + (o.price as number), 0);
+    return Math.round((sum / pricedOffers.length) * 100) / 100;
+  }, [pricedOffers]);
+  const winRate = useMemo(() => (total > 0 ? Math.round((accepted / total) * 100) : 0), [accepted, total]);
+
+  // Trend (last 7 days)
+  const { dailyCounts, dailyRevenue } = useMemo(() => {
+    const days = 7;
+    const startOfDay = (d: Date) => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+    const today = startOfDay(new Date(now));
+    const buckets = Array.from({ length: days }, (_, i) => new Date(today.getTime() - (days - 1 - i) * 86400000));
+    const counts = new Array(days).fill(0);
+    const revenue = new Array(days).fill(0);
+
+    offers.forEach((o) => {
+      const ts: any = (o.createdAt as any) || null;
+      const created: Date | null = ts?.toDate ? ts.toDate() : (typeof ts === "number" ? new Date(ts) : null);
+      if (!created) return;
+      const d = startOfDay(created).getTime();
+      const idx = buckets.findIndex((bd) => bd.getTime() === d);
+      if (idx >= 0) {
+        counts[idx] += 1;
+        if (o.status === "accepted" && typeof o.price === "number") revenue[idx] += o.price;
+      }
+    });
+    return { dailyCounts: counts, dailyRevenue: revenue };
+  }, [offers, now]);
+
+  // Tiny sparkline component
+  function Sparkline({ data, width = 220, height = 48, stroke = "#10b981" }: { data: number[]; width?: number; height?: number; stroke?: string }) {
+    const max = Math.max(1, ...data);
+    const step = data.length > 1 ? width / (data.length - 1) : width;
+    const points = data.map((v, i) => {
+      const x = i * step;
+      const y = height - (v / max) * height;
+      return `${x},${y}`;
+    });
+    return (
+      <svg width={width} height={height} viewBox={`0 0 ${width} ${height}`} className="overflow-visible">
+        <polyline fill="none" stroke={stroke} strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" points={points.join(" ")} />
+      </svg>
+    );
+  }
 
   // Edit/delete actions for an offer
   async function updateOffer(offer: any, fields: Partial<any>) {
@@ -182,7 +240,7 @@ export default function CompanyDashboard() {
           {activeTab === "offers" && (
             <>
               {/* Stats Cards */}
-              <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+              <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-6">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -238,6 +296,93 @@ export default function CompanyDashboard() {
                     <p className="text-4xl font-bold">{rejected}</p>
                   </div>
                 </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.4 }}
+                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-indigo-500 to-indigo-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
+                >
+                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
+                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
+                  <div className="relative">
+                    <p className="mb-1 text-sm font-medium text-indigo-100">Venit (acceptate)</p>
+                    <p className="text-4xl font-bold">{new Intl.NumberFormat("ro-RO").format(totalRevenue)} lei</p>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-fuchsia-500 to-fuchsia-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
+                >
+                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
+                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
+                  <div className="relative">
+                    <p className="mb-1 text-sm font-medium text-fuchsia-100">Rată de câștig</p>
+                    <p className="text-4xl font-bold">{winRate}%</p>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Overview row */}
+              <div className="mb-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+                {/* Performance sparkline */}
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm lg:col-span-2">
+                  <div className="mb-4 flex items-center justify-between">
+                    <h3 className="text-lg font-semibold text-gray-900">Performanță (7 zile)</h3>
+                    <div className="text-xs text-gray-500">Media ofertelor: {new Intl.NumberFormat("ro-RO").format(avgOfferValue)} lei</div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                    <div>
+                      <p className="mb-2 text-xs font-medium text-gray-500">Număr oferte/zi</p>
+                      <Sparkline data={dailyCounts} width={320} height={64} stroke="#0ea5e9" />
+                      <div className="mt-2 text-xs text-gray-500">{dailyCounts.join("  •  ")}</div>
+                    </div>
+                    <div>
+                      <p className="mb-2 text-xs font-medium text-gray-500">Venit acceptat/zi (lei)</p>
+                      <Sparkline data={dailyRevenue} width={320} height={64} stroke="#10b981" />
+                      <div className="mt-2 text-xs text-gray-500">{dailyRevenue.map((v) => Math.round(v)).join("  •  ")}</div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Recent activity */}
+                <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+                  <h3 className="mb-4 text-lg font-semibold text-gray-900">Activitate recentă</h3>
+                  <ul className="space-y-3">
+                    {offers.slice(0, 6).map((o) => {
+                      const ts: any = (o.createdAt as any) || null;
+                      const d: Date | null = ts?.toDate ? ts.toDate() : (typeof ts === "number" ? new Date(ts) : null);
+                      return (
+                        <li key={o.id} className="flex items-start justify-between gap-3">
+                          <div>
+                            <p className="text-sm font-medium text-gray-800">{o.requestCode ? o.requestCode : (o.requestId ? `REQ-${String(o.requestId).slice(0, 6).toUpperCase()}` : "—")}</p>
+                            <p className="text-xs text-gray-500">{d ? d.toLocaleDateString("ro-RO", { day: "2-digit", month: "short" }) : "—"}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            {typeof o.price === "number" && (
+                              <span className="rounded-md bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-700">{new Intl.NumberFormat("ro-RO").format(o.price)} lei</span>
+                            )}
+                            <span className={`rounded-md px-2 py-1 text-xs font-semibold ${
+                              o.status === "accepted"
+                                ? "bg-emerald-100 text-emerald-700"
+                                : o.status === "rejected" || o.status === "declined"
+                                  ? "bg-rose-100 text-rose-700"
+                                  : "bg-amber-100 text-amber-700"
+                            }`}>
+                              {o.status ?? "pending"}
+                            </span>
+                          </div>
+                        </li>
+                      );
+                    })}
+                    {offers.length === 0 && (
+                      <li className="text-sm text-gray-500">Nu există activitate recentă.</li>
+                    )}
+                  </ul>
+                </div>
               </div>
 
               {/* Filters */}
