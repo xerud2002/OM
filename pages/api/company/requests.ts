@@ -9,6 +9,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : null;
     if (!token) return res.status(401).json({ error: "Missing Authorization" });
 
+    if (!adminAuth || !adminDb) {
+      return res.status(501).json({ error: "Admin not configured on server" });
+    }
+
     await adminAuth.verifyIdToken(token); // only check auth; no role gating here
 
     const limit = Math.min(50, Number(req.query.limit) || 10);
@@ -17,7 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let ref = adminDb.collection("requests").orderBy("createdAt", "desc");
     if (before) ref = ref.where("createdAt", "<=", new Date(before));
 
-    const snap = await ref.limit(limit).get();
+  const snap = await ref.limit(limit).get();
     const raw = snap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
     const requests = raw.filter((r) => (!r.status || r.status === "active") && !r.archived);
 

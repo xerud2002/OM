@@ -132,6 +132,7 @@ export default function CustomerAuthPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              autoComplete="email"
               className="w-full bg-transparent outline-none"
             />
           </div>
@@ -144,6 +145,7 @@ export default function CustomerAuthPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              autoComplete={isLogin ? "current-password" : "new-password"}
               className="w-full bg-transparent outline-none"
             />
           </div>
