@@ -35,6 +35,26 @@ const nextConfig = {
 
   // Performance optimizations
   poweredByHeader: false,
+
+  // Development configuration
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'Cross-Origin-Opener-Policy',
+            value: 'same-origin-allow-popups',
+          },
+        ],
+      },
+    ];
+  },
+
+  // Allow cross-origin requests in development
+  ...(process.env.NODE_ENV === 'development' && {
+    allowedDevOrigins: ['127.0.0.1:3000', 'localhost:3000'],
+  }),
 };
 
 export default nextConfig;

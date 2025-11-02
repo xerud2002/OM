@@ -11,20 +11,26 @@ if (!admin.apps.length) {
   const storageBucket =
     process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || `${projectId}.appspot.com`;
 
-  if (!projectId || !clientEmail || !privateKey) {
-    throw new Error(
-      "Missing Firebase Admin credentials. Please set FIREBASE_ADMIN_PROJECT_ID, FIREBASE_ADMIN_CLIENT_EMAIL, FIREBASE_ADMIN_PRIVATE_KEY."
+  if (!projectId || !clientEmail || !privateKey || privateKey.includes("Placeholder")) {
+    console.warn(
+      "Firebase Admin credentials not configured. Some features may not work. Set FIREBASE_ADMIN_PROJECT_ID, FIREBASE_ADMIN_CLIENT_EMAIL, FIREBASE_ADMIN_PRIVATE_KEY for full functionality."
     );
+    // Initialize with minimal config for development
+    admin.initializeApp({
+      projectId: projectId || "demo-project",
+    });
+  } else {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId,
+        clientEmail,
+        privateKey,
+      }),
+      storageBucket,
+    });
   }
 
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId,
-      clientEmail,
-      privateKey,
-    }),
-    storageBucket,
-  });
+
 }
 
 export const adminDb = admin.firestore();

@@ -120,13 +120,12 @@ export default function EditRequestModal({
         
         for (const file of Array.from(form.mediaFiles) as File[]) {
           try {
-            console.warn(`Uploading ${file.name} via API route`);
-            console.warn(`Auth UID: ${currentUser.uid}, Customer ID: ${request.customerId}`);
+            // Uploading file via API route
             
             // Upload via Next.js API route (server-side, no CORS issues)
             const downloadURL = await uploadFileViaAPI(file, request.id, request.customerId);
             newMediaUrls.push(downloadURL);
-            console.warn(`Upload success: ${downloadURL}`);
+            // Upload successful
           } catch (uploadError) {
             console.error(`Failed to upload ${file.name}:`, uploadError);
             console.error("Upload error details:", {
