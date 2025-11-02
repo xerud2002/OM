@@ -254,6 +254,27 @@ function OfferItem({
   );
 }
 
+function JobSheetButton({ request }: { request: MovingRequest }) {
+  const [showModal, setShowModal] = useState(false);
+
+  return (
+    <>
+      <button
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowModal(true);
+        }}
+        className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-semibold text-emerald-700 transition hover:bg-emerald-100"
+        title="Vizualizează Job Sheet"
+      >
+        <FileText size={14} />
+        Job Sheet
+      </button>
+      <JobSheetModal request={request} isOpen={showModal} onClose={() => setShowModal(false)} />
+    </>
+  );
+}
+
 function OfferList({
   requestId,
   company,
@@ -635,17 +656,20 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 )}
 
                 <div>
-                  <div className="mb-2 flex items-center gap-2">
-                    <h3 className="text-lg font-semibold text-emerald-700">
-                      {unlockMap[r.id]
-                        ? r.customerName || "Client anonim"
-                        : maskName(r.customerName)}
-                    </h3>
-                    {r.requestCode && (
-                      <span className="inline-flex items-center rounded-md bg-gradient-to-r from-emerald-100 to-sky-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
-                        {r.requestCode}
-                      </span>
-                    )}
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-semibold text-emerald-700">
+                        {unlockMap[r.id]
+                          ? r.customerName || "Client anonim"
+                          : maskName(r.customerName)}
+                      </h3>
+                      {r.requestCode && (
+                        <span className="inline-flex items-center rounded-md bg-gradient-to-r from-emerald-100 to-sky-100 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                          {r.requestCode}
+                        </span>
+                      )}
+                    </div>
+                    <JobSheetButton request={r} />
                   </div>
 
                   {/* Status Badge */}
