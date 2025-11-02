@@ -63,21 +63,29 @@ export default async function handler(
   const bucket = admin.storage().bucket(bucketName);
   console.warn("[uploadMedia] Using bucket:", bucketName);
 
-    // Debug: verify bucket existence before attempting upload
+    // Check if the bucket exists (skip in development with placeholder credentials)
     try {
-      const [exists] = await bucket.exists();
-      if (!exists) {
-        console.error("[uploadMedia] Bucket does not exist:", bucketName);
-        throw new Error(
-          `The specified bucket does not exist: ${bucketName}. Open Firebase Console → Storage and ensure the default bucket is created, or set NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET to your bucket (e.g. omro-e5a88.appspot.com).`
-        );
+      if (!process.env.FIREBASE_ADMIN_PRIVATE_KEY?.includes("Placeholder")) {
+        const [exists] = await bucket.exists();
+        if (!exists) {
+          console.error("[uploadMedia] Bucket does not exist:", bucketName);
+          return res.status(500).json({
+            error: `Firebase Storage bucket not configured. Please set up Firebase Storage in console.`,
+          });
+        }
+      } else {
+        // Development mode - return mock success
+        console.warn("[uploadMedia] Development mode - Firebase Admin not configured");
+        return res.status(200).json({
+          message: "Development mode - file upload skipped",
+          urls: ["https://via.placeholder.com/300x200.png?text=Dev+Mode"],
+        });
       }
     } catch (existErr: any) {
-      // If exists() itself fails, surface a clearer message
-      if (existErr?.message?.includes("does not exist")) {
-        throw existErr;
-      }
-      console.error("[uploadMedia] Bucket exists() check failed:", existErr);
+      console.error("[uploadMedia] Bucket check failed:", existErr);
+      return res.status(500).json({
+        error: "Firebase Storage not properly configured",
+      });
     }
 
     for (const file of fileArray) {
