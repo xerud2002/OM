@@ -114,3 +114,22 @@ export type Offer = {
   status?: "pending" | "accepted" | "declined" | "rejected";
   createdAt: Timestamp;
 };
+
+export type Notification = {
+  id: string;
+  type: "new_message" | "new_offer" | "offer_accepted" | "media_uploaded";
+  requestId: string;
+  requestCode?: string;
+  customerId?: string;
+  customerName?: string;
+  customerEmail?: string;
+  message: string;
+  title: string;
+  read: boolean;
+  createdAt: Timestamp;
+  metadata?: {
+    offerId?: string;
+    messageCount?: number;
+    offerCount?: number;
+  };
+};
