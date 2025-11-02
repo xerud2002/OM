@@ -1070,6 +1070,14 @@ function OfferRow({
 }) {
   const [showMessage, setShowMessage] = useState(false);
   const [text, setText] = useState("");
+  const [messages, setMessages] = useState<any[]>([]);
+
+  // Subscribe to messages for this offer
+  useEffect(() => {
+    const { onOfferMessages } = require("@/utils/messagesHelpers");
+    const unsub = onOfferMessages(requestId, offer.id, (msgs: any[]) => setMessages(msgs));
+    return () => unsub();
+  }, [requestId, offer.id]);
 
   const sendMessage = async () => {
     const t = text.trim();
@@ -1144,6 +1152,48 @@ function OfferRow({
           </div>
         </div>
       </div>
+
+      {/* Message History */}
+      {messages.length > 0 && (
+        <div className="border-t border-gray-200 pt-3">
+          <p className="mb-2 text-xs font-semibold text-gray-700">Istoric conversație</p>
+          <div className="space-y-2">
+            {messages.slice(-3).map((msg: any) => {
+              const isOwn = msg.senderType === "customer";
+              return (
+                <div key={msg.id} className={`flex ${isOwn ? "justify-end" : "justify-start"}`}>
+                  <div
+                    className={`max-w-[75%] rounded-lg px-3 py-1.5 text-sm ${
+                      isOwn
+                        ? "bg-emerald-600 text-white"
+                        : "border border-gray-200 bg-white text-gray-900"
+                    }`}
+                  >
+                    {!isOwn && (
+                      <p className="mb-0.5 text-[10px] font-semibold text-gray-600">
+                        {msg.senderName || "Companie"}
+                      </p>
+                    )}
+                    <p>{msg.text}</p>
+                    <p
+                      className={`mt-0.5 text-[10px] ${
+                        isOwn ? "text-emerald-100" : "text-gray-500"
+                      }`}
+                    >
+                      {msg.createdAt?.toDate
+                        ? new Date(msg.createdAt.toDate()).toLocaleTimeString("ro-RO", {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })
+                        : ""}
+                    </p>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {showMessage && (
         <div className="rounded-lg border border-gray-200 bg-white p-3">

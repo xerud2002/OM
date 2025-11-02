@@ -66,9 +66,7 @@ export function onRequestMessagesAggregate(
   // eslint-disable-next-line no-unused-vars
   onError?: (err: any) => void
 ) {
-  // Lazy import to avoid heavy Firestore imports when unused
   let unsubscribers: Array<() => void> = [];
-  const { collection, onSnapshot, orderBy, query } = require("firebase/firestore") as typeof import("firebase/firestore");
 
   // Listen to offers for this request
   const offersRef = collection(db, "requests", requestId, "offers");
