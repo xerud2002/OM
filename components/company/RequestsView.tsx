@@ -27,7 +27,7 @@ import { onCompanyUnlocks, unlockContact } from "@/utils/unlockHelpers";
 import { sendOfferMessage } from "@/utils/messagesHelpers";
 import { FileText } from "lucide-react";
 import JobSheetModal from "@/components/company/JobSheetModal";
-// import Alert from "@/components/ui/Alert"; // TODO: Apply to unlock contact boxes
+import Alert from "@/components/ui/Alert";
 
 // Types
 export type MovingRequest = {
@@ -706,54 +706,55 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
                   {/* Contact Details - Hidden by default, shown after unlock */}
                   {!unlockMap[r.id] ? (
-                    <div className="mt-3 rounded-lg border border-amber-200 bg-amber-50 p-3">
-                      <p className="mb-2 text-xs font-medium text-amber-800">
-                        🔒 Detaliile complete de contact sunt ascunse
-                      </p>
-                      <p className="mb-3 text-xs text-amber-700">
-                        Deblochează pentru a vedea numele complet, email și telefon
-                      </p>
-                      <button
-                        onClick={async () => {
-                          if (!company?.uid) return;
-                          if (
-                            !confirm(
-                              "Vrei să deblochezi detaliile de contact pentru această cerere? (simulare plată)"
-                            )
-                          )
-                            return;
-                          setUnlockingId(r.id);
-                          try {
-                            await unlockContact(r.id, company.uid);
-                            trackEvent("contact_unlocked", { requestId: r.id, companyId: company.uid });
-                          } catch (err) {
-                            console.error("Unlock failed:", err);
-                          } finally {
-                            setUnlockingId(null);
-                          }
-                        }}
-                        disabled={unlockingId === r.id}
-                        className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:bg-gray-400"
+                    <div className="mt-3">
+                      <Alert
+                        variant="locked"
+                        title="Detaliile de contact sunt ascunse"
+                        action={
+                          <button
+                            onClick={async () => {
+                              if (!company?.uid) return;
+                              if (
+                                !confirm(
+                                  "Vrei să deblochezi detaliile de contact pentru această cerere? (simulare plată)"
+                                )
+                              )
+                                return;
+                              setUnlockingId(r.id);
+                              try {
+                                await unlockContact(r.id, company.uid);
+                                trackEvent("contact_unlocked", { requestId: r.id, companyId: company.uid });
+                              } catch (err) {
+                                console.error("Unlock failed:", err);
+                              } finally {
+                                setUnlockingId(null);
+                              }
+                            }}
+                            disabled={unlockingId === r.id}
+                            className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:bg-gray-400"
+                          >
+                            {unlockingId === r.id ? "Se deblochează..." : "🔓 Deblochează contactele"}
+                          </button>
+                        }
                       >
-                        {unlockingId === r.id ? "Se deblochează..." : "🔓 Deblochează contactele"}
-                      </button>
+                        <p className="text-xs">Deblochează pentru a vedea numele complet, email și telefon.</p>
+                      </Alert>
                     </div>
                   ) : (
-                    <div className="mt-3 rounded-lg border border-emerald-200 bg-emerald-50 p-3">
-                      <p className="mb-2 text-xs font-semibold text-emerald-800">
-                        ✅ Detalii complete de contact
-                      </p>
-                      <div className="space-y-1 text-sm text-emerald-900">
-                        <p>
-                          <span className="font-medium">Nume:</span> {r.customerName || "—"}
-                        </p>
-                        <p>
-                          <span className="font-medium">Email:</span> {r.customerEmail || "—"}
-                        </p>
-                        <p>
-                          <span className="font-medium">Telefon:</span> {r.phone || "—"}
-                        </p>
-                      </div>
+                    <div className="mt-3">
+                      <Alert variant="success" title="Detalii complete de contact">
+                        <div className="space-y-1 text-sm">
+                          <p>
+                            <span className="font-medium">Nume:</span> {r.customerName || "—"}
+                          </p>
+                          <p>
+                            <span className="font-medium">Email:</span> {r.customerEmail || "—"}
+                          </p>
+                          <p>
+                            <span className="font-medium">Telefon:</span> {r.phone || "—"}
+                          </p>
+                        </div>
+                      </Alert>
                     </div>
                   )}
                 </div>
