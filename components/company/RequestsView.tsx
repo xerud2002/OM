@@ -463,19 +463,26 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 transition={{ duration: 0.3 }}
                 className="rounded-xl border bg-white/90 p-5 shadow-md backdrop-blur-md transition-all hover:shadow-lg"
               >
-                {r.createdAt && (
-                  <div className="mb-2 flex items-center justify-between">
-                    <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${
-                        getTimeAgo(r.createdAt) === "Nou!"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-gray-100 text-gray-600"
-                      }`}
-                    >
-                      {getTimeAgo(r.createdAt)}
-                    </span>
+                <div className="mb-2 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {r.createdAt && (
+                      <span
+                        className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                          getTimeAgo(r.createdAt) === "Nou!"
+                            ? "bg-emerald-100 text-emerald-700"
+                            : "bg-gray-100 text-gray-600"
+                        }`}
+                      >
+                        {getTimeAgo(r.createdAt)}
+                      </span>
+                    )}
                   </div>
-                )}
+                  {r.requestCode && (
+                    <span className="inline-flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-emerald-500 to-sky-500 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
+                      {r.requestCode}
+                    </span>
+                  )}
+                </div>
 
                 <div>
                   <h3 className="mb-1 text-lg font-semibold text-emerald-700">
