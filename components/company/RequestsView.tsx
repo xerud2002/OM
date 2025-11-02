@@ -25,6 +25,8 @@ import { onAuthChange } from "@/utils/firebaseHelpers";
 import { maskName } from "@/utils/masking";
 import { onCompanyUnlocks, unlockContact } from "@/utils/unlockHelpers";
 import { sendOfferMessage } from "@/utils/messagesHelpers";
+import { FileText } from "lucide-react";
+import JobSheetModal from "./JobSheetModal";
 
 // Types
 export type MovingRequest = {
