@@ -116,7 +116,7 @@ function OfferItem({
         <>
           <div className="flex justify-between">
             <span className="font-semibold text-emerald-700">{offer.companyName}</span>
-            <span className="text-sm font-medium text-gray-700">💰 {offer.price} lei</span>
+            <span className="text-sm font-medium text-gray-700">{offer.price} lei</span>
           </div>
           <div className="mt-1 flex items-center justify-between gap-2">
             <p className="text-sm text-gray-600">{offer.message}</p>
@@ -137,7 +137,7 @@ function OfferItem({
           {/* Display proposed dates */}
           {offer.proposedDates && offer.proposedDates.length > 0 && (
             <div className="mt-2 rounded-md bg-sky-50 p-2">
-              <p className="text-xs font-semibold text-sky-700">📅 Date propuse:</p>
+              <p className="text-xs font-semibold text-sky-700">Date propuse:</p>
               <div className="mt-1 flex flex-wrap gap-1">
                 {offer.proposedDates.map((date, idx) => (
                   <span key={idx} className="rounded bg-sky-100 px-2 py-0.5 text-xs text-sky-700">
@@ -155,7 +155,7 @@ function OfferItem({
           {/* Display info request */}
           {offer.infoRequest && (
             <div className="mt-2 rounded-md bg-amber-50 p-2">
-              <p className="text-xs font-semibold text-amber-700">❓ Informații solicitate:</p>
+              <p className="text-xs font-semibold text-amber-700">Informații solicitate:</p>
               <p className="mt-1 text-xs text-gray-600">{offer.infoRequest}</p>
             </div>
           )}
@@ -163,14 +163,14 @@ function OfferItem({
           {isOwn && isPending && (
             <div className="mt-2 flex gap-2 text-xs">
               <button onClick={() => setIsEditing(true)} className="text-sky-600 hover:underline">
-                ✏️ Editează
+                Editează
               </button>
               <button
                 onClick={handleDelete}
                 disabled={removing}
                 className="text-red-500 hover:underline"
               >
-                🗑️ Retrage
+                Retrage
               </button>
             </div>
           )}
@@ -237,8 +237,18 @@ function OfferList({
   );
 }
 
+// Helper function to safely format move date
+function formatRequestMoveDate(request: MovingRequest): string {
+  try {
+    const formatted = formatMoveDateDisplay(request as any, { month: "short" });
+    return formatted && formatted !== "-" ? formatted : "-";
+  } catch {
+    return "-";
+  }
+}
+
 // Customer data visibility component with unlock feature
-function CustomerDataSection({ request }: { request: MovingRequest; company: CompanyUser | null }) {
+function CustomerDataSection({ request }: { request: MovingRequest }) {
   const [dataUnlocked, setDataUnlocked] = useState(false);
   const [unlocking, setUnlocking] = useState(false);
 
@@ -255,8 +265,9 @@ function CustomerDataSection({ request }: { request: MovingRequest; company: Com
     // 1. Process payment via Stripe/PayPal
     // 2. Update Firestore to mark data as unlocked for this company
     // 3. Track the transaction
-    // 4. Use company.uid to track who unlocked the data
   };
+
+  const moveDateDisplay = formatRequestMoveDate(request);
 
   return (
     <div>
@@ -269,10 +280,7 @@ function CustomerDataSection({ request }: { request: MovingRequest; company: Com
             {request.fromCity} → {request.toCity}
           </p>
           <p className="text-sm text-gray-500">
-            Mutare: {(() => { 
-              const d = formatMoveDateDisplay(request as any, { month: "short" }); 
-              return d && d !== "-" ? d : "-"; 
-            })()}
+            Mutare: {moveDateDisplay}
           </p>
         </div>
         
@@ -291,9 +299,7 @@ function CustomerDataSection({ request }: { request: MovingRequest; company: Com
                 Procesare...
               </>
             ) : (
-              <>
-                🔓 Deblochează
-              </>
+              <>Deblochează</>
             )}
           </button>
         )}
@@ -304,33 +310,33 @@ function CustomerDataSection({ request }: { request: MovingRequest; company: Com
           <p className="text-xs font-semibold text-emerald-700">✓ Informații complete deblocate</p>
           {request.customerEmail && (
             <p className="text-sm text-gray-600">
-              📧 Email: <a href={`mailto:${request.customerEmail}`} className="text-emerald-600 hover:underline">{request.customerEmail}</a>
+              Email: <a href={`mailto:${request.customerEmail}`} className="text-emerald-600 hover:underline">{request.customerEmail}</a>
             </p>
           )}
           {request.phone && (
             <p className="text-sm text-gray-600">
-              📞 Telefon: <a href={`tel:${request.phone}`} className="text-emerald-600 hover:underline">{request.phone}</a>
+              Telefon: <a href={`tel:${request.phone}`} className="text-emerald-600 hover:underline">{request.phone}</a>
             </p>
           )}
           {request.fromAddress && (
-            <p className="text-sm text-gray-600">📍 Adresa plecare: {request.fromAddress}</p>
+            <p className="text-sm text-gray-600">Adresa plecare: {request.fromAddress}</p>
           )}
           {request.toAddress && (
-            <p className="text-sm text-gray-600">📍 Adresa sosire: {request.toAddress}</p>
+            <p className="text-sm text-gray-600">Adresa sosire: {request.toAddress}</p>
           )}
           {request.details && (
-            <p className="mt-2 text-sm text-gray-600">💬 {request.details}</p>
+            <p className="mt-2 text-sm text-gray-600">{request.details}</p>
           )}
         </div>
       ) : (
         <div className="space-y-1 rounded-md border border-amber-200 bg-amber-50/30 p-3">
-          <p className="text-xs font-semibold text-amber-700">🔒 Informații limitate</p>
+          <p className="text-xs font-semibold text-amber-700">Informații limitate</p>
           <p className="text-xs text-gray-600">
             Deblochează datele de contact complete pentru a putea oferta. 
             Costul: <span className="font-semibold">10 lei</span>
           </p>
           {request.details && (
-            <p className="mt-2 text-sm text-gray-600">💬 {request.details}</p>
+            <p className="mt-2 text-sm text-gray-600">{request.details}</p>
           )}
         </div>
       )}
@@ -364,7 +370,6 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
         message,
         ...(proposedDates.length > 0 && { proposedDates }),
         ...(infoRequest && { infoRequest }),
-        dataUnlocked: false, // Initially locked until payment
       });
       try {
         trackEvent("offer_submitted", { requestId, companyId: company.uid, price: priceNum });
@@ -647,7 +652,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   </div>
                 )}
 
-                <CustomerDataSection request={r} company={company} />
+                <CustomerDataSection request={r} />
 
                 {company ? (
                   <>
