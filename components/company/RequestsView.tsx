@@ -27,6 +27,7 @@ import { onCompanyUnlocks, unlockContact } from "@/utils/unlockHelpers";
 import { sendOfferMessage } from "@/utils/messagesHelpers";
 import { FileText } from "lucide-react";
 import JobSheetModal from "./JobSheetModal";
+import Alert from "@/components/ui/Alert";
 
 // Types
 export type MovingRequest = {
