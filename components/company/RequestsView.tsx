@@ -21,35 +21,14 @@ import { addOffer } from "@/utils/firestoreHelpers";
 import { formatMoveDateDisplay } from "@/utils/date";
 import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import type { MovingRequest, Offer } from "@/types";
 
 // Types
-export type MovingRequest = {
-  id: string;
-  customerId: string;
-  customerName?: string;
-  customerEmail?: string;
-  fromCity: string;
-  toCity: string;
-  moveDate?: string;
-  details?: string;
-  createdAt?: any;
-};
-
 export type CompanyUser = {
   uid: string;
   displayName?: string | null;
   email?: string | null;
 } | null;
-
-export type Offer = {
-  id: string;
-  companyId: string;
-  companyName: string;
-  price: number;
-  message: string;
-  status?: "pending" | "accepted" | "declined" | "rejected";
-  createdAt?: any;
-};
 
 // Offer editing component
 function OfferItem({
@@ -154,6 +133,33 @@ function OfferItem({
               {offer.status ?? "pending"}
             </span>
           </div>
+          
+          {/* Display proposed dates */}
+          {offer.proposedDates && offer.proposedDates.length > 0 && (
+            <div className="mt-2 rounded-md bg-sky-50 p-2">
+              <p className="text-xs font-semibold text-sky-700">📅 Date propuse:</p>
+              <div className="mt-1 flex flex-wrap gap-1">
+                {offer.proposedDates.map((date, idx) => (
+                  <span key={idx} className="rounded bg-sky-100 px-2 py-0.5 text-xs text-sky-700">
+                    {new Date(date).toLocaleDateString("ro-RO", { 
+                      year: "numeric", 
+                      month: "short", 
+                      day: "numeric" 
+                    })}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+          
+          {/* Display info request */}
+          {offer.infoRequest && (
+            <div className="mt-2 rounded-md bg-amber-50 p-2">
+              <p className="text-xs font-semibold text-amber-700">❓ Informații solicitate:</p>
+              <p className="mt-1 text-xs text-gray-600">{offer.infoRequest}</p>
+            </div>
+          )}
+          
           {isOwn && isPending && (
             <div className="mt-2 flex gap-2 text-xs">
               <button onClick={() => setIsEditing(true)} className="text-sky-600 hover:underline">
@@ -231,10 +237,116 @@ function OfferList({
   );
 }
 
+// Customer data visibility component with unlock feature
+function CustomerDataSection({ request }: { request: MovingRequest; company: CompanyUser | null }) {
+  const [dataUnlocked, setDataUnlocked] = useState(false);
+  const [unlocking, setUnlocking] = useState(false);
+
+  // In a real app, you'd check if the company has paid to unlock this request
+  // For now, we'll simulate it with local state
+  const handleUnlock = async () => {
+    setUnlocking(true);
+    // Simulate payment process
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setDataUnlocked(true);
+    setUnlocking(false);
+    
+    // In production, this would:
+    // 1. Process payment via Stripe/PayPal
+    // 2. Update Firestore to mark data as unlocked for this company
+    // 3. Track the transaction
+    // 4. Use company.uid to track who unlocked the data
+  };
+
+  return (
+    <div>
+      <div className="mb-3 flex items-start justify-between">
+        <div className="flex-1">
+          <h3 className="mb-1 text-lg font-semibold text-emerald-700">
+            {dataUnlocked ? (request.customerName || "Client anonim") : "Client"}
+          </h3>
+          <p className="text-sm text-gray-600">
+            {request.fromCity} → {request.toCity}
+          </p>
+          <p className="text-sm text-gray-500">
+            Mutare: {(() => { 
+              const d = formatMoveDateDisplay(request as any, { month: "short" }); 
+              return d && d !== "-" ? d : "-"; 
+            })()}
+          </p>
+        </div>
+        
+        {!dataUnlocked && (
+          <button
+            onClick={handleUnlock}
+            disabled={unlocking}
+            className="ml-2 flex items-center gap-1 rounded-md bg-amber-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-amber-600 disabled:bg-gray-400"
+          >
+            {unlocking ? (
+              <>
+                <svg className="h-3 w-3 animate-spin" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Procesare...
+              </>
+            ) : (
+              <>
+                🔓 Deblochează
+              </>
+            )}
+          </button>
+        )}
+      </div>
+
+      {dataUnlocked ? (
+        <div className="space-y-1 rounded-md border border-emerald-200 bg-emerald-50/30 p-3">
+          <p className="text-xs font-semibold text-emerald-700">✓ Informații complete deblocate</p>
+          {request.customerEmail && (
+            <p className="text-sm text-gray-600">
+              📧 Email: <a href={`mailto:${request.customerEmail}`} className="text-emerald-600 hover:underline">{request.customerEmail}</a>
+            </p>
+          )}
+          {request.phone && (
+            <p className="text-sm text-gray-600">
+              📞 Telefon: <a href={`tel:${request.phone}`} className="text-emerald-600 hover:underline">{request.phone}</a>
+            </p>
+          )}
+          {request.fromAddress && (
+            <p className="text-sm text-gray-600">📍 Adresa plecare: {request.fromAddress}</p>
+          )}
+          {request.toAddress && (
+            <p className="text-sm text-gray-600">📍 Adresa sosire: {request.toAddress}</p>
+          )}
+          {request.details && (
+            <p className="mt-2 text-sm text-gray-600">💬 {request.details}</p>
+          )}
+        </div>
+      ) : (
+        <div className="space-y-1 rounded-md border border-amber-200 bg-amber-50/30 p-3">
+          <p className="text-xs font-semibold text-amber-700">🔒 Informații limitate</p>
+          <p className="text-xs text-gray-600">
+            Deblochează datele de contact complete pentru a putea oferta. 
+            Costul: <span className="font-semibold">10 lei</span>
+          </p>
+          {request.details && (
+            <p className="mt-2 text-sm text-gray-600">💬 {request.details}</p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function OfferForm({ requestId, company }: { requestId: string; company: CompanyUser }) {
   const [price, setPrice] = useState("");
   const [message, setMessage] = useState("");
+  const [proposedDate1, setProposedDate1] = useState("");
+  const [proposedDate2, setProposedDate2] = useState("");
+  const [proposedDate3, setProposedDate3] = useState("");
+  const [infoRequest, setInfoRequest] = useState("");
   const [sending, setSending] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const priceNum = Number(price);
   const isPriceValid = !Number.isNaN(priceNum) && priceNum > 0;
@@ -244,17 +356,26 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
     if (!company || !isPriceValid) return;
     setSending(true);
     try {
+      const proposedDates = [proposedDate1, proposedDate2, proposedDate3].filter((d) => d);
       await addOffer(requestId, {
         companyId: company.uid,
         companyName: company.displayName || company.email || "Companie",
         price: priceNum,
         message,
+        ...(proposedDates.length > 0 && { proposedDates }),
+        ...(infoRequest && { infoRequest }),
+        dataUnlocked: false, // Initially locked until payment
       });
       try {
         trackEvent("offer_submitted", { requestId, companyId: company.uid, price: priceNum });
       } catch {}
       setPrice("");
       setMessage("");
+      setProposedDate1("");
+      setProposedDate2("");
+      setProposedDate3("");
+      setInfoRequest("");
+      setShowAdvanced(false);
     } catch (err) {
       console.error("Error sending offer:", err);
     } finally {
@@ -280,8 +401,55 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        rows={3}
         required
       />
+      
+      {/* Toggle advanced options */}
+      <button
+        type="button"
+        onClick={() => setShowAdvanced(!showAdvanced)}
+        className="text-left text-xs text-emerald-600 hover:underline"
+      >
+        {showAdvanced ? "▼ Ascunde opțiuni avansate" : "▶ Propune date & cere informații"}
+      </button>
+
+      {showAdvanced && (
+        <div className="space-y-2 rounded-md border border-emerald-200 bg-emerald-50/30 p-3">
+          <p className="text-xs font-semibold text-gray-700">Date propuse pentru mutare (opțional):</p>
+          <input
+            type="date"
+            placeholder="Data 1"
+            value={proposedDate1}
+            onChange={(e) => setProposedDate1(e.target.value)}
+            className="w-full rounded-md border p-2 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+          <input
+            type="date"
+            placeholder="Data 2"
+            value={proposedDate2}
+            onChange={(e) => setProposedDate2(e.target.value)}
+            className="w-full rounded-md border p-2 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+          <input
+            type="date"
+            placeholder="Data 3"
+            value={proposedDate3}
+            onChange={(e) => setProposedDate3(e.target.value)}
+            className="w-full rounded-md border p-2 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+          
+          <p className="mt-3 text-xs font-semibold text-gray-700">Cerere informații suplimentare (opțional):</p>
+          <textarea
+            placeholder="Ex: Aveți lift la adresa de plecare? Câte camere are locuința?"
+            value={infoRequest}
+            onChange={(e) => setInfoRequest(e.target.value)}
+            className="w-full rounded-md border p-2 text-xs focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            rows={2}
+          />
+        </div>
+      )}
+
       <button
         type="submit"
         disabled={sending || !isPriceValid}
@@ -404,8 +572,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
   const sortedRequests = useMemo(() => {
     const arr = [...combinedRequests];
-    const getTime = (r: MovingRequest) =>
-      r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
+    const getTime = (r: MovingRequest): number => {
+      const ct = r.createdAt as any;
+      return ct?.toMillis ? ct.toMillis() : ct || 0;
+    };
     return sortBy === "date-desc"
       ? arr.sort((a, b) => getTime(b) - getTime(a))
       : arr.sort((a, b) => getTime(a) - getTime(b));
@@ -477,16 +647,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   </div>
                 )}
 
-                <div>
-                  <h3 className="mb-1 text-lg font-semibold text-emerald-700">
-                    {r.customerName || "Client anonim"}
-                  </h3>
-                  <p className="text-sm text-gray-600">
-                    {r.fromCity} → {r.toCity}
-                  </p>
-                  <p className="text-sm text-gray-500">Mutare: {(() => { const d = formatMoveDateDisplay(r as any, { month: "short" }); return d && d !== "-" ? d : "-"; })()}</p>
-                  <p className="mt-2 text-sm text-gray-600">{r.details}</p>
-                </div>
+                <CustomerDataSection request={r} company={company} />
 
                 {company ? (
                   <>
