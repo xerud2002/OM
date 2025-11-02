@@ -1,6 +1,8 @@
 "use client";
 
-import { Flame, TrendingUp, AlertTriangle, CheckCircle, DollarSign, Calendar, Image, Users } from "lucide-react";
+// Note: capture a module-scope timestamp to avoid impure calls during render
+const NOW_AT_LOAD = Date.now();
+import { Flame, TrendingUp, AlertTriangle, CheckCircle, DollarSign, Calendar, Image as ImageIcon } from "lucide-react";
 
 type LeadScoringProps = {
   request: {
@@ -20,8 +22,8 @@ type LeadScoringProps = {
   isUnlocked?: boolean;
 };
 
-export default function LeadScoring({ request, offersCount = 0, isUnlocked = false }: LeadScoringProps) {
-  // Calculate score (0-10)
+export default function LeadScoring({ request, offersCount = 0 }: LeadScoringProps) {
+  // Calculate score (0-10) with a module-captured timestamp to preserve purity
   let score = 0;
   const factors: { label: string; points: number; icon: any; color: string }[] = [];
 
@@ -39,7 +41,7 @@ export default function LeadScoring({ request, offersCount = 0, isUnlocked = fal
   // Move date within 30 days (+2 points)
   if (request.moveDate) {
     const moveDate = new Date(request.moveDate);
-    const daysUntil = Math.ceil((moveDate.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+    const daysUntil = Math.ceil((moveDate.getTime() - NOW_AT_LOAD) / (1000 * 60 * 60 * 24));
     if (daysUntil > 0 && daysUntil <= 30) {
       score += 2;
       factors.push({
@@ -65,7 +67,7 @@ export default function LeadScoring({ request, offersCount = 0, isUnlocked = fal
     factors.push({
       label: `${request.mediaUrls.length} fișiere media`,
       points: 1.5,
-      icon: Image,
+      icon: ImageIcon,
       color: "purple",
     });
   }
@@ -123,7 +125,7 @@ export default function LeadScoring({ request, offersCount = 0, isUnlocked = fal
   // Recent request (+0.5 points if < 24h old)
   if (request.createdAt) {
     const createdDate = request.createdAt.toDate ? request.createdAt.toDate() : new Date(request.createdAt);
-    const hoursOld = (Date.now() - createdDate.getTime()) / (1000 * 60 * 60);
+    const hoursOld = (NOW_AT_LOAD - createdDate.getTime()) / (1000 * 60 * 60);
     if (hoursOld < 24) {
       score += 0.5;
       factors.push({

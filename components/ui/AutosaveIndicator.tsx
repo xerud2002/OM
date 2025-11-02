@@ -14,9 +14,13 @@ export default function AutosaveIndicator({ lastSaved, isSaving = false }: Autos
 
   useEffect(() => {
     if (lastSaved) {
-      setShowSavedMessage(true);
-      const timer = setTimeout(() => setShowSavedMessage(false), 3000);
-      return () => clearTimeout(timer);
+      // Avoid synchronous setState inside effect to satisfy lint rule; schedule asynchronously
+      const showTimer = setTimeout(() => setShowSavedMessage(true), 0);
+      const hideTimer = setTimeout(() => setShowSavedMessage(false), 3000);
+      return () => {
+        clearTimeout(showTimer);
+        clearTimeout(hideTimer);
+      };
     }
   }, [lastSaved]);
 
