@@ -266,7 +266,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
                 <select
                   required
                   value={form.fromCounty || ""}
@@ -284,7 +284,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
                 <select
                   required={!form.fromCityManual}
                   value={form.fromCity || ""}
@@ -491,7 +491,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Județ</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
                 <select
                   required
                   value={form.toCounty || ""}
@@ -507,7 +507,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate</label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
                 <select
                   required={!form.toCityManual}
                   value={form.toCity || ""}

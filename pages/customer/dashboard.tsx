@@ -18,7 +18,6 @@ import { MessageSquare } from "lucide-react";
 import { auth } from "@/services/firebase";
 import { toast } from "sonner";
 import { updateRequestStatus, archiveRequest } from "@/utils/firestoreHelpers";
-import { validators } from "@/utils/validation";
 
 type Request = {
   id: string;
@@ -256,8 +255,9 @@ export default function CustomerDashboard() {
     if (typeof window !== "undefined") {
       try {
         // Exclude mediaFiles (not serializable) from localStorage
-        const { mediaFiles, ...serializableForm } = form;
-        localStorage.setItem("customerDashboardForm", JSON.stringify(serializableForm));
+        const formToSave = { ...form };
+        delete formToSave.mediaFiles;
+        localStorage.setItem("customerDashboardForm", JSON.stringify(formToSave));
       } catch (err) {
         console.warn("Failed to save form to localStorage", err);
       }
@@ -298,7 +298,7 @@ export default function CustomerDashboard() {
       // Contact
       if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
       if (!(form as any).contactLastName?.trim()) errors.push("Nume");
-      if (!validators.phone(form.phone || "")) errors.push("Telefon (format valid: 07xxxxxxxx sau +407xxxxxxxx)");
+      if (!form.phone?.trim()) errors.push("Număr de telefon");
 
       // Services at least one
       if (!hasAtLeastOneService) errors.push("Alege cel puțin un serviciu");
@@ -415,7 +415,8 @@ export default function CustomerDashboard() {
         toast.success("Cererea a fost trimisă cu succes!");
       }
 
-      setForm({
+      // Clear form after successful submission
+      const emptyForm = {
         fromCity: "",
         fromCounty: "",
         toCity: "",
@@ -446,7 +447,12 @@ export default function CustomerDashboard() {
         surveyType: "quick-estimate",
         mediaUpload: "later",
         mediaFiles: [],
-      });
+      };
+      setForm(emptyForm);
+      // Clear localStorage
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("customerDashboardForm");
+      }
       setActiveTab("requests");
     } catch (err) {
       console.error("Failed to submit request", err);
@@ -454,8 +460,8 @@ export default function CustomerDashboard() {
     }
   };
 
-  const resetForm = () =>
-    setForm({
+  const resetForm = () => {
+    const emptyForm = {
       fromCity: "",
       fromCounty: "",
       toCity: "",
@@ -486,7 +492,13 @@ export default function CustomerDashboard() {
       surveyType: "quick-estimate",
       mediaUpload: "later",
       mediaFiles: [],
-    });
+    };
+    setForm(emptyForm);
+    // Also clear from localStorage
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("customerDashboardForm");
+    }
+  };
 
   return (
     <RequireRole allowedRole="customer">
