@@ -387,7 +387,7 @@ function OfferList({
             className="mt-3 space-y-3"
           >
             {offers.length === 0 ? (
-              <p className="text-sm italic text-gray-400">Nicio ofertă disponibilă momentan.</p>
+              <p className="text-sm italic text-gray-600">Nicio ofertă disponibilă momentan.</p>
             ) : (
               offers.map((offer) => (
                 <OfferItem
@@ -842,14 +842,14 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                     {!hasMineMap[r.id] ? (
                       <OfferForm requestId={r.id} company={company} />
                     ) : (
-                      <p className="mt-2 text-xs text-gray-500">
+                      <p className="mt-2 text-xs text-gray-600">
                         Ai trimis deja o ofertă pentru această cerere. O poți edita sau retrage mai
                         sus.
                       </p>
                     )}
                   </>
                 ) : (
-                  <p className="mt-3 text-sm italic text-gray-400">
+                  <p className="mt-3 text-sm italic text-gray-600">
                     Trebuie să fii autentificat pentru a trimite oferte.
                   </p>
                 )}

@@ -215,7 +215,7 @@ export default function CustomerAuthPage() {
           )}
         </form>
 
-        <div className="my-4 text-gray-400">sau</div>
+        <div className="my-4 text-gray-600">sau</div>
 
         {/* === Google Login === */}
         <motion.button

@@ -186,7 +186,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
               <span className="text-xs font-semibold text-emerald-900">Detalii proprietate</span>
             </div>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
                 <label htmlFor="fromType" className="mb-1 block text-xs font-medium text-gray-700">
                   Tip proprietate <span className="text-red-500">*</span>
@@ -214,7 +214,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     setForm((s) => ({ ...s, fromRooms: digits }));
                   }}
                   required
-                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                   placeholder="ex: 2"
                 />
               </div>
@@ -226,11 +226,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.fromFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                     />
                   </div>
-                  <div className="flex items-center">
-                    <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                  <div className="flex items-end">
+                    <label className="inline-flex items-center gap-2 pb-2 text-sm text-gray-700">
                       <input
                         type="checkbox"
                         checked={!!form.fromElevator}
@@ -268,8 +268,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
+                <label htmlFor="fromCounty" className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
                 <select
+                  id="fromCounty"
                   required
                   value={form.fromCounty || ""}
                   onChange={(e) =>
@@ -286,8 +287,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
+                <label htmlFor="fromCity" className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
                 <select
+                  id="fromCity"
                   required={!form.fromCityManual}
                   value={form.fromCity || ""}
                   onChange={(e) => {
@@ -320,8 +322,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 )}
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
+                <label htmlFor="fromStreet" className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
                 <input
+                  id="fromStreet"
                   value={form.fromStreet || ""}
                   onChange={(e) => setForm((s) => ({ ...s, fromStreet: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
@@ -329,8 +332,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
+                <label htmlFor="fromNumber" className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
                 <input
+                  id="fromNumber"
                   value={form.fromNumber || ""}
                   onChange={(e) => setForm((s) => ({ ...s, fromNumber: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
@@ -415,7 +419,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
               <span className="text-xs font-semibold text-sky-900">Detalii proprietate</span>
             </div>
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
                   Tip proprietate <span className="text-red-500">*</span>
@@ -441,7 +445,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     setForm((s) => ({ ...s, toRooms: digits }));
                   }}
                   required
-                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                   placeholder="ex: 2"
                 />
               </div>
@@ -453,11 +457,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.toFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
                     />
                   </div>
-                  <div className="flex items-center">
-                    <label className="inline-flex items-center gap-2 text-sm text-gray-700">
+                  <div className="flex items-end">
+                    <label className="inline-flex items-center gap-2 pb-2 text-sm text-gray-700">
                       <input
                         type="checkbox"
                         checked={!!form.toElevator}
@@ -493,8 +497,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
+                <label htmlFor="toCounty" className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
                 <select
+                  id="toCounty"
                   required
                   value={form.toCounty || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
@@ -509,8 +514,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
+                <label htmlFor="toCity" className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
                 <select
+                  id="toCity"
                   required={!form.toCityManual}
                   value={form.toCity || ""}
                   onChange={(e) => {
@@ -539,8 +545,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 )}
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
+                <label htmlFor="toStreet" className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
                 <input
+                  id="toStreet"
                   value={form.toStreet || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toStreet: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
@@ -548,8 +555,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 />
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
+                <label htmlFor="toNumber" className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
                 <input
+                  id="toNumber"
                   value={form.toNumber || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toNumber: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
@@ -1225,7 +1233,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <p className="mt-2 text-sm font-medium text-gray-700">
                     Click pentru a încărca fișiere
                   </p>
-                  <p className="mt-1 text-xs text-gray-500">Poze sau video (max 50MB per fișier)</p>
+                  <p className="mt-1 text-xs text-gray-600">Poze sau video (max 50MB per fișier)</p>
                 </label>
                 {form.mediaFiles && form.mediaFiles.length > 0 && (
                   <div className="mt-4 space-y-2 text-left">
@@ -1246,7 +1254,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       >
                         <div className="min-w-0 pr-3">
                           <p className="truncate text-xs font-medium text-gray-800">{file.name}</p>
-                          <p className="text-[10px] text-gray-500">
+                          <p className="text-[10px] text-gray-600">
                             {(file.size / 1024 / 1024).toFixed(2)} MB
                           </p>
                         </div>
@@ -1573,10 +1581,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   </div>
                 </div>
                 <div>
-                  <label className="mb-2 block text-xs font-semibold text-gray-700">
+                  <label htmlFor="phone" className="mb-2 block text-xs font-semibold text-gray-700">
                     Număr de telefon <span className="text-red-500">*</span>
                   </label>
                   <input
+                    id="phone"
                     value={form.phone || ""}
                     onChange={(e) => {
                       // Allow numbers only; no length restriction
@@ -1596,10 +1605,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
         {/* Details */}
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-700">
+          <label htmlFor="details" className="mb-1 block text-xs font-medium text-gray-700">
             Detalii suplimentare
           </label>
           <textarea
+            id="details"
             value={form.details || ""}
             onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
             className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"

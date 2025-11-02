@@ -77,7 +77,7 @@ export default function Testimonials() {
               &ldquo;{t.text}&rdquo;
             </p>
             <h4 className="font-semibold text-emerald-700">{t.name}</h4>
-            <span className="text-xs text-gray-500">{t.role}</span>
+            <span className="text-xs text-gray-600">{t.role}</span>
           </motion.div>
         ))}
       </div>

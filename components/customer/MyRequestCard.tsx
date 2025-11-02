@@ -131,7 +131,7 @@ export default function MyRequestCard({
               />
               <h3 className="truncate text-xl font-bold text-gray-900">
                 {request.fromCity || request.fromCounty}
-                <span className="mx-2 text-gray-400">→</span>
+                <span className="mx-2 text-gray-600">→</span>
                 {request.toCity || request.toCounty}
               </h3>
             </div>

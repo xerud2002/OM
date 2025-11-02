@@ -9,7 +9,7 @@ import DashboardErrorBoundary from "@/components/DashboardErrorBoundary";
 import { db } from "@/services/firebase";
 import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { motion } from "framer-motion";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange, ensureUserProfile } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
@@ -219,24 +219,55 @@ export default function CustomerDashboard() {
   }, [requests]);
 
   useEffect(() => {
-    const unsubAuth = onAuthChange((u: any) => {
+    const unsubAuth = onAuthChange(async (u: any) => {
       setUser(u);
-      if (!u) return;
-      const q = query(
-        collection(db, "requests"),
-        where("customerId", "==", u.uid),
-        orderBy("createdAt", "desc")
-      );
-      const unsub = onSnapshot(q, (snap) => {
-        const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
-        const activeDocs = docs.filter((doc: any) => !doc.archived);
-        const archivedDocs = docs.filter((doc: any) => !!doc.archived);
-        setRequests(activeDocs);
-        setArchivedRequests(archivedDocs);
+      if (!u) {
         setLoading(false);
-      });
-      return () => unsub();
+        return;
+      }
+      
+      try {
+        // Ensure customer profile exists before querying requests
+        await ensureUserProfile(u, "customer");
+        
+        const q = query(
+          collection(db, "requests"),
+          where("customerId", "==", u.uid),
+          orderBy("createdAt", "desc")
+        );
+        
+        const unsub = onSnapshot(q, (snap) => {
+          const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+          const activeDocs = docs.filter((doc: any) => !doc.archived);
+          const archivedDocs = docs.filter((doc: any) => !!doc.archived);
+          setRequests(activeDocs);
+          setArchivedRequests(archivedDocs);
+          setLoading(false);
+        }, (error) => {
+          console.error("Error fetching requests:", error);
+          // If permission denied, it might be because the customer profile isn't created yet
+          if (error.code === 'permission-denied') {
+            console.warn("Permission denied - customer profile may not exist yet");
+            // Set empty arrays and stop loading to prevent infinite spinner
+            setRequests([]);
+            setArchivedRequests([]);
+          }
+          setLoading(false);
+        });
+        
+        return () => unsub();
+      } catch (error) {
+        console.error("Error ensuring customer profile:", error);
+        setLoading(false);
+        
+        // If there's a role conflict, redirect to appropriate page
+        if ((error as any)?.code === 'ROLE_CONFLICT') {
+          toast.error("Acest cont este înregistrat ca firmă. Te rugăm să accesezi zona pentru firme.");
+          // Redirect will be handled by RequireRole component
+        }
+      }
     });
+    
     return () => unsubAuth();
   }, []);
 
@@ -258,6 +289,10 @@ export default function CustomerDashboard() {
           ...(d.data() as any),
         }));
         setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
+      }, (error) => {
+        console.error(`Error fetching offers for request ${r.id}:`, error);
+        // Set empty offers for this request on error
+        setOffersByRequest((prev) => ({ ...prev, [r.id]: [] }));
       });
       unsubscribers.push(unsub);
     });
@@ -964,7 +999,7 @@ export default function CustomerDashboard() {
                                   <p className="truncate text-sm font-semibold text-gray-900">
                                     {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                                   </p>
-                                  <p className="mt-0.5 text-xs text-gray-500">
+                                  <p className="mt-0.5 text-xs text-gray-600">
                                     {(() => {
                                       const d = formatMoveDateDisplay(r as any, { month: "short" });
                                       return d && d !== "-" ? d : "fără dată";
@@ -1205,7 +1240,7 @@ function OfferRow({
           <p className="text-sm font-semibold text-gray-900">{offer.companyName}</p>
           {offer.message && <p className="mt-1 text-sm text-gray-600">{offer.message}</p>}
             {offer.createdAt?.toDate && (
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-gray-600">
                 {formatDateRO(offer.createdAt, { month: "short" })}
               </p>
             )}
