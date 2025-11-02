@@ -151,11 +151,12 @@ export default function RequestDetailsModal({
               <div className="max-h-[calc(90vh-180px)] overflow-y-auto p-6">
                 {/* Route Section */}
                 <div className="mb-6 rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5">
-                  <div className="mb-3 flex items-center gap-2">
+                  <div className="mb-4 flex items-center gap-2">
                     <MapPin size={20} className="text-emerald-600" />
                     <h3 className="text-lg font-semibold text-gray-900">Traseu</h3>
                   </div>
-                  <div className="space-y-3">
+                  <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-start">
+                    {/* DE LA */}
                     <div>
                       <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
                         De la
@@ -185,11 +186,13 @@ export default function RequestDetailsModal({
                         )}
                       </div>
                     </div>
-                    <div className="flex items-center justify-center">
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-emerald-300 to-transparent" />
-                      <span className="mx-4 text-2xl text-emerald-500">→</span>
-                      <div className="h-px w-full bg-gradient-to-r from-transparent via-emerald-300 to-transparent" />
+                    
+                    {/* Arrow */}
+                    <div className="flex items-center justify-center md:mt-6">
+                      <span className="text-2xl text-emerald-500 md:mx-4">→</span>
                     </div>
+                    
+                    {/* CĂTRE */}
                     <div>
                       <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
                         Către
@@ -369,7 +372,11 @@ export default function RequestDetailsModal({
                           {isOwner && (
                             <button
                               type="button"
-                              onClick={() => handleDeleteMedia(url)}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                e.preventDefault();
+                                handleDeleteMedia(url);
+                              }}
                               disabled={deletingUrl === url}
                               title="Șterge"
                               className="absolute right-2 top-2 z-10 hidden h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-md transition hover:bg-red-600 disabled:cursor-wait group-hover:flex"

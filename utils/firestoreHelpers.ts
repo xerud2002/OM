@@ -16,6 +16,24 @@ export async function createRequest(data: any) {
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
+  // Handle move date logic based on mode
+  if (data.moveDateMode) {
+    clean.moveDateMode = data.moveDateMode;
+    
+    if (data.moveDateMode === 'exact' && data.moveDateStart) {
+      clean.moveDate = data.moveDateStart;
+      clean.moveDateStart = data.moveDateStart;
+    } else if (data.moveDateMode === 'range' && data.moveDateStart && data.moveDateEnd) {
+      clean.moveDate = data.moveDateStart; // For backward compatibility
+      clean.moveDateStart = data.moveDateStart;
+      clean.moveDateEnd = data.moveDateEnd;
+    } else if (data.moveDateMode === 'flexible' && data.moveDateStart && data.moveDateFlexDays) {
+      clean.moveDate = data.moveDateStart;
+      clean.moveDateStart = data.moveDateStart;
+      clean.moveDateFlexDays = data.moveDateFlexDays;
+    }
+  }
+
   // Build full address strings for backward compatibility
   if (clean.fromStreet || clean.fromNumber) {
     const parts = [clean.fromStreet, clean.fromNumber];
@@ -118,6 +136,24 @@ export async function updateRequest(requestId: string, data: any) {
   const clean: Record<string, any> = Object.fromEntries(
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
+
+  // Handle move date logic based on mode
+  if (data.moveDateMode) {
+    clean.moveDateMode = data.moveDateMode;
+    
+    if (data.moveDateMode === 'exact' && data.moveDateStart) {
+      clean.moveDate = data.moveDateStart;
+      clean.moveDateStart = data.moveDateStart;
+    } else if (data.moveDateMode === 'range' && data.moveDateStart && data.moveDateEnd) {
+      clean.moveDate = data.moveDateStart; // For backward compatibility
+      clean.moveDateStart = data.moveDateStart;
+      clean.moveDateEnd = data.moveDateEnd;
+    } else if (data.moveDateMode === 'flexible' && data.moveDateStart && data.moveDateFlexDays) {
+      clean.moveDate = data.moveDateStart;
+      clean.moveDateStart = data.moveDateStart;
+      clean.moveDateFlexDays = data.moveDateFlexDays;
+    }
+  }
 
   // Build full address strings for backward compatibility
   if (clean.fromStreet || clean.fromNumber) {
