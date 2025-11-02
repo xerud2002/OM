@@ -48,7 +48,7 @@ export default function ClientAccount() {
                 >
                   <LogIn size={18} /> Autentificare / Înregistrare
                 </Link>
-                <p className="mt-3 text-sm text-gray-500">
+                <p className="mt-3 text-sm text-gray-600">
                   Creează-ți contul gratuit și gestionează toate cererile tale într-un singur loc.
                 </p>
               </>

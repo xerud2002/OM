@@ -13,7 +13,7 @@ export default function TypingDots({ label = "Tastează..." }: { label?: string 
   };
 
   return (
-    <div className="inline-flex items-center gap-2 text-xs text-gray-500">
+    <div className="inline-flex items-center gap-2 text-xs text-gray-600">
       <span>{label}</span>
       <div className="flex gap-1">
         {[0, 1, 2].map((i) => (

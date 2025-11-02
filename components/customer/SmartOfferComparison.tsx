@@ -36,7 +36,7 @@ export default function SmartOfferComparison({
   if (offers.length === 0) {
     return (
       <div className="rounded-xl border border-gray-200 bg-white p-8 text-center">
-        <p className="text-gray-500">Nu există oferte de comparat.</p>
+        <p className="text-gray-600">Nu există oferte de comparat.</p>
       </div>
     );
   }
@@ -217,7 +217,7 @@ export default function SmartOfferComparison({
                   {/* Message */}
                   {offer.message && (
                     <div className="mb-4 rounded-lg bg-gray-50 p-3">
-                      <p className="mb-1 text-xs font-semibold text-gray-500">Mesaj:</p>
+                      <p className="mb-1 text-xs font-semibold text-gray-600">Mesaj:</p>
                       <p className="line-clamp-3 text-sm text-gray-700">{offer.message}</p>
                     </div>
                   )}

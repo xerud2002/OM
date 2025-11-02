@@ -188,10 +188,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-[auto_auto_auto_auto] md:items-end md:justify-start md:justify-items-start">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">
+                <label htmlFor="fromType" className="mb-1 block text-xs font-medium text-gray-700">
                   Tip proprietate <span className="text-red-500">*</span>
                 </label>
                 <select
+                  id="fromType"
                   value={form.fromType || "house"}
                   onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
                   className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
@@ -201,8 +202,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
+                <label htmlFor="fromRooms" className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
                 <input
+                  id="fromRooms"
                   type="text"
                   inputMode="numeric"
                   pattern="[0-9]*"

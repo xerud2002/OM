@@ -32,7 +32,7 @@ export default function ActivityList({ offers }: { offers: any[] }) {
           );
         })}
         {offers.length === 0 && (
-          <li className="text-sm text-gray-500">Nu există activitate recentă.</li>
+          <li className="text-sm text-gray-600">Nu există activitate recentă.</li>
         )}
       </ul>
     </div>

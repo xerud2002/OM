@@ -67,24 +67,32 @@ export default function CustomerSettings() {
               className="flex flex-col gap-4 rounded-lg border bg-white p-4 shadow-sm"
             >
               <div>
-                <label className="block text-xs text-gray-600">Nume afișat</label>
+                <label htmlFor="settings-displayName" className="block text-xs text-gray-600">Nume afișat</label>
                 <input
+                  id="settings-displayName"
                   value={form.displayName}
                   onChange={(e) => setForm((s) => ({ ...s, displayName: e.target.value }))}
                   className="w-full rounded-md border p-2 text-sm"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600">Telefon</label>
+                <label htmlFor="settings-phone" className="block text-xs text-gray-600">Telefon</label>
                 <input
+                  id="settings-phone"
                   value={form.phone}
-                  onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+                  onChange={(e) => {
+                    // Sanitize phone input in real-time
+                    const sanitized = e.target.value.replace(/[^0-9\s+\-()]/g, '');
+                    setForm((s) => ({ ...s, phone: sanitized }));
+                  }}
                   className="w-full rounded-md border p-2 text-sm"
+                  placeholder="07xxxxxxxx sau +407xxxxxxxx"
                 />
               </div>
               <div>
-                <label className="block text-xs text-gray-600">Oraș</label>
+                <label htmlFor="settings-city" className="block text-xs text-gray-600">Oraș</label>
                 <input
+                  id="settings-city"
                   value={form.city}
                   onChange={(e) => setForm((s) => ({ ...s, city: e.target.value }))}
                   className="w-full rounded-md border p-2 text-sm"

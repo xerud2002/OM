@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Head from "next/head";
 import OnboardingTour from "@/components/ui/OnboardingTour";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
+import DashboardErrorBoundary from "@/components/DashboardErrorBoundary";
 import { db } from "@/services/firebase";
 import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { motion } from "framer-motion";
@@ -12,7 +14,13 @@ import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
 import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
 import { sendEmail } from "@/utils/emailHelpers";
-import OfferComparison from "@/components/customer/OfferComparison";
+import dynamic from "next/dynamic";
+
+// Lazy-load heavy components
+const OfferComparison = dynamic(() => import("@/components/customer/OfferComparison"), {
+  loading: () => <div className="h-32 animate-pulse rounded-lg bg-gray-100" />,
+  ssr: false,
+});
 import RequestForm from "@/components/customer/RequestForm";
 import MyRequestCard from "@/components/customer/MyRequestCard";
 import { MessageSquare, MessageCircle } from "lucide-react";
@@ -160,6 +168,14 @@ export default function CustomerDashboard() {
         const data = await resp.json().catch(() => ({}));
         throw new Error(data.error || `HTTP ${resp.status}`);
       }
+      
+      // Track offer acceptance
+      const { trackEvent } = await import("@/utils/analytics");
+      trackEvent("offer_accepted", {
+        request_id: requestId,
+        offer_id: offerId,
+      });
+      
       toast.success("Oferta a fost acceptată!");
     } catch (err) {
       console.error("Failed to accept offer", err);
@@ -360,6 +376,18 @@ export default function CustomerDashboard() {
             mediaUrls: arrayUnion(...uploadedUrls),
           });
 
+          // Track media upload completion
+          try {
+            const { trackEvent } = await import("@/utils/analytics");
+            trackEvent("media_upload_completed", {
+              requestId,
+              filesCount: uploadedUrls.length,
+              uploadMethod: "direct_dashboard",
+            });
+          } catch (err) {
+            console.error("Analytics tracking failed:", err);
+          }
+
           toast.success(`Cererea și ${uploadedUrls.length} fișier(e) au fost încărcate cu succes!`);
         } catch (uploadError) {
           console.error("Media upload error:", uploadError);
@@ -422,6 +450,21 @@ export default function CustomerDashboard() {
       } else {
         toast.success("Cererea a fost trimisă cu succes!");
       }
+
+      // Track successful request submission
+      const { trackEvent } = await import("@/utils/analytics");
+      trackEvent("request_submitted", {
+        media_upload_type: form.mediaUpload,
+        has_media_files: form.mediaFiles && form.mediaFiles.length > 0,
+        services_count: [
+          form.serviceMoving,
+          form.servicePacking,
+          form.serviceDisassembly,
+          form.serviceCleanout,
+          form.serviceStorage,
+        ].filter(Boolean).length,
+        survey_type: form.surveyType,
+      });
 
       // Clear form after successful submission
       const emptyForm = {
@@ -521,8 +564,19 @@ export default function CustomerDashboard() {
   };
 
   return (
-    <RequireRole allowedRole="customer">
-      <LayoutWrapper>
+    <>
+      <Head>
+        <title>Panoul tău - Ofertemutare.ro</title>
+        <meta
+          name="description"
+          content="Gestionează cererile tale de mutare, vezi ofertele primite și alege compania perfectă pentru mutarea ta. Compară prețuri și servicii rapid."
+        />
+        <link rel="canonical" href="https://ofertemutare.ro/customer/dashboard" />
+      </Head>
+      
+      <RequireRole allowedRole="customer">
+        <DashboardErrorBoundary dashboardType="customer">
+          <LayoutWrapper>
         <OnboardingTour
           id="customer_dashboard_v1"
           steps={[
@@ -557,7 +611,7 @@ export default function CustomerDashboard() {
                 <h1 className="text-3xl font-bold text-gray-900">
                   Bună, {user?.displayName || "Client"}!
                 </h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-gray-600">
                   Gestionează cererile tale de mutare și ofertele primite
                 </p>
               </div>
@@ -617,7 +671,7 @@ export default function CustomerDashboard() {
             <button
               onClick={() => setActiveTab("new")}
               className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "new" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+                activeTab === "new" ? "text-emerald-600" : "text-gray-600 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-2">
@@ -636,7 +690,7 @@ export default function CustomerDashboard() {
             <button
               onClick={() => setActiveTab("offers")}
               className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "offers" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+                activeTab === "offers" ? "text-emerald-600" : "text-gray-600 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-2">
@@ -660,7 +714,7 @@ export default function CustomerDashboard() {
             <button
               onClick={() => setActiveTab("requests")}
               className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "requests" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+                activeTab === "requests" ? "text-emerald-600" : "text-gray-600 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-2">
@@ -679,7 +733,7 @@ export default function CustomerDashboard() {
             <button
               onClick={() => setActiveTab("messages")}
               className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "messages" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+                activeTab === "messages" ? "text-emerald-600" : "text-gray-600 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-2">
@@ -698,7 +752,7 @@ export default function CustomerDashboard() {
             <button
               onClick={() => setActiveTab("archive")}
               className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "archive" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
+                activeTab === "archive" ? "text-emerald-600" : "text-gray-600 hover:text-gray-700"
               }`}
             >
               <div className="flex items-center gap-2">
@@ -724,7 +778,7 @@ export default function CustomerDashboard() {
                 <button
                   onClick={() => setActiveTab("new")}
                   className={`flex flex-col items-center justify-center gap-1 py-2 ${
-                    activeTab === "new" ? "text-emerald-600" : "text-gray-500"
+                    activeTab === "new" ? "text-emerald-600" : "text-gray-600"
                   }`}
                   aria-current={activeTab === "new" ? "page" : undefined}
                 >
@@ -734,7 +788,7 @@ export default function CustomerDashboard() {
                 <button
                   onClick={() => setActiveTab("offers")}
                   className={`relative flex flex-col items-center justify-center gap-1 py-2 ${
-                    activeTab === "offers" ? "text-emerald-600" : "text-gray-500"
+                    activeTab === "offers" ? "text-emerald-600" : "text-gray-600"
                   }`}
                   aria-current={activeTab === "offers" ? "page" : undefined}
                 >
@@ -749,7 +803,7 @@ export default function CustomerDashboard() {
                 <button
                   onClick={() => setActiveTab("requests")}
                   className={`flex flex-col items-center justify-center gap-1 py-2 ${
-                    activeTab === "requests" ? "text-emerald-600" : "text-gray-500"
+                    activeTab === "requests" ? "text-emerald-600" : "text-gray-600"
                   }`}
                   aria-current={activeTab === "requests" ? "page" : undefined}
                 >
@@ -759,7 +813,7 @@ export default function CustomerDashboard() {
                 <button
                   onClick={() => setActiveTab("messages")}
                   className={`flex flex-col items-center justify-center gap-1 py-2 ${
-                    activeTab === "messages" ? "text-emerald-600" : "text-gray-500"
+                    activeTab === "messages" ? "text-emerald-600" : "text-gray-600"
                   }`}
                   aria-current={activeTab === "messages" ? "page" : undefined}
                 >
@@ -769,7 +823,7 @@ export default function CustomerDashboard() {
                 <button
                   onClick={() => setActiveTab("archive")}
                   className={`flex flex-col items-center justify-center gap-1 py-2 ${
-                    activeTab === "archive" ? "text-emerald-600" : "text-gray-500"
+                    activeTab === "archive" ? "text-emerald-600" : "text-gray-600"
                   }`}
                   aria-current={activeTab === "archive" ? "page" : undefined}
                 >
@@ -790,7 +844,7 @@ export default function CustomerDashboard() {
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
                     <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-                    <p className="mt-4 text-sm text-gray-500">Se încarcă cererile...</p>
+                    <p className="mt-4 text-sm text-gray-600">Se încarcă cererile...</p>
                   </div>
                 </div>
               ) : sortedRequests.length === 0 ? (
@@ -803,7 +857,7 @@ export default function CustomerDashboard() {
                     <List size={32} className="text-emerald-600" />
                   </div>
                   <h3 className="mt-4 text-lg font-semibold text-gray-900">Nicio cerere încă</h3>
-                  <p className="mt-2 max-w-sm text-sm text-gray-500">
+                  <p className="mt-2 max-w-sm text-sm text-gray-600">
                     Creează prima ta cerere de mutare și primește oferte de la firme verificate
                   </p>
                   <button
@@ -881,7 +935,7 @@ export default function CustomerDashboard() {
                     <Inbox size={32} className="text-sky-600" />
                   </div>
                   <h3 className="text-lg font-semibold text-gray-900">Nu ai încă cereri</h3>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-gray-600">
                     Creează o cerere pentru a primi oferte.
                   </p>
                 </div>
@@ -931,7 +985,7 @@ export default function CustomerDashboard() {
                   {/* Main: offers for selected request */}
                   <main className="p-4 sm:p-6">
                     {!selectedRequestId ? (
-                      <div className="py-10 text-center text-sm text-gray-500">
+                      <div className="py-10 text-center text-sm text-gray-600">
                         Selectează o cerere din stânga pentru a vedea ofertele.
                       </div>
                     ) : (
@@ -939,7 +993,7 @@ export default function CustomerDashboard() {
                         <div className="mb-4 flex items-center justify-between">
                           <div>
                             <h3 className="text-lg font-semibold text-gray-900">Oferte primite</h3>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-gray-600">
                               Relevante pentru cererea selectată
                             </p>
                           </div>
@@ -953,7 +1007,7 @@ export default function CustomerDashboard() {
                             <h4 className="mt-3 text-base font-semibold text-gray-900">
                               Nicio ofertă încă
                             </h4>
-                            <p className="mt-1 max-w-sm text-sm text-gray-500">
+                            <p className="mt-1 max-w-sm text-sm text-gray-600">
                               Firmele vor trimite oferte aici după ce procesează cererea ta.
                             </p>
                           </div>
@@ -1017,7 +1071,7 @@ export default function CustomerDashboard() {
                     userName={user.displayName || user.email || "Client"}
                   />
                 ) : (
-                  <div className="py-12 text-center text-sm text-gray-500">
+                  <div className="py-12 text-center text-sm text-gray-600">
                     Trebuie să fii autentificat pentru a vedea mesajele.
                   </div>
                 )}
@@ -1034,7 +1088,7 @@ export default function CustomerDashboard() {
                 <div className="flex items-center justify-center py-12">
                   <div className="text-center">
                     <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-                    <p className="mt-4 text-sm text-gray-500">Se încarcă arhiva...</p>
+                    <p className="mt-4 text-sm text-gray-600">Se încarcă arhiva...</p>
                   </div>
                 </div>
               ) : archivedRequests.length === 0 ? (
@@ -1044,10 +1098,10 @@ export default function CustomerDashboard() {
                   className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
                 >
                   <div className="rounded-full bg-gray-100 p-4">
-                    <ArchiveIcon size={32} className="text-gray-500" />
+                    <ArchiveIcon size={32} className="text-gray-600" />
                   </div>
                   <h3 className="mt-4 text-lg font-semibold text-gray-900">Arhivă goală</h3>
-                  <p className="mt-2 max-w-sm text-sm text-gray-500">
+                  <p className="mt-2 max-w-sm text-sm text-gray-600">
                     Cererile arhivate vor apărea aici.
                   </p>
                 </motion.div>
@@ -1075,7 +1129,9 @@ export default function CustomerDashboard() {
           )}
         </section>
       </LayoutWrapper>
+        </DashboardErrorBoundary>
     </RequireRole>
+    </>
   );
 }
 

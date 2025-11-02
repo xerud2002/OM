@@ -154,24 +154,39 @@ function OfferItem({
     >
       {isEditing ? (
         <div className="space-y-2">
+          <label htmlFor={`edit-price-${offer.id}`} className="sr-only">
+            Editează preț
+          </label>
           <input
+            id={`edit-price-${offer.id}`}
             type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
             placeholder="Preț (lei)"
             className="w-full rounded border p-2 text-sm"
+            aria-label="Editează preț"
           />
+          <label htmlFor={`edit-date-${offer.id}`} className="sr-only">
+            Editează data propusă
+          </label>
           <input
+            id={`edit-date-${offer.id}`}
             type="date"
             value={proposedDate}
             onChange={(e) => setProposedDate(e.target.value)}
             className="w-full rounded border p-2 text-sm"
+            aria-label="Editează data propusă"
           />
+          <label htmlFor={`edit-message-${offer.id}`} className="sr-only">
+            Editează mesaj
+          </label>
           <textarea
+            id={`edit-message-${offer.id}`}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Mesaj"
             className="w-full rounded border p-2 text-sm"
+            aria-label="Editează mesaj"
           />
           <div className="flex gap-2">
             <button
@@ -429,29 +444,50 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
 
   return (
     <form onSubmit={handleSend} className="mt-3 flex flex-col gap-2 border-t pt-3 text-sm">
+      <label htmlFor={`offer-price-${requestId}`} className="sr-only">
+        Preț estimativ în lei
+      </label>
       <input
+        id={`offer-price-${requestId}`}
         type="number"
         placeholder="Preț estimativ (lei)"
         value={price}
-        onChange={(e) => setPrice(e.target.value)}
+        onChange={(e) => {
+          // Only allow positive numbers
+          const value = e.target.value;
+          if (value === '' || (/^\d+$/.test(value) && parseInt(value) > 0)) {
+            setPrice(value);
+          }
+        }}
         min={1}
         className={`rounded-md border p-2 focus:outline-none focus:ring-2 ${
           isPriceValid ? "focus:ring-emerald-500" : "border-rose-300 focus:ring-rose-400"
         }`}
         required
+        aria-label="Preț estimativ în lei"
       />
+      <label htmlFor={`offer-date-${requestId}`} className="sr-only">
+        Data propusă pentru mutare
+      </label>
       <input
+        id={`offer-date-${requestId}`}
         type="date"
         placeholder="Data propusă pentru mutare"
         value={proposedDate}
         onChange={(e) => setProposedDate(e.target.value)}
         className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        aria-label="Data propusă pentru mutare"
       />
+      <label htmlFor={`offer-message-${requestId}`} className="sr-only">
+        Mesaj pentru client
+      </label>
       <textarea
+        id={`offer-message-${requestId}`}
         placeholder="Mesaj pentru client"
         value={message}
         onChange={(e) => setMessage(e.target.value)}
         className="rounded-md border p-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+        aria-label="Mesaj pentru client"
         required
       />
       <button
@@ -654,12 +690,12 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       </div>
 
       {loading ? (
-        <p className="text-center text-gray-500">Se încarcă cererile...</p>
+        <p className="text-center text-gray-600">Se încarcă cererile...</p>
       ) : sortedRequests.length === 0 ? (
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center italic text-gray-500"
+          className="text-center italic text-gray-600"
         >
           Momentan nu există cereri noi. 💤
         </motion.p>
@@ -728,7 +764,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   <p className="text-sm text-gray-600">
                     {r.fromCity} → {r.toCity}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm text-gray-600">
                     Mutare: {(() => {
                       const d = formatMoveDateDisplay(r as any, { month: "short" });
                       return d && d !== "-" ? d : "-";

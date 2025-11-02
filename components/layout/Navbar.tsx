@@ -8,7 +8,13 @@ import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react"
 import { useRouter, usePathname } from "next/navigation";
 import { User as FirebaseUser } from "firebase/auth";
 import { onAuthChange, logout, getUserRole } from "@/utils/firebaseHelpers";
-import NotificationBell from "@/components/company/NotificationBell";
+import dynamic from "next/dynamic";
+
+// Lazy-load NotificationBell since it's only used for companies
+const NotificationBell = dynamic(() => import("@/components/company/NotificationBell"), {
+  loading: () => <div className="h-6 w-6 animate-pulse rounded-full bg-gray-200" />,
+  ssr: false,
+});
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);

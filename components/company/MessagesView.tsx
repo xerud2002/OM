@@ -316,7 +316,7 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
           <div className="flex h-full items-center justify-center p-8 text-center">
             <div>
               <MessageCircle size={64} className="mx-auto mb-4 text-gray-300" />
-              <p className="text-gray-500">Selectează o conversație pentru a vedea mesajele</p>
+              <p className="text-gray-600">Selectează o conversație pentru a vedea mesajele</p>
             </div>
           </div>
         ) : (
@@ -326,7 +326,7 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
               <h3 className="text-lg font-semibold text-gray-900">
                 {selectedConversation.customerName || "Client"}
               </h3>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-600">
                 {selectedConversation.requestCode ||
                   selectedConversation.requestId.slice(0, 8)}
               </p>
@@ -383,7 +383,11 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
             {/* Input */}
             <div className="border-t border-gray-200 p-4">
               <div className="flex gap-2">
+                <label htmlFor="message-input" className="sr-only">
+                  Scrie mesajul tău
+                </label>
                 <input
+                  id="message-input"
                   type="text"
                   value={messageText}
                   onChange={(e) => handleTypingChange(e.target.value)}
@@ -395,6 +399,7 @@ export default function CompanyMessagesView({ companyId, companyName }: Messages
                     }
                   }}
                   disabled={sending}
+                  aria-label="Scrie mesajul tău"
                 />
                 <button
                   onClick={handleSendMessage}

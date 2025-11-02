@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Head from "next/head";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import OnboardingTour from "@/components/ui/OnboardingTour";
+import DashboardErrorBoundary from "@/components/DashboardErrorBoundary";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import {
@@ -192,8 +194,19 @@ export default function CompanyDashboard() {
   }
 
   return (
-    <RequireRole allowedRole="company">
-      <LayoutWrapper>
+    <>
+      <Head>
+        <title>Panou Companie - Ofertemutare.ro</title>
+        <meta
+          name="description"
+          content="Monitorizează cererile de mutare, trimite oferte competitive și crește-ți afacerea cu clienți noi din întreaga România."
+        />
+        <link rel="canonical" href="https://ofertemutare.ro/company/dashboard" />
+      </Head>
+      
+      <RequireRole allowedRole="company">
+        <DashboardErrorBoundary dashboardType="company">
+          <LayoutWrapper>
         <OnboardingTour
           id="company_dashboard_v1"
           steps={[
@@ -626,7 +639,7 @@ export default function CompanyDashboard() {
                   <p className="mt-4 text-lg font-semibold text-gray-700">
                     Nu există oferte de afișat
                   </p>
-                  <p className="mt-2 text-sm text-gray-500">Ofertele tale vor apărea aici</p>
+                  <p className="mt-2 text-sm text-gray-600">Ofertele tale vor apărea aici</p>
                 </div>
               )}
             </>
@@ -699,7 +712,7 @@ export default function CompanyDashboard() {
                   return <RequestsView companyFromParent={company} />;
                 })()
               ) : (
-                <p className="text-center text-sm italic text-gray-500">
+                <p className="text-center text-sm italic text-gray-600">
                   Se încarcă utilizatorul...
                 </p>
               )}
@@ -714,7 +727,7 @@ export default function CompanyDashboard() {
                     companyName={company.displayName || company.email || "Companie"}
                   />
                 ) : (
-                  <p className="text-center text-sm italic text-gray-500">
+                  <p className="text-center text-sm italic text-gray-600">
                     Se încarcă utilizatorul...
                   </p>
                 )}
@@ -722,6 +735,8 @@ export default function CompanyDashboard() {
             )}
         </section>
       </LayoutWrapper>
+        </DashboardErrorBoundary>
     </RequireRole>
+    </>
   );
 }
