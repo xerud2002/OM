@@ -52,12 +52,11 @@ export default function Footer() {
         <motion.div variants={fadeUp}>
           <div className="mb-5 flex items-center gap-3">
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="Logo ofertemutare.ro"
-              width={140}
-              height={80}
+              width={120}
+              height={33}
               className="rounded-lg"
-              priority
             />
           </div>
 

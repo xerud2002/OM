@@ -26,7 +26,8 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charSet="utf-8" />
-        <link rel="icon" href="/logo.png" type="image/png" />
+        <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+        <link rel="icon" href="/logo-square.webp" type="image/webp" sizes="64x64" />
         <title>Ofertemutare.ro — Oferte reale de la firme de mutări verificate</title>
         <meta
           name="description"
