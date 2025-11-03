@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { adminDb } from "@/lib/firebaseAdmin";
+import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 
 type UploadTokenData = {
   requestId: string;
@@ -24,6 +24,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    if (!adminReady) {
+      console.warn("[validateUploadToken] Firebase Admin not configured - returning invalid");
+      return res.status(200).json({
+        valid: false,
+        reason: "admin_unconfigured",
+        message:
+          "Server not fully configured for validation in this environment. Please try again later.",
+      });
+    }
     // Get token from Firestore
     const tokenRef = adminDb.doc(`uploadTokens/${token}`);
     const tokenSnap = await tokenRef.get();
