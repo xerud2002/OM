@@ -38,6 +38,15 @@ export async function uploadFileViaAPI(
     return uploadFileClientSide(file, requestId, customerId);
   }
 
+  // If API returns 500 with storage config error, try client-side as fallback
+  if (response.status === 500) {
+    const errorData = await response.json().catch(() => ({}));
+    if (errorData.error?.includes("Storage") || errorData.error?.includes("configured")) {
+      console.warn("Storage configuration issue, trying client-side upload");
+      return uploadFileClientSide(file, requestId, customerId);
+    }
+  }
+
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.error || `Upload failed: ${response.status}`);

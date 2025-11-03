@@ -77,14 +77,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const [exists] = await bucket.exists();
       if (!exists) {
         console.error("[uploadMedia] Bucket does not exist:", bucketName);
-        return res.status(500).json({
-          error: `Firebase Storage bucket not configured. Please set up Firebase Storage in console.`,
+        return res.status(503).json({
+          error: `Firebase Storage bucket not configured - use client-side upload`,
         });
       }
     } catch (existErr: any) {
       console.error("[uploadMedia] Bucket check failed:", existErr);
-      return res.status(500).json({
-        error: "Firebase Storage not properly configured",
+      // Return 503 so client can fallback to client-side upload
+      return res.status(503).json({
+        error: "Firebase Storage not properly configured - use client-side upload",
       });
     }
 

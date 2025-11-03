@@ -12,17 +12,30 @@ service firebase.storage {
       return isSignedIn() && request.auth.uid == uid;
     }
     
+    // Validate file size (max 10MB for images/videos)
+    function isValidSize() {
+      return request.resource.size < 10 * 1024 * 1024;
+    }
+    
+    // Validate content type (images and videos only)
+    function isValidContentType() {
+      return request.resource.contentType.matches('image/.*') ||
+             request.resource.contentType.matches('video/.*');
+    }
+    
     // === REQUEST MEDIA ===
     // Path: requests/{requestId}/customers/{customerId}/{filename}
     match /requests/{requestId}/customers/{customerId}/{filename} {
       // Anyone authenticated can read (so companies can view media)
       allow read: if isSignedIn();
       
-      // Only the customer who owns this path can upload
-      allow write: if isOwner(customerId);
+      // Only the customer who owns this path can upload with validation
+      allow write: if isOwner(customerId) && 
+                      isValidSize() && 
+                      isValidContentType();
       
-  // Only the customer who owns this path can delete
-  allow delete: if isOwner(customerId);
+      // Only the customer who owns this path can delete
+      allow delete: if isOwner(customerId);
     }
     
     // === COMPANY LOGOS (optional future feature) ===
