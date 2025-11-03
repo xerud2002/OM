@@ -114,7 +114,7 @@ export default function CustomerDashboard() {
       if (saved === "new" || saved === "requests" || saved === "offers" || saved === "archive")
         return saved as any;
     }
-    return "requests";
+    return "new";
   });
   // Two-column layout: we render selected content on the right; no modal needed
   const [loading, setLoading] = useState<boolean>(true);
