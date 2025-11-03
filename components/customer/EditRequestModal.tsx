@@ -260,13 +260,6 @@ export default function EditRequestModal({
                                     fill
                                     className="object-cover"
                                   />
-                                  <button
-                                    onClick={() => handleDeleteMedia(url)}
-                                    className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity hover:bg-red-600 group-hover:opacity-100"
-                                    title="Șterge"
-                                  >
-                                    <Trash2 size={16} />
-                                  </button>
                                   <a
                                     href={url}
                                     target="_blank"
@@ -275,6 +268,17 @@ export default function EditRequestModal({
                                   >
                                     <span className="text-xs font-medium text-white">Vezi</span>
                                   </a>
+                                  <button
+                                    onClick={(e) => {
+                                      e.preventDefault();
+                                      e.stopPropagation();
+                                      handleDeleteMedia(url);
+                                    }}
+                                    className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity hover:bg-red-600 group-hover:opacity-100"
+                                    title="Șterge"
+                                  >
+                                    <Trash2 size={16} />
+                                  </button>
                                 </div>
                               ))}
                             </div>

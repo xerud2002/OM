@@ -337,18 +337,18 @@ export default function RequestDetailsModal({
                           key={url}
                           className="group relative aspect-square overflow-hidden rounded-lg border border-gray-200 transition-all hover:border-emerald-300 hover:shadow-md"
                         >
+                          <Image
+                            src={url}
+                            alt={`Media ${index + 1}`}
+                            fill
+                            className="object-cover transition-transform group-hover:scale-110"
+                          />
                           <a
                             href={url}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="absolute inset-0"
                             aria-label={`Deschide media ${index + 1}`}
-                          />
-                          <Image
-                            src={url}
-                            alt={`Media ${index + 1}`}
-                            fill
-                            className="object-cover transition-transform group-hover:scale-110"
                           />
                           {isOwner && (
                             <button
@@ -360,7 +360,7 @@ export default function RequestDetailsModal({
                               }}
                               disabled={deletingUrl === url}
                               title="Șterge"
-                              className="absolute right-2 top-2 z-10 hidden h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-md transition hover:bg-red-600 disabled:cursor-wait group-hover:flex"
+                              className="absolute right-2 top-2 z-20 hidden h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-md transition hover:bg-red-600 disabled:cursor-wait group-hover:flex"
                             >
                               {deletingUrl === url ? (
                                 <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
