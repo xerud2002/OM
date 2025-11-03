@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, PhoneCall, Mail, MapPin } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/utils/animations";
@@ -49,12 +50,14 @@ export default function Footer() {
       >
         {/* Logo & about */}
         <motion.div variants={fadeUp}>
-          <div className="mb-5 flex items-center">
-            <div className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-xl font-bold text-transparent">
-              <span className="tracking-tight">Oferte</span>
-              <span className="text-emerald-400">mutare</span>
-              <span className="align-top text-xs text-emerald-500">.ro</span>
-            </div>
+          <div className="mb-5 flex items-center gap-3">
+            <Image
+              src="/logo.webp"
+              alt="Logo ofertemutare.ro"
+              width={120}
+              height={33}
+              className="rounded-lg"
+            />
           </div>
 
           <p className="mb-4 max-w-xs text-sm leading-relaxed text-gray-600">
