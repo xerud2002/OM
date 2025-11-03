@@ -72,7 +72,10 @@ export default function ClientAccount() {
                     Panou Client
                   </Link>
                   <button
-                    onClick={logout}
+                    onClick={async () => {
+                      router.push("/");
+                      await logout();
+                    }}
                     className="rounded-lg bg-red-500 px-6 py-2 text-white shadow transition-all hover:scale-105 hover:bg-red-600"
                   >
                     Logout
