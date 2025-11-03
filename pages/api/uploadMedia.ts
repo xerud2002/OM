@@ -11,10 +11,7 @@ export const config = {
   },
 };
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
   }
@@ -22,14 +19,12 @@ export default async function handler(
   try {
     // Parse form data
     const form = new IncomingForm({ multiples: true });
-    const [fields, files] = await new Promise<[any, any]>(
-      (resolve, reject) => {
-        form.parse(req, (err, fields, files) => {
-          if (err) reject(err);
-          else resolve([fields, files]);
-        });
-      }
-    );
+    const [fields, files] = await new Promise<[any, any]>((resolve, reject) => {
+      form.parse(req, (err, fields, files) => {
+        if (err) reject(err);
+        else resolve([fields, files]);
+      });
+    });
 
     // Verify Firebase auth token
     const token = req.headers.authorization?.split("Bearer ")[1];
@@ -59,26 +54,31 @@ export default async function handler(
 
     // Resolve bucket name explicitly to avoid default-bucket config issues
     const bucketName =
-      (process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "").trim() || `${process.env.FIREBASE_ADMIN_PROJECT_ID}.appspot.com`;
-  const bucket = admin.storage().bucket(bucketName);
-  console.warn("[uploadMedia] Using bucket:", bucketName);
+      (process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "").trim() ||
+      `${process.env.FIREBASE_ADMIN_PROJECT_ID}.appspot.com`;
+    const bucket = admin.storage().bucket(bucketName);
+    console.warn("[uploadMedia] Using bucket:", bucketName);
 
-    // Check if the bucket exists (skip in development with placeholder credentials)
+    // Check if Admin SDK is properly configured
+    const isPlaceholder = process.env.FIREBASE_ADMIN_PRIVATE_KEY?.includes("Placeholder");
+
+    if (isPlaceholder) {
+      // Development mode - use client-side upload instead
+      console.warn(
+        "[uploadMedia] Development mode - Firebase Admin not configured, falling back to client"
+      );
+      return res.status(503).json({
+        error: "Admin not configured - use client-side upload",
+      });
+    }
+
+    // Check if the bucket exists
     try {
-      if (!process.env.FIREBASE_ADMIN_PRIVATE_KEY?.includes("Placeholder")) {
-        const [exists] = await bucket.exists();
-        if (!exists) {
-          console.error("[uploadMedia] Bucket does not exist:", bucketName);
-          return res.status(500).json({
-            error: `Firebase Storage bucket not configured. Please set up Firebase Storage in console.`,
-          });
-        }
-      } else {
-        // Development mode - return mock success
-        console.warn("[uploadMedia] Development mode - Firebase Admin not configured");
-        return res.status(200).json({
-          message: "Development mode - file upload skipped",
-          urls: ["https://via.placeholder.com/300x200.png?text=Dev+Mode"],
+      const [exists] = await bucket.exists();
+      if (!exists) {
+        console.error("[uploadMedia] Bucket does not exist:", bucketName);
+        return res.status(500).json({
+          error: `Firebase Storage bucket not configured. Please set up Firebase Storage in console.`,
         });
       }
     } catch (existErr: any) {
@@ -94,7 +94,7 @@ export default async function handler(
       const formFile = file as FormidableFile;
       const fileName = `${Date.now()}_${formFile.originalFilename}`;
       const storagePath = `requests/${requestId}/customers/${customerId}/${fileName}`;
-      
+
       // Upload to Firebase Storage via Admin SDK
       await bucket.upload(formFile.filepath, {
         destination: storagePath,
@@ -123,14 +123,14 @@ export default async function handler(
       }
     }
 
-    return res.status(200).json({ 
-      ok: true, 
-      urls: uploadedUrls 
+    return res.status(200).json({
+      ok: true,
+      urls: uploadedUrls,
     });
   } catch (error: any) {
     console.error("Upload error:", error);
-    return res.status(500).json({ 
-      error: error.message || "Upload failed" 
+    return res.status(500).json({
+      error: error.message || "Upload failed",
     });
   }
 }

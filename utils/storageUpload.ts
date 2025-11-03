@@ -1,9 +1,10 @@
 /**
- * Upload file via Next.js API route (server-side)
+ * Upload file via Next.js API route (server-side) or fallback to client-side
  * Bypasses client-side CORS issues on localhost
  */
 
-import { auth } from "@/services/firebase";
+import { auth, storage } from "@/services/firebase";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 export async function uploadFileViaAPI(
   file: File,
@@ -22,7 +23,7 @@ export async function uploadFileViaAPI(
   formData.append("requestId", requestId);
   formData.append("customerId", customerId);
 
-  // Upload via API route
+  // Try API route first
   const response = await fetch("/api/uploadMedia", {
     method: "POST",
     headers: {
@@ -30,6 +31,12 @@ export async function uploadFileViaAPI(
     },
     body: formData,
   });
+
+  // If API returns 503 (Admin not configured), use client-side upload
+  if (response.status === 503) {
+    console.warn("API upload not available, using client-side upload");
+    return uploadFileClientSide(file, requestId, customerId);
+  }
 
   if (!response.ok) {
     const errorData = await response.json().catch(() => ({}));
@@ -43,4 +50,42 @@ export async function uploadFileViaAPI(
   }
 
   return result.urls[0];
+}
+
+/**
+ * Client-side upload directly to Firebase Storage
+ */
+async function uploadFileClientSide(
+  file: File,
+  requestId: string,
+  customerId: string
+): Promise<string> {
+  const fileName = `${Date.now()}_${file.name}`;
+  const storagePath = `requests/${requestId}/customers/${customerId}/${fileName}`;
+  
+  const storageRef = ref(storage, storagePath);
+  
+  // Upload file
+  const uploadTask = uploadBytesResumable(storageRef, file);
+  
+  return new Promise((resolve, reject) => {
+    uploadTask.on(
+      'state_changed',
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.warn(`Upload progress: ${progress.toFixed(0)}%`);
+      },
+      (error) => {
+        reject(error);
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        } catch (error) {
+          reject(error);
+        }
+      }
+    );
+  });
 }
