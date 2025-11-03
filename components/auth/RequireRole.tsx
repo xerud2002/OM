@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { onAuthChange, getUserRole } from "@/utils/firebaseHelpers";
+import { onAuthChange, getUserRole, isLogoutInProgress } from "@/utils/firebaseHelpers";
 import { toast } from "sonner";
 
 type Props = {
@@ -19,7 +19,10 @@ export default function RequireRole({ allowedRole, children }: Props) {
       (async () => {
         // Not authenticated -> send to the appropriate auth page
         if (!u) {
-          toast.error("Trebuie să fii autentificat pentru a accesa această pagină.");
+          // Don't show error toast if user is logging out intentionally
+          if (!isLogoutInProgress()) {
+            toast.error("Trebuie să fii autentificat pentru a accesa această pagină.");
+          }
           router.push(allowedRole === "company" ? "/company/auth" : "/customer/auth");
           setChecking(false);
           return;

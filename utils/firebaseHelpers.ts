@@ -52,8 +52,20 @@ export function onAuthChange(cb: (user: User | null) => void) {
   return onAuthStateChanged(auth, cb);
 }
 
+// Track if logout is in progress to avoid showing error messages
+let isLoggingOut = false;
+
 export async function logout() {
+  isLoggingOut = true;
   await signOut(auth);
+  // Reset after a short delay to allow auth state to propagate
+  setTimeout(() => {
+    isLoggingOut = false;
+  }, 1000);
+}
+
+export function isLogoutInProgress() {
+  return isLoggingOut;
 }
 
 // ---- Role-aware profile helpers

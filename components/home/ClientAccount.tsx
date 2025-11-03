@@ -7,9 +7,11 @@ import { LogIn, LayoutDashboard } from "lucide-react";
 import { useEffect, useState } from "react";
 import { User } from "firebase/auth";
 import { onAuthChange, logout } from "@/utils/firebaseHelpers";
+import { useRouter } from "next/navigation";
 import FadeInWhenVisible from "@/components/FadeInWhenVisible";
 
 export default function ClientAccount() {
+  const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
 
   useEffect(() => {

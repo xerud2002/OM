@@ -50,10 +50,12 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
+    setShowUserMenu(false);
+    // Redirect immediately to avoid RequireRole error messages
+    router.push("/");
+    // Then logout
     await logout();
     setUser(null);
-    setShowUserMenu(false);
-    router.push("/");
   };
 
   const navLinks = [
