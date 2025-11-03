@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { db } from "@/services/firebase";
-import { collection, getDocs, query, where, Timestamp } from "firebase/firestore";
+import { adminDb } from "@/lib/firebaseAdmin";
 
 /**
  * API pentru verificarea token-urilor nefolosite și trimiterea reminder-elor
@@ -26,41 +25,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
-    // Query tokens created 3+ days ago, not used, and not expired
-    const tokensRef = collection(db, "uploadTokens");
-    const tokensQuery = query(
-      tokensRef,
-      where("used", "==", false),
-      where("createdAt", "<=", Timestamp.fromDate(threeDaysAgo))
-    );
-    const tokensSnap = await getDocs(tokensQuery);
+    // Query via Admin SDK
+    const tokensSnap = await adminDb.collection("uploadTokens").where("used", "==", false).get();
 
     const reminders: Array<{ email: string; name: string; link: string }> = [];
     const now = new Date();
 
     for (const tokenDoc of tokensSnap.docs) {
-      const tokenData = tokenDoc.data();
-      const expiresAt = new Date(tokenData.expiresAt);
+      const tokenData = tokenDoc.data() as any;
+      const createdAt = tokenData.createdAt ? new Date(tokenData.createdAt) : null;
+      const expiresAt = tokenData.expiresAt ? new Date(tokenData.expiresAt) : null;
+      if (!createdAt || !expiresAt) continue;
 
-      // Skip if expired
-      if (now > expiresAt) continue;
-
-      // Check if reminder already sent (optional: add reminderSent field to token)
-      if (tokenData.reminderSent) continue;
-
-      reminders.push({
-        email: tokenData.customerEmail,
-        name: tokenData.customerName,
-        link: tokenData.uploadLink,
-      });
+      if (createdAt <= threeDaysAgo && now <= expiresAt && !tokenData.reminderSent) {
+        reminders.push({
+          email: tokenData.customerEmail,
+          name: tokenData.customerName,
+          link: tokenData.uploadLink,
+        });
+      }
     }
 
-    // Return list of reminders to send (client will send via EmailJS)
-    return res.status(200).json({
-      ok: true,
-      count: reminders.length,
-      reminders,
-    });
+    return res.status(200).json({ ok: true, count: reminders.length, reminders });
   } catch (error) {
     console.error("Error checking upload reminders:", error);
     return res.status(500).json({ error: "Internal server error" });

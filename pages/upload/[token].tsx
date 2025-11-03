@@ -177,18 +177,24 @@ export default function UploadMediaPage() {
         mediaUrls: arrayUnion(...uploadedUrls),
       });
 
-      // Mark token as used
+      // Mark token as used via secure API (Admin SDK)
       try {
-        const tokenRef = doc(db, "uploadTokens", token as string);
-        await updateDoc(tokenRef, {
-          used: true,
-          uploadedAt: new Date().toISOString(),
+        const idToken = await auth.currentUser?.getIdToken();
+        const resp = await fetch("/api/markUploadTokenUsed", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${idToken}`,
+          },
+          body: JSON.stringify({ token }),
         });
+        if (!resp.ok) {
+          const data = await resp.json().catch(() => ({}));
+          throw new Error(data.error || `HTTP ${resp.status}`);
+        }
       } catch (e: any) {
-        console.error("Failed to update token status:", e?.message || e);
-        toast.error(
-          "Nu am putut marca link-ul ca folosit. Verifică dacă ești autentificat cu contul corect."
-        );
+        console.error("Failed to mark token used:", e?.message || e);
+        toast.error("Nu am putut marca link-ul ca folosit.");
       }
 
       // Notify companies with offers

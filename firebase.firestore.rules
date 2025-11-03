@@ -58,25 +58,55 @@ service cloud.firestore {
           get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid
         );
 
-        // Only companies can create offers for requests
-        allow create: if isSignedIn() && isCompany() && request.resource.data.companyId == request.auth.uid;
+        // Only companies can create offers for requests on active, non-archived requests
+        allow create: if isSignedIn() &&
+          isCompany() &&
+          request.resource.data.companyId == request.auth.uid &&
+          // Request must not be archived
+          !(get(/databases/$(database)/documents/requests/$(requestId)).data.archived == true) &&
+          // And request status must not be closed or cancelled
+          !(
+            get(/databases/$(database)/documents/requests/$(requestId)).data.status == 'closed' ||
+            get(/databases/$(database)/documents/requests/$(requestId)).data.status == 'cancelled'
+          );
 
-        // Company can update their own offers, customer can update status (accept/decline)
+        // Strict updates:
+        // - Company (owner) may only change price/message (and not rebind companyId/requestId)
+        // - Customer (request owner) may only change status to accepted|declined
         allow update: if isSignedIn() && (
-          resource.data.companyId == request.auth.uid ||
-          get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid
+          // Company edits: limit to price/message fields
+          (
+            resource.data.companyId == request.auth.uid &&
+            request.resource.data.companyId == resource.data.companyId &&
+            request.resource.data.requestId == resource.data.requestId &&
+            request.resource.data.diff(resource.data).changedKeys().hasOnly(['price','message'])
+          ) ||
+          // Customer accepts/declines: limit to status only
+          (
+            get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid &&
+            request.resource.data.diff(resource.data).changedKeys().hasOnly(['status']) &&
+            (request.resource.data.status == 'accepted' || request.resource.data.status == 'declined')
+          )
         );
 
-        // No deletion
+        // No deletion via client SDK
         allow delete: if false;
       }
     }
 
     // === UPLOAD TOKENS COLLECTION ===
     match /uploadTokens/{tokenId} {
-      // Tokens are readable by system only (API routes with admin SDK)
-      allow read: if false;
-      allow write: if false;
+      // Keep tokens hidden from clients
+      allow get, list: if false;
+      // Allow customers to mark their own token as used (optional; prefer server API)
+      allow update: if isSignedIn() &&
+        // Ensure token is bound to a request owned by the caller
+        get(/databases/$(database)/documents/requests/$(resource.data.requestId)).data.customerId == request.auth.uid &&
+        // Only allow flipping used flag and setting uploadedAt
+        request.resource.data.diff(resource.data).changedKeys().hasOnly(['used','uploadedAt']) &&
+        request.resource.data.used == true;
+      // No creates/deletes from client
+      allow create, delete: if false;
     }
 
     // Deny everything else by default
