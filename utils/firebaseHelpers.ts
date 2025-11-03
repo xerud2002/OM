@@ -58,10 +58,10 @@ let isLoggingOut = false;
 export async function logout() {
   isLoggingOut = true;
   await signOut(auth);
-  // Reset after a short delay to allow auth state to propagate
+  // Reset after a longer delay to ensure all auth state changes propagate
   setTimeout(() => {
     isLoggingOut = false;
-  }, 1000);
+  }, 2000);
 }
 
 export function isLogoutInProgress() {

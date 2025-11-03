@@ -46,6 +46,34 @@ const nextConfig = {
             key: 'Cross-Origin-Opener-Policy',
             value: 'same-origin-allow-popups',
           },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+        ],
+      },
+      // Optimize font loading
+      {
+        source: '/fonts/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+      // Optimize static assets
+      {
+        source: '/pics/(.*)',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
         ],
       },
     ];
@@ -59,6 +87,18 @@ const nextConfig = {
     // Allow dev origins for cross-origin requests
     allowedDevOrigins: ['127.0.0.1:*', 'localhost:*'],
   }),
+
+  // Webpack configuration for better development experience
+  webpack: (config, { dev, isServer }) => {
+    if (dev && !isServer) {
+      // Optimize webpack for development
+      config.watchOptions = {
+        poll: 1000,
+        aggregateTimeout: 300,
+      };
+    }
+    return config;
+  },
 };
 
 export default nextConfig;

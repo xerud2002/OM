@@ -4,6 +4,9 @@ import Head from "next/head";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
+// Import dev error suppressor for cleaner console in development
+import "@/utils/devErrorSuppressor";
+
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
