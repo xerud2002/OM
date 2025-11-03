@@ -103,8 +103,10 @@ service cloud.firestore {
           allow create: if isSignedIn() && (
             get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid ||
             get(/databases/$(database)/documents/requests/$(requestId)/offers/$(offerId)).data.companyId == request.auth.uid
-          ) && request.resource.data.senderId == request.auth.uid &&
-          request.resource.data.diff({}).changedKeys().hasOnly(['text','senderId','senderRole','createdAt']);
+          ) && 
+          request.resource.data.senderId == request.auth.uid &&
+          request.resource.data.keys().hasAll(['text','senderId','senderRole','createdAt']) &&
+          request.resource.data.keys().hasOnly(['text','senderId','senderRole','createdAt']);
           // No client updates/deletes to messages
           allow update, delete: if false;
         }
@@ -124,6 +126,14 @@ service cloud.firestore {
         request.resource.data.used == true;
       // No creates/deletes from client
       allow create, delete: if false;
+    }
+
+    // === META COLLECTION (for counters and system data) ===
+    match /meta/{docId} {
+      // Allow authenticated users to read and write counters (for request code generation)
+      allow read, write: if isSignedIn() && docId == 'counters';
+      // Deny all other meta documents
+      allow read, write: if false;
     }
 
     // Deny everything else by default
