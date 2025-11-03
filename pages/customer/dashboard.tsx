@@ -17,7 +17,7 @@ import MyRequestCard from "@/components/customer/MyRequestCard";
 import { MessageSquare } from "lucide-react";
 import { auth } from "@/services/firebase";
 import { toast } from "sonner";
-import { updateRequestStatus, archiveRequest } from "@/utils/firestoreHelpers";
+import { updateRequestStatus, archiveRequest, unarchiveRequest } from "@/utils/firestoreHelpers";
 
 type Request = {
   id: string;
@@ -111,7 +111,8 @@ export default function CustomerDashboard() {
   const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers" | "archive">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("customerActiveTab");
-      if (saved === "new" || saved === "requests" || saved === "offers" || saved === "archive") return saved as any;
+      if (saved === "new" || saved === "requests" || saved === "offers" || saved === "archive")
+        return saved as any;
     }
     return "new";
   });
@@ -121,7 +122,7 @@ export default function CustomerDashboard() {
   const totalOffers = useMemo(() => {
     const allOffers = Object.values(offersByRequest).flat();
     // Filter out any invalid/empty offers
-    const validOffers = allOffers.filter(offer => offer && offer.id && offer.companyName);
+    const validOffers = allOffers.filter((offer) => offer && offer.id && offer.companyName);
     return validOffers.length;
   }, [offersByRequest]);
   // Aggregated no longer needed for UI; keep if future export requires it
@@ -246,7 +247,7 @@ export default function CustomerDashboard() {
         orderBy("createdAt", "desc")
       );
       const unsub = onSnapshot(
-        offersQuery, 
+        offersQuery,
         (snap) => {
           const offersList = snap.docs.map((d) => ({
             id: d.id,
@@ -307,13 +308,16 @@ export default function CustomerDashboard() {
         !!form.serviceCleanout ||
         !!form.serviceStorage;
 
-      const digitsOnly = (v: any) => typeof v === "number" ? Number.isInteger(v) : /^\d+$/.test((v || "").toString());
+      const digitsOnly = (v: any) =>
+        typeof v === "number" ? Number.isInteger(v) : /^\d+$/.test((v || "").toString());
 
       // Property details (both ends)
       if (!form.fromType) errors.push("Tip proprietate (plecare)");
       if (!form.toType) errors.push("Tip proprietate (destinație)");
-      if (!form.fromRooms || !digitsOnly(form.fromRooms)) errors.push("Număr camere (plecare – doar cifre)");
-      if (!form.toRooms || !digitsOnly(form.toRooms)) errors.push("Număr camere (destinație – doar cifre)");
+      if (!form.fromRooms || !digitsOnly(form.fromRooms))
+        errors.push("Număr camere (plecare – doar cifre)");
+      if (!form.toRooms || !digitsOnly(form.toRooms))
+        errors.push("Număr camere (destinație – doar cifre)");
 
       // Address essentials
       if (!form.fromCounty) errors.push("Județ (plecare)");
@@ -333,9 +337,7 @@ export default function CustomerDashboard() {
       if (!form.surveyType) errors.push("Survey / estimare");
 
       if (errors.length) {
-        toast.error(
-          `Te rugăm să completezi corect câmpurile obligatorii: ${errors.join(", ")}`
-        );
+        toast.error(`Te rugăm să completezi corect câmpurile obligatorii: ${errors.join(", ")}`);
         return;
       }
 
@@ -355,8 +357,10 @@ export default function CustomerDashboard() {
       // If user chose "now" for media upload, upload files immediately
       if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
         try {
-          console.warn(`Auth UID: ${user.uid}, uploading ${form.mediaFiles.length} file(s) via API route`);
-          
+          console.warn(
+            `Auth UID: ${user.uid}, uploading ${form.mediaFiles.length} file(s) via API route`
+          );
+
           const { uploadFileViaAPI } = await import("@/utils/storageUpload");
           const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
 
@@ -384,7 +388,7 @@ export default function CustomerDashboard() {
           console.error("Upload error details:", {
             code: (uploadError as any)?.code,
             message: (uploadError as any)?.message,
-            serverResponse: (uploadError as any)?.serverResponse
+            serverResponse: (uploadError as any)?.serverResponse,
           });
           toast.warning("Cererea a fost creată, dar fișierele nu au putut fi încărcate.");
         }
@@ -741,8 +745,8 @@ export default function CustomerDashboard() {
                               newStatus === "closed"
                                 ? "Cererea a fost marcată ca închisă"
                                 : newStatus === "paused"
-                                ? "Cererea a fost pusă în așteptare"
-                                : "Cererea a fost reactivată"
+                                  ? "Cererea a fost pusă în așteptare"
+                                  : "Cererea a fost reactivată"
                             );
                           } catch (error) {
                             console.error("Error updating status:", error);
@@ -947,6 +951,7 @@ export default function CustomerDashboard() {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
+                      className="space-y-2"
                     >
                       <MyRequestCard
                         request={r as any}
@@ -955,6 +960,22 @@ export default function CustomerDashboard() {
                         onStatusChange={() => {}}
                         onArchive={() => {}}
                       />
+                      <div className="flex justify-end px-6 pb-2">
+                        <button
+                          onClick={async () => {
+                            try {
+                              await unarchiveRequest(r.id);
+                              toast.success("Cererea a fost reactivată");
+                            } catch (error) {
+                              console.error("Error unarchiving request:", error);
+                              toast.error("Nu s-a putut reactiva cererea");
+                            }
+                          }}
+                          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700"
+                        >
+                          Reactivează
+                        </button>
+                      </div>
                     </motion.div>
                   ))}
                 </div>
@@ -1028,11 +1049,11 @@ function OfferRow({
         <div className="flex-1">
           <p className="text-sm font-semibold text-gray-900">{offer.companyName}</p>
           {offer.message && <p className="mt-1 text-sm text-gray-600">{offer.message}</p>}
-            {offer.createdAt?.toDate && (
-              <p className="mt-1 text-xs text-gray-400">
-                {formatDateRO(offer.createdAt, { month: "short" })}
-              </p>
-            )}
+          {offer.createdAt?.toDate && (
+            <p className="mt-1 text-xs text-gray-400">
+              {formatDateRO(offer.createdAt, { month: "short" })}
+            </p>
+          )}
         </div>
         <div className="flex items-center gap-3">
           <p className="text-2xl font-bold text-emerald-600">{offer.price} lei</p>

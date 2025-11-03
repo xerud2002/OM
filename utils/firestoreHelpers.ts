@@ -33,7 +33,17 @@ async function generateRequestCode(): Promise<string> {
 
 export async function createRequest(data: any) {
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
-  const excludeFields = ['mediaFiles', 'contactName', 'contactFirstName', 'contactLastName', 'moveDateMode', 'moveDateStart', 'moveDateEnd', 'moveDateFlexDays', 'mediaUpload'];
+  const excludeFields = [
+    "mediaFiles",
+    "contactName",
+    "contactFirstName",
+    "contactLastName",
+    "moveDateMode",
+    "moveDateStart",
+    "moveDateEnd",
+    "moveDateFlexDays",
+    "mediaUpload",
+  ];
   const clean: Record<string, any> = Object.fromEntries(
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
@@ -41,15 +51,15 @@ export async function createRequest(data: any) {
   // Handle move date logic based on mode
   if (data.moveDateMode) {
     clean.moveDateMode = data.moveDateMode;
-    
-    if (data.moveDateMode === 'exact' && data.moveDateStart) {
+
+    if (data.moveDateMode === "exact" && data.moveDateStart) {
       clean.moveDate = data.moveDateStart;
       clean.moveDateStart = data.moveDateStart;
-    } else if (data.moveDateMode === 'range' && data.moveDateStart && data.moveDateEnd) {
+    } else if (data.moveDateMode === "range" && data.moveDateStart && data.moveDateEnd) {
       clean.moveDate = data.moveDateStart; // For backward compatibility
       clean.moveDateStart = data.moveDateStart;
       clean.moveDateEnd = data.moveDateEnd;
-    } else if (data.moveDateMode === 'flexible' && data.moveDateStart && data.moveDateFlexDays) {
+    } else if (data.moveDateMode === "flexible" && data.moveDateStart && data.moveDateFlexDays) {
       clean.moveDate = data.moveDateStart;
       clean.moveDateStart = data.moveDateStart;
       clean.moveDateFlexDays = data.moveDateFlexDays;
@@ -59,22 +69,22 @@ export async function createRequest(data: any) {
   // Build full address strings for backward compatibility
   if (clean.fromStreet || clean.fromNumber) {
     const parts = [clean.fromStreet, clean.fromNumber];
-    if (clean.fromType === 'flat') {
+    if (clean.fromType === "flat") {
       if (clean.fromBloc) parts.push(`Bl. ${clean.fromBloc}`);
       if (clean.fromStaircase) parts.push(`Sc. ${clean.fromStaircase}`);
       if (clean.fromApartment) parts.push(`Ap. ${clean.fromApartment}`);
     }
-    clean.fromAddress = parts.filter(Boolean).join(', ');
+    clean.fromAddress = parts.filter(Boolean).join(", ");
   }
 
   if (clean.toStreet || clean.toNumber) {
     const parts = [clean.toStreet, clean.toNumber];
-    if (clean.toType === 'flat') {
+    if (clean.toType === "flat") {
       if (clean.toBloc) parts.push(`Bl. ${clean.toBloc}`);
       if (clean.toStaircase) parts.push(`Sc. ${clean.toStaircase}`);
       if (clean.toApartment) parts.push(`Ap. ${clean.toApartment}`);
     }
-    clean.toAddress = parts.filter(Boolean).join(', ');
+    clean.toAddress = parts.filter(Boolean).join(", ");
   }
 
   // Generate friendly code for this request
@@ -110,7 +120,9 @@ export async function addOffer(requestId: string, data: any) {
   try {
     const reqRef = doc(db, "requests", requestId);
     const snap = await getDoc(reqRef);
-    requestCode = (snap.exists() ? (snap.data() as any).requestCode : undefined) as string | undefined;
+    requestCode = (snap.exists() ? (snap.data() as any).requestCode : undefined) as
+      | string
+      | undefined;
   } catch {}
 
   await addDoc(collection(db, "requests", requestId, "offers"), {
@@ -127,6 +139,9 @@ export async function getOffers(requestId: string) {
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
 
+// ---- Archiving helpers
+// moved below: archive/unarchive helpers implemented with dynamic imports for consistency
+
 export async function updateRequestStatus(
   requestId: string,
   status: "active" | "closed" | "paused" | "cancelled"
@@ -141,12 +156,12 @@ export async function updateRequestStatus(
 
 export async function deleteRequest(requestId: string) {
   const { doc, deleteDoc, getDocs, collection } = await import("firebase/firestore");
-  
+
   // Delete all offers in the subcollection first
   const offersSnapshot = await getDocs(collection(db, "requests", requestId, "offers"));
   const deletePromises = offersSnapshot.docs.map((offerDoc) => deleteDoc(offerDoc.ref));
   await Promise.all(deletePromises);
-  
+
   // Delete the request document
   const requestRef = doc(db, "requests", requestId);
   await deleteDoc(requestRef);
@@ -161,12 +176,31 @@ export async function archiveRequest(requestId: string) {
   });
 }
 
+export async function unarchiveRequest(requestId: string) {
+  const { doc, updateDoc } = await import("firebase/firestore");
+  const requestRef = doc(db, "requests", requestId);
+  await updateDoc(requestRef, {
+    archived: false,
+    updatedAt: serverTimestamp(),
+  });
+}
+
 export async function updateRequest(requestId: string, data: any) {
   const { doc, updateDoc, getDocs, collection, addDoc } = await import("firebase/firestore");
-  
+
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
   // Note: mediaUrls is allowed (it's an array of strings/URLs)
-  const excludeFields = ['mediaFiles', 'contactName', 'contactFirstName', 'contactLastName', 'moveDateMode', 'moveDateStart', 'moveDateEnd', 'moveDateFlexDays', 'mediaUpload'];
+  const excludeFields = [
+    "mediaFiles",
+    "contactName",
+    "contactFirstName",
+    "contactLastName",
+    "moveDateMode",
+    "moveDateStart",
+    "moveDateEnd",
+    "moveDateFlexDays",
+    "mediaUpload",
+  ];
   const clean: Record<string, any> = Object.fromEntries(
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
@@ -174,15 +208,15 @@ export async function updateRequest(requestId: string, data: any) {
   // Handle move date logic based on mode
   if (data.moveDateMode) {
     clean.moveDateMode = data.moveDateMode;
-    
-    if (data.moveDateMode === 'exact' && data.moveDateStart) {
+
+    if (data.moveDateMode === "exact" && data.moveDateStart) {
       clean.moveDate = data.moveDateStart;
       clean.moveDateStart = data.moveDateStart;
-    } else if (data.moveDateMode === 'range' && data.moveDateStart && data.moveDateEnd) {
+    } else if (data.moveDateMode === "range" && data.moveDateStart && data.moveDateEnd) {
       clean.moveDate = data.moveDateStart; // For backward compatibility
       clean.moveDateStart = data.moveDateStart;
       clean.moveDateEnd = data.moveDateEnd;
-    } else if (data.moveDateMode === 'flexible' && data.moveDateStart && data.moveDateFlexDays) {
+    } else if (data.moveDateMode === "flexible" && data.moveDateStart && data.moveDateFlexDays) {
       clean.moveDate = data.moveDateStart;
       clean.moveDateStart = data.moveDateStart;
       clean.moveDateFlexDays = data.moveDateFlexDays;
@@ -192,22 +226,22 @@ export async function updateRequest(requestId: string, data: any) {
   // Build full address strings for backward compatibility
   if (clean.fromStreet || clean.fromNumber) {
     const parts = [clean.fromStreet, clean.fromNumber];
-    if (clean.fromType === 'flat') {
+    if (clean.fromType === "flat") {
       if (clean.fromBloc) parts.push(`Bl. ${clean.fromBloc}`);
       if (clean.fromStaircase) parts.push(`Sc. ${clean.fromStaircase}`);
       if (clean.fromApartment) parts.push(`Ap. ${clean.fromApartment}`);
     }
-    clean.fromAddress = parts.filter(Boolean).join(', ');
+    clean.fromAddress = parts.filter(Boolean).join(", ");
   }
 
   if (clean.toStreet || clean.toNumber) {
     const parts = [clean.toStreet, clean.toNumber];
-    if (clean.toType === 'flat') {
+    if (clean.toType === "flat") {
       if (clean.toBloc) parts.push(`Bl. ${clean.toBloc}`);
       if (clean.toStaircase) parts.push(`Sc. ${clean.toStaircase}`);
       if (clean.toApartment) parts.push(`Ap. ${clean.toApartment}`);
     }
-    clean.toAddress = parts.filter(Boolean).join(', ');
+    clean.toAddress = parts.filter(Boolean).join(", ");
   }
 
   const requestRef = doc(db, "requests", requestId);
@@ -219,7 +253,7 @@ export async function updateRequest(requestId: string, data: any) {
   // Get all companies that have submitted offers for this request
   const offersSnapshot = await getDocs(collection(db, "requests", requestId, "offers"));
   const companyIds = new Set<string>();
-  
+
   offersSnapshot.docs.forEach((offerDoc) => {
     const offerData = offerDoc.data();
     if (offerData.companyId) {
@@ -232,7 +266,8 @@ export async function updateRequest(requestId: string, data: any) {
     await addDoc(collection(db, "companies", companyId, "notifications"), {
       type: "request_updated",
       requestId,
-      message: "Clientul a modificat detaliile cererii. Te rugăm să revizuiești cererea actualizată.",
+      message:
+        "Clientul a modificat detaliile cererii. Te rugăm să revizuiești cererea actualizată.",
       title: "Cerere actualizată",
       read: false,
       createdAt: serverTimestamp(),
