@@ -35,11 +35,18 @@ export default function CompanyDashboard() {
   const [editPrice, setEditPrice] = useState<string>("");
   const [editMessage, setEditMessage] = useState<string>("");
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [currentTime, setCurrentTime] = useState(() => Date.now());
 
   // Track logged-in company
   useEffect(() => {
     const unsub = onAuthChange((user) => setCompany(user));
     return () => unsub();
+  }, []);
+
+  // Update current time for metrics every minute
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentTime(Date.now()), 60000);
+    return () => clearInterval(interval);
   }, []);
 
   // Real-time offers listener
@@ -104,11 +111,35 @@ export default function CompanyDashboard() {
     });
   }, [offers, statusFilter, search]);
 
-  // Counts
+  // Counts and metrics
   const total = offers.length;
   const accepted = offers.filter((o) => o.status === "accepted").length;
   const pending = offers.filter((o) => !o.status || o.status === "pending").length;
   const rejected = offers.filter((o) => o.status === "rejected" || o.status === "declined").length;
+  
+  // Calculate revenue from accepted offers
+  const totalRevenue = offers
+    .filter((o) => o.status === "accepted")
+    .reduce((sum, o) => sum + (o.price || 0), 0);
+  
+  // Average offer value
+  const avgOfferValue = total > 0 ? Math.round(offers.reduce((sum, o) => sum + (o.price || 0), 0) / total) : 0;
+  
+  // Win rate
+  const winRate = (accepted + rejected) > 0 ? Math.round((accepted / (accepted + rejected)) * 100) : 0;
+  
+  // Recent activity (last 7 days)
+  const recentOffers = useMemo(() => {
+    const sevenDaysAgo = currentTime - 7 * 24 * 60 * 60 * 1000;
+    return offers.filter((o) => {
+      const createdMs = o.createdAt?.toMillis ? o.createdAt.toMillis() : 0;
+      return createdMs >= sevenDaysAgo;
+    });
+  }, [offers, currentTime]);
+  
+  // Response rate (accepted or rejected vs total)
+  const respondedCount = accepted + rejected;
+  const responseRate = total > 0 ? Math.round((respondedCount / total) * 100) : 0;
 
   // Edit/delete actions for an offer
   async function updateOffer(offer: any, fields: Partial<any>) {
@@ -190,8 +221,8 @@ export default function CompanyDashboard() {
 
           {activeTab === "offers" && (
             <>
-              {/* Stats Cards */}
-              <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+              {/* Stats Cards - Primary Metrics */}
+              <div className="mb-6 grid grid-cols-2 gap-4 lg:grid-cols-4">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -201,8 +232,14 @@ export default function CompanyDashboard() {
                   <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
                   <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
                   <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-emerald-100">Total oferte</p>
+                    <div className="mb-2 flex items-center gap-2">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                      </svg>
+                      <p className="text-sm font-medium text-emerald-100">Total oferte</p>
+                    </div>
                     <p className="text-4xl font-bold">{total}</p>
+                    <p className="mt-1 text-xs text-emerald-200">{recentOffers.length} în ultima săptămână</p>
                   </div>
                 </motion.div>
 
@@ -215,8 +252,14 @@ export default function CompanyDashboard() {
                   <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
                   <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
                   <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-sky-100">Acceptate</p>
+                    <div className="mb-2 flex items-center gap-2">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <p className="text-sm font-medium text-sky-100">Acceptate</p>
+                    </div>
                     <p className="text-4xl font-bold">{accepted}</p>
+                    <p className="mt-1 text-xs text-sky-200">Rată câștig: {winRate}%</p>
                   </div>
                 </motion.div>
 
@@ -229,8 +272,14 @@ export default function CompanyDashboard() {
                   <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
                   <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
                   <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-amber-100">În așteptare</p>
+                    <div className="mb-2 flex items-center gap-2">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-sm font-medium text-amber-100">În așteptare</p>
+                    </div>
                     <p className="text-4xl font-bold">{pending}</p>
+                    <p className="mt-1 text-xs text-amber-200">Răspuns: {responseRate}%</p>
                   </div>
                 </motion.div>
 
@@ -238,13 +287,80 @@ export default function CompanyDashboard() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
+                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-violet-500 to-violet-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
                 >
                   <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
                   <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
                   <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-rose-100">Respinse</p>
-                    <p className="text-4xl font-bold">{rejected}</p>
+                    <div className="mb-2 flex items-center gap-2">
+                      <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      <p className="text-sm font-medium text-violet-100">Venit total</p>
+                    </div>
+                    <p className="text-4xl font-bold">{totalRevenue.toLocaleString('ro-RO')}</p>
+                    <p className="mt-1 text-xs text-violet-200">Lei din contracte</p>
+                  </div>
+                </motion.div>
+              </div>
+
+              {/* Secondary Metrics */}
+              <div className="mb-10 grid grid-cols-1 gap-4 md:grid-cols-3">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.4 }}
+                  className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Valoare medie ofertă</p>
+                      <p className="mt-1 text-2xl font-bold text-gray-900">{avgOfferValue.toLocaleString('ro-RO')} lei</p>
+                    </div>
+                    <div className="rounded-full bg-emerald-100 p-3">
+                      <svg className="h-6 w-6 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                      </svg>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.5 }}
+                  className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Oferte respinse</p>
+                      <p className="mt-1 text-2xl font-bold text-gray-900">{rejected}</p>
+                    </div>
+                    <div className="rounded-full bg-rose-100 p-3">
+                      <svg className="h-6 w-6 text-rose-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                      </svg>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.6 }}
+                  className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm"
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-medium text-gray-600">Activitate recentă</p>
+                      <p className="mt-1 text-2xl font-bold text-gray-900">{recentOffers.length}</p>
+                      <p className="text-xs text-gray-500">ultimele 7 zile</p>
+                    </div>
+                    <div className="rounded-full bg-sky-100 p-3">
+                      <svg className="h-6 w-6 text-sky-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </div>
                   </div>
                 </motion.div>
               </div>

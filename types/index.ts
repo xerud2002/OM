@@ -112,4 +112,10 @@ export type Offer = {
   message: string;
   status?: "pending" | "accepted" | "declined" | "rejected";
   createdAt: Timestamp;
+  // Proposed dates for the move
+  proposedDates?: string[]; // Array of ISO date strings (YYYY-MM-DD)
+  // Information request to customer
+  infoRequest?: string;
+  // Customer visibility - whether full contact info is unlocked
+  dataUnlocked?: boolean;
 };
