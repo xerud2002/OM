@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
+import RequestsView from "@/components/company/RequestsView";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import {
@@ -23,7 +24,7 @@ export default function CompanyDashboard() {
   const [company, setCompany] = useState<any>(null);
   const [offers, setOffers] = useState<any[]>([]);
   const [selectedOffer, setSelectedOffer] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [requestDetails, setRequestDetails] = useState<any | null>(null);
   const [statusFilter, setStatusFilter] = useState<
     "all" | "accepted" | "pending" | "rejected" | "declined"
@@ -43,7 +44,9 @@ export default function CompanyDashboard() {
 
   // Real-time offers listener
   useEffect(() => {
-    if (!company?.uid) return;
+    if (!company?.uid) {
+      return;
+    }
 
     const q = query(
       collectionGroup(db, "offers"),
@@ -54,12 +57,18 @@ export default function CompanyDashboard() {
     const unsub = onSnapshot(
       q,
       (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        const data = snapshot.docs.map((doc) => ({ 
+          id: doc.id, 
+          requestId: doc.ref.parent.parent?.id,
+          ...doc.data() 
+        }));
         setOffers(data);
         setLoading(false);
       },
       (err) => {
-        console.error("Error loading offers:", err);
+        console.warn("Error loading offers (this might be normal for new companies):", err);
+        // Set empty array instead of error state for better UX
+        setOffers([]);
         setLoading(false);
       }
     );
@@ -617,10 +626,7 @@ export default function CompanyDashboard() {
             <div className="mt-6">
               {/** Reuse the same requests view from company requests page */}
               {company ? (
-                (() => {
-                  const RequestsView = require("@/components/company/RequestsView").default;
-                  return <RequestsView companyFromParent={company} />;
-                })()
+                <RequestsView companyFromParent={company} />
               ) : (
                 <p className="text-center text-sm italic text-gray-500">
                   Se încarcă utilizatorul...

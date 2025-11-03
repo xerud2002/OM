@@ -119,11 +119,10 @@ export default function CustomerDashboard() {
   const [loading, setLoading] = useState<boolean>(true);
 
   const totalOffers = useMemo(() => {
-    const offers = Object.values(offersByRequest).flat();
-    // Debug: log what's being counted
-    console.log("Debug - offersByRequest:", offersByRequest);
-    console.log("Debug - total offers:", offers.length, offers);
-    return offers.length;
+    const allOffers = Object.values(offersByRequest).flat();
+    // Filter out any invalid/empty offers
+    const validOffers = allOffers.filter(offer => offer && offer.id && offer.companyName);
+    return validOffers.length;
   }, [offersByRequest]);
   // Aggregated no longer needed for UI; keep if future export requires it
   // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
@@ -207,7 +206,9 @@ export default function CustomerDashboard() {
     const unsubAuth = onAuthChange((u: any) => {
       setUser(u);
       if (!u) {
-        // Clear offers when user logs out
+        // Clear all data when user logs out
+        setRequests([]);
+        setArchivedRequests([]);
         setOffersByRequest({});
         return;
       }
@@ -231,7 +232,11 @@ export default function CustomerDashboard() {
 
   // Real-time offers listener for all user requests
   useEffect(() => {
-    if (requests.length === 0) return;
+    if (requests.length === 0) {
+      // Clear offers when no requests
+      setOffersByRequest({});
+      return;
+    }
 
     const unsubscribers: Array<() => void> = [];
 
@@ -240,14 +245,22 @@ export default function CustomerDashboard() {
         collection(db, "requests", r.id, "offers"),
         orderBy("createdAt", "desc")
       );
-      const unsub = onSnapshot(offersQuery, (snap) => {
-        const offersList = snap.docs.map((d) => ({
-          id: d.id,
-          requestId: r.id,
-          ...(d.data() as any),
-        }));
-        setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
-      });
+      const unsub = onSnapshot(
+        offersQuery, 
+        (snap) => {
+          const offersList = snap.docs.map((d) => ({
+            id: d.id,
+            requestId: r.id,
+            ...(d.data() as any),
+          }));
+          setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
+        },
+        (error) => {
+          console.warn(`Error listening to offers for request ${r.id}:`, error);
+          // Set empty array for this request if there's an error
+          setOffersByRequest((prev) => ({ ...prev, [r.id]: [] }));
+        }
+      );
       unsubscribers.push(unsub);
     });
 

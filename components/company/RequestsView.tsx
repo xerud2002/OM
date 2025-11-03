@@ -324,21 +324,31 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       orderBy("createdAt", "desc"),
       limit(PAGE_SIZE)
     );
-    const unsub = onSnapshot(q, (snapshot) => {
-      const list = snapshot.docs
-  .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
-        .filter((req) => {
-          // Only show active (or undefined status) and non-archived requests
-          const isActive = !req.status || req.status === "active";
-          const notArchived = !req.archived;
-          return isActive && notArchived;
-        });
-      setFirstPage(list);
-      setLoading(false);
-      const last = snapshot.docs[snapshot.docs.length - 1] || null;
-      setLastDoc(last);
-      setHasMore(snapshot.size === PAGE_SIZE);
-    });
+    const unsub = onSnapshot(
+      q, 
+      (snapshot) => {
+        const list = snapshot.docs
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
+          .filter((req) => {
+            // Only show active (or undefined status) and non-archived requests
+            const isActive = !req.status || req.status === "active";
+            const notArchived = !req.archived;
+            return isActive && notArchived;
+          });
+        setFirstPage(list);
+        setLoading(false);
+        const last = snapshot.docs[snapshot.docs.length - 1] || null;
+        setLastDoc(last);
+        setHasMore(snapshot.size === PAGE_SIZE);
+      },
+      (error) => {
+        console.warn("Error loading requests (this might be normal for new companies):", error);
+        // Set empty state instead of error for better UX
+        setFirstPage([]);
+        setLoading(false);
+        setHasMore(false);
+      }
+    );
     return () => unsub();
   }, []);
 
@@ -372,6 +382,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       const last = snap.docs[snap.docs.length - 1] || null;
       setLastDoc(last);
       setHasMore(snap.size === PAGE_SIZE);
+    } catch (error) {
+      console.warn("Error loading more requests:", error);
+      // Stop trying to load more if there are permission errors
+      setHasMore(false);
     } finally {
       setLoadingMore(false);
     }

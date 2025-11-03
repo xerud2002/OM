@@ -29,6 +29,13 @@ export default function CustomerAuthPage() {
       setLoading(true);
       const mod = await import("@/utils/firebaseHelpers");
       const user = await mod.loginWithGoogle("company");
+      
+      // Handle popup blocked/cancelled case
+      if (!user) {
+        setLoading(false);
+        return; // User cancelled or popup was blocked - no error message needed
+      }
+      
       const role = await mod.getUserRole(user);
       if (role !== "company") {
         setMessage(

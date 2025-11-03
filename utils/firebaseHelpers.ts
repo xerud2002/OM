@@ -103,12 +103,22 @@ export async function getUserRole(u: User): Promise<UserRole | null> {
 // ---- Sign in / Sign up
 
 export async function loginWithGoogle(role: UserRole) {
-  // Force account chooser so user can pick a different Google account
-  const provider = new GoogleAuthProvider();
-  provider.setCustomParameters({ prompt: "select_account" });
-  const cred = await signInWithPopup(auth, provider);
-  await ensureUserProfile(cred.user, role);
-  return cred.user;
+  try {
+    // Force account chooser so user can pick a different Google account
+    const provider = new GoogleAuthProvider();
+    provider.setCustomParameters({ prompt: "select_account" });
+    const cred = await signInWithPopup(auth, provider);
+    await ensureUserProfile(cred.user, role);
+    return cred.user;
+  } catch (error: any) {
+    // Don't throw popup-blocked errors - these are user-initiated cancellations
+    if (error?.code === 'auth/popup-blocked') {
+      console.warn('Google sign-in popup was blocked by browser');
+      return null; // Return null instead of throwing
+    }
+    // Re-throw other errors
+    throw error;
+  }
 }
 
 export async function registerWithEmail(
