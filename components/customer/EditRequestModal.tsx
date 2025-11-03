@@ -92,7 +92,7 @@ export default function EditRequestModal({
     if (!request || !form) return;
 
     setIsSaving(true);
-  const { toast } = await import("sonner");
+    const { toast } = await import("sonner");
 
     try {
       // Upload new media files if any
@@ -101,7 +101,7 @@ export default function EditRequestModal({
         // Check auth before attempting upload
         const { auth } = await import("@/services/firebase");
         const currentUser = auth.currentUser;
-        
+
         if (!currentUser) {
           toast.error("Trebuie să fii autentificat pentru a încărca fișiere");
           throw new Error("User not authenticated");
@@ -117,11 +117,11 @@ export default function EditRequestModal({
         toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
 
         const { uploadFileViaAPI } = await import("@/utils/storageUpload");
-        
+
         for (const file of Array.from(form.mediaFiles) as File[]) {
           try {
             // Uploading file via API route
-            
+
             // Upload via Next.js API route (server-side, no CORS issues)
             const downloadURL = await uploadFileViaAPI(file, request.id, request.customerId);
             newMediaUrls.push(downloadURL);
@@ -131,27 +131,21 @@ export default function EditRequestModal({
             console.error("Upload error details:", {
               code: (uploadError as any)?.code,
               message: (uploadError as any)?.message,
-              serverResponse: (uploadError as any)?.serverResponse
+              serverResponse: (uploadError as any)?.serverResponse,
             });
             toast.error(`Nu s-a putut încărca fișierul ${file.name}`);
             throw uploadError;
           }
         }
-      }      // Delete removed media files from storage
+      }
+
+      // Note: We don't physically delete files from Storage here
+      // Files are just removed from the mediaUrls array in Firestore
+      // This avoids issues with signed URLs and path extraction
+      // Storage cleanup can be done via Cloud Functions or manual admin process
+
       if (deletedMediaUrls.length > 0) {
-        const { ref, deleteObject } = await import("firebase/storage");
-        const { storage } = await import("@/services/firebase");
-        
-        await Promise.all(
-          deletedMediaUrls.map(async (url) => {
-            try {
-              const fileRef = ref(storage, url);
-              await deleteObject(fileRef);
-            } catch (err) {
-              console.warn("Failed to delete media file:", url, err);
-            }
-          })
-        );
+        console.warn(`Marking ${deletedMediaUrls.length} file(s) as removed from request`);
       }
 
       // Combine existing (not deleted) + new URLs
@@ -164,13 +158,13 @@ export default function EditRequestModal({
         mediaUrls: finalMediaUrls,
       };
 
-    await onSave(request.id, updatedData);
-    toast.success("Cererea a fost actualizată cu succes!");
+      await onSave(request.id, updatedData);
+      toast.success("Cererea a fost actualizată cu succes!");
       onClose();
     } catch (error) {
-    console.error("Failed to save changes:", error);
-    const errorMessage = error instanceof Error ? error.message : "Eroare necunoscută";
-    toast.error(`Eroare la actualizare: ${errorMessage}`);
+      console.error("Failed to save changes:", error);
+      const errorMessage = error instanceof Error ? error.message : "Eroare necunoscută";
+      toast.error(`Eroare la actualizare: ${errorMessage}`);
     } finally {
       setIsSaving(false);
     }
@@ -203,9 +197,7 @@ export default function EditRequestModal({
               <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-6 py-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Modifică cererea</h2>
-                  <p className="mt-1 text-sm text-gray-600">
-                    Actualizează detaliile mutării tale
-                  </p>
+                  <p className="mt-1 text-sm text-gray-600">Actualizează detaliile mutării tale</p>
                 </div>
                 <button
                   onClick={onClose}
@@ -242,7 +234,8 @@ export default function EditRequestModal({
                 ) : (
                   <>
                     {/* Media Management Section */}
-                    {(existingMediaUrls.length > 0 || (form.mediaFiles && form.mediaFiles.length > 0)) && (
+                    {(existingMediaUrls.length > 0 ||
+                      (form.mediaFiles && form.mediaFiles.length > 0)) && (
                       <div className="mb-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-5">
                         <div className="mb-4 flex items-center gap-2">
                           <ImageIcon size={20} className="text-amber-600" />
@@ -280,9 +273,7 @@ export default function EditRequestModal({
                                     rel="noopener noreferrer"
                                     className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all hover:bg-black/30 hover:opacity-100"
                                   >
-                                    <span className="text-xs font-medium text-white">
-                                      Vezi
-                                    </span>
+                                    <span className="text-xs font-medium text-white">Vezi</span>
                                   </a>
                                 </div>
                               ))}
@@ -316,9 +307,9 @@ export default function EditRequestModal({
                                   )}
                                   <button
                                     onClick={() => {
-                                      const newFiles = (Array.from(form.mediaFiles) as File[]).filter(
-                                        (_, i) => i !== index
-                                      );
+                                      const newFiles = (
+                                        Array.from(form.mediaFiles) as File[]
+                                      ).filter((_, i) => i !== index);
                                       setForm((s: any) => ({ ...s, mediaFiles: newFiles }));
                                     }}
                                     className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity hover:bg-red-600 group-hover:opacity-100"
