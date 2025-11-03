@@ -36,7 +36,7 @@ service cloud.firestore {
     // === REQUESTS COLLECTION ===
     match /requests/{requestId} {
       // Customers can read their own requests; companies can read active (non-archived) requests
-      allow read: if isSignedIn() && (
+      allow get, list: if isSignedIn() && (
         resource.data.customerId == request.auth.uid ||
         (isCompany() && !(resource.data.archived == true))
       );
@@ -53,7 +53,7 @@ service cloud.firestore {
       // === OFFERS SUBCOLLECTION ===
       match /offers/{offerId} {
         // Request owner and offer company can read
-        allow read: if isSignedIn() && (
+        allow get, list: if isSignedIn() && (
           resource.data.companyId == request.auth.uid ||
           get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid
         );
@@ -95,7 +95,7 @@ service cloud.firestore {
         // === MESSAGES SUBCOLLECTION ===
         match /messages/{messageId} {
           // Request owner and offer company can read their conversation
-          allow read: if isSignedIn() && (
+          allow get, list: if isSignedIn() && (
             get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid ||
             get(/databases/$(database)/documents/requests/$(requestId)/offers/$(offerId)).data.companyId == request.auth.uid
           );

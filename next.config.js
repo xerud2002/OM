@@ -10,19 +10,19 @@ const nextConfig = {
     minimumCacheTTL: 60,
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'storage.googleapis.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "storage.googleapis.com",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'firebasestorage.googleapis.com',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "firebasestorage.googleapis.com",
+        pathname: "/**",
       },
       {
-        protocol: 'https',
-        hostname: 'omro-e5a88.firebasestorage.app',
-        pathname: '/**',
+        protocol: "https",
+        hostname: "omro-e5a88.firebasestorage.app",
+        pathname: "/**",
       },
     ],
   },
@@ -40,39 +40,43 @@ const nextConfig = {
   async headers() {
     return [
       {
-        source: '/:path*',
+        source: "/:path*",
         headers: [
           {
-            key: 'Cross-Origin-Opener-Policy',
-            value: 'same-origin-allow-popups',
+            key: "Cross-Origin-Opener-Policy",
+            value: "unsafe-none",
           },
           {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            key: "Cross-Origin-Embedder-Policy",
+            value: "unsafe-none",
           },
           {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            key: "X-Content-Type-Options",
+            value: "nosniff",
+          },
+          {
+            key: "Referrer-Policy",
+            value: "origin-when-cross-origin",
           },
         ],
       },
       // Optimize font loading
       {
-        source: '/fonts/(.*)',
+        source: "/fonts/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
       // Optimize static assets
       {
-        source: '/pics/(.*)',
+        source: "/pics/(.*)",
         headers: [
           {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
           },
         ],
       },
@@ -80,12 +84,12 @@ const nextConfig = {
   },
 
   // Development configuration for CORS
-  ...(process.env.NODE_ENV === 'development' && {
+  ...(process.env.NODE_ENV === "development" && {
     experimental: {
       serverComponentsExternalPackages: [],
     },
     // Allow dev origins for cross-origin requests
-    allowedDevOrigins: ['127.0.0.1:3001', 'localhost:3001', '127.0.0.1:*', 'localhost:*'],
+    allowedDevOrigins: ["127.0.0.1:3001", "localhost:3001", "127.0.0.1:*", "localhost:*"],
   }),
 
   // Webpack configuration for better development experience
