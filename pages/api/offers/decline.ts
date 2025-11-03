@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { adminDb, adminAuth } from "@/lib/firebaseAdmin";
+import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 
 type RequestDoc = {
   customerId: string;
@@ -20,6 +20,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    if (!adminReady) {
+      return res.status(503).json({ error: "Admin not configured in this environment" });
+    }
     const authHeader = req.headers.authorization || "";
     const match = authHeader.match(/^Bearer (.+)$/);
     if (!match) {

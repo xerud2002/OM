@@ -91,6 +91,23 @@ service cloud.firestore {
 
         // No deletion via client SDK
         allow delete: if false;
+
+        // === MESSAGES SUBCOLLECTION ===
+        match /messages/{messageId} {
+          // Request owner and offer company can read their conversation
+          allow read: if isSignedIn() && (
+            get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid ||
+            get(/databases/$(database)/documents/requests/$(requestId)/offers/$(offerId)).data.companyId == request.auth.uid
+          );
+          // Allow either party to create a message with restricted fields
+          allow create: if isSignedIn() && (
+            get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid ||
+            get(/databases/$(database)/documents/requests/$(requestId)/offers/$(offerId)).data.companyId == request.auth.uid
+          ) && request.resource.data.senderId == request.auth.uid &&
+          request.resource.data.diff({}).changedKeys().hasOnly(['text','senderId','senderRole','createdAt']);
+          // No client updates/deletes to messages
+          allow update, delete: if false;
+        }
       }
     }
 

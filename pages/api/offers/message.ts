@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import admin, { adminDb, adminAuth } from "@/lib/firebaseAdmin";
+import admin, { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -13,6 +13,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    if (!adminReady) {
+      return res.status(503).json({ error: "Admin not configured in this environment" });
+    }
     const authHeader = req.headers.authorization || "";
     const match = authHeader.match(/^Bearer (.+)$/);
     if (!match) {

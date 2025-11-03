@@ -2,7 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import { Star, Check, X, MessageSquare } from "lucide-react";
 import StarRating from "@/components/reviews/StarRating";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, collection, onSnapshot, orderBy, query } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import { auth } from "@/services/firebase";
 import { toast } from "sonner";
@@ -39,6 +39,23 @@ export default function OfferItem({
   } | null>(null);
   const [showMessage, setShowMessage] = useState(false);
   const [messageText, setMessageText] = useState("");
+  const [messages, setMessages] = useState<
+    Array<{ id: string; text: string; senderId: string; senderRole?: string; createdAt?: any }>
+  >([]);
+
+  // Live messages when the panel is open
+  useEffect(() => {
+    if (!showMessage || !requestId || !offer.id) return;
+    const q = query(
+      collection(db, "requests", requestId, "offers", offer.id, "messages"),
+      orderBy("createdAt", "asc")
+    );
+    const unsub = onSnapshot(q, (snap) => {
+      const list = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+      setMessages(list);
+    });
+    return () => unsub();
+  }, [showMessage, requestId, offer.id]);
 
   // Fetch company rating if companyId is available
   useEffect(() => {
@@ -104,8 +121,19 @@ export default function OfferItem({
         body: JSON.stringify({ requestId, offerId: offer.id, text }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${resp.status}`);
+        if (resp.status === 503) {
+          // Fallback: write message directly (rules allow involved parties to create messages)
+          const { addDoc, collection, serverTimestamp } = await import("firebase/firestore");
+          await addDoc(collection(db, "requests", requestId, "offers", offer.id, "messages"), {
+            text,
+            senderId: user.uid,
+            senderRole: "customer",
+            createdAt: serverTimestamp(),
+          });
+        } else {
+          const data = await resp.json().catch(() => ({}));
+          throw new Error(data.error || `HTTP ${resp.status}`);
+        }
       }
       toast.success("Mesaj trimis");
       setMessageText("");
@@ -195,6 +223,29 @@ export default function OfferItem({
           </div>
           {showMessage && (
             <div className="flex w-full flex-col gap-2 rounded-md border border-gray-200 bg-white p-2">
+              {/* Conversation */}
+              <div className="max-h-64 space-y-2 overflow-y-auto">
+                {messages.length === 0 ? (
+                  <p className="text-xs italic text-gray-400">Nu există mesaje încă.</p>
+                ) : (
+                  messages.map((m) => (
+                    <div
+                      key={m.id}
+                      className={`flex ${m.senderId === auth.currentUser?.uid ? "justify-end" : "justify-start"}`}
+                    >
+                      <div
+                        className={`rounded-md px-2 py-1 text-sm ${
+                          m.senderId === auth.currentUser?.uid
+                            ? "bg-emerald-100 text-emerald-800"
+                            : "bg-gray-100 text-gray-700"
+                        }`}
+                      >
+                        {m.text}
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
               <textarea
                 value={messageText}
                 onChange={(e) => setMessageText(e.target.value)}

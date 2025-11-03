@@ -158,8 +158,24 @@ export default function CustomerDashboard() {
         body: JSON.stringify({ requestId, offerId }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${resp.status}`);
+        // Fallback in dev when Admin isn't configured: perform client-side updates
+        if (resp.status === 503) {
+          const { writeBatch, doc } = await import("firebase/firestore");
+          const batch = writeBatch(db);
+          // Accept selected offer
+          batch.update(doc(db, "requests", requestId, "offers", offerId), { status: "accepted" });
+          // Decline the rest (based on local state we already hold)
+          const others = (offersByRequest[requestId] || []).filter((o) => o.id !== offerId);
+          for (const o of others) {
+            batch.update(doc(db, "requests", requestId, "offers", o.id), { status: "declined" });
+          }
+          // Mark request as accepted
+          batch.update(doc(db, "requests", requestId), { status: "accepted" });
+          await batch.commit();
+        } else {
+          const data = await resp.json().catch(() => ({}));
+          throw new Error(data.error || `HTTP ${resp.status}`);
+        }
       }
       toast.success("Oferta a fost acceptată!");
     } catch (err) {
@@ -185,8 +201,15 @@ export default function CustomerDashboard() {
         body: JSON.stringify({ requestId, offerId }),
       });
       if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${resp.status}`);
+        if (resp.status === 503) {
+          const { doc, updateDoc } = await import("firebase/firestore");
+          await updateDoc(doc(db, "requests", requestId, "offers", offerId), {
+            status: "declined",
+          });
+        } else {
+          const data = await resp.json().catch(() => ({}));
+          throw new Error(data.error || `HTTP ${resp.status}`);
+        }
       }
       toast.success("Oferta a fost refuzată");
     } catch (err) {
