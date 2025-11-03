@@ -35,10 +35,10 @@ service cloud.firestore {
 
     // === REQUESTS COLLECTION ===
     match /requests/{requestId} {
-      // Customers can read their own requests; companies can read active (non-archived) requests
-      allow get, list: if isSignedIn() && (
-        resource.data.customerId == request.auth.uid ||
-        (isCompany() && !(resource.data.archived == true))
+      // Companies can read all requests; customers can read their own
+      allow read: if isSignedIn() && (
+        isCompany() ||
+        resource.data.customerId == request.auth.uid
       );
 
       // Only customers can create requests
