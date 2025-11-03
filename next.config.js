@@ -56,6 +56,8 @@ const nextConfig = {
     experimental: {
       serverComponentsExternalPackages: [],
     },
+    // Allow dev origins for cross-origin requests
+    allowedDevOrigins: ['127.0.0.1:*', 'localhost:*'],
   }),
 };
 
