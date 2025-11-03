@@ -27,7 +27,7 @@ export async function uploadFileViaAPI(
   const response = await fetch("/api/uploadMedia", {
     method: "POST",
     headers: {
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
     body: formData,
   });
@@ -44,7 +44,7 @@ export async function uploadFileViaAPI(
   }
 
   const result = await response.json();
-  
+
   if (!result.ok || !result.urls || result.urls.length === 0) {
     throw new Error("Upload failed: No URLs returned");
   }
@@ -62,15 +62,15 @@ async function uploadFileClientSide(
 ): Promise<string> {
   const fileName = `${Date.now()}_${file.name}`;
   const storagePath = `requests/${requestId}/customers/${customerId}/${fileName}`;
-  
+
   const storageRef = ref(storage, storagePath);
-  
+
   // Upload file
   const uploadTask = uploadBytesResumable(storageRef, file);
-  
+
   return new Promise((resolve, reject) => {
     uploadTask.on(
-      'state_changed',
+      "state_changed",
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.warn(`Upload progress: ${progress.toFixed(0)}%`);
