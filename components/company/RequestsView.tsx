@@ -439,10 +439,14 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         const list = snapshot.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
           .filter((req) => {
-            // Only show active (or undefined status) and non-archived requests
-            const isActive = !req.status || req.status === "active";
+            // Show requests that are not closed, cancelled, or archived
+            const isVisible =
+              !req.status ||
+              req.status === "active" ||
+              req.status === "accepted" ||
+              req.status === "pending";
             const notArchived = !req.archived;
-            return isActive && notArchived;
+            return isVisible && notArchived;
           });
         setFirstPage(list);
         setLoading(false);
@@ -480,9 +484,13 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       const list = snap.docs
         .map((d) => ({ id: d.id, ...d.data() }) as any)
         .filter((req: any) => {
-          const isActive = !req.status || req.status === "active";
+          const isVisible =
+            !req.status ||
+            req.status === "active" ||
+            req.status === "accepted" ||
+            req.status === "pending";
           const notArchived = !req.archived;
-          return isActive && notArchived;
+          return isVisible && notArchived;
         });
       setExtra((prev) => {
         const seen = new Set(prev.map((p) => p.id).concat(firstPage.map((p) => p.id)));
