@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
@@ -73,34 +74,17 @@ export default function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
-        {/* === LOGO OPTIONS === */}
-        <div className="flex select-none items-center space-x-6">
-          {/* Option 1: Text Logo */}
-          <div className="hidden sm:block">
-            <Link href="/" aria-label="Acasă" className="flex select-none items-center">
-              <div className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-2xl font-bold text-transparent transition-transform duration-200 hover:scale-105 md:text-3xl">
-                <span className="tracking-tight">Oferte</span>
-                <span className="text-emerald-500">mutare</span>
-                <span className="align-top text-xs text-emerald-600">.ro</span>
-              </div>
-            </Link>
-          </div>
-          
-          {/* Option 2: Icon + Text Logo (Mobile) */}
-          <div className="block sm:hidden">
-            <Link href="/" aria-label="Acasă" className="flex select-none items-center gap-2">
-              <svg className="h-6 w-6 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <div className="font-bold text-emerald-800">
-                <div className="text-sm leading-tight">
-                  <span>Oferte</span>
-                  <span className="text-emerald-600">mutare</span>
-                </div>
-              </div>
-            </Link>
-          </div>
-        </div>
+        {/* === LOGO === */}
+        <Link href="/" aria-label="Acasă" className="flex select-none items-center space-x-2">
+          <Image
+            src="/logo.png"
+            alt="ofertemutare.ro logo"
+            width={180}
+            height={40}
+            className="object-contain"
+            priority
+          />
+        </Link>
 
         {/* === DESKTOP NAV === */}
         <nav className="hidden items-center space-x-2 md:flex">
