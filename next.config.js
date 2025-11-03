@@ -85,7 +85,7 @@ const nextConfig = {
       serverComponentsExternalPackages: [],
     },
     // Allow dev origins for cross-origin requests
-    allowedDevOrigins: ['127.0.0.1:*', 'localhost:*'],
+    allowedDevOrigins: ['127.0.0.1:3001', 'localhost:3001', '127.0.0.1:*', 'localhost:*'],
   }),
 
   // Webpack configuration for better development experience
