@@ -1,17 +1,39 @@
 import LayoutWrapper from "@/components/layout/Layout";
+import { Mail } from "lucide-react";
 
 export default function ContactPage() {
   return (
     <LayoutWrapper>
       <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
-        <h1 className="mb-4 text-3xl font-bold text-emerald-700">Contactează-ne</h1>
-        <p className="max-w-md text-gray-600">
-          Dacă ai întrebări despre platforma ofertemutare.ro sau ai nevoie de suport, scrie-ne la{" "}
-          <a href="mailto:contact@ofertemutare.ro" className="text-emerald-500 underline">
-            contact@ofertemutare.ro
-          </a>
-          .
+        <h1 className="mb-6 text-3xl font-bold text-emerald-700">Contactează-ne</h1>
+        <p className="mb-8 max-w-md text-gray-600">
+          Dacă ai întrebări despre platforma ofertemutare.ro sau ai nevoie de suport, suntem aici
+          pentru tine!
         </p>
+
+        <div className="flex flex-col gap-4 sm:flex-row">
+          <div className="rounded-lg border-2 border-emerald-200 bg-emerald-50 p-6 text-center">
+            <Mail className="mx-auto mb-3 h-8 w-8 text-emerald-600" />
+            <h2 className="mb-2 font-semibold text-gray-800">Pentru Clienți</h2>
+            <a
+              href="mailto:contact@ofertemutare.ro"
+              className="text-emerald-600 underline hover:text-emerald-700"
+            >
+              contact@ofertemutare.ro
+            </a>
+          </div>
+
+          <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-6 text-center">
+            <Mail className="mx-auto mb-3 h-8 w-8 text-blue-600" />
+            <h2 className="mb-2 font-semibold text-gray-800">Pentru Companii Partenere</h2>
+            <a
+              href="mailto:partener@ofertemutare.ro"
+              className="text-blue-600 underline hover:text-blue-700"
+            >
+              partener@ofertemutare.ro
+            </a>
+          </div>
+        </div>
       </main>
     </LayoutWrapper>
   );

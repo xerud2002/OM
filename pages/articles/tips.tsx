@@ -120,7 +120,7 @@ export default function ArticleTips() {
                   <div className="mt-3 rounded-lg bg-white p-3">
                     <p className="text-sm font-semibold text-green-700">💰 Exemplu concret:</p>
                     <p className="text-sm text-gray-700">
-                      Mutare 2 camere București: <strong>Sâmbătă iulie = 2.800 lei</strong> vs.{" "}
+                      Mutare 2 camere: <strong>Sâmbătă iulie = 2.800 lei</strong> vs.{" "}
                       <strong>Miercuri ianuarie = 1.600 lei</strong> (economie: 1.200 lei!)
                     </p>
                   </div>

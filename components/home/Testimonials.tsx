@@ -7,7 +7,7 @@ import { Star } from "lucide-react";
 const testimonials = [
   {
     name: "Andreea Popescu",
-    role: "Clientă – București",
+    role: "Clientă – Timișoara",
     text: "Am primit 5 oferte în doar 3 ore și am economisit 520 lei! Nu credeam că e atât de simplu. Recomand 100%!",
     rating: 5,
     savings: "520 lei",

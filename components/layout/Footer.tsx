@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Facebook, Instagram, Linkedin, PhoneCall, Mail, MapPin } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Mail } from "lucide-react";
 import { fadeUp, staggerContainer } from "@/utils/animations";
 
 /* 🔹 Constants */
 const CONTACT_INFO = [
-  { icon: PhoneCall, text: "+40 700 000 000" },
-  { icon: Mail, text: "contact@ofertemutare.ro" },
-  { icon: MapPin, text: "București, România" },
+  { icon: Mail, text: "contact@ofertemutare.ro", label: "Clienți" },
+  { icon: Mail, text: "partener@ofertemutare.ro", label: "Companii" },
 ];
 
 const USEFUL_LINKS = [
@@ -63,10 +62,13 @@ export default function Footer() {
           </p>
 
           <div className="flex flex-col gap-1 text-sm text-gray-600">
-            {CONTACT_INFO.map(({ icon: Icon, text }, i) => (
+            {CONTACT_INFO.map(({ icon: Icon, text, label }, i) => (
               <div key={i} className="flex items-center gap-2">
                 <Icon size={16} className="text-emerald-500" />
-                <span>{text}</span>
+                <a href={`mailto:${text}`} className="hover:text-emerald-600">
+                  {text}
+                </a>
+                {label && <span className="text-xs text-gray-500">({label})</span>}
               </div>
             ))}
           </div>
