@@ -11,15 +11,9 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import FloatingCTA from "@/components/FloatingCTA";
-import UrgencyBanner from "@/components/UrgencyBanner";
-import LiveActivityPopup from "@/components/LiveActivityPopup";
-import LiveChatWidget from "@/components/LiveChatWidget";
 import { Toaster } from "sonner";
 
 export default function App({ Component, pageProps }: AppProps) {
-  // Feature flags (default disabled). Toggle with NEXT_PUBLIC_ENABLE_URGENCY_BANNER / NEXT_PUBLIC_ENABLE_LIVE_POPUP
-  const enableUrgencyBanner = process.env.NEXT_PUBLIC_ENABLE_URGENCY_BANNER === "true";
-  const enableLiveActivityPopup = process.env.NEXT_PUBLIC_ENABLE_LIVE_POPUP === "true";
   return (
     <ErrorBoundary>
       {/* Fallback meta for pages that don't set their own <Head> */}
@@ -45,9 +39,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
       <Navbar />
 
-      {/* Urgency banner - limited time offer (feature-flagged) */}
-      {enableUrgencyBanner && <UrgencyBanner />}
-
       {/* Offset content for the fixed navbar once, globally */}
       <main id="main-content" className="min-h-[60vh] pt-[80px]">
         <Component {...pageProps} />
@@ -57,9 +48,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
       {/* Conversion optimization widgets */}
       <FloatingCTA />
-      {/* Live activity popup (feature-flagged) */}
-      {enableLiveActivityPopup && <LiveActivityPopup />}
-      <LiveChatWidget />
 
       {/* Toasts (success/error/info) from anywhere in the app */}
       <Toaster richColors position="top-right" closeButton />

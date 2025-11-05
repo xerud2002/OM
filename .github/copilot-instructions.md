@@ -6,7 +6,7 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 
 - Stack: Next.js 14 (Pages Router in `pages/`), TypeScript, Tailwind CSS, Framer Motion, Firebase (Auth, Firestore, Storage), Sonner toasts, Lucide icons.
 - Config: ESM project (`"type": "module"` in package.json), ESLint flat config, Prettier + Tailwind plugin for class sorting.
-- Global shell: `pages/_app.tsx` wires `Navbar`, `Footer`, global `<Toaster />`, `ErrorBoundary`, and feature-flagged components (`UrgencyBanner`, `LiveActivityPopup`). Content is offset via `pt-[80px]`.
+- Global shell: `pages/_app.tsx` wires `Navbar`, `Footer`, global `<Toaster />`, `ErrorBoundary`, and `FloatingCTA`. Content is offset via `pt-[80px]`.
 - Routing: Uses Pages Router (`pages/**`). Some client components use `next/navigation`'s `useRouter`; keep this consistent unless migrating the app.
 - Layout: Use `components/layout/Layout.tsx` (`LayoutWrapper`) to wrap sections/pages with the gradient background container.
 
