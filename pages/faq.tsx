@@ -200,7 +200,7 @@ export default function FAQPage() {
               Solicită oferte gratuite de la cele mai bune firme de mutări din România
             </p>
             <Link
-              href="/form"
+              href="/customer/dashboard"
               className="inline-block rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg"
             >
               Solicită Oferte Gratuite

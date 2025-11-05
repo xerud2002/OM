@@ -105,6 +105,7 @@ export default function CustomerDashboard() {
       surveyType: "quick-estimate",
       mediaUpload: "later",
       mediaFiles: [],
+      acceptedTerms: false,
     };
   });
 
@@ -319,6 +320,12 @@ export default function CustomerDashboard() {
     if (!user) return;
 
     const { toast } = await import("sonner");
+
+    // Check terms acceptance first
+    if (!form.acceptedTerms) {
+      toast.error("Trebuie să accepți termenii și condițiile pentru a continua.");
+      return;
+    }
 
     try {
       // Client-side validation for mandatory fields
@@ -557,6 +564,7 @@ export default function CustomerDashboard() {
       surveyType: "quick-estimate",
       mediaUpload: "later",
       mediaFiles: [],
+      acceptedTerms: false,
     };
     setForm(emptyForm);
     // Also clear from localStorage

@@ -720,7 +720,7 @@ export default function ArticleSurvey() {
               firme de mutări. Survey video sau fizic inclus, fără costuri!
             </p>
             <Link
-              href="/form"
+              href="/customer/dashboard"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg"
             >
               <Home className="h-5 w-5" />

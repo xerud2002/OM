@@ -245,7 +245,7 @@ export default function ArticleImpachetare() {
               demontare mobilier.
             </p>
             <Link
-              href="/form"
+              href="/customer/dashboard"
               className="inline-block rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition hover:bg-gray-100"
             >
               Cere Oferte Gratuite

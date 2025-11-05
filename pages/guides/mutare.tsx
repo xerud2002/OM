@@ -285,7 +285,7 @@ export default function GuideMutare() {
               Solicită oferte personalizate de la firmele de mutări verificate din zona ta
             </p>
             <Link
-              href="/form"
+              href="/customer/dashboard"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 font-bold text-emerald-600 shadow-lg transition-transform hover:scale-105"
             >
               Solicită Oferte Gratuite

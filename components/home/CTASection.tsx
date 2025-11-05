@@ -41,7 +41,7 @@ export default function CTASection() {
             whileTap={{ scale: 0.95 }}
           >
             <Link
-              href="/form"
+              href="/customer/dashboard"
               className="inline-flex items-center gap-3 rounded-full bg-white px-8 py-4 text-lg font-bold text-emerald-600 shadow-2xl transition-all duration-300 hover:text-emerald-700 hover:shadow-white/30"
             >
               PRIMEȘTE 5 OFERTE GRATUITE <ArrowRight size={24} />

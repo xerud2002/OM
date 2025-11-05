@@ -72,7 +72,7 @@ export default function Steps() {
             className="mt-16"
           >
             <Link
-              href="/form"
+              href="/customer/dashboard"
               className="inline-flex items-center gap-3 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-8 py-4 text-lg font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
             >
               Primește oferte GRATUITE <ArrowRight size={24} />

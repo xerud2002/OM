@@ -598,7 +598,7 @@ export default function ArticlePregatire() {
               Gratuit, fără obligații, răspuns în 24h.
             </p>
             <Link
-              href="/form"
+              href="/customer/dashboard"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg"
             >
               <Truck className="h-5 w-5" />

@@ -1,4 +1,5 @@
 import React from "react";
+import Link from "next/link";
 import { DayPicker } from "react-day-picker";
 import { ro } from "date-fns/locale";
 import counties from "@/counties";
@@ -56,6 +57,7 @@ type FormShape = {
   contactName?: string;
   contactFirstName?: string;
   contactLastName?: string;
+  acceptedTerms?: boolean;
 };
 
 type Props = {
@@ -201,7 +203,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Număr camere <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -243,7 +247,6 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
           </div>
 
-
           {/* Detalii adresă */}
           <div className="mt-4 rounded-lg border border-emerald-100 bg-white p-3">
             <div className="mb-2 flex items-center gap-2">
@@ -266,7 +269,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Județ <span className="text-red-500">*</span>
+                </label>
                 <select
                   required
                   value={form.fromCounty || ""}
@@ -284,7 +289,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Localitate <span className="text-red-500">*</span>
+                </label>
                 <select
                   required={!form.fromCityManual}
                   value={form.fromCity || ""}
@@ -428,7 +435,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Număr camere <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Număr camere <span className="text-red-500">*</span>
+                </label>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -491,7 +500,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-4">
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Județ <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Județ <span className="text-red-500">*</span>
+                </label>
                 <select
                   required
                   value={form.toCounty || ""}
@@ -507,7 +518,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-700">Localitate <span className="text-red-500">*</span></label>
+                <label className="mb-1 block text-xs font-medium text-gray-700">
+                  Localitate <span className="text-red-500">*</span>
+                </label>
                 <select
                   required={!form.toCityManual}
                   value={form.toCity || ""}
@@ -608,7 +621,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900">Servicii căutate <span className="text-red-500">*</span></h4>
+              <h4 className="text-base font-bold text-gray-900">
+                Servicii căutate <span className="text-red-500">*</span>
+              </h4>
               <p className="text-xs text-gray-600">Selectează serviciile de care ai nevoie</p>
             </div>
           </div>
@@ -830,8 +845,16 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
           </div>
-          {!(form.serviceMoving || form.servicePacking || form.serviceDisassembly || form.serviceCleanout || form.serviceStorage) && (
-            <p className="mt-2 text-xs font-medium text-red-600">Selectează cel puțin un serviciu.</p>
+          {!(
+            form.serviceMoving ||
+            form.servicePacking ||
+            form.serviceDisassembly ||
+            form.serviceCleanout ||
+            form.serviceStorage
+          ) && (
+            <p className="mt-2 text-xs font-medium text-red-600">
+              Selectează cel puțin un serviciu.
+            </p>
           )}
         </div>
 
@@ -860,7 +883,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </svg>
             </div>
             <div>
-              <h4 className="text-base font-bold text-gray-900">Survey și estimare <span className="text-red-500">*</span></h4>
+              <h4 className="text-base font-bold text-gray-900">
+                Survey și estimare <span className="text-red-500">*</span>
+              </h4>
               <p className="text-xs text-gray-600">Alege modalitatea de evaluare</p>
             </div>
           </div>
@@ -1149,9 +1174,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   name="mediaUpload"
                   value="none"
                   checked={form.mediaUpload === "none"}
-                  onChange={(e) =>
-                    setForm((s) => ({ ...s, mediaUpload: e.target.value as any }))
-                  }
+                  onChange={(e) => setForm((s) => ({ ...s, mediaUpload: e.target.value as any }))}
                   className="peer sr-only"
                 />
                 <div className="p-5">
@@ -1604,6 +1627,37 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             rows={3}
             placeholder="Informații importante (acces, obiecte fragile, interval orar, etc.)"
           />
+        </div>
+
+        {/* Terms and Conditions Checkbox */}
+        <div className="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <input
+            type="checkbox"
+            id="acceptTermsRequestForm"
+            checked={form.acceptedTerms || false}
+            onChange={(e) => setForm((s) => ({ ...s, acceptedTerms: e.target.checked }))}
+            className="mt-1 h-5 w-5 cursor-pointer rounded border-gray-300 text-emerald-600 focus:ring-2 focus:ring-emerald-500"
+            required
+          />
+          <label htmlFor="acceptTermsRequestForm" className="cursor-pointer text-sm text-gray-700">
+            Am citit și sunt de acord cu{" "}
+            <Link
+              href="/terms"
+              target="_blank"
+              className="font-semibold text-emerald-600 underline hover:text-emerald-700"
+            >
+              Termenii și Condițiile
+            </Link>{" "}
+            și{" "}
+            <Link
+              href="/privacy"
+              target="_blank"
+              className="font-semibold text-emerald-600 underline hover:text-emerald-700"
+            >
+              Politica de Confidențialitate
+            </Link>
+            .
+          </label>
         </div>
 
         <div className="flex items-center gap-3 pt-2">
