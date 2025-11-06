@@ -15,16 +15,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     return res.status(405).json({ error: "Method Not Allowed" });
   }
 
-  // Auth note:
-  // Previously this endpoint required an x-api-key in production.
-  // Per request, we no longer enforce it. If you want to re-enable later,
-  // set CRON_API_KEY and uncomment the check below.
-  // const apiKey = req.headers["x-api-key"];
-  // if (process.env.NODE_ENV === "production" && process.env.CRON_API_KEY) {
-  //   if (apiKey !== process.env.CRON_API_KEY) {
-  //     return res.status(401).json({ error: "Unauthorized" });
-  //   }
-  // }
+  // Auth: Check API key for production security
+  const apiKey = req.headers["x-api-key"];
+  if (process.env.NODE_ENV === "production" && process.env.CRON_API_KEY) {
+    if (apiKey !== process.env.CRON_API_KEY) {
+      return res.status(401).json({ error: "Unauthorized" });
+    }
+  }
 
   try {
     const threeDaysAgo = new Date();
