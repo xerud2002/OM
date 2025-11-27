@@ -57,6 +57,23 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 
 ## API routes and secure operations
 
+**API Response Format** (Standardized in `types/api.ts`):
+
+```typescript
+// Success
+{ success: true, data: T }
+// Error
+{ success: false, error: string, code?: string }
+```
+
+**Secured Endpoints** (Require Firebase ID token in `Authorization: Bearer <token>` header):
+
+- `/api/offers/accept` - Accept offer, decline all others in batch
+- `/api/offers/decline` - Decline specific offer
+- `/api/offers/message` - Send message in offer conversation
+- `/api/markUploadTokenUsed` - Mark upload token as used
+- `/api/notifyCompaniesOnUpload` - Notify companies after media upload
+
 **Offer acceptance** (`pages/api/offers/accept.ts`):
 
 - Requires Firebase ID token in `Authorization: Bearer <token>` header

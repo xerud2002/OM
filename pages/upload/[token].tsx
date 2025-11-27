@@ -212,9 +212,17 @@ export default function UploadMediaPage() {
 
   const notifyCompanies = async (requestId: string) => {
     try {
+      if (!currentUser) {
+        console.warn("Cannot notify companies: user not authenticated");
+        return;
+      }
+      const idToken = await currentUser.getIdToken();
       const resp = await fetch("/api/notifyCompaniesOnUpload", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${idToken}`,
+        },
         body: JSON.stringify({ requestId }),
       });
       if (!resp.ok) {

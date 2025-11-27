@@ -138,11 +138,10 @@ export async function hasUserReviewedRequest(
   requestId: string
 ): Promise<boolean> {
   // Query all companies reviews pentru acest customer + request
-  // Nota: Pentru performanță optimă, ar trebui să adăugăm o colecție separată
-  // "reviews" la nivel de root cu compound index pe customerId + requestId
+  // Note: For better performance at scale, consider migrating to a root-level
+  // "reviews" collection with compound index on customerId + requestId
 
   // Pentru simplitate, căutăm în toate companiile (nu e scalabil la 1000+ companii)
-  // TODO: Migrate to root-level reviews collection pentru query performance
 
   const companiesRef = collection(db, "companies");
   const companiesSnap = await getDocs(companiesRef);
