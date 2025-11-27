@@ -51,16 +51,6 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
         throw new Error(data.error || `HTTP ${resp.status}`);
       }
       toast.success("Oferta a fost acceptată!");
-
-      const accepted: any = (offers || []).find((o) => o.id === offerId) || null;
-      try {
-        trackEvent("offer_accepted", {
-          requestId: r.id,
-          offerId,
-          price: accepted?.price,
-          companyId: accepted?.companyId,
-        });
-      } catch {}
     } catch (err) {
       console.error("Failed to accept offer", err);
       const errMsg = err instanceof Error ? err.message : "Eroare necunoscută";
@@ -89,12 +79,6 @@ const RequestCard = React.memo(({ r, offers }: { r: Request; offers?: Offer[] })
         const data = await resp.json().catch(() => ({}));
         throw new Error(data.error || `HTTP ${resp.status}`);
       }
-      try {
-        trackEvent("offer_declined", { requestId: r.id, offerId });
-      } catch {}
-      try {
-        trackEvent("offer_declined", { requestId: r.id, offerId });
-      } catch {}
       toast.success("Oferta a fost refuzată");
     } catch (err) {
       console.error("Failed to decline offer", err);

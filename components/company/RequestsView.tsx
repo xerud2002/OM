@@ -362,9 +362,6 @@ function OfferForm({ requestId, company }: { requestId: string; company: Company
         price: priceNum,
         message,
       });
-      try {
-        trackEvent("offer_submitted", { requestId, companyId: company.uid, price: priceNum });
-      } catch {}
       setPrice("");
       setMessage("");
     } catch (err) {
