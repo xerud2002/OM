@@ -3,7 +3,6 @@ import { formatMoveDateDisplay } from "@/utils/date";
 import { useState } from "react";
 import OfferItem from "@/components/customer/OfferItem";
 import { toast } from "sonner";
-import { trackEvent } from "@/utils/analytics";
 import { auth } from "@/services/firebase";
 
 type Offer = {

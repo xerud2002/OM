@@ -28,7 +28,6 @@ import {
   serverTimestamp,
 } from "firebase/firestore";
 import { formatMoveDateDisplay } from "@/utils/date";
-import { trackEvent } from "@/utils/analytics";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 
 // Types
