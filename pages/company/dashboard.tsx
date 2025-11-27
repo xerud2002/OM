@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useRouter } from "next/router";
 import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import RequestsView from "@/components/company/RequestsView";
@@ -21,6 +22,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
 
 export default function CompanyDashboard() {
+  const router = useRouter();
   const [company, setCompany] = useState<any>(null);
   const [offers, setOffers] = useState<any[]>([]);
   const [selectedOffer, setSelectedOffer] = useState<any | null>(null);
@@ -144,7 +146,10 @@ export default function CompanyDashboard() {
                   Bine ai revenit, {company?.displayName || "Companie"}!
                 </p>
               </div>
-              <button className="rounded-xl bg-white px-6 py-3 font-semibold text-emerald-600 shadow-lg transition hover:bg-emerald-50">
+              <button 
+                onClick={() => router.push('/company/profile')}
+                className="rounded-xl bg-white px-6 py-3 font-semibold text-emerald-600 shadow-lg transition hover:bg-emerald-50"
+              >
                 Profil companie
               </button>
             </div>
