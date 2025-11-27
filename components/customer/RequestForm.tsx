@@ -1558,6 +1558,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   </label>
                   <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                     <input
+                      name="contactFirstName"
                       value={(form as any).contactFirstName || ""}
                       onChange={(e) =>
                         setForm((s: any) => {
@@ -1571,10 +1572,14 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         })
                       }
                       required
+                      minLength={2}
+                      pattern="[A-Za-zĂÂÎȘȚăâîșțÀ-ÿ\s\-']+"
+                      title="Te rugăm să introduci prenumele (minim 2 caractere)"
                       className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
                       placeholder="Prenume"
                     />
                     <input
+                      name="contactLastName"
                       value={(form as any).contactLastName || ""}
                       onChange={(e) =>
                         setForm((s: any) => {
@@ -1588,6 +1593,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         })
                       }
                       required
+                      minLength={2}
+                      pattern="[A-Za-zĂÂÎȘȚăâîșțÀ-ÿ\s\-']+"
+                      title="Te rugăm să introduci numele (minim 2 caractere)"
                       className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
                       placeholder="Nume"
                     />
