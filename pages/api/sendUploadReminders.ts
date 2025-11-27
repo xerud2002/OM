@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb } from "@/lib/firebaseAdmin";
+import { sendEmail } from "@/utils/emailHelpers";
 
 /**
  * API pentru verificarea token-urilor nefolosite și trimiterea reminder-elor
@@ -32,6 +33,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const reminders: Array<{ email: string; name: string; link: string }> = [];
     const now = new Date();
+    let sentCount = 0;
+    let failedCount = 0;
 
     for (const tokenDoc of tokensSnap.docs) {
       const tokenData = tokenDoc.data() as any;
@@ -40,15 +43,44 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (!createdAt || !expiresAt) continue;
 
       if (createdAt <= threeDaysAgo && now <= expiresAt && !tokenData.reminderSent) {
-        reminders.push({
+        const reminderInfo = {
           email: tokenData.customerEmail,
           name: tokenData.customerName,
           link: tokenData.uploadLink,
-        });
+        };
+        reminders.push(reminderInfo);
+
+        // Send reminder email
+        try {
+          await sendEmail({
+            to_email: tokenData.customerEmail,
+            to_name: tokenData.customerName,
+            customer_name: tokenData.customerName,
+            upload_link: tokenData.uploadLink,
+            request_code: tokenData.requestId || "cererea ta",
+          });
+
+          // Mark reminder as sent
+          await adminDb.collection("uploadTokens").doc(tokenDoc.id).update({
+            reminderSent: true,
+            reminderSentAt: new Date().toISOString(),
+          });
+
+          sentCount++;
+        } catch (emailError) {
+          console.error(`Failed to send reminder to ${tokenData.customerEmail}:`, emailError);
+          failedCount++;
+        }
       }
     }
 
-    return res.status(200).json({ ok: true, count: reminders.length, reminders });
+    return res.status(200).json({ 
+      ok: true, 
+      total: reminders.length, 
+      sent: sentCount,
+      failed: failedCount,
+      reminders 
+    });
   } catch (error) {
     console.error("Error checking upload reminders:", error);
     return res.status(500).json({ error: "Internal server error" });
