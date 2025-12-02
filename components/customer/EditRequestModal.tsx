@@ -116,16 +116,35 @@ export default function EditRequestModal({
 
         toast.info(`Se încarcă ${form.mediaFiles.length} fișier(e)...`);
 
-        const { uploadFileViaAPI } = await import("@/utils/storageUpload");
+        const { ref, uploadBytesResumable, getDownloadURL } = await import("firebase/storage");
+        const { storage } = await import("@/services/firebase");
 
         for (const file of Array.from(form.mediaFiles) as File[]) {
           try {
-            // Uploading file via API route
+            const fileName = `${Date.now()}_${file.name}`;
+            const storagePath = `requests/${request.id}/customers/${request.customerId}/${fileName}`;
+            const storageRef = ref(storage, storagePath);
 
-            // Upload via Next.js API route (server-side, no CORS issues)
-            const downloadURL = await uploadFileViaAPI(file, request.id, request.customerId);
-            newMediaUrls.push(downloadURL);
-            // Upload successful
+            // Upload file
+            const uploadTask = uploadBytesResumable(storageRef, file);
+
+            // Wait for upload to complete
+            await new Promise((resolve, reject) => {
+              uploadTask.on(
+                "state_changed",
+                null,
+                (error) => reject(error),
+                async () => {
+                  try {
+                    const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+                    newMediaUrls.push(downloadURL);
+                    resolve(downloadURL);
+                  } catch (error) {
+                    reject(error);
+                  }
+                }
+              );
+            });
           } catch (uploadError) {
             console.error(`Failed to upload ${file.name}:`, uploadError);
             console.error("Upload error details:", {

@@ -391,7 +391,8 @@ export default function CustomerDashboard() {
             `Auth UID: ${user.uid}, uploading ${form.mediaFiles.length} file(s) via API route`
           );
 
-          const { uploadFileViaAPI } = await import("@/utils/storageUpload");
+          const { ref, uploadBytesResumable, getDownloadURL } = await import("firebase/storage");
+          const { storage } = await import("@/services/firebase");
           const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
 
           const uploadedUrls: string[] = [];
@@ -400,10 +401,38 @@ export default function CustomerDashboard() {
             const file = form.mediaFiles[i];
 
             console.warn(`Uploading ${file.name} (${i + 1}/${form.mediaFiles.length})`);
-            // Upload via Next.js API route (server-side, no CORS issues)
-            const downloadURL = await uploadFileViaAPI(file, requestId, user.uid);
-            uploadedUrls.push(downloadURL);
-            console.warn(`Upload success: ${downloadURL}`);
+            
+            try {
+              const fileName = `${Date.now()}_${file.name}`;
+              const storagePath = `requests/${requestId}/customers/${user.uid}/${fileName}`;
+              const storageRef = ref(storage, storagePath);
+
+              // Upload file
+              const uploadTask = uploadBytesResumable(storageRef, file);
+
+              // Wait for upload to complete
+              const downloadURL = await new Promise<string>((resolve, reject) => {
+                uploadTask.on(
+                  "state_changed",
+                  null,
+                  (error) => reject(error),
+                  async () => {
+                    try {
+                      const url = await getDownloadURL(uploadTask.snapshot.ref);
+                      resolve(url);
+                    } catch (error) {
+                      reject(error);
+                    }
+                  }
+                );
+              });
+
+              uploadedUrls.push(downloadURL);
+              console.warn(`Upload success: ${downloadURL}`);
+            } catch (err) {
+              console.error(`Failed to upload ${file.name}:`, err);
+              throw err;
+            }
           }
 
           // Update request document with media URLs
