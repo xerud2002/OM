@@ -5,7 +5,7 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 ## Overview
 
 - **Stack**: Next.js 14 (Pages Router in `pages/`), TypeScript, Tailwind CSS, Framer Motion, Firebase (Auth, Firestore, Storage), Sonner toasts, Lucide icons.
-- **Config**: ESM project (`"type": "module"` in package.json), ESLint flat config, Prettier + Tailwind plugin for class sorting.
+- **Config**: ESM project (`"type": "module"` in package.json) — **all imports must use `.js` extensions in compiled code**; ESLint flat config (`eslint.config.js`), Prettier + Tailwind plugin for class sorting.
 - **Global shell**: `pages/_app.tsx` wires `Navbar`, `Footer`, global `<Toaster />`, `ErrorBoundary`, and `FloatingCTA`. Content is offset via `pt-[80px]`.
 - **Routing**: Uses Pages Router (`pages/**`). Some client components use `next/navigation`'s `useRouter`; keep this consistent unless migrating the app.
 - **Layout**: Use `components/layout/Layout.tsx` (`LayoutWrapper`) to wrap sections/pages with the gradient background container.
@@ -66,6 +66,8 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 { success: false, error: string, code?: string }
 ```
 
+**Use helper functions**: `apiSuccess(data)`, `apiError(error, code?)` from `types/api.ts`.
+
 **Secured Endpoints** (Require Firebase ID token in `Authorization: Bearer <token>` header):
 
 - `/api/offers/accept` - Accept offer, decline all others in batch
@@ -74,11 +76,30 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 - `/api/markUploadTokenUsed` - Mark upload token as used
 - `/api/notifyCompaniesOnUpload` - Notify companies after media upload
 
+**Authentication pattern for API routes**:
+```typescript
+// Extract and verify Firebase ID token
+const authHeader = req.headers.authorization || "";
+const match = authHeader.match(/^Bearer (.+)$/);
+if (!match) return res.status(401).json({ error: "Missing Authorization bearer token" });
+const idToken = match[1];
+const decoded = await adminAuth.verifyIdToken(idToken);
+const uid = decoded.uid;
+```
+
 **Offer acceptance** (`pages/api/offers/accept.ts`):
 
 - Requires Firebase ID token in `Authorization: Bearer <token>` header
 - Validates ownership (request must belong to authenticated customer)
-- Accepts selected offer, declines all others in a batch, updates request status to `accepted`
+- **Uses batch writes** to accept selected offer and decline all others atomically
+- Updates request status to `accepted`
+- Sends personalized HTML email to company via Resend API (server-side)
+
+**Email System** (Dual approach):
+
+- **Client-side**: EmailJS for user-triggered emails (upload links) — uses `utils/emailHelpers.ts` wrapper
+- **Server-side**: Resend API for transactional emails (offer accepted, notifications) — direct API calls in API routes
+- Both require env vars; gracefully degrade if missing (log warning, continue)
 
 **Media upload workflow** (Complete Enterprise System):
 
@@ -138,10 +159,13 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 - **Use helpers in `utils/*Helpers.ts`** instead of ad-hoc Firestore calls where possible.
 - **Maintain single-role invariant** for users; handle `ROLE_CONFLICT` from auth flows.
 - **Keep timestamps with `serverTimestamp()`** and map snapshots to plain objects in the UI.
+- **Strip `undefined` fields** before Firestore writes — `createRequest()` and `updateRequest()` do this automatically.
 - **Navigation** currently uses `next/navigation` inside client components, even under `pages/`. Keep consistent unless performing a broader migration.
 - **Sequential request codes** are generated via Firestore transaction on `meta/counters` doc (see `generateRequestCode()` in `firestoreHelpers.ts`).
 - **CollectionGroup queries** on offers: denormalize `requestId` and `requestCode` on offer docs to enable company-wide offer queries.
-- **Batch operations** for offer acceptance/decline to ensure consistency.
+- **Batch operations** for offer acceptance/decline to ensure consistency and atomicity.
+- **Token-based workflows**: Generate secure 64-char hex tokens (`crypto.randomBytes(32)`), store in Firestore with `expiresAt` (7 days), validate before use, mark `used: true` after consumption.
+- **Graceful degradation**: API routes check `adminReady` before privileged ops; email systems log warnings if keys missing but don't throw.
 
 ## Developer workflows
 
@@ -151,6 +175,19 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 - **Pre-commit**: Husky runs `lint-staged` hook that lints and formats staged files (config in `package.json` top-level).
 - **ESLint**: Flat config (`eslint.config.js`) with Next.js, React, Tailwind rules, and Prettier integration.
 - **Firebase Admin setup**: Requires service account env vars for API routes. Falls back gracefully if missing (see `lib/firebaseAdmin.ts`).
+- **Deploy checklist**: See `DEPLOYMENT_CHECKLIST.md` for critical Firebase domain authorization, env vars, and CRON setup steps.
+
+## Environment variables and deployment
+
+**Required env vars** (see `.env copy.example`):
+
+- **Client-side** (`NEXT_PUBLIC_*`): Firebase config (apiKey, authDomain, projectId, etc.), EmailJS credentials (serviceId, templateId, publicKey), app URL
+- **Server-side** (secrets): Firebase Admin (projectId, clientEmail, privateKey as multiline string), Resend API key, CRON API key
+- **Critical deployment steps**:
+  1. Add deployed domain to Firebase Console → Authentication → Authorized domains (else `auth/unauthorized-domain` error)
+  2. Set all env vars in Vercel/hosting provider
+  3. Generate Firebase Admin service account JSON from Firebase Console → Project Settings → Service Accounts
+  4. Configure Vercel CRON jobs for `/api/sendUploadReminders` with `x-api-key` header matching `CRON_API_KEY`
 
 ## Examples
 
