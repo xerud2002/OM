@@ -32,7 +32,7 @@ export default function CompanyDashboard() {
     "all" | "accepted" | "pending" | "rejected" | "declined"
   >("all");
   const [search, setSearch] = useState("");
-  const [activeTab, setActiveTab] = useState<"offers" | "requests">("offers");
+  const [activeTab, setActiveTab] = useState<"offers" | "requests">("requests");
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editPrice, setEditPrice] = useState<string>("");
   const [editMessage, setEditMessage] = useState<string>("");
@@ -158,23 +158,6 @@ export default function CompanyDashboard() {
           {/* Tab Navigation */}
           <div className="mb-8 flex justify-center gap-2 rounded-xl bg-gray-100 p-1.5">
             <button
-              onClick={() => setActiveTab("offers")}
-              className={`relative rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
-                activeTab === "offers"
-                  ? "bg-white text-emerald-700 shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              {activeTab === "offers" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 rounded-lg bg-white shadow-md"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <span className="relative z-10">Ofertele mele</span>
-            </button>
-            <button
               onClick={() => setActiveTab("requests")}
               className={`relative rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
                 activeTab === "requests"
@@ -191,7 +174,37 @@ export default function CompanyDashboard() {
               )}
               <span className="relative z-10">Cereri clienți</span>
             </button>
+            <button
+              onClick={() => setActiveTab("offers")}
+              className={`relative rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
+                activeTab === "offers"
+                  ? "bg-white text-emerald-700 shadow-md"
+                  : "text-gray-600 hover:text-gray-900"
+              }`}
+            >
+              {activeTab === "offers" && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute inset-0 rounded-lg bg-white shadow-md"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">Ofertele mele</span>
+            </button>
           </div>
+
+          {activeTab === "requests" && (
+            <div className="mt-6">
+              {/** Reuse the same requests view from company requests page */}
+              {company ? (
+                <RequestsView companyFromParent={company} />
+              ) : (
+                <p className="text-center text-sm italic text-gray-500">
+                  Se încarcă utilizatorul...
+                </p>
+              )}
+            </div>
+          )}
 
           {activeTab === "offers" && (
             <>
@@ -626,19 +639,6 @@ export default function CompanyDashboard() {
               </motion.div>
             )}
           </AnimatePresence>
-
-          {activeTab === "requests" && (
-            <div className="mt-6">
-              {/** Reuse the same requests view from company requests page */}
-              {company ? (
-                <RequestsView companyFromParent={company} />
-              ) : (
-                <p className="text-center text-sm italic text-gray-500">
-                  Se încarcă utilizatorul...
-                </p>
-              )}
-            </div>
-          )}
         </section>
       </LayoutWrapper>
     </RequireRole>
