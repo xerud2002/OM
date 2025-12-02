@@ -207,7 +207,6 @@ function RequestCardCompact({
   // eslint-disable-next-line no-unused-vars
   onUpdateHasMine?: (arg: boolean) => void;
 }) {
-  const [expanded, setExpanded] = useState(false);
   const [paidAccess, setPaidAccess] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(true);
   const r = request;
@@ -247,109 +246,242 @@ function RequestCardCompact({
     }
   };
 
+  const handlePrint = () => {
+    // Get the current request element
+    const printContent = document.getElementById(`request-${r.id}`);
+    if (!printContent) return;
+
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) return;
+
+    // Write the HTML structure with styles
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <title>Cerere ${(r as any).requestCode || r.id.substring(0, 8)}</title>
+          <link rel="stylesheet" href="/_next/static/css/de5116d32dc2f3ee.css">
+          <style>
+            @page {
+              size: A4;
+              margin: 15mm;
+            }
+            body {
+              font-family: system-ui, -apple-system, sans-serif;
+              color: black;
+              background: white;
+              padding: 20px;
+            }
+            * {
+              box-shadow: none !important;
+              animation: none !important;
+              transition: none !important;
+            }
+          </style>
+        </head>
+        <body>
+          ${printContent.innerHTML}
+        </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+
+    // Wait for content to load, then print
+    setTimeout(() => {
+      printWindow.print();
+      printWindow.close();
+    }, 250);
+  };
+
   return (
-    <div className="space-y-3">
+    <div id={`request-${r.id}`} className="space-y-3 print:break-inside-avoid">
       {/* Compact view - always visible */}
-      <div className="space-y-2">
+      <div className="space-y-2 print:space-y-1">
         {/* Header */}
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between print:mb-2">
           <div>
-            <h3 className="text-lg font-semibold text-emerald-700">
+            <h3 className="text-lg font-semibold text-emerald-700 print:text-base print:text-black">
               {(r as any).requestCode || r.id.substring(0, 8)}
             </h3>
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-gray-500 print:text-[10px] print:text-gray-700">
               Cerere client: {r.customerName?.split(" ")[0] || "Client"}
             </p>
           </div>
-          {(r as any).rooms && (
-            <span className="rounded-lg bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700">
-              {(r as any).rooms} {Number((r as any).rooms) === 1 ? "cameră" : "camere"}
-            </span>
-          )}
+          <div className="flex items-center gap-2">
+            {(r as any).rooms && (
+              <span className="rounded-lg bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700 print:bg-gray-100 print:px-2 print:py-0.5 print:text-[10px] print:text-black">
+                {(r as any).rooms} {Number((r as any).rooms) === 1 ? "cameră" : "camere"}
+              </span>
+            )}
+            <button
+              onClick={handlePrint}
+              className="rounded-lg border border-emerald-600 bg-white px-3 py-1 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50 print:hidden"
+              title="Printează"
+            >
+              🖨️ Print
+            </button>
+          </div>
         </div>
 
         {/* Quick summary */}
-        <div className="flex items-center gap-3 text-sm text-gray-600">
+        <div className="flex items-center gap-3 text-sm text-gray-600 print:text-[11px] print:text-black">
           <span>📦 {(r as any).fromCounty || r.fromCity}</span>
           <span>→</span>
           <span>🚚 {(r as any).toCounty || r.toCity}</span>
         </div>
-
-        {/* Expand/Collapse button */}
-        <button
-          onClick={() => setExpanded(!expanded)}
-          className="w-full rounded-md border border-gray-300 bg-white py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-        >
-          {expanded ? "▲ Ascunde detalii" : "▼ Vezi toate detaliile"}
-        </button>
       </div>
 
-      {/* Expanded details */}
-      <AnimatePresence>
-        {expanded && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.3 }}
-            className="space-y-3 overflow-hidden"
-          >
-            {/* Location details */}
-            <div className="space-y-2 rounded-lg bg-gradient-to-br from-sky-50 to-emerald-50 p-3">
+      {/* Details */}
+      <div className="space-y-3 print:space-y-2">
+            {/* Contact Info - Only show if paid/has access */}
+            {(paidAccess || hasMine) && (
+              <div className="space-y-2 rounded-lg border-2 border-emerald-200 bg-white p-3 shadow-sm print:border print:border-black print:bg-white print:p-2 print:shadow-none">
+                <div className="mb-2 flex items-center gap-2 text-emerald-700 print:mb-1 print:text-black">
+                  <span className="text-lg print:text-sm">✅</span>
+                  <h4 className="text-sm font-bold print:text-[11px]">Date de Contact</h4>
+                </div>
+                
+                {(r as any).phone && (
+                  <div className="flex items-center gap-2 print:gap-1">
+                    <span className="text-lg print:text-sm">📞</span>
+                    <div>
+                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Telefon</p>
+                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">{(r as any).phone}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {r.customerEmail && (
+                  <div className={`flex items-center gap-2 print:gap-1 ${(r as any).phone ? 'border-t pt-2 print:pt-1' : ''}`}>
+                    <span className="text-lg print:text-sm">📧</span>
+                    <div>
+                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Email</p>
+                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">{r.customerEmail}</p>
+                    </div>
+                  </div>
+                )}
+                
+                {r.customerName && (
+                  <div className={`flex items-center gap-2 print:gap-1 ${((r as any).phone || r.customerEmail) ? 'border-t pt-2 print:pt-1' : ''}`}>
+                    <span className="text-lg print:text-sm">👤</span>
+                    <div>
+                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Nume complet</p>
+                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">{r.customerName}</p>
+                    </div>
+                  </div>
+                )}
+
+                {((r as any).contactFirstName || (r as any).contactLastName) && !r.customerName && (
+                  <div className={`flex items-center gap-2 print:gap-1 ${((r as any).phone || r.customerEmail) ? 'border-t pt-2 print:pt-1' : ''}`}>
+                    <span className="text-lg print:text-sm">👤</span>
+                    <div>
+                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Nume</p>
+                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">
+                        {(r as any).contactFirstName} {(r as any).contactLastName}
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Location details - Enhanced with full details if paid */}
+            <div className="space-y-2 rounded-lg bg-gradient-to-br from-sky-50 to-emerald-50 p-3 print:border print:border-black print:bg-white print:p-2">
               <div>
-                <p className="text-xs font-semibold uppercase text-gray-500">📦 Adresa Colectare:</p>
-                <p className="text-sm font-medium text-gray-800">
+                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">📦 Adresă Colectare:</p>
+                <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
                   {(r as any).fromCounty || ""}{(r as any).fromCounty && ", "}{r.fromCity}
                 </p>
-                {((r as any).fromStreet || (r as any).fromAddress) && (
-                  <p className="text-sm text-gray-600">
-                    {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
-                    {!(r as any).fromStreet && (r as any).fromAddress}
-                  </p>
+                {(paidAccess || hasMine) ? (
+                  // Full address with all details if paid
+                  <>
+                    {((r as any).fromStreet || (r as any).fromAddress) && (
+                      <p className="text-sm text-gray-700 print:text-[11px] print:text-black">
+                        {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                        {!(r as any).fromStreet && (r as any).fromAddress && (r as any).fromAddress}
+                        {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
+                        {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
+                        {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
+                        {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  // Basic street only if not paid
+                  <>
+                    {((r as any).fromStreet || (r as any).fromAddress) && (
+                      <p className="text-sm text-gray-600 print:text-[11px] print:text-black">
+                        {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                        {!(r as any).fromStreet && (r as any).fromAddress}
+                      </p>
+                    )}
+                  </>
                 )}
-                <div className="mt-1 flex flex-wrap gap-2 text-xs">
+                <div className="mt-1 flex flex-wrap gap-2 text-xs print:gap-1 print:text-[9px]">
                   {(r as any).fromType && (
-                    <span className="rounded bg-white/80 px-2 py-0.5">
-                      {(r as any).fromType === "house" ? "🏠 Casă" : "Apartament"}
+                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
+                      {(r as any).fromType === "house" ? "🏠 Casă" : "🏢 Apartament"}
                     </span>
                   )}
-                  {(r as any).fromFloor && (
-                    <span className="rounded bg-white/80 px-2 py-0.5">
+                  {(r as any).fromFloor !== undefined && (
+                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
                       Etaj {(r as any).fromFloor}
                     </span>
                   )}
                   {(r as any).fromElevator !== undefined && (
-                    <span className="rounded bg-white/80 px-2 py-0.5">
+                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
                       {(r as any).fromElevator ? "✅ Lift" : "❌ Fără lift"}
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="border-t border-emerald-200 pt-2">
-                <p className="text-xs font-semibold uppercase text-gray-500">🚚 Adresa Livrare:</p>
-                <p className="text-sm font-medium text-gray-800">
+              <div className="border-t border-emerald-200 pt-2 print:border-gray-400 print:pt-1">
+                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">🚚 Adresă Livrare:</p>
+                <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
                   {(r as any).toCounty || ""}{(r as any).toCounty && ", "}{r.toCity}
                 </p>
-                {((r as any).toStreet || (r as any).toAddress) && (
-                  <p className="text-sm text-gray-600">
-                    {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
-                    {!(r as any).toStreet && (r as any).toAddress}
-                  </p>
+                {(paidAccess || hasMine) ? (
+                  // Full address with all details if paid
+                  <>
+                    {((r as any).toStreet || (r as any).toAddress) && (
+                      <p className="text-sm text-gray-700 print:text-[11px] print:text-black">
+                        {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                        {!(r as any).toStreet && (r as any).toAddress && (r as any).toAddress}
+                        {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
+                        {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
+                        {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
+                        {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  // Basic street only if not paid
+                  <>
+                    {((r as any).toStreet || (r as any).toAddress) && (
+                      <p className="text-sm text-gray-600 print:text-[11px] print:text-black">
+                        {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                        {!(r as any).toStreet && (r as any).toAddress}
+                      </p>
+                    )}
+                  </>
                 )}
-                <div className="mt-1 flex flex-wrap gap-2 text-xs">
+                <div className="mt-1 flex flex-wrap gap-2 text-xs print:gap-1 print:text-[9px]">
                   {(r as any).toType && (
-                    <span className="rounded bg-white/80 px-2 py-0.5">
+                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
                       {(r as any).toType === "house" ? "🏠 Casă" : "Apartament"}
                     </span>
                   )}
-                  {(r as any).toFloor && (
-                    <span className="rounded bg-white/80 px-2 py-0.5">
+                  {(r as any).toFloor !== undefined && (
+                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
                       Etaj {(r as any).toFloor}
                     </span>
                   )}
                   {(r as any).toElevator !== undefined && (
-                    <span className="rounded bg-white/80 px-2 py-0.5">
+                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
                       {(r as any).toElevator ? "✅ Lift" : "❌ Fără lift"}
                     </span>
                   )}
@@ -358,9 +490,9 @@ function RequestCardCompact({
             </div>
 
             {/* Move date */}
-            <div className="rounded-lg bg-amber-50 p-3">
-              <p className="text-xs font-semibold uppercase text-gray-500">📅 Data mutării:</p>
-              <p className="text-sm font-medium text-gray-800">
+            <div className="rounded-lg bg-amber-50 p-3 print:border print:border-black print:bg-white print:p-2">
+              <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">📅 Data mutării:</p>
+              <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
                 {(() => {
                   const d = formatMoveDateDisplay(r as any, { month: "short" });
                   return d && d !== "-" ? d : "Flexibilă";
@@ -371,31 +503,31 @@ function RequestCardCompact({
             {/* Services requested */}
             {((r as any).serviceMoving || (r as any).servicePacking || (r as any).serviceDisassembly || 
               (r as any).serviceCleanout || (r as any).serviceStorage) && (
-              <div className="rounded-lg bg-purple-50 p-3">
-                <p className="mb-2 text-xs font-semibold uppercase text-gray-500">🛠️ Servicii solicitate:</p>
-                <div className="flex flex-wrap gap-2">
+              <div className="rounded-lg bg-purple-50 p-3 print:border print:border-black print:bg-white print:p-2">
+                <p className="mb-2 text-xs font-semibold uppercase text-gray-500 print:mb-1 print:text-[10px] print:text-black">🛠️ Servicii solicitate:</p>
+                <div className="flex flex-wrap gap-2 print:gap-1">
                   {(r as any).serviceMoving && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800">
+                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
                       🚚 Transport
                     </span>
                   )}
                   {(r as any).servicePacking && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800">
+                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
                       📦 Ambalare
                     </span>
                   )}
                   {(r as any).serviceDisassembly && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800">
+                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
                       🔧 Demontare/Montare
                     </span>
                   )}
                   {(r as any).serviceCleanout && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800">
+                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
                       🧹 Debarasare
                     </span>
                   )}
                   {(r as any).serviceStorage && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800">
+                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
                       🏪 Depozitare
                     </span>
                   )}
@@ -405,9 +537,9 @@ function RequestCardCompact({
 
             {/* Survey type */}
             {(r as any).surveyType && (
-              <div className="rounded-lg bg-rose-50 p-3">
-                <p className="text-xs font-semibold uppercase text-gray-500">📋 Tip evaluare:</p>
-                <p className="text-sm font-medium text-gray-800">
+              <div className="rounded-lg bg-rose-50 p-3 print:border print:border-black print:bg-white print:p-2">
+                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">📋 Tip evaluare:</p>
+                <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
                   {(r as any).surveyType === "in-person" && "👤 La fața locului"}
                   {(r as any).surveyType === "video" && "📹 Video call"}
                   {(r as any).surveyType === "quick-estimate" && "⚡ Estimare rapidă (fără vizită)"}
@@ -417,113 +549,45 @@ function RequestCardCompact({
 
             {/* Details/notes */}
             {r.details && (
-              <div className="rounded-lg border-l-4 border-emerald-500 bg-gray-50 p-3">
-                <p className="text-xs font-semibold uppercase text-gray-500">💬 Detalii suplimentare:</p>
-                <p className="mt-1 text-sm text-gray-700">{r.details}</p>
+              <div className="rounded-lg border-l-4 border-emerald-500 bg-gray-50 p-3 print:border print:border-l-2 print:border-black print:bg-white print:p-2">
+                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">💬 Detalii suplimentare:</p>
+                <p className="mt-1 text-sm text-gray-700 print:text-[11px] print:text-black">{r.details}</p>
               </div>
             )}
 
             {/* Media indicator */}
             {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
-              <div className="flex items-center gap-2 text-sm text-emerald-700">
+              <div className="flex items-center gap-2 text-sm text-emerald-700 print:text-[11px] print:text-black">
                 <span>📸</span>
                 <span className="font-medium">{(r as any).mediaUrls.length} fotografii/video-uri încărcate</span>
               </div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      </div>
 
       {/* Action button */}
       {company ? (
         <>
           {checkingPayment ? (
-            <div className="mt-3 flex items-center justify-center rounded-lg bg-gray-50 p-4">
+            <div className="mt-3 flex items-center justify-center rounded-lg bg-gray-50 p-4 print:hidden">
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent"></div>
                 <span>Verificare acces...</span>
               </div>
             </div>
           ) : !hasMine && !paidAccess ? (
-            <OfferForm requestId={r.id} company={company} onPaymentSuccess={handlePaymentSuccess} />
+            <div className="print:hidden">
+              <OfferForm requestId={r.id} company={company} onPaymentSuccess={handlePaymentSuccess} />
+            </div>
           ) : (
-            <div className="mt-3 space-y-3 rounded-lg border-2 border-emerald-600 bg-gradient-to-br from-emerald-50 to-white p-4">
-              <div className="flex items-center gap-2 text-emerald-700">
-                <span className="text-2xl">✅</span>
-                <h4 className="font-bold">Detalii Complete Deblocate</h4>
-              </div>
-              
-              <div className="space-y-2 rounded-lg bg-white p-3 shadow-sm">
-                <div className="flex items-center gap-2">
-                  <span className="text-lg">📞</span>
-                  <div>
-                    <p className="text-xs text-gray-500">Telefon</p>
-                    <p className="font-semibold text-gray-800">{(r as any).phone || "Nu a fost furnizat"}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2 border-t pt-2">
-                  <span className="text-lg">📧</span>
-                  <div>
-                    <p className="text-xs text-gray-500">Email</p>
-                    <p className="font-semibold text-gray-800">{r.customerEmail || "Nu a fost furnizat"}</p>
-                  </div>
-                </div>
-                
-                <div className="flex items-center gap-2 border-t pt-2">
-                  <span className="text-lg">👤</span>
-                  <div>
-                    <p className="text-xs text-gray-500">Nume complet</p>
-                    <p className="font-semibold text-gray-800">{r.customerName || "Nu a fost furnizat"}</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Full addresses with exact details */}
-              <div className="space-y-2">
-                <div className="rounded-lg bg-sky-50 p-3">
-                  <p className="mb-1 text-xs font-semibold text-gray-600">📦 Adresă Exactă Colectare:</p>
-                  <p className="text-sm font-medium text-gray-800">
-                    {(r as any).fromCounty && `${(r as any).fromCounty}, `}
-                    {r.fromCity}
-                  </p>
-                  {(r as any).fromStreet && (
-                    <p className="text-sm text-gray-700">
-                      Str. {(r as any).fromStreet}
-                      {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
-                      {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
-                      {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
-                      {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
-                    </p>
-                  )}
-                </div>
-
-                <div className="rounded-lg bg-emerald-50 p-3">
-                  <p className="mb-1 text-xs font-semibold text-gray-600">🚚 Adresă Exactă Livrare:</p>
-                  <p className="text-sm font-medium text-gray-800">
-                    {(r as any).toCounty && `${(r as any).toCounty}, `}
-                    {r.toCity}
-                  </p>
-                  {(r as any).toStreet && (
-                    <p className="text-sm text-gray-700">
-                      Str. {(r as any).toStreet}
-                      {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
-                      {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
-                      {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
-                      {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
-                    </p>
-                  )}
-                </div>
-              </div>
-
-              <p className="text-center text-xs text-emerald-600">
-                🎉 Ai acces complet la toate informațiile acestei cereri
+            <div className="mt-3 rounded-lg border-2 border-emerald-600 bg-gradient-to-br from-emerald-50 to-white p-3 text-center print:hidden">
+              <p className="text-sm font-medium text-emerald-700">
+                ✅ Ai acces complet la toate detaliile acestei cereri
               </p>
             </div>
           )}
         </>
       ) : (
-        <p className="mt-3 text-sm italic text-gray-400">
+        <p className="mt-3 text-sm italic text-gray-400 print:hidden">
           Trebuie să fii autentificat pentru a trimite oferte.
         </p>
       )}

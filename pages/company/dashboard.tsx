@@ -14,20 +14,16 @@ import {
   orderBy,
   onSnapshot,
   doc,
-  getDoc,
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { motion, AnimatePresence } from "framer-motion";
-import { formatMoveDateDisplay } from "@/utils/date";
+import { motion } from "framer-motion";
 
 export default function CompanyDashboard() {
   const router = useRouter();
   const [company, setCompany] = useState<any>(null);
   const [offers, setOffers] = useState<any[]>([]);
-  const [selectedOffer, setSelectedOffer] = useState<any | null>(null);
   const [loading, setLoading] = useState(false);
-  const [requestDetails, setRequestDetails] = useState<any | null>(null);
   const [statusFilter, setStatusFilter] = useState<
     "all" | "accepted" | "pending" | "rejected" | "declined"
   >("all");
@@ -77,25 +73,6 @@ export default function CompanyDashboard() {
 
     return () => unsub();
   }, [company?.uid]);
-
-  // Fetch request details for modal
-  const fetchRequestDetails = async (requestId: string) => {
-    try {
-      if (!requestId) {
-        setRequestDetails(null);
-        return;
-      }
-      const reqRef = doc(db, "requests", requestId);
-      const reqSnap = await getDoc(reqRef);
-      if (reqSnap.exists()) {
-        setRequestDetails(reqSnap.data());
-      } else {
-        setRequestDetails(null);
-      }
-    } catch (err) {
-      console.error("Error fetching request details:", err);
-    }
-  };
 
   const filteredOffers = useMemo(() => {
     return offers.filter((o) => {
@@ -321,11 +298,7 @@ export default function CompanyDashboard() {
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       whileHover={{ y: -2 }}
-                      onClick={() => {
-                        setSelectedOffer(offer);
-                        fetchRequestDetails(offer.requestId);
-                      }}
-                      className="group cursor-pointer overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:border-emerald-300 hover:shadow-lg"
+                      className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:border-emerald-300 hover:shadow-lg"
                     >
                       <div className="flex">
                         {/* Color accent bar */}
@@ -582,63 +555,7 @@ export default function CompanyDashboard() {
             </>
           )}
 
-          {/* Offer details modal */}
-          <AnimatePresence>
-            {selectedOffer && (
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-                onClick={() => setSelectedOffer(null)}
-              >
-                <motion.div
-                  initial={{ scale: 0.9 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0.9 }}
-                  transition={{ duration: 0.2 }}
-                  onClick={(e) => e.stopPropagation()}
-                  className="w-full max-w-md rounded-2xl bg-white p-6 text-gray-800 shadow-xl"
-                >
-                  <h3 className="mb-2 text-lg font-bold text-emerald-700">Detalii ofertă</h3>
-                  <p className="mb-1 text-sm">
-                    <strong>Preț:</strong> {selectedOffer.price} lei
-                  </p>
-                  <p className="mb-1 text-sm">
-                    <strong>Status:</strong> {selectedOffer.status ?? "În așteptare"}
-                  </p>
-                  <p className="mb-3 text-sm">
-                    <strong>Mesaj:</strong> {selectedOffer.message || "Fără mesaj adăugat."}
-                  </p>
 
-                  {requestDetails && (
-                    <div className="mt-4 border-t pt-3">
-                      <h4 className="text-md mb-1 font-semibold text-gray-700">Detalii cerere:</h4>
-                      <p className="text-sm">
-                        {requestDetails.fromCity} → {requestDetails.toCity}
-                      </p>
-                      <p className="text-sm text-gray-600">
-                        Data mutării: {(() => {
-                          const d = formatMoveDateDisplay(requestDetails as any, { month: "short" });
-                          return d && d !== "-" ? d : "-";
-                        })()}
-                      </p>
-                      <p className="mt-1 text-sm text-gray-600">
-                        Detalii: {requestDetails.details || "—"}
-                      </p>
-                    </div>
-                  )}
-
-                  <button
-                    onClick={() => setSelectedOffer(null)}
-                    className="mt-6 w-full rounded-lg bg-gradient-to-r from-emerald-600 to-sky-500 py-2 font-semibold text-white transition hover:opacity-90"
-                  >
-                    Închide
-                  </button>
-                </motion.div>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </section>
       </LayoutWrapper>
     </RequireRole>
