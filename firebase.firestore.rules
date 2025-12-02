@@ -31,6 +31,20 @@ service cloud.firestore {
         allow read: if isSignedIn() && request.auth.uid == companyId;
         allow write: if false; // Created by server or Cloud Functions
       }
+
+      // Company payments subcollection
+      match /payments/{requestId} {
+        // Company can read their own payments
+        allow read: if isSignedIn() && request.auth.uid == companyId;
+        // Company can create payment records for requests they want to access
+        allow create: if isSignedIn() && 
+          request.auth.uid == companyId &&
+          request.resource.data.companyId == companyId &&
+          request.resource.data.requestId == requestId &&
+          request.resource.data.status == 'completed';
+        // No updates or deletes allowed
+        allow update, delete: if false;
+      }
     }
 
     // === REQUESTS COLLECTION ===

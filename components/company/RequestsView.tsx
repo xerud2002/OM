@@ -12,6 +12,10 @@ import {
   limit,
   QueryDocumentSnapshot,
   DocumentData,
+  doc,
+  setDoc,
+  getDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { addOffer } from "@/utils/firestoreHelpers";
@@ -63,6 +67,19 @@ function OfferForm({ requestId, company, onPaymentSuccess }: { requestId: string
     try {
       // Simulate payment processing delay
       await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // Save payment to Firestore (companies/{companyId}/payments/{requestId})
+      const paymentRef = doc(db, `companies/${company.uid}/payments/${requestId}`);
+      await setDoc(paymentRef, {
+        requestId,
+        companyId: company.uid,
+        companyName: company.displayName || company.email || "Companie",
+        amount: 20,
+        currency: "RON",
+        status: "completed",
+        paidAt: serverTimestamp(),
+        createdAt: serverTimestamp(),
+      });
       
       // Simulate successful payment
       setPaymentSuccess(true);
@@ -192,7 +209,36 @@ function RequestCardCompact({
 }) {
   const [expanded, setExpanded] = useState(false);
   const [paidAccess, setPaidAccess] = useState(false);
+  const [checkingPayment, setCheckingPayment] = useState(true);
   const r = request;
+
+  // Check if company has already paid for this request
+  useEffect(() => {
+    const checkPayment = async () => {
+      if (!company?.uid || !r.id) {
+        setCheckingPayment(false);
+        return;
+      }
+      
+      try {
+        const paymentRef = doc(db, `companies/${company.uid}/payments/${r.id}`);
+        const paymentSnap = await getDoc(paymentRef);
+        
+        if (paymentSnap.exists() && paymentSnap.data()?.status === "completed") {
+          setPaidAccess(true);
+          if (onUpdateHasMine) {
+            onUpdateHasMine(true);
+          }
+        }
+      } catch (err) {
+        console.error("Error checking payment:", err);
+      } finally {
+        setCheckingPayment(false);
+      }
+    };
+    
+    checkPayment();
+  }, [company?.uid, r.id, onUpdateHasMine]);
 
   const handlePaymentSuccess = () => {
     setPaidAccess(true);
@@ -391,7 +437,14 @@ function RequestCardCompact({
       {/* Action button */}
       {company ? (
         <>
-          {!hasMine && !paidAccess ? (
+          {checkingPayment ? (
+            <div className="mt-3 flex items-center justify-center rounded-lg bg-gray-50 p-4">
+              <div className="flex items-center gap-2 text-sm text-gray-600">
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent"></div>
+                <span>Verificare acces...</span>
+              </div>
+            </div>
+          ) : !hasMine && !paidAccess ? (
             <OfferForm requestId={r.id} company={company} onPaymentSuccess={handlePaymentSuccess} />
           ) : (
             <div className="mt-3 space-y-3 rounded-lg border-2 border-emerald-600 bg-gradient-to-br from-emerald-50 to-white p-4">
