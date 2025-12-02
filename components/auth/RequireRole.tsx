@@ -34,15 +34,29 @@ export default function RequireRole({ allowedRole, children }: Props) {
           let role: string | null = null;
           const maxAttempts = 5;
           for (let i = 0; i < maxAttempts; i++) {
-            // getUserRole performs Firestore reads to detect whether a profile doc exists
-            role = await getUserRole(u);
-            if (role) break;
-            // wait a bit and retry
-            await new Promise((res) => setTimeout(res, 400));
+            try {
+              // getUserRole performs Firestore reads to detect whether a profile doc exists
+              role = await getUserRole(u);
+              if (role) break;
+            } catch (err) {
+              console.error(`Role check attempt ${i + 1} failed:`, err);
+            }
+            // wait a bit and retry (but not after last attempt)
+            if (i < maxAttempts - 1) {
+              await new Promise((res) => setTimeout(res, 400));
+            }
+          }
+
+          // If we still don't have a role after all attempts, redirect to home
+          if (!role) {
+            toast.error("Nu am putut determina tipul contului. Te rugăm să contactezi suportul.");
+            router.push("/");
+            setChecking(false);
+            return;
           }
 
           if (role !== allowedRole) {
-            // If role is null or mismatched, redirect to the appropriate place
+            // If role is mismatched, redirect to the appropriate place
             toast.error("Acces nepermis pentru acest cont.");
             if (role === "company") router.push("/company/dashboard");
             else if (role === "customer") router.push("/customer/dashboard");
@@ -52,6 +66,7 @@ export default function RequireRole({ allowedRole, children }: Props) {
           }
         } catch (err) {
           console.error("Role check failed:", err);
+          toast.error("Eroare la verificarea contului.");
           router.push("/");
         }
       })();

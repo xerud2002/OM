@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Calendar,
@@ -27,7 +27,7 @@ type MyRequestCardProps = {
   onArchive: (requestId: string) => void;
 };
 
-export default function MyRequestCard({
+const MyRequestCard = memo(function MyRequestCard({
   request,
   offersCount,
   readOnly = false,
@@ -331,4 +331,6 @@ export default function MyRequestCard({
       />
     </motion.div>
   );
-}
+});
+
+export default MyRequestCard;

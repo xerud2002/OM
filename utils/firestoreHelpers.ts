@@ -12,6 +12,48 @@ import {
   getDoc,
 } from "firebase/firestore";
 
+// Helper: Build full address string from components
+function buildAddressString(
+  street?: string,
+  number?: string,
+  type?: "house" | "flat",
+  bloc?: string,
+  staircase?: string,
+  apartment?: string
+): string {
+  const parts = [street, number];
+  if (type === "flat") {
+    if (bloc) parts.push(`Bl. ${bloc}`);
+    if (staircase) parts.push(`Sc. ${staircase}`);
+    if (apartment) parts.push(`Ap. ${apartment}`);
+  }
+  return parts.filter(Boolean).join(", ");
+}
+
+// Helper: Build move date fields from data
+function buildMoveDateFields(data: any): Record<string, any> {
+  const fields: Record<string, any> = {};
+  
+  if (data.moveDateMode) {
+    fields.moveDateMode = data.moveDateMode;
+
+    if (data.moveDateMode === "exact" && data.moveDateStart) {
+      fields.moveDate = data.moveDateStart;
+      fields.moveDateStart = data.moveDateStart;
+    } else if (data.moveDateMode === "range" && data.moveDateStart && data.moveDateEnd) {
+      fields.moveDate = data.moveDateStart; // For backward compatibility
+      fields.moveDateStart = data.moveDateStart;
+      fields.moveDateEnd = data.moveDateEnd;
+    } else if (data.moveDateMode === "flexible" && data.moveDateStart && data.moveDateFlexDays) {
+      fields.moveDate = data.moveDateStart;
+      fields.moveDateStart = data.moveDateStart;
+      fields.moveDateFlexDays = data.moveDateFlexDays;
+    }
+  }
+  
+  return fields;
+}
+
 // Generate a human-friendly sequential request code like REQ-141629
 async function generateRequestCode(): Promise<string> {
   const countersRef = doc(db, "meta", "counters");
@@ -48,43 +90,31 @@ export async function createRequest(data: any) {
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
-  // Handle move date logic based on mode
-  if (data.moveDateMode) {
-    clean.moveDateMode = data.moveDateMode;
+  // Handle move date logic using helper
+  const moveDateFields = buildMoveDateFields(data);
+  Object.assign(clean, moveDateFields);
 
-    if (data.moveDateMode === "exact" && data.moveDateStart) {
-      clean.moveDate = data.moveDateStart;
-      clean.moveDateStart = data.moveDateStart;
-    } else if (data.moveDateMode === "range" && data.moveDateStart && data.moveDateEnd) {
-      clean.moveDate = data.moveDateStart; // For backward compatibility
-      clean.moveDateStart = data.moveDateStart;
-      clean.moveDateEnd = data.moveDateEnd;
-    } else if (data.moveDateMode === "flexible" && data.moveDateStart && data.moveDateFlexDays) {
-      clean.moveDate = data.moveDateStart;
-      clean.moveDateStart = data.moveDateStart;
-      clean.moveDateFlexDays = data.moveDateFlexDays;
-    }
-  }
-
-  // Build full address strings for backward compatibility
+  // Build full address strings using helper
   if (clean.fromStreet || clean.fromNumber) {
-    const parts = [clean.fromStreet, clean.fromNumber];
-    if (clean.fromType === "flat") {
-      if (clean.fromBloc) parts.push(`Bl. ${clean.fromBloc}`);
-      if (clean.fromStaircase) parts.push(`Sc. ${clean.fromStaircase}`);
-      if (clean.fromApartment) parts.push(`Ap. ${clean.fromApartment}`);
-    }
-    clean.fromAddress = parts.filter(Boolean).join(", ");
+    clean.fromAddress = buildAddressString(
+      clean.fromStreet,
+      clean.fromNumber,
+      clean.fromType,
+      clean.fromBloc,
+      clean.fromStaircase,
+      clean.fromApartment
+    );
   }
 
   if (clean.toStreet || clean.toNumber) {
-    const parts = [clean.toStreet, clean.toNumber];
-    if (clean.toType === "flat") {
-      if (clean.toBloc) parts.push(`Bl. ${clean.toBloc}`);
-      if (clean.toStaircase) parts.push(`Sc. ${clean.toStaircase}`);
-      if (clean.toApartment) parts.push(`Ap. ${clean.toApartment}`);
-    }
-    clean.toAddress = parts.filter(Boolean).join(", ");
+    clean.toAddress = buildAddressString(
+      clean.toStreet,
+      clean.toNumber,
+      clean.toType,
+      clean.toBloc,
+      clean.toStaircase,
+      clean.toApartment
+    );
   }
 
   // Generate friendly code for this request
@@ -205,43 +235,31 @@ export async function updateRequest(requestId: string, data: any) {
     Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
   );
 
-  // Handle move date logic based on mode
-  if (data.moveDateMode) {
-    clean.moveDateMode = data.moveDateMode;
+  // Handle move date logic using helper
+  const moveDateFields = buildMoveDateFields(data);
+  Object.assign(clean, moveDateFields);
 
-    if (data.moveDateMode === "exact" && data.moveDateStart) {
-      clean.moveDate = data.moveDateStart;
-      clean.moveDateStart = data.moveDateStart;
-    } else if (data.moveDateMode === "range" && data.moveDateStart && data.moveDateEnd) {
-      clean.moveDate = data.moveDateStart; // For backward compatibility
-      clean.moveDateStart = data.moveDateStart;
-      clean.moveDateEnd = data.moveDateEnd;
-    } else if (data.moveDateMode === "flexible" && data.moveDateStart && data.moveDateFlexDays) {
-      clean.moveDate = data.moveDateStart;
-      clean.moveDateStart = data.moveDateStart;
-      clean.moveDateFlexDays = data.moveDateFlexDays;
-    }
-  }
-
-  // Build full address strings for backward compatibility
+  // Build full address strings using helper
   if (clean.fromStreet || clean.fromNumber) {
-    const parts = [clean.fromStreet, clean.fromNumber];
-    if (clean.fromType === "flat") {
-      if (clean.fromBloc) parts.push(`Bl. ${clean.fromBloc}`);
-      if (clean.fromStaircase) parts.push(`Sc. ${clean.fromStaircase}`);
-      if (clean.fromApartment) parts.push(`Ap. ${clean.fromApartment}`);
-    }
-    clean.fromAddress = parts.filter(Boolean).join(", ");
+    clean.fromAddress = buildAddressString(
+      clean.fromStreet,
+      clean.fromNumber,
+      clean.fromType,
+      clean.fromBloc,
+      clean.fromStaircase,
+      clean.fromApartment
+    );
   }
 
   if (clean.toStreet || clean.toNumber) {
-    const parts = [clean.toStreet, clean.toNumber];
-    if (clean.toType === "flat") {
-      if (clean.toBloc) parts.push(`Bl. ${clean.toBloc}`);
-      if (clean.toStaircase) parts.push(`Sc. ${clean.toStaircase}`);
-      if (clean.toApartment) parts.push(`Ap. ${clean.toApartment}`);
-    }
-    clean.toAddress = parts.filter(Boolean).join(", ");
+    clean.toAddress = buildAddressString(
+      clean.toStreet,
+      clean.toNumber,
+      clean.toType,
+      clean.toBloc,
+      clean.toStaircase,
+      clean.toApartment
+    );
   }
 
   const requestRef = doc(db, "requests", requestId);
