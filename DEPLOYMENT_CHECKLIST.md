@@ -20,7 +20,7 @@
 1. Go to: https://console.firebase.google.com/project/omro-e5a88/authentication/settings
 2. Scroll to "Authorized domains" section
 3. Click "Add domain"
-4. Enter: `om-eosin.vercel.app`
+4. Enter: `om-eosin.vercel.app``
 5. Click "Add" to save
 
 **Why**: Firebase auth blocks unauthorized domains. Users will see "Error (auth/unauthorized-domain)" until this is fixed.
