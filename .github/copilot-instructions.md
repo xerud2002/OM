@@ -77,6 +77,7 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 - `/api/notifyCompaniesOnUpload` - Notify companies after media upload
 
 **Authentication pattern for API routes**:
+
 ```typescript
 // Extract and verify Firebase ID token
 const authHeader = req.headers.authorization || "";
@@ -148,9 +149,9 @@ const uid = decoded.uid;
 ## Validation and utilities
 
 - **`utils/validation.ts`**: Romanian-specific validators (phone `07xxxxxxxx` or `+407xxxxxxxx`, CIF), date utilities, and a `validateField(value, rules)` runner. Prefer these in forms.
-- **`utils/hooks.ts`**: `useDebouncedValue` for search/filter UIs.
-- **`utils/animations.ts`**: Framer Motion variants for consistent animations.
+- **`utils/animations.ts`**: Framer Motion variants (`fadeUp`, `staggerContainer`) for consistent animations.
 - **`utils/date.ts`**: `formatDateRO`, `formatMoveDateDisplay` for Romanian date formatting.
+- **`utils/emailHelpers.ts`**: EmailJS wrapper for client-side emails (upload link requests, etc.).
 - **`utils/devErrorSuppressor.ts`**: Suppresses common dev-only console noise (WebSocket errors, HMR warnings) in development mode.
 
 ## Conventions and gotchas
