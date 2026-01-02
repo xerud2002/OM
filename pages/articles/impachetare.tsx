@@ -21,8 +21,11 @@ export default function ArticleImpachetare() {
         <article className="mx-auto max-w-4xl px-6 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-emerald-700 md:text-5xl">
-              Ghid Complet de Împachetare pentru Mutare
+            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+              Ghid Complet de Împachetare pentru{" "}
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                Mutare
+              </span>
             </h1>
             <p className="text-lg text-gray-600">
               Tehnici profesionale și sfaturi practice pentru o mutare organizată și fără stres

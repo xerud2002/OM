@@ -54,7 +54,10 @@ export default function Articles() {
             <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Ghid de Mutare</span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
-            Sfaturi pentru o mutare reușită
+            Sfaturi pentru o{" "}
+            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              mutare reușită
+            </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
             Articole utile și ghiduri practice care te ajută să te pregătești pentru ziua mutării.

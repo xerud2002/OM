@@ -1,15 +1,15 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote, MapPin, TrendingDown } from "lucide-react";
+import { Star, Quote, MapPin, CheckCircle } from "lucide-react";
 
 const testimonials = [
   {
     name: "Andreea Popescu",
     location: "Timișoara",
-    text: "Am primit 5 oferte în doar 3 ore și am economisit 520 lei! Nu credeam că e atât de simplu. Recomand 100%!",
+    text: "Am primit 5 oferte în doar 3 ore! Nu credeam că e atât de simplu. Recomand 100%!",
     rating: 5,
-    savings: "520 lei",
+    badge: "5 oferte primite",
     avatar: "AP",
     gradient: "from-pink-500 to-rose-500",
   },
@@ -18,7 +18,7 @@ const testimonials = [
     location: "Cluj-Napoca",
     text: "Platformă serioasă! Am comparat ofertele liniștit și am ales firma perfectă. Mutarea a fost fără stres.",
     rating: 5,
-    savings: "380 lei",
+    badge: "Firmă verificată",
     avatar: "MI",
     gradient: "from-blue-500 to-indigo-500",
   },
@@ -27,7 +27,7 @@ const testimonials = [
     location: "Brașov",
     text: "Firmele verificate de voi sunt profesioniști adevărați. Totul a decurs perfect, la timp și fără surprize!",
     rating: 5,
-    savings: "450 lei",
+    badge: "Mutare perfectă",
     avatar: "EM",
     gradient: "from-emerald-500 to-teal-500",
   },
@@ -36,7 +36,7 @@ const testimonials = [
     location: "Iași",
     text: "Formular super rapid de completat, oferte primite a doua zi. Acum știu unde să mă întorc când mă mut din nou!",
     rating: 5,
-    savings: "290 lei",
+    badge: "Răspuns rapid",
     avatar: "AT",
     gradient: "from-purple-500 to-pink-500",
   },
@@ -62,13 +62,16 @@ export default function Testimonials() {
         >
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
-            <span className="text-xs font-semibold text-amber-700 sm:text-sm">4.9/5 din sute de reviews</span>
+            <span className="text-xs font-semibold text-amber-700 sm:text-sm">4.9/5 din 500+ reviews</span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
-            Ce spun clienții noștri
+            Ce spun{" "}
+            <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+              clienții noștri
+            </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Peste 5.000 de utilizatori au folosit <span className="font-semibold text-emerald-600">ofertemutare.ro</span> pentru a compara oferte de mutare în siguranță.
+            Peste 500 de utilizatori au folosit <span className="font-semibold text-emerald-600">ofertemutare.ro</span> pentru a compara oferte de mutare în siguranță.
           </p>
         </motion.div>
 
@@ -102,10 +105,10 @@ export default function Testimonials() {
                   &ldquo;{t.text}&rdquo;
                 </p>
 
-                {/* Savings badge */}
+                {/* Badge */}
                 <div className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 sm:mb-4 sm:gap-2 sm:px-3 sm:py-1.5">
-                  <TrendingDown className="h-3 w-3 text-emerald-600 sm:h-4 sm:w-4" />
-                  <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Economie: {t.savings}</span>
+                  <CheckCircle className="h-3 w-3 text-emerald-600 sm:h-4 sm:w-4" />
+                  <span className="text-xs font-semibold text-emerald-700 sm:text-sm">{t.badge}</span>
                 </div>
 
                 {/* Author */}
@@ -139,7 +142,7 @@ export default function Testimonials() {
         >
           <div className="grid grid-cols-3 divide-x divide-slate-200 rounded-xl border border-slate-200/50 bg-white p-4 shadow-lg sm:rounded-2xl sm:p-6">
             {[
-              { value: "Sute de", label: "Clienți mulțumiți" },
+              { value: "500+", label: "Clienți mulțumiți" },
               { value: "100%", label: "Satisfacție clienți" },
               { value: "4.9/5", label: "Rating mediu" },
             ].map((stat, i) => (

@@ -46,8 +46,11 @@ export default function ArticleTips() {
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-emerald-700 md:text-5xl">
-              50+ Sfaturi Expert Pentru Mutări în România
+            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+              50+ Sfaturi Expert Pentru{" "}
+              <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+                Mutări în România
+              </span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Trucuri, economii și best practices de la profesioniști cu zeci de ani de experiență.

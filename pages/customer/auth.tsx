@@ -129,7 +129,12 @@ export default function CustomerAuthPage() {
   return (
     <LayoutWrapper>
       <section className="mx-auto mt-10 max-w-md rounded-2xl border border-emerald-100 bg-white/80 p-8 text-center shadow-lg backdrop-blur-md">
-        <h1 className="mb-2 text-3xl font-bold text-emerald-700">Autentificare Client</h1>
+        <h1 className="mb-2 text-3xl font-bold text-slate-900">
+          Autentificare{" "}
+          <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            Client
+          </span>
+        </h1>
 
         <p className="mb-6 text-gray-600">
           {isLogin

@@ -70,7 +70,10 @@ export default function Services() {
             <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Servicii Complete</span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
-            Tot ce ai nevoie pentru mutare
+            Tot ce ai nevoie pentru{" "}
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              mutare
+            </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
             Firmele noastre partenere oferă servicii profesionale complete, de la împachetare până la instalare la noua locație.

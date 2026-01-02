@@ -43,8 +43,11 @@ export default function ArticlePregatire() {
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-emerald-700 md:text-5xl">
-              Cum să Te Pregătești pentru Mutare: Ghid Complet
+            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+              Cum să Te Pregătești pentru Mutare:{" "}
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Ghid Complet
+              </span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Planifică-ți mutarea pas cu pas cu acest ghid complet. De la 8 săptămâni înainte până

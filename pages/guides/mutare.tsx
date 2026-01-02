@@ -21,8 +21,11 @@ export default function GuideMutare() {
             <div className="mb-4 inline-flex rounded-full bg-gradient-to-br from-emerald-100 to-blue-100 p-4">
               <BookOpen className="h-10 w-10 text-emerald-600" />
             </div>
-            <h1 className="mb-4 text-4xl font-bold text-emerald-700">
-              Ghidul Complet pentru Mutarea Ta
+            <h1 className="mb-4 text-4xl font-bold text-slate-900">
+              Ghidul Complet pentru{" "}
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Mutarea Ta
+              </span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Tot ce trebuie să știi pentru o mutare organizată și fără stres. De la pregătire și

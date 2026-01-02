@@ -117,7 +117,12 @@ export default function CompanyProfile() {
         <section className="mx-auto max-w-4xl px-4 py-10">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900">Profil Companie</h1>
+            <h1 className="text-3xl font-bold text-slate-900">
+              Profil{" "}
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Companie
+              </span>
+            </h1>
             <p className="mt-2 text-gray-600">Gestionează informațiile companiei tale</p>
           </div>
 

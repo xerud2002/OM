@@ -42,8 +42,11 @@ export default function ArticleSurvey() {
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-emerald-700 md:text-5xl">
-              Tipuri de Survey Pentru Mutări: Ce Să Alegi?
+            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+              Tipuri de Survey Pentru Mutări:{" "}
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+                Ce Să Alegi?
+              </span>
             </h1>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Un survey corect = preț exact = zero surprize în ziua mutării. Descoperă cele 3 metode

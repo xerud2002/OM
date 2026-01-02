@@ -56,7 +56,10 @@ export default function Steps() {
             <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Proces simplu în 3 pași</span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
-            Cum funcționează?
+            Cum{" "}
+            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              funcționează?
+            </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
             Un proces transparent și simplu, gândit să îți economisească timp și bani.
@@ -125,7 +128,7 @@ export default function Steps() {
         >
           <div className="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-sky-50 px-5 py-4 sm:rounded-2xl sm:px-8 sm:py-6">
             <p className="text-xs text-slate-600 sm:text-sm">
-              <span className="font-semibold text-emerald-700">💡 Știai că...</span> clienții noștri economisesc în medie <span className="font-bold text-emerald-700">450 lei</span> pe mutare?
+              <span className="font-semibold text-emerald-700">💡 Știai că...</span> poți compara <span className="font-bold text-emerald-700">până la 5 oferte</span> și să alegi cea mai bună variantă pentru tine?
             </p>
           </div>
         </motion.div>

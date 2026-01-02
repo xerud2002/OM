@@ -63,7 +63,7 @@ export default function CTASection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mx-auto mb-8 max-w-2xl text-base text-slate-300 sm:mb-10 sm:text-lg md:text-xl"
           >
-            Peste <span className="font-bold text-white">5.000 de români</span> au economisit deja prin Ofertemutare.ro. 
+            Peste <span className="font-bold text-white">500 de români</span> au economisit deja prin Ofertemutare.ro. 
             Completează cererea și primește <span className="font-bold text-emerald-400">oferte gratuite</span> de la firme verificate!
           </motion.p>
 
@@ -123,7 +123,7 @@ export default function CTASection() {
             className="mt-10 grid grid-cols-3 divide-x divide-slate-700 rounded-xl border border-slate-700 bg-slate-800/50 p-4 backdrop-blur-sm sm:mt-16 sm:rounded-2xl sm:p-6"
           >
             {[
-              { value: "Sute de", label: "Mutări realizate" },
+              { value: "500+", label: "Mutări realizate" },
               { value: "24h", label: "Timp de răspuns" },
               { value: "50+", label: "Firme partenere" },
             ].map((stat, i) => (

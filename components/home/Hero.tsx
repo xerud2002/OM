@@ -59,7 +59,7 @@ export default function Hero() {
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 sm:h-2.5 sm:w-2.5"></span>
               </span>
               <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
-                🎉 Peste 5.000+ mutări realizate cu succes
+                🎉 Peste 500+ mutări realizate cu succes
               </span>
             </motion.div>
 
@@ -180,7 +180,7 @@ export default function Hero() {
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400 sm:h-5 sm:w-5" />
                   <span className="text-xs font-bold text-amber-700 sm:text-sm">4.9/5</span>
                 </div>
-                <p className="text-[10px] text-amber-600 sm:text-xs">Sute de reviews</p>
+                <p className="text-[10px] text-amber-600 sm:text-xs">500+ reviews</p>
               </motion.div>
             </div>
           </motion.div>

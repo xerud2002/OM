@@ -64,7 +64,7 @@ export default function AboutPage() {
   ];
 
   const stats = [
-    { value: "5.000+", label: "Clienți mulțumiți", icon: Users },
+    { value: "500+", label: "Clienți mulțumiți", icon: Users },
     { value: "50+", label: "Firme partenere", icon: Building2 },
     { value: "40%", label: "Economie medie", icon: TrendingUp },
     { value: "24h", label: "Timp de răspuns", icon: Clock },
@@ -697,7 +697,7 @@ export default function AboutPage() {
               </h2>
 
               <p className="mx-auto mb-10 max-w-2xl text-lg text-slate-600 sm:text-xl">
-                Alătură-te celor peste 5.000 de clienți mulțumiți care au găsit firma de mutări
+                Alătură-te celor peste 500 de clienți mulțumiți care au găsit firma de mutări
                 perfectă prin platforma noastră.
               </p>
 
