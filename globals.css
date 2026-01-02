@@ -1,6 +1,24 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* Tailwind v4: CSS-first configuration */
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  
+  --color-emerald-50: #ecfdf5;
+  --color-emerald-100: #d1fae5;
+  --color-emerald-200: #a7f3d0;
+  --color-emerald-300: #6ee7b7;
+  --color-emerald-400: #34d399;
+  --color-emerald-500: #10b981;
+  --color-emerald-600: #059669;
+  --color-emerald-700: #047857;
+  --color-emerald-800: #065f46;
+  --color-emerald-900: #064e3b;
+}
+
+/* Source paths for Tailwind to scan */
+@source "../pages/**/*.{ts,tsx}";
+@source "../components/**/*.{ts,tsx}";
 
 /* 🎨 Paletă de culori personalizată */
 :root {
@@ -11,7 +29,7 @@
 
 /* 🌿 BODY global */
 body {
-  font-family: theme("fontFamily.sans");
+  font-family: var(--font-sans);
   color: rgb(31, 41, 55); /* echivalent text-gray-800 */
   background: linear-gradient(to bottom right, #ecfdf5, #ffffff, #f0f9ff);
   background-attachment: fixed;
@@ -47,7 +65,6 @@ select {
   background-color: white;
   border-radius: 12px;
   appearance: none;
-  background-image: linear-gradient(to right, #10b981, #0ea5e9);
   background-clip: padding-box;
   color: #064e3b;
   padding-right: 2rem;
@@ -214,7 +231,7 @@ select option:checked {
   /* Hide non-essential elements */
   nav,
   footer,
-  .print\\:hidden {
+  [class*="print:hidden"] {
     display: none !important;
   }
 
@@ -236,7 +253,7 @@ select option:checked {
   }
 
   /* Page breaks */
-  .print\\:break-inside-avoid {
+  [class*="print:break-inside-avoid"] {
     break-inside: avoid;
     page-break-inside: avoid;
   }

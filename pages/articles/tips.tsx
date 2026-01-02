@@ -60,7 +60,7 @@ export default function ArticleTips() {
             <div className="grid gap-6 md:grid-cols-3">
               <div className="text-center">
                 <div className="mb-2 text-4xl font-bold">40%</div>
-                <div className="text-sm opacity-90">Economie medie cu sfaturile noastre</div>
+                <div className="text-sm opacity-90">Clienți mulțumiți cu sfaturile noastre</div>
               </div>
               <div className="text-center">
                 <div className="mb-2 text-4xl font-bold">6h</div>

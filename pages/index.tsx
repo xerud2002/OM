@@ -18,7 +18,7 @@ export default function HomePage() {
           🔹 SEO Meta Tags
       =========================== */}
       <Head>
-        <title>Oferte Mutare România 2024 | Economisește până la 40% | Firme Verificate</title>
+        <title>Oferte Mutare România 2026 | Economisește până la 40% | Firme Verificate</title>
         <meta
           name="description"
           content="Primești 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări din România. Economisești în medie 450 lei. 100% gratuit, fără obligații. Peste 5000+ clienți mulțumiți!"
@@ -32,10 +32,10 @@ export default function HomePage() {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro" />
-        <meta property="og:title" content="Oferte Mutare România 2024 | Economisești până la 40%" />
+        <meta property="og:title" content="Oferte Mutare România 2026 | Economisești până la 40%" />
         <meta
           property="og:description"
-          content="Primești 3-5 oferte GRATUITE în 24h. Economie medie 450 lei. 100% gratuit!"
+          content="Primești 3-5 oferte GRATUITE în 24h de la firme verificate. 100% gratuit!"
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.png" />
 
@@ -44,11 +44,11 @@ export default function HomePage() {
         <meta property="twitter:url" content="https://ofertemutare.ro" />
         <meta
           property="twitter:title"
-          content="Oferte Mutare România 2024 | Economisești până la 40%"
+          content="Oferte Mutare România 2026 | Economisești până la 40%"
         />
         <meta
           property="twitter:description"
-          content="Primești 3-5 oferte GRATUITE în 24h. Economie medie 450 lei!"
+          content="Primești 3-5 oferte GRATUITE în 24h de la firme verificate!"
         />
         <meta property="twitter:image" content="https://ofertemutare.ro/pics/index.png" />
       </Head>
@@ -57,19 +57,14 @@ export default function HomePage() {
           🔹 Page Sections
       =========================== */}
       <Hero />
-      {/* Wrap content sections for consistent mobile padding/background */}
-      <div className="bg-gradient-to-b from-white to-emerald-50">
-        <div className="container mx-auto px-3 py-6 sm:px-4 sm:py-10">
-          <Steps />
-          <ClientAccount />
-          <Services />
-          <GuaranteeSection />
-          <PartnerSection />
-          <Testimonials />
-          <Articles />
-          <CTASection />
-        </div>
-      </div>
+      <Steps />
+      <ClientAccount />
+      <Services />
+      <GuaranteeSection />
+      <PartnerSection />
+      <Testimonials />
+      <Articles />
+      <CTASection />
     </>
   );
 }
