@@ -72,24 +72,24 @@ export default function AboutPage() {
 
   const timeline = [
     {
-      year: "2023",
-      title: "Ideea a luat naștere",
-      desc: "Am experimentat pe propria piele cât de stresant poate fi să găsești o firmă de mutări de încredere.",
+      year: "2010",
+      title: "Începutul în domeniu",
+      desc: "Am intrat în industria mutărilor și am învățat din prima mână provocările acestui domeniu.",
     },
     {
-      year: "2024",
-      title: "Lansarea platformei",
-      desc: "Am lansat prima versiune a platformei cu 10 firme partenere din București.",
+      year: "15+ ani",
+      title: "Experiență acumulată",
+      desc: "Peste 15 ani de experiență în mutări naționale ne-au arătat cât de greu este să găsești clienți și firme de încredere.",
     },
     {
       year: "2025",
-      title: "Expansiune națională",
-      desc: "Acum acoperim toate județele din România cu peste 50 de firme verificate.",
+      title: "Soluția: Ofertemutare.ro",
+      desc: "Am creat o platformă care aduce împreună clienții și companiile de transport, cu transparență totală.",
     },
     {
-      year: "2026",
-      title: "Viitorul",
-      desc: "Continuăm să inovăm și să aducem funcționalități noi pentru o experiență și mai bună.",
+      year: "Azi",
+      title: "Misiunea noastră",
+      desc: "Continuăm să construim încredere între clienți și firme, făcând mutările mai simple și mai sigure pentru toți.",
     },
   ];
 
@@ -252,7 +252,10 @@ export default function AboutPage() {
                 </div>
 
                 <h2 className="mb-6 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-                  Să eliminăm stresul din procesul de mutare
+                  Să eliminăm stresul din{" "}
+                  <span className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
+                    procesul de mutare
+                  </span>
                 </h2>
 
                 <div className="mb-8 space-y-5">
@@ -363,11 +366,13 @@ export default function AboutPage() {
             </div>
 
             <h2 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl">
-              O călătorie continuă
+              <span className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-1 text-white">
+                Povestea noastră
+              </span>
             </h2>
 
             <p className="text-lg text-slate-600">
-              De la o idee simplă la o platformă folosită de mii de oameni.
+              15+ ani de experiență în mutări ne-au inspirat să creăm o platformă de încredere.
             </p>
           </motion.div>
 
@@ -428,7 +433,10 @@ export default function AboutPage() {
             </div>
 
             <h2 className="mb-5 text-3xl font-bold text-slate-900 sm:text-4xl lg:text-5xl">
-              Principiile care ne ghidează
+              Principiile care{" "}
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                ne ghidează
+              </span>
             </h2>
 
             <p className="text-lg text-slate-600">
@@ -541,7 +549,10 @@ export default function AboutPage() {
                 </div>
 
                 <h2 className="mb-8 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
-                  Un proces simplu, rezultate excelente
+                  Un proces simplu,{" "}
+                  <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                    rezultate excelente
+                  </span>
                 </h2>
 
                 <div className="space-y-6">

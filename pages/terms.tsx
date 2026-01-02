@@ -18,10 +18,15 @@ export default function TermsPage() {
         <div className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex rounded-full bg-emerald-100 p-3">
+            <div className="mb-4 inline-flex rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
               <FileText className="h-8 w-8 text-emerald-600" />
             </div>
-            <h1 className="mb-4 text-4xl font-bold text-emerald-700">Termeni și Condiții</h1>
+            <h1 className="mb-4 text-4xl font-bold text-slate-900">
+              Termeni și{" "}
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                Condiții
+              </span>
+            </h1>
             <p className="text-gray-600">Ultima actualizare: 5 Noiembrie 2025</p>
           </div>
 

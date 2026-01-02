@@ -67,16 +67,35 @@ export default function Hero() {
             <h1 className="mb-4 text-3xl font-extrabold leading-[1.15] tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
               Mutări simple,
               <br />
-              <span className="relative">
+              <span className="relative inline-block">
                 <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                   prețuri corecte.
                 </span>
-                <motion.span 
-                  initial={{ scaleX: 0 }}
-                  animate={{ scaleX: 1 }}
-                  transition={{ delay: 0.8, duration: 0.6 }}
-                  className="absolute -bottom-1 left-0 h-2 w-full origin-left bg-gradient-to-r from-emerald-200 to-sky-200 opacity-50 sm:-bottom-2 sm:h-3"
-                />
+                <motion.svg
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={{ pathLength: 1, opacity: 1 }}
+                  transition={{ delay: 0.8, duration: 1.2 }}
+                  className="absolute -bottom-1 left-0 w-full sm:-bottom-2"
+                  viewBox="0 0 300 12"
+                  fill="none"
+                >
+                  <motion.path
+                    d="M2 10C40 4 100 2 150 6C200 10 260 4 298 8"
+                    stroke="url(#hero-gradient)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ delay: 0.8, duration: 1.2 }}
+                  />
+                  <defs>
+                    <linearGradient id="hero-gradient" x1="0" y1="0" x2="300" y2="0">
+                      <stop offset="0%" stopColor="#059669" />
+                      <stop offset="50%" stopColor="#14b8a6" />
+                      <stop offset="100%" stopColor="#0284c7" />
+                    </linearGradient>
+                  </defs>
+                </motion.svg>
               </span>
             </h1>
 

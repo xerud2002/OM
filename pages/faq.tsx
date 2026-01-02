@@ -147,10 +147,15 @@ export default function FAQPage() {
         <div className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex rounded-full bg-emerald-100 p-3">
+            <div className="mb-4 inline-flex rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
               <HelpCircle className="h-8 w-8 text-emerald-600" />
             </div>
-            <h1 className="mb-4 text-4xl font-bold text-emerald-700">Întrebări Frecvente</h1>
+            <h1 className="mb-4 text-4xl font-bold text-slate-900">
+              Întrebări{" "}
+              <span className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-1 text-white">
+                Frecvente
+              </span>
+            </h1>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Răspunsuri clare la cele mai comune întrebări despre platformă, proces, prețuri și mai
               mult.
