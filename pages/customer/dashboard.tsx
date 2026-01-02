@@ -1,14 +1,13 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import { db } from "@/services/firebase";
 import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { motion } from "framer-motion";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
-import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
+import { PlusSquare, List, Inbox, Archive as ArchiveIcon, CheckCircle2 } from "lucide-react";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
 import { sendEmail } from "@/utils/emailHelpers";
 import OfferComparison from "@/components/customer/OfferComparison";
@@ -604,190 +603,205 @@ export default function CustomerDashboard() {
 
   return (
     <RequireRole allowedRole="customer">
-      <LayoutWrapper>
-        <section className="mx-auto max-w-[1400px] px-0 py-8 sm:px-4">
-          {/* Modern Header */}
-          <div className="mb-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">
-                  Bună, {user?.displayName || "Client"}!
+      <div className="min-h-screen bg-gradient-to-b from-white to-emerald-50">
+        {/* Hero background with gradient */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
+          {/* Animated gradient orbs */}
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+            <div className="absolute -right-20 top-20 h-96 w-96 rounded-full bg-sky-500/15 blur-3xl" />
+            <div className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-400/10 blur-2xl" />
+          </div>
+
+          <div className="relative mx-auto max-w-[1400px] px-4 pt-28 pb-10 sm:px-6 sm:pt-32 lg:pb-14">
+            {/* Header */}
+            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                <h1 className="text-3xl font-bold text-white sm:text-4xl">
+                  Bună, <span className="bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">{user?.displayName || "Client"}</span>!
                 </h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-2 text-base text-slate-300">
                   Gestionează cererile tale de mutare și ofertele primite
                 </p>
-              </div>
-              <button
+              </motion.div>
+              <motion.button
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
                 onClick={() => setActiveTab("new")}
-                className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-emerald-500 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40"
               >
-                <PlusSquare size={20} />
+                <PlusSquare size={22} className="transition-transform group-hover:rotate-90" />
                 Cerere nouă
-              </button>
+              </motion.button>
             </div>
 
             {/* Stats Cards */}
-            <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="group relative overflow-hidden rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-6 shadow-sm transition-all hover:shadow-lg"
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-medium text-emerald-600">Cereri active</p>
-                    <p className="mt-2 text-3xl font-bold text-gray-900">{requests.length}</p>
+                    <p className="text-sm font-medium text-emerald-400">Cereri active</p>
+                    <p className="mt-2 text-4xl font-bold text-white">{requests.length}</p>
+                    <p className="mt-1 text-xs text-slate-400">În așteptarea ofertelor</p>
                   </div>
-                  <div className="rounded-xl bg-emerald-100 p-3">
-                    <List size={24} className="text-emerald-600" />
+                  <div className="rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
+                    <List size={26} className="text-emerald-400" />
                   </div>
                 </div>
-                <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-emerald-100 opacity-20" />
+                <div className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
               </motion.div>
 
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="group relative overflow-hidden rounded-2xl border border-sky-100 bg-gradient-to-br from-sky-50 to-white p-6 shadow-sm transition-all hover:shadow-lg"
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-medium text-sky-600">Oferte primite</p>
-                    <p className="mt-2 text-3xl font-bold text-gray-900">{totalOffers}</p>
+                    <p className="text-sm font-medium text-sky-400">Oferte primite</p>
+                    <p className="mt-2 text-4xl font-bold text-white">{totalOffers}</p>
+                    <p className="mt-1 text-xs text-slate-400">De la firme verificate</p>
                   </div>
-                  <div className="rounded-xl bg-sky-100 p-3">
-                    <Inbox size={24} className="text-sky-600" />
+                  <div className="rounded-xl bg-gradient-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
+                    <Inbox size={26} className="text-sky-400" />
                   </div>
                 </div>
-                <div className="absolute -bottom-2 -right-2 h-24 w-24 rounded-full bg-sky-100 opacity-20" />
+                <div className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-sky-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
               </motion.div>
 
-              {/* Removed "Medie oferte" card as requested */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all sm:col-span-2 lg:col-span-1"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <p className="text-sm font-medium text-amber-400">Arhivate</p>
+                    <p className="mt-2 text-4xl font-bold text-white">{archivedRequests.length}</p>
+                    <p className="mt-1 text-xs text-slate-400">Cereri finalizate</p>
+                  </div>
+                  <div className="rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">
+                    <ArchiveIcon size={26} className="text-amber-400" />
+                  </div>
+                </div>
+                <div className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
+              </motion.div>
             </div>
           </div>
+        </div>
 
-          {/* Navigation Tabs (order: Cerere Nouă, Oferte, Cererile mele) */}
-          <div className="mb-6 flex flex-wrap gap-2 border-b border-gray-200">
-            {/* Cerere Nouă */}
-            <button
-              onClick={() => setActiveTab("new")}
-              className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "new" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
+        <section className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6">
+
+          {/* Navigation Tabs - Modern pill style */}
+          <div className="mb-8">
+            <div className="inline-flex flex-wrap gap-2 rounded-2xl bg-gray-100 p-2">
+              {/* Cerere Nouă */}
+              <button
+                onClick={() => setActiveTab("new")}
+                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                  activeTab === "new"
+                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
+                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                }`}
+              >
                 <PlusSquare size={18} />
                 <span>Cerere Nouă</span>
-              </div>
-              {activeTab === "new" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
-                />
-              )}
-            </button>
+              </button>
 
-            {/* Oferte */}
-            <button
-              onClick={() => setActiveTab("offers")}
-              className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "offers" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
+              {/* Oferte */}
+              <button
+                onClick={() => setActiveTab("offers")}
+                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                  activeTab === "offers"
+                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
+                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                }`}
+              >
                 <Inbox size={18} />
                 <span>Oferte</span>
-                {/* Only show badge if there are actual offers */}
                 {totalOffers > 0 && (
-                  <span className="rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-600">
+                  <span className="rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
                     {totalOffers}
                   </span>
                 )}
-              </div>
-              {activeTab === "offers" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
-                />
-              )}
-            </button>
+              </button>
 
-            {/* Cererile mele */}
-            <button
-              onClick={() => setActiveTab("requests")}
-              className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "requests" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
+              {/* Cererile mele */}
+              <button
+                onClick={() => setActiveTab("requests")}
+                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                  activeTab === "requests"
+                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
+                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                }`}
+              >
                 <List size={18} />
                 <span>Cererile mele</span>
-              </div>
-              {activeTab === "requests" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
-                />
-              )}
-            </button>
+              </button>
 
-            {/* Arhivă */}
-            <button
-              onClick={() => setActiveTab("archive")}
-              className={`relative px-6 py-3 font-medium transition-colors ${
-                activeTab === "archive" ? "text-emerald-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              <div className="flex items-center gap-2">
+              {/* Arhivă */}
+              <button
+                onClick={() => setActiveTab("archive")}
+                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                  activeTab === "archive"
+                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
+                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                }`}
+              >
                 <ArchiveIcon size={18} />
                 <span>Arhivă</span>
-              </div>
-              {activeTab === "archive" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-emerald-600"
-                />
-              )}
-            </button>
+              </button>
+            </div>
           </div>
 
           {activeTab === "requests" && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="overflow-visible rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+              className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-100/50 sm:p-8"
             >
               {loading ? (
-                <div className="flex items-center justify-center py-12">
+                <div className="flex items-center justify-center py-16">
                   <div className="text-center">
-                    <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-                    <p className="mt-4 text-sm text-gray-500">Se încarcă cererile...</p>
+                    <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                    <p className="mt-5 text-gray-500">Se încarcă cererile...</p>
                   </div>
                 </div>
               ) : sortedRequests.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
+                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-14 text-center"
                 >
-                  <div className="rounded-full bg-emerald-100 p-4">
-                    <List size={32} className="text-emerald-600" />
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
+                    <List size={36} className="text-white" />
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900">Nicio cerere încă</h3>
-                  <p className="mt-2 max-w-sm text-sm text-gray-500">
-                    Creează prima ta cerere de mutare și primește oferte de la firme verificate
+                  <h3 className="mt-6 text-xl font-bold text-gray-900">Nicio cerere încă</h3>
+                  <p className="mt-3 max-w-md text-gray-500">
+                    Creează prima ta cerere de mutare și primește oferte personalizate de la firme verificate
                   </p>
                   <button
                     onClick={() => setActiveTab("new")}
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
+                    className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
                   >
-                    <PlusSquare size={20} />
+                    <PlusSquare size={22} />
                     Creează prima cerere
                   </button>
                 </motion.div>
               ) : (
-                <div className="grid grid-cols-1 gap-5">
+                <div className="grid grid-cols-1 gap-6">
                   {sortedRequests.map((r, index) => (
                     <motion.div
                       key={r.id}
@@ -834,7 +848,7 @@ export default function CustomerDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+              className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-0 shadow-xl shadow-gray-100/50 sm:p-8"
             >
               <RequestForm
                 form={form}
@@ -846,24 +860,34 @@ export default function CustomerDashboard() {
           )}
 
           {activeTab === "offers" && (
-            <div className="rounded-2xl border border-gray-100 bg-white p-0 shadow-sm">
+            <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/50">
               {requests.length === 0 ? (
-                <div className="p-10 text-center">
-                  <div className="mx-auto mb-3 w-fit rounded-full bg-sky-100 p-4">
-                    <Inbox size={32} className="text-sky-600" />
+                <div className="p-12 text-center">
+                  <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
+                    <Inbox size={36} className="text-white" />
                   </div>
-                  <h3 className="text-lg font-semibold text-gray-900">Nu ai încă cereri</h3>
-                  <p className="mt-1 text-sm text-gray-500">
-                    Creează o cerere pentru a primi oferte.
+                  <h3 className="text-xl font-bold text-gray-900">Nu ai încă cereri</h3>
+                  <p className="mt-2 text-gray-500">
+                    Creează o cerere pentru a primi oferte de la firme verificate.
                   </p>
+                  <button
+                    onClick={() => setActiveTab("new")}
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
+                  >
+                    <PlusSquare size={18} />
+                    Creează prima cerere
+                  </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 gap-0 sm:grid-cols-[300px,1fr]">
+                <div className="grid grid-cols-1 gap-0 lg:grid-cols-[320px,1fr]">
                   {/* Sidebar: requests list */}
-                  <aside className="border-b border-gray-100 sm:border-b-0 sm:border-r">
-                    <div className="sticky top-[80px] max-h-[calc(100vh-120px)] overflow-auto p-4">
-                      <h3 className="mb-3 text-sm font-semibold text-gray-800">Cererile mele</h3>
-                      <div className="space-y-2">
+                  <aside className="border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white lg:border-b-0 lg:border-r">
+                    <div className="sticky top-[80px] max-h-[calc(100vh-120px)] overflow-auto p-5">
+                      <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-900">
+                        <List size={16} className="text-emerald-600" />
+                        Selectează o cerere
+                      </h3>
+                      <div className="space-y-3">
                         {requests.map((r) => {
                           const cnt = (offersByRequest[r.id] || []).length;
                           const active = selectedRequestId === r.id;
@@ -871,25 +895,29 @@ export default function CustomerDashboard() {
                             <button
                               key={r.id}
                               onClick={() => setSelectedRequestId(r.id)}
-                              className={`w-full rounded-xl border px-4 py-3 text-left transition-all ${
+                              className={`w-full rounded-xl border-2 px-4 py-4 text-left transition-all duration-300 ${
                                 active
-                                  ? "border-emerald-300 bg-emerald-50 shadow-sm"
-                                  : "border-gray-200 bg-white hover:bg-gray-50"
+                                  ? "border-emerald-400 bg-gradient-to-r from-emerald-50 to-teal-50 shadow-lg shadow-emerald-500/10"
+                                  : "border-transparent bg-white shadow-sm hover:border-gray-200 hover:shadow-md"
                               }`}
                             >
                               <div className="flex items-center justify-between gap-3">
                                 <div className="min-w-0">
-                                  <p className="truncate text-sm font-semibold text-gray-900">
+                                  <p className={`truncate font-bold ${active ? "text-emerald-700" : "text-gray-900"}`}>
                                     {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                                   </p>
-                                  <p className="mt-0.5 text-xs text-gray-500">
+                                  <p className="mt-1 text-xs text-gray-500">
                                     {(() => {
                                       const d = formatMoveDateDisplay(r as any, { month: "short" });
                                       return d && d !== "-" ? d : "fără dată";
                                     })()}
                                   </p>
                                 </div>
-                                <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-semibold text-emerald-700">
+                                <span className={`shrink-0 rounded-xl px-3 py-1 text-sm font-bold ${
+                                  active 
+                                    ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30" 
+                                    : "bg-gray-100 text-gray-700"
+                                }`}>
                                   {cnt}
                                 </span>
                               </div>
@@ -901,36 +929,43 @@ export default function CustomerDashboard() {
                   </aside>
 
                   {/* Main: offers for selected request */}
-                  <main className="p-4 sm:p-6">
+                  <main className="p-5 lg:p-8">
                     {!selectedRequestId ? (
-                      <div className="py-10 text-center text-sm text-gray-500">
-                        Selectează o cerere din stânga pentru a vedea ofertele.
+                      <div className="flex flex-col items-center justify-center py-16 text-center">
+                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
+                          <Inbox size={28} className="text-gray-400" />
+                        </div>
+                        <p className="text-gray-500">Selectează o cerere din stânga pentru a vedea ofertele.</p>
                       </div>
                     ) : (
                       <>
-                        <div className="mb-4 flex items-center justify-between">
+                        <div className="mb-6 flex items-center justify-between">
                           <div>
-                            <h3 className="text-lg font-semibold text-gray-900">Oferte primite</h3>
-                            <p className="text-sm text-gray-500">
-                              Relevante pentru cererea selectată
+                            <h3 className="text-xl font-bold text-gray-900">Oferte primite</h3>
+                            <p className="mt-1 text-sm text-gray-500">
+                              Compară și selectează cea mai bună ofertă
                             </p>
+                          </div>
+                          <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2">
+                            <span className="text-sm font-medium text-emerald-700">Total:</span>
+                            <span className="text-lg font-bold text-emerald-600">{(offersByRequest[selectedRequestId] || []).length}</span>
                           </div>
                         </div>
 
                         {!(offersByRequest[selectedRequestId] || []).length ? (
-                          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50 p-10 text-center">
-                            <div className="rounded-full bg-sky-100 p-4">
-                              <Inbox size={32} className="text-sky-600" />
+                          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-12 text-center">
+                            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
+                              <Inbox size={36} className="text-white" />
                             </div>
-                            <h4 className="mt-3 text-base font-semibold text-gray-900">
+                            <h4 className="mt-5 text-lg font-bold text-gray-900">
                               Nicio ofertă încă
                             </h4>
-                            <p className="mt-1 max-w-sm text-sm text-gray-500">
-                              Firmele vor trimite oferte aici după ce procesează cererea ta.
+                            <p className="mt-2 max-w-sm text-gray-500">
+                              Firmele verificate vor trimite oferte aici în curând. Te vom notifica!
                             </p>
                           </div>
                         ) : (
-                          <div className="space-y-3">
+                          <div className="space-y-4">
                             {(offersByRequest[selectedRequestId] || []).map(
                               (o: any, index: number) => (
                                 <OfferRow
@@ -948,8 +983,11 @@ export default function CustomerDashboard() {
 
                         {/* Comparison for selected request only */}
                         {(offersByRequest[selectedRequestId] || []).length > 1 && (
-                          <div className="mt-6 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                            <h3 className="mb-4 text-lg font-semibold text-gray-900">
+                          <div className="mt-8 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg">
+                            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
+                              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30">
+                                ⚖️
+                              </span>
                               Compară oferte
                             </h3>
                             <OfferComparison
@@ -980,38 +1018,38 @@ export default function CustomerDashboard() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="overflow-visible rounded-none border-x-0 border-b border-t border-gray-100 bg-white p-0 shadow-lg sm:rounded-2xl sm:border sm:p-6 md:p-8"
+              className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-100/50 sm:p-8"
             >
               {loading ? (
-                <div className="flex items-center justify-center py-12">
+                <div className="flex items-center justify-center py-16">
                   <div className="text-center">
-                    <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-                    <p className="mt-4 text-sm text-gray-500">Se încarcă arhiva...</p>
+                    <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                    <p className="mt-5 text-gray-500">Se încarcă arhiva...</p>
                   </div>
                 </div>
               ) : archivedRequests.length === 0 ? (
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50/50 p-12 text-center"
+                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-14 text-center"
                 >
-                  <div className="rounded-full bg-gray-100 p-4">
-                    <ArchiveIcon size={32} className="text-gray-500" />
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-400 to-gray-500 shadow-xl shadow-gray-500/20">
+                    <ArchiveIcon size={36} className="text-white" />
                   </div>
-                  <h3 className="mt-4 text-lg font-semibold text-gray-900">Arhivă goală</h3>
-                  <p className="mt-2 max-w-sm text-sm text-gray-500">
-                    Cererile arhivate vor apărea aici.
+                  <h3 className="mt-6 text-xl font-bold text-gray-900">Arhivă goală</h3>
+                  <p className="mt-3 max-w-md text-gray-500">
+                    Cererile finalizate și arhivate vor apărea aici pentru referință.
                   </p>
                 </motion.div>
               ) : (
-                <div className="grid grid-cols-1 gap-5">
+                <div className="grid grid-cols-1 gap-6">
                   {archivedRequests.map((r: any, index: number) => (
                     <motion.div
                       key={r.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.05 }}
-                      className="space-y-2"
+                      className="space-y-3"
                     >
                       <MyRequestCard
                         request={r as any}
@@ -1020,7 +1058,7 @@ export default function CustomerDashboard() {
                         onStatusChange={() => {}}
                         onArchive={() => {}}
                       />
-                      <div className="flex justify-end px-6 pb-2">
+                      <div className="flex justify-end px-6">
                         <button
                           onClick={async () => {
                             try {
@@ -1031,7 +1069,7 @@ export default function CustomerDashboard() {
                               toast.error("Nu s-a putut reactiva cererea");
                             }
                           }}
-                          className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700"
+                          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 hover:shadow-xl"
                         >
                           Reactivează
                         </button>
@@ -1043,7 +1081,7 @@ export default function CustomerDashboard() {
             </motion.div>
           )}
         </section>
-      </LayoutWrapper>
+      </div>
     </RequireRole>
   );
 }
@@ -1103,67 +1141,92 @@ function OfferRow({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-gradient-to-r from-white to-gray-50 p-4"
+      whileHover={{ y: -2 }}
+      className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
-      <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
+      {/* Gradient accent */}
+      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 to-sky-500" />
+      
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Company info */}
         <div className="flex-1">
-          <p className="text-sm font-semibold text-gray-900">{offer.companyName}</p>
-          {offer.message && <p className="mt-1 text-sm text-gray-600">{offer.message}</p>}
-          {offer.createdAt?.toDate && (
-            <p className="mt-1 text-xs text-gray-400">
-              {formatDateRO(offer.createdAt, { month: "short" })}
-            </p>
+          <div className="flex items-center gap-3">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white shadow-lg shadow-emerald-500/30">
+              {offer.companyName?.charAt(0)?.toUpperCase() || "F"}
+            </div>
+            <div>
+              <p className="text-lg font-bold text-gray-900">{offer.companyName}</p>
+              {offer.createdAt?.toDate && (
+                <p className="text-xs text-gray-500">
+                  {formatDateRO(offer.createdAt, { month: "short" })}
+                </p>
+              )}
+            </div>
+          </div>
+          {offer.message && (
+            <p className="mt-3 rounded-xl bg-gray-50 p-3 text-sm text-gray-600">{offer.message}</p>
           )}
         </div>
-        <div className="flex items-center gap-3">
-          <p className="text-2xl font-bold text-emerald-600">{offer.price} lei</p>
-          <div className="flex gap-2">
+
+        {/* Price and actions */}
+        <div className="flex flex-col items-end gap-3 sm:ml-6">
+          <div className="text-right">
+            <p className="text-sm font-medium text-gray-500">Preț ofertat</p>
+            <p className="text-3xl font-bold text-emerald-600">{offer.price} <span className="text-lg">lei</span></p>
+          </div>
+          <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onAccept(requestId, offer.id)}
-              className="inline-flex items-center justify-center rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
+              <CheckCircle2 size={16} />
               Acceptă
             </button>
             <button
               onClick={() => onDecline(requestId, offer.id)}
-              className="inline-flex items-center justify-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+              className="inline-flex items-center justify-center rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-600"
             >
               Refuză
             </button>
             <button
               onClick={() => setShowMessage((s) => !s)}
-              className="inline-flex items-center justify-center gap-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+              className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600"
             >
-              <MessageSquare size={16} /> Mesaj
+              <MessageSquare size={16} />
+              Mesaj
             </button>
           </div>
         </div>
       </div>
 
       {showMessage && (
-        <div className="rounded-lg border border-gray-200 bg-white p-3">
+        <motion.div
+          initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          className="mt-4 overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-4"
+        >
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
             rows={3}
             placeholder="Scrie un mesaj către firmă..."
-            className="w-full resize-y rounded-md border border-gray-200 p-2 text-sm outline-none focus:border-emerald-400 focus:ring-1 focus:ring-emerald-200"
+            className="w-full resize-y rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none transition-all focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
           />
-          <div className="mt-2 flex justify-end gap-2">
+          <div className="mt-3 flex justify-end gap-2">
             <button
               onClick={() => setShowMessage(false)}
-              className="rounded-md border border-gray-200 bg-white px-3 py-1.5 text-sm"
+              className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
             >
               Anulează
             </button>
             <button
               onClick={sendMessage}
-              className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
+              className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-xl"
             >
               Trimite
             </button>
           </div>
-        </div>
+        </motion.div>
       )}
     </motion.div>
   );

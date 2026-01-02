@@ -209,6 +209,7 @@ function RequestCardCompact({
 }) {
   const [paidAccess, setPaidAccess] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(true);
+  const [isExpanded, setIsExpanded] = useState(false);
   const r = request;
 
   // Check if company has already paid for this request
@@ -246,351 +247,431 @@ function RequestCardCompact({
     }
   };
 
-  const handlePrint = () => {
-    // Get the current request element
-    const printContent = document.getElementById(`request-${r.id}`);
-    if (!printContent) return;
-
-    // Create a new window for printing
-    const printWindow = window.open('', '_blank');
-    if (!printWindow) return;
-
-    // Write the HTML structure with styles
-    printWindow.document.write(`
-      <!DOCTYPE html>
-      <html>
-        <head>
-          <title>Cerere ${(r as any).requestCode || r.id.substring(0, 8)}</title>
-          <link rel="stylesheet" href="/_next/static/css/de5116d32dc2f3ee.css">
-          <style>
-            @page {
-              size: A4;
-              margin: 15mm;
-            }
-            body {
-              font-family: system-ui, -apple-system, sans-serif;
-              color: black;
-              background: white;
-              padding: 20px;
-            }
-            * {
-              box-shadow: none !important;
-              animation: none !important;
-              transition: none !important;
-            }
-          </style>
-        </head>
-        <body>
-          ${printContent.innerHTML}
-        </body>
-      </html>
-    `);
-
-    printWindow.document.close();
-    printWindow.focus();
-
-    // Wait for content to load, then print
-    setTimeout(() => {
-      printWindow.print();
-      printWindow.close();
-    }, 250);
-  };
-
   return (
-    <div id={`request-${r.id}`} className="space-y-3 print:break-inside-avoid">
-      {/* Compact view - always visible */}
-      <div className="space-y-2 print:space-y-1">
-        {/* Header */}
-        <div className="flex items-start justify-between print:mb-2">
-          <div>
-            <h3 className="text-lg font-semibold text-emerald-700 print:text-base print:text-black">
-              {(r as any).requestCode || r.id.substring(0, 8)}
-            </h3>
-            <p className="text-xs text-gray-500 print:text-[10px] print:text-gray-700">
-              Cerere client: {r.customerName?.split(" ")[0] || "Client"}
-            </p>
+    <div id={`request-${r.id}`} className="print:break-inside-avoid">
+      {/* Header - always visible */}
+      <div 
+        onClick={() => setIsExpanded(!isExpanded)}
+        className="group cursor-pointer"
+      >
+        {/* Main header row */}
+        <div className="flex items-center justify-between gap-4">
+          {/* Left: Code + Route */}
+          <div className="flex min-w-0 flex-1 items-center gap-4">
+            <div className="flex flex-col">
+              <span className="text-base font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                {(r as any).requestCode || r.id.substring(0, 8)}
+              </span>
+              <span className="text-xs font-medium text-emerald-600">
+                {r.customerName?.split(" ")[0] || "Client"}
+              </span>
+            </div>
+            
+            {/* Route indicator */}
+            <div className="hidden items-center gap-2.5 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100/80 px-4 py-2 text-xs ring-1 ring-slate-200/50 sm:flex">
+              <div className="flex items-center gap-1.5">
+                <div className="h-2 w-2 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 shadow-sm" />
+                <span className="font-semibold text-slate-700">{(r as any).fromCounty || r.fromCity}</span>
+              </div>
+              <svg className="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+              </svg>
+              <div className="flex items-center gap-1.5">
+                <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm" />
+                <span className="font-semibold text-slate-700">{(r as any).toCounty || r.toCity}</span>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
+
+          {/* Right: Badges + Actions */}
+          <div className="flex shrink-0 items-center gap-2.5">
             {(r as any).rooms && (
-              <span className="rounded-lg bg-indigo-100 px-3 py-1 text-sm font-medium text-indigo-700 print:bg-gray-100 print:px-2 print:py-0.5 print:text-[10px] print:text-black">
-                {(r as any).rooms} {Number((r as any).rooms) === 1 ? "cameră" : "camere"}
+              <span className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm shadow-indigo-200">
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                </svg>
+                {(r as any).rooms} cam
               </span>
             )}
+
+            {/* Expand/Collapse button */}
             <button
-              onClick={handlePrint}
-              className="rounded-lg border border-emerald-600 bg-white px-3 py-1 text-sm font-medium text-emerald-700 transition hover:bg-emerald-50 print:hidden"
-              title="Printează"
+              onClick={(e) => {
+                e.stopPropagation();
+                setIsExpanded(!isExpanded);
+              }}
+              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 print:hidden ${
+                isExpanded 
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200" 
+                  : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200 group-hover:from-emerald-50 group-hover:to-teal-50 group-hover:text-emerald-600 group-hover:ring-emerald-200"
+              }`}
             >
-              🖨️ Print
+              <motion.svg
+                animate={{ rotate: isExpanded ? 180 : 0 }}
+                transition={{ duration: 0.2 }}
+                className="h-4 w-4"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+              </motion.svg>
+              {isExpanded ? "Închide" : "Vezi"}
             </button>
           </div>
         </div>
 
-        {/* Quick summary */}
-        <div className="flex items-center gap-3 text-sm text-gray-600 print:text-[11px] print:text-black">
-          <span>📦 {(r as any).fromCounty || r.fromCity}</span>
-          <span>→</span>
-          <span>🚚 {(r as any).toCounty || r.toCity}</span>
+        {/* Mobile route - visible only on small screens */}
+        <div className="mt-3 flex items-center gap-2 text-xs sm:hidden">
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-gradient-to-br from-orange-400 to-amber-500" />
+            <span className="font-medium text-slate-600">{(r as any).fromCounty || r.fromCity}</span>
+          </div>
+          <svg className="h-3.5 w-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg>
+          <div className="flex items-center gap-1.5">
+            <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500" />
+            <span className="font-medium text-slate-600">{(r as any).toCounty || r.toCity}</span>
+          </div>
         </div>
       </div>
 
-      {/* Details */}
-      <div className="space-y-3 print:space-y-2">
+      {/* Expandable Details */}
+      <AnimatePresence>
+        {isExpanded && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+            className="overflow-hidden"
+          >
+            <div className="mt-4 space-y-4 print:space-y-2">
             {/* Contact Info - Only show if paid/has access */}
             {(paidAccess || hasMine) && (
-              <div className="space-y-2 rounded-lg border-2 border-emerald-200 bg-white p-3 shadow-sm print:border print:border-black print:bg-white print:p-2 print:shadow-none">
-                <div className="mb-2 flex items-center gap-2 text-emerald-700 print:mb-1 print:text-black">
-                  <span className="text-lg print:text-sm">✅</span>
-                  <h4 className="text-sm font-bold print:text-[11px]">Date de Contact</h4>
+              <div className="rounded-2xl border border-emerald-200/60 bg-gradient-to-br from-emerald-50 via-white to-teal-50/30 p-4 shadow-sm">
+                <div className="mb-3 flex items-center gap-2.5">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
+                    <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-bold text-slate-700">Date de Contact</span>
                 </div>
                 
-                {(r as any).phone && (
-                  <div className="flex items-center gap-2 print:gap-1">
-                    <span className="text-lg print:text-sm">📞</span>
-                    <div>
-                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Telefon</p>
-                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">{(r as any).phone}</p>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {(r.customerName || (r as any).contactFirstName) && (
+                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-sm">
+                        <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">Nume</p>
+                        <p className="text-sm font-bold text-slate-700">
+                          {r.customerName || `${(r as any).contactFirstName || ""} ${(r as any).contactLastName || ""}`.trim()}
+                        </p>
+                      </div>
                     </div>
-                  </div>
-                )}
-                
-                {r.customerEmail && (
-                  <div className={`flex items-center gap-2 print:gap-1 ${(r as any).phone ? 'border-t pt-2 print:pt-1' : ''}`}>
-                    <span className="text-lg print:text-sm">📧</span>
-                    <div>
-                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Email</p>
-                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">{r.customerEmail}</p>
+                  )}
+                  
+                  {r.customerEmail && (
+                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-purple-500 shadow-sm">
+                        <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">Email</p>
+                        <p className="truncate text-sm font-bold text-slate-700">{r.customerEmail}</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-                
-                {r.customerName && (
-                  <div className={`flex items-center gap-2 print:gap-1 ${((r as any).phone || r.customerEmail) ? 'border-t pt-2 print:pt-1' : ''}`}>
-                    <span className="text-lg print:text-sm">👤</span>
-                    <div>
-                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Nume complet</p>
-                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">{r.customerName}</p>
+                  )}
+                  
+                  {(r as any).phone && (
+                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 shadow-sm">
+                        <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">Telefon</p>
+                        <p className="text-sm font-bold text-slate-700">{(r as any).phone}</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-
-                {((r as any).contactFirstName || (r as any).contactLastName) && !r.customerName && (
-                  <div className={`flex items-center gap-2 print:gap-1 ${((r as any).phone || r.customerEmail) ? 'border-t pt-2 print:pt-1' : ''}`}>
-                    <span className="text-lg print:text-sm">👤</span>
-                    <div>
-                      <p className="text-xs text-gray-500 print:text-[9px] print:text-gray-700">Nume</p>
-                      <p className="font-semibold text-gray-800 print:text-[11px] print:text-black">
-                        {(r as any).contactFirstName} {(r as any).contactLastName}
-                      </p>
-                    </div>
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             )}
 
-            {/* Location details - Enhanced with full details if paid */}
-            <div className="space-y-2 rounded-lg bg-gradient-to-br from-sky-50 to-emerald-50 p-3 print:border print:border-black print:bg-white print:p-2">
-              <div>
-                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">📦 Adresă Colectare:</p>
-                <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
+            {/* Location details - Two column layout */}
+            <div className="grid gap-3 sm:grid-cols-2">
+              {/* From Location */}
+              <div className="rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50/80 to-amber-50/30 p-4">
+                <div className="mb-2.5 flex items-center gap-2">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 shadow-sm">
+                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wide text-orange-600">Colectare</span>
+                </div>
+                <p className="text-sm font-semibold text-slate-700">
                   {(r as any).fromCounty || ""}{(r as any).fromCounty && ", "}{r.fromCity}
                 </p>
                 {(paidAccess || hasMine) ? (
-                  // Full address with all details if paid
-                  <>
-                    {((r as any).fromStreet || (r as any).fromAddress) && (
-                      <p className="text-sm text-gray-700 print:text-[11px] print:text-black">
-                        {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
-                        {!(r as any).fromStreet && (r as any).fromAddress && (r as any).fromAddress}
-                        {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
-                        {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
-                        {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
-                        {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
-                      </p>
-                    )}
-                  </>
+                  ((r as any).fromStreet || (r as any).fromAddress) && (
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                      {!(r as any).fromStreet && (r as any).fromAddress && (r as any).fromAddress}
+                      {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
+                      {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
+                      {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
+                      {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
+                    </p>
+                  )
                 ) : (
-                  // Basic street only if not paid
-                  <>
-                    {((r as any).fromStreet || (r as any).fromAddress) && (
-                      <p className="text-sm text-gray-600 print:text-[11px] print:text-black">
-                        {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
-                        {!(r as any).fromStreet && (r as any).fromAddress}
-                      </p>
-                    )}
-                  </>
+                  ((r as any).fromStreet || (r as any).fromAddress) && (
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                      {!(r as any).fromStreet && (r as any).fromAddress}
+                    </p>
+                  )
                 )}
-                <div className="mt-1 flex flex-wrap gap-2 text-xs print:gap-1 print:text-[9px]">
+                <div className="mt-2 flex flex-wrap gap-1.5">
                   {(r as any).fromType && (
-                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
-                      {(r as any).fromType === "house" ? "🏠 Casă" : "🏢 Apartament"}
+                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                      {(r as any).fromType === "house" ? "Casă" : "Apartament"}
                     </span>
                   )}
                   {(r as any).fromFloor !== undefined && (
-                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
+                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
                       Etaj {(r as any).fromFloor}
                     </span>
                   )}
                   {(r as any).fromElevator !== undefined && (
-                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
-                      {(r as any).fromElevator ? "✅ Lift" : "❌ Fără lift"}
+                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
+                      (r as any).fromElevator 
+                        ? "bg-emerald-50 text-emerald-600 ring-emerald-200" 
+                        : "bg-red-50 text-red-500 ring-red-200"
+                    }`}>
+                      {(r as any).fromElevator ? "Cu lift" : "Fără lift"}
                     </span>
                   )}
                 </div>
               </div>
 
-              <div className="border-t border-emerald-200 pt-2 print:border-gray-400 print:pt-1">
-                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">🚚 Adresă Livrare:</p>
-                <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
+              {/* To Location */}
+              <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50/80 to-teal-50/30 p-4">
+                <div className="mb-2.5 flex items-center gap-2">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
+                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wide text-emerald-600">Livrare</span>
+                </div>
+                <p className="text-sm font-semibold text-slate-700">
                   {(r as any).toCounty || ""}{(r as any).toCounty && ", "}{r.toCity}
                 </p>
                 {(paidAccess || hasMine) ? (
-                  // Full address with all details if paid
-                  <>
-                    {((r as any).toStreet || (r as any).toAddress) && (
-                      <p className="text-sm text-gray-700 print:text-[11px] print:text-black">
-                        {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
-                        {!(r as any).toStreet && (r as any).toAddress && (r as any).toAddress}
-                        {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
-                        {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
-                        {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
-                        {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
-                      </p>
-                    )}
-                  </>
+                  ((r as any).toStreet || (r as any).toAddress) && (
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                      {!(r as any).toStreet && (r as any).toAddress && (r as any).toAddress}
+                      {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
+                      {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
+                      {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
+                      {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
+                    </p>
+                  )
                 ) : (
-                  // Basic street only if not paid
-                  <>
-                    {((r as any).toStreet || (r as any).toAddress) && (
-                      <p className="text-sm text-gray-600 print:text-[11px] print:text-black">
-                        {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
-                        {!(r as any).toStreet && (r as any).toAddress}
-                      </p>
-                    )}
-                  </>
+                  ((r as any).toStreet || (r as any).toAddress) && (
+                    <p className="mt-0.5 text-xs text-slate-500">
+                      {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                      {!(r as any).toStreet && (r as any).toAddress}
+                    </p>
+                  )
                 )}
-                <div className="mt-1 flex flex-wrap gap-2 text-xs print:gap-1 print:text-[9px]">
+                <div className="mt-2 flex flex-wrap gap-1.5">
                   {(r as any).toType && (
-                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
-                      {(r as any).toType === "house" ? "🏠 Casă" : "Apartament"}
+                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                      {(r as any).toType === "house" ? "Casă" : "Apartament"}
                     </span>
                   )}
                   {(r as any).toFloor !== undefined && (
-                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
+                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
                       Etaj {(r as any).toFloor}
                     </span>
                   )}
                   {(r as any).toElevator !== undefined && (
-                    <span className="rounded bg-white/80 px-2 py-0.5 print:border print:border-gray-400 print:bg-white print:px-1 print:text-black">
-                      {(r as any).toElevator ? "✅ Lift" : "❌ Fără lift"}
+                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
+                      (r as any).toElevator 
+                        ? "bg-emerald-50 text-emerald-600 ring-emerald-200" 
+                        : "bg-red-50 text-red-500 ring-red-200"
+                    }`}>
+                      {(r as any).toElevator ? "Cu lift" : "Fără lift"}
                     </span>
                   )}
                 </div>
               </div>
             </div>
 
-            {/* Move date */}
-            <div className="rounded-lg bg-amber-50 p-3 print:border print:border-black print:bg-white print:p-2">
-              <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">📅 Data mutării:</p>
-              <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
-                {(() => {
-                  const d = formatMoveDateDisplay(r as any, { month: "short" });
-                  return d && d !== "-" ? d : "Flexibilă";
-                })()}
-              </p>
+            {/* Bottom info row: Date + Services + Survey */}
+            <div className="flex flex-wrap items-center gap-2">
+              {/* Move date */}
+              <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-50 to-yellow-50 px-3 py-2 ring-1 ring-amber-100">
+                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-yellow-500 shadow-sm">
+                  <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-medium uppercase tracking-wide text-amber-500">Data mutării</span>
+                  <span className="text-xs font-bold text-amber-700">
+                    {(() => {
+                      const d = formatMoveDateDisplay(r as any, { month: "short" });
+                      return d && d !== "-" ? d : "Flexibilă";
+                    })()}
+                  </span>
+                </div>
+              </div>
+
+              {/* Survey type */}
+              {(r as any).surveyType && (
+                <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 px-3 py-2 ring-1 ring-rose-100">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-rose-400 to-pink-500 shadow-sm">
+                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                    </svg>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-[9px] font-medium uppercase tracking-wide text-rose-400">Tip evaluare</span>
+                    <span className="text-xs font-bold text-rose-700">
+                      {(r as any).surveyType === "in-person" && "La fața locului"}
+                      {(r as any).surveyType === "video" && "Video call"}
+                      {(r as any).surveyType === "quick-estimate" && "Estimare rapidă"}
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              {/* Media indicator */}
+              {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
+                <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 px-3 py-2 ring-1 ring-blue-100">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 shadow-sm">
+                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold text-blue-700">{(r as any).mediaUrls.length} fișiere</span>
+                </div>
+              )}
             </div>
 
             {/* Services requested */}
             {((r as any).serviceMoving || (r as any).servicePacking || (r as any).serviceDisassembly || 
               (r as any).serviceCleanout || (r as any).serviceStorage) && (
-              <div className="rounded-lg bg-purple-50 p-3 print:border print:border-black print:bg-white print:p-2">
-                <p className="mb-2 text-xs font-semibold uppercase text-gray-500 print:mb-1 print:text-[10px] print:text-black">🛠️ Servicii solicitate:</p>
-                <div className="flex flex-wrap gap-2 print:gap-1">
-                  {(r as any).serviceMoving && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
-                      🚚 Transport
-                    </span>
-                  )}
-                  {(r as any).servicePacking && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
-                      📦 Ambalare
-                    </span>
-                  )}
-                  {(r as any).serviceDisassembly && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
-                      🔧 Demontare/Montare
-                    </span>
-                  )}
-                  {(r as any).serviceCleanout && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
-                      🧹 Debarasare
-                    </span>
-                  )}
-                  {(r as any).serviceStorage && (
-                    <span className="rounded-full bg-purple-200 px-2.5 py-1 text-xs font-medium text-purple-800 print:rounded print:border print:border-gray-400 print:bg-white print:px-1.5 print:py-0.5 print:text-[9px] print:text-black">
-                      🏪 Depozitare
-                    </span>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Survey type */}
-            {(r as any).surveyType && (
-              <div className="rounded-lg bg-rose-50 p-3 print:border print:border-black print:bg-white print:p-2">
-                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">📋 Tip evaluare:</p>
-                <p className="text-sm font-medium text-gray-800 print:text-[11px] print:text-black">
-                  {(r as any).surveyType === "in-person" && "👤 La fața locului"}
-                  {(r as any).surveyType === "video" && "📹 Video call"}
-                  {(r as any).surveyType === "quick-estimate" && "⚡ Estimare rapidă (fără vizită)"}
-                </p>
+              <div className="flex flex-wrap gap-2">
+                {(r as any).serviceMoving && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
+                    </svg>
+                    Transport
+                  </span>
+                )}
+                {(r as any).servicePacking && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                    </svg>
+                    Ambalare
+                  </span>
+                )}
+                {(r as any).serviceDisassembly && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                    Demontare/Montare
+                  </span>
+                )}
+                {(r as any).serviceCleanout && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                    </svg>
+                    Debarasare
+                  </span>
+                )}
+                {(r as any).serviceStorage && (
+                  <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
+                    </svg>
+                    Depozitare
+                  </span>
+                )}
               </div>
             )}
 
             {/* Details/notes */}
             {r.details && (
-              <div className="rounded-lg border-l-4 border-emerald-500 bg-gray-50 p-3 print:border print:border-l-2 print:border-black print:bg-white print:p-2">
-                <p className="text-xs font-semibold uppercase text-gray-500 print:text-[10px] print:text-black">💬 Detalii suplimentare:</p>
-                <p className="mt-1 text-sm text-gray-700 print:text-[11px] print:text-black">{r.details}</p>
+              <div className="rounded-2xl border border-slate-200/60 bg-gradient-to-br from-slate-50 to-gray-50/50 p-4">
+                <div className="mb-2 flex items-center gap-2">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-slate-400 to-gray-500 shadow-sm">
+                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
+                    </svg>
+                  </div>
+                  <span className="text-xs font-bold uppercase tracking-wide text-slate-500">Detalii suplimentare</span>
+                </div>
+                <p className="text-sm leading-relaxed text-slate-600">{r.details}</p>
               </div>
             )}
 
-            {/* Media indicator */}
-            {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
-              <div className="flex items-center gap-2 text-sm text-emerald-700 print:text-[11px] print:text-black">
-                <span>📸</span>
-                <span className="font-medium">{(r as any).mediaUrls.length} fotografii/video-uri încărcate</span>
-              </div>
-            )}
-      </div>
-
-      {/* Action button */}
-      {company ? (
-        <>
-          {checkingPayment ? (
-            <div className="mt-3 flex items-center justify-center rounded-lg bg-gray-50 p-4 print:hidden">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-600 border-t-transparent"></div>
-                <span>Verificare acces...</span>
-              </div>
-            </div>
-          ) : !hasMine && !paidAccess ? (
-            <div className="print:hidden">
-              <OfferForm requestId={r.id} company={company} onPaymentSuccess={handlePaymentSuccess} />
-            </div>
-          ) : (
-            <div className="mt-3 rounded-lg border-2 border-emerald-600 bg-gradient-to-br from-emerald-50 to-white p-3 text-center print:hidden">
-              <p className="text-sm font-medium text-emerald-700">
-                ✅ Ai acces complet la toate detaliile acestei cereri
+            {/* Action button */}
+            {company ? (
+              <>
+                {checkingPayment ? (
+                  <div className="flex items-center justify-center rounded-xl bg-slate-50 p-4 print:hidden">
+                    <div className="flex items-center gap-2 text-sm text-slate-500">
+                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent"></div>
+                      <span>Verificare acces...</span>
+                    </div>
+                  </div>
+                ) : !hasMine && !paidAccess ? (
+                  <div className="print:hidden">
+                    <OfferForm requestId={r.id} company={company} onPaymentSuccess={handlePaymentSuccess} />
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-3 ring-1 ring-emerald-200 print:hidden">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
+                      <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-bold text-emerald-700">Ai acces complet la toate detaliile acestei cereri</span>
+                  </div>
+                )}
+              </>
+            ) : (
+              <p className="text-sm italic text-slate-400 print:hidden">
+                Trebuie să fii autentificat pentru a trimite oferte.
               </p>
+            )}
             </div>
-          )}
-        </>
-      ) : (
-        <p className="mt-3 text-sm italic text-gray-400 print:hidden">
-          Trebuie să fii autentificat pentru a trimite oferte.
-        </p>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
@@ -733,10 +814,18 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       const ms = createdAt.toMillis ? createdAt.toMillis() : createdAt;
       const diff = currentTime - ms;
       const hours = Math.floor(diff / (1000 * 60 * 60));
-      const days = Math.floor(hours / 24);
-      if (days > 0) return `${days}d`;
-      if (hours > 0) return `${hours}h`;
-      return "Nou!";
+      
+      // Show "Nou!" for recent posts (less than 1 hour)
+      if (hours < 1) return "Nou!";
+      
+      // Show the actual date and time
+      const date = new Date(ms);
+      const day = date.getDate().toString().padStart(2, '0');
+      const months = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const month = months[date.getMonth()];
+      const hour = date.getHours().toString().padStart(2, '0');
+      const minute = date.getMinutes().toString().padStart(2, '0');
+      return `${day} ${month}, ${hour}:${minute}`;
     },
     [currentTime]
   );
@@ -763,31 +852,37 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="text-center italic text-gray-500"
+          className="py-12 text-center text-slate-400"
         >
-          Momentan nu există cereri noi. 💤
+          Momentan nu există cereri noi.
         </motion.p>
       ) : (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+        <div className="flex flex-col gap-3">
           <AnimatePresence>
-            {sortedRequests.map((r) => (
+            {sortedRequests.map((r, index) => (
               <motion.div
                 key={r.id}
-                initial={{ opacity: 0, y: 10 }}
+                initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                transition={{ duration: 0.3 }}
-                className="rounded-xl border bg-white/90 p-5 shadow-md backdrop-blur-md transition-all hover:shadow-lg"
+                exit={{ opacity: 0, y: -8 }}
+                transition={{ duration: 0.15, delay: index * 0.02 }}
+                className="group/card relative overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-br from-white via-white to-slate-50/80 px-5 py-4 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100/50"
               >
+                {/* Decorative gradient bar */}
+                <div className="absolute left-0 top-0 h-1 w-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 opacity-80" />
+                
                 {r.createdAt && (
-                  <div className="mb-2 flex items-center justify-between">
+                  <div className="mb-3 flex items-center">
                     <span
-                      className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm ${
                         getTimeAgo(r.createdAt) === "Nou!"
-                          ? "bg-emerald-100 text-emerald-700"
-                          : "bg-gray-100 text-gray-600"
+                          ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white"
+                          : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200"
                       }`}
                     >
+                      <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
                       {getTimeAgo(r.createdAt)}
                     </span>
                   </div>

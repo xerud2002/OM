@@ -13,11 +13,11 @@ export default function PartnerSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-24 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-16 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute bottom-0 left-0 h-[500px] w-[500px] -translate-x-1/2 translate-y-1/4 rounded-full bg-emerald-100/40 blur-[100px]" />
-        <div className="absolute right-0 top-0 h-[400px] w-[400px] translate-x-1/4 -translate-y-1/4 rounded-full bg-sky-100/40 blur-[100px]" />
+        <div className="absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/4 rounded-full bg-emerald-100/40 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
+        <div className="absolute right-0 top-0 hidden h-[400px] w-[400px] translate-x-1/4 -translate-y-1/4 rounded-full bg-sky-100/40 blur-[100px] sm:block" />
       </div>
 
       <div className="container relative z-10 mx-auto px-4">
@@ -27,7 +27,7 @@ export default function PartnerSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="overflow-hidden rounded-[2rem] border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50"
+            className="overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-[2rem]"
           >
             <div className="grid lg:grid-cols-2">
               {/* Left - Image */}
@@ -39,7 +39,7 @@ export default function PartnerSection() {
                 className="relative order-2 lg:order-1"
               >
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-sky-50 to-purple-50" />
-                <div className="relative flex h-full min-h-[400px] items-center justify-center p-8 lg:p-12">
+                <div className="relative flex h-full min-h-[280px] items-center justify-center p-6 sm:min-h-[400px] sm:p-8 lg:p-12">
                   <div className="relative">
                     <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
                     <Image
@@ -47,7 +47,7 @@ export default function PartnerSection() {
                       alt="Firme de mutări partenere ofertemutare.ro"
                       width={450}
                       height={350}
-                      className="relative rounded-2xl object-cover shadow-2xl"
+                      className="relative rounded-xl object-cover shadow-2xl sm:rounded-2xl"
                     />
                     
                     {/* Floating stats card */}
@@ -56,15 +56,15 @@ export default function PartnerSection() {
                       whileInView={{ scale: 1, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-                      className="absolute -bottom-4 -right-4 rounded-2xl border border-emerald-100 bg-white p-4 shadow-xl"
+                      className="absolute -bottom-3 -right-3 rounded-xl border border-emerald-100 bg-white p-2.5 shadow-xl sm:-bottom-4 sm:-right-4 sm:rounded-2xl sm:p-4"
                     >
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg">
-                          <TrendingUp className="h-6 w-6 text-white" />
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-12 sm:w-12 sm:rounded-xl">
+                          <TrendingUp className="h-5 w-5 text-white sm:h-6 sm:w-6" />
                         </div>
                         <div>
-                          <p className="text-2xl font-bold text-slate-900">50+</p>
-                          <p className="text-xs text-slate-500">Firme partenere</p>
+                          <p className="text-xl font-bold text-slate-900 sm:text-2xl">50+</p>
+                          <p className="text-[10px] text-slate-500 sm:text-xs">Firme partenere</p>
                         </div>
                       </div>
                     </motion.div>
@@ -73,19 +73,19 @@ export default function PartnerSection() {
               </motion.div>
 
               {/* Right - Content */}
-              <div className="order-1 flex flex-col justify-center p-8 lg:order-2 lg:p-12">
+              <div className="order-1 flex flex-col justify-center p-6 sm:p-8 lg:order-2 lg:p-12">
                 <motion.div
                   initial={{ opacity: 0, x: 30 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-50 to-sky-50 px-4 py-2">
-                    <Building2 className="h-4 w-4 text-emerald-600" />
-                    <span className="text-sm font-semibold text-emerald-700">Pentru Companii</span>
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-50 to-sky-50 px-3 py-1.5 sm:mb-6 sm:px-4 sm:py-2">
+                    <Building2 className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
+                    <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Pentru Companii</span>
                   </div>
 
-                  <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 lg:text-4xl">
+                  <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-3xl lg:text-4xl">
                     Devino partener
                     <br />
                     <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
@@ -93,13 +93,13 @@ export default function PartnerSection() {
                     </span>
                   </h2>
 
-                  <p className="mb-8 text-lg leading-relaxed text-slate-600">
+                  <p className="mb-6 text-base leading-relaxed text-slate-600 sm:mb-8 sm:text-lg">
                     Ai o firmă de mutări și vrei mai mulți clienți fără costuri mari de publicitate? 
                     Primești cereri reale de la clienți interesați din orașul tău și din întreaga țară.
                   </p>
 
                   {/* Benefits */}
-                  <div className="mb-8 space-y-4">
+                  <div className="mb-6 space-y-3 sm:mb-8 sm:space-y-4">
                     {benefits.map((benefit, i) => (
                       <motion.div
                         key={i}
@@ -107,12 +107,12 @@ export default function PartnerSection() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.4 + i * 0.1, duration: 0.4 }}
-                        className="flex items-center gap-4"
+                        className="flex items-center gap-3 sm:gap-4"
                       >
-                        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-emerald-50">
-                          <CheckCircle className="h-5 w-5 text-emerald-600" />
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 sm:h-10 sm:w-10 sm:rounded-xl">
+                          <CheckCircle className="h-4 w-4 text-emerald-600 sm:h-5 sm:w-5" />
                         </div>
-                        <span className="font-medium text-slate-700">{benefit.text}</span>
+                        <span className="text-sm font-medium text-slate-700 sm:text-base">{benefit.text}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -124,10 +124,10 @@ export default function PartnerSection() {
                   >
                     <Link
                       href="/company/auth"
-                      className="group inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-8 py-4 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30"
+                      className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:px-8 sm:py-4 sm:text-base"
                     >
                       Înregistrează-ți firma
-                      <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5" />
                     </Link>
                   </motion.div>
                 </motion.div>

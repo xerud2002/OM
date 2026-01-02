@@ -36,10 +36,10 @@ export default function GuaranteeSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-24 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-1/2 h-[800px] w-[800px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-50/50 blur-[100px]" />
+        <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-50/50 blur-[80px] sm:h-[800px] sm:w-[800px] sm:blur-[100px]" />
       </div>
 
       <div className="container relative z-10 mx-auto px-4">
@@ -49,26 +49,26 @@ export default function GuaranteeSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto mb-16 max-w-3xl text-center"
+          className="mx-auto mb-10 max-w-3xl text-center sm:mb-16"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2">
-            <Award className="h-4 w-4 text-emerald-600" />
-            <span className="text-sm font-semibold text-emerald-700">Garanțiile Noastre</span>
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
+            <Award className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
+            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Garanțiile Noastre</span>
           </div>
-          <h2 className="mb-5 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             De ce să alegi{" "}
             <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               Ofertemutare.ro
             </span>
             ?
           </h2>
-          <p className="text-lg text-slate-600">
+          <p className="text-base text-slate-600 sm:text-lg">
             Suntem dedicați să îți oferim cea mai simplă și sigură experiență de comparare a ofertelor de mutare din România.
           </p>
         </motion.div>
 
         {/* Guarantees Grid */}
-        <div className="mx-auto grid max-w-5xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
           {guarantees.map((g, idx) => (
             <motion.div
               key={idx}
@@ -80,24 +80,24 @@ export default function GuaranteeSection() {
               <motion.div
                 whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="group relative flex h-full flex-col items-center rounded-2xl border border-slate-200/50 bg-white p-8 text-center shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50"
+                className="group relative flex h-full flex-col items-center rounded-xl border border-slate-200/50 bg-white p-4 text-center shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl sm:p-8"
               >
                 {/* Icon */}
                 <motion.div
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
-                  className={`mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${g.gradient} shadow-lg`}
+                  className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${g.gradient} shadow-lg sm:mb-6 sm:h-16 sm:w-16 sm:rounded-2xl`}
                 >
-                  <g.icon className="h-8 w-8 text-white" strokeWidth={1.5} />
+                  <g.icon className="h-6 w-6 text-white sm:h-8 sm:w-8" strokeWidth={1.5} />
                 </motion.div>
 
                 {/* Content */}
-                <h3 className="mb-3 text-lg font-bold text-slate-900">{g.title}</h3>
-                <p className="text-sm leading-relaxed text-slate-600">{g.desc}</p>
+                <h3 className="mb-2 text-sm font-bold text-slate-900 sm:mb-3 sm:text-lg">{g.title}</h3>
+                <p className="hidden text-sm leading-relaxed text-slate-600 sm:block">{g.desc}</p>
 
                 {/* Decorative corner */}
-                <div className="absolute right-0 top-0 h-20 w-20 overflow-hidden rounded-tr-2xl">
-                  <div className={`absolute -right-10 -top-10 h-20 w-20 rotate-45 ${g.bgLight} opacity-50`} />
+                <div className="absolute right-0 top-0 h-16 w-16 overflow-hidden rounded-tr-xl sm:h-20 sm:w-20 sm:rounded-tr-2xl">
+                  <div className={`absolute -right-8 -top-8 h-16 w-16 rotate-45 ${g.bgLight} opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20`} />
                 </div>
               </motion.div>
             </motion.div>
@@ -110,21 +110,21 @@ export default function GuaranteeSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.6 }}
-          className="mx-auto mt-16 max-w-4xl"
+          className="mx-auto mt-10 max-w-4xl sm:mt-16"
         >
-          <div className="relative overflow-hidden rounded-3xl border border-emerald-200/50 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-8 shadow-xl lg:p-10">
+          <div className="relative overflow-hidden rounded-2xl border border-emerald-200/50 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-5 shadow-xl sm:rounded-3xl sm:p-8 lg:p-10">
             {/* Background pattern */}
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:20px_20px] sm:bg-[size:30px_30px]" />
             
-            <div className="relative flex flex-col items-center gap-6 text-center lg:flex-row lg:text-left">
-              <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg">
-                <HeartHandshake className="h-10 w-10 text-white" strokeWidth={1.5} />
+            <div className="relative flex flex-col items-center gap-4 text-center sm:gap-6 lg:flex-row lg:text-left">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-20 sm:w-20 sm:rounded-2xl">
+                <HeartHandshake className="h-7 w-7 text-white sm:h-10 sm:w-10" strokeWidth={1.5} />
               </div>
               <div>
-                <h3 className="mb-2 text-xl font-bold text-slate-900">
+                <h3 className="mb-2 text-lg font-bold text-slate-900 sm:text-xl">
                   💚 Garantăm siguranța și transparența procesului!
                 </h3>
-                <p className="text-slate-600">
+                <p className="text-sm text-slate-600 sm:text-base">
                   Toate firmele partenere sunt verificate și au licențe valide. Citește recenziile altor clienți și alege cu încredere. 
                   Dacă nu ești mulțumit de ofertele primite, nu ești obligat să accepți niciuna.
                 </p>

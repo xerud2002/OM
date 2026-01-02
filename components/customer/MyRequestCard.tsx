@@ -1,10 +1,9 @@
 import { useState, memo } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import {
   Calendar,
   MapPin,
   Package,
-  MoreVertical,
   CheckCircle2,
   PauseCircle,
   Archive,
@@ -34,7 +33,6 @@ const MyRequestCard = memo(function MyRequestCard({
   onStatusChange,
   onArchive,
 }: MyRequestCardProps) {
-  const [showMenu, setShowMenu] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   // Normalize status to valid values
@@ -63,7 +61,7 @@ const MyRequestCard = memo(function MyRequestCard({
   const getGradientClass = () => {
     switch (status) {
       case "active":
-        return "bg-gradient-to-r from-emerald-500 to-sky-500";
+        return "bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500";
       case "closed":
         return "bg-gradient-to-r from-gray-400 to-gray-500";
       case "paused":
@@ -71,7 +69,7 @@ const MyRequestCard = memo(function MyRequestCard({
       case "cancelled":
         return "bg-gradient-to-r from-red-500 to-rose-500";
       default:
-        return "bg-gradient-to-r from-emerald-500 to-sky-500";
+        return "bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500";
     }
   };
 
@@ -81,29 +79,34 @@ const MyRequestCard = memo(function MyRequestCard({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className="group relative rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50/50 shadow-sm transition-all hover:shadow-lg"
+      whileHover={{ y: -3 }}
+      className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg shadow-gray-100/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
       {/* Gradient accent bar */}
-      <div className={`h-1.5 w-full overflow-hidden rounded-t-2xl ${getGradientClass()}`} />
+      <div className={`h-1.5 w-full ${getGradientClass()}`} />
 
       <div className="p-6">
         <div className="flex items-start justify-between gap-4">
           {/* Main content */}
           <div className="min-w-0 flex-1">
             {/* Route */}
-            <div className="mb-3 flex items-center gap-2">
-              <MapPin 
-                size={20} 
-                className={
-                  status === "active" ? "shrink-0 text-emerald-700" :
-                  status === "closed" ? "shrink-0 text-gray-700" :
-                  status === "paused" ? "shrink-0 text-amber-700" :
-                  "shrink-0 text-red-700"
-                }
-              />
+            <div className="mb-4 flex items-center gap-3">
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${
+                status === "active" ? "bg-gradient-to-br from-emerald-500 to-teal-500" :
+                status === "closed" ? "bg-gradient-to-br from-gray-400 to-gray-500" :
+                status === "paused" ? "bg-gradient-to-br from-amber-500 to-orange-500" :
+                "bg-gradient-to-br from-red-500 to-rose-500"
+              } shadow-lg ${
+                status === "active" ? "shadow-emerald-500/30" :
+                status === "closed" ? "shadow-gray-500/20" :
+                status === "paused" ? "shadow-amber-500/30" :
+                "shadow-red-500/30"
+              }`}>
+                <MapPin size={20} className="text-white" />
+              </div>
               <h3 className="truncate text-xl font-bold text-gray-900">
                 {request.fromCity || request.fromCounty}
-                <span className="mx-2 text-gray-400">→</span>
+                <span className="mx-2 text-gray-300">→</span>
                 {request.toCity || request.toCounty}
               </h3>
             </div>
@@ -114,12 +117,12 @@ const MyRequestCard = memo(function MyRequestCard({
               <span
                 className={
                   status === "active" 
-                    ? "inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-700"
+                    ? "inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-semibold text-emerald-700 shadow-sm"
                     : status === "closed"
-                    ? "inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-semibold text-gray-700"
+                    ? "inline-flex items-center gap-1.5 rounded-xl border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-semibold text-gray-700 shadow-sm"
                     : status === "paused"
-                    ? "inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700"
-                    : "inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-semibold text-red-700"
+                    ? "inline-flex items-center gap-1.5 rounded-xl border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-semibold text-amber-700 shadow-sm"
+                    : "inline-flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-sm font-semibold text-red-700 shadow-sm"
                 }
               >
                 {status === "active" && <CheckCircle2 size={14} />}
@@ -133,8 +136,8 @@ const MyRequestCard = memo(function MyRequestCard({
               {(() => {
                 const display = formatMoveDateDisplay(request as any, { month: "short" });
                 return display && display !== "-" ? (
-                  <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700">
-                    <Calendar size={14} />
+                  <span className="inline-flex items-center gap-1.5 rounded-xl bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700">
+                    <Calendar size={14} className="text-gray-500" />
                     {display}
                   </span>
                 ) : null;
@@ -142,8 +145,8 @@ const MyRequestCard = memo(function MyRequestCard({
 
               {/* Rooms badge */}
               {request.rooms && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-3 py-1.5 text-sm text-gray-700">
-                  <Package size={14} />
+                <span className="inline-flex items-center gap-1.5 rounded-xl bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-700">
+                  <Package size={14} className="text-gray-500" />
                   {request.rooms} camere
                 </span>
               )}
@@ -151,7 +154,7 @@ const MyRequestCard = memo(function MyRequestCard({
 
             {/* Details */}
             {request.details && (
-              <p className="line-clamp-2 text-sm text-gray-600">{request.details}</p>
+              <p className="line-clamp-2 rounded-xl bg-gray-50 p-3 text-sm text-gray-600">{request.details}</p>
             )}
 
             {/* Services */}
@@ -160,29 +163,29 @@ const MyRequestCard = memo(function MyRequestCard({
               request.serviceDisassembly ||
               request.serviceCleanout ||
               request.serviceStorage) && (
-              <div className="mt-3 flex flex-wrap gap-2">
+              <div className="mt-4 flex flex-wrap gap-2">
                 {request.serviceMoving && (
-                  <span className="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
+                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Transport
                   </span>
                 )}
                 {request.servicePacking && (
-                  <span className="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
+                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Ambalare
                   </span>
                 )}
                 {request.serviceDisassembly && (
-                  <span className="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
+                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Demontare
                   </span>
                 )}
                 {request.serviceCleanout && (
-                  <span className="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
+                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Debarasare
                   </span>
                 )}
                 {request.serviceStorage && (
-                  <span className="rounded-full bg-purple-50 px-2.5 py-1 text-xs font-medium text-purple-700">
+                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Depozitare
                   </span>
                 )}
@@ -193,121 +196,71 @@ const MyRequestCard = memo(function MyRequestCard({
           {/* Right side: Offers count + Menu */}
           <div className="flex shrink-0 flex-col items-end gap-3">
             {/* Offers badge */}
-            <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-500 to-sky-500 shadow-lg">
+            <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-sky-500 shadow-xl shadow-emerald-500/30">
+              <div className="absolute inset-0 bg-white/10" />
               <div className="text-center">
-                <div className="text-2xl font-bold text-white">{offersCount}</div>
-                <div className="text-[10px] font-medium text-white/90">oferte</div>
+                <div className="text-3xl font-bold text-white">{offersCount}</div>
+                <div className="text-xs font-semibold text-white/90">oferte</div>
               </div>
             </div>
 
-            {/* Menu dropdown */}
-            <div className="relative z-30">
-              {/* Show menu for active, closed, or paused requests (not cancelled, not read-only) */}
-              {!readOnly && (status === "active" || status === "closed" || status === "paused") && (
+            {/* Action buttons - direct icons */}
+            {!readOnly && (
+              <div className="flex items-center gap-2">
+                {/* View Details */}
                 <button
-                  onClick={() => setShowMenu(!showMenu)}
-                  className="rounded-lg p-2 transition-colors hover:bg-gray-100"
+                  onClick={() => setShowDetailsModal(true)}
+                  className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600 hover:shadow-md"
+                  title="Vezi detalii cerere"
                 >
-                  <MoreVertical size={20} className="text-gray-600" />
+                  <Eye size={18} />
                 </button>
-              )}
 
-              <AnimatePresence>
-                {showMenu && (
+                {/* Status actions */}
+                {status === "active" && (
                   <>
-                    {/* Backdrop */}
-                    <div
-                      className="fixed inset-0 z-40"
-                      onClick={() => setShowMenu(false)}
-                    />
-
-                    {/* Menu */}
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95, y: -10 }}
-                      animate={{ opacity: 1, scale: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                      className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-xl"
+                    <button
+                      onClick={() => onStatusChange(request.id, "closed")}
+                      className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md"
+                      title="Am găsit companie"
                     >
-                      <div className="p-1">
-                        {/* View Details */}
-                        <button
-                          onClick={() => {
-                            setShowDetailsModal(true);
-                            setShowMenu(false);
-                          }}
-                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
-                        >
-                          <Eye size={16} />
-                          Vezi detalii cerere
-                        </button>
-
-                        <div className="my-1 h-px bg-gray-100" />
-
-                        {/* Status actions */}
-                        {status === "active" && (
-                          <>
-                            <button
-                              onClick={() => {
-                                onStatusChange(request.id, "closed");
-                                setShowMenu(false);
-                              }}
-                              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
-                            >
-                              <CheckCircle2 size={16} />
-                              Am găsit companie
-                            </button>
-                            <button
-                              onClick={() => {
-                                onStatusChange(request.id, "paused");
-                                setShowMenu(false);
-                              }}
-                              className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-amber-50 hover:text-amber-700"
-                            >
-                              <PauseCircle size={16} />
-                              Nu mai primesc oferte
-                            </button>
-                          </>
-                        )}
-
-                        {/* Reopen closed or paused requests */}
-                        {(status === "closed" || status === "paused") && (
-                          <button
-                            onClick={() => {
-                              onStatusChange(request.id, "active");
-                              setShowMenu(false);
-                            }}
-                            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-emerald-50 hover:text-emerald-700"
-                          >
-                            <RotateCcw size={16} />
-                            Redeschide cererea
-                          </button>
-                        )}
-
-                        <div className="my-1 h-px bg-gray-100" />
-
-                        {/* Archive */}
-                        <button
-                          onClick={() => {
-                            if (
-                              confirm(
-                                "Sigur vrei să arhivezi această cerere? O vei putea vedea în secțiunea Arhivă."
-                              )
-                            ) {
-                              onArchive(request.id);
-                              setShowMenu(false);
-                            }
-                          }}
-                          className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100"
-                        >
-                          <Archive size={16} />
-                          Arhivează cererea
-                        </button>
-                      </div>
-                    </motion.div>
+                      <CheckCircle2 size={18} />
+                    </button>
+                    <button
+                      onClick={() => onStatusChange(request.id, "paused")}
+                      className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600 hover:shadow-md"
+                      title="Nu mai primesc oferte"
+                    >
+                      <PauseCircle size={18} />
+                    </button>
                   </>
                 )}
-              </AnimatePresence>
-            </div>
+
+                {/* Reopen for closed or paused */}
+                {(status === "closed" || status === "paused") && (
+                  <button
+                    onClick={() => onStatusChange(request.id, "active")}
+                    className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md"
+                    title="Redeschide cererea"
+                  >
+                    <RotateCcw size={18} />
+                  </button>
+                )}
+
+                {/* Archive */}
+                <button
+                  onClick={() => {
+                    if (confirm("Sigur vrei să arhivezi această cerere? O vei putea vedea în secțiunea Arhivă.")) {
+                      onArchive(request.id);
+                    }
+                  }}
+                  className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-gray-300 hover:bg-gray-100 hover:text-gray-700 hover:shadow-md"
+                  title="Arhivează cererea"
+                >
+                  <Archive size={18} />
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

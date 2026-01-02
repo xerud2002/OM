@@ -49,11 +49,11 @@ export default function Services() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/50 to-white py-24 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-1/4 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[100px]" />
-        <div className="absolute right-0 bottom-1/4 h-[400px] w-[400px] translate-x-1/2 rounded-full bg-sky-100/30 blur-[100px]" />
+        <div className="absolute left-0 top-1/4 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
+        <div className="absolute right-0 bottom-1/4 hidden h-[400px] w-[400px] translate-x-1/2 rounded-full bg-sky-100/30 blur-[100px] sm:block" />
       </div>
 
       <div className="container relative z-10 mx-auto px-4">
@@ -63,22 +63,22 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto mb-16 max-w-3xl text-center"
+          className="mx-auto mb-10 max-w-3xl text-center sm:mb-16"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2">
-            <Truck className="h-4 w-4 text-emerald-600" />
-            <span className="text-sm font-semibold text-emerald-700">Servicii Complete</span>
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
+            <Truck className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
+            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Servicii Complete</span>
           </div>
-          <h2 className="mb-5 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Tot ce ai nevoie pentru mutare
           </h2>
-          <p className="text-lg text-slate-600">
+          <p className="text-base text-slate-600 sm:text-lg">
             Firmele noastre partenere oferă servicii profesionale complete, de la împachetare până la instalare la noua locație.
           </p>
         </motion.div>
 
         {/* Services Grid */}
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-5">
           {services.map((service, idx) => (
             <motion.div
               key={idx}
@@ -91,33 +91,33 @@ export default function Services() {
               <motion.div
                 whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="relative flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-lg transition-all duration-300 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50"
+                className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all duration-300 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
               >
                 {/* Image */}
-                <div className="relative h-40 overflow-visible bg-gradient-to-br from-slate-50 to-slate-100">
+                <div className="relative h-24 overflow-visible bg-gradient-to-br from-slate-50 to-slate-100 sm:h-40">
                   <Image
                     src={service.img}
                     alt={service.title}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
-                    className="object-contain p-4 transition-transform duration-500 group-hover:scale-110"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 20vw"
+                    className="object-contain p-2 transition-transform duration-500 group-hover:scale-110 sm:p-4"
                     loading="lazy"
                   />
                 </div>
                 
                 {/* Icon badge - positioned outside image container */}
-                <div className="relative z-10 -mt-6 flex justify-center">
-                  <div className={`flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${service.color} shadow-lg`}>
-                    <service.icon className="h-6 w-6 text-white" strokeWidth={1.5} />
+                <div className="relative z-10 -mt-4 flex justify-center sm:-mt-6">
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${service.color} shadow-lg sm:h-12 sm:w-12 sm:rounded-xl`}>
+                    <service.icon className="h-4 w-4 text-white sm:h-6 sm:w-6" strokeWidth={1.5} />
                   </div>
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-1 flex-col p-5 pt-3 text-center">
-                  <h3 className="mb-2 text-lg font-bold text-slate-900">
+                <div className="flex flex-1 flex-col p-3 pt-2 text-center sm:p-5 sm:pt-3">
+                  <h3 className="mb-1 text-sm font-bold text-slate-900 sm:mb-2 sm:text-lg">
                     {service.title}
                   </h3>
-                  <p className="flex-1 text-sm leading-relaxed text-slate-600">
+                  <p className="hidden flex-1 text-sm leading-relaxed text-slate-600 sm:block">
                     {service.desc}
                   </p>
                 </div>
@@ -135,12 +135,14 @@ export default function Services() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="mx-auto mt-16 max-w-2xl text-center"
+          className="mx-auto mt-10 max-w-2xl text-center sm:mt-16"
         >
-          <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-6 py-3 shadow-sm">
-            <span className="text-slate-600">Ai nevoie de un serviciu specific?</span>
-            <span className="font-semibold text-emerald-600">Descrie-l în cererea ta!</span>
-            <ArrowRight className="h-4 w-4 text-emerald-600" />
+          <div className="inline-flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:py-3">
+            <span className="text-sm text-slate-600 sm:text-base">Ai nevoie de un serviciu specific?</span>
+            <span className="flex items-center gap-1 font-semibold text-emerald-600 sm:gap-2">
+              Descrie-l în cererea ta!
+              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            </span>
           </div>
         </motion.div>
       </div>

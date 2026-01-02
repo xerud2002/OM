@@ -21,7 +21,7 @@ export default function HomePage() {
         <title>Oferte Mutare România 2026 | Economisește până la 40% | Firme Verificate</title>
         <meta
           name="description"
-          content="Primești 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări din România. Economisești în medie 450 lei. 100% gratuit, fără obligații. Peste 5000+ clienți mulțumiți!"
+          content="Primești 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări din România. Economisești în medie 450 lei. 100% gratuit, fără obligații. Sute de clienți mulțumiți!"
         />
         <meta
           name="keywords"

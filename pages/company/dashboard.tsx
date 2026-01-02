@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import LayoutWrapper from "@/components/layout/Layout";
 import RequireRole from "@/components/auth/RequireRole";
 import RequestsView from "@/components/company/RequestsView";
+import NotificationBell from "@/components/company/NotificationBell";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import {
@@ -18,6 +18,27 @@ import {
   deleteDoc,
 } from "firebase/firestore";
 import { motion } from "framer-motion";
+import {
+  Building2,
+  FileText,
+  Send,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  Search,
+  Filter,
+  TrendingUp,
+  User,
+  Settings,
+  Edit3,
+  Trash2,
+  Save,
+  X,
+  ChevronRight,
+  Sparkles,
+  BarChart3,
+  Bell,
+} from "lucide-react";
 
 export default function CompanyDashboard() {
   const router = useRouter();
@@ -112,170 +133,229 @@ export default function CompanyDashboard() {
 
   return (
     <RequireRole allowedRole="company">
-      <LayoutWrapper>
-        <section className="mx-auto max-w-7xl px-4 py-10">
-          {/* Hero Header */}
-          <div className="mb-10 rounded-2xl bg-gradient-to-br from-emerald-500 via-emerald-600 to-sky-600 p-8 text-white shadow-xl">
-            <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-              <div>
-                <h1 className="mb-2 text-4xl font-bold">Dashboard Companie</h1>
-                <p className="text-emerald-50">
-                  Bine ai revenit, {company?.displayName || "Companie"}!
-                </p>
-              </div>
-              <button 
-                onClick={() => router.push('/company/profile')}
-                className="rounded-xl bg-white px-6 py-3 font-semibold text-emerald-600 shadow-lg transition hover:bg-emerald-50"
+      <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
+        {/* Hero Header */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-28 pb-16 sm:pt-32 sm:pb-20">
+          {/* Background elements */}
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[100px]" />
+            <div className="absolute bottom-0 right-1/4 h-[300px] w-[300px] translate-y-1/2 rounded-full bg-sky-500/10 blur-[100px]" />
+            <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px]" />
+          </div>
+
+          <div className="container relative z-10 mx-auto px-4">
+            <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
               >
-                Profil companie
-              </button>
+                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2">
+                  <Building2 className="h-4 w-4 text-emerald-400" />
+                  <span className="text-sm font-medium text-emerald-400">Panou Companie</span>
+                </div>
+                <h1 className="mb-3 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
+                  Bine ai revenit,{" "}
+                  <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                    {company?.displayName || "Partener"}
+                  </span>
+                </h1>
+                <p className="max-w-xl text-slate-400">
+                  Gestionează cererile clienților și ofertele tale într-un singur loc
+                </p>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="flex items-center gap-3"
+              >
+                {company && <NotificationBell companyId={company.uid} />}
+                <button
+                  onClick={() => router.push("/company/profile")}
+                  className="group flex items-center gap-2 rounded-xl border border-slate-700 bg-slate-800/50 px-5 py-3 font-medium text-white backdrop-blur-sm transition-all hover:border-emerald-500/50 hover:bg-slate-800"
+                >
+                  <Settings className="h-5 w-5 text-slate-400 transition-colors group-hover:text-emerald-400" />
+                  <span>Setări profil</span>
+                </button>
+              </motion.div>
             </div>
           </div>
+        </section>
 
+        <div className="container mx-auto px-4 py-8">
           {/* Tab Navigation */}
-          <div className="mb-8 flex justify-center gap-2 rounded-xl bg-gray-100 p-1.5">
-            <button
-              onClick={() => setActiveTab("requests")}
-              className={`relative rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
-                activeTab === "requests"
-                  ? "bg-white text-emerald-700 shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              {activeTab === "requests" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 rounded-lg bg-white shadow-md"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <span className="relative z-10">Cereri clienți</span>
-            </button>
-            <button
-              onClick={() => setActiveTab("offers")}
-              className={`relative rounded-lg px-6 py-2.5 text-sm font-semibold transition-all ${
-                activeTab === "offers"
-                  ? "bg-white text-emerald-700 shadow-md"
-                  : "text-gray-600 hover:text-gray-900"
-              }`}
-            >
-              {activeTab === "offers" && (
-                <motion.div
-                  layoutId="activeTab"
-                  className="absolute inset-0 rounded-lg bg-white shadow-md"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <span className="relative z-10">Ofertele mele</span>
-            </button>
-          </div>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
+            className="mb-8 flex justify-center"
+          >
+            <div className="inline-flex rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg">
+              <button
+                onClick={() => setActiveTab("requests")}
+                className={`relative flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all ${
+                  activeTab === "requests"
+                    ? "text-white"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                {activeTab === "requests" && (
+                  <motion.div
+                    layoutId="activeCompanyTab"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <FileText className="relative z-10 h-4 w-4" />
+                <span className="relative z-10">Cereri clienți</span>
+              </button>
+              <button
+                onClick={() => setActiveTab("offers")}
+                className={`relative flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all ${
+                  activeTab === "offers"
+                    ? "text-white"
+                    : "text-slate-600 hover:text-slate-900"
+                }`}
+              >
+                {activeTab === "offers" && (
+                  <motion.div
+                    layoutId="activeCompanyTab"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg"
+                    transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <Send className="relative z-10 h-4 w-4" />
+                <span className="relative z-10">Ofertele mele</span>
+                {total > 0 && (
+                  <span className="relative z-10 ml-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-white/20 px-1.5 text-xs">
+                    {total}
+                  </span>
+                )}
+              </button>
+            </div>
+          </motion.div>
 
           {activeTab === "requests" && (
-            <div className="mt-6">
-              {/** Reuse the same requests view from company requests page */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
               {company ? (
                 <RequestsView companyFromParent={company} />
               ) : (
-                <p className="text-center text-sm italic text-gray-500">
-                  Se încarcă utilizatorul...
-                </p>
+                <div className="flex flex-col items-center justify-center py-20">
+                  <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                  <p className="mt-4 text-sm font-medium text-slate-600">
+                    Se încarcă utilizatorul...
+                  </p>
+                </div>
               )}
-            </div>
+            </motion.div>
           )}
 
           {activeTab === "offers" && (
-            <>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+            >
               {/* Stats Cards */}
-              <div className="mb-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-emerald-100">Total oferte</p>
-                    <p className="text-4xl font-bold">{total}</p>
-                  </div>
-                </motion.div>
+              <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                {[
+                  {
+                    label: "Total oferte",
+                    value: total,
+                    icon: BarChart3,
+                    gradient: "from-slate-600 to-slate-700",
+                    iconBg: "bg-slate-500/20",
+                    iconColor: "text-slate-300",
+                  },
+                  {
+                    label: "Acceptate",
+                    value: accepted,
+                    icon: CheckCircle2,
+                    gradient: "from-emerald-500 to-teal-600",
+                    iconBg: "bg-emerald-400/20",
+                    iconColor: "text-emerald-300",
+                  },
+                  {
+                    label: "În așteptare",
+                    value: pending,
+                    icon: Clock,
+                    gradient: "from-amber-500 to-orange-600",
+                    iconBg: "bg-amber-400/20",
+                    iconColor: "text-amber-300",
+                  },
+                  {
+                    label: "Respinse",
+                    value: rejected,
+                    icon: XCircle,
+                    gradient: "from-rose-500 to-pink-600",
+                    iconBg: "bg-rose-400/20",
+                    iconColor: "text-rose-300",
+                  },
+                ].map((stat, i) => (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: i * 0.1 }}
+                  >
+                    <div
+                      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.gradient} p-5 text-white shadow-lg transition-transform hover:scale-[1.02]`}
+                    >
+                      {/* Background decoration */}
+                      <div className="absolute -right-4 -top-4 h-20 w-20 rounded-full bg-white/10 blur-xl" />
+                      <div className="absolute -bottom-4 -left-4 h-24 w-24 rounded-full bg-white/5 blur-xl" />
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.1 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-sky-500 to-sky-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-sky-100">Acceptate</p>
-                    <p className="text-4xl font-bold">{accepted}</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.2 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-amber-100">În așteptare</p>
-                    <p className="text-4xl font-bold">{pending}</p>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: 0.3 }}
-                  className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-rose-500 to-rose-600 p-6 text-white shadow-lg transition-transform hover:scale-105"
-                >
-                  <div className="absolute -right-4 -top-4 h-24 w-24 rounded-full bg-white/10"></div>
-                  <div className="absolute -bottom-6 -left-6 h-32 w-32 rounded-full bg-white/10"></div>
-                  <div className="relative">
-                    <p className="mb-1 text-sm font-medium text-rose-100">Respinse</p>
-                    <p className="text-4xl font-bold">{rejected}</p>
-                  </div>
-                </motion.div>
+                      <div className="relative flex items-start justify-between">
+                        <div>
+                          <p className="mb-1 text-sm font-medium text-white/70">{stat.label}</p>
+                          <p className="text-3xl font-bold sm:text-4xl">{stat.value}</p>
+                        </div>
+                        <div className={`rounded-xl ${stat.iconBg} p-2.5`}>
+                          <stat.icon className={`h-6 w-6 ${stat.iconColor}`} />
+                        </div>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
 
               {/* Filters */}
-              <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-                  <h2 className="text-xl font-bold text-gray-900">Ofertele mele</h2>
-                  <div className="flex flex-1 items-center gap-3 md:justify-end">
-                    <div className="relative flex-1 md:max-w-xs">
-                      <svg
-                        className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                        />
-                      </svg>
-                      <input
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
-                        placeholder="Caută după mesaj sau ID cerere"
-                        className="w-full rounded-xl border border-gray-300 bg-white py-2.5 pl-10 pr-4 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
-                      />
-                    </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.4, delay: 0.4 }}
+                className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+              >
+                <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-6 py-4">
+                  <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
+                    <Send className="h-5 w-5 text-emerald-600" />
+                    Ofertele mele
+                  </h2>
+                </div>
+                <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div className="relative flex-1 sm:max-w-sm">
+                    <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                    <input
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                      placeholder="Caută după mesaj sau ID cerere..."
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Filter className="h-4 w-4 text-slate-400" />
                     <select
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value as any)}
-                      className="rounded-xl border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium transition-all focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
                     >
-                      <option value="all">Toate</option>
+                      <option value="all">Toate statusurile</option>
                       <option value="pending">În așteptare</option>
                       <option value="accepted">Acceptate</option>
                       <option value="declined">Declinate</option>
@@ -283,61 +363,50 @@ export default function CompanyDashboard() {
                     </select>
                   </div>
                 </div>
-              </div>
+              </motion.div>
 
+              {/* Offers List */}
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-20">
-                  <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600"></div>
-                  <p className="mt-4 text-sm font-medium text-gray-600">Se încarcă datele...</p>
+                  <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                  <p className="mt-4 text-sm font-medium text-slate-600">Se încarcă datele...</p>
                 </div>
               ) : Array.isArray(filteredOffers) && filteredOffers.length > 0 ? (
                 <div className="space-y-4">
-                  {filteredOffers.map((offer) => (
+                  {filteredOffers.map((offer, i) => (
                     <motion.div
                       key={offer.id}
-                      initial={{ opacity: 0, y: 10 }}
+                      initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      whileHover={{ y: -2 }}
-                      className="group overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all hover:border-emerald-300 hover:shadow-lg"
+                      transition={{ duration: 0.3, delay: i * 0.05 }}
+                      className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:border-emerald-200 hover:shadow-lg"
                     >
                       <div className="flex">
                         {/* Color accent bar */}
                         <div
                           className={`w-1.5 ${
                             offer.status === "accepted"
-                              ? "bg-gradient-to-b from-emerald-500 to-sky-500"
+                              ? "bg-gradient-to-b from-emerald-500 to-teal-500"
                               : offer.status === "rejected" || offer.status === "declined"
-                                ? "bg-gradient-to-b from-rose-500 to-rose-600"
-                                : "bg-gradient-to-b from-amber-500 to-amber-600"
+                                ? "bg-gradient-to-b from-rose-500 to-pink-500"
+                                : "bg-gradient-to-b from-amber-500 to-orange-500"
                           }`}
-                        ></div>
+                        />
 
                         <div className="flex-1 p-5">
                           {/* Header */}
-                          <div className="mb-3 flex items-start justify-between">
+                          <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
                             <div>
-                              <p className="mb-1 text-lg font-bold text-gray-900">
-                                {offer.requestCode ? offer.requestCode : (offer.requestId ? `REQ-${String(offer.requestId).slice(0, 6).toUpperCase()}` : "—")}
-                              </p>
-                              <div className="flex items-center gap-2">
-                                <span className="inline-flex items-center gap-1 rounded-lg bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">
-                                  <svg
-                                    className="h-4 w-4"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    stroke="currentColor"
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      strokeWidth={2}
-                                      d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"
-                                    />
-                                  </svg>
-                                  {offer.price ?? "—"} lei
+                              <div className="mb-2 flex items-center gap-2">
+                                <span className="rounded-lg bg-slate-100 px-3 py-1 text-sm font-bold text-slate-700">
+                                  {offer.requestCode
+                                    ? offer.requestCode
+                                    : offer.requestId
+                                      ? `REQ-${String(offer.requestId).slice(0, 6).toUpperCase()}`
+                                      : "—"}
                                 </span>
                                 <span
-                                  className={`inline-flex items-center gap-1 rounded-lg px-3 py-1 text-xs font-semibold ${
+                                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold ${
                                     offer.status === "accepted"
                                       ? "bg-emerald-100 text-emerald-700"
                                       : offer.status === "rejected" || offer.status === "declined"
@@ -346,62 +415,65 @@ export default function CompanyDashboard() {
                                   }`}
                                 >
                                   {offer.status === "accepted" && (
-                                    <svg
-                                      className="h-3.5 w-3.5"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M5 13l4 4L19 7"
-                                      />
-                                    </svg>
+                                    <CheckCircle2 className="h-3.5 w-3.5" />
                                   )}
-                                  {offer.status ?? "În așteptare"}
+                                  {(offer.status === "rejected" || offer.status === "declined") && (
+                                    <XCircle className="h-3.5 w-3.5" />
+                                  )}
+                                  {(!offer.status || offer.status === "pending") && (
+                                    <Clock className="h-3.5 w-3.5" />
+                                  )}
+                                  {offer.status === "accepted"
+                                    ? "Acceptată"
+                                    : offer.status === "rejected"
+                                      ? "Respinsă"
+                                      : offer.status === "declined"
+                                        ? "Declinată"
+                                        : "În așteptare"}
                                 </span>
                               </div>
+                            </div>
+                            <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-2">
+                              <TrendingUp className="h-4 w-4 text-emerald-600" />
+                              <span className="text-lg font-bold text-emerald-700">
+                                {offer.price ?? "—"} lei
+                              </span>
                             </div>
                           </div>
 
                           {/* Message preview */}
                           {offer.message && (
-                            <p className="mb-3 line-clamp-2 text-sm text-gray-600">
+                            <p className="mb-4 line-clamp-2 rounded-xl bg-slate-50 p-3 text-sm text-slate-600">
                               {offer.message}
                             </p>
                           )}
 
                           {/* Action buttons */}
                           {offer.companyId === company?.uid && (
-                            <div className="mt-4 border-t border-gray-100 pt-4">
+                            <div className="border-t border-slate-100 pt-4">
                               {editingId === offer.id ? (
-                                <div
-                                  className="rounded-xl border-2 border-emerald-200 bg-emerald-50/30 p-4"
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  <div className="mb-3 flex flex-col gap-3 sm:flex-row">
-                                    <div className="flex-1">
-                                      <label className="mb-1 block text-xs font-medium text-gray-700">
+                                <div className="rounded-xl border-2 border-emerald-200 bg-emerald-50/50 p-4">
+                                  <div className="mb-4 grid gap-4 sm:grid-cols-2">
+                                    <div>
+                                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
                                         Preț (lei)
                                       </label>
                                       <input
                                         type="number"
                                         value={editPrice}
                                         onChange={(e) => setEditPrice(e.target.value)}
-                                        className="w-full rounded-lg border border-gray-300 p-2.5 text-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                                        className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                                         placeholder="Preț (lei)"
                                       />
                                     </div>
-                                    <div className="flex-1">
-                                      <label className="mb-1 block text-xs font-medium text-gray-700">
+                                    <div>
+                                      <label className="mb-1.5 block text-xs font-semibold text-slate-700">
                                         Mesaj
                                       </label>
                                       <textarea
                                         value={editMessage}
                                         onChange={(e) => setEditMessage(e.target.value)}
-                                        className="w-full rounded-lg border border-gray-300 p-2.5 text-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                                        className="w-full rounded-xl border border-slate-200 bg-white p-3 text-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                                         placeholder="Mesaj"
                                         rows={2}
                                       />
@@ -420,21 +492,9 @@ export default function CompanyDashboard() {
                                         setEditingId(null);
                                       }}
                                       disabled={savingId === offer.id}
-                                      className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-60"
+                                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-xl disabled:opacity-60"
                                     >
-                                      <svg
-                                        className="h-4 w-4"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M5 13l4 4L19 7"
-                                        />
-                                      </svg>
+                                      <Save className="h-4 w-4" />
                                       {savingId === offer.id ? "Se salvează..." : "Salvează"}
                                     </button>
                                     <button
@@ -442,33 +502,20 @@ export default function CompanyDashboard() {
                                         e.stopPropagation();
                                         setEditingId(null);
                                       }}
-                                      className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
+                                      className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:bg-slate-50"
                                     >
+                                      <X className="h-4 w-4" />
                                       Anulează
                                     </button>
                                     <button
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        if (
-                                          confirm("Ești sigur că vrei să retragi această ofertă?")
-                                        )
+                                        if (confirm("Ești sigur că vrei să retragi această ofertă?"))
                                           removeOffer(offer);
                                       }}
-                                      className="inline-flex items-center gap-2 rounded-lg border-2 border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                                      className="inline-flex items-center gap-2 rounded-xl border-2 border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
                                     >
-                                      <svg
-                                        className="h-4 w-4"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
-                                      >
-                                        <path
-                                          strokeLinecap="round"
-                                          strokeLinejoin="round"
-                                          strokeWidth={2}
-                                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                        />
-                                      </svg>
+                                      <Trash2 className="h-4 w-4" />
                                       Retrage
                                     </button>
                                   </div>
@@ -482,21 +529,9 @@ export default function CompanyDashboard() {
                                       setEditPrice(String(offer.price ?? ""));
                                       setEditMessage(offer.message ?? "");
                                     }}
-                                    className="inline-flex items-center gap-2 rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
+                                    className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-100"
                                   >
-                                    <svg
-                                      className="h-4 w-4"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
-                                      />
-                                    </svg>
+                                    <Edit3 className="h-4 w-4" />
                                     Editează
                                   </button>
                                   <button
@@ -505,21 +540,9 @@ export default function CompanyDashboard() {
                                       if (confirm("Ești sigur că vrei să retragi această ofertă?"))
                                         removeOffer(offer);
                                     }}
-                                    className="inline-flex items-center gap-2 rounded-lg border border-rose-200 bg-white px-4 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
+                                    className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
                                   >
-                                    <svg
-                                      className="h-4 w-4"
-                                      fill="none"
-                                      viewBox="0 0 24 24"
-                                      stroke="currentColor"
-                                    >
-                                      <path
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth={2}
-                                        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                                      />
-                                    </svg>
+                                    <Trash2 className="h-4 w-4" />
                                     Retrage
                                   </button>
                                 </div>
@@ -532,32 +555,32 @@ export default function CompanyDashboard() {
                   ))}
                 </div>
               ) : (
-                <div className="rounded-2xl border-2 border-dashed border-gray-300 bg-gray-50/50 py-20 text-center">
-                  <svg
-                    className="mx-auto h-16 w-16 text-gray-400"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
-                    />
-                  </svg>
-                  <p className="mt-4 text-lg font-semibold text-gray-700">
-                    Nu există oferte de afișat
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 py-16 text-center"
+                >
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-slate-100">
+                    <Send className="h-8 w-8 text-slate-400" />
+                  </div>
+                  <p className="text-lg font-semibold text-slate-700">Nu există oferte de afișat</p>
+                  <p className="mt-2 text-sm text-slate-500">
+                    Trimite oferte la cererile clienților pentru a le vedea aici
                   </p>
-                  <p className="mt-2 text-sm text-gray-500">Ofertele tale vor apărea aici</p>
-                </div>
+                  <button
+                    onClick={() => setActiveTab("requests")}
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:shadow-xl"
+                  >
+                    <FileText className="h-5 w-5" />
+                    Vezi cererile disponibile
+                    <ChevronRight className="h-4 w-4" />
+                  </button>
+                </motion.div>
               )}
-            </>
+            </motion.div>
           )}
-
-
-        </section>
-      </LayoutWrapper>
+        </div>
+      </main>
     </RequireRole>
   );
 }

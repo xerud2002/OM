@@ -44,11 +44,11 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-emerald-50/30 to-white py-24 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-emerald-50/30 to-white py-16 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/4 top-0 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-emerald-100/30 blur-[100px]" />
-        <div className="absolute bottom-0 right-1/4 h-[500px] w-[500px] translate-y-1/2 rounded-full bg-sky-100/30 blur-[100px]" />
+        <div className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
+        <div className="absolute bottom-0 right-1/4 hidden h-[500px] w-[500px] translate-y-1/2 rounded-full bg-sky-100/30 blur-[100px] sm:block" />
       </div>
 
       <div className="container relative z-10 mx-auto px-4">
@@ -58,22 +58,22 @@ export default function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mx-auto mb-16 max-w-3xl text-center"
+          className="mx-auto mb-10 max-w-3xl text-center sm:mb-16"
         >
-          <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-4 py-2">
-            <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-            <span className="text-sm font-semibold text-amber-700">4.9/5 din 5000+ reviews</span>
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
+            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
+            <span className="text-xs font-semibold text-amber-700 sm:text-sm">4.9/5 din sute de reviews</span>
           </div>
-          <h2 className="mb-5 text-4xl font-bold tracking-tight text-slate-900 md:text-5xl">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Ce spun clienții noștri
           </h2>
-          <p className="text-lg text-slate-600">
+          <p className="text-base text-slate-600 sm:text-lg">
             Peste 5.000 de utilizatori au folosit <span className="font-semibold text-emerald-600">ofertemutare.ro</span> pentru a compara oferte de mutare în siguranță.
           </p>
         </motion.div>
 
         {/* Testimonials Grid */}
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
           {testimonials.map((t, idx) => (
             <motion.div
               key={idx}
@@ -85,45 +85,45 @@ export default function Testimonials() {
               <motion.div
                 whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300 }}
-                className="group relative flex h-full flex-col rounded-2xl border border-slate-200/50 bg-white p-6 shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50"
+                className="group relative flex h-full flex-col rounded-xl border border-slate-200/50 bg-white p-4 shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl sm:p-6"
               >
                 {/* Quote icon */}
-                <Quote className="mb-4 h-8 w-8 text-emerald-200" />
+                <Quote className="mb-3 h-6 w-6 text-emerald-200 sm:mb-4 sm:h-8 sm:w-8" />
 
                 {/* Rating Stars */}
-                <div className="mb-4 flex gap-1">
+                <div className="mb-3 flex gap-0.5 sm:mb-4 sm:gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
                   ))}
                 </div>
 
                 {/* Text */}
-                <p className="mb-6 flex-1 text-sm leading-relaxed text-slate-600">
+                <p className="mb-4 flex-1 text-xs leading-relaxed text-slate-600 sm:mb-6 sm:text-sm">
                   &ldquo;{t.text}&rdquo;
                 </p>
 
                 {/* Savings badge */}
-                <div className="mb-4 inline-flex w-fit items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5">
-                  <TrendingDown className="h-4 w-4 text-emerald-600" />
-                  <span className="text-sm font-semibold text-emerald-700">Economie: {t.savings}</span>
+                <div className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 sm:mb-4 sm:gap-2 sm:px-3 sm:py-1.5">
+                  <TrendingDown className="h-3 w-3 text-emerald-600 sm:h-4 sm:w-4" />
+                  <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Economie: {t.savings}</span>
                 </div>
 
                 {/* Author */}
-                <div className="flex items-center gap-3 border-t border-slate-100 pt-4">
-                  <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient} text-sm font-bold text-white`}>
+                <div className="flex items-center gap-2 border-t border-slate-100 pt-3 sm:gap-3 sm:pt-4">
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient} text-xs font-bold text-white sm:h-10 sm:w-10`}>
                     {t.avatar}
                   </div>
                   <div>
-                    <p className="font-semibold text-slate-900">{t.name}</p>
-                    <p className="flex items-center gap-1 text-xs text-slate-500">
-                      <MapPin className="h-3 w-3" />
+                    <p className="text-sm font-semibold text-slate-900">{t.name}</p>
+                    <p className="flex items-center gap-1 text-[10px] text-slate-500 sm:text-xs">
+                      <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                       {t.location}
                     </p>
                   </div>
                 </div>
 
                 {/* Decorative gradient on hover */}
-                <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-50/0 via-transparent to-sky-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-emerald-50/0 via-transparent to-sky-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:rounded-2xl" />
               </motion.div>
             </motion.div>
           ))}
@@ -135,17 +135,17 @@ export default function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="mx-auto mt-16 max-w-3xl"
+          className="mx-auto mt-10 max-w-3xl sm:mt-16"
         >
-          <div className="grid grid-cols-3 divide-x divide-slate-200 rounded-2xl border border-slate-200/50 bg-white p-6 shadow-lg">
+          <div className="grid grid-cols-3 divide-x divide-slate-200 rounded-xl border border-slate-200/50 bg-white p-4 shadow-lg sm:rounded-2xl sm:p-6">
             {[
-              { value: "5000+", label: "Clienți mulțumiți" },
+              { value: "Sute de", label: "Clienți mulțumiți" },
               { value: "100%", label: "Satisfacție clienți" },
               { value: "4.9/5", label: "Rating mediu" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <p className="text-2xl font-bold text-emerald-600 lg:text-3xl">{stat.value}</p>
-                <p className="text-xs text-slate-500 lg:text-sm">{stat.label}</p>
+                <p className="text-lg font-bold text-emerald-600 sm:text-2xl lg:text-3xl">{stat.value}</p>
+                <p className="text-[10px] text-slate-500 sm:text-xs lg:text-sm">{stat.label}</p>
               </div>
             ))}
           </div>
