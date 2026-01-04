@@ -18,7 +18,7 @@ export default function Hero() {
   // Defer Firebase loading until after initial render
   useEffect(() => {
     const timer = setTimeout(() => setAnimationsReady(true), 100);
-    
+
     // Lazy load Firebase auth check
     const checkAuth = async () => {
       try {
@@ -33,10 +33,12 @@ export default function Hero() {
         return () => {};
       }
     };
-    
+
     let unsub: (() => void) | undefined;
-    checkAuth().then((u) => { unsub = u; });
-    
+    checkAuth().then((u) => {
+      unsub = u;
+    });
+
     return () => {
       clearTimeout(timer);
       unsub?.();

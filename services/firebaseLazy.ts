@@ -37,13 +37,13 @@ export async function getFirebaseStorage(): Promise<FirebaseStorage> {
 
 export async function initializeFirebase() {
   if (_initialized) return { auth: _auth!, db: _db!, storage: _storage! };
-  
+
   const { auth, db, storage } = await import("./firebase");
   _auth = auth;
   _db = db;
   _storage = storage;
   _initialized = true;
-  
+
   return { auth, db, storage };
 }
 
