@@ -196,7 +196,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <select
                   value={form.fromType || "house"}
                   onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                 >
                   <option value="house">Casă</option>
                   <option value="flat">Apartament</option>
@@ -216,7 +216,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     setForm((s) => ({ ...s, fromRooms: digits }));
                   }}
                   required
-                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                   placeholder="ex: 2"
                 />
               </div>
@@ -228,7 +228,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.fromFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                     />
                   </div>
                   <div className="flex items-center">
@@ -278,7 +278,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   onChange={(e) =>
                     setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))
                   }
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                 >
                   <option value="">Selectează județ</option>
                   {counties.map((c) => (
@@ -303,7 +303,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       fromCityManual: value === "__other__",
                     }));
                   }}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                   disabled={!form.fromCounty}
                 >
                   <option value="">Selectează localitatea</option>
@@ -320,7 +320,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     value={form.fromCity === "__other__" ? "" : form.fromCity || ""}
                     onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
                     placeholder="Introdu localitatea"
-                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                   />
                 )}
               </div>
@@ -329,7 +329,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <input
                   value={form.fromStreet || ""}
                   onChange={(e) => setForm((s) => ({ ...s, fromStreet: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                   placeholder="Numele străzii"
                 />
               </div>
@@ -338,7 +338,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <input
                   value={form.fromNumber || ""}
                   onChange={(e) => setForm((s) => ({ ...s, fromNumber: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                   placeholder="Nr."
                 />
               </div>
@@ -350,7 +350,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <input
                     value={form.fromBloc || ""}
                     onChange={(e) => setForm((s) => ({ ...s, fromBloc: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                     placeholder="Bloc"
                   />
                 </div>
@@ -359,7 +359,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <input
                     value={form.fromStaircase || ""}
                     onChange={(e) => setForm((s) => ({ ...s, fromStaircase: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                     placeholder="Scară"
                   />
                 </div>
@@ -368,7 +368,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <input
                     value={form.fromApartment || ""}
                     onChange={(e) => setForm((s) => ({ ...s, fromApartment: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                     placeholder="Ap."
                   />
                 </div>
@@ -428,7 +428,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <select
                   value={form.toType || "house"}
                   onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                 >
                   <option value="house">Casă</option>
                   <option value="flat">Apartament</option>
@@ -448,7 +448,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     setForm((s) => ({ ...s, toRooms: digits }));
                   }}
                   required
-                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                   placeholder="ex: 2"
                 />
               </div>
@@ -460,7 +460,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       placeholder="ex: 3"
                       value={form.toFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                      className="w-24 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                     />
                   </div>
                   <div className="flex items-center">
@@ -507,7 +507,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   required
                   value={form.toCounty || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                 >
                   <option value="">Selectează județ</option>
                   {counties.map((c) => (
@@ -528,7 +528,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     const value = e.target.value;
                     setForm((s) => ({ ...s, toCity: value, toCityManual: value === "__other__" }));
                   }}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                   disabled={!form.toCounty}
                 >
                   <option value="">Selectează localitatea</option>
@@ -545,7 +545,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     value={form.toCity === "__other__" ? "" : form.toCity || ""}
                     onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
                     placeholder="Introdu localitatea"
-                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                   />
                 )}
               </div>
@@ -554,7 +554,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <input
                   value={form.toStreet || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toStreet: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                   placeholder="Numele străzii"
                 />
               </div>
@@ -563,7 +563,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <input
                   value={form.toNumber || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toNumber: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                   placeholder="Nr."
                 />
               </div>
@@ -575,7 +575,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <input
                     value={form.toBloc || ""}
                     onChange={(e) => setForm((s) => ({ ...s, toBloc: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                     placeholder="Bloc"
                   />
                 </div>
@@ -584,7 +584,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <input
                     value={form.toStaircase || ""}
                     onChange={(e) => setForm((s) => ({ ...s, toStaircase: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                     placeholder="Scară"
                   />
                 </div>
@@ -593,7 +593,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <input
                     value={form.toApartment || ""}
                     onChange={(e) => setForm((s) => ({ ...s, toApartment: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:outline-none focus:ring-2 focus:ring-sky-500/20"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                     placeholder="Ap."
                   />
                 </div>
@@ -655,7 +655,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <h5 className="mb-1 font-semibold text-gray-900">Mutare</h5>
                 <p className="text-xs text-gray-600">Transport și manipulare obiecte</p>
               </div>
-              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+              <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -698,7 +698,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <h5 className="mb-1 font-semibold text-gray-900">Împachetare</h5>
                 <p className="text-xs text-gray-600">Materiale și ambalare profesională</p>
               </div>
-              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+              <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -742,7 +742,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <h5 className="mb-1 font-semibold text-gray-900">Demontare</h5>
                 <p className="text-xs text-gray-600">Demontare mobilier și recondiționare</p>
               </div>
-              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+              <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -785,7 +785,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <h5 className="mb-1 font-semibold text-gray-900">Debarasare</h5>
                 <p className="text-xs text-gray-600">Eliminare obiecte vechi nedorite</p>
               </div>
-              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+              <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -828,7 +828,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <h5 className="mb-1 font-semibold text-gray-900">Depozitare</h5>
                 <p className="text-xs text-gray-600">Spațiu depozitare temporară/permanentă</p>
               </div>
-              <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
+              <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-purple-500 peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -926,7 +926,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   Un reprezentant va veni să evalueze bunurile
                 </p>
               </div>
-              <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
+              <div className="absolute top-4 right-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -976,7 +976,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <h5 className="mb-2 font-bold text-gray-900">Survey video</h5>
                 <p className="text-sm leading-relaxed text-gray-600">Evaluare online rapidă</p>
               </div>
-              <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
+              <div className="absolute top-4 right-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -1028,7 +1028,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   Ofertă estimativă pe baza informațiilor
                 </p>
               </div>
-              <div className="absolute right-4 top-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
+              <div className="absolute top-4 right-4 hidden h-7 w-7 items-center justify-center rounded-full bg-amber-500 shadow-lg peer-checked:flex">
                 <svg
                   className="h-4 w-4 text-white"
                   fill="none"
@@ -1103,7 +1103,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <h5 className="mb-1 font-semibold text-gray-900">Upload acum</h5>
                   <p className="text-xs text-gray-600">Încarcă fotografii/video imediat</p>
                 </div>
-                <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
+                <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
                   <svg
                     className="h-4 w-4 text-white"
                     fill="none"
@@ -1150,7 +1150,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <h5 className="mb-1 font-semibold text-gray-900">Primesc link pe email</h5>
                   <p className="text-xs text-gray-600">Vei primi un link pentru upload ulterior</p>
                 </div>
-                <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
+                <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
                   <svg
                     className="h-4 w-4 text-white"
                     fill="none"
@@ -1196,7 +1196,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <h5 className="mb-1 font-semibold text-gray-900">Nu doresc să adaug poze</h5>
                   <p className="text-xs text-gray-600">Continui fără a trimite fotografii/video</p>
                 </div>
-                <div className="absolute right-3 top-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
+                <div className="absolute top-3 right-3 hidden h-6 w-6 items-center justify-center rounded-full bg-blue-500 peer-checked:flex">
                   <svg
                     className="h-4 w-4 text-white"
                     fill="none"
@@ -1518,7 +1518,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           moveDateFlexDays: Number(e.target.value),
                         }))
                       }
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
                     >
                       <option value={3}>±3 zile</option>
                       <option value={7}>±7 zile</option>
@@ -1575,7 +1575,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       minLength={2}
                       pattern="[A-Za-zĂÂÎȘȚăâîșțÀ-ÿ\s\-']+"
                       title="Te rugăm să introduci prenumele (minim 2 caractere)"
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
                       placeholder="Prenume"
                     />
                     <input
@@ -1596,7 +1596,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       minLength={2}
                       pattern="[A-Za-zĂÂÎȘȚăâîșțÀ-ÿ\s\-']+"
                       title="Te rugăm să introduci numele (minim 2 caractere)"
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
                       placeholder="Nume"
                     />
                   </div>
@@ -1614,7 +1614,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     }}
                     inputMode="numeric"
                     required
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/30"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
                     placeholder="Număr de telefon"
                   />
                 </div>
@@ -1631,41 +1631,46 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           <textarea
             value={form.details || ""}
             onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
             rows={3}
             placeholder="Informații importante (acces, obiecte fragile, interval orar, etc.)"
           />
         </div>
 
         {/* Terms and Conditions Checkbox */}
-        <div className="flex items-start gap-3 rounded-lg border border-gray-200 bg-gray-50 p-4">
-          <input
-            type="checkbox"
-            id="acceptTermsRequestForm"
-            checked={form.acceptedTerms || false}
-            onChange={(e) => setForm((s) => ({ ...s, acceptedTerms: e.target.checked }))}
-            className="mt-1 h-5 w-5 cursor-pointer rounded border-gray-300 text-emerald-600 focus:ring-2 focus:ring-emerald-500"
-            required
-          />
-          <label htmlFor="acceptTermsRequestForm" className="cursor-pointer text-sm text-gray-700">
-            Am citit și sunt de acord cu{" "}
-            <Link
-              href="/terms"
-              target="_blank"
-              className="font-semibold text-emerald-600 underline hover:text-emerald-700"
+        <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+          <div className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="acceptTermsRequestForm"
+              checked={form.acceptedTerms || false}
+              onChange={(e) => setForm((s) => ({ ...s, acceptedTerms: e.target.checked }))}
+              className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-gray-300 text-emerald-600 focus:ring-2 focus:ring-emerald-500"
+              required
+            />
+            <label
+              htmlFor="acceptTermsRequestForm"
+              className="cursor-pointer text-sm text-gray-700"
             >
-              Termenii și Condițiile
-            </Link>{" "}
-            și{" "}
-            <Link
-              href="/privacy"
-              target="_blank"
-              className="font-semibold text-emerald-600 underline hover:text-emerald-700"
-            >
-              Politica de Confidențialitate
-            </Link>
-            .
-          </label>
+              Am citit și sunt de acord cu{" "}
+              <Link
+                href="/terms"
+                target="_blank"
+                className="font-semibold text-emerald-600 underline hover:text-emerald-700"
+              >
+                Termenii și Condițiile
+              </Link>{" "}
+              și{" "}
+              <Link
+                href="/privacy"
+                target="_blank"
+                className="font-semibold text-emerald-600 underline hover:text-emerald-700"
+              >
+                Politica de Confidențialitate
+              </Link>
+              .
+            </label>
+          </div>
         </div>
 
         <div className="flex items-center gap-3 pt-2">
