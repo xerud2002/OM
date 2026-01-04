@@ -1,10 +1,10 @@
 ╔════════════════════════════════════════════════════════════════════════════╗
 ║                    VPS DEPLOYMENT QUICK REFERENCE                          ║
-║                         OferteMutari.ro                                    ║
+║                         OferteMutare.ro                                    ║
 ╠════════════════════════════════════════════════════════════════════════════╣
 ║ VPS INFO                                                                   ║
 ║ ├─ IP: 80.96.6.93                                                         ║
-║ ├─ Domain: ofertemutari.ro                                                ║
+║ ├─ Domain: ofertemutare.ro                                                ║
 ║ ├─ App Dir: /var/www/om                                                   ║
 ║ └─ Port: 3000 (internal)                                                  ║
 ╠════════════════════════════════════════════════════════════════════════════╣
@@ -37,7 +37,7 @@
 ║    nginx -t && systemctl restart nginx                                   ║
 ║                                                                            ║
 ║ 8. Setup SSL (after DNS configured)                                      ║
-║    certbot --nginx -d ofertemutari.ro -d www.ofertemutari.ro            ║
+║    certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro            ║
 ║                                                                            ║
 ║ 9. Configure Firebase authorized domains                                 ║
 ║    console.firebase.google.com/project/omro-e5a88/authentication/settings║
@@ -110,7 +110,7 @@
 ║ Firebase Console:                                                         ║
 ║   https://console.firebase.google.com/project/omro-e5a88                ║
 ║                                                                            ║
-║ Firebase Auth Settings (ADD DOMAINS HERE!):                              ║
+║ Firebase Auth Settings (ADD DOMAINS HERE - ofertemutare.ro!):           ║
 ║   https://console.firebase.google.com/project/omro-e5a88/               ║
 ║   authentication/settings                                                 ║
 ║                                                                            ║

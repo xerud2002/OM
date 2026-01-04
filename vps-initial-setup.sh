@@ -1,10 +1,10 @@
 #!/bin/bash
-# VPS Initial Setup Script for OferteMutari.ro
+# VPS Initial Setup Script for OferteMutare.ro
 # Run this script on your VPS: bash <(curl -s https://raw.githubusercontent.com/xerud2002/OM/main/vps-initial-setup.sh)
 
 set -e
 
-echo "🚀 OferteMutari.ro - VPS Initial Setup"
+echo "🚀 OferteMutare.ro - VPS Initial Setup"
 echo "========================================"
 echo ""
 

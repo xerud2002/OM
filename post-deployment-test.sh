@@ -9,7 +9,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-DOMAIN="ofertemutari.ro"
+DOMAIN="ofertemutare.ro"
 LOCAL_URL="http://localhost:3000"
 HTTPS_URL="https://$DOMAIN"
 HTTP_URL="http://$DOMAIN"
@@ -86,7 +86,7 @@ if timeout 5 openssl s_client -connect $DOMAIN:443 -servername $DOMAIN < /dev/nu
     ((PASSED++))
 else
     echo -e "${YELLOW}⚠ SSL certificate check failed or not yet configured${NC}"
-    echo -e "${YELLOW}  Run: certbot --nginx -d ofertemutari.ro -d www.ofertemutari.ro${NC}"
+    echo -e "${YELLOW}  Run: certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro${NC}"
     ((FAILED++))
 fi
 

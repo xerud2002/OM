@@ -42,19 +42,19 @@ Use this checklist to track your deployment progress.
 - [ ] Go to your domain registrar (GoDaddy, Namecheap, etc.)
 - [ ] Add A record: `@ -> 80.96.6.93`
 - [ ] Add A record: `www -> 80.96.6.93`
-- [ ] Wait for DNS propagation (test with `nslookup ofertemutari.ro`)
-- [ ] Test: Open `http://ofertemutari.ro` in browser
+- [ ] Wait for DNS propagation (test with `nslookup ofertemutare.ro`)
+- [ ] Test: Open `http://ofertemutare.ro` in browser
 
 ## ☐ Phase 6: SSL/HTTPS Setup (10 minutes)
 
 **Prerequisites**: DNS must be configured and propagated first!
 
-- [ ] Run Certbot: `certbot --nginx -d ofertemutari.ro -d www.ofertemutari.ro`
+- [ ] Run Certbot: `certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro`
 - [ ] Enter email address
 - [ ] Agree to terms
 - [ ] Choose to redirect HTTP to HTTPS (recommended: Yes)
 - [ ] Test auto-renewal: `certbot renew --dry-run`
-- [ ] Verify: Open `https://ofertemutari.ro` (should have valid SSL certificate)
+- [ ] Verify: Open `https://ofertemutare.ro` (should have valid SSL certificate)
 
 ## ☐ Phase 7: Firebase Configuration (5 minutes)
 
@@ -62,8 +62,8 @@ Use this checklist to track your deployment progress.
 
 - [ ] Go to [Firebase Authentication Settings](https://console.firebase.google.com/project/omro-e5a88/authentication/settings)
 - [ ] Scroll to "Authorized domains"
-- [ ] Add domain: `ofertemutari.ro`
-- [ ] Add domain: `www.ofertemutari.ro`
+- [ ] Add domain: `ofertemutare.ro`
+- [ ] Add domain: `www.ofertemutare.ro`
 - [ ] Add domain: `80.96.6.93` (for testing)
 - [ ] Test: Try to register/login on your site
 
@@ -76,7 +76,7 @@ Use this checklist to track your deployment progress.
 
 ## ☐ Phase 9: Testing (15 minutes)
 
-- [ ] Test homepage loads: `https://ofertemutari.ro`
+- [ ] Test homepage loads: `https://ofertemutare.ro`
 - [ ] Test customer registration
 - [ ] Test customer login
 - [ ] Test company registration
@@ -143,7 +143,7 @@ npm run build
 
 Your deployment is successful when:
 
-✅ Site loads at `https://ofertemutari.ro`  
+✅ Site loads at `https://ofertemutare.ro`  
 ✅ SSL certificate is valid (green lock icon)  
 ✅ Customers can register and login  
 ✅ Companies can register and login  

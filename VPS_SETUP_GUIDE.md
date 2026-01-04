@@ -149,7 +149,7 @@ NEXT_PUBLIC_EMAILJS_REMINDER_TEMPLATE_ID=template_upload_reminder
 RESEND_API_KEY=re_your_resend_api_key_here
 
 # App Configuration
-NEXT_PUBLIC_APP_URL=https://ofertemutari.ro
+NEXT_PUBLIC_APP_URL=https://ofertemutare.ro
 
 # CRON API Key (for scheduled tasks)
 CRON_API_KEY=7a8f9b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0
@@ -200,7 +200,7 @@ Paste this configuration:
 ```nginx
 server {
     listen 80;
-    server_name ofertemutari.ro www.ofertemutari.ro 80.96.6.93;
+    server_name ofertemutare.ro www.ofertemutare.ro 80.96.6.93;
 
     # Security headers
     add_header X-Frame-Options "SAMEORIGIN" always;
@@ -317,7 +317,7 @@ A       www     80.96.6.93      3600
 ```
 
 3. Wait for DNS propagation (can take 5 minutes to 48 hours)
-4. Test with: `nslookup ofertemutari.ro`
+4. Test with: `nslookup ofertemutare.ro`
 
 ---
 
@@ -333,7 +333,7 @@ apt install certbot python3-certbot-nginx -y
 
 ```bash
 # Make sure DNS is pointing to your VPS first!
-certbot --nginx -d ofertemutari.ro -d www.ofertemutari.ro
+certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro
 
 # Follow prompts:
 # - Enter email address
@@ -359,8 +359,8 @@ Certbot will automatically renew certificates before they expire.
 2. Scroll to "Authorized domains"
 3. Click "Add domain"
 4. Add these domains:
-   - `ofertemutari.ro`
-   - `www.ofertemutari.ro`
+   - `ofertemutare.ro`
+   - `www.ofertemutare.ro`
    - `80.96.6.93` (for testing)
 5. Click "Add"
 
@@ -573,7 +573,7 @@ systemctl restart sshd
 
 - **Directory**: `/var/www/om`
 - **Port**: 3000
-- **Domain**: ofertemutari.ro
+- **Domain**: ofertemutare.ro
 - **Process Manager**: PM2
 - **Web Server**: Nginx
 
@@ -617,7 +617,7 @@ pm2 status && systemctl status nginx
 - [ ] Site accessible via IP (http://80.96.6.93)
 - [ ] DNS records configured (A records for @ and www)
 - [ ] SSL certificate obtained and installed (certbot)
-- [ ] Site accessible via HTTPS (https://ofertemutari.ro)
+- [ ] Site accessible via HTTPS (https://ofertemutare.ro)
 - [ ] Firebase authorized domains configured
 - [ ] Authentication works (test login/register)
 - [ ] CRON job configured for upload reminders
@@ -636,4 +636,4 @@ If you encounter issues:
 4. Ensure Firebase authorized domains are set
 5. Check firewall rules: `ufw status`
 
-**Your site should now be live at https://ofertemutari.ro! 🚀**
+**Your site should now be live at https://ofertemutare.ro! 🚀**

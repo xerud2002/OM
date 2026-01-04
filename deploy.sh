@@ -17,7 +17,7 @@ REPO_URL="https://github.com/xerud2002/OM.git"
 BRANCH="main"
 BACKUP_DIR="/var/backups/om"
 
-echo -e "${BLUE}🚀 Starting deployment for OferteMutari.ro${NC}"
+echo -e "${BLUE}🚀 Starting deployment for OferteMutare.ro${NC}"
 echo "=================================================="
 
 # Check if running in correct directory
@@ -131,8 +131,8 @@ echo "  📈 Monitor:       pm2 monit"
 echo "  🔄 Restart:       pm2 restart om-app"
 echo ""
 echo -e "${BLUE}Site URLs:${NC}"
-echo "  🌐 https://ofertemutari.ro"
-echo "  🌐 https://www.ofertemutari.ro"
+echo "  🌐 https://ofertemutare.ro"
+echo "  🌐 https://www.ofertemutare.ro"
 echo ""
 
 # Show PM2 status

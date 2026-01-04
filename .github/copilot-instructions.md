@@ -1,11 +1,14 @@
 # Copilot instructions for OM (Next.js + Firebase)
 
+> **Quick Start**: Next.js 14 + Firebase + Tailwind v4. Dev: `npm run dev` (port 3001). Firebase init in `services/firebase.ts`. Helpers in `utils/*Helpers.ts`. Role protection via `RequireRole`. Romanian validators in `utils/validation.ts`.
+
 These notes make AI coding agents productive quickly in this repo. Stick to the project's patterns and file boundaries below.
 
 ## Overview
 
-- **Stack**: Next.js 14 (Pages Router in `pages/`), TypeScript, Tailwind CSS, Framer Motion, Firebase (Auth, Firestore, Storage), Sonner toasts, Lucide icons.
+- **Stack**: Next.js 14 (Pages Router in `pages/`), TypeScript, Tailwind CSS v4, Framer Motion, Firebase (Auth, Firestore, Storage), Sonner toasts, Lucide icons.
 - **Config**: ESM project (`"type": "module"` in package.json) — **all imports must use `.js` extensions in compiled code**; ESLint flat config (`eslint.config.js`), Prettier + Tailwind plugin for class sorting.
+- **Tailwind v4**: Uses **CSS-first configuration** in `globals.css` via `@theme` and `@source` directives — no `tailwind.config.ts` file. Custom colors and fonts defined in `@theme {}` block.
 - **Global shell**: `pages/_app.tsx` wires `Navbar`, `Footer`, global `<Toaster />`, `ErrorBoundary`, and `FloatingCTA`. Content is offset via `pt-[80px]`.
 - **Routing**: Uses Pages Router (`pages/**`). Some client components use `next/navigation`'s `useRouter`; keep this consistent unless migrating the app.
 - **Layout**: Use `components/layout/Layout.tsx` (`LayoutWrapper`) to wrap sections/pages with the gradient background container.
@@ -131,7 +134,8 @@ const uid = decoded.uid;
 
 ## Key UI patterns
 
-- **Tailwind is primary**. Prettier + tailwind plugin sorts classes; don't fight the order.
+- **Tailwind v4 CSS-first**: All Tailwind config is in `globals.css` — custom theme via `@theme {}`, source paths via `@source`. Prettier + tailwind plugin sorts classes.
+- **Custom CSS classes**: `globals.css` defines reusable `.card`, `.btn-primary`, `.btn-secondary` classes using `@apply`.
 - **Reusable motion variants** in `utils/animations.ts` (`fadeUp`, `staggerContainer`).
 - **Customer dashboard** (`pages/customer/dashboard.tsx`):
   - Real-time requests for the logged-in user via `onSnapshot`.
@@ -184,11 +188,85 @@ const uid = decoded.uid;
 
 - **Client-side** (`NEXT_PUBLIC_*`): Firebase config (apiKey, authDomain, projectId, etc.), EmailJS credentials (serviceId, templateId, publicKey), app URL
 - **Server-side** (secrets): Firebase Admin (projectId, clientEmail, privateKey as multiline string), Resend API key, CRON API key
-- **Critical deployment steps**:
-  1. Add deployed domain to Firebase Console → Authentication → Authorized domains (else `auth/unauthorized-domain` error)
-  2. Set all env vars in Vercel/hosting provider
-  3. Generate Firebase Admin service account JSON from Firebase Console → Project Settings → Service Accounts
-  4. Configure Vercel CRON jobs for `/api/sendUploadReminders` with `x-api-key` header matching `CRON_API_KEY`
+
+### VPS Deployment (80.96.6.93)
+
+**Prerequisites on VPS**:
+
+```bash
+# Install Node.js 18+ via nvm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+nvm install 18
+nvm use 18
+
+# Install PM2 for process management
+npm install -g pm2
+```
+
+**Deploy steps**:
+
+```bash
+# 1. Clone/pull latest code
+git clone https://github.com/xerud2002/OM.git /var/www/om
+cd /var/www/om
+
+# 2. Install dependencies
+npm ci --production=false
+
+# 3. Create .env with all required variables
+cp ".env copy.example" .env
+nano .env  # Edit with production values
+
+# 4. Build for production
+npm run build
+
+# 5. Start with PM2
+pm2 start npm --name "om-app" -- start
+pm2 save
+pm2 startup  # Auto-restart on reboot
+```
+
+**Nginx reverse proxy** (`/etc/nginx/sites-available/om`):
+
+```nginx
+server {
+    listen 80;
+    server_name 80.96.6.93 ofertemutari.ro www.ofertemutari.ro;
+
+    location / {
+        proxy_pass http://127.0.0.1:3000;
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection 'upgrade';
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+```
+
+**SSL cu Certbot** (după configurarea DNS):
+
+```bash
+sudo apt install certbot python3-certbot-nginx
+sudo certbot --nginx -d ofertemutari.ro -d www.ofertemutari.ro
+```
+
+**CRON job pentru remindere** (înlocuiește Vercel CRON):
+
+```bash
+# Adaugă în crontab -e
+0 9 * * * curl -X POST http://localhost:3000/api/sendUploadReminders -H "x-api-key: YOUR_CRON_API_KEY"
+```
+
+**Critical deployment steps**:
+
+1. Add VPS IP + domain to Firebase Console → Authentication → Authorized domains
+2. Update `NEXT_PUBLIC_APP_URL` în `.env` cu URL-ul de producție
+3. Configure firewall: `ufw allow 80,443/tcp`
+4. Monitor logs: `pm2 logs om-app`
 
 ## Examples
 
