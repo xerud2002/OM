@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, Star, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -11,10 +10,16 @@ import Image from "next/image";
 export default function Hero() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
+  const [animationsReady, setAnimationsReady] = useState(false);
 
   useEffect(() => {
+    // Delay animations until after LCP
+    const timer = setTimeout(() => setAnimationsReady(true), 100);
     const unsub = onAuthChange((user) => setUser(user));
-    return () => unsub();
+    return () => {
+      clearTimeout(timer);
+      unsub();
+    };
   }, []);
 
   const handleCTA = () => {
@@ -27,33 +32,21 @@ export default function Hero() {
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-32 lg:pb-24">
-      {/* Animated Background Elements */}
+      {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-[300px] w-[300px] rounded-full bg-emerald-200/40 blur-[80px] sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px] lg:blur-[100px]" />
         <div className="absolute right-[5%] bottom-20 hidden h-[300px] w-[300px] rounded-full bg-sky-200/40 blur-[80px] sm:block sm:h-[400px] sm:w-[400px] lg:blur-[100px]" />
-        <div className="absolute top-1/2 left-1/2 h-[200px] w-[200px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-100/30 blur-[60px] sm:h-[300px] sm:w-[300px] lg:blur-[80px]" />
-        
-        {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:40px_40px] sm:bg-[size:60px_60px]" />
       </div>
 
       <div className="container relative z-10 mx-auto">
         <div className="flex flex-col items-center gap-10 sm:gap-12 lg:flex-row lg:gap-20">
           
-          {/* Text Content */}
-          <motion.div 
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-            className="flex-1 text-center lg:text-left"
+          {/* Text Content - renders immediately without animation delay */}
+          <div 
+            className={`flex-1 text-center lg:text-left transition-all duration-500 ${animationsReady ? 'opacity-100 translate-y-0' : 'opacity-100'}`}
           >
             {/* Badge */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: 0.2, duration: 0.5 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5"
-            >
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5">
               <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 sm:h-2.5 sm:w-2.5"></span>
@@ -61,9 +54,9 @@ export default function Hero() {
               <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
                 🎉 Peste 500+ mutări realizate cu succes
               </span>
-            </motion.div>
+            </div>
 
-            {/* Headline */}
+            {/* Headline - Critical LCP element */}
             <h1 className="mb-4 text-3xl font-extrabold leading-[1.15] tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
               Mutări simple,
               <br />
@@ -71,22 +64,17 @@ export default function Hero() {
                 <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                   prețuri corecte.
                 </span>
-                <motion.svg
-                  initial={{ pathLength: 0, opacity: 0 }}
-                  animate={{ pathLength: 1, opacity: 1 }}
-                  transition={{ delay: 0.8, duration: 1.2 }}
+                {/* Underline decoration - CSS only, no JS animation */}
+                <svg
                   className="absolute -bottom-1 left-0 w-full sm:-bottom-2"
                   viewBox="0 0 300 12"
                   fill="none"
                 >
-                  <motion.path
+                  <path
                     d="M2 10C40 4 100 2 150 6C200 10 260 4 298 8"
                     stroke="url(#hero-gradient)"
                     strokeWidth="4"
                     strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ delay: 0.8, duration: 1.2 }}
                   />
                   <defs>
                     <linearGradient id="hero-gradient" x1="0" y1="0" x2="300" y2="0">
@@ -95,7 +83,7 @@ export default function Hero() {
                       <stop offset="100%" stopColor="#0284c7" />
                     </linearGradient>
                   </defs>
-                </motion.svg>
+                </svg>
               </span>
             </h1>
 
@@ -107,33 +95,24 @@ export default function Hero() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4 lg:justify-start">
-              <motion.button 
+              <button 
                 onClick={handleCTA}
-                whileHover={{ scale: 1.02, y: -2 }}
-                whileTap={{ scale: 0.98 }}
-                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25 transition-all hover:shadow-2xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
+                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25 transition-all hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-emerald-500/30 active:scale-[0.98] sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
               >
                 <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                 Obține oferte gratuite
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5" />
-              </motion.button>
-              <motion.button 
+              </button>
+              <button 
                 onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-6 py-3.5 text-base font-semibold text-slate-700 transition-all hover:border-emerald-200 hover:bg-emerald-50 sm:w-auto sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
+                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-6 py-3.5 text-base font-semibold text-slate-700 transition-all hover:scale-[1.02] hover:border-emerald-200 hover:bg-emerald-50 active:scale-[0.98] sm:w-auto sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
               >
                 Cum funcționează?
-              </motion.button>
+              </button>
             </div>
 
             {/* Trust Indicators */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5, duration: 0.6 }}
-              className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-12 sm:gap-4 lg:justify-start lg:gap-6"
-            >
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-12 sm:gap-4 lg:justify-start lg:gap-6">
               {[
                 { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
                 { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
@@ -145,18 +124,13 @@ export default function Hero() {
                   <span className="text-xs font-medium text-slate-700 sm:text-sm">{item.label}</span>
                 </div>
               ))}
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
 
-          {/* Visual Content */}
-          <motion.div 
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative w-full flex-1 lg:w-auto"
-          >
+          {/* Visual Content - Image loads with priority */}
+          <div className="relative w-full flex-1 lg:w-auto">
             <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
-              {/* Main Card */}
+              {/* Main Card with Hero Image - LCP element */}
               <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
                 <div className="relative aspect-[4/3] bg-linear-to-br from-slate-50 to-emerald-50/50">
                   <Image 
@@ -166,26 +140,22 @@ export default function Hero() {
                     className="object-cover"
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                    quality={85}
+                    quality={80}
+                    fetchPriority="high"
                   />
                 </div>
               </div>
 
               {/* Floating Badge - Top Right */}
-              <motion.div
-                initial={{ scale: 0, rotate: -12 }}
-                animate={{ scale: 1, rotate: -6 }}
-                transition={{ delay: 1, type: "spring", stiffness: 200 }}
-                className="absolute -top-2 -right-2 rounded-xl border border-amber-200 bg-linear-to-br from-amber-50 to-orange-50 px-2.5 py-2 shadow-lg sm:-top-4 sm:-right-4 sm:rounded-2xl sm:px-4 sm:py-3"
-              >
+              <div className="absolute -top-2 -right-2 -rotate-6 rounded-xl border border-amber-200 bg-linear-to-br from-amber-50 to-orange-50 px-2.5 py-2 shadow-lg sm:-top-4 sm:-right-4 sm:rounded-2xl sm:px-4 sm:py-3">
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400 sm:h-5 sm:w-5" />
                   <span className="text-xs font-bold text-amber-700 sm:text-sm">4.9/5</span>
                 </div>
                 <p className="text-[10px] text-amber-600 sm:text-xs">500+ reviews</p>
-              </motion.div>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
