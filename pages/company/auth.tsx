@@ -4,8 +4,8 @@ import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
-import { Mail, Lock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Lock, Building2, ArrowRight, Users, TrendingUp, Award } from "lucide-react";
 import Image from "next/image";
 
 export default function CustomerAuthPage() {
@@ -120,98 +120,237 @@ export default function CustomerAuthPage() {
 
   return (
     <LayoutWrapper>
-      <section className="mx-auto mt-10 max-w-md rounded-2xl border border-emerald-100 bg-white/80 p-8 text-center shadow-lg backdrop-blur-md">
-        <h1 className="mb-2 text-3xl font-bold text-slate-900">
-          {isLogin ? (
-            <>
-              Autentificare{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Firmă
-              </span>
-            </>
-          ) : (
-            <>
-              Creare Cont{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-                Client
-              </span>
-            </>
-          )}
-        </h1>
-        <p className="mb-6 text-gray-600">
-          {isLogin
-            ? "Intră în contul tău pentru a gestiona cererile de mutare."
-            : "Creează un cont nou pentru a primi oferte personalizate."}
-        </p>
-
-        <form onSubmit={handleEmailAuth} className="space-y-4">
-          <div className="flex items-center rounded-lg border px-3 py-2">
-            <Mail size={18} className="mr-2 text-emerald-600" />
-            <input
-              type="email"
-              placeholder="Email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full bg-transparent outline-none"
-              autoComplete="email"
-            />
-          </div>
-
-          <div className="flex items-center rounded-lg border px-3 py-2">
-            <Lock size={18} className="mr-2 text-emerald-600" />
-            <input
-              type="password"
-              placeholder="Parolă"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full bg-transparent outline-none"
-              autoComplete={isLogin ? "current-password" : "new-password"}
-            />
-          </div>
-
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-gradient-to-r from-emerald-500 to-sky-500 py-2 font-semibold text-white shadow-md transition hover:shadow-lg"
+      <div className="container mx-auto px-4 py-12">
+        <div className="mx-auto grid max-w-6xl gap-8 overflow-hidden rounded-3xl bg-white shadow-2xl lg:grid-cols-2">
+          {/* Left Side - Illustration & Benefits */}
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="relative hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-12 lg:flex lg:flex-col lg:justify-between"
           >
-            {loading ? "Se procesează..." : isLogin ? "Autentificare" : "Înregistrare"}
-          </motion.button>
+            {/* Decorative circles */}
+            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
-          {isLogin && (
-            <button
-              type="button"
-              onClick={handlePasswordReset}
-              className="text-sm text-sky-600 hover:underline"
+            <div className="relative z-10">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.3 }}
+                className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm"
+              >
+                <Building2 size={16} />
+                Pentru Firme
+              </motion.div>
+
+              <h2 className="mb-4 text-4xl font-bold text-white">
+                Dezvoltă-ți
+                <br />
+                <span className="text-blue-100">business-ul.</span>
+              </h2>
+              <p className="text-lg text-blue-50">
+                Primești cereri verificate de la clienți reali și îți crești vânzările.
+              </p>
+            </div>
+
+            {/* Benefits list */}
+            <div className="relative z-10 space-y-4">
+              {[
+                { icon: Users, text: "Acces la clienți verificați" },
+                { icon: TrendingUp, text: "Crește-ți vânzările" },
+                { icon: Award, text: "Verificare gratuită" },
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.5 + i * 0.1 }}
+                  className="flex items-center gap-3 text-white"
+                >
+                  <div className="rounded-full bg-white/20 p-2 backdrop-blur-sm">
+                    <item.icon size={20} />
+                  </div>
+                  <span className="text-blue-50">{item.text}</span>
+                </motion.div>
+              ))}
+            </div>
+
+            {/* Decorative illustration */}
+            <div className="absolute bottom-8 right-8 opacity-10">
+              <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
+                <rect x="20" y="20" width="160" height="160" stroke="white" strokeWidth="2" rx="20" />
+                <rect x="40" y="40" width="120" height="120" stroke="white" strokeWidth="2" rx="15" />
+                <rect x="60" y="60" width="80" height="80" stroke="white" strokeWidth="2" rx="10" />
+              </svg>
+            </div>
+          </motion.div>
+
+          {/* Right Side - Auth Form */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.6 }}
+            className="p-8 lg:p-12"
+          >
+            <div className="mb-8">
+              <motion.div
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700"
+              >
+                <Building2 size={16} />
+                Cont Firmă
+              </motion.div>
+
+              <h1 className="mb-2 text-3xl font-bold text-slate-900 lg:text-4xl">
+                <AnimatePresence mode="wait">
+                  <motion.span
+                    key={isLogin ? "login" : "register"}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    {isLogin ? "Bine ai revenit!" : "Alătură-te platformei"}
+                  </motion.span>
+                </AnimatePresence>
+              </h1>
+              <p className="text-gray-600">
+                {isLogin
+                  ? "Intră în cont pentru a gestiona cererile."
+                  : "Înregistrează-te și primește cereri de ofertă."}
+              </p>
+            </div>
+
+            <form onSubmit={handleEmailAuth} className="space-y-4">
+              <div className="group relative">
+                <div className="flex items-center rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 transition-all focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg">
+                  <Mail size={20} className="mr-3 text-gray-400 transition-colors group-focus-within:text-blue-600" />
+                  <input
+                    type="email"
+                    placeholder="Email firmă"
+                    required
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="w-full bg-transparent text-gray-900 placeholder-gray-400 outline-none"
+                    autoComplete="email"
+                  />
+                </div>
+              </div>
+
+              <div className="group relative">
+                <div className="flex items-center rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 transition-all focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg">
+                  <Lock size={20} className="mr-3 text-gray-400 transition-colors group-focus-within:text-blue-600" />
+                  <input
+                    type="password"
+                    placeholder="Parolă"
+                    required
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="w-full bg-transparent text-gray-900 placeholder-gray-400 outline-none"
+                    autoComplete={isLogin ? "current-password" : "new-password"}
+                  />
+                </div>
+              </div>
+
+              <motion.button
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={loading}
+                className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
+              >
+                <span className="relative z-10 flex items-center justify-center gap-2">
+                  {loading ? (
+                    <>
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+                      />
+                      Se procesează...
+                    </>
+                  ) : (
+                    <>
+                      {isLogin ? "Autentificare" : "Înregistrare firmă"}
+                      <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+                    </>
+                  )}
+                </span>
+                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-0 transition-opacity group-hover:opacity-100" />
+              </motion.button>
+
+              {isLogin && (
+                <div className="text-right">
+                  <button
+                    type="button"
+                    onClick={handlePasswordReset}
+                    className="text-sm font-medium text-blue-600 transition-colors hover:text-blue-700 hover:underline"
+                  >
+                    Ai uitat parola?
+                  </button>
+                </div>
+              )}
+            </form>
+
+            <div className="relative my-6">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200" />
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="bg-white px-4 text-gray-500">sau continuă cu</span>
+              </div>
+            </div>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={handleGoogleLogin}
+              disabled={loading}
+              className="group flex w-full items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-6 py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
             >
-              Ai uitat parola?
-            </button>
-          )}
-        </form>
+              <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
+              Google
+            </motion.button>
 
-        <div className="my-4 text-gray-400">sau</div>
+            {/* === Status Message === */}
+            <AnimatePresence>
+              {message && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="mt-4 rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800"
+                >
+                  {message}
+                </motion.div>
+              )}
+            </AnimatePresence>
 
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          onClick={handleGoogleLogin}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 py-2 transition hover:bg-gray-50"
-        >
-          <Image src="/pics/google.svg" alt="Google" width={20} height={20} />
-          Continuă cu Google
-        </motion.button>
+            <div className="mt-8 text-center text-sm text-gray-600">
+              {isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
+              <button
+                onClick={() => {
+                  setIsLogin(!isLogin);
+                  setMessage("");
+                }}
+                className="font-semibold text-blue-600 transition-colors hover:text-blue-700 hover:underline"
+              >
+                {isLogin ? "Înregistrează-te" : "Autentifică-te"}
+              </button>
+            </div>
 
-        {message && <p className="mt-4 text-sm text-gray-600">{message}</p>}
-
-        <div className="mt-6 text-sm">
-          {isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
-          <button onClick={() => setIsLogin(!isLogin)} className="text-emerald-600 hover:underline">
-            {isLogin ? "Creează unul" : "Autentifică-te"}
-          </button>
+            {/* Customer auth link */}
+            <div className="mt-4 text-center text-sm text-gray-500">
+              Ești client?{" "}
+              <a href="/customer/auth" className="font-medium text-emerald-600 hover:underline">
+                Click aici
+              </a>
+            </div>
+          </motion.div>
         </div>
-      </section>
+      </div>
     </LayoutWrapper>
   );
 }
