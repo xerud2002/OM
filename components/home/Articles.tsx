@@ -33,7 +33,7 @@ const articles = [
 
 export default function Articles() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute right-0 top-1/4 h-[300px] w-[300px] translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
@@ -55,7 +55,7 @@ export default function Articles() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Sfaturi pentru o{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
               mutare reușită
             </span>
           </h2>
@@ -81,12 +81,12 @@ export default function Articles() {
                   className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
                 >
                   {/* Top gradient bar */}
-                  <div className={`h-1.5 w-full bg-gradient-to-r ${article.gradient} sm:h-2`} />
+                  <div className={`h-1.5 w-full bg-linear-to-r ${article.gradient} sm:h-2`} />
 
                   <div className="flex flex-1 flex-col p-4 sm:p-6">
                     {/* Meta info */}
                     <div className="mb-3 flex items-center justify-between sm:mb-4">
-                      <span className={`rounded-full bg-gradient-to-r ${article.gradient} px-2.5 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs`}>
+                      <span className={`rounded-full bg-linear-to-r ${article.gradient} px-2.5 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs`}>
                         {article.category}
                       </span>
                       <span className="flex items-center gap-1 text-[10px] text-slate-500 sm:text-xs">
@@ -113,7 +113,7 @@ export default function Articles() {
                   </div>
 
                   {/* Hover overlay */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-50/0 via-transparent to-sky-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                  <div className="pointer-events-none absolute inset-0 bg-linear-to-br from-emerald-50/0 via-transparent to-sky-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </motion.div>
               </Link>
             </motion.div>

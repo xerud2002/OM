@@ -603,9 +603,9 @@ export default function CustomerDashboard() {
 
   return (
     <RequireRole allowedRole="customer">
-      <div className="min-h-screen bg-gradient-to-b from-white to-emerald-50">
+      <div className="min-h-screen bg-linear-to-b from-white to-emerald-50">
         {/* Hero background with gradient */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
+        <div className="relative overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-emerald-900">
           {/* Animated gradient orbs */}
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
@@ -621,7 +621,7 @@ export default function CustomerDashboard() {
                 animate={{ opacity: 1, x: 0 }}
               >
                 <h1 className="text-3xl font-bold text-white sm:text-4xl">
-                  Bună, <span className="bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">{user?.displayName || "Client"}</span>!
+                  Bună, <span className="bg-linear-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">{user?.displayName || "Client"}</span>!
                 </h1>
                 <p className="mt-2 text-base text-slate-300">
                   Gestionează cererile tale de mutare și ofertele primite
@@ -631,7 +631,7 @@ export default function CustomerDashboard() {
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 onClick={() => setActiveTab("new")}
-                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40"
+                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40"
               >
                 <PlusSquare size={22} className="transition-transform group-hover:rotate-90" />
                 Cerere nouă
@@ -652,7 +652,7 @@ export default function CustomerDashboard() {
                     <p className="mt-2 text-4xl font-bold text-white">{requests.length}</p>
                     <p className="mt-1 text-xs text-slate-400">În așteptarea ofertelor</p>
                   </div>
-                  <div className="rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
+                  <div className="rounded-xl bg-linear-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
                     <List size={26} className="text-emerald-400" />
                   </div>
                 </div>
@@ -672,7 +672,7 @@ export default function CustomerDashboard() {
                     <p className="mt-2 text-4xl font-bold text-white">{totalOffers}</p>
                     <p className="mt-1 text-xs text-slate-400">De la firme verificate</p>
                   </div>
-                  <div className="rounded-xl bg-gradient-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
+                  <div className="rounded-xl bg-linear-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
                     <Inbox size={26} className="text-sky-400" />
                   </div>
                 </div>
@@ -692,7 +692,7 @@ export default function CustomerDashboard() {
                     <p className="mt-2 text-4xl font-bold text-white">{archivedRequests.length}</p>
                     <p className="mt-1 text-xs text-slate-400">Cereri finalizate</p>
                   </div>
-                  <div className="rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">
+                  <div className="rounded-xl bg-linear-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">
                     <ArchiveIcon size={26} className="text-amber-400" />
                   </div>
                 </div>
@@ -732,7 +732,7 @@ export default function CustomerDashboard() {
                 <Inbox size={18} />
                 <span>Oferte</span>
                 {totalOffers > 0 && (
-                  <span className="rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
+                  <span className="rounded-full bg-linear-to-r from-emerald-500 to-teal-500 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
                     {totalOffers}
                   </span>
                 )}
@@ -783,9 +783,9 @@ export default function CustomerDashboard() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-14 text-center"
+                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-linear-to-br from-gray-50 to-white p-14 text-center"
                 >
-                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
                     <List size={36} className="text-white" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">Nicio cerere încă</h3>
@@ -794,7 +794,7 @@ export default function CustomerDashboard() {
                   </p>
                   <button
                     onClick={() => setActiveTab("new")}
-                    className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                    className="mt-8 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
                   >
                     <PlusSquare size={22} />
                     Creează prima cerere
@@ -863,7 +863,7 @@ export default function CustomerDashboard() {
             <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/50">
               {requests.length === 0 ? (
                 <div className="p-12 text-center">
-                  <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
+                  <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
                     <Inbox size={36} className="text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900">Nu ai încă cereri</h3>
@@ -872,7 +872,7 @@ export default function CustomerDashboard() {
                   </p>
                   <button
                     onClick={() => setActiveTab("new")}
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
                   >
                     <PlusSquare size={18} />
                     Creează prima cerere
@@ -881,7 +881,7 @@ export default function CustomerDashboard() {
               ) : (
                 <div className="grid grid-cols-1 gap-0 lg:grid-cols-[320px,1fr]">
                   {/* Sidebar: requests list */}
-                  <aside className="border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white lg:border-b-0 lg:border-r">
+                  <aside className="border-b border-gray-100 bg-linear-to-br from-gray-50 to-white lg:border-b-0 lg:border-r">
                     <div className="sticky top-[80px] max-h-[calc(100vh-120px)] overflow-auto p-5">
                       <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-900">
                         <List size={16} className="text-emerald-600" />
@@ -897,7 +897,7 @@ export default function CustomerDashboard() {
                               onClick={() => setSelectedRequestId(r.id)}
                               className={`w-full rounded-xl border-2 px-4 py-4 text-left transition-all duration-300 ${
                                 active
-                                  ? "border-emerald-400 bg-gradient-to-r from-emerald-50 to-teal-50 shadow-lg shadow-emerald-500/10"
+                                  ? "border-emerald-400 bg-linear-to-r from-emerald-50 to-teal-50 shadow-lg shadow-emerald-500/10"
                                   : "border-transparent bg-white shadow-sm hover:border-gray-200 hover:shadow-md"
                               }`}
                             >
@@ -953,8 +953,8 @@ export default function CustomerDashboard() {
                         </div>
 
                         {!(offersByRequest[selectedRequestId] || []).length ? (
-                          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-12 text-center">
-                            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
+                          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-linear-to-br from-gray-50 to-white p-12 text-center">
+                            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
                               <Inbox size={36} className="text-white" />
                             </div>
                             <h4 className="mt-5 text-lg font-bold text-gray-900">
@@ -983,9 +983,9 @@ export default function CustomerDashboard() {
 
                         {/* Comparison for selected request only */}
                         {(offersByRequest[selectedRequestId] || []).length > 1 && (
-                          <div className="mt-8 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg">
+                          <div className="mt-8 rounded-2xl border border-gray-100 bg-linear-to-br from-white to-gray-50/50 p-6 shadow-lg">
                             <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
-                              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30">
+                              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30">
                                 ⚖️
                               </span>
                               Compară oferte
@@ -1031,9 +1031,9 @@ export default function CustomerDashboard() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-14 text-center"
+                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-linear-to-br from-gray-50 to-white p-14 text-center"
                 >
-                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-400 to-gray-500 shadow-xl shadow-gray-500/20">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-gray-400 to-gray-500 shadow-xl shadow-gray-500/20">
                     <ArchiveIcon size={36} className="text-white" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">Arhivă goală</h3>
@@ -1069,7 +1069,7 @@ export default function CustomerDashboard() {
                               toast.error("Nu s-a putut reactiva cererea");
                             }
                           }}
-                          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 hover:shadow-xl"
+                          className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 hover:shadow-xl"
                         >
                           Reactivează
                         </button>
@@ -1145,13 +1145,13 @@ function OfferRow({
       className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
       {/* Gradient accent */}
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 to-sky-500" />
+      <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-emerald-500 to-sky-500" />
       
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Company info */}
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white shadow-lg shadow-emerald-500/30">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white shadow-lg shadow-emerald-500/30">
               {offer.companyName?.charAt(0)?.toUpperCase() || "F"}
             </div>
             <div>
@@ -1177,7 +1177,7 @@ function OfferRow({
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onAccept(requestId, offer.id)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
               <CheckCircle2 size={16} />
               Acceptă
@@ -1221,7 +1221,7 @@ function OfferRow({
             </button>
             <button
               onClick={sendMessage}
-              className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-xl"
+              className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-xl"
             >
               Trimite
             </button>

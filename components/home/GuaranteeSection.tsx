@@ -36,7 +36,7 @@ export default function GuaranteeSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-50/50 blur-[80px] sm:h-[800px] sm:w-[800px] sm:blur-[100px]" />
@@ -57,7 +57,7 @@ export default function GuaranteeSection() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             De ce să alegi{" "}
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               Ofertemutare.ro
             </span>
             ?
@@ -86,7 +86,7 @@ export default function GuaranteeSection() {
                 <motion.div
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
-                  className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br ${g.gradient} shadow-lg sm:mb-6 sm:h-16 sm:w-16 sm:rounded-2xl`}
+                  className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${g.gradient} shadow-lg sm:mb-6 sm:h-16 sm:w-16 sm:rounded-2xl`}
                 >
                   <g.icon className="h-6 w-6 text-white sm:h-8 sm:w-8" strokeWidth={1.5} />
                 </motion.div>
@@ -112,12 +112,12 @@ export default function GuaranteeSection() {
           transition={{ delay: 0.5, duration: 0.6 }}
           className="mx-auto mt-10 max-w-4xl sm:mt-16"
         >
-          <div className="relative overflow-hidden rounded-2xl border border-emerald-200/50 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-5 shadow-xl sm:rounded-3xl sm:p-8 lg:p-10">
+          <div className="relative overflow-hidden rounded-2xl border border-emerald-200/50 bg-linear-to-br from-emerald-50 via-white to-sky-50 p-5 shadow-xl sm:rounded-3xl sm:p-8 lg:p-10">
             {/* Background pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:20px_20px] sm:bg-[size:30px_30px]" />
             
             <div className="relative flex flex-col items-center gap-4 text-center sm:gap-6 lg:flex-row lg:text-left">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-20 sm:w-20 sm:rounded-2xl">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-20 sm:w-20 sm:rounded-2xl">
                 <HeartHandshake className="h-7 w-7 text-white sm:h-10 sm:w-10" strokeWidth={1.5} />
               </div>
               <div>

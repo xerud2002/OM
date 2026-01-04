@@ -49,7 +49,7 @@ export default function Services() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/50 to-white py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-linear-to-b from-white via-slate-50/50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-0 top-1/4 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
@@ -71,7 +71,7 @@ export default function Services() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Tot ce ai nevoie pentru{" "}
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               mutare
             </span>
           </h2>
@@ -97,7 +97,7 @@ export default function Services() {
                 className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all duration-300 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
               >
                 {/* Image */}
-                <div className="relative h-24 overflow-visible bg-gradient-to-br from-slate-50 to-slate-100 sm:h-40">
+                <div className="relative h-24 overflow-visible bg-linear-to-br from-slate-50 to-slate-100 sm:h-40">
                   <Image
                     src={service.img}
                     alt={service.title}
@@ -110,7 +110,7 @@ export default function Services() {
                 
                 {/* Icon badge - positioned outside image container */}
                 <div className="relative z-10 -mt-4 flex justify-center sm:-mt-6">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br ${service.color} shadow-lg sm:h-12 sm:w-12 sm:rounded-xl`}>
+                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br ${service.color} shadow-lg sm:h-12 sm:w-12 sm:rounded-xl`}>
                     <service.icon className="h-4 w-4 text-white sm:h-6 sm:w-6" strokeWidth={1.5} />
                   </div>
                 </div>
@@ -126,7 +126,7 @@ export default function Services() {
                 </div>
 
                 {/* Hover gradient overlay */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-emerald-50/0 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-emerald-50/0 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </motion.div>
             </motion.div>
           ))}

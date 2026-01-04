@@ -45,7 +45,7 @@ export default function ArticlePregatire() {
           <header className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               Cum să Te Pregătești pentru Mutare:{" "}
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Ghid Complet
               </span>
             </h1>
@@ -58,7 +58,7 @@ export default function ArticlePregatire() {
           {/* Intro */}
           <section className="mb-12 rounded-lg bg-emerald-50 p-6">
             <div className="flex items-start gap-4">
-              <Calendar className="mt-1 h-8 w-8 flex-shrink-0 text-emerald-600" />
+              <Calendar className="mt-1 h-8 w-8 shrink-0 text-emerald-600" />
               <div>
                 <h2 className="mb-2 text-xl font-semibold text-emerald-800">
                   De ce este importantă pregătirea?
@@ -89,28 +89,28 @@ export default function ArticlePregatire() {
               </div>
               <ul className="ml-6 space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Stabilește data mutării</strong> &ndash; Evită sfârșitul de lună
                     (prețuri mai mari) și weekendurile (lipsa disponibilității).
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Creează un buget</strong> &ndash; Include: firmă mutări (1.500-4.000
                     lei), ambalaje (200-500 lei), utilități noi (500 lei), chirie/garanție.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Măsoară mobilierul mare</strong> &ndash; Verifică dacă intră pe ușile
                     noii locuințe (intrare, lift, scări).
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Informează proprietarul actual</strong> &ndash; Respectă preavizul din
                     contract (de obicei 30 zile).
@@ -129,28 +129,28 @@ export default function ArticlePregatire() {
               </div>
               <ul className="ml-6 space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Solicită oferte</strong> &ndash; Pe OferteMutare.ro primești 3-5 oferte
                     gratuite în 24h, fără obligație de cumpărare.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Compară prețurile și serviciile</strong> &ndash; Verifică: asigurare
                     transport, echipamente (rampe, lifturi), personal specializat.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Programează survey-ul</strong> &ndash; Lasă firma să vadă exact ce
                     trebuie mutat pentru ofertă finală precisă.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Rezervă data</strong> &ndash; Firmele bune se rezervă cu 3-4 săptămâni
                     înainte, mai ales în sezon (aprilie-octombrie).
@@ -169,7 +169,7 @@ export default function ArticlePregatire() {
               </div>
               <ul className="ml-6 space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Sortează tot ce ai</strong> &ndash; Metodă simplă:{" "}
                     <em>păstrez, donez, arunc, vând</em>. Economia: cu 30% mai puține obiecte,
@@ -177,21 +177,21 @@ export default function ArticlePregatire() {
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Vinde lucrurile valoroase</strong> &ndash; Olx, Facebook Marketplace,
                     second-hand. Poți recupera 500-2.000 lei.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Donează sau aruncă restul</strong> &ndash; Caritas, centre de colectare,
                     asociații sociale.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Cumpără materiale de ambalare</strong> &ndash; Vezi{" "}
                     <Link
@@ -216,28 +216,28 @@ export default function ArticlePregatire() {
               </div>
               <ul className="ml-6 space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Schimbă adresa la utilități</strong> &ndash; Electricitate, gaze, apă,
                     internet (unele necesită 10-14 zile pentru conectare).
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Actualizează adresa oficială</strong> &ndash; Buletin (dacă schimbi
                     localitatea), permis auto, asigurare RCA, loc de muncă.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Transferă abonamentele</strong> &ndash; Internet, TV, telefonie. Unele
                     operatori oferă transfer gratuit.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Redirectionează corespondența</strong> &ndash; Bănci, primărie, medicul
                     de familie.
@@ -256,14 +256,14 @@ export default function ArticlePregatire() {
               </div>
               <ul className="ml-6 space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Împachetează tot (mai puțin esențialele)</strong> &ndash; Cameră cu
                     cameră, etichetează clar fiecare cutie.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Pregătește &ldquo;geanta de supraviețuire&rdquo;</strong> &ndash; Haine
                     pentru 2-3 zile, produse igienă, documente importante, încărcătoare,
@@ -271,21 +271,21 @@ export default function ArticlePregatire() {
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Confirmă cu firma de mutări</strong> &ndash; Ora exactă, adresele
                     corecte, număr de telefon activ.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Curăță locuința veche</strong> &ndash; Dacă vrei să recuperezi garanția
                     integral.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
                     <strong>Pregătește noua locuință</strong> &ndash; Verifică cheile, curățenie
                     generală, funcționare lift/interfon.
@@ -304,28 +304,28 @@ export default function ArticlePregatire() {
               </div>
               <ul className="ml-6 space-y-2 text-gray-700">
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-red-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-red-500" />
                   <span>
                     <strong>Fii prezent tot timpul</strong> &ndash; Coordonează echipa, verifică
                     încărcarea, răspunde la întrebări.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-red-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-red-500" />
                   <span>
                     <strong>Verifică starea obiectelor</strong> &ndash; Înainte și după mutare.
                     Fotografiază mobilierul valoros.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-red-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-red-500" />
                   <span>
                     <strong>Ai cash la tine</strong> &ndash; Pentru bacșiș (10-15% din cost) și
                     eventuale cheltuieli neprevăzute.
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-red-500" />
+                  <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-red-500" />
                   <span>
                     <strong>Predă cheia veche</strong> &ndash; Documentează starea locuinței
                     (poze/video) pentru recuperarea garanției.
@@ -545,7 +545,7 @@ export default function ArticlePregatire() {
           </section>
 
           {/* Tips for Efficiency */}
-          <section className="mb-16 rounded-lg bg-gradient-to-r from-emerald-50 to-blue-50 p-8">
+          <section className="mb-16 rounded-lg bg-linear-to-r from-emerald-50 to-blue-50 p-8">
             <h2 className="mb-6 text-3xl font-bold text-gray-800">
               Sfaturi pentru o Mutare Ultra-Eficientă
             </h2>

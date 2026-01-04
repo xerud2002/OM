@@ -119,7 +119,7 @@ export default function CompanyProfile() {
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-slate-900">
               Profil{" "}
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Companie
               </span>
             </h1>
@@ -133,7 +133,7 @@ export default function CompanyProfile() {
             className="rounded-2xl border border-gray-200 bg-white shadow-lg"
           >
             {/* Header Section with Avatar */}
-            <div className="border-b border-gray-200 bg-gradient-to-br from-emerald-500 to-sky-600 p-8 text-white">
+            <div className="border-b border-gray-200 bg-linear-to-br from-emerald-500 to-sky-600 p-8 text-white">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/20 text-3xl font-bold backdrop-blur-sm">

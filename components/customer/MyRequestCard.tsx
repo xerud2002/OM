@@ -61,15 +61,15 @@ const MyRequestCard = memo(function MyRequestCard({
   const getGradientClass = () => {
     switch (status) {
       case "active":
-        return "bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500";
+        return "bg-linear-to-r from-emerald-500 via-teal-500 to-sky-500";
       case "closed":
-        return "bg-gradient-to-r from-gray-400 to-gray-500";
+        return "bg-linear-to-r from-gray-400 to-gray-500";
       case "paused":
-        return "bg-gradient-to-r from-amber-500 to-orange-500";
+        return "bg-linear-to-r from-amber-500 to-orange-500";
       case "cancelled":
-        return "bg-gradient-to-r from-red-500 to-rose-500";
+        return "bg-linear-to-r from-red-500 to-rose-500";
       default:
-        return "bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500";
+        return "bg-linear-to-r from-emerald-500 via-teal-500 to-sky-500";
     }
   };
 
@@ -92,10 +92,10 @@ const MyRequestCard = memo(function MyRequestCard({
             {/* Route */}
             <div className="mb-4 flex items-center gap-3">
               <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${
-                status === "active" ? "bg-gradient-to-br from-emerald-500 to-teal-500" :
-                status === "closed" ? "bg-gradient-to-br from-gray-400 to-gray-500" :
-                status === "paused" ? "bg-gradient-to-br from-amber-500 to-orange-500" :
-                "bg-gradient-to-br from-red-500 to-rose-500"
+                status === "active" ? "bg-linear-to-br from-emerald-500 to-teal-500" :
+                status === "closed" ? "bg-linear-to-br from-gray-400 to-gray-500" :
+                status === "paused" ? "bg-linear-to-br from-amber-500 to-orange-500" :
+                "bg-linear-to-br from-red-500 to-rose-500"
               } shadow-lg ${
                 status === "active" ? "shadow-emerald-500/30" :
                 status === "closed" ? "shadow-gray-500/20" :
@@ -165,27 +165,27 @@ const MyRequestCard = memo(function MyRequestCard({
               request.serviceStorage) && (
               <div className="mt-4 flex flex-wrap gap-2">
                 {request.serviceMoving && (
-                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
+                  <span className="rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Transport
                   </span>
                 )}
                 {request.servicePacking && (
-                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
+                  <span className="rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Ambalare
                   </span>
                 )}
                 {request.serviceDisassembly && (
-                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
+                  <span className="rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Demontare
                   </span>
                 )}
                 {request.serviceCleanout && (
-                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
+                  <span className="rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Debarasare
                   </span>
                 )}
                 {request.serviceStorage && (
-                  <span className="rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
+                  <span className="rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-3 py-1 text-xs font-semibold text-purple-700 ring-1 ring-purple-200">
                     Depozitare
                   </span>
                 )}
@@ -196,7 +196,7 @@ const MyRequestCard = memo(function MyRequestCard({
           {/* Right side: Offers count + Menu */}
           <div className="flex shrink-0 flex-col items-end gap-3">
             {/* Offers badge */}
-            <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-500 via-teal-500 to-sky-500 shadow-xl shadow-emerald-500/30">
+            <div className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-linear-to-br from-emerald-500 via-teal-500 to-sky-500 shadow-xl shadow-emerald-500/30">
               <div className="absolute inset-0 bg-white/10" />
               <div className="text-center">
                 <div className="text-3xl font-bold text-white">{offersCount}</div>

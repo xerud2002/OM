@@ -19,7 +19,6 @@ import {
   Award,
   Quote,
   Star,
-  Zap,
   Phone,
 } from "lucide-react";
 
@@ -102,20 +101,20 @@ export default function AboutPage() {
   };
 
   return (
-    <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">
+    <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">
       {/* Hero Section - Enhanced with Parallax */}
       <section ref={heroRef} className="relative overflow-hidden pt-24 pb-20 sm:pt-32 sm:pb-32">
         {/* Animated Background Elements */}
         <motion.div className="pointer-events-none absolute inset-0" style={{ y: heroY }}>
-          <div className="absolute left-1/4 top-0 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-gradient-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
-          <div className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-y-1/2 rounded-full bg-gradient-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
-          <div className="absolute left-1/2 top-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
+          <div className="absolute top-0 left-1/4 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-linear-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
+          <div className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-y-1/2 rounded-full bg-linear-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
+          <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
         </motion.div>
 
         {/* Grid Pattern */}
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
-        <div className="container relative z-10 mx-auto px-4">
+        <div className="relative z-10 container mx-auto px-4">
           <motion.div
             style={{ opacity: heroOpacity }}
             initial={{ opacity: 0, y: 40 }}
@@ -127,7 +126,7 @@ export default function AboutPage() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm"
+              className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm"
             >
               <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
                 <Sparkles className="h-3.5 w-3.5 text-white" />
@@ -139,7 +138,7 @@ export default function AboutPage() {
               Facem mutările
               <br />
               <span className="relative">
-                <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                   simple și accesibile
                 </span>
                 <motion.svg
@@ -171,9 +170,9 @@ export default function AboutPage() {
             </h1>
 
             <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-slate-600 sm:text-xl">
-              Ofertemutare.ro s-a născut dintr-o frustrare comună: cât de greu era să găsești o firmă
-              de mutări de încredere la un preț corect. Am creat platforma pe care ne-am fi dorit-o
-              noi înșine.
+              Ofertemutare.ro s-a născut dintr-o frustrare comună: cât de greu era să găsești o
+              firmă de mutări de încredere la un preț corect. Am creat platforma pe care ne-am fi
+              dorit-o noi înșine.
             </p>
 
             {/* Quick CTA */}
@@ -185,7 +184,7 @@ export default function AboutPage() {
             >
               <Link
                 href="/customer/dashboard"
-                className="group inline-flex items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-8 py-4 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30"
+                className="group inline-flex items-center gap-2 rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 px-8 py-4 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30"
               >
                 Primește oferte gratuite
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
@@ -204,9 +203,9 @@ export default function AboutPage() {
       {/* Mission Section - Enhanced */}
       <section id="misiune" className="relative py-20 sm:py-32">
         {/* Background accent */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-50/30 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-50/30 to-transparent" />
 
-        <div className="container relative z-10 mx-auto px-4">
+        <div className="relative z-10 container mx-auto px-4">
           <div className="mx-auto max-w-6xl">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
               {/* Image - Enhanced */}
@@ -219,11 +218,11 @@ export default function AboutPage() {
               >
                 <div className="relative">
                   {/* Decorative frame */}
-                  <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
+                  <div className="absolute -inset-4 rounded-[2rem] bg-linear-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
 
-                  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-50 to-sky-50 p-6 sm:p-10">
+                  <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-emerald-50 to-sky-50 p-6 sm:p-10">
                     {/* Decorative orbs */}
-                    <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-emerald-200/40 blur-3xl" />
+                    <div className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-emerald-200/40 blur-3xl" />
                     <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-sky-200/40 blur-3xl" />
 
                     <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white shadow-2xl">
@@ -246,14 +245,14 @@ export default function AboutPage() {
                 transition={{ duration: 0.7, delay: 0.2 }}
                 className="order-1 lg:order-2"
               >
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-50 to-indigo-50 px-5 py-2.5 shadow-sm">
+                <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-sky-50 to-indigo-50 px-5 py-2.5 shadow-sm">
                   <Target className="h-4 w-4 text-sky-600" />
                   <span className="text-sm font-semibold text-sky-700">Misiunea noastră</span>
                 </div>
 
-                <h2 className="mb-6 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                <h2 className="mb-6 text-3xl leading-tight font-bold text-slate-900 sm:text-4xl lg:text-5xl">
                   Să eliminăm stresul din{" "}
-                  <span className="bg-gradient-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-sky-600 to-indigo-600 bg-clip-text text-transparent">
                     procesul de mutare
                   </span>
                 </h2>
@@ -306,12 +305,12 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-2xl sm:p-14"
+            className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-2xl sm:p-14"
           >
             {/* Background effects */}
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute -left-20 -top-20 h-60 w-60 rounded-full bg-emerald-500/10 blur-3xl" />
-              <div className="absolute -bottom-20 -right-20 h-60 w-60 rounded-full bg-sky-500/10 blur-3xl" />
+              <div className="absolute -top-20 -left-20 h-60 w-60 rounded-full bg-emerald-500/10 blur-3xl" />
+              <div className="absolute -right-20 -bottom-20 h-60 w-60 rounded-full bg-sky-500/10 blur-3xl" />
               <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
             </div>
 
@@ -337,7 +336,7 @@ export default function AboutPage() {
                   transition={{ delay: i * 0.1 }}
                   className="group text-center"
                 >
-                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 transition-transform group-hover:scale-110">
+                  <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500/20 to-teal-500/20 transition-transform group-hover:scale-110">
                     <stat.icon className="h-7 w-7 text-emerald-400" />
                   </div>
                   <p className="mb-1 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
@@ -366,7 +365,7 @@ export default function AboutPage() {
             </div>
 
             <h2 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl">
-              <span className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-1 text-white">
+              <span className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-4 py-1 text-white">
                 Povestea noastră
               </span>
             </h2>
@@ -379,7 +378,7 @@ export default function AboutPage() {
           <div className="mx-auto max-w-4xl">
             <div className="relative">
               {/* Timeline line */}
-              <div className="absolute left-4 top-0 hidden h-full w-0.5 bg-gradient-to-b from-emerald-500 via-teal-500 to-sky-500 sm:left-1/2 sm:block sm:-translate-x-1/2" />
+              <div className="absolute top-0 left-4 hidden h-full w-0.5 bg-linear-to-b from-emerald-500 via-teal-500 to-sky-500 sm:left-1/2 sm:block sm:-translate-x-1/2" />
 
               {timeline.map((item, i) => (
                 <motion.div
@@ -398,7 +397,7 @@ export default function AboutPage() {
                       whileHover={{ y: -5 }}
                       className="rounded-2xl border border-slate-200/50 bg-white p-6 shadow-lg transition-shadow hover:shadow-xl"
                     >
-                      <div className="mb-3 inline-flex rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-1">
+                      <div className="mb-3 inline-flex rounded-lg bg-linear-to-r from-emerald-500 to-teal-500 px-3 py-1">
                         <span className="text-sm font-bold text-white">{item.year}</span>
                       </div>
                       <h3 className="mb-2 text-xl font-bold text-slate-900">{item.title}</h3>
@@ -407,7 +406,7 @@ export default function AboutPage() {
                   </div>
 
                   {/* Timeline dot */}
-                  <div className="absolute left-4 top-6 hidden h-4 w-4 rounded-full border-4 border-white bg-emerald-500 shadow-lg sm:left-1/2 sm:block sm:-translate-x-1/2" />
+                  <div className="absolute top-6 left-4 hidden h-4 w-4 rounded-full border-4 border-white bg-emerald-500 shadow-lg sm:left-1/2 sm:block sm:-translate-x-1/2" />
                 </motion.div>
               ))}
             </div>
@@ -418,23 +417,23 @@ export default function AboutPage() {
       {/* Values Section - Enhanced */}
       <section className="relative py-20 sm:py-28">
         {/* Background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-slate-50 via-white to-slate-50" />
+        <div className="absolute inset-0 bg-linear-to-b from-slate-50 via-white to-slate-50" />
 
-        <div className="container relative z-10 mx-auto px-4">
+        <div className="relative z-10 container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="mx-auto mb-16 max-w-3xl text-center"
           >
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50 px-5 py-2.5 shadow-sm">
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-purple-200 bg-linear-to-r from-purple-50 to-pink-50 px-5 py-2.5 shadow-sm">
               <Heart className="h-4 w-4 text-purple-600" />
               <span className="text-sm font-semibold text-purple-700">Valorile noastre</span>
             </div>
 
             <h2 className="mb-5 text-3xl font-bold text-slate-900 sm:text-4xl lg:text-5xl">
               Principiile care{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 ne ghidează
               </span>
             </h2>
@@ -460,12 +459,12 @@ export default function AboutPage() {
                 >
                   {/* Hover gradient overlay */}
                   <div
-                    className={`absolute inset-0 bg-gradient-to-br ${value.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-5`}
+                    className={`absolute inset-0 bg-linear-to-br ${value.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-5`}
                   />
 
                   {/* Icon */}
                   <div
-                    className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${value.gradient} shadow-lg transition-transform group-hover:scale-110`}
+                    className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br ${value.gradient} shadow-lg transition-transform group-hover:scale-110`}
                   >
                     <value.icon className="h-8 w-8 text-white" strokeWidth={1.5} />
                   </div>
@@ -476,7 +475,7 @@ export default function AboutPage() {
 
                   {/* Decorative corner */}
                   <div
-                    className={`absolute -bottom-8 -right-8 h-24 w-24 rounded-full bg-gradient-to-br ${value.gradient} opacity-10 blur-2xl transition-opacity group-hover:opacity-20`}
+                    className={`absolute -right-8 -bottom-8 h-24 w-24 rounded-full bg-linear-to-br ${value.gradient} opacity-10 blur-2xl transition-opacity group-hover:opacity-20`}
                   />
                 </motion.div>
               </motion.div>
@@ -492,14 +491,14 @@ export default function AboutPage() {
             initial={{ opacity: 0, scale: 0.95 }}
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
-            className="relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-emerald-600 via-teal-600 to-sky-600 p-8 shadow-2xl sm:p-14"
+            className="relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-linear-to-br from-emerald-600 via-teal-600 to-sky-600 p-8 shadow-2xl sm:p-14"
           >
             {/* Background pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:30px_30px]" />
 
             {/* Decorative elements */}
-            <div className="absolute -left-10 -top-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
-            <div className="absolute -bottom-10 -right-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute -right-10 -bottom-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
 
             <div className="relative text-center">
               {/* Quote icon */}
@@ -508,7 +507,7 @@ export default function AboutPage() {
               </div>
 
               {/* Quote */}
-              <blockquote className="mb-8 text-xl font-medium leading-relaxed text-white sm:text-2xl lg:text-3xl">
+              <blockquote className="mb-8 text-xl leading-relaxed font-medium text-white sm:text-2xl lg:text-3xl">
                 &ldquo;{testimonial.quote}&rdquo;
               </blockquote>
 
@@ -532,9 +531,9 @@ export default function AboutPage() {
       {/* How We Help Section - Enhanced */}
       <section className="relative py-20 sm:py-28">
         {/* Decorative background */}
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-amber-50/20 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-b from-transparent via-amber-50/20 to-transparent" />
 
-        <div className="container relative z-10 mx-auto px-4">
+        <div className="relative z-10 container mx-auto px-4">
           <div className="mx-auto max-w-6xl">
             <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-24">
               {/* Content - Enhanced */}
@@ -543,14 +542,14 @@ export default function AboutPage() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
               >
-                <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-2.5 shadow-sm">
+                <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-amber-50 to-orange-50 px-5 py-2.5 shadow-sm">
                   <Handshake className="h-4 w-4 text-amber-600" />
                   <span className="text-sm font-semibold text-amber-700">Cum te ajutăm</span>
                 </div>
 
-                <h2 className="mb-8 text-3xl font-bold leading-tight text-slate-900 sm:text-4xl lg:text-5xl">
+                <h2 className="mb-8 text-3xl leading-tight font-bold text-slate-900 sm:text-4xl lg:text-5xl">
                   Un proces simplu,{" "}
-                  <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
                     rezultate excelente
                   </span>
                 </h2>
@@ -586,7 +585,7 @@ export default function AboutPage() {
                       className="group flex gap-5 rounded-2xl border border-slate-100 bg-white p-5 shadow-md transition-all hover:shadow-xl"
                     >
                       <div
-                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} shadow-lg transition-transform group-hover:scale-110`}
+                        className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ${item.gradient} shadow-lg transition-transform group-hover:scale-110`}
                       >
                         <item.icon className="h-7 w-7 text-white" />
                       </div>
@@ -609,11 +608,11 @@ export default function AboutPage() {
               >
                 <div className="relative">
                   {/* Decorative frame */}
-                  <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-amber-200/50 via-orange-100/30 to-rose-200/50 blur-2xl" />
+                  <div className="absolute -inset-4 rounded-[2rem] bg-linear-to-br from-amber-200/50 via-orange-100/30 to-rose-200/50 blur-2xl" />
 
-                  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-amber-50 to-orange-50 p-6 sm:p-10">
+                  <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-amber-50 to-orange-50 p-6 sm:p-10">
                     {/* Decorative orbs */}
-                    <div className="absolute -right-12 -top-12 h-48 w-48 rounded-full bg-amber-200/40 blur-3xl" />
+                    <div className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-amber-200/40 blur-3xl" />
                     <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-orange-200/40 blur-3xl" />
 
                     <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white shadow-2xl">
@@ -635,17 +634,14 @@ export default function AboutPage() {
                     >
                       <div className="rounded-2xl border border-amber-100 bg-white p-4 shadow-xl sm:p-5">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 shadow-lg">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-amber-500 to-orange-600 shadow-lg">
                             <Award className="h-6 w-6 text-white" />
                           </div>
                           <div>
                             <p className="text-xl font-bold text-slate-900">Top Rating</p>
                             <div className="flex items-center gap-0.5">
                               {[...Array(5)].map((_, i) => (
-                                <Star
-                                  key={i}
-                                  className="h-4 w-4 fill-amber-400 text-amber-400"
-                                />
+                                <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
                               ))}
                             </div>
                           </div>
@@ -667,11 +663,11 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] border border-emerald-200/50 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-10 text-center shadow-2xl sm:p-16"
+            className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] border border-emerald-200/50 bg-linear-to-br from-emerald-50 via-white to-sky-50 p-10 text-center shadow-2xl sm:p-16"
           >
             {/* Decorative elements */}
-            <div className="absolute -left-20 -top-20 h-60 w-60 rounded-full bg-emerald-200/30 blur-3xl" />
-            <div className="absolute -bottom-20 -right-20 h-60 w-60 rounded-full bg-sky-200/30 blur-3xl" />
+            <div className="absolute -top-20 -left-20 h-60 w-60 rounded-full bg-emerald-200/30 blur-3xl" />
+            <div className="absolute -right-20 -bottom-20 h-60 w-60 rounded-full bg-sky-200/30 blur-3xl" />
             <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" />
 
             <div className="relative">
@@ -691,7 +687,7 @@ export default function AboutPage() {
               <h2 className="mb-5 text-3xl font-bold text-slate-900 sm:text-4xl lg:text-5xl">
                 Gata să economisești la
                 <br className="hidden sm:block" />
-                <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                   următoarea mutare?
                 </span>
               </h2>
@@ -705,7 +701,7 @@ export default function AboutPage() {
                 <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
                   <Link
                     href="/customer/dashboard"
-                    className="group inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-10 py-5 text-lg font-semibold text-white shadow-xl shadow-emerald-500/25 transition-all hover:shadow-2xl hover:shadow-emerald-500/30"
+                    className="group inline-flex items-center gap-3 rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 px-10 py-5 text-lg font-semibold text-white shadow-xl shadow-emerald-500/25 transition-all hover:shadow-2xl hover:shadow-emerald-500/30"
                   >
                     Primește oferte gratuite
                     <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

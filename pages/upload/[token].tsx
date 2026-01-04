@@ -288,7 +288,7 @@ export default function UploadMediaPage() {
   return (
     <LayoutWrapper>
       <section className="mx-auto max-w-4xl px-4 py-10">
-        <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-blue-50/30 p-8 shadow-lg">
+        <div className="rounded-2xl border border-gray-200 bg-linear-to-br from-white to-blue-50/30 p-8 shadow-lg">
           <div className="mb-6 flex items-center gap-3 border-b border-blue-100 pb-4">
             <Upload className="h-8 w-8 text-blue-600" />
             <div>
@@ -344,7 +344,7 @@ export default function UploadMediaPage() {
                       <div className="flex items-center gap-3 p-3">
                         {/* Thumbnail preview */}
                         {fileWithProgress.preview && (
-                          <div className="h-16 w-16 flex-shrink-0 overflow-hidden rounded border">
+                          <div className="h-16 w-16 shrink-0 overflow-hidden rounded border">
                             {fileWithProgress.file.type.startsWith("image/") ? (
                               // eslint-disable-next-line @next/next/no-img-element
                               <img
@@ -414,7 +414,7 @@ export default function UploadMediaPage() {
               <button
                 onClick={handleUpload}
                 disabled={uploading || files.length === 0}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:from-blue-700 hover:to-blue-800 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-lg bg-linear-to-r from-blue-600 to-blue-700 px-6 py-3 text-base font-semibold text-white shadow-lg shadow-blue-500/30 transition hover:from-blue-700 hover:to-blue-800 hover:shadow-xl disabled:cursor-not-allowed disabled:opacity-60"
               >
                 {uploading ? (
                   <>

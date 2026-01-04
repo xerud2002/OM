@@ -49,7 +49,7 @@ export default function Footer() {
         {/* Logo & about */}
         <motion.div variants={fadeUp}>
           <div className="mb-5 flex items-center">
-            <div className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-xl font-bold text-transparent">
+            <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-xl font-bold text-transparent">
               <span className="tracking-tight">Oferte</span>
               <span className="text-emerald-400">mutare</span>
               <span className="align-top text-xs text-emerald-500">.ro</span>
@@ -94,7 +94,7 @@ export default function Footer() {
                   className="group relative inline-block transition-all duration-300 hover:text-emerald-600"
                 >
                   {label}
-                  <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-emerald-500 to-sky-500 transition-all duration-300 group-hover:w-full" />
+                  <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-linear-to-r from-emerald-500 to-sky-500 transition-all duration-300 group-hover:w-full" />
                 </Link>
               </li>
             ))}
@@ -150,7 +150,7 @@ function FooterColumn({
               className="group relative inline-block transition-all duration-300 hover:text-emerald-600"
             >
               {label}
-              <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-gradient-to-r from-emerald-500 to-sky-500 transition-all duration-300 group-hover:w-full" />
+              <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-linear-to-r from-emerald-500 to-sky-500 transition-all duration-300 group-hover:w-full" />
             </Link>
           </li>
         ))}

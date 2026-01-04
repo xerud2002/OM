@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
@@ -127,7 +128,7 @@ export default function CustomerAuthPage() {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.6 }}
-            className="relative hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-12 lg:flex lg:flex-col lg:justify-between"
+            className="relative hidden bg-linear-to-br from-blue-600 via-indigo-600 to-purple-600 p-12 lg:flex lg:flex-col lg:justify-between"
           >
             {/* Decorative circles */}
             <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
@@ -252,7 +253,7 @@ export default function CustomerAuthPage() {
                 >
                   Email firmă
                 </label>
-                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-blue-100 focus-within:ring-blue-50 hover:border-gray-300 hover:shadow-sm">
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-linear-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-blue-100 focus-within:ring-blue-50 hover:border-gray-300 hover:shadow-sm">
                   <motion.div
                     animate={{
                       scale: email ? 1.1 : 1,
@@ -289,7 +290,7 @@ export default function CustomerAuthPage() {
                 >
                   Parolă
                 </label>
-                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-blue-100 focus-within:ring-blue-50 hover:border-gray-300 hover:shadow-sm">
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-linear-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-blue-100 focus-within:ring-blue-50 hover:border-gray-300 hover:shadow-sm">
                   <motion.div
                     animate={{
                       scale: password ? 1.1 : 1,
@@ -319,7 +320,7 @@ export default function CustomerAuthPage() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={loading}
-                className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
+                className="group relative w-full overflow-hidden rounded-xl bg-linear-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
                   {loading ? (
@@ -341,7 +342,7 @@ export default function CustomerAuthPage() {
                     </>
                   )}
                 </span>
-                <div className="absolute inset-0 -z-0 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-0 transition-opacity group-hover:opacity-100" />
+                <div className="absolute inset-0 -z-0 bg-linear-to-r from-blue-700 via-indigo-700 to-purple-700 opacity-0 transition-opacity group-hover:opacity-100" />
               </motion.button>
 
               {isLogin && (
@@ -407,9 +408,9 @@ export default function CustomerAuthPage() {
             {/* Customer auth link */}
             <div className="mt-4 text-center text-sm text-gray-500">
               Ești client?{" "}
-              <a href="/customer/auth" className="font-medium text-emerald-600 hover:underline">
+              <Link href="/customer/auth" className="font-medium text-emerald-600 hover:underline">
                 Click aici
-              </a>
+              </Link>
             </div>
           </motion.div>
         </div>

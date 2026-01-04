@@ -147,12 +147,12 @@ export default function FAQPage() {
         <div className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
+            <div className="mb-4 inline-flex rounded-full bg-linear-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
               <HelpCircle className="h-8 w-8 text-emerald-600" />
             </div>
             <h1 className="mb-4 text-4xl font-bold text-slate-900">
               Întrebări{" "}
-              <span className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-1 text-white">
+              <span className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-4 py-1 text-white">
                 Frecvente
               </span>
             </h1>
@@ -188,7 +188,7 @@ export default function FAQPage() {
                     >
                       <summary className="flex cursor-pointer items-start justify-between gap-4 font-semibold text-gray-800 hover:text-emerald-600">
                         <span className="flex-1">{faq.q}</span>
-                        <Check className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500 opacity-0 transition-opacity group-open:opacity-100" />
+                        <Check className="mt-1 h-5 w-5 shrink-0 text-emerald-500 opacity-0 transition-opacity group-open:opacity-100" />
                       </summary>
                       <p className="mt-4 leading-relaxed text-gray-600">{faq.a}</p>
                     </details>
@@ -199,7 +199,7 @@ export default function FAQPage() {
           </div>
 
           {/* CTA */}
-          <div className="mt-16 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
+          <div className="mt-16 rounded-lg bg-linear-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
             <h3 className="mb-4 text-2xl font-bold">Gata să Începi?</h3>
             <p className="mb-6 text-lg">
               Solicită oferte gratuite de la cele mai bune firme de mutări din România

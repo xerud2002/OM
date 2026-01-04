@@ -38,8 +38,8 @@ export default function Steps() {
     <section id="how-it-works" className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-32">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/2 top-0 h-px w-[90%] -translate-x-1/2 bg-gradient-to-r from-transparent via-emerald-200 to-transparent sm:w-[80%]" />
-        <div className="absolute left-1/2 bottom-0 h-px w-[90%] -translate-x-1/2 bg-gradient-to-r from-transparent via-emerald-200 to-transparent sm:w-[80%]" />
+        <div className="absolute left-1/2 top-0 h-px w-[90%] -translate-x-1/2 bg-linear-to-r from-transparent via-emerald-200 to-transparent sm:w-[80%]" />
+        <div className="absolute left-1/2 bottom-0 h-px w-[90%] -translate-x-1/2 bg-linear-to-r from-transparent via-emerald-200 to-transparent sm:w-[80%]" />
       </div>
 
       <div className="container mx-auto px-4">
@@ -57,7 +57,7 @@ export default function Steps() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Cum{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               funcționează?
             </span>
           </h2>
@@ -69,7 +69,7 @@ export default function Steps() {
         {/* Steps Grid */}
         <div className="relative mx-auto max-w-5xl">
           {/* Connecting Line (Desktop) */}
-          <div className="absolute left-0 right-0 top-[80px] z-0 hidden h-0.5 bg-gradient-to-r from-blue-200 via-emerald-200 to-purple-200 lg:top-[100px] lg:block" />
+          <div className="absolute left-0 right-0 top-[80px] z-0 hidden h-0.5 bg-linear-to-r from-blue-200 via-emerald-200 to-purple-200 lg:top-[100px] lg:block" />
 
           <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-3 md:gap-6">
             {steps.map((step, i) => (
@@ -87,7 +87,7 @@ export default function Steps() {
                     {/* Background circle */}
                     <motion.div 
                       whileHover={{ scale: 1.05, rotate: 3 }}
-                      className={`flex h-[80px] w-[80px] items-center justify-center rounded-2xl bg-gradient-to-br ${step.gradient} shadow-xl transition-all duration-300 sm:h-[100px] sm:w-[100px] sm:rounded-3xl lg:h-[120px] lg:w-[120px]`}
+                      className={`flex h-[80px] w-[80px] items-center justify-center rounded-2xl bg-linear-to-br ${step.gradient} shadow-xl transition-all duration-300 sm:h-[100px] sm:w-[100px] sm:rounded-3xl lg:h-[120px] lg:w-[120px]`}
                     >
                       <step.icon className="h-8 w-8 text-white sm:h-10 sm:w-10 lg:h-12 lg:w-12" strokeWidth={1.5} />
                     </motion.div>
@@ -126,7 +126,7 @@ export default function Steps() {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mx-auto mt-10 max-w-lg text-center sm:mt-16"
         >
-          <div className="rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-sky-50 px-5 py-4 sm:rounded-2xl sm:px-8 sm:py-6">
+          <div className="rounded-xl border border-emerald-100 bg-linear-to-br from-emerald-50 to-sky-50 px-5 py-4 sm:rounded-2xl sm:px-8 sm:py-6">
             <p className="text-xs text-slate-600 sm:text-sm">
               <span className="font-semibold text-emerald-700">💡 Știai că...</span> poți compara <span className="font-bold text-emerald-700">până la 5 oferte</span> și să alegi cea mai bună variantă pentru tine?
             </p>

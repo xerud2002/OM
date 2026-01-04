@@ -1,15 +1,15 @@
 import LayoutWrapper from "@/components/layout/Layout";
-import { Mail, MessageCircle, Phone } from "lucide-react";
+import { Mail, MessageCircle } from "lucide-react";
 
 export default function ContactPage() {
   return (
     <LayoutWrapper>
       <main className="flex min-h-screen flex-col items-center justify-center p-6 text-center">
-        <div className="mb-6 inline-flex rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 p-4 shadow-sm">
+        <div className="mb-6 inline-flex rounded-full bg-linear-to-r from-emerald-100 to-teal-100 p-4 shadow-sm">
           <MessageCircle className="h-8 w-8 text-emerald-600" />
         </div>
         <h1 className="mb-6 text-3xl font-bold sm:text-4xl">
-          <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+          <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
             Contactează-ne
           </span>
         </h1>

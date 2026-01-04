@@ -23,7 +23,7 @@ export default function ArticleImpachetare() {
           <header className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               Ghid Complet de Împachetare pentru{" "}
-              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 Mutare
               </span>
             </h1>
@@ -61,39 +61,39 @@ export default function ArticleImpachetare() {
             </p>
             <ul className="mb-6 space-y-2 text-gray-700">
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 flex-shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Cutii de carton rezistente</strong> - diverse dimensiuni (mici pentru
                   cărți, mari pentru haine)
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 flex-shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Folie cu bule (bubble wrap)</strong> - protecție excelentă pentru obiecte
                   fragile
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 flex-shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Hârtie de ziar sau ambalare</strong> - pentru umplerea spațiilor goale
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 flex-shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Bandă adezivă rezistentă</strong> - minimum 2 role pentru siguranță
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 flex-shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Markere permanente</strong> - pentru etichetare clară și organizare
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 flex-shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Folie stretch</strong> - pentru protejarea mobilierului și gruparea
                   obiectelor
@@ -241,7 +241,7 @@ export default function ArticleImpachetare() {
           </div>
 
           {/* CTA */}
-          <div className="mt-12 rounded-lg bg-gradient-to-r from-emerald-500 to-sky-500 p-8 text-center text-white">
+          <div className="mt-12 rounded-lg bg-linear-to-r from-emerald-500 to-sky-500 p-8 text-center text-white">
             <h3 className="mb-4 text-2xl font-bold">Primește Oferte pentru Mutarea Ta!</h3>
             <p className="mb-6">
               Compară prețuri de la firme verificate. Servicii complete: transport, împachetare și

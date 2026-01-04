@@ -48,7 +48,7 @@ export default function ArticleTips() {
           <header className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               50+ Sfaturi Expert Pentru{" "}
-              <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
                 Mutări în România
               </span>
             </h1>
@@ -59,7 +59,7 @@ export default function ArticleTips() {
           </header>
 
           {/* Stats Banner */}
-          <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-6 text-white">
+          <section className="mb-12 rounded-lg bg-linear-to-r from-emerald-600 to-blue-600 p-6 text-white">
             <div className="grid gap-6 md:grid-cols-3">
               <div className="text-center">
                 <div className="mb-2 text-4xl font-bold">40%</div>
@@ -144,28 +144,28 @@ export default function ArticleTips() {
                     <p className="mb-2 font-semibold">Strategia 4 categorii:</p>
                     <ul className="space-y-2">
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                         <span>
                           <strong>Păstrez</strong> &ndash; lucruri esențiale folosite în ultimele 6
                           luni
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                         <span>
                           <strong>Vând</strong> &ndash; obiecte valoroase neutilizate (Olx, Facebook
                           Marketplace, second-hand)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                         <span>
                           <strong>Donez</strong> &ndash; haine, mobilă în stare bună (Caritas,
                           asociații sociale)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                         <span>
                           <strong>Arunc</strong> &ndash; obiecte stricate sau inutile (centru
                           colectare, Rebu)
@@ -214,35 +214,35 @@ export default function ArticleTips() {
                 </h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                     <span>
                       <strong>Împachetează singur</strong> &ndash; economie 200-500 lei (vs.
                       serviciu de ambalare complet)
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                     <span>
                       <strong>Cere cutii gratuite</strong> &ndash; magazine (Kaufland, Lidl),
                       farmacii, librării le dau gratis
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                     <span>
                       <strong>Demontează mobilierul singur</strong> &ndash; economie 150-300 lei
                       (dacă te pricepi!)
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                     <span>
                       <strong>Mută singur lucrurile mici</strong> (haine, cărți, obiecte decorative)
                       cu mașina personală înainte de ziua oficială
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-green-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-600" />
                     <span>
                       <strong>Negociază prețul</strong> &ndash; firmele sunt dispuse să reducă 5-10%
                       dacă ceri politicos și ai oferte competitive
@@ -429,45 +429,45 @@ export default function ArticleTips() {
                     <p className="mb-2 font-semibold">Ce TREBUIE să conțină contractul:</p>
                     <ul className="space-y-2">
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                         <span>
                           <strong>Prețul final exact</strong> (nu &ldquo;estimativ&rdquo;) și ce
                           include (transport, echipă, asigurare)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                         <span>
                           <strong>Data și ora exactă</strong> a mutării
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                         <span>
                           <strong>Adresele complete</strong> (vechie și nouă, inclusiv etaj, acces)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                         <span>
                           <strong>Lista serviciilor</strong> (demontare, ambalare, urcare scări,
                           etc.)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                         <span>
                           <strong>Detalii asigurare</strong> (acoperire, procedura de daune)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                         <span>
                           <strong>Condiții de anulare</strong> (termene, penalități)
                         </span>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                        <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                         <span>
                           <strong>Date firmă</strong> (CUI, nr. înregistrare, contact)
                         </span>
@@ -710,7 +710,7 @@ export default function ArticleTips() {
           </section>
 
           {/* Pro Tips from Experts */}
-          <section className="mb-16 rounded-lg bg-gradient-to-r from-amber-50 to-orange-50 p-8">
+          <section className="mb-16 rounded-lg bg-linear-to-r from-amber-50 to-orange-50 p-8">
             <div className="mb-6 flex items-center gap-3">
               <Star className="h-8 w-8 text-amber-600" />
               <h2 className="text-3xl font-bold text-gray-800">
@@ -839,7 +839,7 @@ export default function ArticleTips() {
           </section>
 
           {/* CTA Section */}
-          <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
+          <section className="mb-12 rounded-lg bg-linear-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
             <div className="mb-4 flex justify-center">
               <MessageCircle className="h-12 w-12" />
             </div>

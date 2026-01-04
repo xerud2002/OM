@@ -44,7 +44,7 @@ export default function ArticleSurvey() {
           <header className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               Tipuri de Survey Pentru Mutări:{" "}
-              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Ce Să Alegi?
               </span>
             </h1>
@@ -57,7 +57,7 @@ export default function ArticleSurvey() {
           {/* Why Survey Matters */}
           <section className="mb-12 rounded-lg bg-blue-50 p-6">
             <div className="flex items-start gap-4">
-              <Shield className="mt-1 h-8 w-8 flex-shrink-0 text-blue-600" />
+              <Shield className="mt-1 h-8 w-8 shrink-0 text-blue-600" />
               <div>
                 <h2 className="mb-2 text-xl font-semibold text-blue-800">
                   De ce este important survey-ul?
@@ -189,27 +189,27 @@ export default function ArticleSurvey() {
                 <p className="mb-2 font-semibold text-gray-800">Ce verifică surveyorul:</p>
                 <ul className="grid gap-2 md:grid-cols-2">
                   <li className="flex items-start gap-2 text-sm">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     Număr și dimensiuni mobilier
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     Acces (lift, lățime scări, intrare)
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     Obiecte fragile/valoroase
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     Necesarul de demontare
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     Distanța parcării de intrare
                   </li>
                   <li className="flex items-start gap-2 text-sm">
-                    <CheckCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                     Necesarul de ambalaje speciale
                   </li>
                 </ul>
@@ -398,7 +398,7 @@ export default function ArticleSurvey() {
 
             <div className="mt-6 rounded-lg border-l-4 border-yellow-500 bg-yellow-50 p-4">
               <div className="flex gap-3">
-                <AlertCircle className="h-6 w-6 flex-shrink-0 text-yellow-600" />
+                <AlertCircle className="h-6 w-6 shrink-0 text-yellow-600" />
                 <div>
                   <p className="font-semibold text-yellow-800">
                     Sfat important pentru survey video:
@@ -513,7 +513,7 @@ export default function ArticleSurvey() {
 
             <div className="mt-6 rounded-lg border-l-4 border-red-500 bg-red-50 p-4">
               <div className="flex gap-3">
-                <AlertCircle className="h-6 w-6 flex-shrink-0 text-red-600" />
+                <AlertCircle className="h-6 w-6 shrink-0 text-red-600" />
                 <div>
                   <p className="font-semibold text-red-800">⚠️ ATENȚIE:</p>
                   <p className="mt-1 text-sm text-gray-700">
@@ -540,35 +540,35 @@ export default function ArticleSurvey() {
                 </h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-600" />
                     <span>
                       <strong>Sortează și aruncă lucrurile</strong> pe care nu le mai vrei &ndash;
                       cu cât mai puține obiecte, cu atât mai ieftin.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-600" />
                     <span>
                       <strong>Grupează obiectele similare</strong> într-o cameră pentru evaluare mai
                       ușoară (ex: toate cărțile, toate hainele).
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-600" />
                     <span>
                       <strong>Măsoară mobilierul mare</strong> și verifica dimensiunile
                       ușilor/liftului la noua locuință.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-600" />
                     <span>
                       <strong>Fă o listă cu obiecte fragile</strong> (tablouri, oglinzi,
                       electronice) &ndash; surveyorul trebuie să știe.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-600" />
                     <span>
                       <strong>Verifică accesul</strong>: este nevoie de autorizație pentru
                       parcare/intrare mașină mare?
@@ -584,28 +584,28 @@ export default function ArticleSurvey() {
                 </h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-blue-600" />
                     <span>
                       <strong>Fii sincer despre volume</strong> &ndash; arată TOT ce trebuie mutat,
                       inclusiv debara, balconul, podul.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-blue-600" />
                     <span>
                       <strong>Pune întrebări</strong>: despre asigurare, ambalare, servicii extra,
                       termene de plată.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-blue-600" />
                     <span>
                       <strong>Cere clarificări</strong> despre costuri adiționale (taxe parcare,
                       etaje fără lift, transport la gunoi).
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-blue-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-blue-600" />
                     <span>
                       <strong>Solicită ofertă scrisă</strong> cu inventar complet și prețul final
                       garantat.
@@ -621,28 +621,28 @@ export default function ArticleSurvey() {
                 </h3>
                 <ul className="space-y-2 text-gray-700">
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                     <span>
                       <strong>Compară cel puțin 3 oferte</strong> &ndash; pe OferteMutare.ro le
                       primești gratuit în 24h.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                     <span>
                       <strong>Verifică ce include prețul</strong>: transport, asigurare, echipă,
                       demontare, ambalaje?
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                     <span>
                       <strong>Citește recenziile firmei</strong> &ndash; prețul cel mai mic nu
                       înseamnă întotdeauna cea mai bună alegere.
                     </span>
                   </li>
                   <li className="flex items-start gap-2">
-                    <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-purple-600" />
+                    <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-purple-600" />
                     <span>
                       <strong>Semnează contract clar</strong> cu prețul final, data, și
                       responsabilități.
@@ -716,7 +716,7 @@ export default function ArticleSurvey() {
           </section>
 
           {/* CTA Section */}
-          <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
+          <section className="mb-12 rounded-lg bg-linear-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Primește 3-5 Oferte Cu Survey Gratuit</h2>
             <p className="mb-6 text-lg">
               Completează un singur formular și primește oferte personalizate de la cele mai bune

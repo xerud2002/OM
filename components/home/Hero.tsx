@@ -26,7 +26,7 @@ export default function Hero() {
   };
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-32 lg:pb-24">
+    <section className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-32 lg:pb-24">
       {/* Animated Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-[300px] w-[300px] rounded-full bg-emerald-200/40 blur-[80px] sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px] lg:blur-[100px]" />
@@ -52,7 +52,7 @@ export default function Hero() {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5"
+              className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5"
             >
               <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
@@ -68,7 +68,7 @@ export default function Hero() {
               Mutări simple,
               <br />
               <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                   prețuri corecte.
                 </span>
                 <motion.svg
@@ -111,7 +111,7 @@ export default function Hero() {
                 onClick={handleCTA}
                 whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
-                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25 transition-all hover:shadow-2xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
+                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25 transition-all hover:shadow-2xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
               >
                 <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                 Obține oferte gratuite
@@ -158,7 +158,7 @@ export default function Hero() {
             <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
               {/* Main Card */}
               <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
-                <div className="relative aspect-[4/3] bg-gradient-to-br from-slate-50 to-emerald-50/50">
+                <div className="relative aspect-[4/3] bg-linear-to-br from-slate-50 to-emerald-50/50">
                   <Image 
                     src="/pics/index.png" 
                     alt="Platforma Oferte Mutare" 
@@ -174,7 +174,7 @@ export default function Hero() {
                 initial={{ scale: 0, rotate: -12 }}
                 animate={{ scale: 1, rotate: -6 }}
                 transition={{ delay: 1, type: "spring", stiffness: 200 }}
-                className="absolute -top-2 -right-2 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 px-2.5 py-2 shadow-lg sm:-top-4 sm:-right-4 sm:rounded-2xl sm:px-4 sm:py-3"
+                className="absolute -top-2 -right-2 rounded-xl border border-amber-200 bg-linear-to-br from-amber-50 to-orange-50 px-2.5 py-2 shadow-lg sm:-top-4 sm:-right-4 sm:rounded-2xl sm:px-4 sm:py-3"
               >
                 <div className="flex items-center gap-1.5 sm:gap-2">
                   <Star className="h-4 w-4 fill-amber-400 text-amber-400 sm:h-5 sm:w-5" />

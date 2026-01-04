@@ -120,7 +120,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-4 shadow-lg sm:p-6">
+    <div className="rounded-2xl border border-gray-200 bg-linear-to-br from-white to-emerald-50/30 p-4 shadow-lg sm:p-6">
       <div className="mb-6 flex items-center gap-3 border-b border-emerald-100 pb-4">
         <svg
           className="h-6 w-6 text-emerald-600"
@@ -140,9 +140,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
       <form onSubmit={onSubmit} className="space-y-6">
         {/* Pickup Location */}
-        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+        <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600 shadow-lg">
               <svg
                 className="h-5 w-5 text-white"
                 fill="none"
@@ -378,9 +378,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Destination */}
-        <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-6">
+        <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-sky-500 to-sky-600 shadow-lg">
               <svg
                 className="h-5 w-5 text-white"
                 fill="none"
@@ -603,9 +603,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Services */}
-        <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6">
+        <div className="rounded-xl border border-purple-200 bg-linear-to-br from-purple-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-purple-500 to-purple-600 shadow-lg">
               <svg
                 className="h-5 w-5 text-white"
                 fill="none"
@@ -629,7 +629,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {/* Mutare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceMoving}
@@ -672,7 +672,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Împachetare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.servicePacking}
@@ -715,7 +715,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Demontare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceDisassembly}
@@ -759,7 +759,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Debarasare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceCleanout}
@@ -802,7 +802,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Depozitare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceStorage}
@@ -859,9 +859,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Survey */}
-        <div className="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6">
+        <div className="rounded-xl border border-amber-200 bg-linear-to-br from-amber-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-500 to-amber-600 shadow-lg">
               <svg
                 className="h-5 w-5 text-white"
                 fill="none"
@@ -891,7 +891,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* In-person */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
@@ -943,7 +943,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Video */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
@@ -993,7 +993,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Quick estimate */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
@@ -1050,7 +1050,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         {/* Media (cards) */}
         <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-500 to-blue-600 shadow-lg">
               <svg
                 className="h-5 w-5 text-white"
                 fill="none"
@@ -1073,7 +1073,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           <div className="space-y-5">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {/* Upload now */}
-              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"
@@ -1120,7 +1120,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
               </label>
               {/* Upload later */}
-              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"
@@ -1168,7 +1168,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </label>
 
               {/* No media */}
-              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-gradient-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"
@@ -1302,7 +1302,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               <div className="rounded-lg border border-blue-200 bg-blue-50 p-4">
                 <div className="flex items-start gap-3">
                   <svg
-                    className="mt-0.5 h-5 w-5 flex-shrink-0 text-blue-600"
+                    className="mt-0.5 h-5 w-5 shrink-0 text-blue-600"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -1328,9 +1328,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Date & Contact */}
-        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+        <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-emerald-600 shadow-lg">
               <svg
                 className="h-5 w-5 text-white"
                 fill="none"
@@ -1381,7 +1381,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         className={`rounded-md px-4 py-2 font-medium transition-all duration-200 ${
                           (form as any).moveDateMode === key ||
                           (!(form as any).moveDateMode && key === "exact")
-                            ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md"
+                            ? "bg-linear-to-r from-emerald-600 to-emerald-700 text-white shadow-md"
                             : "text-gray-700 hover:bg-emerald-50"
                         }`}
                       >
@@ -1394,7 +1394,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
               {/* Inputs per mode */}
               {((form as any).moveDateMode ?? "exact") === "exact" && (
-                <div className="mx-auto flex max-w-md justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                <div className="mx-auto flex max-w-md justify-center rounded-2xl border-2 border-emerald-300 bg-linear-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                   <DayPicker
                     mode="single"
                     selected={parseYMD(form.moveDate)}
@@ -1445,7 +1445,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
                   <div className="flex items-start gap-3">
                     <svg
-                      className="mt-0.5 h-5 w-5 flex-shrink-0 text-emerald-600"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -1467,7 +1467,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
               {((form as any).moveDateMode ?? "exact") === "flexible" && (
                 <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
-                  <div className="flex justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                  <div className="flex justify-center rounded-2xl border-2 border-emerald-300 bg-linear-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
                     <DayPicker
                       mode="single"
                       selected={parseYMD(form.moveDate)}
@@ -1671,7 +1671,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl hover:shadow-emerald-500/40"
+            className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-emerald-600 to-emerald-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl hover:shadow-emerald-500/40"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
