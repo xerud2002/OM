@@ -1,15 +1,32 @@
 "use client";
 
 import Head from "next/head";
+import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
-import ClientAccount from "@/components/home/ClientAccount";
-import Services from "@/components/home/Services";
-import Articles from "@/components/home/Articles";
-import PartnerSection from "@/components/home/PartnerSection";
-import Testimonials from "@/components/home/Testimonials";
-import GuaranteeSection from "@/components/home/GuaranteeSection";
-import CTASection from "@/components/home/CTASection";
+
+// Lazy load below-the-fold components for better LCP
+const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const Services = dynamic(() => import("@/components/home/Services"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const Articles = dynamic(() => import("@/components/home/Articles"), {
+  loading: () => <div className="min-h-[300px]" />,
+});
+const PartnerSection = dynamic(() => import("@/components/home/PartnerSection"), {
+  loading: () => <div className="min-h-[300px]" />,
+});
+const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
+  loading: () => <div className="min-h-[400px]" />,
+});
+const GuaranteeSection = dynamic(() => import("@/components/home/GuaranteeSection"), {
+  loading: () => <div className="min-h-[300px]" />,
+});
+const CTASection = dynamic(() => import("@/components/home/CTASection"), {
+  loading: () => <div className="min-h-[200px]" />,
+});
 
 export default function HomePage() {
   return (
