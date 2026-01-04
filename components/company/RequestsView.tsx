@@ -13,14 +13,12 @@ import {
   QueryDocumentSnapshot,
   DocumentData,
   doc,
-  setDoc,
   getDoc,
-  serverTimestamp,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
-import { addOffer } from "@/utils/firestoreHelpers";
 import { formatMoveDateDisplay } from "@/utils/date";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import PaymentForm from "@/components/company/requestsView/PaymentForm";
 
 // Types
 export type MovingRequest = {
@@ -51,157 +49,14 @@ export type Offer = {
   createdAt?: any;
 };
 
-function OfferForm({ requestId, company, onPaymentSuccess }: { requestId: string; company: CompanyUser; onPaymentSuccess?: () => void }) {
-  const [showPayment, setShowPayment] = useState(false);
-  const [sending, setSending] = useState(false);
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
-
-  const handleShowPayment = (e: React.FormEvent) => {
-    e.preventDefault();
-    setShowPayment(true);
-  };
-
-  const handleConfirmPayment = async () => {
-    if (!company) return;
-    setSending(true);
-    try {
-      // Simulate payment processing delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      
-      // Save payment to Firestore (companies/{companyId}/payments/{requestId})
-      const paymentRef = doc(db, `companies/${company.uid}/payments/${requestId}`);
-      await setDoc(paymentRef, {
-        requestId,
-        companyId: company.uid,
-        companyName: company.displayName || company.email || "Companie",
-        amount: 20,
-        currency: "RON",
-        status: "completed",
-        paidAt: serverTimestamp(),
-        createdAt: serverTimestamp(),
-      });
-      
-      // Simulate successful payment
-      setPaymentSuccess(true);
-      
-      // Try to create offer (optional - for tracking)
-      try {
-        await addOffer(requestId, {
-          companyId: company.uid,
-          companyName: company.displayName || company.email || "Companie",
-          price: 20,
-          message: "Acces detalii complete achiziționate",
-          status: "pending",
-        });
-      } catch (offerErr) {
-        console.error("Offer creation skipped (permissions):", offerErr);
-        // Continue anyway - payment succeeded
-      }
-      
-      // Notify parent component
-      if (onPaymentSuccess) {
-        onPaymentSuccess();
-      }
-      
-      // Wait a moment to show success message
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      setShowPayment(false);
-      setPaymentSuccess(false);
-    } catch (err) {
-      console.error("Error processing payment:", err);
-      alert("A apărut o eroare. Te rugăm să încerci din nou.");
-    } finally {
-      setSending(false);
-    }
-  };
-
-  if (showPayment) {
-    return (
-      <div className="mt-3 space-y-3 rounded-lg border-2 border-emerald-500 bg-linear-to-br from-emerald-50 to-sky-50 p-4">
-        {paymentSuccess ? (
-          // Success message
-          <div className="text-center">
-            <div className="mb-3 text-5xl">✅</div>
-            <h4 className="text-lg font-bold text-emerald-700">Plată Reușită!</h4>
-            <p className="mt-2 text-sm text-gray-600">
-              Detaliile complete ale clientului sunt acum deblocate
-            </p>
-          </div>
-        ) : (
-          <>
-            <div className="text-center">
-              <h4 className="text-lg font-bold text-emerald-700">🔓 Deblochează Detalii Complete</h4>
-              <p className="mt-1 text-sm text-gray-600">
-                Pentru a vedea datele complete de contact ale clientului (telefon, email, adresă exactă)
-              </p>
-            </div>
-
-            <div className="rounded-lg bg-white p-4 text-center shadow-sm">
-              <p className="text-sm text-gray-500">Cost per cerere</p>
-              <p className="text-3xl font-bold text-emerald-600">20 Lei</p>
-              <p className="mt-1 text-xs text-gray-500">Plată unică pentru accesul la această cerere</p>
-            </div>
-
-            <div className="space-y-2">
-              <p className="text-xs font-semibold text-gray-700">Ce primești:</p>
-              <ul className="space-y-1 text-xs text-gray-600">
-                <li>✅ Număr de telefon client</li>
-                <li>✅ Adresa email</li>
-                <li>✅ Adresă exactă (număr, bloc, scară, apartament)</li>
-                <li>✅ Toate detaliile mutării</li>
-              </ul>
-            </div>
-
-            <div className="flex gap-2">
-              <button
-                onClick={handleConfirmPayment}
-                disabled={sending}
-                className={`flex-1 rounded-md py-3 font-semibold text-white transition-all ${
-                  sending
-                    ? "cursor-not-allowed bg-gray-400"
-                    : "bg-emerald-600 hover:bg-emerald-700"
-                }`}
-              >
-                {sending ? "Se procesează..." : "💳 Plătește 20 Lei"}
-              </button>
-              <button
-                onClick={() => setShowPayment(false)}
-                disabled={sending}
-                className="rounded-md border border-gray-300 bg-white px-4 py-3 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50"
-              >
-                Anulează
-              </button>
-            </div>
-
-            <p className="text-center text-xs text-gray-500">
-              🔒 Plată securizată • Acces imediat după confirmare
-            </p>
-          </>
-        )}
-      </div>
-    );
-  }
-
-  return (
-    <form onSubmit={handleShowPayment} className="mt-3 flex flex-col gap-2 border-t pt-3 text-sm">
-      <button
-        type="submit"
-        className="rounded-md bg-emerald-600 py-2 font-semibold text-white transition-all hover:bg-emerald-700"
-      >
-        Vezi detalii complete client
-      </button>
-    </form>
-  );
-}
-
 // Compact request card with expand/collapse functionality
-function RequestCardCompact({ 
-  request, 
-  company, 
+function RequestCardCompact({
+  request,
+  company,
   hasMine,
-  onUpdateHasMine 
-}: { 
-  request: MovingRequest; 
+  onUpdateHasMine,
+}: {
+  request: MovingRequest;
   company: CompanyUser;
   hasMine?: boolean;
   // eslint-disable-next-line no-unused-vars
@@ -219,11 +74,11 @@ function RequestCardCompact({
         setCheckingPayment(false);
         return;
       }
-      
+
       try {
         const paymentRef = doc(db, `companies/${company.uid}/payments/${r.id}`);
         const paymentSnap = await getDoc(paymentRef);
-        
+
         if (paymentSnap.exists() && paymentSnap.data()?.status === "completed") {
           setPaidAccess(true);
           if (onUpdateHasMine) {
@@ -236,7 +91,7 @@ function RequestCardCompact({
         setCheckingPayment(false);
       }
     };
-    
+
     checkPayment();
   }, [company?.uid, r.id, onUpdateHasMine]);
 
@@ -250,35 +105,42 @@ function RequestCardCompact({
   return (
     <div id={`request-${r.id}`} className="print:break-inside-avoid">
       {/* Header - always visible */}
-      <div 
-        onClick={() => setIsExpanded(!isExpanded)}
-        className="group cursor-pointer"
-      >
+      <div onClick={() => setIsExpanded(!isExpanded)} className="group cursor-pointer">
         {/* Main header row */}
         <div className="flex items-center justify-between gap-4">
           {/* Left: Code + Route */}
           <div className="flex min-w-0 flex-1 items-center gap-4">
             <div className="flex flex-col">
-              <span className="text-base font-bold bg-linear-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-slate-800 to-slate-600 bg-clip-text text-base font-bold text-transparent">
                 {(r as any).requestCode || r.id.substring(0, 8)}
               </span>
               <span className="text-xs font-medium text-emerald-600">
                 {r.customerName?.split(" ")[0] || "Client"}
               </span>
             </div>
-            
+
             {/* Route indicator */}
             <div className="hidden items-center gap-2.5 rounded-xl bg-linear-to-r from-slate-50 to-slate-100/80 px-4 py-2 text-xs ring-1 ring-slate-200/50 sm:flex">
               <div className="flex items-center gap-1.5">
                 <div className="h-2 w-2 rounded-full bg-linear-to-br from-orange-400 to-amber-500 shadow-sm" />
-                <span className="font-semibold text-slate-700">{(r as any).fromCounty || r.fromCity}</span>
+                <span className="font-semibold text-slate-700">
+                  {(r as any).fromCounty || r.fromCity}
+                </span>
               </div>
-              <svg className="h-4 w-4 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <svg
+                className="h-4 w-4 text-emerald-500"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2.5}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
               <div className="flex items-center gap-1.5">
                 <div className="h-2 w-2 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm" />
-                <span className="font-semibold text-slate-700">{(r as any).toCounty || r.toCity}</span>
+                <span className="font-semibold text-slate-700">
+                  {(r as any).toCounty || r.toCity}
+                </span>
               </div>
             </div>
           </div>
@@ -287,8 +149,18 @@ function RequestCardCompact({
           <div className="flex shrink-0 items-center gap-2.5">
             {(r as any).rooms && (
               <span className="flex items-center gap-1 rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm shadow-indigo-200">
-                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                <svg
+                  className="h-3.5 w-3.5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  strokeWidth={2}
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
                 </svg>
                 {(r as any).rooms} cam
               </span>
@@ -301,8 +173,8 @@ function RequestCardCompact({
                 setIsExpanded(!isExpanded);
               }}
               className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 print:hidden ${
-                isExpanded 
-                  ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200" 
+                isExpanded
+                  ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200"
                   : "bg-linear-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200 group-hover:from-emerald-50 group-hover:to-teal-50 group-hover:text-emerald-600 group-hover:ring-emerald-200"
               }`}
             >
@@ -314,7 +186,12 @@ function RequestCardCompact({
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2.5}
+                  d="M19 9l-7 7-7-7"
+                />
               </motion.svg>
               {isExpanded ? "Închide" : "Vezi"}
             </button>
@@ -325,9 +202,17 @@ function RequestCardCompact({
         <div className="mt-3 flex items-center gap-2 text-xs sm:hidden">
           <div className="flex items-center gap-1.5">
             <div className="h-2 w-2 rounded-full bg-linear-to-br from-orange-400 to-amber-500" />
-            <span className="font-medium text-slate-600">{(r as any).fromCounty || r.fromCity}</span>
+            <span className="font-medium text-slate-600">
+              {(r as any).fromCounty || r.fromCity}
+            </span>
           </div>
-          <svg className="h-3.5 w-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+          <svg
+            className="h-3.5 w-3.5 text-emerald-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2.5}
+          >
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
           <div className="flex items-center gap-1.5">
@@ -348,326 +233,530 @@ function RequestCardCompact({
             className="overflow-hidden"
           >
             <div className="mt-4 space-y-4 print:space-y-2">
-            {/* Contact Info - Only show if paid/has access */}
-            {(paidAccess || hasMine) && (
-              <div className="rounded-2xl border border-emerald-200/60 bg-linear-to-br from-emerald-50 via-white to-teal-50/30 p-4 shadow-sm">
-                <div className="mb-3 flex items-center gap-2.5">
-                  <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
-                    <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                    </svg>
+              {/* Contact Info - Only show if paid/has access */}
+              {(paidAccess || hasMine) && (
+                <div className="rounded-2xl border border-emerald-200/60 bg-linear-to-br from-emerald-50 via-white to-teal-50/30 p-4 shadow-sm">
+                  <div className="mb-3 flex items-center gap-2.5">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
+                      <svg
+                        className="h-4 w-4 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-sm font-bold text-slate-700">Date de Contact</span>
                   </div>
-                  <span className="text-sm font-bold text-slate-700">Date de Contact</span>
-                </div>
-                
-                <div className="grid gap-4 sm:grid-cols-3">
-                  {(r.customerName || (r as any).contactFirstName) && (
-                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-400 to-orange-500 shadow-sm">
-                        <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                        </svg>
+
+                  <div className="grid gap-4 sm:grid-cols-3">
+                    {(r.customerName || (r as any).contactFirstName) && (
+                      <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-400 to-orange-500 shadow-sm">
+                          <svg
+                            className="h-5 w-5 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-medium tracking-wider text-slate-400 uppercase">
+                            Nume
+                          </p>
+                          <p className="text-sm font-bold text-slate-700">
+                            {r.customerName ||
+                              `${(r as any).contactFirstName || ""} ${(r as any).contactLastName || ""}`.trim()}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">Nume</p>
-                        <p className="text-sm font-bold text-slate-700">
-                          {r.customerName || `${(r as any).contactFirstName || ""} ${(r as any).contactLastName || ""}`.trim()}
+                    )}
+
+                    {r.customerEmail && (
+                      <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-violet-400 to-purple-500 shadow-sm">
+                          <svg
+                            className="h-5 w-5 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                            />
+                          </svg>
+                        </div>
+                        <div className="min-w-0">
+                          <p className="text-[10px] font-medium tracking-wider text-slate-400 uppercase">
+                            Email
+                          </p>
+                          <p className="truncate text-sm font-bold text-slate-700">
+                            {r.customerEmail}
+                          </p>
+                        </div>
+                      </div>
+                    )}
+
+                    {(r as any).phone && (
+                      <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-400 to-indigo-500 shadow-sm">
+                          <svg
+                            className="h-5 w-5 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"
+                            />
+                          </svg>
+                        </div>
+                        <div>
+                          <p className="text-[10px] font-medium tracking-wider text-slate-400 uppercase">
+                            Telefon
+                          </p>
+                          <p className="text-sm font-bold text-slate-700">{(r as any).phone}</p>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Location details - Two column layout */}
+              <div className="grid gap-3 sm:grid-cols-2">
+                {/* From Location */}
+                <div className="rounded-2xl border border-orange-100 bg-linear-to-br from-orange-50/80 to-amber-50/30 p-4">
+                  <div className="mb-2.5 flex items-center gap-2">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-orange-400 to-amber-500 shadow-sm">
+                      <svg
+                        className="h-3.5 w-3.5 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-bold tracking-wide text-orange-600 uppercase">
+                      Colectare
+                    </span>
+                  </div>
+                  <p className="text-sm font-semibold text-slate-700">
+                    {(r as any).fromCounty || ""}
+                    {(r as any).fromCounty && ", "}
+                    {r.fromCity}
+                  </p>
+                  {paidAccess || hasMine
+                    ? ((r as any).fromStreet || (r as any).fromAddress) && (
+                        <p className="mt-0.5 text-xs text-slate-500">
+                          {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                          {!(r as any).fromStreet &&
+                            (r as any).fromAddress &&
+                            (r as any).fromAddress}
+                          {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
+                          {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
+                          {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
+                          {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
                         </p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {r.customerEmail && (
-                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-violet-400 to-purple-500 shadow-sm">
-                        <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
-                      </div>
-                      <div className="min-w-0">
-                        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">Email</p>
-                        <p className="truncate text-sm font-bold text-slate-700">{r.customerEmail}</p>
-                      </div>
-                    </div>
-                  )}
-                  
-                  {(r as any).phone && (
-                    <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-400 to-indigo-500 shadow-sm">
-                        <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p className="text-[10px] font-medium uppercase tracking-wider text-slate-400">Telefon</p>
-                        <p className="text-sm font-bold text-slate-700">{(r as any).phone}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            )}
-
-            {/* Location details - Two column layout */}
-            <div className="grid gap-3 sm:grid-cols-2">
-              {/* From Location */}
-              <div className="rounded-2xl border border-orange-100 bg-linear-to-br from-orange-50/80 to-amber-50/30 p-4">
-                <div className="mb-2.5 flex items-center gap-2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-orange-400 to-amber-500 shadow-sm">
-                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-                    </svg>
+                      )
+                    : ((r as any).fromStreet || (r as any).fromAddress) && (
+                        <p className="mt-0.5 text-xs text-slate-500">
+                          {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                          {!(r as any).fromStreet && (r as any).fromAddress}
+                        </p>
+                      )}
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {(r as any).fromType && (
+                      <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                        {(r as any).fromType === "house" ? "Casă" : "Apartament"}
+                      </span>
+                    )}
+                    {(r as any).fromFloor !== undefined && (
+                      <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                        Etaj {(r as any).fromFloor}
+                      </span>
+                    )}
+                    {(r as any).fromElevator !== undefined && (
+                      <span
+                        className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
+                          (r as any).fromElevator
+                            ? "bg-emerald-50 text-emerald-600 ring-emerald-200"
+                            : "bg-red-50 text-red-500 ring-red-200"
+                        }`}
+                      >
+                        {(r as any).fromElevator ? "Cu lift" : "Fără lift"}
+                      </span>
+                    )}
                   </div>
-                  <span className="text-xs font-bold uppercase tracking-wide text-orange-600">Colectare</span>
                 </div>
-                <p className="text-sm font-semibold text-slate-700">
-                  {(r as any).fromCounty || ""}{(r as any).fromCounty && ", "}{r.fromCity}
-                </p>
-                {(paidAccess || hasMine) ? (
-                  ((r as any).fromStreet || (r as any).fromAddress) && (
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
-                      {!(r as any).fromStreet && (r as any).fromAddress && (r as any).fromAddress}
-                      {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
-                      {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
-                      {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
-                      {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
-                    </p>
-                  )
-                ) : (
-                  ((r as any).fromStreet || (r as any).fromAddress) && (
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
-                      {!(r as any).fromStreet && (r as any).fromAddress}
-                    </p>
-                  )
-                )}
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {(r as any).fromType && (
-                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
-                      {(r as any).fromType === "house" ? "Casă" : "Apartament"}
-                    </span>
-                  )}
-                  {(r as any).fromFloor !== undefined && (
-                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
-                      Etaj {(r as any).fromFloor}
-                    </span>
-                  )}
-                  {(r as any).fromElevator !== undefined && (
-                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
-                      (r as any).fromElevator 
-                        ? "bg-emerald-50 text-emerald-600 ring-emerald-200" 
-                        : "bg-red-50 text-red-500 ring-red-200"
-                    }`}>
-                      {(r as any).fromElevator ? "Cu lift" : "Fără lift"}
-                    </span>
-                  )}
-                </div>
-              </div>
 
-              {/* To Location */}
-              <div className="rounded-2xl border border-emerald-100 bg-linear-to-br from-emerald-50/80 to-teal-50/30 p-4">
-                <div className="mb-2.5 flex items-center gap-2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
-                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
+                {/* To Location */}
+                <div className="rounded-2xl border border-emerald-100 bg-linear-to-br from-emerald-50/80 to-teal-50/30 p-4">
+                  <div className="mb-2.5 flex items-center gap-2">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
+                      <svg
+                        className="h-3.5 w-3.5 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-bold tracking-wide text-emerald-600 uppercase">
+                      Livrare
+                    </span>
                   </div>
-                  <span className="text-xs font-bold uppercase tracking-wide text-emerald-600">Livrare</span>
-                </div>
-                <p className="text-sm font-semibold text-slate-700">
-                  {(r as any).toCounty || ""}{(r as any).toCounty && ", "}{r.toCity}
-                </p>
-                {(paidAccess || hasMine) ? (
-                  ((r as any).toStreet || (r as any).toAddress) && (
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
-                      {!(r as any).toStreet && (r as any).toAddress && (r as any).toAddress}
-                      {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
-                      {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
-                      {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
-                      {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
-                    </p>
-                  )
-                ) : (
-                  ((r as any).toStreet || (r as any).toAddress) && (
-                    <p className="mt-0.5 text-xs text-slate-500">
-                      {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
-                      {!(r as any).toStreet && (r as any).toAddress}
-                    </p>
-                  )
-                )}
-                <div className="mt-2 flex flex-wrap gap-1.5">
-                  {(r as any).toType && (
-                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
-                      {(r as any).toType === "house" ? "Casă" : "Apartament"}
-                    </span>
-                  )}
-                  {(r as any).toFloor !== undefined && (
-                    <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
-                      Etaj {(r as any).toFloor}
-                    </span>
-                  )}
-                  {(r as any).toElevator !== undefined && (
-                    <span className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
-                      (r as any).toElevator 
-                        ? "bg-emerald-50 text-emerald-600 ring-emerald-200" 
-                        : "bg-red-50 text-red-500 ring-red-200"
-                    }`}>
-                      {(r as any).toElevator ? "Cu lift" : "Fără lift"}
-                    </span>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom info row: Date + Services + Survey */}
-            <div className="flex flex-wrap items-center gap-2">
-              {/* Move date */}
-              <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-amber-50 to-yellow-50 px-3 py-2 ring-1 ring-amber-100">
-                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-amber-400 to-yellow-500 shadow-sm">
-                  <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </div>
-                <div className="flex flex-col">
-                  <span className="text-[9px] font-medium uppercase tracking-wide text-amber-500">Data mutării</span>
-                  <span className="text-xs font-bold text-amber-700">
-                    {(() => {
-                      const d = formatMoveDateDisplay(r as any, { month: "short" });
-                      return d && d !== "-" ? d : "Flexibilă";
-                    })()}
-                  </span>
+                  <p className="text-sm font-semibold text-slate-700">
+                    {(r as any).toCounty || ""}
+                    {(r as any).toCounty && ", "}
+                    {r.toCity}
+                  </p>
+                  {paidAccess || hasMine
+                    ? ((r as any).toStreet || (r as any).toAddress) && (
+                        <p className="mt-0.5 text-xs text-slate-500">
+                          {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                          {!(r as any).toStreet && (r as any).toAddress && (r as any).toAddress}
+                          {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
+                          {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
+                          {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
+                          {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
+                        </p>
+                      )
+                    : ((r as any).toStreet || (r as any).toAddress) && (
+                        <p className="mt-0.5 text-xs text-slate-500">
+                          {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                          {!(r as any).toStreet && (r as any).toAddress}
+                        </p>
+                      )}
+                  <div className="mt-2 flex flex-wrap gap-1.5">
+                    {(r as any).toType && (
+                      <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                        {(r as any).toType === "house" ? "Casă" : "Apartament"}
+                      </span>
+                    )}
+                    {(r as any).toFloor !== undefined && (
+                      <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                        Etaj {(r as any).toFloor}
+                      </span>
+                    )}
+                    {(r as any).toElevator !== undefined && (
+                      <span
+                        className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
+                          (r as any).toElevator
+                            ? "bg-emerald-50 text-emerald-600 ring-emerald-200"
+                            : "bg-red-50 text-red-500 ring-red-200"
+                        }`}
+                      >
+                        {(r as any).toElevator ? "Cu lift" : "Fără lift"}
+                      </span>
+                    )}
+                  </div>
                 </div>
               </div>
 
-              {/* Survey type */}
-              {(r as any).surveyType && (
-                <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-rose-50 to-pink-50 px-3 py-2 ring-1 ring-rose-100">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-rose-400 to-pink-500 shadow-sm">
-                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              {/* Bottom info row: Date + Services + Survey */}
+              <div className="flex flex-wrap items-center gap-2">
+                {/* Move date */}
+                <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-amber-50 to-yellow-50 px-3 py-2 ring-1 ring-amber-100">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-amber-400 to-yellow-500 shadow-sm">
+                    <svg
+                      className="h-3.5 w-3.5 text-white"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth={2.5}
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
                     </svg>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[9px] font-medium uppercase tracking-wide text-rose-400">Tip evaluare</span>
-                    <span className="text-xs font-bold text-rose-700">
-                      {(r as any).surveyType === "in-person" && "La fața locului"}
-                      {(r as any).surveyType === "video" && "Video call"}
-                      {(r as any).surveyType === "quick-estimate" && "Estimare rapidă"}
+                    <span className="text-[9px] font-medium tracking-wide text-amber-500 uppercase">
+                      Data mutării
+                    </span>
+                    <span className="text-xs font-bold text-amber-700">
+                      {(() => {
+                        const d = formatMoveDateDisplay(r as any, { month: "short" });
+                        return d && d !== "-" ? d : "Flexibilă";
+                      })()}
                     </span>
                   </div>
                 </div>
-              )}
 
-              {/* Media indicator */}
-              {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
-                <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-blue-50 to-cyan-50 px-3 py-2 ring-1 ring-blue-100">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-blue-400 to-cyan-500 shadow-sm">
-                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <span className="text-xs font-bold text-blue-700">{(r as any).mediaUrls.length} fișiere</span>
-                </div>
-              )}
-            </div>
-
-            {/* Services requested */}
-            {((r as any).serviceMoving || (r as any).servicePacking || (r as any).serviceDisassembly || 
-              (r as any).serviceCleanout || (r as any).serviceStorage) && (
-              <div className="flex flex-wrap gap-2">
-                {(r as any).serviceMoving && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0" />
-                    </svg>
-                    Transport
-                  </span>
-                )}
-                {(r as any).servicePacking && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-                    </svg>
-                    Ambalare
-                  </span>
-                )}
-                {(r as any).serviceDisassembly && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    Demontare/Montare
-                  </span>
-                )}
-                {(r as any).serviceCleanout && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                    Debarasare
-                  </span>
-                )}
-                {(r as any).serviceStorage && (
-                  <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                    <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z" />
-                    </svg>
-                    Depozitare
-                  </span>
-                )}
-              </div>
-            )}
-
-            {/* Details/notes */}
-            {r.details && (
-              <div className="rounded-2xl border border-slate-200/60 bg-linear-to-br from-slate-50 to-gray-50/50 p-4">
-                <div className="mb-2 flex items-center gap-2">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-slate-400 to-gray-500 shadow-sm">
-                    <svg className="h-3.5 w-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
-                    </svg>
-                  </div>
-                  <span className="text-xs font-bold uppercase tracking-wide text-slate-500">Detalii suplimentare</span>
-                </div>
-                <p className="text-sm leading-relaxed text-slate-600">{r.details}</p>
-              </div>
-            )}
-
-            {/* Action button */}
-            {company ? (
-              <>
-                {checkingPayment ? (
-                  <div className="flex items-center justify-center rounded-xl bg-slate-50 p-4 print:hidden">
-                    <div className="flex items-center gap-2 text-sm text-slate-500">
-                      <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent"></div>
-                      <span>Verificare acces...</span>
-                    </div>
-                  </div>
-                ) : !hasMine && !paidAccess ? (
-                  <div className="print:hidden">
-                    <OfferForm requestId={r.id} company={company} onPaymentSuccess={handlePaymentSuccess} />
-                  </div>
-                ) : (
-                  <div className="flex items-center gap-3 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 px-4 py-3 ring-1 ring-emerald-200 print:hidden">
-                    <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
-                      <svg className="h-4 w-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                {/* Survey type */}
+                {(r as any).surveyType && (
+                  <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-rose-50 to-pink-50 px-3 py-2 ring-1 ring-rose-100">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-rose-400 to-pink-500 shadow-sm">
+                      <svg
+                        className="h-3.5 w-3.5 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                        />
                       </svg>
                     </div>
-                    <span className="text-sm font-bold text-emerald-700">Ai acces complet la toate detaliile acestei cereri</span>
+                    <div className="flex flex-col">
+                      <span className="text-[9px] font-medium tracking-wide text-rose-400 uppercase">
+                        Tip evaluare
+                      </span>
+                      <span className="text-xs font-bold text-rose-700">
+                        {(r as any).surveyType === "in-person" && "La fața locului"}
+                        {(r as any).surveyType === "video" && "Video call"}
+                        {(r as any).surveyType === "quick-estimate" && "Estimare rapidă"}
+                      </span>
+                    </div>
                   </div>
                 )}
-              </>
-            ) : (
-              <p className="text-sm italic text-slate-400 print:hidden">
-                Trebuie să fii autentificat pentru a trimite oferte.
-              </p>
-            )}
+
+                {/* Media indicator */}
+                {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
+                  <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-blue-50 to-cyan-50 px-3 py-2 ring-1 ring-blue-100">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-blue-400 to-cyan-500 shadow-sm">
+                      <svg
+                        className="h-3.5 w-3.5 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-bold text-blue-700">
+                      {(r as any).mediaUrls.length} fișiere
+                    </span>
+                  </div>
+                )}
+              </div>
+
+              {/* Services requested */}
+              {((r as any).serviceMoving ||
+                (r as any).servicePacking ||
+                (r as any).serviceDisassembly ||
+                (r as any).serviceCleanout ||
+                (r as any).serviceStorage) && (
+                <div className="flex flex-wrap gap-2">
+                  {(r as any).serviceMoving && (
+                    <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+                        />
+                      </svg>
+                      Transport
+                    </span>
+                  )}
+                  {(r as any).servicePacking && (
+                    <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                        />
+                      </svg>
+                      Ambalare
+                    </span>
+                  )}
+                  {(r as any).serviceDisassembly && (
+                    <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                      Demontare/Montare
+                    </span>
+                  )}
+                  {(r as any).serviceCleanout && (
+                    <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                        />
+                      </svg>
+                      Debarasare
+                    </span>
+                  )}
+                  {(r as any).serviceStorage && (
+                    <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <svg
+                        className="h-3.5 w-3.5"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+                        />
+                      </svg>
+                      Depozitare
+                    </span>
+                  )}
+                </div>
+              )}
+
+              {/* Details/notes */}
+              {r.details && (
+                <div className="rounded-2xl border border-slate-200/60 bg-linear-to-br from-slate-50 to-gray-50/50 p-4">
+                  <div className="mb-2 flex items-center gap-2">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-slate-400 to-gray-500 shadow-sm">
+                      <svg
+                        className="h-3.5 w-3.5 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"
+                        />
+                      </svg>
+                    </div>
+                    <span className="text-xs font-bold tracking-wide text-slate-500 uppercase">
+                      Detalii suplimentare
+                    </span>
+                  </div>
+                  <p className="text-sm leading-relaxed text-slate-600">{r.details}</p>
+                </div>
+              )}
+
+              {/* Action button */}
+              {company ? (
+                <>
+                  {checkingPayment ? (
+                    <div className="flex items-center justify-center rounded-xl bg-slate-50 p-4 print:hidden">
+                      <div className="flex items-center gap-2 text-sm text-slate-500">
+                        <div className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent"></div>
+                        <span>Verificare acces...</span>
+                      </div>
+                    </div>
+                  ) : !hasMine && !paidAccess ? (
+                    <div className="print:hidden">
+                      <PaymentForm
+                        requestId={r.id}
+                        company={company}
+                        onPaymentSuccess={handlePaymentSuccess}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-3 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 px-4 py-3 ring-1 ring-emerald-200 print:hidden">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
+                        <svg
+                          className="h-4 w-4 text-white"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2.5}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                          />
+                        </svg>
+                      </div>
+                      <span className="text-sm font-bold text-emerald-700">
+                        Ai acces complet la toate detaliile acestei cereri
+                      </span>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <p className="text-sm text-slate-400 italic print:hidden">
+                  Trebuie să fii autentificat pentru a trimite oferte.
+                </p>
+              )}
             </div>
           </motion.div>
         )}
@@ -814,17 +903,30 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       const ms = createdAt.toMillis ? createdAt.toMillis() : createdAt;
       const diff = currentTime - ms;
       const hours = Math.floor(diff / (1000 * 60 * 60));
-      
+
       // Show "Nou!" for recent posts (less than 1 hour)
       if (hours < 1) return "Nou!";
-      
+
       // Show the actual date and time
       const date = new Date(ms);
-      const day = date.getDate().toString().padStart(2, '0');
-      const months = ['Ian', 'Feb', 'Mar', 'Apr', 'Mai', 'Iun', 'Iul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const day = date.getDate().toString().padStart(2, "0");
+      const months = [
+        "Ian",
+        "Feb",
+        "Mar",
+        "Apr",
+        "Mai",
+        "Iun",
+        "Iul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ];
       const month = months[date.getMonth()];
-      const hour = date.getHours().toString().padStart(2, '0');
-      const minute = date.getMinutes().toString().padStart(2, '0');
+      const hour = date.getHours().toString().padStart(2, "0");
+      const minute = date.getMinutes().toString().padStart(2, "0");
       return `${day} ${month}, ${hour}:${minute}`;
     },
     [currentTime]
@@ -869,26 +971,43 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 className="group/card relative overflow-hidden rounded-2xl border border-slate-200/60 bg-linear-to-br from-white via-white to-slate-50/80 px-5 py-4 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100/50"
               >
                 {/* Decorative gradient bar */}
-                <div className="absolute left-0 top-0 h-1 w-full bg-linear-to-r from-emerald-400 via-teal-400 to-cyan-400 opacity-80" />
-                
+                <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-emerald-400 via-teal-400 to-cyan-400 opacity-80" />
+
                 {r.createdAt && (
                   <div className="mb-3 flex items-center">
                     <span
-                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-wider shadow-sm ${
+                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold tracking-wider uppercase shadow-sm ${
                         getTimeAgo(r.createdAt) === "Nou!"
                           ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white"
                           : "bg-linear-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200"
                       }`}
                     >
-                      <svg className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      <svg
+                        className="h-3 w-3"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2.5}
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
                       </svg>
                       {getTimeAgo(r.createdAt)}
                     </span>
                   </div>
                 )}
 
-                <RequestCardCompact request={r} company={company} hasMine={hasMineMap[r.id]} onUpdateHasMine={(has: boolean) => setHasMineMap((prev) => ({ ...prev, [r.id]: has }))} />
+                <RequestCardCompact
+                  request={r}
+                  company={company}
+                  hasMine={hasMineMap[r.id]}
+                  onUpdateHasMine={(has: boolean) =>
+                    setHasMineMap((prev) => ({ ...prev, [r.id]: has }))
+                  }
+                />
               </motion.div>
             ))}
           </AnimatePresence>
