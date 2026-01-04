@@ -38,12 +38,11 @@ export default function Hero() {
         <div className="absolute right-[5%] bottom-20 hidden h-[300px] w-[300px] rounded-full bg-sky-200/40 blur-[80px] sm:block sm:h-[400px] sm:w-[400px] lg:blur-[100px]" />
       </div>
 
-      <div className="container relative z-10 mx-auto">
+      <div className="relative z-10 container mx-auto">
         <div className="flex flex-col items-center gap-10 sm:gap-12 lg:flex-row lg:gap-20">
-          
           {/* Text Content - renders immediately without animation delay */}
-          <div 
-            className={`flex-1 text-center lg:text-left transition-all duration-500 ${animationsReady ? 'opacity-100 translate-y-0' : 'opacity-100'}`}
+          <div
+            className={`flex-1 text-center transition-all duration-500 lg:text-left ${animationsReady ? "translate-y-0 opacity-100" : "opacity-100"}`}
           >
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5">
@@ -57,7 +56,7 @@ export default function Hero() {
             </div>
 
             {/* Headline - Critical LCP element */}
-            <h1 className="mb-4 text-3xl font-extrabold leading-[1.15] tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
               Mutări simple,
               <br />
               <span className="relative inline-block">
@@ -89,22 +88,26 @@ export default function Hero() {
 
             {/* Subheadline */}
             <p className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-slate-600 sm:mb-10 sm:text-lg lg:mx-0 lg:text-xl">
-              Completezi o singură cerere și primești <span className="font-semibold text-emerald-600">până la 5 oferte</span> de la firme verificate. 
-              Compari, alegi și <span className="font-semibold text-emerald-600">economisești până la 40%</span>.
+              Completezi o singură cerere și primești{" "}
+              <span className="font-semibold text-emerald-600">până la 5 oferte</span> de la firme
+              verificate. Compari, alegi și{" "}
+              <span className="font-semibold text-emerald-600">economisești până la 40%</span>.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4 lg:justify-start">
-              <button 
+              <button
                 onClick={handleCTA}
-                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25 transition-all hover:scale-[1.02] hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-emerald-500/30 active:scale-[0.98] sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
+                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25 transition-all hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-500/30 active:scale-[0.98] sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
               >
                 <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
                 Obține oferte gratuite
                 <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5" />
               </button>
-              <button 
-                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
+              <button
+                onClick={() =>
+                  document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
+                }
                 className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-6 py-3.5 text-base font-semibold text-slate-700 transition-all hover:scale-[1.02] hover:border-emerald-200 hover:bg-emerald-50 active:scale-[0.98] sm:w-auto sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
               >
                 Cum funcționează?
@@ -119,9 +122,14 @@ export default function Hero() {
                 { icon: Star, label: "4.9/5 Rating", color: "text-amber-500" },
                 { icon: TrendingUp, label: "Economie ~40%", color: "text-purple-600" },
               ].map((item, i) => (
-                <div key={i} className="flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-2">
+                <div
+                  key={i}
+                  className="flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-2"
+                >
                   <item.icon className={`h-4 w-4 ${item.color} sm:h-5 sm:w-5`} />
-                  <span className="text-xs font-medium text-slate-700 sm:text-sm">{item.label}</span>
+                  <span className="text-xs font-medium text-slate-700 sm:text-sm">
+                    {item.label}
+                  </span>
                 </div>
               ))}
             </div>
@@ -133,10 +141,10 @@ export default function Hero() {
               {/* Main Card with Hero Image - LCP element */}
               <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
                 <div className="relative aspect-[4/3] bg-linear-to-br from-slate-50 to-emerald-50/50">
-                  <Image 
-                    src="/pics/index.png" 
-                    alt="Platforma Oferte Mutare" 
-                    fill 
+                  <Image
+                    src="/pics/index.png"
+                    alt="Platforma Oferte Mutare"
+                    fill
                     className="object-cover"
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"

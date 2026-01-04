@@ -30,19 +30,11 @@ export default function App({ Component, pageProps }: AppProps) {
           name="google-site-verification"
           content="Ua-OtirGRvnE0f7Q-HiI9YB9MDcONOYn1OpQg4HdaFY"
         />
-        
-        {/* Preconnect for faster resource loading */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* Preconnect moved to _document.tsx */}
         <link rel="preconnect" href="https://firebasestorage.googleapis.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-        
-        {/* Optimized font loading */}
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-        />
-        
+
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/logo-square.webp" type="image/webp" sizes="64x64" />
         <title>Ofertemutare.ro — Oferte reale de la firme de mutări verificate</title>
