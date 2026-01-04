@@ -94,7 +94,7 @@ export default function ArticleTips() {
                 <div className="space-y-3 text-gray-700">
                   <div>
                     <p className="font-semibold">✅ CEL MAI IEFTIN:</p>
-                    <ul className="ml-6 mt-1 space-y-1 text-sm">
+                    <ul className="mt-1 ml-6 space-y-1 text-sm">
                       <li>
                         • <strong>Iarna (noiembrie-martie)</strong>: până la 40% mai ieftin decât
                         vara
@@ -111,7 +111,7 @@ export default function ArticleTips() {
                   </div>
                   <div>
                     <p className="font-semibold">❌ CEL MAI SCUMP:</p>
-                    <ul className="ml-6 mt-1 space-y-1 text-sm">
+                    <ul className="mt-1 ml-6 space-y-1 text-sm">
                       <li>• Vară (iunie-august) + primăvară (aprilie-mai)</li>
                       <li>• Weekenduri (sâmbătă, duminică)</li>
                       <li>
@@ -288,7 +288,7 @@ export default function ArticleTips() {
                     <span>Finalizează împachetarea, confirmă cu firma</span>
                   </li>
                 </ul>
-                <p className="mt-3 text-sm italic text-blue-700">
+                <p className="mt-3 text-sm text-blue-700 italic">
                   Planificare bună = zero panică în ultima zi!
                 </p>
               </div>
