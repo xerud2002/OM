@@ -2,33 +2,55 @@
 
 import { ArrowRight, CheckCircle, Star, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { User } from "firebase/auth";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
+
+// Tiny blur placeholder (10x7 px encoded as base64) - prevents CLS
+const blurDataURL =
+  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAHAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIDBAAFBhESITFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEuO";
 
 export default function Hero() {
   const router = useRouter();
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<{ uid: string } | null>(null);
   const [animationsReady, setAnimationsReady] = useState(false);
+  const [authChecked, setAuthChecked] = useState(false);
 
+  // Defer Firebase loading until after initial render
   useEffect(() => {
-    // Delay animations until after LCP
     const timer = setTimeout(() => setAnimationsReady(true), 100);
-    const unsub = onAuthChange((user) => setUser(user));
+    
+    // Lazy load Firebase auth check
+    const checkAuth = async () => {
+      try {
+        const { onAuthChange } = await import("@/utils/firebaseHelpers");
+        const unsub = onAuthChange((u) => {
+          setUser(u ? { uid: u.uid } : null);
+          setAuthChecked(true);
+        });
+        return unsub;
+      } catch {
+        setAuthChecked(true);
+        return () => {};
+      }
+    };
+    
+    let unsub: (() => void) | undefined;
+    checkAuth().then((u) => { unsub = u; });
+    
     return () => {
       clearTimeout(timer);
-      unsub();
+      unsub?.();
     };
   }, []);
 
-  const handleCTA = () => {
-    if (user) router.push("/form");
-    else {
+  const handleCTA = useCallback(() => {
+    if (user) {
+      router.push("/customer/dashboard");
+    } else {
       localStorage.setItem("redirectAfterLogin", "form");
       router.push("/customer/auth");
     }
-  };
+  }, [user, router]);
 
   return (
     <section className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-32 lg:pb-24">
@@ -142,14 +164,16 @@ export default function Hero() {
               <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
                 <div className="relative aspect-[4/3] bg-linear-to-br from-slate-50 to-emerald-50/50">
                   <Image
-                    src="/pics/index.png"
+                    src="/pics/index.webp"
                     alt="Platforma Oferte Mutare"
                     fill
                     className="object-cover"
                     priority
                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px"
-                    quality={80}
+                    quality={85}
                     fetchPriority="high"
+                    placeholder="blur"
+                    blurDataURL={blurDataURL}
                   />
                 </div>
               </div>
