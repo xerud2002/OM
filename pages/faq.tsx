@@ -9,8 +9,8 @@ export default function FAQPage() {
       category: "General",
       questions: [
         {
-          q: "Ce este OferteMutari.ro?",
-          a: "OferteMutari.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești 3-5 oferte personalizate în 24 ore.",
+          q: "Ce este OferteMutare.ro?",
+          a: "OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești 3-5 oferte personalizate în 24 ore.",
         },
         {
           q: "Serviciul este cu adevărat gratuit?",

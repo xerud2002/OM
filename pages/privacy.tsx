@@ -7,10 +7,10 @@ export default function PrivacyPage() {
   return (
     <>
       <Head>
-        <title>Politica de Confidențialitate | OferteMutari.ro</title>
+        <title>Politica de Confidențialitate | OferteMutare.ro</title>
         <meta
           name="description"
-          content="Politica de confidențialitate OferteMutari.ro - Cum colectăm, folosim și protejăm datele tale personale conform GDPR."
+          content="Politica de confidențialitate OferteMutare.ro - Cum colectăm, folosim și protejăm datele tale personale conform GDPR."
         />
       </Head>
 
@@ -58,7 +58,7 @@ export default function PrivacyPage() {
             <section>
               <h2 className="mb-4 text-2xl font-bold text-gray-800">1. Introducere</h2>
               <p className="leading-relaxed text-gray-600">
-                OferteMutari.ro (denumit în continuare &ldquo;Noi&rdquo;, &ldquo;Platforma&rdquo;
+                OferteMutare.ro (denumit în continuare &ldquo;Noi&rdquo;, &ldquo;Platforma&rdquo;
                 sau &ldquo;Site-ul&rdquo;) respectă confidențialitatea utilizatorilor și se
                 angajează să protejeze datele personale conform <strong>GDPR</strong> (Regulamentul
                 General privind Protecția Datelor UE 2016/679) și legislației române aplicabile.

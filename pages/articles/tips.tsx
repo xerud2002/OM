@@ -39,7 +39,7 @@ export default function ArticleTips() {
           content="Ghid complet cu trucuri și sfaturi de la profesioniști: economisește bani, timp și stres la mutare."
         />
         <meta property="og:type" content="article" />
-        <link rel="canonical" href="https://ofertemutari.ro/articles/tips" />
+        <link rel="canonical" href="https://ofertemutare.ro/articles/tips" />
       </Head>
 
       <LayoutWrapper>
@@ -191,7 +191,7 @@ export default function ArticleTips() {
                     diferență pentru aceeași mutare. <strong>Nu te mulțumi cu prima ofertă!</strong>
                   </p>
                   <div className="rounded-lg bg-white p-4">
-                    <p className="mb-2 font-semibold">Pe OferteMutari.ro:</p>
+                    <p className="mb-2 font-semibold">Pe OferteMutare.ro:</p>
                     <ul className="space-y-1 text-sm">
                       <li>✓ Completezi UN singur formular (3 minute)</li>
                       <li>✓ Primești 3-5 oferte personalizate în 24h</li>
@@ -795,7 +795,7 @@ export default function ArticleTips() {
               <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
                 <h3 className="mb-4 font-semibold text-emerald-800">✅ Cu 1 Lună Înainte</h3>
                 <ul className="space-y-1 text-sm text-gray-700">
-                  <li>☐ Am solicitat 3-5 oferte (pe OferteMutari.ro)</li>
+                  <li>☐ Am solicitat 3-5 oferte (pe OferteMutare.ro)</li>
                   <li>☐ Am făcut survey (fizic sau video)</li>
                   <li>☐ Am rezervat firma și semnat contractul</li>
                   <li>☐ Am sortat și vândut lucruri neutilizate</li>

@@ -7,10 +7,10 @@ export default function TermsPage() {
   return (
     <>
       <Head>
-        <title>Termeni și Condiții | OferteMutari.ro</title>
+        <title>Termeni și Condiții | OferteMutare.ro</title>
         <meta
           name="description"
-          content="Termenii și condițiile de utilizare a platformei OferteMutari.ro. Citește regulile și responsabilitățile pentru utilizatori și firme partenere."
+          content="Termenii și condițiile de utilizare a platformei OferteMutare.ro. Citește regulile și responsabilitățile pentru utilizatori și firme partenere."
         />
       </Head>
 
@@ -35,7 +35,7 @@ export default function TermsPage() {
             <section>
               <h2 className="mb-4 text-2xl font-bold text-gray-800">1. Introducere</h2>
               <p className="leading-relaxed text-gray-600">
-                Bine ați venit pe <strong>OferteMutari.ro</strong> (denumită în continuare
+                Bine ați venit pe <strong>OferteMutare.ro</strong> (denumită în continuare
                 &ldquo;Platforma&rdquo;, &ldquo;Noi&rdquo; sau &ldquo;Site-ul&rdquo;). Prin
                 accesarea și utilizarea acestui site, acceptați să respectați și să fiți obligat de
                 următorii termeni și condiții. Dacă nu sunteți de acord cu acești termeni, vă rugăm
@@ -72,7 +72,7 @@ export default function TermsPage() {
                 3. Serviciile Oferite de Platformă
               </h2>
               <p className="mb-3 leading-relaxed text-gray-600">
-                OferteMutari.ro este un intermediar care facilitează conectarea între Clienți și
+                OferteMutare.ro este un intermediar care facilitează conectarea între Clienți și
                 Firme de Mutări. Platforma:
               </p>
               <ul className="list-disc space-y-2 pl-6 text-gray-600">
@@ -168,7 +168,7 @@ export default function TermsPage() {
               </h2>
               <div className="rounded-lg border-2 border-yellow-200 bg-yellow-50 p-6">
                 <p className="mb-3 font-semibold text-gray-800">
-                  ⚠️ IMPORTANT: OferteMutari.ro acționează exclusiv ca INTERMEDIAR.
+                  ⚠️ IMPORTANT: OferteMutare.ro acționează exclusiv ca INTERMEDIAR.
                 </p>
                 <ul className="list-disc space-y-2 pl-6 text-gray-700">
                   <li>
@@ -242,7 +242,7 @@ export default function TermsPage() {
               <h2 className="mb-4 text-2xl font-bold text-gray-800">9. Proprietate Intelectuală</h2>
               <p className="leading-relaxed text-gray-600">
                 Toate drepturile de proprietate intelectuală asupra Platformei (design, logo, cod,
-                conținut) aparțin OferteMutari.ro. Este interzisă copierea, reproducerea sau
+                conținut) aparțin OferteMutare.ro. Este interzisă copierea, reproducerea sau
                 distribuirea conținutului fără acordul scris prealabil.
               </p>
             </section>

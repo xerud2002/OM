@@ -29,13 +29,13 @@ export default function CustomerAuthPage() {
       setLoading(true);
       const mod = await import("@/utils/firebaseHelpers");
       const user = await mod.loginWithGoogle("company");
-      
+
       // Handle popup blocked/cancelled case
       if (!user) {
         setLoading(false);
         return; // User cancelled or popup was blocked - no error message needed
       }
-      
+
       const role = await mod.getUserRole(user);
       if (role !== "company") {
         setMessage(
@@ -130,7 +130,7 @@ export default function CustomerAuthPage() {
             className="relative hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-12 lg:flex lg:flex-col lg:justify-between"
           >
             {/* Decorative circles */}
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
             <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
             <div className="relative z-10">
@@ -177,10 +177,26 @@ export default function CustomerAuthPage() {
             </div>
 
             {/* Decorative illustration */}
-            <div className="absolute bottom-8 right-8 opacity-10">
+            <div className="absolute right-8 bottom-8 opacity-10">
               <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
-                <rect x="20" y="20" width="160" height="160" stroke="white" strokeWidth="2" rx="20" />
-                <rect x="40" y="40" width="120" height="120" stroke="white" strokeWidth="2" rx="15" />
+                <rect
+                  x="20"
+                  y="20"
+                  width="160"
+                  height="160"
+                  stroke="white"
+                  strokeWidth="2"
+                  rx="20"
+                />
+                <rect
+                  x="40"
+                  y="40"
+                  width="120"
+                  height="120"
+                  stroke="white"
+                  strokeWidth="2"
+                  rx="15"
+                />
                 <rect x="60" y="60" width="80" height="80" stroke="white" strokeWidth="2" rx="10" />
               </svg>
             </div>
@@ -226,17 +242,17 @@ export default function CustomerAuthPage() {
             <form onSubmit={handleEmailAuth} className="space-y-6">
               {/* Email Input with Floating Label */}
               <div className="group relative">
-                <label 
+                <label
                   htmlFor="company-email"
-                  className={`absolute left-12 transition-all duration-200 pointer-events-none ${
-                    email 
-                      ? '-top-2.5 left-3 text-xs bg-white px-2 text-blue-600 font-medium' 
-                      : 'top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:text-xs group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-blue-600 group-focus-within:font-medium'
+                  className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                    email
+                      ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-blue-600"
+                      : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-blue-600"
                   }`}
                 >
                   Email firmă
                 </label>
-                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 hover:border-gray-300 hover:shadow-sm focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-blue-100 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-blue-50">
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-blue-100 focus-within:ring-blue-50 hover:border-gray-300 hover:shadow-sm">
                   <motion.div
                     animate={{
                       scale: email ? 1.1 : 1,
@@ -244,7 +260,10 @@ export default function CustomerAuthPage() {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Mail size={20} className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500" />
+                    <Mail
+                      size={20}
+                      className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500"
+                    />
                   </motion.div>
                   <input
                     id="company-email"
@@ -260,17 +279,17 @@ export default function CustomerAuthPage() {
 
               {/* Password Input with Floating Label */}
               <div className="group relative">
-                <label 
+                <label
                   htmlFor="company-password"
-                  className={`absolute left-12 transition-all duration-200 pointer-events-none ${
-                    password 
-                      ? '-top-2.5 left-3 text-xs bg-white px-2 text-blue-600 font-medium' 
-                      : 'top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:text-xs group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-blue-600 group-focus-within:font-medium'
+                  className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                    password
+                      ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-blue-600"
+                      : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-blue-600"
                   }`}
                 >
                   Parolă
                 </label>
-                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 hover:border-gray-300 hover:shadow-sm focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-blue-100 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-blue-50">
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-blue-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-blue-100 focus-within:ring-blue-50 hover:border-gray-300 hover:shadow-sm">
                   <motion.div
                     animate={{
                       scale: password ? 1.1 : 1,
@@ -278,7 +297,10 @@ export default function CustomerAuthPage() {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Lock size={20} className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500" />
+                    <Lock
+                      size={20}
+                      className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500"
+                    />
                   </motion.div>
                   <input
                     id="company-password"
@@ -312,7 +334,10 @@ export default function CustomerAuthPage() {
                   ) : (
                     <>
                       {isLogin ? "Autentificare" : "Înregistrare firmă"}
-                      <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+                      <ArrowRight
+                        size={20}
+                        className="transition-transform group-hover:translate-x-1"
+                      />
                     </>
                   )}
                 </span>
@@ -359,7 +384,7 @@ export default function CustomerAuthPage() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="mt-4 rounded-xl bg-blue-50 border border-blue-200 px-4 py-3 text-sm text-blue-800"
+                  className="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800"
                 >
                   {message}
                 </motion.div>

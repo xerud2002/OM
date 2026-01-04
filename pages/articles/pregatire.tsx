@@ -18,7 +18,7 @@ export default function ArticlePregatire() {
   return (
     <>
       <Head>
-        <title>Ghid Complet: Cum să Te Pregătești pentru Mutare în România | OferteMutari.ro</title>
+        <title>Ghid Complet: Cum să Te Pregătești pentru Mutare în România | OferteMutare.ro</title>
         <meta
           name="description"
           content="Ghid detaliat pentru pregătirea mutării: planificare în 8 săptămâni, liste complete, când să rezervi firma, ce documente îți trebuie și cum să economisești timp și bani."
@@ -36,7 +36,7 @@ export default function ArticlePregatire() {
           content="Tot ce trebuie să știi pentru o mutare bine organizată: planificare pas cu pas, liste complete și sfaturi pentru economisire."
         />
         <meta property="og:type" content="article" />
-        <link rel="canonical" href="https://ofertemutari.ro/articles/pregatire" />
+        <link rel="canonical" href="https://ofertemutare.ro/articles/pregatire" />
       </Head>
 
       <LayoutWrapper>
@@ -131,7 +131,7 @@ export default function ArticlePregatire() {
                 <li className="flex items-start gap-2">
                   <CheckCircle className="mt-1 h-5 w-5 flex-shrink-0 text-emerald-500" />
                   <span>
-                    <strong>Solicită oferte</strong> &ndash; Pe OferteMutari.ro primești 3-5 oferte
+                    <strong>Solicită oferte</strong> &ndash; Pe OferteMutare.ro primești 3-5 oferte
                     gratuite în 24h, fără obligație de cumpărare.
                   </span>
                 </li>
@@ -539,7 +539,7 @@ export default function ArticlePregatire() {
               </table>
             </div>
             <p className="mt-4 text-sm text-gray-600">
-              <strong>💡 Sfat de economisire:</strong> Solicită oferte pe OferteMutari.ro pentru a
+              <strong>💡 Sfat de economisire:</strong> Solicită oferte pe OferteMutare.ro pentru a
               compara prețuri. Mutările midweek (marți-joi) sunt de obicei mai ieftine cu 10-20%.
             </p>
           </section>

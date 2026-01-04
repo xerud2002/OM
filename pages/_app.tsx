@@ -20,7 +20,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta charSet="utf-8" />
-        <meta name="google-site-verification" content="Ua-OtirGRvnE0f7Q-HiI9YB9MDcONOYn1OpQg4HdaFY" />
+        <meta
+          name="google-site-verification"
+          content="Ua-OtirGRvnE0f7Q-HiI9YB9MDcONOYn1OpQg4HdaFY"
+        />
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/logo-square.webp" type="image/webp" sizes="64x64" />
         <title>Ofertemutare.ro — Oferte reale de la firme de mutări verificate</title>
@@ -33,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* A11y: skip link for keyboard users */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-[999] focus:rounded-lg focus:bg-emerald-600 focus:px-4 focus:py-2 focus:text-white"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[999] focus:rounded-lg focus:bg-emerald-600 focus:px-4 focus:py-2 focus:text-white"
       >
         Sar peste navigare
       </a>

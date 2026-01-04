@@ -31,13 +31,13 @@ export default function CustomerAuthPage() {
       setLoading(true);
       const mod = await import("@/utils/firebaseHelpers");
       const user = await mod.loginWithGoogle("customer");
-      
+
       // Handle popup blocked/cancelled case
       if (!user) {
         setLoading(false);
         return; // User cancelled or popup was blocked - no error message needed
       }
-      
+
       // Ensure role is correct (defensive; loginWithGoogle should create customer profile)
       const role = await mod.getUserRole(user);
       if (role !== "customer") {
@@ -138,7 +138,7 @@ export default function CustomerAuthPage() {
             className="relative hidden bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-12 lg:flex lg:flex-col lg:justify-between"
           >
             {/* Decorative circles */}
-            <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
             <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
             <div className="relative z-10">
@@ -185,7 +185,7 @@ export default function CustomerAuthPage() {
             </div>
 
             {/* Decorative illustration */}
-            <div className="absolute bottom-8 right-8 opacity-10">
+            <div className="absolute right-8 bottom-8 opacity-10">
               <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
                 <circle cx="100" cy="100" r="80" stroke="white" strokeWidth="2" />
                 <circle cx="100" cy="100" r="60" stroke="white" strokeWidth="2" />
@@ -235,17 +235,17 @@ export default function CustomerAuthPage() {
             <form onSubmit={handleEmailAuth} className="space-y-6">
               {/* Email Input with Floating Label */}
               <div className="group relative">
-                <label 
+                <label
                   htmlFor="email"
-                  className={`absolute left-12 transition-all duration-200 pointer-events-none ${
-                    email 
-                      ? '-top-2.5 left-3 text-xs bg-white px-2 text-emerald-600 font-medium' 
-                      : 'top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:text-xs group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-emerald-600 group-focus-within:font-medium'
+                  className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                    email
+                      ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
+                      : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
                   }`}
                 >
                   Adresa ta de email
                 </label>
-                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 hover:border-gray-300 hover:shadow-sm focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-emerald-100 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-emerald-50">
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
                   <motion.div
                     animate={{
                       scale: email ? 1.1 : 1,
@@ -253,7 +253,10 @@ export default function CustomerAuthPage() {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Mail size={20} className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
+                    <Mail
+                      size={20}
+                      className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500"
+                    />
                   </motion.div>
                   <input
                     id="email"
@@ -269,17 +272,17 @@ export default function CustomerAuthPage() {
 
               {/* Password Input with Floating Label */}
               <div className="group relative">
-                <label 
+                <label
                   htmlFor="password"
-                  className={`absolute left-12 transition-all duration-200 pointer-events-none ${
-                    password 
-                      ? '-top-2.5 left-3 text-xs bg-white px-2 text-emerald-600 font-medium' 
-                      : 'top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:text-xs group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-emerald-600 group-focus-within:font-medium'
+                  className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                    password
+                      ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
+                      : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
                   }`}
                 >
                   Parola ta
                 </label>
-                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 hover:border-gray-300 hover:shadow-sm focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-emerald-100 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-emerald-50">
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
                   <motion.div
                     animate={{
                       scale: password ? 1.1 : 1,
@@ -287,7 +290,10 @@ export default function CustomerAuthPage() {
                     }}
                     transition={{ duration: 0.3 }}
                   >
-                    <Lock size={20} className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
+                    <Lock
+                      size={20}
+                      className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500"
+                    />
                   </motion.div>
                   <input
                     id="password"
@@ -321,7 +327,10 @@ export default function CustomerAuthPage() {
                   ) : (
                     <>
                       {isLogin ? "Autentificare" : "Creează cont gratuit"}
-                      <ArrowRight size={20} className="transition-transform group-hover:translate-x-1" />
+                      <ArrowRight
+                        size={20}
+                        className="transition-transform group-hover:translate-x-1"
+                      />
                     </>
                   )}
                 </span>
@@ -369,7 +378,7 @@ export default function CustomerAuthPage() {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="mt-4 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-800"
+                  className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
                 >
                   {message}
                 </motion.div>
