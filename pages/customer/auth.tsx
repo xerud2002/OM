@@ -232,32 +232,70 @@ export default function CustomerAuthPage() {
             </div>
 
             {/* === Email Form === */}
-            <form onSubmit={handleEmailAuth} className="space-y-4">
+            <form onSubmit={handleEmailAuth} className="space-y-6">
+              {/* Email Input with Floating Label */}
               <div className="group relative">
-                <div className="flex items-center rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 transition-all focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg">
-                  <Mail size={20} className="mr-3 text-gray-400 transition-colors group-focus-within:text-emerald-600" />
+                <label 
+                  htmlFor="email"
+                  className={`absolute left-12 transition-all duration-200 pointer-events-none ${
+                    email 
+                      ? '-top-2.5 left-3 text-xs bg-white px-2 text-emerald-600 font-medium' 
+                      : 'top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:text-xs group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-emerald-600 group-focus-within:font-medium'
+                  }`}
+                >
+                  Adresa ta de email
+                </label>
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 hover:border-gray-300 hover:shadow-sm focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-emerald-100 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-emerald-50">
+                  <motion.div
+                    animate={{
+                      scale: email ? 1.1 : 1,
+                      rotate: email ? [0, -10, 10, 0] : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Mail size={20} className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
+                  </motion.div>
                   <input
+                    id="email"
                     type="email"
-                    placeholder="Adresa ta de email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full bg-transparent text-gray-900 placeholder-gray-400 outline-none"
+                    className="w-full bg-transparent text-gray-900 placeholder-transparent outline-none"
                     autoComplete="email"
                   />
                 </div>
               </div>
 
+              {/* Password Input with Floating Label */}
               <div className="group relative">
-                <div className="flex items-center rounded-xl border-2 border-gray-200 bg-gray-50 px-4 py-3 transition-all focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg">
-                  <Lock size={20} className="mr-3 text-gray-400 transition-colors group-focus-within:text-emerald-600" />
+                <label 
+                  htmlFor="password"
+                  className={`absolute left-12 transition-all duration-200 pointer-events-none ${
+                    password 
+                      ? '-top-2.5 left-3 text-xs bg-white px-2 text-emerald-600 font-medium' 
+                      : 'top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:text-xs group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-emerald-600 group-focus-within:font-medium'
+                  }`}
+                >
+                  Parola ta
+                </label>
+                <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 hover:border-gray-300 hover:shadow-sm focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-emerald-100 focus-within:shadow-lg focus-within:ring-4 focus-within:ring-emerald-50">
+                  <motion.div
+                    animate={{
+                      scale: password ? 1.1 : 1,
+                      rotate: password ? [0, 5, -5, 0] : 0,
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <Lock size={20} className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
+                  </motion.div>
                   <input
+                    id="password"
                     type="password"
-                    placeholder="Parola ta"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full bg-transparent text-gray-900 placeholder-gray-400 outline-none"
+                    className="w-full bg-transparent text-gray-900 placeholder-transparent outline-none"
                     autoComplete={isLogin ? "current-password" : "new-password"}
                   />
                 </div>
