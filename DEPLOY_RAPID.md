@@ -37,11 +37,13 @@ nano /var/www/om/.env
 ### Credențiale necesare:
 
 #### 1. Firebase Admin (obligatoriu)
+
 Mergi la: https://console.firebase.google.com/project/omro-e5a88/settings/serviceaccounts/adminsdk
 
 Click **"Generate new private key"** → Se descarcă un fișier JSON
 
 Din fișierul JSON, copiază:
+
 ```
 FIREBASE_ADMIN_CLIENT_EMAIL=firebase-adminsdk-xxxxx@omro-e5a88.iam.gserviceaccount.com
 FIREBASE_ADMIN_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nXXXX\n-----END PRIVATE KEY-----\n"
@@ -50,6 +52,7 @@ FIREBASE_ADMIN_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\nXXXX\n-----END PRIVATE 
 **IMPORTANT**: Private key trebuie în ghilimele și cu `\n` păstrate!
 
 #### 2. Resend API (pentru email-uri)
+
 Mergi la: https://resend.com/api-keys
 
 Click **"Create API Key"** → Copiază cheia
@@ -59,6 +62,7 @@ RESEND_API_KEY=re_XXXXXXXXXXXXXXXXX
 ```
 
 ### Salvează fișierul:
+
 - Apasă `Ctrl + X`
 - Apasă `Y`
 - Apasă `Enter`
@@ -78,6 +82,7 @@ certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro
 ```
 
 Răspunde:
+
 - Email: `adresa_ta@email.com`
 - Terms: `Y`
 - Redirect HTTP to HTTPS: `Y` (recomandat)
@@ -91,6 +96,7 @@ Mergi la: https://console.firebase.google.com/project/omro-e5a88/authentication/
 Scroll la **"Authorized domains"**
 
 Click **"Add domain"** și adaugă:
+
 1. `ofertemutare.ro`
 2. `www.ofertemutare.ro`
 3. `80.96.6.93`
@@ -104,20 +110,24 @@ Click **"Add"** pentru fiecare.
 ## Pasul 6: Testează site-ul
 
 ### Test rapid:
+
 ```bash
 curl http://localhost:3000
 ```
 
 ### Test în browser:
+
 - http://ofertemutare.ro
 - https://ofertemutare.ro (după SSL)
 
 ### Verifică logs:
+
 ```bash
 pm2 logs om-app
 ```
 
 ### Rulează teste automate:
+
 ```bash
 cd /var/www/om
 chmod +x post-deployment-test.sh
@@ -129,6 +139,7 @@ chmod +x post-deployment-test.sh
 ## Rezolvare Probleme
 
 ### Site-ul nu se încarcă
+
 ```bash
 # Verifică PM2
 pm2 status
@@ -143,6 +154,7 @@ systemctl restart nginx
 ```
 
 ### Erori în logs
+
 ```bash
 # Vezi ultimele 100 linii
 pm2 logs om-app --lines 100
@@ -152,11 +164,13 @@ pm2 logs om-app --err
 ```
 
 ### Autentificare nu funcționează
+
 1. Verifică Firebase authorized domains
 2. Verifică `.env` are credențiale corecte
 3. Verifică browser console pentru erori
 
 ### Build failed
+
 ```bash
 cd /var/www/om
 rm -rf .next node_modules
@@ -201,6 +215,7 @@ crontab -e
 ```
 
 Adaugă:
+
 ```
 0 9 * * * curl -X POST http://localhost:3000/api/sendUploadReminders -H "x-api-key: 7a8f9b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0" >> /var/log/cron-reminders.log 2>&1
 ```
@@ -229,12 +244,14 @@ Salvează: `Ctrl+X`, `Y`, `Enter`
 ## 🎉 Gata!
 
 Site-ul ar trebui să funcționeze la:
+
 - **https://ofertemutare.ro**
 - **https://www.ofertemutare.ro**
 
 Timp total estimat: **30-45 minute**
 
 Dacă întâmpini probleme, verifică:
+
 1. `pm2 logs om-app`
 2. `/var/log/nginx/om_error.log`
 3. `.env` are toate credențialele
