@@ -36,7 +36,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
-        <link rel="icon" href="/logo-square.webp" type="image/webp" sizes="64x64" />
+        <link rel="icon" href="/logo.webp" type="image/webp" sizes="any" />
         <title>Ofertemutare.ro — Oferte reale de la firme de mutări verificate</title>
         <meta
           name="description"

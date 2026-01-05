@@ -41,9 +41,9 @@ export default function Navbar() {
 
   /* 🔹 Navigation logic */
   const handleGetOffers = () => {
-    if (user) router.push("/form");
+    if (user) router.push("/customer/dashboard");
     else {
-      localStorage.setItem("redirectAfterLogin", "form");
+      localStorage.setItem("redirectAfterLogin", "/customer/dashboard");
       router.push("/customer/auth");
     }
     setIsOpen(false);
@@ -66,7 +66,7 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed left-0 top-0 z-50 w-full transition-all duration-500 ${
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 ${
         scrolled
           ? "border-b border-emerald-100 bg-white/90 shadow-md backdrop-blur-xl"
           : "bg-white/60 backdrop-blur-sm"
@@ -74,7 +74,7 @@ export default function Navbar() {
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
         {/* === LOGO === */}
-        <Link href="/" aria-label="Acasă" className="-ml-2 flex select-none items-center">
+        <Link href="/" aria-label="Acasă" className="-ml-2 flex items-center select-none">
           {/* Desktop Logo */}
           <div className="hidden sm:block">
             <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-2xl font-bold text-transparent transition-transform duration-200 hover:scale-105 md:text-3xl">
@@ -83,7 +83,7 @@ export default function Navbar() {
               <span className="align-top text-xs text-emerald-600">.ro</span>
             </div>
           </div>
-          
+
           {/* Mobile Logo */}
           <div className="block sm:hidden">
             <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent">
@@ -121,9 +121,7 @@ export default function Navbar() {
           ) : (
             <div className="relative ml-3 flex items-center gap-3">
               {/* Notification Bell for Companies */}
-              {userRole === "company" && user?.uid && (
-                <NotificationBell companyId={user.uid} />
-              )}
+              {userRole === "company" && user?.uid && <NotificationBell companyId={user.uid} />}
 
               <button
                 onClick={() => setShowUserMenu((v) => !v)}
