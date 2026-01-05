@@ -1,5 +1,5 @@
 // components/company/requestsView/PaymentForm.tsx
-// Payment form to unlock full request details
+// Payment form to unlock full request details - FREE limited time offer
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -11,15 +11,17 @@ import {
   Lock,
   Unlock,
   Phone,
-  Mail,
-  MapPin,
-  FileText,
+  Send,
+  HandshakeIcon,
+  MessageCircle,
   Shield,
   CheckCircle2,
   Sparkles,
   X,
   Zap,
   Gift,
+  Clock,
+  ArrowRight,
 } from "lucide-react";
 
 type Props = {
@@ -42,251 +44,220 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
     if (!company) return;
     setSending(true);
     try {
-      // Simulate payment processing delay
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1200));
 
-      // Save payment to Firestore (companies/{companyId}/payments/{requestId})
       const paymentRef = doc(db, `companies/${company.uid}/payments/${requestId}`);
       await setDoc(paymentRef, {
         requestId,
         companyId: company.uid,
         companyName: company.displayName || company.email || "Companie",
-        amount: 20,
+        amount: 0,
         currency: "RON",
         status: "completed",
         paidAt: serverTimestamp(),
         createdAt: serverTimestamp(),
       });
 
-      // Simulate successful payment
       setPaymentSuccess(true);
 
-      // Try to create offer (optional - for tracking)
       try {
         await addOffer(requestId, {
           companyId: company.uid,
           companyName: company.displayName || company.email || "Companie",
-          price: 20,
-          message: "Acces detalii complete achiziționate",
+          price: 0,
+          message: "Acces gratuit - promoție lansare",
           status: "pending",
         });
       } catch (offerErr) {
-        console.error("Offer creation skipped (permissions):", offerErr);
-        // Continue anyway - payment succeeded
+        console.error("Offer creation skipped:", offerErr);
       }
 
-      // Notify parent component
       if (onPaymentSuccess) {
         onPaymentSuccess();
       }
 
-      // Wait a moment to show success message
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 800));
       setShowPayment(false);
       setPaymentSuccess(false);
     } catch (err) {
-      console.error("Error processing payment:", err);
+      console.error("Error:", err);
       alert("A apărut o eroare. Te rugăm să încerci din nou.");
     } finally {
       setSending(false);
     }
   };
 
-  const benefits = [
-    { icon: Phone, text: "Număr de telefon client", color: "from-blue-500 to-indigo-500" },
-    { icon: Mail, text: "Adresa email completă", color: "from-violet-500 to-purple-500" },
+  // Action-oriented benefits
+  const actions = [
     {
-      icon: MapPin,
-      text: "Adresă exactă (bloc, scară, apartament)",
-      color: "from-orange-500 to-amber-500",
+      icon: Phone,
+      title: "Contactează clientul",
+      desc: "Sună direct pentru detalii",
+      gradient: "from-blue-500 to-indigo-600",
     },
-    { icon: FileText, text: "Toate detaliile mutării", color: "from-emerald-500 to-teal-500" },
+    {
+      icon: Send,
+      title: "Trimite o ofertă",
+      desc: "Propune prețul tău",
+      gradient: "from-emerald-500 to-teal-600",
+    },
+    {
+      icon: MessageCircle,
+      title: "Discută detaliile",
+      desc: "Clarifică cerințele",
+      gradient: "from-violet-500 to-purple-600",
+    },
+    {
+      icon: HandshakeIcon,
+      title: "Câștigă contractul",
+      desc: "Finalizează mutarea",
+      gradient: "from-teal-500 to-cyan-600",
+    },
   ];
 
   if (showPayment) {
     return (
       <AnimatePresence mode="wait">
         <motion.div
-          initial={{ opacity: 0, y: 10, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -10, scale: 0.98 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="mt-4 overflow-hidden rounded-2xl border border-emerald-200/60 bg-gradient-to-br from-white via-emerald-50/30 to-teal-50/40 shadow-xl shadow-emerald-500/10"
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="mt-4 overflow-hidden rounded-3xl bg-white shadow-2xl ring-1 shadow-slate-200/50 ring-slate-100"
         >
           {paymentSuccess ? (
-            // Success message
             <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
+              initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="p-8 text-center"
+              className="p-10 text-center"
             >
               <motion.div
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15, delay: 0.1 }}
-                className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30"
+                initial={{ scale: 0, rotate: -180 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ type: "spring", stiffness: 200, damping: 12 }}
+                className="mx-auto mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-xl shadow-emerald-200"
               >
                 <CheckCircle2 className="h-10 w-10 text-white" />
               </motion.div>
-              <h4 className="text-xl font-bold text-emerald-700">Plată Reușită!</h4>
-              <p className="mt-2 text-sm text-gray-600">
-                Detaliile complete ale clientului sunt acum deblocate
-              </p>
+              <h4 className="text-2xl font-bold text-slate-800">Felicitări! 🎉</h4>
+              <p className="mt-2 text-slate-500">Ai acces la datele complete ale clientului</p>
             </motion.div>
           ) : (
             <>
               {/* Header */}
-              <div className="relative bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-6 py-5">
-                <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIj48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnY0em0wLTZ2LTRoLTJ2NGgyek0zNiAyMGgtMnY0aDJ2LTR6Ii8+PC9nPjwvZz48L3N2Zz4=')] opacity-30" />
+              <div className="relative overflow-hidden bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 px-6 py-6">
+                {/* Animated gradient orbs */}
+                <motion.div
+                  animate={{ x: [0, 20, 0], opacity: [0.3, 0.5, 0.3] }}
+                  transition={{ duration: 5, repeat: Infinity }}
+                  className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-emerald-500/20 blur-3xl"
+                />
+                <motion.div
+                  animate={{ x: [0, -20, 0], opacity: [0.2, 0.4, 0.2] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                  className="absolute -right-10 -bottom-10 h-40 w-40 rounded-full bg-cyan-500/20 blur-3xl"
+                />
+
+                {/* Close button */}
                 <button
                   onClick={() => setShowPayment(false)}
                   disabled={sending}
-                  className="absolute top-3 right-3 rounded-full p-1.5 text-white/70 transition-colors hover:bg-white/20 hover:text-white disabled:opacity-50"
+                  className="absolute top-4 right-4 z-20 rounded-full bg-white/10 p-2 text-white/60 backdrop-blur-sm transition-all hover:bg-white/20 hover:text-white disabled:opacity-50"
                 >
-                  <X size={18} />
+                  <X size={16} />
                 </button>
-                <div className="relative flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20 backdrop-blur-sm">
-                    <Unlock className="h-6 w-6 text-white" />
+
+                <div className="relative z-10">
+                  <div className="flex items-center gap-4">
+                    <motion.div
+                      animate={{ rotate: [0, 5, -5, 0] }}
+                      transition={{ duration: 4, repeat: Infinity }}
+                      className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-500/30"
+                    >
+                      <Unlock className="h-7 w-7 text-white" />
+                    </motion.div>
+                    <div>
+                      <h4 className="text-xl font-bold text-white">Deblochează Accesul</h4>
+                      <p className="text-sm text-slate-300">Gratis pe perioadă limitată</p>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="text-lg font-bold text-white">Deblochează Detalii Complete</h4>
-                    <p className="text-sm text-emerald-100">
-                      Accesează toate informațiile clientului
-                    </p>
+
+                  {/* Price display */}
+                  <div className="mt-6 flex items-center justify-center">
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: "spring", delay: 0.3 }}
+                      className="relative"
+                    >
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1], opacity: [0.5, 0.8, 0.5] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 rounded-2xl bg-emerald-400/30 blur-xl"
+                      />
+                      <div className="relative flex items-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-8 py-4 shadow-lg shadow-emerald-500/30">
+                        <Sparkles className="h-6 w-6 text-white/80" />
+                        <span className="text-3xl font-black text-white">GRATIS</span>
+                        <Sparkles className="h-6 w-6 text-white/80" />
+                      </div>
+                    </motion.div>
                   </div>
                 </div>
               </div>
 
-              <div className="p-5">
-                {/* Price Card */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1 }}
-                  className="relative mb-5 overflow-hidden rounded-xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 p-5 text-center shadow-lg"
-                >
-                  <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-emerald-500/20 blur-2xl" />
-                  <div className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-teal-500/20 blur-2xl" />
+              {/* Actions Grid */}
+              <div className="p-6">
+                <p className="mb-4 flex items-center gap-2 text-xs font-semibold tracking-wider text-slate-400 uppercase">
+                  <Gift className="h-4 w-4 text-emerald-500" />
+                  Ce poți face după deblocare
+                </p>
 
-                  {/* Limited Offer Badge */}
-                  <motion.div
-                    initial={{ scale: 0, rotate: -12 }}
-                    animate={{ scale: 1, rotate: -12 }}
-                    transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.2 }}
-                    className="absolute -top-1 -right-1 z-10"
-                  >
-                    <div className="relative">
-                      <motion.div
-                        animate={{ scale: [1, 1.1, 1] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                        className="rounded-lg bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1.5 shadow-lg shadow-red-500/30"
-                      >
-                        <span className="flex items-center gap-1 text-xs font-bold text-white">
-                          <Zap className="h-3 w-3" />
-                          OFERTĂ LIMITATĂ
-                        </span>
-                      </motion.div>
-                    </div>
-                  </motion.div>
-
-                  <div className="relative pt-2">
-                    <div className="mb-2 flex items-center justify-center gap-1.5">
-                      <motion.div
-                        animate={{ rotate: [0, 10, -10, 0] }}
-                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
-                      >
-                        <Gift className="h-5 w-5 text-amber-400" />
-                      </motion.div>
-                      <span className="text-xs font-medium tracking-wider text-amber-400 uppercase">
-                        Promoție lansare
-                      </span>
-                    </div>
-
-                    {/* Price display with crossed out old price */}
-                    <div className="flex items-center justify-center gap-3">
-                      <div className="relative">
-                        <span className="text-2xl font-bold text-slate-500 line-through decoration-red-500 decoration-2">
-                          20 Lei
-                        </span>
-                      </div>
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        transition={{ type: "spring", stiffness: 200, delay: 0.3 }}
-                        className="flex items-baseline gap-1"
-                      >
-                        <span className="text-5xl font-black text-white">0</span>
-                        <span className="text-xl font-bold text-emerald-400">Lei</span>
-                      </motion.div>
-                    </div>
-
-                    <motion.p
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      transition={{ delay: 0.4 }}
-                      className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-400"
+                <div className="grid grid-cols-2 gap-3">
+                  {actions.map((action, i) => (
+                    <motion.div
+                      key={i}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.1 + i * 0.08 }}
+                      className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-white p-4 ring-1 ring-slate-100 transition-all hover:shadow-lg hover:ring-slate-200"
                     >
-                      <CheckCircle2 className="h-3.5 w-3.5" />
-                      GRATUIT • Acces permanent
-                    </motion.p>
-                  </div>
-                </motion.div>
-
-                {/* Benefits */}
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2 }}
-                  className="mb-5 space-y-2.5"
-                >
-                  <p className="text-xs font-bold tracking-wider text-slate-500 uppercase">
-                    Ce primești
-                  </p>
-                  <div className="grid gap-2">
-                    {benefits.map((benefit, i) => (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -10 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.25 + i * 0.05 }}
-                        className="flex items-center gap-3 rounded-xl bg-white p-3 shadow-sm ring-1 ring-slate-100"
-                      >
+                      <div className="absolute inset-0 bg-gradient-to-br from-slate-50/0 to-slate-100/50 opacity-0 transition-opacity group-hover:opacity-100" />
+                      <div className="relative">
                         <div
-                          className={`flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br ${benefit.color} shadow-sm`}
+                          className={`mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br ${action.gradient} shadow-md transition-transform group-hover:scale-110`}
                         >
-                          <benefit.icon className="h-4 w-4 text-white" />
+                          <action.icon className="h-5 w-5 text-white" />
                         </div>
-                        <span className="text-sm font-medium text-slate-700">{benefit.text}</span>
-                      </motion.div>
-                    ))}
-                  </div>
-                </motion.div>
+                        <h5 className="font-semibold text-slate-800">{action.title}</h5>
+                        <p className="mt-0.5 text-xs text-slate-500">{action.desc}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
 
-                {/* Action Buttons */}
+                {/* CTA Button */}
                 <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.4 }}
-                  className="space-y-3"
+                  className="mt-6"
                 >
                   <motion.button
                     onClick={handleConfirmPayment}
                     disabled={sending}
-                    whileHover={{ scale: sending ? 1 : 1.02 }}
-                    whileTap={{ scale: sending ? 1 : 0.98 }}
-                    className={`group relative w-full overflow-hidden rounded-xl py-4 font-bold text-white shadow-lg transition-all duration-300 ${
+                    whileHover={{ scale: sending ? 1 : 1.01 }}
+                    whileTap={{ scale: sending ? 1 : 0.99 }}
+                    className={`group relative w-full overflow-hidden rounded-2xl py-4 text-base font-bold text-white shadow-lg transition-all duration-300 ${
                       sending
                         ? "cursor-not-allowed bg-slate-400"
-                        : "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40"
+                        : "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/25 hover:shadow-xl hover:shadow-emerald-500/30"
                     }`}
                   >
-                    {/* Animated background pulse */}
                     {!sending && (
                       <motion.div
-                        className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400"
-                        animate={{ opacity: [0, 0.5, 0] }}
-                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                        animate={{ x: ["-100%", "100%"] }}
+                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 0.5 }}
                       />
                     )}
                     <span className="relative flex items-center justify-center gap-2">
@@ -297,7 +268,7 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
                             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                             className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white"
                           />
-                          Se procesează...
+                          Se activează...
                         </>
                       ) : (
                         <>
@@ -308,31 +279,31 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
                             <Sparkles className="h-5 w-5" />
                           </motion.div>
                           Deblochează GRATUIT
-                          <motion.span
+                          <motion.div
                             animate={{ x: [0, 4, 0] }}
                             transition={{ duration: 1, repeat: Infinity }}
                           >
-                            →
-                          </motion.span>
+                            <ArrowRight className="h-5 w-5" />
+                          </motion.div>
                         </>
                       )}
                     </span>
-                    {!sending && (
-                      <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-                    )}
                   </motion.button>
 
-                  {/* Trust badges */}
-                  <div className="flex items-center justify-center gap-4 pt-2">
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                  {/* Trust indicators */}
+                  <div className="mt-4 flex items-center justify-center gap-5 text-xs text-slate-400">
+                    <span className="flex items-center gap-1.5">
                       <Shield className="h-3.5 w-3.5 text-emerald-500" />
-                      <span>Plată securizată</span>
-                    </div>
-                    <div className="h-3 w-px bg-slate-200" />
-                    <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                      Securizat
+                    </span>
+                    <span className="flex items-center gap-1.5">
+                      <Zap className="h-3.5 w-3.5 text-teal-500" />
+                      Instant
+                    </span>
+                    <span className="flex items-center gap-1.5">
                       <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500" />
-                      <span>Acces imediat</span>
-                    </div>
+                      Fără obligații
+                    </span>
                   </div>
                 </motion.div>
               </div>
@@ -343,6 +314,7 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
     );
   }
 
+  // Initial compact button
   return (
     <motion.form
       onSubmit={handleShowPayment}
@@ -352,51 +324,61 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
     >
       <motion.button
         type="submit"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-4 shadow-lg shadow-emerald-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/30"
+        whileHover={{ scale: 1.01, y: -2 }}
+        whileTap={{ scale: 0.99 }}
+        className="group relative w-full overflow-hidden rounded-2xl bg-white p-1 shadow-lg ring-1 shadow-slate-200/50 ring-slate-100 transition-all duration-300 hover:shadow-xl hover:ring-emerald-200"
       >
-        {/* Animated pulse background */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400"
-          animate={{ opacity: [0, 0.3, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        />
-
-        {/* Limited offer badge */}
-        <motion.div
-          initial={{ scale: 0, rotate: -12 }}
-          animate={{ scale: 1, rotate: -12 }}
-          className="absolute -top-2 -right-2 z-10"
-        >
+        {/* Inner card */}
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-800 via-slate-900 to-slate-800 p-5">
+          {/* Animated glow */}
           <motion.div
-            animate={{ scale: [1, 1.1, 1] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="rounded-md bg-gradient-to-r from-red-500 to-orange-500 px-2 py-0.5 shadow-lg"
-          >
-            <span className="flex items-center gap-1 text-[10px] font-bold text-white">
-              <Zap className="h-2.5 w-2.5" />
-              GRATIS
-            </span>
-          </motion.div>
-        </motion.div>
+            className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 via-teal-500/5 to-cyan-500/10"
+            animate={{ opacity: [0.3, 0.5, 0.3] }}
+            transition={{ duration: 3, repeat: Infinity }}
+          />
 
-        <div className="relative flex items-center justify-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
-            <Lock className="h-5 w-5 text-white" />
+          <div className="relative flex items-center gap-4">
+            {/* Icon */}
+            <motion.div
+              animate={{ rotate: [0, 3, -3, 0] }}
+              transition={{ duration: 4, repeat: Infinity }}
+              className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg shadow-emerald-500/30"
+            >
+              <Lock className="h-7 w-7 text-white" />
+            </motion.div>
+
+            {/* Text */}
+            <div className="flex-1 text-left">
+              <p className="text-base font-bold text-white">Contactează clientul</p>
+              <p className="text-sm text-slate-400">
+                Deblochează: telefon, email și adresă, trimite-i o ofertă
+              </p>
+            </div>
+
+            {/* GRATIS badge */}
+            <motion.div
+              animate={{ scale: [1, 1.03, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-2 shadow-md shadow-emerald-500/20"
+            >
+              <span className="text-lg font-black text-white">GRATIS</span>
+            </motion.div>
           </div>
-          <div className="text-left">
-            <p className="text-sm font-bold text-white">Vezi detalii complete client</p>
-            <p className="text-xs text-emerald-100">Telefon, email, adresă exactă</p>
-          </div>
-          <div className="ml-auto flex items-center gap-2">
-            <span className="text-sm text-white/60 line-through">20 Lei</span>
-            <span className="rounded-lg bg-white/20 px-3 py-1.5 text-sm font-bold text-white backdrop-blur-sm">
-              0 Lei
+
+          {/* Bottom banner */}
+          <div className="mt-4 flex items-center justify-center gap-2 rounded-lg bg-emerald-500/10 py-2">
+            <Clock className="h-4 w-4 text-emerald-500" />
+            <span className="text-xs font-semibold text-emerald-600">
+              Gratis pe perioadă limitată
             </span>
+            <motion.div
+              animate={{ scale: [1, 1.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              <Sparkles className="h-4 w-4 text-emerald-500" />
+            </motion.div>
           </div>
         </div>
-        <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
       </motion.button>
     </motion.form>
   );
