@@ -6,7 +6,7 @@ import type { DashboardTab } from "./types";
 
 type Props = {
   activeTab: DashboardTab;
-  onTabChange: (tab: DashboardTab) => void;
+  onTabChange: (_tab: DashboardTab) => void;
   totalOffers: number;
 };
 

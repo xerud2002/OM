@@ -14,11 +14,12 @@ import {
   Mail,
   MapPin,
   FileText,
-  CreditCard,
   Shield,
   CheckCircle2,
   Sparkles,
   X,
+  Zap,
+  Gift,
 } from "lucide-react";
 
 type Props = {
@@ -167,20 +168,68 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
                 >
                   <div className="absolute -top-6 -right-6 h-24 w-24 rounded-full bg-emerald-500/20 blur-2xl" />
                   <div className="absolute -bottom-6 -left-6 h-24 w-24 rounded-full bg-teal-500/20 blur-2xl" />
-                  <div className="relative">
-                    <div className="mb-1 flex items-center justify-center gap-1.5">
-                      <Sparkles className="h-4 w-4 text-amber-400" />
+
+                  {/* Limited Offer Badge */}
+                  <motion.div
+                    initial={{ scale: 0, rotate: -12 }}
+                    animate={{ scale: 1, rotate: -12 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 15, delay: 0.2 }}
+                    className="absolute -top-1 -right-1 z-10"
+                  >
+                    <div className="relative">
+                      <motion.div
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="rounded-lg bg-gradient-to-r from-red-500 to-orange-500 px-3 py-1.5 shadow-lg shadow-red-500/30"
+                      >
+                        <span className="flex items-center gap-1 text-xs font-bold text-white">
+                          <Zap className="h-3 w-3" />
+                          OFERTĂ LIMITATĂ
+                        </span>
+                      </motion.div>
+                    </div>
+                  </motion.div>
+
+                  <div className="relative pt-2">
+                    <div className="mb-2 flex items-center justify-center gap-1.5">
+                      <motion.div
+                        animate={{ rotate: [0, 10, -10, 0] }}
+                        transition={{ duration: 2, repeat: Infinity, repeatDelay: 1 }}
+                      >
+                        <Gift className="h-5 w-5 text-amber-400" />
+                      </motion.div>
                       <span className="text-xs font-medium tracking-wider text-amber-400 uppercase">
-                        Preț special
+                        Promoție lansare
                       </span>
                     </div>
-                    <div className="flex items-baseline justify-center gap-1">
-                      <span className="text-5xl font-black text-white">20</span>
-                      <span className="text-xl font-bold text-emerald-400">Lei</span>
+
+                    {/* Price display with crossed out old price */}
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="relative">
+                        <span className="text-2xl font-bold text-slate-500 line-through decoration-red-500 decoration-2">
+                          20 Lei
+                        </span>
+                      </div>
+                      <motion.div
+                        initial={{ scale: 0 }}
+                        animate={{ scale: 1 }}
+                        transition={{ type: "spring", stiffness: 200, delay: 0.3 }}
+                        className="flex items-baseline gap-1"
+                      >
+                        <span className="text-5xl font-black text-white">0</span>
+                        <span className="text-xl font-bold text-emerald-400">Lei</span>
+                      </motion.div>
                     </div>
-                    <p className="mt-1 text-xs text-slate-400">
-                      Plată unică • Acces permanent la această cerere
-                    </p>
+
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.4 }}
+                      className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/20 px-3 py-1 text-xs font-semibold text-emerald-400"
+                    >
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                      GRATUIT • Acces permanent
+                    </motion.p>
                   </div>
                 </motion.div>
 
@@ -221,15 +270,25 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
                   transition={{ delay: 0.4 }}
                   className="space-y-3"
                 >
-                  <button
+                  <motion.button
                     onClick={handleConfirmPayment}
                     disabled={sending}
+                    whileHover={{ scale: sending ? 1 : 1.02 }}
+                    whileTap={{ scale: sending ? 1 : 0.98 }}
                     className={`group relative w-full overflow-hidden rounded-xl py-4 font-bold text-white shadow-lg transition-all duration-300 ${
                       sending
                         ? "cursor-not-allowed bg-slate-400"
-                        : "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/30 hover:scale-[1.02] hover:shadow-xl hover:shadow-emerald-500/40"
+                        : "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 shadow-emerald-500/30 hover:shadow-xl hover:shadow-emerald-500/40"
                     }`}
                   >
+                    {/* Animated background pulse */}
+                    {!sending && (
+                      <motion.div
+                        className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400"
+                        animate={{ opacity: [0, 0.5, 0] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      />
+                    )}
                     <span className="relative flex items-center justify-center gap-2">
                       {sending ? (
                         <>
@@ -238,19 +297,30 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
                             transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                             className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white"
                           />
-                          Se procesează plata...
+                          Se procesează...
                         </>
                       ) : (
                         <>
-                          <CreditCard className="h-5 w-5" />
-                          Plătește 20 Lei
+                          <motion.div
+                            animate={{ scale: [1, 1.2, 1] }}
+                            transition={{ duration: 1.5, repeat: Infinity }}
+                          >
+                            <Sparkles className="h-5 w-5" />
+                          </motion.div>
+                          Deblochează GRATUIT
+                          <motion.span
+                            animate={{ x: [0, 4, 0] }}
+                            transition={{ duration: 1, repeat: Infinity }}
+                          >
+                            →
+                          </motion.span>
                         </>
                       )}
                     </span>
                     {!sending && (
                       <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
                     )}
-                  </button>
+                  </motion.button>
 
                   {/* Trust badges */}
                   <div className="flex items-center justify-center gap-4 pt-2">
@@ -280,10 +350,37 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
       animate={{ opacity: 1 }}
       className="mt-4"
     >
-      <button
+      <motion.button
         type="submit"
-        className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-4 shadow-lg shadow-emerald-500/20 transition-all duration-300 hover:scale-[1.02] hover:shadow-xl hover:shadow-emerald-500/30"
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
+        className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500 p-4 shadow-lg shadow-emerald-500/20 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/30"
       >
+        {/* Animated pulse background */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400"
+          animate={{ opacity: [0, 0.3, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        />
+
+        {/* Limited offer badge */}
+        <motion.div
+          initial={{ scale: 0, rotate: -12 }}
+          animate={{ scale: 1, rotate: -12 }}
+          className="absolute -top-2 -right-2 z-10"
+        >
+          <motion.div
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="rounded-md bg-gradient-to-r from-red-500 to-orange-500 px-2 py-0.5 shadow-lg"
+          >
+            <span className="flex items-center gap-1 text-[10px] font-bold text-white">
+              <Zap className="h-2.5 w-2.5" />
+              GRATIS
+            </span>
+          </motion.div>
+        </motion.div>
+
         <div className="relative flex items-center justify-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 backdrop-blur-sm">
             <Lock className="h-5 w-5 text-white" />
@@ -292,12 +389,15 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
             <p className="text-sm font-bold text-white">Vezi detalii complete client</p>
             <p className="text-xs text-emerald-100">Telefon, email, adresă exactă</p>
           </div>
-          <div className="ml-auto rounded-lg bg-white/20 px-3 py-1.5 backdrop-blur-sm">
-            <span className="text-sm font-bold text-white">20 Lei</span>
+          <div className="ml-auto flex items-center gap-2">
+            <span className="text-sm text-white/60 line-through">20 Lei</span>
+            <span className="rounded-lg bg-white/20 px-3 py-1.5 text-sm font-bold text-white backdrop-blur-sm">
+              0 Lei
+            </span>
           </div>
         </div>
         <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/10 to-transparent transition-transform duration-700 group-hover:translate-x-full" />
-      </button>
+      </motion.button>
     </motion.form>
   );
 }

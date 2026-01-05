@@ -13,8 +13,8 @@ type Props = {
   index: number;
   requestId: string;
   offer: Offer;
-  onAccept: (requestId: string, offerId: string) => Promise<void> | void;
-  onDecline: (requestId: string, offerId: string) => Promise<void> | void;
+  onAccept: (_requestId: string, _offerId: string) => Promise<void> | void;
+  onDecline: (_requestId: string, _offerId: string) => Promise<void> | void;
 };
 
 export default function OfferRow({ index, requestId, offer, onAccept, onDecline }: Props) {

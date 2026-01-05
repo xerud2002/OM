@@ -26,7 +26,6 @@ const getCityOptions = (county?: string) => {
 
 export default function LocationSection({ type, form, setForm }: Props) {
   const isFrom = type === "from";
-  const colorClass = isFrom ? "emerald" : "sky";
   const borderColor = isFrom ? "border-emerald-200" : "border-sky-200";
   const bgGradient = isFrom
     ? "bg-linear-to-br from-emerald-50 to-white"
