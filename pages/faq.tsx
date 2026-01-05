@@ -136,10 +136,10 @@ export default function FAQPage() {
   return (
     <>
       <Head>
-        <title>Întrebări Frecvente (FAQ) | OferteMutari.ro</title>
+        <title>Întrebări Frecvente (FAQ) | OferteMutare.ro</title>
         <meta
           name="description"
-          content="Răspunsuri la cele mai frecvente întrebări despre OferteMutari.ro: cum funcționează, prețuri, firme verificate, proces de solicitare și mai mult."
+          content="Răspunsuri la cele mai frecvente întrebări despre OferteMutare.ro: cum funcționează, prețuri, firme verificate, proces de solicitare și mai mult."
         />
       </Head>
 

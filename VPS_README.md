@@ -71,7 +71,7 @@ systemctl restart nginx
 ### Step 6: Setup SSL (After DNS is configured)
 
 ```bash
-certbot --nginx -d ofertemutari.ro -d www.ofertemutari.ro
+certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro
 ```
 
 ### Step 7: Configure Firebase

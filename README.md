@@ -1,4 +1,4 @@
-# 🚚 OferteMutari.ro
+# 🚚 OferteMutare.ro
 
 **Platform modernă pentru conectarea clienților cu firme de mutări verificate din România.**
 
@@ -27,7 +27,7 @@
 
 ## 🎯 Despre Proiect
 
-OferteMutari.ro este o platformă all-in-one care simplifică procesul de mutare prin conectarea clienților cu firme de mutări profesioniste.
+OferteMutare.ro este o platformă all-in-one care simplifică procesul de mutare prin conectarea clienților cu firme de mutări profesioniste.
 
 ### Pentru Clienți
 
@@ -343,7 +343,7 @@ firebase deploy --only storage
 
 1. În Firebase Console → **Project Settings** → **General**
 2. Scroll la **Your apps** → Click **Web** icon (`</>`)
-3. Register app (nickname: "OferteMutari Web")
+3. Register app (nickname: "OferteMutare Web")
 4. Copiază config în `.env`:
    ```env
    NEXT_PUBLIC_FIREBASE_API_KEY=AIza...

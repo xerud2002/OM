@@ -1,11 +1,11 @@
-# VPS Setup & Deployment Guide - OferteMutari.ro
+# VPS Setup & Deployment Guide - OferteMutare.ro
 
 ## Prerequisites
 
 Your VPS details:
 
 - **IP**: 80.96.6.93
-- **Domain**: ofertemutari.ro (and www.ofertemutari.ro)
+- **Domain**: ofertemutare.ro (and www.ofertemutare.ro)
 - **OS**: Ubuntu/Debian (assumed)
 
 ---
@@ -299,7 +299,7 @@ curl http://localhost:3000
 Open your browser and navigate to:
 
 - http://80.96.6.93 (should work immediately)
-- http://ofertemutari.ro (requires DNS configuration - see below)
+- http://ofertemutare.ro (requires DNS configuration - see below)
 
 ---
 
@@ -514,7 +514,7 @@ systemctl restart nginx
 1. Check firewall: `ufw status`
 2. Check Nginx: `systemctl status nginx`
 3. Check PM2: `pm2 status`
-4. Check DNS: `nslookup ofertemutari.ro`
+4. Check DNS: `nslookup ofertemutare.ro`
 5. Try accessing by IP: `http://80.96.6.93`
 
 ---

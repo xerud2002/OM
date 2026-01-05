@@ -1,6 +1,6 @@
 # Copilot instructions for OM (Next.js + Firebase)
 
-> **Quick Start**: Next.js 14 + Firebase + Tailwind v4. Dev: `npm run dev` (port 3001). Firebase init in `services/firebase.ts`. Helpers in `utils/*Helpers.ts`. Role protection via `RequireRole`. Romanian validators in `utils/validation.ts`.
+> **Quick Start**: Next.js 14 + Firebase + Tailwind v4. Dev: `npm run dev` (port 3000). Firebase init in `services/firebase.ts`. Helpers in `utils/*Helpers.ts`. Role protection via `RequireRole`. Romanian validators in `utils/validation.ts`.
 
 These notes make AI coding agents productive quickly in this repo. Stick to the project's patterns and file boundaries below.
 
@@ -12,7 +12,7 @@ These notes make AI coding agents productive quickly in this repo. Stick to the 
 - **Global shell**: `pages/_app.tsx` wires `Navbar`, `Footer`, global `<Toaster />`, `ErrorBoundary`, and `FloatingCTA`. Content is offset via `pt-[80px]`.
 - **Routing**: Uses Pages Router (`pages/**`). Some client components use `next/navigation`'s `useRouter`; keep this consistent unless migrating the app.
 - **Layout**: Use `components/layout/Layout.tsx` (`LayoutWrapper`) to wrap sections/pages with the gradient background container.
-- **Dev mode**: Port `:3001` (see `package.json` scripts). Imports `@/utils/devErrorSuppressor` to suppress common dev noise.
+- **Dev mode**: Port `:3000` (see `package.json` scripts). Imports `@/utils/devErrorSuppressor` to suppress common dev noise.
 
 ## Firebase integration
 
@@ -174,7 +174,7 @@ const uid = decoded.uid;
 
 ## Developer workflows
 
-- **Dev**: `npm run dev` (runs on port 3001)
+- **Dev**: `npm run dev` (runs on port 3000)
 - **Build**: `npm run build`; **Start**: `npm run start`
 - **Lint**: `npm run lint` (max warnings: 0); **Format**: `npm run format`
 - **Pre-commit**: Husky runs `lint-staged` hook that lints and formats staged files (config in `package.json` top-level).
@@ -231,7 +231,7 @@ pm2 startup  # Auto-restart on reboot
 ```nginx
 server {
     listen 80;
-    server_name 80.96.6.93 ofertemutari.ro www.ofertemutari.ro;
+    server_name 80.96.6.93 ofertemutare.ro www.ofertemutare.ro;
 
     location / {
         proxy_pass http://127.0.0.1:3000;
@@ -251,7 +251,7 @@ server {
 
 ```bash
 sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d ofertemutari.ro -d www.ofertemutari.ro
+sudo certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro
 ```
 
 **CRON job pentru remindere** (înlocuiește Vercel CRON):

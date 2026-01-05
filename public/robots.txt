@@ -1,0 +1,17 @@
+# robots.txt for ofertemutare.ro
+
+User-agent: *
+Allow: /
+
+# Block private/authenticated pages
+Disallow: /customer/dashboard
+Disallow: /customer/settings
+Disallow: /company/dashboard
+Disallow: /company/profile
+Disallow: /upload/
+
+# Block API routes
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://ofertemutare.ro/sitemap.xml

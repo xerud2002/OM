@@ -7,7 +7,7 @@ export default function GuideMutare() {
   return (
     <>
       <Head>
-        <title>Ghid Complet Mutare Locuință | OferteMutari.ro</title>
+        <title>Ghid Complet Mutare Locuință | OferteMutare.ro</title>
         <meta
           name="description"
           content="Ghidul complet pentru o mutare fără stres - pregătire, împachetare, evaluare și sfaturi practice de la experți."
