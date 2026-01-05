@@ -12,6 +12,14 @@ export default function GuideMutare() {
           name="description"
           content="Ghidul complet pentru o mutare fără stres - pregătire, împachetare, evaluare și sfaturi practice de la experți."
         />
+        <link rel="canonical" href="https://ofertemutare.ro/guides/mutare" />
+        <meta property="og:title" content="Ghid Complet Mutare Locuință" />
+        <meta
+          property="og:description"
+          content="Tot ce trebuie să știi pentru o mutare organizată și fără stres."
+        />
+        <meta property="og:url" content="https://ofertemutare.ro/guides/mutare" />
+        <meta property="og:type" content="article" />
       </Head>
 
       <LayoutWrapper>

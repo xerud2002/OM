@@ -35,6 +35,7 @@ export default function ArticleSurvey() {
           content="Compară cele 3 tipuri de survey la mutări și alege cel mai potrivit pentru tine: vizită fizică, video call sau estimare rapidă."
         />
         <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://ofertemutare.ro/articles/survey" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/survey" />
       </Head>
 

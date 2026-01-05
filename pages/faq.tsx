@@ -141,6 +141,14 @@ export default function FAQPage() {
           name="description"
           content="Răspunsuri la cele mai frecvente întrebări despre OferteMutare.ro: cum funcționează, prețuri, firme verificate, proces de solicitare și mai mult."
         />
+        <link rel="canonical" href="https://ofertemutare.ro/faq" />
+        <meta property="og:title" content="Întrebări Frecvente (FAQ) | OferteMutare.ro" />
+        <meta
+          property="og:description"
+          content="Răspunsuri la cele mai frecvente întrebări despre platforma de mutări."
+        />
+        <meta property="og:url" content="https://ofertemutare.ro/faq" />
+        <meta property="og:type" content="website" />
       </Head>
 
       <LayoutWrapper>

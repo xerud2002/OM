@@ -16,6 +16,14 @@ export default function ArticleImpachetare() {
           name="keywords"
           content="împachetare mutare, cutii mutare, materiale ambalare, protejare obiecte fragile, organizare mutare"
         />
+        <link rel="canonical" href="https://ofertemutare.ro/articles/impachetare" />
+        <meta property="og:title" content="Ghid Complet de Împachetare pentru Mutare" />
+        <meta
+          property="og:description"
+          content="Tehnici profesionale de împachetare pentru o mutare organizată și fără stres."
+        />
+        <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://ofertemutare.ro/articles/impachetare" />
       </Head>
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-6 py-12">
@@ -53,7 +61,7 @@ export default function ArticleImpachetare() {
 
           {/* Main Content */}
           <div className="prose prose-lg max-w-none">
-            <h2 className="mb-4 mt-8 text-2xl font-bold text-gray-900">
+            <h2 className="mt-8 mb-4 text-2xl font-bold text-gray-900">
               Materiale Esențiale de Împachetare
             </h2>
             <p className="mb-4 text-gray-700">
@@ -61,39 +69,39 @@ export default function ArticleImpachetare() {
             </p>
             <ul className="mb-6 space-y-2 text-gray-700">
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Cutii de carton rezistente</strong> - diverse dimensiuni (mici pentru
                   cărți, mari pentru haine)
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Folie cu bule (bubble wrap)</strong> - protecție excelentă pentru obiecte
                   fragile
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Hârtie de ziar sau ambalare</strong> - pentru umplerea spațiilor goale
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Bandă adezivă rezistentă</strong> - minimum 2 role pentru siguranță
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Markere permanente</strong> - pentru etichetare clară și organizare
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mr-2 mt-1 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
                 <span>
                   <strong>Folie stretch</strong> - pentru protejarea mobilierului și gruparea
                   obiectelor
@@ -114,11 +122,11 @@ export default function ArticleImpachetare() {
               </p>
             </div>
 
-            <h2 className="mb-4 mt-8 text-2xl font-bold text-gray-900">
+            <h2 className="mt-8 mb-4 text-2xl font-bold text-gray-900">
               Tehnici de Împachetare pe Categorii
             </h2>
 
-            <h3 className="mb-3 mt-6 text-xl font-semibold text-gray-800">Haine și Textile</h3>
+            <h3 className="mt-6 mb-3 text-xl font-semibold text-gray-800">Haine și Textile</h3>
             <p className="mb-4 text-gray-700">
               Hainele pot fi păstrate pe umerașe și acoperite cu folii de protecție, sau împăturite
               în cutii mari. Pentru economie de spațiu, folosește saci de vidat pentru lenjerie și
@@ -126,7 +134,7 @@ export default function ArticleImpachetare() {
               umerașe.
             </p>
 
-            <h3 className="mb-3 mt-6 text-xl font-semibold text-gray-800">
+            <h3 className="mt-6 mb-3 text-xl font-semibold text-gray-800">
               Electrocasnice și Electronice
             </h3>
             <p className="mb-4 text-gray-700">
@@ -136,21 +144,21 @@ export default function ArticleImpachetare() {
               reinstalare ușoară.
             </p>
 
-            <h3 className="mb-3 mt-6 text-xl font-semibold text-gray-800">Cărți și Documente</h3>
+            <h3 className="mt-6 mb-3 text-xl font-semibold text-gray-800">Cărți și Documente</h3>
             <p className="mb-4 text-gray-700">
               Cărțile sunt grele, așa că folosește cutii mici pentru a evita supraîncărcarea.
               Pune-le pe verticală (ca pe raft) pentru protecție maximă. Documentele importante
               păstrează-le într-o mapă separată pe care o transporți personal, nu le lăsa în camion.
             </p>
 
-            <h3 className="mb-3 mt-6 text-xl font-semibold text-gray-800">Bucătărie</h3>
+            <h3 className="mt-6 mb-3 text-xl font-semibold text-gray-800">Bucătărie</h3>
             <p className="mb-4 text-gray-700">
               Farfuriile se împachetează vertical (nu stivuite orizontal) separate prin carton sau
               bubble wrap. Paharele se înfășoară individual și se așază cu gura în jos. Cuțitele se
               leagă împreună cu carton pe partea ascuțită pentru siguranță.
             </p>
 
-            <h2 className="mb-4 mt-8 text-2xl font-bold text-gray-900">
+            <h2 className="mt-8 mb-4 text-2xl font-bold text-gray-900">
               Sistem de Etichetare și Organizare
             </h2>
             <p className="mb-4 text-gray-700">
@@ -176,7 +184,7 @@ export default function ArticleImpachetare() {
               </li>
             </ul>
 
-            <h2 className="mb-4 mt-8 text-2xl font-bold text-gray-900">
+            <h2 className="mt-8 mb-4 text-2xl font-bold text-gray-900">
               Cutia de Prioritate - Prima Zi
             </h2>
             <p className="mb-4 text-gray-700">
@@ -210,7 +218,7 @@ export default function ArticleImpachetare() {
               </p>
             </div>
 
-            <h2 className="mb-4 mt-8 text-2xl font-bold text-gray-900">Timeline de Împachetare</h2>
+            <h2 className="mt-8 mb-4 text-2xl font-bold text-gray-900">Timeline de Împachetare</h2>
             <div className="mb-6 space-y-4">
               <div className="rounded-lg border-l-4 border-emerald-500 bg-gray-50 p-4">
                 <h4 className="mb-2 font-semibold text-gray-900">3 săptămâni înainte</h4>

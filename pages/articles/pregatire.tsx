@@ -36,6 +36,7 @@ export default function ArticlePregatire() {
           content="Tot ce trebuie să știi pentru o mutare bine organizată: planificare pas cu pas, liste complete și sfaturi pentru economisire."
         />
         <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://ofertemutare.ro/articles/pregatire" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/pregatire" />
       </Head>
 

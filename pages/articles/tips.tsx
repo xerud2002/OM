@@ -39,6 +39,7 @@ export default function ArticleTips() {
           content="Ghid complet cu trucuri și sfaturi de la profesioniști: economisește bani, timp și stres la mutare."
         />
         <meta property="og:type" content="article" />
+        <meta property="og:url" content="https://ofertemutare.ro/articles/tips" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/tips" />
       </Head>
 

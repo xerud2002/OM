@@ -12,6 +12,10 @@ export default function TermsPage() {
           name="description"
           content="Termenii și condițiile de utilizare a platformei OferteMutare.ro. Citește regulile și responsabilitățile pentru utilizatori și firme partenere."
         />
+        <link rel="canonical" href="https://ofertemutare.ro/terms" />
+        <meta property="og:title" content="Termeni și Condiții | OferteMutare.ro" />
+        <meta property="og:url" content="https://ofertemutare.ro/terms" />
+        <meta property="og:type" content="website" />
       </Head>
 
       <LayoutWrapper>
