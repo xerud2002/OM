@@ -1,22 +1,45 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import RequireRole from "@/components/auth/RequireRole";
-import { db } from "@/services/firebase";
-import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
-import { motion } from "framer-motion";
-import { onAuthChange } from "@/utils/firebaseHelpers";
-import { createRequest as createRequestHelper } from "@/utils/firestoreHelpers";
-import { PlusSquare, List, Inbox, Archive as ArchiveIcon, CheckCircle2 } from "lucide-react";
+import {
+  PlusSquare,
+  List,
+  Inbox,
+  Archive as ArchiveIcon,
+  CheckCircle2,
+  MessageSquare,
+} from "lucide-react";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
-import { sendEmail } from "@/utils/emailHelpers";
-import OfferComparison from "@/components/customer/OfferComparison";
-import RequestForm from "@/components/customer/RequestForm";
-import MyRequestCard from "@/components/customer/MyRequestCard";
-import { MessageSquare } from "lucide-react";
-import { auth } from "@/services/firebase";
 import { toast } from "sonner";
-import { updateRequestStatus, archiveRequest, unarchiveRequest } from "@/utils/firestoreHelpers";
+import { motion } from "framer-motion";
+import { db, auth } from "@/services/firebase";
+import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { onAuthChange } from "@/utils/firebaseHelpers";
+import { sendEmail } from "@/utils/emailHelpers";
+import {
+  createRequest as createRequestHelper,
+  updateRequestStatus,
+  archiveRequest,
+  unarchiveRequest,
+} from "@/utils/firestoreHelpers";
+
+// Lazy load heavy components to reduce initial bundle
+const RequestForm = dynamic(() => import("@/components/customer/RequestForm"), {
+  loading: () => <div className="h-96 animate-pulse rounded-xl bg-gray-100" />,
+  ssr: false,
+});
+
+const OfferComparison = dynamic(() => import("@/components/customer/OfferComparison"), {
+  loading: () => <div className="h-48 animate-pulse rounded-xl bg-gray-100" />,
+  ssr: false,
+});
+
+const MyRequestCard = dynamic(() => import("@/components/customer/MyRequestCard"), {
+  loading: () => <div className="mb-4 h-32 animate-pulse rounded-xl bg-gray-100" />,
+  ssr: false,
+});
 
 type Request = {
   id: string;
@@ -400,7 +423,7 @@ export default function CustomerDashboard() {
             const file = form.mediaFiles[i];
 
             console.warn(`Uploading ${file.name} (${i + 1}/${form.mediaFiles.length})`);
-            
+
             try {
               const fileName = `${Date.now()}_${file.name}`;
               const storagePath = `requests/${requestId}/customers/${user.uid}/${fileName}`;
@@ -608,20 +631,21 @@ export default function CustomerDashboard() {
         <div className="relative overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-emerald-900">
           {/* Animated gradient orbs */}
           <div className="pointer-events-none absolute inset-0">
-            <div className="absolute -left-20 top-10 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
-            <div className="absolute -right-20 top-20 h-96 w-96 rounded-full bg-sky-500/15 blur-3xl" />
+            <div className="absolute top-10 -left-20 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
+            <div className="absolute top-20 -right-20 h-96 w-96 rounded-full bg-sky-500/15 blur-3xl" />
             <div className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-400/10 blur-2xl" />
           </div>
 
           <div className="relative mx-auto max-w-[1400px] px-4 pt-28 pb-10 sm:px-6 sm:pt-32 lg:pb-14">
             {/* Header */}
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <motion.div
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-              >
+              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
                 <h1 className="text-3xl font-bold text-white sm:text-4xl">
-                  Bună, <span className="bg-linear-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">{user?.displayName || "Client"}</span>!
+                  Bună,{" "}
+                  <span className="bg-linear-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
+                    {user?.displayName || "Client"}
+                  </span>
+                  !
                 </h1>
                 <p className="mt-2 text-base text-slate-300">
                   Gestionează cererile tale de mutare și ofertele primite
@@ -656,7 +680,7 @@ export default function CustomerDashboard() {
                     <List size={26} className="text-emerald-400" />
                   </div>
                 </div>
-                <div className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
+                <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
               </motion.div>
 
               <motion.div
@@ -676,7 +700,7 @@ export default function CustomerDashboard() {
                     <Inbox size={26} className="text-sky-400" />
                   </div>
                 </div>
-                <div className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-sky-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
+                <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-sky-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
               </motion.div>
 
               <motion.div
@@ -696,14 +720,13 @@ export default function CustomerDashboard() {
                     <ArchiveIcon size={26} className="text-amber-400" />
                   </div>
                 </div>
-                <div className="absolute -bottom-4 -right-4 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
+                <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
               </motion.div>
             </div>
           </div>
         </div>
 
         <section className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6">
-
           {/* Navigation Tabs - Modern pill style */}
           <div className="mb-8">
             <div className="inline-flex flex-wrap gap-2 rounded-2xl bg-gray-100 p-2">
@@ -790,7 +813,8 @@ export default function CustomerDashboard() {
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">Nicio cerere încă</h3>
                   <p className="mt-3 max-w-md text-gray-500">
-                    Creează prima ta cerere de mutare și primește oferte personalizate de la firme verificate
+                    Creează prima ta cerere de mutare și primește oferte personalizate de la firme
+                    verificate
                   </p>
                   <button
                     onClick={() => setActiveTab("new")}
@@ -881,7 +905,7 @@ export default function CustomerDashboard() {
               ) : (
                 <div className="grid grid-cols-1 gap-0 lg:grid-cols-[320px,1fr]">
                   {/* Sidebar: requests list */}
-                  <aside className="border-b border-gray-100 bg-linear-to-br from-gray-50 to-white lg:border-b-0 lg:border-r">
+                  <aside className="border-b border-gray-100 bg-linear-to-br from-gray-50 to-white lg:border-r lg:border-b-0">
                     <div className="sticky top-[80px] max-h-[calc(100vh-120px)] overflow-auto p-5">
                       <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-900">
                         <List size={16} className="text-emerald-600" />
@@ -903,7 +927,9 @@ export default function CustomerDashboard() {
                             >
                               <div className="flex items-center justify-between gap-3">
                                 <div className="min-w-0">
-                                  <p className={`truncate font-bold ${active ? "text-emerald-700" : "text-gray-900"}`}>
+                                  <p
+                                    className={`truncate font-bold ${active ? "text-emerald-700" : "text-gray-900"}`}
+                                  >
                                     {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
                                   </p>
                                   <p className="mt-1 text-xs text-gray-500">
@@ -913,11 +939,13 @@ export default function CustomerDashboard() {
                                     })()}
                                   </p>
                                 </div>
-                                <span className={`shrink-0 rounded-xl px-3 py-1 text-sm font-bold ${
-                                  active 
-                                    ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30" 
-                                    : "bg-gray-100 text-gray-700"
-                                }`}>
+                                <span
+                                  className={`shrink-0 rounded-xl px-3 py-1 text-sm font-bold ${
+                                    active
+                                      ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
+                                      : "bg-gray-100 text-gray-700"
+                                  }`}
+                                >
                                   {cnt}
                                 </span>
                               </div>
@@ -935,7 +963,9 @@ export default function CustomerDashboard() {
                         <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
                           <Inbox size={28} className="text-gray-400" />
                         </div>
-                        <p className="text-gray-500">Selectează o cerere din stânga pentru a vedea ofertele.</p>
+                        <p className="text-gray-500">
+                          Selectează o cerere din stânga pentru a vedea ofertele.
+                        </p>
                       </div>
                     ) : (
                       <>
@@ -948,7 +978,9 @@ export default function CustomerDashboard() {
                           </div>
                           <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2">
                             <span className="text-sm font-medium text-emerald-700">Total:</span>
-                            <span className="text-lg font-bold text-emerald-600">{(offersByRequest[selectedRequestId] || []).length}</span>
+                            <span className="text-lg font-bold text-emerald-600">
+                              {(offersByRequest[selectedRequestId] || []).length}
+                            </span>
                           </div>
                         </div>
 
@@ -1146,7 +1178,7 @@ function OfferRow({
     >
       {/* Gradient accent */}
       <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-emerald-500 to-sky-500" />
-      
+
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Company info */}
         <div className="flex-1">
@@ -1172,7 +1204,9 @@ function OfferRow({
         <div className="flex flex-col items-end gap-3 sm:ml-6">
           <div className="text-right">
             <p className="text-sm font-medium text-gray-500">Preț ofertat</p>
-            <p className="text-3xl font-bold text-emerald-600">{offer.price} <span className="text-lg">lei</span></p>
+            <p className="text-3xl font-bold text-emerald-600">
+              {offer.price} <span className="text-lg">lei</span>
+            </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button
@@ -1210,7 +1244,7 @@ function OfferRow({
             onChange={(e) => setText(e.target.value)}
             rows={3}
             placeholder="Scrie un mesaj către firmă..."
-            className="w-full resize-y rounded-xl border border-gray-200 bg-white p-3 text-sm outline-none transition-all focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
+            className="w-full resize-y rounded-xl border border-gray-200 bg-white p-3 text-sm transition-all outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
           />
           <div className="mt-3 flex justify-end gap-2">
             <button
