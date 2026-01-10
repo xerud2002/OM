@@ -4,6 +4,11 @@ export default function Document() {
   return (
     <Html lang="ro">
       <Head>
+        {/* Favicon - REQUIRED for Google search results */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="apple-touch-icon" href="/favicon-32x32.png" />
+
         {/* Critical preconnects for Firebase (LCP improvement ~310ms) */}
         <link rel="preconnect" href="https://omro-e5a88.firebaseapp.com" crossOrigin="anonymous" />
         <link
