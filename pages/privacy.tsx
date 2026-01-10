@@ -26,7 +26,10 @@ export default function PrivacyPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/privacy" />
         <meta name="twitter:title" content="Politica de Confidențialitate | OferteMutare.ro" />
-        <meta name="twitter:description" content="Cum colectăm, folosim și protejăm datele tale personale conform GDPR." />
+        <meta
+          name="twitter:description"
+          content="Cum colectăm, folosim și protejăm datele tale personale conform GDPR."
+        />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 

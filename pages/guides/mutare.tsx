@@ -26,7 +26,10 @@ export default function GuideMutare() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/guides/mutare" />
         <meta name="twitter:title" content="Ghid Complet Mutare Locuință" />
-        <meta name="twitter:description" content="Tot ce trebuie să știi pentru o mutare organizată și fără stres." />
+        <meta
+          name="twitter:description"
+          content="Tot ce trebuie să știi pentru o mutare organizată și fără stres."
+        />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 

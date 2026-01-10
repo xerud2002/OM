@@ -30,7 +30,10 @@ export default function ArticleImpachetare() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/articles/impachetare" />
         <meta name="twitter:title" content="Ghid Complet de Împachetare pentru Mutare" />
-        <meta name="twitter:description" content="Tehnici profesionale de împachetare pentru o mutare organizată și fără stres." />
+        <meta
+          name="twitter:description"
+          content="Tehnici profesionale de împachetare pentru o mutare organizată și fără stres."
+        />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/packing1.webp" />
       </Head>
       <LayoutWrapper>

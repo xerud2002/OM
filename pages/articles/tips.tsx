@@ -44,7 +44,10 @@ export default function ArticleTips() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/articles/tips" />
         <meta name="twitter:title" content="50+ Sfaturi Expert Pentru Mutări în România" />
-        <meta name="twitter:description" content="Ghid complet cu trucuri și sfaturi de la profesioniști: economisește bani, timp și stres la mutare." />
+        <meta
+          name="twitter:description"
+          content="Ghid complet cu trucuri și sfaturi de la profesioniști: economisește bani, timp și stres la mutare."
+        />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/tips" />
       </Head>

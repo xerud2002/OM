@@ -155,7 +155,10 @@ export default function FAQPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/faq" />
         <meta name="twitter:title" content="Întrebări Frecvente (FAQ) | OferteMutare.ro" />
-        <meta name="twitter:description" content="Răspunsuri la cele mai frecvente întrebări despre platforma de mutări." />
+        <meta
+          name="twitter:description"
+          content="Răspunsuri la cele mai frecvente întrebări despre platforma de mutări."
+        />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 

@@ -127,7 +127,10 @@ export default function AboutPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/about" />
         <meta name="twitter:title" content="Despre Noi | OferteMutare.ro" />
-        <meta name="twitter:description" content="Platforma care conectează clienții cu firme de mutări verificate din România." />
+        <meta
+          name="twitter:description"
+          content="Platforma care conectează clienții cu firme de mutări verificate din România."
+        />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/team.webp" />
       </Head>
 

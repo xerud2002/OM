@@ -40,7 +40,10 @@ export default function ArticleSurvey() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/articles/survey" />
         <meta name="twitter:title" content="Tipuri de Survey Pentru Mutări: Ghid Complet 2025" />
-        <meta name="twitter:description" content="Compară cele 3 tipuri de survey la mutări și alege cel mai potrivit pentru tine." />
+        <meta
+          name="twitter:description"
+          content="Compară cele 3 tipuri de survey la mutări și alege cel mai potrivit pentru tine."
+        />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/survey" />
       </Head>
