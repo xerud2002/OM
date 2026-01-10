@@ -13,7 +13,7 @@ export default function Hero() {
   const router = useRouter();
   const [user, setUser] = useState<{ uid: string } | null>(null);
   const [animationsReady, setAnimationsReady] = useState(false);
-  const [_authChecked, setAuthChecked] = useState(false);
+  const [, setAuthChecked] = useState(false);
 
   // Defer Firebase loading until after initial render
   useEffect(() => {

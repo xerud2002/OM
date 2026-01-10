@@ -6,7 +6,6 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import {
   Mail,
-  Phone,
   MapPin,
   Send,
   MessageCircle,
