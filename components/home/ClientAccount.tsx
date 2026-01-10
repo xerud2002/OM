@@ -28,11 +28,11 @@ export default function ClientAccount() {
     <section className="relative overflow-hidden bg-linear-to-b from-slate-50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute right-0 top-0 h-[400px] w-[400px] -translate-y-1/2 translate-x-1/2 rounded-full bg-emerald-100/50 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
+        <div className="absolute top-0 right-0 h-[400px] w-[400px] translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-100/50 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
         <div className="absolute bottom-0 left-0 hidden h-[400px] w-[400px] -translate-x-1/2 translate-y-1/2 rounded-full bg-sky-100/50 blur-[100px] sm:block" />
       </div>
 
-      <div className="container relative z-10 mx-auto px-4">
+      <div className="relative z-10 container mx-auto px-4">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -52,7 +52,9 @@ export default function ClientAccount() {
                 >
                   <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 sm:mb-6 sm:px-4 sm:py-2">
                     <User className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
-                    <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Cont de Client</span>
+                    <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+                      Cont de Client
+                    </span>
                   </div>
 
                   <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-3xl lg:text-4xl">
@@ -64,7 +66,8 @@ export default function ClientAccount() {
                   </h2>
 
                   <p className="mb-6 text-base leading-relaxed text-slate-600 sm:mb-8 sm:text-lg">
-                    Urmărește cererile tale, primește oferte personalizate și comunică direct cu firmele de mutări - totul într-un dashboard intuitiv.
+                    Urmărește cererile tale, primește oferte personalizate și comunică direct cu
+                    firmele de mutări - totul într-un dashboard intuitiv.
                   </p>
 
                   {/* Features list */}
@@ -81,7 +84,9 @@ export default function ClientAccount() {
                         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 sm:h-10 sm:w-10 sm:rounded-xl">
                           <feature.icon className="h-4 w-4 text-emerald-600 sm:h-5 sm:w-5" />
                         </div>
-                        <span className="text-sm font-medium text-slate-700 sm:text-base">{feature.label}</span>
+                        <span className="text-sm font-medium text-slate-700 sm:text-base">
+                          {feature.label}
+                        </span>
                       </motion.div>
                     ))}
                   </div>
@@ -157,14 +162,14 @@ export default function ClientAccount() {
                   >
                     <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
                     <Image
-                      src="/pics/oferta.png"
+                      src="/pics/oferta.webp"
                       alt="Dashboard client ofertemutare.ro"
                       width={400}
                       height={400}
                       className="relative rounded-2xl object-cover shadow-2xl"
                       priority
                     />
-                    
+
                     {/* Floating notification card */}
                     <motion.div
                       initial={{ x: 20, opacity: 0 }}
@@ -178,7 +183,9 @@ export default function ClientAccount() {
                           <Bell className="h-4 w-4 text-emerald-600 lg:h-5 lg:w-5" />
                         </div>
                         <div>
-                          <p className="text-xs font-semibold text-slate-800 lg:text-sm">Ofertă nouă!</p>
+                          <p className="text-xs font-semibold text-slate-800 lg:text-sm">
+                            Ofertă nouă!
+                          </p>
                           <p className="text-[10px] text-slate-500 lg:text-xs">acum 2 minute</p>
                         </div>
                       </div>

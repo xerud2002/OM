@@ -249,7 +249,7 @@ export default function AboutPage() {
 
                       <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white shadow-2xl">
                         <Image
-                          src="/pics/partner.png"
+                          src="/pics/partner.webp"
                           alt="Echipa Ofertemutare.ro"
                           fill
                           className="object-cover transition-transform duration-500 hover:scale-105"
@@ -639,7 +639,7 @@ export default function AboutPage() {
 
                       <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white shadow-2xl">
                         <Image
-                          src="/pics/oferta.png"
+                          src="/pics/oferta.webp"
                           alt="Platforma Ofertemutare.ro"
                           fill
                           sizes="(max-width: 768px) 100vw, 500px"

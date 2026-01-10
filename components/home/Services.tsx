@@ -7,7 +7,7 @@ import { Package, Wrench, Truck, Warehouse, Trash2, ArrowRight } from "lucide-re
 export default function Services() {
   const services = [
     {
-      img: "/pics/packing1.png",
+      img: "/pics/packing1.webp",
       icon: Package,
       title: "Împachetare profesională",
       desc: "Obiectele fragile și mobilierul sunt împachetate cu materiale de protecție de calitate.",
@@ -15,7 +15,7 @@ export default function Services() {
       bgColor: "bg-blue-50",
     },
     {
-      img: "/pics/dism.png",
+      img: "/pics/dism.webp",
       icon: Wrench,
       title: "Demontare mobilier",
       desc: "Dezasamblare și reasamblare a mobilierului mare, rapid și fără daune.",
@@ -23,7 +23,7 @@ export default function Services() {
       bgColor: "bg-emerald-50",
     },
     {
-      img: "/pics/loading4.png",
+      img: "/pics/loading4.webp",
       icon: Truck,
       title: "Transport sigur",
       desc: "De la garsoniere la case întregi, transport cu autoutilitare curate și echipate.",
@@ -31,7 +31,7 @@ export default function Services() {
       bgColor: "bg-purple-50",
     },
     {
-      img: "/pics/storage.png",
+      img: "/pics/storage.webp",
       icon: Warehouse,
       title: "Depozitare temporară",
       desc: "Spații sigure, ventilate și monitorizate 24/7 pentru obiectele tale.",
@@ -39,7 +39,7 @@ export default function Services() {
       bgColor: "bg-orange-50",
     },
     {
-      img: "/pics/disposal.png",
+      img: "/pics/disposal.webp",
       icon: Trash2,
       title: "Debarasare",
       desc: "Colectare și eliminare ecologică a mobilierului vechi sau obiectelor inutile.",
@@ -52,11 +52,11 @@ export default function Services() {
     <section className="relative overflow-hidden bg-linear-to-b from-white via-slate-50/50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-0 top-1/4 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
+        <div className="absolute top-1/4 left-0 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
         <div className="absolute right-0 bottom-1/4 hidden h-[400px] w-[400px] translate-x-1/2 rounded-full bg-sky-100/30 blur-[100px] sm:block" />
       </div>
 
-      <div className="container relative z-10 mx-auto px-4">
+      <div className="relative z-10 container mx-auto px-4">
         {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -67,7 +67,9 @@ export default function Services() {
         >
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
             <Truck className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
-            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Servicii Complete</span>
+            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+              Servicii Complete
+            </span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Tot ce ai nevoie pentru{" "}
@@ -76,7 +78,8 @@ export default function Services() {
             </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Firmele noastre partenere oferă servicii profesionale complete, de la împachetare până la instalare la noua locație.
+            Firmele noastre partenere oferă servicii profesionale complete, de la împachetare până
+            la instalare la noua locație.
           </p>
         </motion.div>
 
@@ -107,10 +110,12 @@ export default function Services() {
                     loading="lazy"
                   />
                 </div>
-                
+
                 {/* Icon badge - positioned outside image container */}
                 <div className="relative z-10 -mt-4 flex justify-center sm:-mt-6">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br ${service.color} shadow-lg sm:h-12 sm:w-12 sm:rounded-xl`}>
+                  <div
+                    className={`flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br ${service.color} shadow-lg sm:h-12 sm:w-12 sm:rounded-xl`}
+                  >
                     <service.icon className="h-4 w-4 text-white sm:h-6 sm:w-6" strokeWidth={1.5} />
                   </div>
                 </div>
@@ -141,7 +146,9 @@ export default function Services() {
           className="mx-auto mt-10 max-w-2xl text-center sm:mt-16"
         >
           <div className="inline-flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:py-3">
-            <span className="text-sm text-slate-600 sm:text-base">Ai nevoie de un serviciu specific?</span>
+            <span className="text-sm text-slate-600 sm:text-base">
+              Ai nevoie de un serviciu specific?
+            </span>
             <span className="flex items-center gap-1 font-semibold text-emerald-600 sm:gap-2">
               Descrie-l în cererea ta!
               <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />

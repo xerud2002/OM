@@ -54,7 +54,7 @@ export default function HomePage() {
           property="og:description"
           content="Primești 3-5 oferte GRATUITE în 24h de la firme verificate. 100% gratuit!"
         />
-        <meta property="og:image" content="https://ofertemutare.ro/pics/index.png" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
@@ -67,7 +67,7 @@ export default function HomePage() {
           property="twitter:description"
           content="Primești 3-5 oferte GRATUITE în 24h de la firme verificate!"
         />
-        <meta property="twitter:image" content="https://ofertemutare.ro/pics/index.png" />
+        <meta property="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       {/* ==========================
