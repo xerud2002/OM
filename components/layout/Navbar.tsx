@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react";
 import { useRouter } from "next/router";
-import { User as FirebaseUser } from "firebase/auth";
+import type { User as FirebaseUser } from "firebase/auth";
 import dynamic from "next/dynamic";
 
 // Lazy load Firebase helpers to reduce initial bundle

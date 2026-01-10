@@ -49,7 +49,7 @@ const nextConfig = {
 
   // Experimental optimizations
   experimental: {
-    optimizePackageImports: ["lucide-react", "sonner", "framer-motion"],
+    optimizePackageImports: ["lucide-react", "sonner", "framer-motion", "date-fns"],
   },
 
   // Development configuration
@@ -129,21 +129,12 @@ const nextConfig = {
     ];
   },
 
-  // Development configuration for CORS
-  ...(process.env.NODE_ENV === "development" && {
-    experimental: {
-      serverComponentsExternalPackages: [],
-    },
-    // Allow dev origins for cross-origin requests
-    allowedDevOrigins: ["127.0.0.1:3001", "localhost:3001", "127.0.0.1:*", "localhost:*"],
-  }),
-
   // Webpack configuration for better development experience
   webpack: (config, { dev, isServer }) => {
     if (dev && !isServer) {
-      // Optimize webpack for development
+      // Optimize webpack for development - disable aggressive polling
       config.watchOptions = {
-        poll: 1000,
+        ignored: /node_modules/,
         aggregateTimeout: 300,
       };
     }

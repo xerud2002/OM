@@ -24,8 +24,10 @@ export default function Hero() {
     const loadAuth = async () => {
       if (!mounted) return;
       try {
-        const { onAuthChange } = await import("@/utils/firebaseHelpers");
-        unsub = onAuthChange((u) => {
+        // Dynamically import Firebase auth only when needed
+        const { auth } = await import("@/services/firebase");
+        const { onAuthStateChanged } = await import("firebase/auth");
+        unsub = onAuthStateChanged(auth, (u) => {
           if (!mounted) return;
           setUser(u ? { uid: u.uid } : null);
           setAuthChecked(true);
@@ -37,7 +39,7 @@ export default function Hero() {
 
     // Use requestIdleCallback to load Firebase after browser is idle
     if ("requestIdleCallback" in window) {
-      const idleId = requestIdleCallback(() => loadAuth(), { timeout: 3000 });
+      const idleId = requestIdleCallback(() => loadAuth(), { timeout: 4000 });
       return () => {
         mounted = false;
         clearTimeout(timer);
@@ -45,8 +47,8 @@ export default function Hero() {
         unsub?.();
       };
     } else {
-      // Fallback: load after 2s to allow LCP
-      const authTimer = setTimeout(loadAuth, 2000);
+      // Fallback: load after 3s to allow LCP to complete first
+      const authTimer = setTimeout(loadAuth, 3000);
       return () => {
         mounted = false;
         clearTimeout(timer);

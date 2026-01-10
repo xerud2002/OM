@@ -61,7 +61,6 @@ export default function App({ Component, pageProps }: AppProps) {
         />
 
         {/* Preconnect moved to _document.tsx */}
-        <link rel="preconnect" href="https://firebasestorage.googleapis.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />

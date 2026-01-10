@@ -19,8 +19,14 @@ export default function Document() {
         />
         <link rel="dns-prefetch" href="https://apis.google.com" />
 
-        {/* Preload LCP hero image for faster rendering */}
-        <link rel="preload" as="image" href="/pics/index.webp" type="image/webp" />
+        {/* Preload LCP hero image for faster rendering - mobile-optimized */}
+        <link
+          rel="preload"
+          as="image"
+          href="/pics/index.webp"
+          type="image/webp"
+          imageSizes="(max-width: 768px) 100vw, 600px"
+        />
       </Head>
       <body>
         <Main />
