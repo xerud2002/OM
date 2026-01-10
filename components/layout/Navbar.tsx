@@ -2,12 +2,16 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
 import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react";
 import { useRouter, usePathname } from "next/navigation";
 import { User as FirebaseUser } from "firebase/auth";
-import { onAuthChange, logout, getUserRole } from "@/utils/firebaseHelpers";
-import NotificationBell from "@/components/company/NotificationBell";
+import dynamic from "next/dynamic";
+
+// Lazy load Firebase helpers to reduce initial bundle
+const NotificationBell = dynamic(() => import("@/components/company/NotificationBell"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,22 +25,31 @@ export default function Navbar() {
   /* 🔹 Scroll shadow logic */
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* 🔹 Firebase user state */
+  /* 🔹 Lazy load Firebase auth after initial render */
   useEffect(() => {
-    const unsub = onAuthChange(async (u) => {
-      setUser(u);
-      if (u) {
-        const role = await getUserRole(u);
-        setUserRole(role);
-      } else {
-        setUserRole(null);
+    // Defer Firebase loading to after paint
+    const timer = setTimeout(async () => {
+      try {
+        const { onAuthChange, getUserRole } = await import("@/utils/firebaseHelpers");
+        const unsub = onAuthChange(async (u) => {
+          setUser(u);
+          if (u) {
+            const role = await getUserRole(u);
+            setUserRole(role);
+          } else {
+            setUserRole(null);
+          }
+        });
+        return () => unsub();
+      } catch {
+        // Auth loading failed silently
       }
-    });
-    return () => unsub();
+    }, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   /* 🔹 Navigation logic */
@@ -51,9 +64,8 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     setShowUserMenu(false);
-    // Redirect immediately to avoid RequireRole error messages
     router.push("/");
-    // Then logout
+    const { logout } = await import("@/utils/firebaseHelpers");
     await logout();
     setUser(null);
   };
@@ -133,32 +145,24 @@ export default function Navbar() {
                 <span className="max-w-[140px] truncate">{user.email?.split("@")[0]}</span>
               </button>
 
-              {/* Dropdown menu */}
-              <AnimatePresence>
-                {showUserMenu && (
-                  <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -8 }}
-                    transition={{ duration: 0.25 }}
-                    className="absolute right-0 z-50 mt-2 w-44 overflow-hidden rounded-xl border border-emerald-100 bg-white shadow-lg"
+              {/* Dropdown menu - CSS animation instead of framer-motion */}
+              {showUserMenu && (
+                <div className="absolute top-full right-0 z-50 mt-2 w-44 origin-top-right scale-100 transform overflow-hidden rounded-xl border border-emerald-100 bg-white opacity-100 shadow-lg transition-all duration-200">
+                  <Link
+                    href="/customer/dashboard"
+                    onClick={() => setShowUserMenu(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
                   >
-                    <Link
-                      href="/customer/dashboard"
-                      onClick={() => setShowUserMenu(false)}
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
-                    >
-                      <LayoutDashboard size={16} /> Dashboard
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
-                    >
-                      <LogOut size={16} /> Logout
-                    </button>
-                  </motion.div>
-                )}
-              </AnimatePresence>
+                    <LayoutDashboard size={16} /> Dashboard
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
+                  >
+                    <LogOut size={16} /> Logout
+                  </button>
+                </div>
+              )}
             </div>
           )}
         </nav>
@@ -173,51 +177,45 @@ export default function Navbar() {
         </button>
       </div>
 
-      {/* === MOBILE MENU === */}
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.25 }}
-            className="border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl md:hidden"
+      {/* === MOBILE MENU - CSS animation instead of framer-motion === */}
+      <div
+        className={`transform overflow-hidden border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 md:hidden ${
+          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        }`}
+      >
+        <div className="flex flex-col space-y-2 px-6 py-4">
+          {navLinks.map(({ href, label }) => (
+            <Link
+              key={href}
+              href={href}
+              onClick={() => setIsOpen(false)}
+              className={`rounded-lg px-3 py-2 font-medium transition-all ${
+                pathname === href
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+              }`}
+            >
+              {label}
+            </Link>
+          ))}
+
+          <button
+            onClick={handleGetOffers}
+            className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-5 py-2 font-semibold text-white shadow-md transition-all hover:shadow-lg"
           >
-            <div className="flex flex-col space-y-2 px-6 py-4">
-              {navLinks.map(({ href, label }) => (
-                <Link
-                  key={href}
-                  href={href}
-                  onClick={() => setIsOpen(false)}
-                  className={`rounded-lg px-3 py-2 font-medium transition-all ${
-                    pathname === href
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
-                  }`}
-                >
-                  {label}
-                </Link>
-              ))}
+            <PhoneCall size={18} /> Obține Oferte
+          </button>
 
-              <button
-                onClick={handleGetOffers}
-                className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-5 py-2 font-semibold text-white shadow-md transition-all hover:shadow-lg"
-              >
-                <PhoneCall size={18} /> Obține Oferte
-              </button>
-
-              {user && (
-                <button
-                  onClick={handleLogout}
-                  className="mt-3 flex items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
-                >
-                  <LogOut size={18} /> Logout
-                </button>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          {user && (
+            <button
+              onClick={handleLogout}
+              className="mt-3 flex items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
+            >
+              <LogOut size={18} /> Logout
+            </button>
+          )}
+        </div>
+      </div>
     </header>
   );
 }

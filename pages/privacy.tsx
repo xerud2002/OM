@@ -14,7 +14,10 @@ export default function PrivacyPage() {
         />
         <link rel="canonical" href="https://ofertemutare.ro/privacy" />
         <meta property="og:title" content="Politica de Confidențialitate | OferteMutare.ro" />
-        <meta property="og:description" content="Cum colectăm, folosim și protejăm datele tale personale conform GDPR." />
+        <meta
+          property="og:description"
+          content="Cum colectăm, folosim și protejăm datele tale personale conform GDPR."
+        />
         <meta property="og:url" content="https://ofertemutare.ro/privacy" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />

@@ -14,7 +14,8 @@ export default function GuideMutare() {
         />
         <link rel="canonical" href="https://ofertemutare.ro/guides/mutare" />
         <meta property="og:title" content="Ghid Complet Mutare Locuință" />
-        <meta property="og:description"
+        <meta
+          property="og:description"
           content="Tot ce trebuie să știi pentru o mutare organizată și fără stres."
         />
         <meta property="og:url" content="https://ofertemutare.ro/guides/mutare" />

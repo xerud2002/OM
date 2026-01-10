@@ -8,15 +8,34 @@ import "react-day-picker/dist/style.css";
 // Import dev error suppressor for cleaner console in development
 import "@/utils/devErrorSuppressor";
 
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import ErrorBoundary from "@/components/ErrorBoundary";
-import { Toaster } from "sonner";
+
+// Lazy load layout components to reduce initial bundle
+const Navbar = dynamic(() => import("@/components/layout/Navbar"), {
+  ssr: true,
+  loading: () => (
+    <header className="fixed top-0 left-0 z-50 w-full bg-white/60 backdrop-blur-sm">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
+        <div className="text-2xl font-bold text-emerald-700">OferteMutare</div>
+      </div>
+    </header>
+  ),
+});
+
+const Footer = dynamic(() => import("@/components/layout/Footer"), {
+  ssr: true,
+  loading: () => <footer className="mt-10 border-t border-gray-200 bg-white py-14" />,
+});
 
 // Lazy load non-critical components
 const FloatingCTA = dynamic(() => import("@/components/FloatingCTA"), {
   ssr: false,
   loading: () => null,
+});
+
+// Defer Toaster until after hydration
+const Toaster = dynamic(() => import("sonner").then((mod) => ({ default: mod.Toaster })), {
+  ssr: false,
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -64,7 +83,7 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* Conversion optimization widgets */}
       <FloatingCTA />
 
-      {/* Toasts (success/error/info) from anywhere in the app */}
+      {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
       <Toaster richColors position="top-right" closeButton />
     </ErrorBoundary>
   );

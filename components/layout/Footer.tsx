@@ -1,9 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Mail } from "lucide-react";
-import { fadeUp, staggerContainer } from "@/utils/animations";
 
 /* 🔹 Constants */
 const CONTACT_INFO = [
@@ -38,16 +36,10 @@ const SOCIAL_LINKS = [
 export default function Footer() {
   return (
     <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
-      {/* Main content */}
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true }}
-        className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr]"
-      >
+      {/* Main content - using CSS animations instead of framer-motion */}
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr]">
         {/* Logo & about */}
-        <motion.div variants={fadeUp}>
+        <div>
           <div className="mb-5 flex items-center">
             <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-xl font-bold text-transparent">
               <span className="tracking-tight">Oferte</span>
@@ -72,19 +64,19 @@ export default function Footer() {
               </div>
             ))}
           </div>
-        </motion.div>
+        </div>
 
         {/* Columns */}
-        <motion.div variants={fadeUp}>
+        <div>
           <FooterColumn title="Linkuri utile" links={USEFUL_LINKS} />
-        </motion.div>
+        </div>
 
-        <motion.div variants={fadeUp}>
+        <div>
           <FooterColumn title="Resurse" links={RESOURCES} />
-        </motion.div>
+        </div>
 
         {/* Legal & social */}
-        <motion.div variants={fadeUp}>
+        <div>
           <h3 className="mb-4 text-lg font-semibold text-emerald-600">Legal</h3>
           <ul className="mb-6 space-y-2 text-sm">
             {LEGAL.map(({ href, label }) => (
@@ -102,22 +94,20 @@ export default function Footer() {
 
           <div className="flex gap-4">
             {SOCIAL_LINKS.map(({ icon: Icon, href, label }, i) => (
-              <motion.a
+              <a
                 key={i}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                whileHover={{ scale: 1.15 }}
-                whileTap={{ scale: 0.9 }}
-                className="rounded-full border border-gray-200 p-2 text-gray-600 transition-all hover:border-emerald-500 hover:text-emerald-600"
+                className="rounded-full border border-gray-200 p-2 text-gray-600 transition-all duration-200 hover:scale-110 hover:border-emerald-500 hover:text-emerald-600"
               >
                 <Icon size={18} />
-              </motion.a>
+              </a>
             ))}
           </div>
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
 
       {/* Bottom bar */}
       <div className="border-t border-gray-200 bg-gray-50 py-5 text-center text-sm text-gray-500">
