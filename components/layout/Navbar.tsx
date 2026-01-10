@@ -128,12 +128,12 @@ export default function Navbar() {
         </Link>
 
         {/* === DESKTOP NAV === */}
-        <nav className="hidden items-center space-x-2 md:flex">
+        <nav className="hidden items-center space-x-1 md:flex">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className={`rounded-full px-4 py-2 font-medium transition-all duration-300 ${
+              className={`flex min-h-[48px] min-w-[48px] items-center justify-center rounded-full px-5 py-3 font-medium transition-all duration-300 ${
                 pathname === href
                   ? "bg-emerald-50 text-emerald-700"
                   : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
@@ -147,7 +147,7 @@ export default function Navbar() {
             <button
               onClick={handleGetOffers}
               aria-label="Primește Oferte Gratuite"
-              className="ml-3 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-5 py-2.5 font-bold text-white shadow-lg transition-all hover:scale-[1.06] hover:shadow-xl"
+              className="ml-3 inline-flex min-h-[48px] items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-3 font-bold text-white shadow-lg transition-all hover:scale-[1.06] hover:shadow-xl"
             >
               <PhoneCall size={18} /> Primește Oferte GRATUITE
             </button>
@@ -192,7 +192,7 @@ export default function Navbar() {
         <button
           onClick={() => setIsOpen((prev) => !prev)}
           aria-label="Menu"
-          className="rounded-lg p-2 text-emerald-700 transition hover:bg-emerald-50 md:hidden"
+          className="flex min-h-[48px] min-w-[48px] items-center justify-center rounded-lg p-3 text-emerald-700 transition hover:bg-emerald-50 md:hidden"
         >
           {isOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
@@ -204,13 +204,13 @@ export default function Navbar() {
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="flex flex-col space-y-2 px-6 py-4">
+        <div className="flex flex-col space-y-1 px-6 py-4">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
               onClick={() => setIsOpen(false)}
-              className={`rounded-lg px-3 py-2 font-medium transition-all ${
+              className={`flex min-h-[48px] items-center rounded-lg px-4 py-3 font-medium transition-all ${
                 pathname === href
                   ? "bg-emerald-50 text-emerald-700"
                   : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
@@ -222,7 +222,7 @@ export default function Navbar() {
 
           <button
             onClick={handleGetOffers}
-            className="mt-3 inline-flex items-center justify-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-5 py-2 font-semibold text-white shadow-md transition-all hover:shadow-lg"
+            className="mt-3 inline-flex min-h-[48px] items-center justify-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-3 font-semibold text-white shadow-md transition-all hover:shadow-lg"
           >
             <PhoneCall size={18} /> Obține Oferte
           </button>
@@ -230,7 +230,7 @@ export default function Navbar() {
           {user && (
             <button
               onClick={handleLogout}
-              className="mt-3 flex items-center justify-center gap-2 rounded-full border border-gray-200 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
+              className="mt-3 flex min-h-[48px] items-center justify-center gap-2 rounded-full border border-gray-200 px-5 py-3 text-gray-700 transition-all hover:bg-emerald-50"
             >
               <LogOut size={18} /> Logout
             </button>
