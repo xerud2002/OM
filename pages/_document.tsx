@@ -10,13 +10,8 @@ export default function Document() {
         <link rel="dns-prefetch" href="https://apis.google.com" />
 
         {/* Preload LCP image for faster rendering */}
-        <link
-          rel="preload"
-          as="image"
-          href="/pics/index.webp"
-          type="image/webp"
-          fetchPriority="high"
-        />
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link rel="preload" as="image" href="/pics/index.webp" type="image/webp" />
 
         {/* Inter font is now self-hosted via next/font in _app.tsx - no Google Fonts needed */}
       </Head>
