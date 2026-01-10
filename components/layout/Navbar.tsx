@@ -29,27 +29,48 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* 🔹 Lazy load Firebase auth after initial render */
+  /* 🔹 Lazy load Firebase auth after LCP - defer until idle or interaction */
   useEffect(() => {
-    // Defer Firebase loading to after paint
-    const timer = setTimeout(async () => {
+    let unsub: (() => void) | undefined;
+    let mounted = true;
+
+    const loadAuth = async () => {
+      if (!mounted) return;
       try {
         const { onAuthChange, getUserRole } = await import("@/utils/firebaseHelpers");
-        const unsub = onAuthChange(async (u) => {
+        unsub = onAuthChange(async (u) => {
+          if (!mounted) return;
           setUser(u);
           if (u) {
             const role = await getUserRole(u);
-            setUserRole(role);
+            if (mounted) setUserRole(role);
           } else {
             setUserRole(null);
           }
         });
-        return () => unsub();
       } catch {
         // Auth loading failed silently
       }
-    }, 100);
-    return () => clearTimeout(timer);
+    };
+
+    // Use requestIdleCallback if available, otherwise setTimeout with longer delay
+    // This ensures auth loads after LCP and main content is ready
+    if ("requestIdleCallback" in window) {
+      const idleId = requestIdleCallback(() => loadAuth(), { timeout: 3000 });
+      return () => {
+        mounted = false;
+        cancelIdleCallback(idleId);
+        unsub?.();
+      };
+    } else {
+      // Fallback: load after 1.5s to allow LCP to complete
+      const timer = setTimeout(loadAuth, 1500);
+      return () => {
+        mounted = false;
+        clearTimeout(timer);
+        unsub?.();
+      };
+    }
   }, []);
 
   /* 🔹 Navigation logic */

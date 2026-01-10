@@ -15,34 +15,45 @@ export default function Hero() {
   const [animationsReady, setAnimationsReady] = useState(false);
   const [, setAuthChecked] = useState(false);
 
-  // Defer Firebase loading until after initial render
+  // Defer Firebase loading until after LCP - use requestIdleCallback
   useEffect(() => {
     const timer = setTimeout(() => setAnimationsReady(true), 100);
+    let unsub: (() => void) | undefined;
+    let mounted = true;
 
-    // Lazy load Firebase auth check
-    const checkAuth = async () => {
+    const loadAuth = async () => {
+      if (!mounted) return;
       try {
         const { onAuthChange } = await import("@/utils/firebaseHelpers");
-        const unsub = onAuthChange((u) => {
+        unsub = onAuthChange((u) => {
+          if (!mounted) return;
           setUser(u ? { uid: u.uid } : null);
           setAuthChecked(true);
         });
-        return unsub;
       } catch {
         setAuthChecked(true);
-        return () => {};
       }
     };
 
-    let unsub: (() => void) | undefined;
-    checkAuth().then((u) => {
-      unsub = u;
-    });
-
-    return () => {
-      clearTimeout(timer);
-      unsub?.();
-    };
+    // Use requestIdleCallback to load Firebase after browser is idle
+    if ("requestIdleCallback" in window) {
+      const idleId = requestIdleCallback(() => loadAuth(), { timeout: 3000 });
+      return () => {
+        mounted = false;
+        clearTimeout(timer);
+        cancelIdleCallback(idleId);
+        unsub?.();
+      };
+    } else {
+      // Fallback: load after 2s to allow LCP
+      const authTimer = setTimeout(loadAuth, 2000);
+      return () => {
+        mounted = false;
+        clearTimeout(timer);
+        clearTimeout(authTimer);
+        unsub?.();
+      };
+    }
   }, []);
 
   const handleCTA = useCallback(() => {

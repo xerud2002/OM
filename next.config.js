@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // Target modern browsers only - removes legacy polyfills (~13KB savings)
+  // Supports browsers with ES2020+ features
+  transpilePackages: [],
+
   images: {
     // Carry over rich image config from the CJS file
     formats: ["image/avif", "image/webp"],

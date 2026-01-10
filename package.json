@@ -48,6 +48,15 @@
       "prettier --write"
     ]
   },
+  "browserslist": [
+    "Chrome >= 90",
+    "Firefox >= 90",
+    "Safari >= 14",
+    "Edge >= 90",
+    "iOS >= 14",
+    "not dead",
+    "not op_mini all"
+  ],
   "overrides": {
     "undici": "6.22.0"
   }
