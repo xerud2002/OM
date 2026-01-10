@@ -5,8 +5,7 @@ export default function Document() {
     <Html lang="ro">
       <Head>
         {/* Preconnect for faster resource loading */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="preconnect" href="https://firebasestorage.googleapis.com" />
 
         {/* Preload LCP image for faster rendering */}
         <link
@@ -17,25 +16,7 @@ export default function Document() {
           fetchPriority="high"
         />
 
-        {/* Google Fonts - use display=swap and preload critical font */}
-        <link
-          rel="preload"
-          as="style"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-          rel="stylesheet"
-          media="print"
-          // @ts-expect-error - onLoad is valid for link elements
-          onLoad="this.media='all'"
-        />
-        <noscript>
-          <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-            rel="stylesheet"
-          />
-        </noscript>
+        {/* Inter font is now self-hosted via next/font in _app.tsx - no Google Fonts needed */}
       </Head>
       <body>
         <Main />

@@ -21,6 +21,13 @@ export default function TermsPage() {
         <meta property="og:url" content="https://ofertemutare.ro/terms" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/terms" />
+        <meta name="twitter:title" content="Termeni și Condiții | OferteMutare.ro" />
+        <meta name="twitter:description" content="Termenii și condițiile de utilizare a platformei OferteMutare.ro." />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <LayoutWrapper>

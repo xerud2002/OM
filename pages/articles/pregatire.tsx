@@ -38,6 +38,13 @@ export default function ArticlePregatire() {
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ofertemutare.ro/articles/pregatire" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/articles/pregatire" />
+        <meta name="twitter:title" content="Ghid Complet: Cum să Te Pregătești pentru Mutare" />
+        <meta name="twitter:description" content="Tot ce trebuie să știi pentru o mutare bine organizată: planificare pas cu pas, liste complete." />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/pregatire" />
       </Head>
 

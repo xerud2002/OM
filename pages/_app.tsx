@@ -2,11 +2,21 @@
 import type { AppProps } from "next/app";
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import { Inter } from "next/font/google";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
 // Import dev error suppressor for cleaner console in development
 import "@/utils/devErrorSuppressor";
+
+// Self-hosted Inter font with optimal loading strategy
+const inter = Inter({
+  subsets: ["latin", "latin-ext"],
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+  variable: "--font-inter",
+  preload: true,
+});
 
 import ErrorBoundary from "@/components/ErrorBoundary";
 
@@ -71,14 +81,17 @@ export default function App({ Component, pageProps }: AppProps) {
         Sar peste navigare
       </a>
 
-      <Navbar />
+      {/* Font wrapper for self-hosted Inter */}
+      <div className={`${inter.variable} font-sans`}>
+        <Navbar />
 
-      {/* Offset content for the fixed navbar once, globally */}
-      <main id="main-content" className="min-h-[60vh] pt-20">
-        <Component {...pageProps} />
-      </main>
+        {/* Offset content for the fixed navbar once, globally */}
+        <main id="main-content" className="min-h-[60vh] pt-20">
+          <Component {...pageProps} />
+        </main>
 
-      <Footer />
+        <Footer />
+      </div>
 
       {/* Conversion optimization widgets */}
       <FloatingCTA />

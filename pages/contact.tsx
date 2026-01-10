@@ -130,6 +130,13 @@ export default function ContactPage() {
         <meta property="og:url" content="https://ofertemutare.ro/contact" />
         <meta property="og:type" content="website" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/contact" />
+        <meta name="twitter:title" content="Contact | OferteMutare.ro" />
+        <meta name="twitter:description" content="Contactează-ne pentru întrebări sau suport. Răspundem în 24h." />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">

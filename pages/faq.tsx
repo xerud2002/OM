@@ -148,8 +148,15 @@ export default function FAQPage() {
           content="Răspunsuri la cele mai frecvente întrebări despre platforma de mutări."
         />
         <meta property="og:url" content="https://ofertemutare.ro/faq" />
-        <meta property="og:type" content="website" />{" "}
-        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />{" "}
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/faq" />
+        <meta name="twitter:title" content="Întrebări Frecvente (FAQ) | OferteMutare.ro" />
+        <meta name="twitter:description" content="Răspunsuri la cele mai frecvente întrebări despre platforma de mutări." />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <LayoutWrapper>

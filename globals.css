@@ -2,7 +2,8 @@
 
 /* Tailwind v4: CSS-first configuration */
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  /* Inter font from next/font with CSS variable fallback */
+  --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
 
   --color-emerald-50: #ecfdf5;
   --color-emerald-100: #d1fae5;

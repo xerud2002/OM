@@ -21,6 +21,13 @@ export default function GuideMutare() {
         <meta property="og:url" content="https://ofertemutare.ro/guides/mutare" />
         <meta property="og:type" content="article" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/guides/mutare" />
+        <meta name="twitter:title" content="Ghid Complet Mutare Locuință" />
+        <meta name="twitter:description" content="Tot ce trebuie să știi pentru o mutare organizată și fără stres." />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <LayoutWrapper>

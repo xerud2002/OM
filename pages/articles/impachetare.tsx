@@ -25,6 +25,13 @@ export default function ArticleImpachetare() {
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ofertemutare.ro/articles/impachetare" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/packing1.webp" />
+
+        {/* Twitter */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/articles/impachetare" />
+        <meta name="twitter:title" content="Ghid Complet de Împachetare pentru Mutare" />
+        <meta name="twitter:description" content="Tehnici profesionale de împachetare pentru o mutare organizată și fără stres." />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/packing1.webp" />
       </Head>
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-6 py-12">
