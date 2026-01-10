@@ -1,38 +1,22 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  X,
-  Edit2,
-  MapPin,
-  Calendar,
-  Package,
-  Phone,
-  User,
-  FileText,
-  Wrench,
-  Trash2,
-} from "lucide-react";
+import { X, MapPin, Calendar, Package, Phone, User, FileText, Wrench, Trash2 } from "lucide-react";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import Image from "next/image";
-import EditRequestModal from "./EditRequestModal";
 
 type RequestDetailsModalProps = {
   request: MovingRequest | null;
   isOpen: boolean;
   onClose: () => void;
-  // eslint-disable-next-line no-unused-vars
-  onRequestEdit: (request: MovingRequest, updatedData: any) => Promise<void>;
 };
 
 export default function RequestDetailsModal({
   request,
   isOpen,
   onClose,
-  onRequestEdit,
 }: RequestDetailsModalProps) {
-  const [showEditModal, setShowEditModal] = useState(false);
   const [localMediaUrls, setLocalMediaUrls] = useState<string[]>(request?.mediaUrls || []);
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
@@ -65,7 +49,7 @@ export default function RequestDetailsModal({
   }, [request, isOpen]);
 
   const handleDeleteMedia = async (url: string) => {
-    if (!isOwner) return;
+    if (!isOwner || !request) return;
     const { toast } = await import("sonner");
     const confirmed = window.confirm("Ștergi acest fișier din cerere?");
     if (!confirmed) return;
@@ -78,7 +62,9 @@ export default function RequestDetailsModal({
 
       const updated = localMediaUrls.filter((u) => u !== url);
       setLocalMediaUrls(updated); // optimistic UI
-      await onRequestEdit(request as MovingRequest, { mediaUrls: updated });
+
+      const { updateRequest } = await import("@/utils/firestoreHelpers");
+      await updateRequest(request.id, { mediaUrls: updated });
       toast.success("Fișierul a fost șters din cerere");
     } catch (err) {
       console.error("Failed to delete media", err);
@@ -142,7 +128,7 @@ export default function RequestDetailsModal({
                   <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-start">
                     {/* DE LA */}
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                      <p className="text-xs font-medium tracking-wide text-gray-500 uppercase">
                         De la
                       </p>
                       <p className="mt-1 text-base font-semibold text-gray-900">
@@ -178,7 +164,7 @@ export default function RequestDetailsModal({
 
                     {/* CĂTRE */}
                     <div>
-                      <p className="text-xs font-medium uppercase tracking-wide text-gray-500">
+                      <p className="text-xs font-medium tracking-wide text-gray-500 uppercase">
                         Către
                       </p>
                       <p className="mt-1 text-base font-semibold text-gray-900">
@@ -364,7 +350,7 @@ export default function RequestDetailsModal({
                               }}
                               disabled={deletingUrl === url}
                               title="Șterge"
-                              className="absolute right-2 top-2 z-20 hidden h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-md transition hover:bg-red-600 disabled:cursor-wait group-hover:flex"
+                              className="absolute top-2 right-2 z-20 hidden h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white shadow-md transition group-hover:flex hover:bg-red-600 disabled:cursor-wait"
                             >
                               {deletingUrl === url ? (
                                 <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
@@ -388,30 +374,9 @@ export default function RequestDetailsModal({
                 >
                   Închide
                 </button>
-                <button
-                  onClick={() => {
-                    setShowEditModal(true);
-                  }}
-                  className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-emerald-600 to-emerald-500 px-5 py-2 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
-                >
-                  <Edit2 size={18} />
-                  Modifică cererea
-                </button>
               </div>
             </motion.div>
           </div>
-
-          {/* Edit Modal */}
-          <EditRequestModal
-            request={request}
-            isOpen={showEditModal}
-            onClose={() => setShowEditModal(false)}
-            onSave={async (requestId, updatedData) => {
-              await onRequestEdit(request, updatedData);
-              setShowEditModal(false);
-              onClose();
-            }}
-          />
         </>
       )}
     </AnimatePresence>,

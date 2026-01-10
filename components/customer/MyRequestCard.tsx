@@ -307,17 +307,6 @@ const MyRequestCard = memo(function MyRequestCard({
         request={request}
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
-        onRequestEdit={async (req, updatedData) => {
-          try {
-            const { updateRequest } = await import("@/utils/firestoreHelpers");
-            await updateRequest(req.id, updatedData);
-            setShowDetailsModal(false); // Close modal to force reload with fresh data
-            toast.success("Cererea a fost actualizată! Companiile interesate au fost notificate.");
-          } catch (error) {
-            console.error("Error updating request:", error);
-            toast.error("Nu s-a putut actualiza cererea");
-          }
-        }}
       />
     </motion.div>
   );
