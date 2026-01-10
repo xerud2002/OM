@@ -2,14 +2,14 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 
 export default function FloatingCTA() {
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = router.pathname;
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [visible, setVisible] = useState(false);
 

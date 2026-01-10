@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, CheckCircle, Star, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 

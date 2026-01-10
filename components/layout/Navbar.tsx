@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/router";
 import { User as FirebaseUser } from "firebase/auth";
 import dynamic from "next/dynamic";
 
@@ -20,7 +20,7 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState<"customer" | "company" | null>(null);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = router.pathname;
 
   /* 🔹 Scroll shadow logic */
   useEffect(() => {

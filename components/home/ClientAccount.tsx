@@ -7,7 +7,7 @@ import { LogIn, LayoutDashboard, User, Bell, FileText, ChevronRight, LogOut } fr
 import { useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
 import { onAuthChange, logout } from "@/utils/firebaseHelpers";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 
 export default function ClientAccount() {
   const router = useRouter();

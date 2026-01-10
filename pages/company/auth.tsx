@@ -6,7 +6,7 @@ import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Building2, ArrowRight, Users, TrendingUp, Award } from "lucide-react";
 import Image from "next/image";

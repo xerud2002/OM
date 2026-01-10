@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/router";
 import { onAuthChange, getUserRole, isLogoutInProgress } from "@/utils/firebaseHelpers";
 import { toast } from "sonner";
 
@@ -15,6 +15,9 @@ export default function RequireRole({ allowedRole, children }: Props) {
   const [checking, setChecking] = useState(true);
 
   useEffect(() => {
+    // Wait for router to be ready before checking auth
+    if (!router.isReady) return;
+
     const unsub = onAuthChange((u) => {
       (async () => {
         // Not authenticated -> send to the appropriate auth page
@@ -74,7 +77,7 @@ export default function RequireRole({ allowedRole, children }: Props) {
 
     return () => unsub();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [allowedRole]);
+  }, [allowedRole, router.isReady]);
 
   if (checking)
     return (
