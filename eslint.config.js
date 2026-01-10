@@ -13,7 +13,14 @@ const config = [
     rules: {
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
-      "no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+      "no-unused-vars": [
+        "warn",
+        {
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+        },
+      ],
       "no-console": ["warn", { allow: ["warn", "error"] }],
     },
     settings: {

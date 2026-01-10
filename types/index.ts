@@ -73,7 +73,7 @@ export type MovingRequest = {
   moveDate?: string; // legacy single date, kept for backward compatibility and quick filters
   moveDateMode?: "exact" | "range" | "none" | "flexible";
   moveDateStart?: string; // YYYY-MM-DD
-  moveDateEnd?: string;   // YYYY-MM-DD (only for range)
+  moveDateEnd?: string; // YYYY-MM-DD (only for range)
   moveDateFlexDays?: number; // only for flexible
   // Friendly tracking code
   requestCode?: string;
@@ -113,3 +113,13 @@ export type Offer = {
   status?: "pending" | "accepted" | "declined" | "rejected";
   createdAt: Timestamp;
 };
+
+// Company user (authenticated company viewing requests)
+export type CompanyUser = {
+  uid: string;
+  displayName?: string | null;
+  email?: string | null;
+} | null;
+
+// Customer dashboard tab navigation
+export type DashboardTab = "new" | "requests" | "offers" | "archive";

@@ -7,7 +7,7 @@ import { CheckCircle2, MessageSquare } from "lucide-react";
 import { toast } from "sonner";
 import { auth } from "@/services/firebase";
 import { formatDateRO } from "@/utils/date";
-import type { Offer } from "./types";
+import type { Offer } from "@/types";
 
 type Props = {
   index: number;
@@ -73,7 +73,7 @@ export default function OfferRow({ index, requestId, offer, onAccept, onDecline 
             </div>
             <div>
               <p className="text-lg font-bold text-gray-900">{offer.companyName}</p>
-              {offer.createdAt?.toDate && (
+              {offer.createdAt && (
                 <p className="text-xs text-gray-500">
                   {formatDateRO(offer.createdAt, { month: "short" })}
                 </p>

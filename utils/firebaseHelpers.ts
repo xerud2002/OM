@@ -13,10 +13,10 @@ import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firest
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/services/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
+import type { UserRole, CustomerProfile, CompanyProfile } from "@/types";
 
-// ---- Types
-export type UserRole = "customer" | "company";
-
+// Re-export types for backward compatibility
+export type { UserRole, CustomerProfile, CompanyProfile };
 export type BaseProfile = {
   uid: string;
   email: string | null;
@@ -24,18 +24,6 @@ export type BaseProfile = {
   photoURL?: string | null;
   createdAt: any; // Firestore timestamp
   updatedAt: any;
-};
-
-export type CustomerProfile = BaseProfile & {
-  phone?: string;
-  city?: string;
-};
-
-export type CompanyProfile = BaseProfile & {
-  companyName?: string;
-  cif?: string;
-  phone?: string;
-  city?: string;
 };
 
 const COLLECTIONS = {
@@ -124,8 +112,8 @@ export async function loginWithGoogle(role: UserRole) {
     return cred.user;
   } catch (error: any) {
     // Don't throw popup-blocked errors - these are user-initiated cancellations
-    if (error?.code === 'auth/popup-blocked') {
-      console.warn('Google sign-in popup was blocked by browser');
+    if (error?.code === "auth/popup-blocked") {
+      console.warn("Google sign-in popup was blocked by browser");
       return null; // Return null instead of throwing
     }
     // Re-throw other errors

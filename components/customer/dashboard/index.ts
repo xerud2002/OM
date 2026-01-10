@@ -4,4 +4,5 @@
 export { default as DashboardHeader } from "./DashboardHeader";
 export { default as DashboardTabs } from "./DashboardTabs";
 export { default as OfferRow } from "./OfferRow";
-export type { Request, Offer, DashboardTab } from "./types";
+
+// Types are now centralized in @/types/index.ts

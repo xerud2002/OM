@@ -1,46 +1,42 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import admin, { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
+import admin, { adminDb } from "@/lib/firebaseAdmin";
+import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
+import { apiError, apiSuccess } from "@/types/api";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json(apiError("Method Not Allowed"));
   }
 
   const { requestId, offerId, text } = req.body || {};
   if (!requestId || !offerId || !text || String(text).trim().length === 0) {
-    return res.status(400).json({ error: "Missing required fields: requestId, offerId, text" });
+    return res.status(400).json(apiError("Missing required fields: requestId, offerId, text"));
   }
 
-  try {
-    if (!adminReady) {
-      return res.status(503).json({ error: "Admin not configured in this environment" });
-    }
-    const authHeader = req.headers.authorization || "";
-    const match = authHeader.match(/^Bearer (.+)$/);
-    if (!match) {
-      return res.status(401).json({ error: "Missing Authorization bearer token" });
-    }
-    const idToken = match[1];
-    const decoded = await adminAuth.verifyIdToken(idToken);
-    const uid = decoded.uid;
+  const authResult = await verifyAuth(req);
+  if (!authResult.success) {
+    return sendAuthError(res, authResult);
+  }
+  const uid = authResult.uid;
 
+  try {
     // Load request and offer to determine permissions and targets
     const requestRef = adminDb.doc(`requests/${requestId}`);
     const requestSnap = await requestRef.get();
-    if (!requestSnap.exists) return res.status(404).json({ error: "Request not found" });
-    const requestData: any = requestSnap.data();
+    if (!requestSnap.exists) return res.status(404).json(apiError("Request not found"));
+    const requestData = requestSnap.data() as { customerId?: string };
 
     const offerRef = adminDb.doc(`requests/${requestId}/offers/${offerId}`);
     const offerSnap = await offerRef.get();
-    if (!offerSnap.exists) return res.status(404).json({ error: "Offer not found" });
-    const offerData: any = offerSnap.data();
+    if (!offerSnap.exists) return res.status(404).json(apiError("Offer not found"));
+    const offerData = offerSnap.data() as { companyId?: string };
 
     const isCustomer = requestData?.customerId === uid;
     const isCompany = offerData?.companyId === uid;
 
     if (!isCustomer && !isCompany) {
-      return res.status(403).json({ error: "Not authorized to message on this offer" });
+      return res.status(403).json(apiError("Not authorized to message on this offer"));
     }
 
     const senderRole = isCustomer ? "customer" : "company";
@@ -67,14 +63,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           seen: false,
         });
       } catch (e) {
-        // non-fatal
         console.warn("[offers/message] failed to create notification", e);
       }
     }
 
-    return res.status(200).json({ ok: true });
+    return res.status(200).json(apiSuccess({ ok: true }));
   } catch (err) {
     console.error("[offers/message] error", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json(apiError("Internal server error"));
   }
 }

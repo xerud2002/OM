@@ -2,7 +2,7 @@
 // Tab navigation for the customer dashboard
 
 import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
-import type { DashboardTab } from "./types";
+import type { DashboardTab } from "@/types";
 
 type Props = {
   activeTab: DashboardTab;

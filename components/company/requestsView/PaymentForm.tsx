@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/services/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { addOffer } from "@/utils/firestoreHelpers";
-import type { CompanyUser } from "./types";
+import type { CompanyUser } from "@/types";
 import {
   Lock,
   Unlock,

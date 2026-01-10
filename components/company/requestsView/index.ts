@@ -2,4 +2,5 @@
 // Barrel export for company requests view components
 
 export { default as PaymentForm } from "./PaymentForm";
-export type { MovingRequest, CompanyUser, Offer } from "./types";
+
+// Types are now exported from @/types/index.ts
