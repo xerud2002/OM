@@ -18,10 +18,10 @@ export default function ArticlePregatire() {
   return (
     <>
       <Head>
-        <title>Ghid Complet: Cum să Te Pregătești pentru Mutare în România | OferteMutare.ro</title>
+        <title>Cum să Te Pregătești pentru Mutare | OferteMutare.ro</title>
         <meta
           name="description"
-          content="Ghid detaliat pentru pregătirea mutării: planificare în 8 săptămâni, liste complete, când să rezervi firma, ce documente îți trebuie și cum să economisești timp și bani."
+          content="Ghid pregătire mutare: planificare în 8 săptămâni, liste complete, când să rezervi firma și cum să economisești."
         />
         <meta
           name="keywords"
@@ -37,6 +37,7 @@ export default function ArticlePregatire() {
         />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ofertemutare.ro/articles/pregatire" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/pregatire" />
       </Head>
 

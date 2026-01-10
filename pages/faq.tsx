@@ -148,8 +148,7 @@ export default function FAQPage() {
           content="Răspunsuri la cele mai frecvente întrebări despre platforma de mutări."
         />
         <meta property="og:url" content="https://ofertemutare.ro/faq" />
-        <meta property="og:type" content="website" />
-      </Head>
+        <meta property="og:type" content="website" />        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />      </Head>
 
       <LayoutWrapper>
         <div className="mx-auto max-w-4xl px-4 py-12">

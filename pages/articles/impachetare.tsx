@@ -7,10 +7,10 @@ export default function ArticleImpachetare() {
   return (
     <>
       <Head>
-        <title>Ghid Complet de Împachetare pentru Mutare | OferteMutare.ro</title>
+        <title>Ghid Împachetare pentru Mutare | OferteMutare.ro</title>
         <meta
           name="description"
-          content="Descoperă tehnicile profesionale de împachetare pentru mutare. Sfaturi practice pentru protejarea obiectelor fragile, organizarea eficientă și economisirea timpului."
+          content="Tehnici profesionale de împachetare pentru mutare. Sfaturi pentru protejarea obiectelor fragile și organizare eficientă."
         />
         <meta
           name="keywords"
@@ -24,6 +24,7 @@ export default function ArticleImpachetare() {
         />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ofertemutare.ro/articles/impachetare" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/packing1.webp" />
       </Head>
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-6 py-12">

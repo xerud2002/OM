@@ -129,6 +129,7 @@ export default function ContactPage() {
         />
         <meta property="og:url" content="https://ofertemutare.ro/contact" />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">

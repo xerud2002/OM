@@ -121,6 +121,7 @@ export default function AboutPage() {
         />
         <meta property="og:url" content="https://ofertemutare.ro/about" />
         <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/team.webp" />
       </Head>
 
       <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">

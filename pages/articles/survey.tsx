@@ -18,12 +18,10 @@ export default function ArticleSurvey() {
   return (
     <>
       <Head>
-        <title>
-          Tipuri de Survey Pentru Mutări: Fizic vs. Video vs. Estimare Rapidă | OferteMutare.ro
-        </title>
+        <title>Survey Mutări: Fizic vs. Video vs. Estimare | OferteMutare.ro</title>
         <meta
           name="description"
-          content="Ghid complet despre cele 3 tipuri de survey la mutări în România: vizită fizică, survey video și estimare rapidă. Află care se potrivește nevoilor tale și cum să obții cel mai bun preț."
+          content="Cele 3 tipuri de survey la mutări: vizită fizică, survey video și estimare rapidă. Află care se potrivește și cum obții cel mai bun preț."
         />
         <meta
           name="keywords"
@@ -36,6 +34,7 @@ export default function ArticleSurvey() {
         />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ofertemutare.ro/articles/survey" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/survey" />
       </Head>
 

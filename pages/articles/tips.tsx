@@ -22,12 +22,10 @@ export default function ArticleTips() {
   return (
     <>
       <Head>
-        <title>
-          50+ Sfaturi Expert Pentru Mutări în România | Trucuri, Economii & Best Practices
-        </title>
+        <title>50+ Sfaturi Expert Pentru Mutări | Trucuri & Economii</title>
         <meta
           name="description"
-          content="Cele mai bune sfaturi pentru mutări în 2025: cum economisești până la 40%, când e cel mai ieftin să te muți, cum eviți greșelile comune și trucuri de la profesioniști."
+          content="Sfaturi pentru mutări 2026: economisești 40%, când e cel mai ieftin, cum eviți greșelile comune. Trucuri de la profesioniști."
         />
         <meta
           name="keywords"
@@ -40,6 +38,7 @@ export default function ArticleTips() {
         />
         <meta property="og:type" content="article" />
         <meta property="og:url" content="https://ofertemutare.ro/articles/tips" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
         <link rel="canonical" href="https://ofertemutare.ro/articles/tips" />
       </Head>
 

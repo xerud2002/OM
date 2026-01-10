@@ -35,10 +35,10 @@ export default function HomePage() {
           🔹 SEO Meta Tags
       =========================== */}
       <Head>
-        <title>Oferte Mutare România 2026 | Economisește până la 40% | Firme Verificate</title>
+        <title>Oferte Mutare România 2026 | Economisește 40%</title>
         <meta
           name="description"
-          content="Primești 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări din România. Compari, alegi și economisești. 100% gratuit, fără obligații. 500+ clienți mulțumiți!"
+          content="Primești 3-5 oferte GRATUITE în 24h de la firme de mutări verificate. Compari, alegi și economisești până la 40%. 100% gratuit!"
         />
         <meta
           name="keywords"
