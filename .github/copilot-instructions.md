@@ -8,15 +8,16 @@
 npm run dev        # Port 3000
 npm run build      # Production build
 npm run lint       # ESLint (0 warnings max) — must pass before commit (husky/lint-staged)
+npm run format     # Prettier formatting
 ```
 
 ## Architecture Overview
 
-**Stack**: Next.js 14 Pages Router, TypeScript, Tailwind v4 (CSS-first in `globals.css`), Firebase (Auth/Firestore/Storage), Framer Motion, Sonner toasts.
+**Stack**: Next.js 14 Pages Router, TypeScript, Tailwind v4 (CSS-first in `globals.css`), Firebase (Auth/Firestore/Storage), Framer Motion, Sonner toasts, EmailJS (client), Firebase Admin (server emails).
 
-**Dual-role system**: Users are either `customer` or `company` — never both. Profiles stored in `customers/{uid}` or `companies/{uid}`. Auth helper `ensureUserProfile()` enforces this, throwing `ROLE_CONFLICT` if violated. Security rules in `firebase.firestore.rules` enforce this at DB level via `canCreateCustomer()`/`canCreateCompany()`.
+**Dual-role system**: Users are either `customer` or `company` — never both. Profiles stored in `customers/{uid}` or `companies/{uid}`. Auth helper `ensureUserProfile()` in `utils/firebaseHelpers.ts` enforces this by checking opposite collection before creating profile, throwing `ROLE_CONFLICT` error if violated. Security rules in `firebase.firestore.rules` enforce this at DB level via `canCreateCustomer()`/`canCreateCompany()` functions.
 
-**Key data flow**: Customer creates request → Companies view and submit offers → Customer accepts one offer (batch declines others via `pages/api/offers/accept.ts`) → Email notifications sent.
+**Key data flow**: Customer creates request → Sequential REQ-XXXXXX code generated via Firestore transaction → Companies view and submit offers → Customer accepts one offer (batch write declines all others via `pages/api/offers/accept.ts`) → Email notifications sent to company → Request status updated to 'accepted'.
 
 ## Critical Patterns
 
@@ -33,6 +34,7 @@ import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 
 ```tsx
 // Wrap with RequireRole — handles auth redirects + role verification with retries
+// Uses 5 retry attempts with 400ms delay between checks to handle async profile creation
 <RequireRole allowedRole="customer">
   <LayoutWrapper>{/* content */}</LayoutWrapper>
 </RequireRole>
@@ -43,8 +45,24 @@ import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 ```tsx
 import { createRequest, updateRequest, addOffer, archiveRequest } from "@/utils/firestoreHelpers";
 
-// Auto-generates REQ-XXXXXX codes via transaction on meta/counters
+// Auto-generates REQ-XXXXXX codes via transaction on meta/counters doc
+// Starts at 141000, increments sequentially
 const requestId = await createRequest({ ...form, customerId: user.uid });
+
+// Helper automatically strips undefined fields and handles moveDate logic
+await updateRequest(requestId, { status: "closed", archived: true });
+```
+
+### Firestore Data Writes
+
+```tsx
+// ALWAYS use serverTimestamp() for createdAt/updatedAt fields
+import { serverTimestamp } from "firebase/firestore";
+
+// firestoreHelpers.ts automatically strips undefined fields before writes
+// No need to manually filter — just pass the entire object
+const data = { field1: value1, field2: undefined, field3: value3 };
+await createRequest(data); // field2 will be stripped automatically
 ```
 
 ### API Route Authentication
@@ -107,6 +125,16 @@ return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
 - **Animations**: Import variants from `utils/animations.ts` (`fadeUp`, `staggerContainer`).
 - **Toasts**: Use `sonner` — `toast.success()`, `toast.error()` for user feedback.
 - **No hard deletes**: Use `archived: true` flag or `status: 'closed'` instead of deleting requests.
+- **Address building**: Use helper functions in `firestoreHelpers.ts` (`buildAddressString`, `buildMoveDateFields`) for consistent formatting.
+
+## Email System
+
+- **Client-side**: EmailJS via `utils/emailHelpers.ts` using dynamic imports to avoid server bundling
+  - Requires `NEXT_PUBLIC_EMAILJS_SERVICE_ID`, `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`, `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`
+  - Call `sendEmail({ to_email, to_name, ...params }, templateId?)`
+- **Server-side**: Firebase Admin or Resend API for transactional emails
+  - Used in `pages/api/offers/accept.ts` for company notifications
+  - Requires `RESEND_API_KEY` environment variable
 
 ## Environment Setup
 
