@@ -35,10 +35,10 @@ export default function HomePage() {
           🔹 SEO Meta Tags
       =========================== */}
       <Head>
-        <title>Oferte Mutare România 2026 | Economisește 40%</title>
+        <title>Oferte Mutări România 2026 → Firme Verificate | Economisești 40%</title>
         <meta
           name="description"
-          content="Primești 3-5 oferte GRATUITE în 24h de la firme de mutări verificate. Compari, alegi și economisești până la 40%. 100% gratuit!"
+          content="🚚 Primești 3-5 oferte GRATUITE în 24h pentru mutarea ta! Compară firme de mutări verificate din toată România. Economisești până la 40% → 100% gratuit, fără obligații!"
         />
         <meta
           name="keywords"
@@ -49,10 +49,10 @@ export default function HomePage() {
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro" />
-        <meta property="og:title" content="Oferte Mutare România 2026 | Economisești până la 40%" />
+        <meta property="og:title" content="Compara Oferte pentru Mutarea Ta | Firme Verificate România" />
         <meta
           property="og:description"
-          content="Primești 3-5 oferte GRATUITE în 24h de la firme verificate. 100% gratuit!"
+          content="🚚 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări! Compară prețuri și economisește până la 40%. Zero obligații!"
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
@@ -61,13 +61,82 @@ export default function HomePage() {
         <meta property="twitter:url" content="https://ofertemutare.ro" />
         <meta
           property="twitter:title"
-          content="Oferte Mutare România 2026 | Economisești până la 40%"
+          content="Compara Oferte pentru Mutarea Ta | Economisești 40%"
         />
         <meta
           property="twitter:description"
-          content="Primești 3-5 oferte GRATUITE în 24h de la firme verificate!"
+          content="🚚 Compară oferte de la firme verificate în 24h. Gratuit, rapid, sigur!"
         />
         <meta property="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* Structured Data - Schema.org for better SEO */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              name: "OferteMutare.ro",
+              url: "https://ofertemutare.ro",
+              description: "Platformă de comparare oferte pentru servicii de mutări în România",
+              potentialAction: {
+                "@type": "SearchAction",
+                target: "https://ofertemutare.ro/mutari/{search_term_string}",
+                "query-input": "required name=search_term_string",
+              },
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              serviceType: "Servicii Mutări",
+              provider: {
+                "@type": "Organization",
+                name: "OferteMutare.ro",
+                url: "https://ofertemutare.ro",
+                logo: "https://ofertemutare.ro/logo.webp",
+              },
+              areaServed: {
+                "@type": "Country",
+                name: "România",
+              },
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: "Servicii de Mutări",
+                itemListElement: [
+                  {
+                    "@type": "Offer",
+                    itemOffered: {
+                      "@type": "Service",
+                      name: "Mutări Apartamente",
+                      description: "Servicii complete de mutare pentru apartamente",
+                    },
+                  },
+                  {
+                    "@type": "Offer",
+                    itemOffered: {
+                      "@type": "Service",
+                      name: "Mutări Case și Vile",
+                      description: "Transport profesional pentru case și vile",
+                    },
+                  },
+                  {
+                    "@type": "Offer",
+                    itemOffered: {
+                      "@type": "Service",
+                      name: "Mutări Birouri",
+                      description: "Relocare companii și birouri",
+                    },
+                  },
+                ],
+              },
+            }),
+          }}
+        />
       </Head>
 
       {/* ==========================
