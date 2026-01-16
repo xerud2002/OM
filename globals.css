@@ -252,8 +252,8 @@ select option:checked {
   }
 
   /* Remove backgrounds for better print quality */
-  .bg-gradient-to-br,
-  .bg-gradient-to-r {
+  .bg-linear-to-br,
+  .bg-linear-to-r {
     background: white !important;
   }
 
