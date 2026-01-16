@@ -95,20 +95,27 @@ export default function WhatsAppWidget() {
         )}
       </AnimatePresence>
 
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.9 }}
-        onClick={isOpen ? handleClose : handleOpen}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/20 transition-all hover:shadow-xl"
-        aria-label="Chat WhatsApp"
-      >
-        {isOpen ? <X size={28} /> : <MessageCircle size={32} />}
-        
-        {/* Notification dot if closed and not interacted */}
-        {!isOpen && !hasInteracted && (
-          <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-red-500 ring-2 ring-white animate-pulse" />
+      <AnimatePresence>
+        {!isOpen && (
+          <motion.button
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleOpen}
+            className="flex h-14 w-14 items-center justify-center rounded-full bg-[#25D366] text-white shadow-lg shadow-emerald-900/20 transition-all hover:shadow-xl"
+            aria-label="Chat WhatsApp"
+          >
+            <MessageCircle size={32} />
+            
+            {/* Notification dot if closed and not interacted */}
+            {!hasInteracted && (
+              <span className="absolute top-0 right-0 h-4 w-4 rounded-full bg-red-500 ring-2 ring-white animate-pulse" />
+            )}
+          </motion.button>
         )}
-      </motion.button>
+      </AnimatePresence>
     </div>
   );
 }
