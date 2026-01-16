@@ -48,10 +48,10 @@ export default function Footer() {
   return (
     <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
       {/* Main content - using CSS animations instead of framer-motion */}
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 sm:gap-10 px-4 py-10 sm:px-6 sm:py-14 sm:grid-cols-2 lg:grid-cols-4">
         {/* Logo & about */}
-        <div>
-          <div className="mb-5 flex items-center">
+        <div className="text-center sm:text-left">
+          <div className="mb-4 sm:mb-5 flex items-center justify-center sm:justify-start">
             <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-xl font-bold text-transparent">
               <span className="tracking-tight">Oferte</span>
               <span className="text-emerald-400">mutare</span>
@@ -59,12 +59,12 @@ export default function Footer() {
             </div>
           </div>
 
-          <p className="mb-4 max-w-xs text-sm leading-relaxed text-gray-600">
+          <p className="mb-3 sm:mb-4 mx-auto sm:mx-0 max-w-xs text-sm leading-relaxed text-gray-600">
             Platforma care conectează clienți și firme de mutări verificate din România. Rapid,
             sigur și transparent.
           </p>
 
-          <div className="flex flex-col gap-1 text-sm text-gray-600">
+          <div className="flex flex-col gap-1 text-sm text-gray-600 items-center sm:items-start">
             {CONTACT_INFO.map(({ icon: Icon, text, label }, i) => (
               <div key={i} className="flex items-center gap-2">
                 <Icon size={16} className="text-emerald-500" />
@@ -92,9 +92,9 @@ export default function Footer() {
         </div>
 
         {/* Legal & social */}
-        <div>
-          <h3 className="mb-4 text-lg font-semibold text-emerald-600">Legal</h3>
-          <ul className="mb-6 space-y-2 text-sm">
+        <div className="text-center sm:text-left">
+          <h3 className="mb-3 sm:mb-4 text-base sm:text-lg font-semibold text-emerald-600">Legal</h3>
+          <ul className="mb-4 sm:mb-6 space-y-2 text-sm">
             {LEGAL.map(({ href, label }) => (
               <li key={href}>
                 <Link
@@ -108,7 +108,7 @@ export default function Footer() {
             ))}
           </ul>
 
-          <div className="flex gap-4">
+          <div className="flex gap-4 justify-center sm:justify-start">
             {SOCIAL_LINKS.map(({ icon: Icon, href, label }, i) => (
               <a
                 key={i}
@@ -116,7 +116,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="rounded-full border border-gray-200 p-2 text-gray-600 transition-all duration-200 hover:scale-110 hover:border-emerald-500 hover:text-emerald-600"
+                className="rounded-full border border-gray-200 p-2 text-gray-600 transition-all duration-200 hover:scale-110 hover:border-emerald-500 hover:text-emerald-600 active:scale-95"
               >
                 <Icon size={18} />
               </a>
@@ -126,7 +126,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-gray-200 bg-gray-50 py-5 text-center text-sm text-gray-500">
+      <div className="border-t border-gray-200 bg-gray-50 py-4 sm:py-5 px-4 text-center text-xs sm:text-sm text-gray-500">
         <p>
           © {new Date().getFullYear()}{" "}
           <span className="font-medium text-emerald-600">ofertemutare.ro</span> · Toate drepturile
@@ -146,9 +146,9 @@ function FooterColumn({
   links: { href: string; label: string }[];
 }) {
   return (
-    <div>
-      <h3 className="mb-4 text-lg font-semibold text-emerald-600">{title}</h3>
-      <ul className="space-y-2 text-sm">
+    <div className="text-center sm:text-left">
+      <h3 className="mb-3 sm:mb-4 text-base sm:text-lg font-semibold text-emerald-600">{title}</h3>
+      <ul className="space-y-1.5 sm:space-y-2 text-sm">
         {links.map(({ href, label }) => (
           <li key={href}>
             <Link

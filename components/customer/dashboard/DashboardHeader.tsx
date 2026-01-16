@@ -28,18 +28,18 @@ export default function DashboardHeader({
         <div className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-400/10 blur-2xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1400px] px-4 pt-28 pb-10 sm:px-6 sm:pt-32 lg:pb-14">
+      <div className="relative mx-auto max-w-[1400px] px-4 pt-24 pb-8 sm:px-6 sm:pt-28 sm:pb-10 lg:pt-32 lg:pb-14">
         {/* Header */}
-        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-4 sm:gap-6 md:flex-row md:items-center md:justify-between">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-            <h1 className="text-3xl font-bold text-white sm:text-4xl">
+            <h1 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
               Bună,{" "}
               <span className="bg-linear-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
                 {displayName || "Client"}
               </span>
               !
             </h1>
-            <p className="mt-2 text-base text-slate-300">
+            <p className="mt-1.5 sm:mt-2 text-sm sm:text-base text-slate-300">
               Gestionează cererile tale de mutare și ofertele primite
             </p>
           </motion.div>
@@ -47,15 +47,15 @@ export default function DashboardHeader({
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={onNewRequest}
-            className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40"
+            className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40 active:scale-95 w-full md:w-auto"
           >
-            <PlusSquare size={22} className="transition-transform group-hover:rotate-90" />
+            <PlusSquare size={20} className="sm:w-[22px] sm:h-[22px] transition-transform group-hover:rotate-90" />
             Cerere nouă
           </motion.button>
         </div>
 
         {/* Stats Cards */}
-        <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-6 sm:mt-8 grid grid-cols-1 gap-4 sm:gap-5 sm:grid-cols-2 lg:grid-cols-3">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
