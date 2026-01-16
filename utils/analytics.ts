@@ -174,6 +174,29 @@ export const trackNavClick = (destination: string) => {
 };
 
 // Outbound links
-export const trackOutboundLink = (url: string) => {
-  trackEvent("outbound_click", "engagement", url);
+// CRO Events
+export const trackCalculatorUsage = (serviceType: string, city: string, savingsValue: number) => {
+  trackEvent("calculator_used", "cro", `${serviceType}_${city}`, savingsValue, {
+    service_type: serviceType,
+    city: city,
+    savings_value: savingsValue,
+  });
+};
+
+export const trackExitIntentShown = () => {
+  trackEvent("exit_intent_shown", "cro", "popup_displayed");
+};
+
+export const trackExitIntentConversion = (action: "clicked_cta" | "dismissed") => {
+  trackEvent("exit_intent_interaction", "cro", action);
+};
+
+export const trackPhoneClick = (location: string, phoneNumber: string) => {
+  trackEvent("phone_click", "contact", location, undefined, {
+    phone_number: phoneNumber,
+  });
+};
+
+export const trackServicePageView = (serviceName: string) => {
+  trackEvent("service_view", "content", serviceName);
 };

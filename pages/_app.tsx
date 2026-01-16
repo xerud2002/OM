@@ -60,6 +60,11 @@ const Toaster = dynamic(() => import("sonner").then((mod) => ({ default: mod.Toa
   ssr: false,
 });
 
+const ExitIntentPopup = dynamic(() => import("@/components/cro/ExitIntentPopup"), {
+  ssr: false,
+  loading: () => null,
+});
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
@@ -140,6 +145,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
       {/* Conversion optimization widgets */}
       <FloatingCTA />
+      <ExitIntentPopup />
 
       {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
       <Toaster richColors position="top-right" closeButton />

@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import { trackCTAClick } from "@/utils/analytics";
 
 export default function FloatingCTA() {
   const router = useRouter();
@@ -54,6 +55,7 @@ export default function FloatingCTA() {
   if (shouldHide) return null;
 
   const handleClick = () => {
+    trackCTAClick("get_offers", "mobile_fab");
     if (user) router.push("/customer/dashboard");
     else {
       localStorage.setItem("redirectAfterLogin", "form");

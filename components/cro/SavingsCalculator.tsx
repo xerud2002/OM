@@ -1,11 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Calculator, TrendingDown, CheckCircle } from "lucide-react";
+import { trackCalculatorUsage } from "@/utils/analytics";
 
 export default function SavingsCalculator() {
   const [serviceType, setServiceType] = useState("apartament-2-camere");
   const [city, setCity] = useState("bucuresti");
+  
+  // Track usage only once per session or after meaningful interaction delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Calculate current savings to send
+      const basePrices: Record<string, number> = {
+        "garsoniera": 600,
+        "apartament-2-camere": 900,
+        "apartament-3-camere": 1400,
+        "apartament-4-camere": 2000,
+        "casa-mica": 2500,
+        "casa-mare": 4000,
+      };
+      const cityMultiplier: Record<string, number> = {
+        "bucuresti": 1.2,
+        "cluj-napoca": 1.15,
+        "timisoara": 1.1,
+        "iasi": 1.05,
+        "constanta": 1.05,
+        "other": 1.0,
+      };
+      
+      const basePrice = basePrices[serviceType] || 900;
+      const multiplier = cityMultiplier[city] || 1.0;
+      const directPrice = Math.round(basePrice * multiplier);
+      const platformPrice = Math.round(directPrice * 0.6);
+      const savings = directPrice - platformPrice;
+
+      trackCalculatorUsage(serviceType, city, savings);
+    }, 2000); // Track after 2s of sitting on a selection (implies they are reading result)
+
+    return () => clearTimeout(timer);
+  }, [serviceType, city]);
   
   const basePrices: Record<string, number> = {
     "garsoniera": 600,
