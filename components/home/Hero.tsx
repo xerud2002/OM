@@ -179,8 +179,8 @@ export default function Hero() {
               <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
                 <div className="relative aspect-4/3 bg-linear-to-br from-slate-50 to-emerald-50/50">
                   <Image
-                    src="/pics/index.webp"
-                    alt="Platforma Oferte Mutare"
+                    src="/pics/hero-branded-v1.png"
+                    alt="Servicii de Mutare Profesionale - OferteMutare.ro"
                     fill
                     className="object-cover"
                     priority
