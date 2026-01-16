@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage -->
+  <!-- Pagina Principală -->
   <url>
     <loc>https://ofertemutare.ro/</loc>
     <lastmod>2026-01-16</lastmod>
@@ -8,7 +8,7 @@
     <priority>1.0</priority>
   </url>
 
-  <!-- Main Pages -->
+  <!-- Pagini Principale -->
   <url>
     <loc>https://ofertemutare.ro/about</loc>
     <lastmod>2026-01-15</lastmod>
@@ -28,7 +28,7 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Articles -->
+  <!-- Articole -->
   <url>
     <loc>https://ofertemutare.ro/articles/tips</loc>
     <lastmod>2026-01-15</lastmod>
@@ -54,7 +54,7 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Guides -->
+  <!-- Ghiduri -->
   <url>
     <loc>https://ofertemutare.ro/guides/mutare</loc>
     <lastmod>2026-01-15</lastmod>
@@ -62,7 +62,7 @@
     <priority>0.7</priority>
   </url>
 
-  <!-- Hub Pages (Pillar Pages) -->
+  <!-- Pagini Centrale (Pillar Pages) -->
   <url>
     <loc>https://ofertemutare.ro/mutari</loc>
     <lastmod>2026-01-15</lastmod>
@@ -76,7 +76,7 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- Service Category Pages -->
+  <!-- Pagini Categorii Servicii -->
   <!-- Tipuri de Mutări -->
   <url>
     <loc>https://ofertemutare.ro/mutari/tipuri/apartamente</loc>
@@ -147,7 +147,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- City Pages - Tier 1 Major Cities -->
+  <!-- Pagini Orașe - Nivel 1 Orașe Majore -->
   <url>
     <loc>https://ofertemutare.ro/mutari/bucuresti</loc>
     <lastmod>2026-01-15</lastmod>
@@ -209,7 +209,7 @@
     <priority>0.9</priority>
   </url>
 
-  <!-- City Pages - Tier 2 County Capitals -->
+  <!-- Pagini Orașe - Nivel 2 Reședințe de Județ -->
   <url>
     <loc>https://ofertemutare.ro/mutari/alba-iulia</loc>
     <lastmod>2026-01-15</lastmod>
@@ -397,7 +397,7 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Auth Pages (for SEO landing) -->
+  <!-- Pagini Autentificare (pentru SEO) -->
   <url>
     <loc>https://ofertemutare.ro/customer/auth</loc>
     <lastmod>2026-01-15</lastmod>
@@ -411,7 +411,7 @@
     <priority>0.6</priority>
   </url>
 
-  <!-- Legal Pages -->
+  <!-- Pagini Legale -->
   <url>
     <loc>https://ofertemutare.ro/privacy</loc>
     <lastmod>2026-01-15</lastmod>
