@@ -1,0 +1,226 @@
+import Head from "next/head";
+import Link from "next/link";
+import LayoutWrapper from "@/components/layout/Layout";
+import {
+  Building2,
+  Home,
+  GraduationCap,
+  Briefcase,
+  Music,
+  ArrowRight,
+  MapPin,
+} from "lucide-react";
+
+export default function MutariIndexPage() {
+  const currentYear = new Date().getFullYear();
+
+  const mutariTypes = [
+    {
+      title: "Mutări Apartamente",
+      description: "De la garsoniere la apartamente cu 4+ camere. Prețuri de la 400 lei.",
+      icon: Building2,
+      href: "/mutari/tipuri/apartamente",
+      color: "purple",
+    },
+    {
+      title: "Mutări Case și Vile",
+      description: "Transport profesional pentru case mari și vile. Echipe 4-6 persoane.",
+      icon: Home,
+      href: "/mutari/tipuri/case",
+      color: "blue",
+    },
+    {
+      title: "Mutări Studenți",
+      description: "Prețuri speciale pentru studenți. De la 300 lei pentru cămine.",
+      icon: GraduationCap,
+      href: "/mutari/tipuri/studenti",
+      color: "orange",
+    },
+    {
+      title: "Mutări Birouri",
+      description: "Relocare companii cu zero downtime. Weekend și program noapte.",
+      icon: Briefcase,
+      href: "/mutari/tipuri/birouri",
+      color: "slate",
+    },
+  ];
+
+  const mutariSpecializate = [
+    {
+      title: "Mutări Piane",
+      description: "Transport specializat pentru piane verticale și cu coadă.",
+      icon: Music,
+      href: "/mutari/specializate/piane",
+      color: "purple",
+    },
+  ];
+
+  const topCities = [
+    { name: "București", href: "/mutari/bucuresti" },
+    { name: "Cluj-Napoca", href: "/mutari/cluj-napoca" },
+    { name: "Timișoara", href: "/mutari/timisoara" },
+    { name: "Iași", href: "/mutari/iasi" },
+    { name: "Constanța", href: "/mutari/constanta" },
+    { name: "Brașov", href: "/mutari/brasov" },
+  ];
+
+  return (
+    <>
+      <Head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        
+        <title>🚚 Servicii Mutări {currentYear} | Toate Tipurile de Mutări</title>
+        <meta
+          name="description"
+          content="✓ Găsește firma perfectă pentru mutarea ta ✓ Apartamente, case, birouri, studenți ✓ 3-5 oferte GRATUITE în 24h → Compară și economisești 40%!"
+        />
+        <meta name="keywords" content="mutări, firme mutări, servicii mutare, oferte mutare, transport mobilă" />
+        <link rel="canonical" href="https://ofertemutare.ro/mutari" />
+        
+        <meta name="robots" content="index, follow, max-image-preview:large" />
+        
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ofertemutare.ro/mutari" />
+        <meta property="og:title" content={`Servicii Mutări ${currentYear} | Toate Tipurile`} />
+        <meta property="og:description" content="Găsește firma perfectă pentru orice tip de mutare. Oferte gratuite în 24h!" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta property="og:locale" content="ro_RO" />
+        <meta property="og:site_name" content="OferteMutare.ro" />
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={`Servicii Mutări ${currentYear}`} />
+        <meta name="twitter:description" content="Toate tipurile de mutări. Oferte gratuite!" />
+        
+        <meta name="theme-color" content="#7c3aed" />
+      </Head>
+
+      <LayoutWrapper>
+        {/* Hero */}
+        <section className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-purple-700 to-violet-800 py-20">
+          <div className="absolute inset-0 overflow-hidden">
+            <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
+            <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
+          </div>
+
+          <div className="relative mx-auto max-w-6xl px-4 text-center">
+            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+              Servicii Complete de{" "}
+              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+                Mutări
+              </span>
+            </h1>
+            <p className="mb-10 mx-auto max-w-2xl text-lg text-purple-100 md:text-xl">
+              Găsește firma perfectă pentru orice tip de mutare. Compară 3-5 oferte gratuite și economisești până la 40%!
+            </p>
+          </div>
+        </section>
+
+        {/* Main Content */}
+        <div className="mx-auto max-w-6xl px-4 py-16">
+          {/* Tipuri de Mutări */}
+          <section className="mb-16">
+            <h2 className="mb-8 text-3xl font-bold text-gray-900">Tipuri de Mutări</h2>
+            <div className="grid gap-6 md:grid-cols-2">
+              {mutariTypes.map((type) => {
+                const Icon = type.icon;
+                return (
+                  <Link
+                    key={type.href}
+                    href={type.href}
+                    className="group rounded-2xl border-2 border-gray-200 bg-white p-6 transition-all hover:border-purple-400 hover:shadow-xl"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className={`rounded-xl bg-${type.color}-100 p-3`}>
+                        <Icon className={`h-6 w-6 text-${type.color}-600`} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-purple-600">
+                          {type.title}
+                        </h3>
+                        <p className="mb-3 text-gray-600">{type.description}</p>
+                        <span className="inline-flex items-center gap-2 text-purple-600 font-semibold">
+                          Vezi detalii
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Mutări Specializate */}
+          <section className="mb-16">
+            <h2 className="mb-8 text-3xl font-bold text-gray-900">Mutări Specializate</h2>
+            <div className="grid gap-6">
+              {mutariSpecializate.map((type) => {
+                const Icon = type.icon;
+                return (
+                  <Link
+                    key={type.href}
+                    href={type.href}
+                    className="group rounded-2xl border-2 border-gray-200 bg-white p-6 transition-all hover:border-purple-400 hover:shadow-xl"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className={`rounded-xl bg-${type.color}-100 p-3`}>
+                        <Icon className={`h-6 w-6 text-${type.color}-600`} />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-purple-600">
+                          {type.title}
+                        </h3>
+                        <p className="mb-3 text-gray-600">{type.description}</p>
+                        <span className="inline-flex items-center gap-2 text-purple-600 font-semibold">
+                          Vezi detalii
+                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                        </span>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* Top Cities */}
+          <section className="mb-16">
+            <div className="flex items-center gap-3 mb-8">
+              <MapPin className="h-7 w-7 text-purple-600" />
+              <h2 className="text-3xl font-bold text-gray-900">Mutări pe Orașe</h2>
+            </div>
+            <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {topCities.map((city) => (
+                <Link
+                  key={city.href}
+                  href={city.href}
+                  className="group rounded-xl border border-gray-200 bg-white p-4 text-center transition-all hover:border-purple-400 hover:shadow-lg"
+                >
+                  <span className="font-semibold text-gray-900 group-hover:text-purple-600">
+                    Mutări {city.name} →
+                  </span>
+                </Link>
+              ))}
+            </div>
+          </section>
+
+          {/* CTA */}
+          <section className="rounded-2xl bg-gradient-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
+            <h2 className="mb-4 text-3xl font-bold">Gata să începi?</h2>
+            <p className="mb-8 text-lg text-purple-100">
+              Primește 3-5 oferte gratuite în 24h și economisește până la 40%.
+            </p>
+            <Link
+              href="/customer/auth"
+              className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-purple-700 shadow-xl transition-all hover:bg-purple-50"
+            >
+              Cere Oferte Gratuite Acum
+              <ArrowRight className="h-5 w-5" />
+            </Link>
+          </section>
+        </div>
+      </LayoutWrapper>
+    </>
+  );
+}

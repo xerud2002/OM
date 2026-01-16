@@ -5,8 +5,7 @@ import { Facebook, Instagram, Linkedin, Mail } from "lucide-react";
 
 /* 🔹 Constants */
 const CONTACT_INFO = [
-  { icon: Mail, text: "contact@ofertemutare.ro", label: "Clienți" },
-  { icon: Mail, text: "partener@ofertemutare.ro", label: "Companii" },
+  { icon: Mail, text: "info@ofertemutare.ro", label: null },
 ];
 
 const USEFUL_LINKS = [
@@ -20,6 +19,31 @@ const RESOURCES = [
   { href: "/articles/tips", label: "Tips & Tricks mutare" },
   { href: "/faq", label: "Întrebări frecvente" },
   { href: "/guides/mutare", label: "Ghid complet de mutare" },
+];
+
+const SERVICE_LINKS = [
+  { href: "/mutari/tipuri/apartamente", label: "Mutări Apartamente" },
+  { href: "/mutari/tipuri/case", label: "Mutări Case" },
+  { href: "/mutari/tipuri/studenti", label: "Mutări Studenți" },
+  { href: "/mutari/tipuri/birouri", label: "Mutări Birouri" },
+  { href: "/servicii/impachetare/profesionala", label: "Împachetare" },
+  { href: "/servicii/montaj/mobila", label: "Montare Mobilă" },
+  { href: "/servicii/depozitare", label: "Depozitare" },
+  { href: "/mutari/specializate/piane", label: "Mutări Piane" },
+  { href: "/servicii/debarasare", label: "Debarasare" },
+];
+
+const CITY_LINKS = [
+  { href: "/mutari/bucuresti", label: "București" },
+  { href: "/mutari/cluj-napoca", label: "Cluj-Napoca" },
+  { href: "/mutari/timisoara", label: "Timișoara" },
+  { href: "/mutari/iasi", label: "Iași" },
+  { href: "/mutari/constanta", label: "Constanța" },
+  { href: "/mutari/brasov", label: "Brașov" },
+  { href: "/mutari/craiova", label: "Craiova" },
+  { href: "/mutari/galati", label: "Galați" },
+  { href: "/mutari/oradea", label: "Oradea" },
+  { href: "/mutari/sibiu", label: "Sibiu" },
 ];
 
 const LEGAL = [
@@ -37,7 +61,7 @@ export default function Footer() {
   return (
     <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
       {/* Main content - using CSS animations instead of framer-motion */}
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr]">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
         {/* Logo & about */}
         <div>
           <div className="mb-5 flex items-center">
@@ -73,6 +97,16 @@ export default function Footer() {
 
         <div>
           <FooterColumn title="Resurse" links={RESOURCES} />
+        </div>
+
+        {/* Service Links for SEO */}
+        <div>
+          <FooterColumn title="Tipuri Servicii" links={SERVICE_LINKS} />
+        </div>
+
+        {/* City Links for SEO */}
+        <div>
+          <FooterColumn title="Mutări pe Orașe" links={CITY_LINKS} />
         </div>
 
         {/* Legal & social */}

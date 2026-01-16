@@ -13,7 +13,13 @@ npm run lint     # ESLint with 0 warnings max (enforced by husky pre-commit)
 
 **Dual-role system**: Users are `customer` OR `company`, never both. Profiles in `customers/{uid}` or `companies/{uid}`. Enforced by `ensureUserProfile()` in `utils/firebaseHelpers.ts` (throws `ROLE_CONFLICT`) and Firestore rules (`canCreateCustomer()`/`canCreateCompany()`).
 
+<<<<<<< HEAD
 **Request flow**: Customer creates request → `generateRequestCode()` assigns REQ-XXXXXX via transaction → Companies pay for access, submit offers → Customer accepts one (batch declines others via `pages/api/offers/accept.ts`) → Notifications sent.
+=======
+**Dual-role system**: Users are either `customer` or `company` — never both. Profiles stored in `customers/{uid}` or `companies/{uid}`. Auth helper `ensureUserProfile()` in `utils/firebaseHelpers.ts` enforces this by checking opposite collection before creating profile, throwing `ROLE_CONFLICT` error if violated. Security rules in `firebase.firestore.rules` enforce this at DB level via `canCreateCustomer()`/`canCreateCompany()` functions.
+
+**Key data flow**: Customer creates request → Sequential REQ-XXXXXX code generated via Firestore transaction on `meta/counters` doc (starts at 141000) → Companies view and submit offers → Customer accepts one offer (batch write declines all others via `pages/api/offers/accept.ts`) → Email notifications sent to company → Request status updated to 'accepted'.
+>>>>>>> 807d0f046dfb415594613dc4471af6126ed60fad
 
 ## Critical Patterns
 
@@ -42,7 +48,21 @@ await createRequest({ ...form, customerId: user.uid });
 import { withAuth } from "@/lib/apiAuth";
 export default withAuth(async (req, res, uid) => { /* uid verified */ });
 
+<<<<<<< HEAD
 // Client-side calls require Bearer token
+=======
+// Option 2: Manual verification (when you need more control)
+import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
+const authResult = await verifyAuth(req);
+if (!authResult.success) return sendAuthError(res, authResult);
+const uid = authResult.uid;
+```
+
+### Client-Side API Calls
+
+```tsx
+// All secured endpoints require Firebase ID token in Authorization header
+>>>>>>> 807d0f046dfb415594613dc4471af6126ed60fad
 const token = await user.getIdToken();
 fetch("/api/offers/accept", { headers: { Authorization: `Bearer ${token}` }, ... });
 ```

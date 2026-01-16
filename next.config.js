@@ -52,6 +52,55 @@ const nextConfig = {
     optimizePackageImports: ["lucide-react", "sonner", "framer-motion", "date-fns"],
   },
 
+  // 301 Redirects for URL restructuring (preserve SEO)
+  async redirects() {
+    return [
+      // Mutări - moved to /mutari/tipuri/
+      {
+        source: '/servicii/mutari-apartamente',
+        destination: '/mutari/tipuri/apartamente',
+        permanent: true,
+      },
+      {
+        source: '/servicii/mutari-case',
+        destination: '/mutari/tipuri/case',
+        permanent: true,
+      },
+      {
+        source: '/servicii/mutari-studenti',
+        destination: '/mutari/tipuri/studenti',
+        permanent: true,
+      },
+      {
+        source: '/servicii/mutari-companii',
+        destination: '/mutari/tipuri/birouri',
+        permanent: true,
+      },
+      // Specializate
+      {
+        source: '/servicii/mutari-piane',
+        destination: '/mutari/specializate/piane',
+        permanent: true,
+      },
+      // Servicii - reorganized
+      {
+        source: '/servicii/impachetare-profesionala',
+        destination: '/servicii/impachetare/profesionala',
+        permanent: true,
+      },
+      {
+        source: '/servicii/materiale-impachetare',
+        destination: '/servicii/impachetare/materiale',
+        permanent: true,
+      },
+      {
+        source: '/servicii/demontare-montare-mobila',
+        destination: '/servicii/montaj/mobila',
+        permanent: true,
+      },
+    ];
+  },
+
   // Development configuration
   async headers() {
     return [

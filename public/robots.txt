@@ -3,6 +3,9 @@
 User-agent: *
 Allow: /
 
+# City pages - explicitly allowed for crawling
+Allow: /mutari/
+
 # Block private/authenticated pages
 Disallow: /customer/dashboard
 Disallow: /customer/settings
