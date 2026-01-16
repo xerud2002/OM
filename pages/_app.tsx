@@ -1,13 +1,20 @@
 // pages/_app.tsx
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import Script from "next/script";
 import dynamic from "next/dynamic";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
 import { Inter } from "next/font/google";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
 // Import dev error suppressor for cleaner console in development
 import "@/utils/devErrorSuppressor";
+import { pageView } from "@/utils/analytics";
+
+// GA4 Measurement ID (from Firebase config)
+const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID;
 
 // Self-hosted Inter font with optimal loading strategy
 const inter = Inter({
@@ -49,8 +56,41 @@ const Toaster = dynamic(() => import("sonner").then((mod) => ({ default: mod.Toa
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+
+  // Track page views on route change (GA4 handles initial page view automatically)
+  useEffect(() => {
+    const handleRouteChange = (url: string) => {
+      pageView(url);
+    };
+    router.events.on("routeChangeComplete", handleRouteChange);
+    return () => {
+      router.events.off("routeChangeComplete", handleRouteChange);
+    };
+  }, [router.events]);
+
   return (
     <ErrorBoundary>
+      {/* Google Analytics 4 */}
+      {GA_MEASUREMENT_ID && (
+        <>
+          <Script
+            src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+            strategy="afterInteractive"
+          />
+          <Script id="google-analytics" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', '${GA_MEASUREMENT_ID}', {
+                page_path: window.location.pathname,
+              });
+            `}
+          </Script>
+        </>
+      )}
+
       {/* Fallback meta for pages that don't set their own <Head> */}
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1" />

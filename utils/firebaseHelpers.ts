@@ -14,6 +14,13 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/services/firebase";
 import { GoogleAuthProvider } from "firebase/auth";
 import type { UserRole, CustomerProfile, CompanyProfile } from "@/types";
+import {
+  setUserId,
+  setUserProperties,
+  clearUserId,
+  trackSignUp,
+  trackLogin,
+} from "@/utils/analytics";
 
 // Re-export types for backward compatibility
 export type { UserRole, CustomerProfile, CompanyProfile };
@@ -37,7 +44,17 @@ const COLLECTIONS = {
 // for this single line to keep the type annotation while avoiding a warning.
 // eslint-disable-next-line no-unused-vars
 export function onAuthChange(cb: (user: User | null) => void) {
-  return onAuthStateChanged(auth, cb);
+  return onAuthStateChanged(auth, async (user) => {
+    if (user) {
+      // Set user ID in GA4 for returning users
+      setUserId(user.uid);
+      const role = await getUserRole(user);
+      if (role) {
+        setUserProperties({ user_role: role });
+      }
+    }
+    cb(user);
+  });
 }
 
 // Track if logout is in progress to avoid showing error messages
@@ -45,6 +62,7 @@ let isLoggingOut = false;
 
 export async function logout() {
   isLoggingOut = true;
+  clearUserId(); // Clear GA4 user tracking
   await signOut(auth);
   // Reset after a longer delay to ensure all auth state changes propagate
   setTimeout(() => {
@@ -109,6 +127,12 @@ export async function loginWithGoogle(role: UserRole) {
     provider.setCustomParameters({ prompt: "select_account" });
     const cred = await signInWithPopup(auth, provider);
     await ensureUserProfile(cred.user, role);
+
+    // Track user in GA4
+    setUserId(cred.user.uid);
+    setUserProperties({ user_role: role });
+    trackLogin("google", role);
+
     return cred.user;
   } catch (error: any) {
     // Don't throw popup-blocked errors - these are user-initiated cancellations
@@ -130,13 +154,29 @@ export async function registerWithEmail(
     await updateProfile(user, { displayName });
   }
   await ensureUserProfile(user, role);
+
+  // Track new user in GA4
+  setUserId(user.uid);
+  setUserProperties({ user_role: role });
+  trackSignUp("email", role);
+
   return user;
 }
 
-export async function loginWithEmail({ email, password }: { email: string; password: string }) {
+export async function loginWithEmail(
+  { email, password }: { email: string; password: string },
+  role?: UserRole
+) {
   const { user } = await signInWithEmailAndPassword(auth, email, password);
-  // The caller usually knows the role context (customer/company page),
-  // but if you need it: await getUserRole(user)
+
+  // Track user in GA4
+  setUserId(user.uid);
+  const detectedRole = role || (await getUserRole(user));
+  if (detectedRole) {
+    setUserProperties({ user_role: detectedRole });
+    trackLogin("email", detectedRole);
+  }
+
   return user;
 }
 

@@ -19,6 +19,8 @@ npm run format     # Prettier formatting
 
 **Key data flow**: Customer creates request → Sequential REQ-XXXXXX code generated via Firestore transaction on `meta/counters` doc (starts at 141000) → Companies view and submit offers → Customer accepts one offer (batch write declines all others via `pages/api/offers/accept.ts`) → Email notifications sent to company → Request status updated to 'accepted'.
 
+**Firebase initialization**: Client SDK in `services/firebase.ts` handles hot reload with `getApps()` check. Admin SDK in `lib/firebaseAdmin.ts` gracefully degrades if credentials missing — always verify `adminReady` flag before privileged operations.
+
 ## Critical Patterns
 
 ### Firebase Imports
@@ -126,6 +128,8 @@ return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
 - **Toasts**: Use `sonner` — `toast.success()`, `toast.error()` for user feedback.
 - **No hard deletes**: Use `archived: true` flag or `status: 'closed'` instead of deleting requests.
 - **Address building**: Use helper functions in `firestoreHelpers.ts` (`buildAddressString`, `buildMoveDateFields`) for consistent formatting.
+- **ESLint**: Zero warnings policy enforced by husky/lint-staged pre-commit hooks. Use `npm run lint` to check.
+- **Code Formatting**: Prettier with Tailwind plugin. Run `npm run format` before committing.
 
 ## Email System
 
@@ -136,6 +140,30 @@ return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
   - Used in `pages/api/offers/accept.ts` for company notifications
   - Requires `RESEND_API_KEY` environment variable
 
+## Media Upload System
+
+**Token-based uploads**: Customers can upload photos/videos later via secure tokens (7-day expiry).
+
+```tsx
+// Generate token (server-side via API)
+POST /api/generateUploadLink { requestId }
+// Creates uploadTokens/{token} doc with:
+// - requestId, customerId, customerEmail
+// - expiresAt: 7 days from creation
+// - used: false
+
+// Validate token before upload
+GET /api/validateUploadToken?token={token}
+// Checks existence, expiry, and used status
+
+// Upload page
+/upload/[token] — Public page for customers to upload media
+// Calls /api/markUploadTokenUsed after successful uploads
+// Notifies companies via /api/notifyCompaniesOnUpload
+```
+
+**Automatic reminders**: Use `/api/sendUploadReminders` (cron job) to email customers with unused tokens.
+
 ## Environment Setup
 
 Copy `.env copy.example` → `.env`. Required vars:
@@ -144,6 +172,15 @@ Copy `.env copy.example` → `.env`. Required vars:
 - `FIREBASE_ADMIN_*` — Service account for API routes (check `adminReady` before privileged ops)
 - `NEXT_PUBLIC_EMAILJS_*` — Client-side emails via `utils/emailHelpers.ts`
 - `RESEND_API_KEY` — Server-side transactional emails
+
+**Important**: `lib/firebaseAdmin.ts` initializes gracefully with fallback when admin credentials missing. Always check `adminReady` flag before admin operations.
+
+## Deployment & Infrastructure
+
+- **VPS Deployment**: See `VPS_README.md` and `auto-deploy-vps.sh` for server setup
+- **Nginx Config**: Use `nginx-om.conf` for reverse proxy configuration
+- **PM2 Management**: See `ecosystem.config.cjs` for process management
+- **Vercel Alternative**: `vercel.json` for serverless deployment option
 
 ## File Locations
 
