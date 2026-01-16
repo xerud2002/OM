@@ -27,7 +27,7 @@ export default function CityPage({ city }: CityPageProps) {
   return (
     <>
       <Head>
-        <title>Mutări {city.name} {currentYear} | Firme Verificate & Oferte Gratuite</title>
+        <title>Mutări {city.name} {currentYear} → Oferte Gratuite</title>
         <meta name="description" content={city.metaDescription} />
         <meta
           name="keywords"

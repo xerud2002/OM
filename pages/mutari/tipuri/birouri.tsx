@@ -24,10 +24,10 @@ export default function MutariCompaniiPage() {
   return (
     <>
       <Head>
-        <title>Mutări Birouri și Companii {currentYear} | Relocare Firme</title>
+        <title>Mutări Birouri {currentYear} → Relocare Firme</title>
         <meta
           name="description"
-          content="Servicii mutări birouri și companii în România. Relocare firme, transport echipamente IT, mobilier office. Zero downtime, weekend sau noapte!"
+          content="Servicii mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier office, arhivă. Zero downtime! Weekend/noapte disponibil. Primește 3-5 oferte gratuite în 24h de la firme specializate în mutări corporative."
         />
         <meta
           name="keywords"

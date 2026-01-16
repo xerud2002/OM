@@ -23,10 +23,10 @@ export default function MutariStudentiPage() {
   return (
     <>
       <Head>
-        <title>Mutări Studenți {currentYear} | Prețuri Mici, Transport Rapid</title>
+        <title>Mutări Studenți {currentYear} → Prețuri de la 250 lei</title>
         <meta
           name="description"
-          content="Servicii mutări pentru studenți în România. Prețuri accesibile pentru cămine și garsoniere. Primește 3-5 oferte GRATUITE în 24h!"
+          content="Servicii mutări pentru studenți în România. Prețuri accesibile de la 250 lei pentru cămine și garsoniere! Transport rapid, flexibil și profesionist. Primește 3-5 oferte GRATUITE în 24h de la firme cu experiență în mutări studențești. Tarife speciale pentru grupe!"
         />
         <meta
           name="keywords"

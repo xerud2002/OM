@@ -51,7 +51,7 @@ export default function MutariApartamentePage() {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
 
         {/* SEO Title - optimized for CTR */}
-        <title>🏠 Mutări Apartamente {currentYear} → Economisești 40% | Compară Oferte</title>
+        <title>Mutări Apartamente {currentYear} → Economisești 40%</title>
         <meta
           name="description"
           content="✓ 3-5 oferte GRATUITE în 24h de la firme verificate ✓ Compară prețuri și economisești până la 40% ✓ Garsoniere până la 4+ camere → Găsește oferta perfectă!"
