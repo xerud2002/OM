@@ -24,7 +24,7 @@ export default function MutariPianePage() {
         <title>Mutări Piane {currentYear} | Transport Specializat Piane</title>
         <meta
           name="description"
-          content="Servicii specializate mutări piane în România. Echipe cu experiență, echipamente profesionale. Transport sigur pentru piane verticale, coadă, șidigi tale. De la 400 lei!"
+          content="Servicii specializate mutări piane în România. Echipe cu experiență, transport sigur piane verticale și cu coadă. De la 400 lei!"
         />
         <meta
           name="keywords"
