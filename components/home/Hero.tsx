@@ -94,7 +94,7 @@ export default function Hero() {
 
             {/* Headline - Critical LCP element */}
             <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-              Caută oferte pentru
+              Compara oferte pentru
               <br />
               <span className="relative inline-block">
                 <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
