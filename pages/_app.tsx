@@ -65,6 +65,11 @@ const ExitIntentPopup = dynamic(() => import("@/components/cro/ExitIntentPopup")
   loading: () => null,
 });
 
+const WhatsAppWidget = dynamic(() => import("@/components/cro/WhatsAppWidget"), {
+  ssr: false,
+  loading: () => null,
+});
+
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
@@ -146,6 +151,7 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* Conversion optimization widgets */}
       <FloatingCTA />
       <ExitIntentPopup />
+      <WhatsAppWidget />
 
       {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
       <Toaster richColors position="top-right" closeButton />

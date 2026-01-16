@@ -200,3 +200,7 @@ export const trackPhoneClick = (location: string, phoneNumber: string) => {
 export const trackServicePageView = (serviceName: string) => {
   trackEvent("service_view", "content", serviceName);
 };
+
+export const trackWhatsAppClick = (action: string) => {
+  trackEvent("whatsapp_click", "contact", action);
+};
