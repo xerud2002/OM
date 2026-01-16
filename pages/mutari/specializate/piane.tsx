@@ -37,6 +37,72 @@ export default function MutariPianePage() {
         <meta property="og:title" content={`Mutări Piane ${currentYear}`} />
         <meta property="og:description" content="Transport specializat pentru piane. Echipe cu experiență!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* Service Schema with Pricing */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              name: "Mutări Piane",
+              description: "Servicii specializate de transport piane verticale și piane cu coadă în România. Echipe cu experiență, echipamente profesionale.",
+              provider: {
+                "@type": "Organization",
+                name: "OferteMutare.ro"
+              },
+              areaServed: {
+                "@type": "Country",
+                name: "România"
+              },
+              hasOfferCatalog: {
+                "@type": "OfferCatalog",
+                name: "Servicii Mutări Piane",
+                itemListElement: [
+                  {
+                    "@type": "Offer",
+                    itemOffered: {
+                      "@type": "Service",
+                      name: "Mutare Pian Vertical (același oraș)",
+                      description: "150-250kg, apartament → apartament"
+                    },
+                    priceSpecification: {
+                      "@type": "PriceSpecification",
+                      priceCurrency: "RON",
+                      price: "400-700"
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    itemOffered: {
+                      "@type": "Service",
+                      name: "Mutare Pian Vertical (\u00eentre ora\u0219e)",
+                      description: "Transport interurban pian vertical"
+                    },
+                    priceSpecification: {
+                      "@type": "PriceSpecification",
+                      priceCurrency: "RON",
+                      price: "800-1500"
+                    }
+                  },
+                  {
+                    "@type": "Offer",
+                    itemOffered: {
+                      "@type": "Service",
+                      name: "Mutare Pian cu Coad\u0103",
+                      description: "300-500kg, echip\u0103 4+ persoane"
+                    },
+                    priceSpecification: {
+                      "@type": "PriceSpecification",
+                      priceCurrency: "RON",
+                      price: "1500-3000"
+                    }
+                  }
+                ]
+              }
+            }),
+          }}
+        />
       </Head>
 
       <LayoutWrapper>
