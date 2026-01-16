@@ -33,19 +33,6 @@ const SERVICE_LINKS = [
   { href: "/servicii/debarasare", label: "Debarasare" },
 ];
 
-const CITY_LINKS = [
-  { href: "/mutari/bucuresti", label: "București" },
-  { href: "/mutari/cluj-napoca", label: "Cluj-Napoca" },
-  { href: "/mutari/timisoara", label: "Timișoara" },
-  { href: "/mutari/iasi", label: "Iași" },
-  { href: "/mutari/constanta", label: "Constanța" },
-  { href: "/mutari/brasov", label: "Brașov" },
-  { href: "/mutari/craiova", label: "Craiova" },
-  { href: "/mutari/galati", label: "Galați" },
-  { href: "/mutari/oradea", label: "Oradea" },
-  { href: "/mutari/sibiu", label: "Sibiu" },
-];
-
 const LEGAL = [
   { href: "/terms", label: "Termeni și condiții" },
   { href: "/privacy", label: "Politica de confidențialitate" },
@@ -61,7 +48,7 @@ export default function Footer() {
   return (
     <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
       {/* Main content - using CSS animations instead of framer-motion */}
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-10 px-6 py-14 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {/* Logo & about */}
         <div>
           <div className="mb-5 flex items-center">
@@ -102,11 +89,6 @@ export default function Footer() {
         {/* Service Links for SEO */}
         <div>
           <FooterColumn title="Tipuri Servicii" links={SERVICE_LINKS} />
-        </div>
-
-        {/* City Links for SEO */}
-        <div>
-          <FooterColumn title="Mutări pe Orașe" links={CITY_LINKS} />
         </div>
 
         {/* Legal & social */}
