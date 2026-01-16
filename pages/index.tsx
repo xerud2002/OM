@@ -7,25 +7,25 @@ import Steps from "@/components/home/Steps";
 
 // Lazy load below-the-fold components for better LCP
 const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <div className="min-h-100" />,
 });
 const Services = dynamic(() => import("@/components/home/Services"), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <div className="min-h-100" />,
 });
 const Articles = dynamic(() => import("@/components/home/Articles"), {
-  loading: () => <div className="min-h-[300px]" />,
+  loading: () => <div className="min-h-75" />,
 });
 const PartnerSection = dynamic(() => import("@/components/home/PartnerSection"), {
-  loading: () => <div className="min-h-[300px]" />,
+  loading: () => <div className="min-h-75" />,
 });
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
-  loading: () => <div className="min-h-[400px]" />,
+  loading: () => <div className="min-h-100" />,
 });
 const GuaranteeSection = dynamic(() => import("@/components/home/GuaranteeSection"), {
-  loading: () => <div className="min-h-[300px]" />,
+  loading: () => <div className="min-h-75" />,
 });
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
-  loading: () => <div className="min-h-[200px]" />,
+  loading: () => <div className="min-h-50" />,
 });
 
 export default function HomePage() {

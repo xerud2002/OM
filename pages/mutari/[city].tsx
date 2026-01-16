@@ -61,7 +61,7 @@ export default function CityPage({ city }: CityPageProps) {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 py-20">
+        <section className="relative overflow-hidden bg-linear-to-br from-emerald-600 via-emerald-700 to-teal-800 py-20">
           {/* Decorative elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
@@ -79,7 +79,7 @@ export default function CityPage({ city }: CityPageProps) {
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Mutări în{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 {city.name}
               </span>
             </h1>
@@ -156,7 +156,7 @@ export default function CityPage({ city }: CityPageProps) {
           </section>
 
           {/* Neighborhoods Section */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-slate-50 to-gray-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-slate-50 to-gray-50 p-8">
             <div className="flex items-center gap-3 mb-6">
               <Building2 className="h-7 w-7 text-emerald-600" />
               <h2 className="text-2xl font-bold text-gray-900">
@@ -232,7 +232,7 @@ export default function CityPage({ city }: CityPageProps) {
           </section>
 
           {/* Pricing Info */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <TrendingDown className="h-7 w-7 text-emerald-600" />
               Prețuri mutări {city.name} în {currentYear}
@@ -330,7 +330,7 @@ export default function CityPage({ city }: CityPageProps) {
           </section>
 
           {/* Local Tips */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-amber-50 to-orange-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Calendar className="h-7 w-7 text-amber-600" />
               Sfaturi pentru mutări în {city.name}
@@ -381,7 +381,7 @@ export default function CityPage({ city }: CityPageProps) {
           </section>
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">
               Gata să te muți în {city.name}?
             </h2>
