@@ -1,10 +1,15 @@
 # robots.txt for ofertemutare.ro
+# Updated: January 16, 2026
 
 User-agent: *
 Allow: /
 
-# City pages - explicitly allowed for crawling
+# Explicitly allow important sections for crawling
 Allow: /mutari/
+Allow: /servicii/
+Allow: /articles/
+Allow: /guides/
+Allow: /faq
 
 # Block private/authenticated pages
 Disallow: /customer/dashboard
@@ -15,6 +20,9 @@ Disallow: /upload/
 
 # Block API routes
 Disallow: /api/
+
+# Crawl delay (polite crawling)
+Crawl-delay: 1
 
 # Sitemap location
 Sitemap: https://ofertemutare.ro/sitemap.xml
