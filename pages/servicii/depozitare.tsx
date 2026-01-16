@@ -20,6 +20,7 @@ import {
 
 export default function DepozitarePage() {
   const currentYear = new Date().getFullYear();
+  const faqItems = SERVICE_FAQS.depozitare;
 
   return (
     <>
@@ -41,6 +42,11 @@ export default function DepozitarePage() {
         <meta property="og:description" content="Spații securizate pentru depozitare mobilă și bunuri!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
+
+      {/* Schema Markup */}
+      <FAQPageSchema faqs={faqItems} />
+      <LocalBusinessSchema serviceName="Depozitare Mobilă și Bunuri" />
+      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Depozitare" }]} />
 
       <LayoutWrapper>
         {/* Hero Section */}
@@ -250,6 +256,9 @@ export default function DepozitarePage() {
               </li>
             </ul>
           </section>
+
+          {/* FAQ Section */}
+          <FAQSection items={faqItems} title="Întrebări Frecvente - Depozitare" />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-amber-600 to-orange-600 p-8 text-center text-white">
