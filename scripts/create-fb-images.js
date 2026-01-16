@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 const publicDir = path.join(__dirname, "..", "public");
 
 async function createFacebookImages() {
-  console.log("Creating Facebook-optimized images...\n");
+  console.warn("Creating Facebook-optimized images...\n");
 
   // Create text-based logo like the header (SVG to PNG)
   const logoSvg = `
@@ -31,7 +31,7 @@ async function createFacebookImages() {
       .resize(180, 180)
       .png()
       .toFile(path.join(publicDir, "fb-profile-180x180.png"));
-    console.log("✅ Profile picture created: public/fb-profile-180x180.png (180x180px)");
+    console.warn("✅ Profile picture created: public/fb-profile-180x180.png (180x180px)");
   } catch (err) {
     console.error("❌ Error creating profile picture:", err.message);
   }
@@ -57,7 +57,7 @@ async function createFacebookImages() {
       .resize(400, 400)
       .png()
       .toFile(path.join(publicDir, "fb-profile-400x400.png"));
-    console.log("✅ Profile picture (HD) created: public/fb-profile-400x400.png (400x400px)");
+    console.warn("✅ Profile picture (HD) created: public/fb-profile-400x400.png (400x400px)");
   } catch (err) {
     console.error("❌ Error creating HD profile picture:", err.message);
   }
@@ -71,7 +71,7 @@ async function createFacebookImages() {
       })
       .png()
       .toFile(path.join(publicDir, "fb-cover-820x312.png"));
-    console.log("✅ Cover photo created: public/fb-cover-820x312.png (820x312px)");
+    console.warn("✅ Cover photo created: public/fb-cover-820x312.png (820x312px)");
   } catch (err) {
     console.error("❌ Error creating cover photo:", err.message);
   }
@@ -85,15 +85,15 @@ async function createFacebookImages() {
       })
       .png()
       .toFile(path.join(publicDir, "fb-cover-duba-820x312.png"));
-    console.log("✅ Alternative cover created: public/fb-cover-duba-820x312.png (820x312px)");
+    console.warn("✅ Alternative cover created: public/fb-cover-duba-820x312.png (820x312px)");
   } catch (err) {
     console.error("❌ Error creating alternative cover:", err.message);
   }
 
-  console.log("\n📁 Files saved in: c:\\Users\\Cip\\Desktop\\OM\\public\\");
-  console.log("\nUpload to Facebook:");
-  console.log("  • Profile: fb-profile-400x400.png (recommended - better quality)");
-  console.log("  • Cover:   fb-cover-820x312.png OR fb-cover-duba-820x312.png");
+  console.warn("\n📁 Files saved in: c:\\Users\\Cip\\Desktop\\OM\\public\\");
+  console.warn("\nUpload to Facebook:");
+  console.warn("  • Profile: fb-profile-400x400.png (recommended - better quality)");
+  console.warn("  • Cover:   fb-cover-820x312.png OR fb-cover-duba-820x312.png");
 }
 
 createFacebookImages();

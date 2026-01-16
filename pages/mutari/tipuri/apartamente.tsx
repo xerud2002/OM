@@ -7,10 +7,7 @@ import {
   Building2,
   CheckCircle,
   ArrowRight,
-  Shield,
-  Truck,
   Package,
-  Clock,
   DollarSign,
   Bed,
   Sofa,
@@ -54,7 +51,7 @@ export default function MutariApartamentePage() {
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
 
         {/* SEO Title - optimized for CTR */}
-        <title>🏠 Mutări Apartamente {currentYear} → Economisești 40% | Compară Oferte</title>
+        <title>Mutări Apartamente {currentYear} → Economisești 40%</title>
         <meta
           name="description"
           content="✓ 3-5 oferte GRATUITE în 24h de la firme verificate ✓ Compară prețuri și economisești până la 40% ✓ Garsoniere până la 4+ camere → Găsește oferta perfectă!"
@@ -109,7 +106,7 @@ export default function MutariApartamentePage() {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-purple-700 to-violet-800 py-20">
+        <section className="relative overflow-hidden bg-linear-to-br from-purple-600 via-purple-700 to-violet-800 py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
@@ -125,7 +122,7 @@ export default function MutariApartamentePage() {
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Apartamente
               </span>
             </h1>
@@ -223,7 +220,7 @@ export default function MutariApartamentePage() {
           </section>
 
           {/* Elevator vs Stairs */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-purple-50 to-violet-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-purple-50 to-violet-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <ArrowUpDown className="h-7 w-7 text-purple-600" />
               Bloc cu lift vs. fără lift
@@ -295,7 +292,7 @@ export default function MutariApartamentePage() {
           </section>
 
           {/* Tips */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-amber-50 to-orange-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Star className="h-7 w-7 text-amber-600" />
               Sfaturi pentru mutarea apartamentului
@@ -334,7 +331,7 @@ export default function MutariApartamentePage() {
           <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Apartamente" />
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">
               Gata să îți muți apartamentul?
             </h2>

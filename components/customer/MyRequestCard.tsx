@@ -14,7 +14,6 @@ import {
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import RequestDetailsModal from "./RequestDetailsModal";
-import { toast } from "sonner";
 
 type MyRequestCardProps = {
   request: MovingRequest;

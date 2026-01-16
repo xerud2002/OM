@@ -52,8 +52,8 @@ export default function Services() {
     <section className="relative overflow-hidden bg-linear-to-b from-white via-slate-50/50 to-white py-16 sm:py-20 lg:py-32">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-1/4 left-0 h-[300px] w-[300px] -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
-        <div className="absolute right-0 bottom-1/4 hidden h-[400px] w-[400px] translate-x-1/2 rounded-full bg-sky-100/30 blur-[100px] sm:block" />
+        <div className="absolute top-1/4 left-0 h-75 w-75 -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-125 sm:w-125 sm:blur-[100px]" />
+        <div className="absolute right-0 bottom-1/4 hidden h-100 w-100 translate-x-1/2 rounded-full bg-sky-100/30 blur-[100px] sm:block" />
       </div>
 
       <div className="relative z-10 container mx-auto px-4">

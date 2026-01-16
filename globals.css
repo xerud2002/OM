@@ -46,7 +46,7 @@ body {
 
 /* 🌿 Butoane principale */
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-medium text-white shadow-md transition-all hover:opacity-95 hover:shadow-lg;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-2 font-medium text-white shadow-md transition-all hover:opacity-95 hover:shadow-lg;
 }
 
 /* 🌿 Butoane contur */
@@ -97,15 +97,24 @@ select option:checked {
 
 /* 🌿 Calendar (stil curat, modern) */
 .rdp {
-  --rdp-cell-size: 42px !important;
+  --rdp-cell-size: 40px !important;
   --rdp-accent-color: var(--color-emerald);
   --rdp-background-color: var(--color-emerald);
   margin: 0 auto;
   width: 100%;
   max-width: 480px !important;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   color: #065f46;
   border-radius: 1.5rem;
+}
+
+/* Mobile calendar optimization */
+@media (max-width: 640px) {
+  .rdp {
+    --rdp-cell-size: 36px !important;
+    font-size: 0.85rem;
+    max-width: 100% !important;
+  }
 }
 
 .rdp-caption_label {
@@ -117,7 +126,7 @@ select option:checked {
 }
 
 .rdp-day_selected {
-  @apply scale-105 bg-gradient-to-r from-emerald-500 to-sky-500 text-white shadow-md;
+  @apply scale-105 bg-linear-to-r from-emerald-500 to-sky-500 text-white shadow-md;
 }
 
 .rdp-day_today {
@@ -126,12 +135,12 @@ select option:checked {
 
 /* 🌿 Calendar container */
 .calendar-box {
-  @apply mx-auto w-full max-w-md rounded-3xl border border-emerald-100 bg-white/80 p-6 shadow-lg backdrop-blur-sm transition-all hover:shadow-emerald-100;
+  @apply mx-auto w-full max-w-md rounded-2xl sm:rounded-3xl border border-emerald-100 bg-white/80 p-4 sm:p-6 shadow-lg backdrop-blur-sm transition-all hover:shadow-emerald-100;
 }
 
 /* 🌿 HERO OVERLAY (pentru homepage) */
 .hero-overlay {
-  @apply rounded-3xl border border-white/30 bg-white/20 p-8 text-center shadow-md backdrop-blur-[2px];
+  @apply rounded-2xl sm:rounded-3xl border border-white/30 bg-white/20 p-6 sm:p-8 text-center shadow-md backdrop-blur-[2px];
 }
 
 /* 🌿 Animations */
@@ -243,8 +252,8 @@ select option:checked {
   }
 
   /* Remove backgrounds for better print quality */
-  .bg-gradient-to-br,
-  .bg-gradient-to-r {
+  .bg-linear-to-br,
+  .bg-linear-to-r {
     background: white !important;
   }
 
@@ -272,5 +281,77 @@ select option:checked {
     animation-duration: 0s !important;
     animation-delay: 0s !important;
     transition: none !important;
+  }
+}
+
+/* 📱 MOBILE & TABLET OPTIMIZATIONS */
+
+/* Ensure smooth scrolling on all devices */
+html {
+  -webkit-overflow-scrolling: touch;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* Improve tap target sizes (minimum 44x44px for accessibility) */
+button:not([class*="text-"]),
+a:not([class*="text-"]),
+[role="button"],
+[role="link"] {
+  min-height: 44px;
+}
+
+/* Optimize images for mobile */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Better touch feedback */
+@media (hover: none) {
+  button:active,
+  a:active {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+}
+
+/* Mobile-specific spacing improvements */
+@media (max-width: 640px) {
+  /* Make modals full-screen on mobile */
+  [role="dialog"] {
+    max-width: 100vw !important;
+    margin: 0.5rem !important;
+  }
+
+  /* Better heading sizes */
+  .hero-title {
+    font-size: 1.875rem !important;
+    line-height: 1.2 !important;
+  }
+}
+
+/* Tablet optimizations */
+@media (min-width: 641px) and (max-width: 1024px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Improve focus visibility for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

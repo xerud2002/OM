@@ -67,7 +67,7 @@ export default function Steps() {
         {/* Steps Grid */}
         <div className="relative mx-auto max-w-5xl">
           {/* Connecting Line (Desktop) */}
-          <div className="absolute top-[80px] right-0 left-0 z-0 hidden h-0.5 bg-linear-to-r from-blue-200 via-emerald-200 to-purple-200 lg:top-[100px] lg:block" />
+          <div className="absolute top-20 right-0 left-0 z-0 hidden h-0.5 bg-linear-to-r from-blue-200 via-emerald-200 to-purple-200 lg:top-25 lg:block" />
 
           <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-3 md:gap-6">
             {steps.map((step, i) => (
@@ -77,7 +77,7 @@ export default function Steps() {
                   <div className="relative mb-5 sm:mb-8">
                     {/* Background circle */}
                     <div
-                      className={`flex h-[80px] w-[80px] items-center justify-center rounded-2xl bg-linear-to-br ${step.gradient} shadow-xl transition-all duration-300 hover:scale-105 sm:h-[100px] sm:w-[100px] sm:rounded-3xl lg:h-[120px] lg:w-[120px]`}
+                      className={`flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br ${step.gradient} shadow-xl transition-all duration-300 hover:scale-105 sm:h-25 sm:w-25 sm:rounded-3xl lg:h-30 lg:w-30`}
                     >
                       <step.icon
                         className="h-8 w-8 text-white sm:h-10 sm:w-10 lg:h-12 lg:w-12"

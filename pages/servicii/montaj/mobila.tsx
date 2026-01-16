@@ -5,8 +5,6 @@ import {
   Wrench,
   CheckCircle,
   ArrowRight,
-  Shield,
-  Clock,
   DollarSign,
   Star,
   Sofa,
@@ -43,7 +41,7 @@ export default function DemontareMontareMobilaPage() {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-cyan-600 via-teal-600 to-emerald-700 py-20">
+        <section className="relative overflow-hidden bg-linear-to-br from-cyan-600 via-teal-600 to-emerald-700 py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
@@ -59,7 +57,7 @@ export default function DemontareMontareMobilaPage() {
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Demontare &{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Montare Mobilă
               </span>
             </h1>
@@ -123,7 +121,7 @@ export default function DemontareMontareMobilaPage() {
           </section>
 
           {/* What We Assemble */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-cyan-50 to-teal-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-cyan-50 to-teal-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Wrench className="h-7 w-7 text-cyan-600" />
               Ce demontăm și montăm?
@@ -269,7 +267,7 @@ export default function DemontareMontareMobilaPage() {
           </section>
 
           {/* Benefits */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-amber-50 to-orange-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Star className="h-7 w-7 text-amber-600" />
               De ce să alegi montatori profesioniști?
@@ -325,7 +323,7 @@ export default function DemontareMontareMobilaPage() {
           </section>
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-cyan-600 to-teal-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-cyan-600 to-teal-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">
               Montatori profesioniști pentru mutarea ta
             </h2>

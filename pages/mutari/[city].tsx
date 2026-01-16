@@ -4,12 +4,9 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
   MapPin,
-  Phone,
-  Clock,
   Shield,
   Truck,
   Package,
-  Users,
   Star,
   CheckCircle,
   ArrowRight,
@@ -18,7 +15,7 @@ import {
   Calendar,
   TrendingDown,
 } from "lucide-react";
-import { cityData, getCityBySlug, getAllCitySlugs, CityData } from "@/utils/citySlugData";
+import { getCityBySlug, getAllCitySlugs, CityData } from "@/utils/citySlugData";
 
 interface CityPageProps {
   city: CityData;
@@ -30,7 +27,7 @@ export default function CityPage({ city }: CityPageProps) {
   return (
     <>
       <Head>
-        <title>Mutări {city.name} {currentYear} | Firme Verificate & Oferte Gratuite</title>
+        <title>Mutări {city.name} {currentYear} → Oferte Gratuite</title>
         <meta name="description" content={city.metaDescription} />
         <meta
           name="keywords"
@@ -61,7 +58,7 @@ export default function CityPage({ city }: CityPageProps) {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 py-20">
+        <section className="relative overflow-hidden bg-linear-to-br from-emerald-600 via-emerald-700 to-teal-800 py-20">
           {/* Decorative elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
@@ -79,7 +76,7 @@ export default function CityPage({ city }: CityPageProps) {
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Mutări în{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 {city.name}
               </span>
             </h1>
@@ -136,23 +133,27 @@ export default function CityPage({ city }: CityPageProps) {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                Te pregătești pentru o mutare în <strong>{city.name}</strong>? Înțelegem cât de stresant
-                poate fi procesul &ndash; de la găsirea firmei potrivite, la negocierea prețurilor și
-                coordonarea logisticii. Cu o populație de <strong>{city.population} de locuitori</strong>,
-                {city.name} este unul dintre cele mai dinamice orașe din România, cu zeci de firme de
-                mutări active în zonă.
+                {city.articleIntro || 
+                  `Te pregătești pentru o mutare în ${city.name}? Înțelegem cât de stresant
+                  poate fi procesul – de la găsirea firmei potrivite, la negocierea prețurilor și
+                  coordonarea logisticii. Cu o populație de ${city.population} de locuitori,
+                  ${city.name} este unul dintre cele mai dinamice orașe din România, cu zeci de firme de
+                  mutări active în zonă.`
+                }
               </p>
-              <p>
-                Vestea bună? Pe <strong>OferteMutare.ro</strong> simplifici tot procesul. Completezi un
-                singur formular în 3 minute și primești 3-5 oferte personalizate de la firme verificate
-                din {city.county}. Compari prețurile, citești recenziile și alegi varianta perfectă
-                pentru tine &ndash; <strong>100% gratuit, fără obligații</strong>.
-              </p>
+              {!city.articleIntro && (
+                <p>
+                  Vestea bună? Pe <strong>OferteMutare.ro</strong> simplifici tot procesul. Completezi un
+                  singur formular în 3 minute și primești 3-5 oferte personalizate de la firme verificate
+                  din {city.county}. Compari prețurile, citești recenziile și alegi varianta perfectă
+                  pentru tine – <strong>100% gratuit, fără obligații</strong>.
+                </p>
+              )}
             </div>
           </section>
 
           {/* Neighborhoods Section */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-slate-50 to-gray-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-slate-50 to-gray-50 p-8">
             <div className="flex items-center gap-3 mb-6">
               <Building2 className="h-7 w-7 text-emerald-600" />
               <h2 className="text-2xl font-bold text-gray-900">
@@ -228,16 +229,18 @@ export default function CityPage({ city }: CityPageProps) {
           </section>
 
           {/* Pricing Info */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <TrendingDown className="h-7 w-7 text-emerald-600" />
               Prețuri mutări {city.name} în {currentYear}
             </h2>
             <div className="prose max-w-none text-gray-700">
               <p>
-                Prețurile pentru servicii de mutări în {city.name} variază în funcție de mai mulți factori:
-                volumul bunurilor, distanța, etajul și serviciile suplimentare (împachetare, demontare
-                mobilier). Orientativ, pentru o mutare standard în {city.name}:
+                {city.priceContext || 
+                  `Prețurile pentru servicii de mutări în ${city.name} variază în funcție de mai mulți factori:
+                  volumul bunurilor, distanța, etajul și serviciile suplimentare (împachetare, demontare
+                  mobilier). Orientativ, pentru o mutare standard în ${city.name}:`
+                }
               </p>
             </div>
             <div className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -267,90 +270,115 @@ export default function CityPage({ city }: CityPageProps) {
               De ce să alegi OferteMutare.ro pentru mutări în {city.name}?
             </h2>
             <div className="grid gap-6 md:grid-cols-2">
-              <div className="flex gap-4">
-                <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
-                <div>
-                  <h3 className="font-bold text-gray-900">Firme verificate local</h3>
-                  <p className="text-gray-600">
-                    Toate firmele partenere sunt verificate și au experiență dovedită în {city.name}
-                    și județul {city.county}.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
-                <div>
-                  <h3 className="font-bold text-gray-900">Oferte rapide în 24h</h3>
-                  <p className="text-gray-600">
-                    Primești 3-5 oferte personalizate direct de la firme din {city.name}, fără să
-                    suni sau negociezi.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
-                <div>
-                  <h3 className="font-bold text-gray-900">100% gratuit și transparent</h3>
-                  <p className="text-gray-600">
-                    Serviciul nostru este complet gratuit. Nu există costuri ascunse sau obligații.
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-4">
-                <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
-                <div>
-                  <h3 className="font-bold text-gray-900">Recenzii reale</h3>
-                  <p className="text-gray-600">
-                    Citești recenzii verificate de la clienți reali din {city.name} care au folosit
-                    aceste firme.
-                  </p>
-                </div>
-              </div>
+              {city.whyChooseUs && city.whyChooseUs.length > 0 ? (
+                city.whyChooseUs.map((reason, index) => (
+                  <div key={index} className="flex gap-4">
+                    <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-gray-900">{reason.split(':')[0]}</h3>
+                      <p className="text-gray-600">{reason.split(':').slice(1).join(':').trim()}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="flex gap-4">
+                    <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-gray-900">Firme verificate local</h3>
+                      <p className="text-gray-600">
+                        Toate firmele partenere sunt verificate și au experiență dovedită în {city.name}
+                        și județul {city.county}.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-gray-900">Oferte rapide în 24h</h3>
+                      <p className="text-gray-600">
+                        Primești 3-5 oferte personalizate direct de la firme din {city.name}, fără să
+                        suni sau negociezi.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-gray-900">100% gratuit și transparent</h3>
+                      <p className="text-gray-600">
+                        Serviciul nostru este complet gratuit. Nu există costuri ascunse sau obligații.
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex gap-4">
+                    <CheckCircle className="h-6 w-6 shrink-0 text-emerald-500 mt-1" />
+                    <div>
+                      <h3 className="font-bold text-gray-900">Recenzii reale</h3>
+                      <p className="text-gray-600">
+                        Citești recenzii verificate de la clienți reali din {city.name} care au folosit
+                        aceste firme.
+                      </p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </section>
 
           {/* Local Tips */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-amber-50 to-orange-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Calendar className="h-7 w-7 text-amber-600" />
               Sfaturi pentru mutări în {city.name}
             </h2>
             <ul className="space-y-4 text-gray-700">
-              <li className="flex items-start gap-3">
-                <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
-                <span>
-                  <strong>Rezervă din timp:</strong> În {city.name}, firmele bune se ocupă repede,
-                  mai ales în perioadele de vârf (mai-septembrie, sfârșitul de lună).
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
-                <span>
-                  <strong>Verifică accesul:</strong> Asigură-te că firma știe exact condițiile
-                  de acces la ambele locații (lift, scări, parcare pentru camion).
-                </span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
-                <span>
-                  <strong>Declară obiectele valoroase:</strong> Informează firma despre obiecte
-                  fragile sau de valoare pentru transport în siguranță.
-                </span>
-              </li>
-              {city.landmarks.length > 0 && (
-                <li className="flex items-start gap-3">
-                  <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
-                  <span>
-                    <strong>Orientare locală:</strong> Firmele cunosc bine zonele din jurul
-                    {" "}{city.landmarks[0]} și alte repere importante din {city.name}.
-                  </span>
-                </li>
+              {city.localTips && city.localTips.length > 0 ? (
+                city.localTips.map((tip, index) => (
+                  <li key={index} className="flex items-start gap-3">
+                    <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
+                    <span dangerouslySetInnerHTML={{ __html: tip.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>') }} />
+                  </li>
+                ))
+              ) : (
+                <>
+                  <li className="flex items-start gap-3">
+                    <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
+                    <span>
+                      <strong>Rezervă din timp:</strong> În {city.name}, firmele bune se ocupă repede,
+                      mai ales în perioadele de vârf (mai-septembrie, sfârșitul de lună).
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
+                    <span>
+                      <strong>Verifică accesul:</strong> Asigură-te că firma știe exact condițiile
+                      de acces la ambele locații (lift, scări, parcare pentru camion).
+                    </span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
+                    <span>
+                      <strong>Declară obiectele valoroase:</strong> Informează firma despre obiecte
+                      fragile sau de valoare pentru transport în siguranță.
+                    </span>
+                  </li>
+                  {city.landmarks.length > 0 && (
+                    <li className="flex items-start gap-3">
+                      <Star className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
+                      <span>
+                        <strong>Orientare locală:</strong> Firmele cunosc bine zonele din jurul
+                        {" "}{city.landmarks[0]} și alte repere importante din {city.name}.
+                      </span>
+                    </li>
+                  )}
+                </>
               )}
             </ul>
           </section>
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">
               Gata să te muți în {city.name}?
             </h2>

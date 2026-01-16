@@ -79,7 +79,7 @@ export default function ServiciiIndexPage() {
 
       <LayoutWrapper>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 py-20">
+        <section className="relative overflow-hidden bg-linear-to-br from-indigo-600 via-purple-600 to-pink-600 py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
@@ -88,7 +88,7 @@ export default function ServiciiIndexPage() {
           <div className="relative mx-auto max-w-6xl px-4 text-center">
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Servicii Complete{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 de Mutare
               </span>
             </h1>
@@ -134,7 +134,7 @@ export default function ServiciiIndexPage() {
           </section>
 
           {/* Benefits */}
-          <section className="mb-16 rounded-2xl bg-gradient-to-r from-purple-50 to-pink-50 p-8">
+          <section className="mb-16 rounded-2xl bg-linear-to-r from-purple-50 to-pink-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900">De ce să folosești serviciile noastre?</h2>
             <div className="grid gap-4 md:grid-cols-3">
               <div className="text-center">
@@ -153,7 +153,7 @@ export default function ServiciiIndexPage() {
           </section>
 
           {/* CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-indigo-600 to-purple-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-indigo-600 to-purple-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Ai nevoie de servicii suplimentare?</h2>
             <p className="mb-8 text-lg text-purple-100">
               Primește oferte personalizate pentru orice serviciu legat de mutare.

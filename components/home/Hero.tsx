@@ -71,8 +71,8 @@ export default function Hero() {
     <section className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-32 lg:pb-24">
       {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute top-20 left-[10%] h-[300px] w-[300px] rounded-full bg-emerald-200/40 blur-[80px] sm:h-[400px] sm:w-[400px] lg:h-[500px] lg:w-[500px] lg:blur-[100px]" />
-        <div className="absolute right-[5%] bottom-20 hidden h-[300px] w-[300px] rounded-full bg-sky-200/40 blur-[80px] sm:block sm:h-[400px] sm:w-[400px] lg:blur-[100px]" />
+        <div className="absolute top-20 left-[10%] h-75 w-75 rounded-full bg-emerald-200/40 blur-[80px] sm:h-100 sm:w-100 lg:h-125 lg:w-125 lg:blur-[100px]" />
+        <div className="absolute right-[5%] bottom-20 hidden h-75 w-75 rounded-full bg-sky-200/40 blur-[80px] sm:block sm:h-100 sm:w-100 lg:blur-[100px]" />
       </div>
 
       <div className="relative z-10 container mx-auto">
@@ -94,11 +94,11 @@ export default function Hero() {
 
             {/* Headline - Critical LCP element */}
             <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-              Mutări simple,
+              Compara oferte pentru
               <br />
               <span className="relative inline-block">
                 <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
-                  prețuri corecte.
+                  mutarea ta
                 </span>
                 {/* Underline decoration - CSS only, no JS animation */}
                 <svg
@@ -177,7 +177,7 @@ export default function Hero() {
             <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
               {/* Main Card with Hero Image - LCP element */}
               <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
-                <div className="relative aspect-[4/3] bg-linear-to-br from-slate-50 to-emerald-50/50">
+                <div className="relative aspect-4/3 bg-linear-to-br from-slate-50 to-emerald-50/50">
                   <Image
                     src="/pics/index.webp"
                     alt="Platforma Oferte Mutare"

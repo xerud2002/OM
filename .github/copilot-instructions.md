@@ -1,81 +1,58 @@
 # Copilot Instructions for OM (OferteMutare.ro)
 
-> Next.js 14 + Firebase + Tailwind v4 platform connecting Romanian customers with moving companies.
+> Next.js 14 Pages Router + Firebase + Tailwind v4 platform connecting Romanian customers with moving companies.
 
-## Quick Start
-
+## Commands
 ```bash
-npm run dev        # Port 3000
-npm run build      # Production build
-npm run lint       # ESLint (0 warnings max) — must pass before commit (husky/lint-staged)
-npm run format     # Prettier formatting
+npm run dev      # Start dev server on port 3000
+npm run build    # Production build (required before deploy)
+npm run lint     # ESLint with 0 warnings max (enforced by husky pre-commit)
 ```
 
-## Architecture Overview
+## Architecture
 
-**Stack**: Next.js 14 Pages Router, TypeScript, Tailwind v4 (CSS-first in `globals.css`), Firebase (Auth/Firestore/Storage), Framer Motion, Sonner toasts, EmailJS (client), Firebase Admin (server emails).
+**Dual-role system**: Users are `customer` OR `company`, never both. Profiles in `customers/{uid}` or `companies/{uid}`. Enforced by `ensureUserProfile()` in `utils/firebaseHelpers.ts` (throws `ROLE_CONFLICT`) and Firestore rules (`canCreateCustomer()`/`canCreateCompany()`).
 
+<<<<<<< HEAD
+**Request flow**: Customer creates request → `generateRequestCode()` assigns REQ-XXXXXX via transaction → Companies pay for access, submit offers → Customer accepts one (batch declines others via `pages/api/offers/accept.ts`) → Notifications sent.
+=======
 **Dual-role system**: Users are either `customer` or `company` — never both. Profiles stored in `customers/{uid}` or `companies/{uid}`. Auth helper `ensureUserProfile()` in `utils/firebaseHelpers.ts` enforces this by checking opposite collection before creating profile, throwing `ROLE_CONFLICT` error if violated. Security rules in `firebase.firestore.rules` enforce this at DB level via `canCreateCustomer()`/`canCreateCompany()` functions.
 
 **Key data flow**: Customer creates request → Sequential REQ-XXXXXX code generated via Firestore transaction on `meta/counters` doc (starts at 141000) → Companies view and submit offers → Customer accepts one offer (batch write declines all others via `pages/api/offers/accept.ts`) → Email notifications sent to company → Request status updated to 'accepted'.
+>>>>>>> 807d0f046dfb415594613dc4471af6126ed60fad
 
 **Firebase initialization**: Client SDK in `services/firebase.ts` handles hot reload with `getApps()` check. Admin SDK in `lib/firebaseAdmin.ts` gracefully degrades if credentials missing — always verify `adminReady` flag before privileged operations.
 
 ## Critical Patterns
 
-### Firebase Imports
-
+### Firebase Imports — Always use singletons
 ```tsx
-// ALWAYS import from services/firebase.ts — never initialize elsewhere
-import { auth, db, storage } from "@/services/firebase";
-// For API routes, use Admin SDK:
-import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
+import { auth, db, storage } from "@/services/firebase";        // Client
+import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";  // API routes
 ```
 
 ### Role-Protected Pages
-
 ```tsx
-// Wrap with RequireRole — handles auth redirects + role verification with retries
-// Uses 5 retry attempts with 400ms delay between checks to handle async profile creation
-<RequireRole allowedRole="customer">
-  <LayoutWrapper>{/* content */}</LayoutWrapper>
+<RequireRole allowedRole="customer">  {/* Retries 5x with 400ms delay for async profile */}
+  <LayoutWrapper>{children}</LayoutWrapper>
 </RequireRole>
 ```
 
-### Firestore Helpers (use these, not raw calls)
-
+### Firestore Helpers — Use these, not raw calls
 ```tsx
-import { createRequest, updateRequest, addOffer, archiveRequest } from "@/utils/firestoreHelpers";
-
-// Auto-generates REQ-XXXXXX codes via transaction on meta/counters doc
-// Starts at 141000, increments sequentially
-const requestId = await createRequest({ ...form, customerId: user.uid });
-
-// Helper automatically strips undefined fields and handles moveDate logic
-await updateRequest(requestId, { status: "closed", archived: true });
+import { createRequest, updateRequest } from "@/utils/firestoreHelpers";
+// Auto-generates REQ-XXXXXX, strips undefined fields, handles moveDate logic
+await createRequest({ ...form, customerId: user.uid });
 ```
 
-### Firestore Data Writes
-
+### API Authentication
 ```tsx
-// ALWAYS use serverTimestamp() for createdAt/updatedAt fields
-import { serverTimestamp } from "firebase/firestore";
-
-// firestoreHelpers.ts automatically strips undefined fields before writes
-// No need to manually filter — just pass the entire object
-const data = { field1: value1, field2: undefined, field3: value3 };
-await createRequest(data); // field2 will be stripped automatically
-```
-
-### API Route Authentication
-
-```tsx
-// Option 1: Use withAuth wrapper (recommended for simple handlers)
 import { withAuth } from "@/lib/apiAuth";
-export default withAuth(async (req, res, uid) => {
-  // uid is verified, proceed with logic
-});
+export default withAuth(async (req, res, uid) => { /* uid verified */ });
 
+<<<<<<< HEAD
+// Client-side calls require Bearer token
+=======
 // Option 2: Manual verification (when you need more control)
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 const authResult = await verifyAuth(req);
@@ -87,38 +64,31 @@ const uid = authResult.uid;
 
 ```tsx
 // All secured endpoints require Firebase ID token in Authorization header
+>>>>>>> 807d0f046dfb415594613dc4471af6126ed60fad
 const token = await user.getIdToken();
-await fetch("/api/offers/accept", {
-  method: "POST",
-  headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
-  body: JSON.stringify({ requestId, offerId }),
-});
+fetch("/api/offers/accept", { headers: { Authorization: `Bearer ${token}` }, ... });
 ```
 
-### API Response Format
-
+### API Responses
 ```tsx
 import { apiSuccess, apiError, ErrorCodes } from "@/types/api";
-return res.status(200).json(apiSuccess({ id: "123" }));
+return res.status(200).json(apiSuccess({ id }));
 return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
 ```
 
 ## Data Model
 
-**requests/{id}**: `customerId`, `requestCode` (REQ-XXXXXX), `fromCity/toCity`, `fromCounty/toCounty`, address components (`fromStreet`, `fromNumber`, `fromBloc`...), `moveDateMode` (exact|range|flexible), `status` (active|accepted|closed), `mediaUrls[]`, `archived` flag, timestamps.
-
-**requests/{id}/offers/{id}**: `companyId`, `price`, `message`, `status` (pending|accepted|declined). **Must denormalize** `requestId`/`requestCode` for collectionGroup queries.
-
-**companies/{id}/notifications/{id}**: Real-time notifications for companies (new requests, media uploads). Write via server only.
-
-**companies/{id}/payments/{requestId}**: Payment records for request access. Created by company.
-
-**uploadTokens/{token}**: Token-based media upload links with 7-day expiration.
-
-**meta/counters**: Sequential request code counter (`requestSeq`). Updated via transaction in `generateRequestCode()`.
+| Collection | Key Fields |
+|------------|------------|
+| `requests/{id}` | `customerId`, `requestCode` (REQ-XXXXXX), `fromCity/toCity`, `moveDateMode`, `status`, `archived` |
+| `requests/{id}/offers/{id}` | `companyId`, `price`, `status`. **Must denormalize** `requestId`/`requestCode` |
+| `companies/{id}/payments/{requestId}` | Payment records for request access |
+| `companies/{id}/notifications/{id}` | Server-created notifications |
+| `meta/counters` | `requestSeq` for sequential codes (starts 141000) |
 
 ## Conventions
 
+<<<<<<< HEAD
 - **Tailwind v4**: Config in `globals.css` via `@theme{}`. Use `.card`, `.btn-primary`, `.btn-outline` utility classes.
 - **Timestamps**: Always use `serverTimestamp()` for Firestore writes.
 - **Undefined fields**: `firestoreHelpers.ts` strips these automatically before writes.
@@ -130,16 +100,30 @@ return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
 - **Address building**: Use helper functions in `firestoreHelpers.ts` (`buildAddressString`, `buildMoveDateFields`) for consistent formatting.
 - **ESLint**: Zero warnings policy enforced by husky/lint-staged pre-commit hooks. Use `npm run lint` to check.
 - **Code Formatting**: Prettier with Tailwind plugin. Run `npm run format` before committing.
+=======
+- **Timestamps**: Always `serverTimestamp()` for `createdAt`/`updatedAt`
+- **No hard deletes**: Use `archived: true` or `status: 'closed'`
+- **Tailwind v4**: Config in `globals.css` via `@theme{}`. Use `.card`, `.btn-primary`, `.btn-outline`
+- **Romanian data**: `cities.ts`/`counties.ts` for locations, `utils/validation.ts` for phone/CIF
+- **Animations**: `utils/animations.ts` (`fadeUp`, `staggerContainer`)
+- **Toasts**: `sonner` — `toast.success()`, `toast.error()`
+- **Address formatting**: Use `buildAddressString()`, `buildMoveDateFields()` from `firestoreHelpers.ts`
+>>>>>>> 3fcd890a9c37e9f080bbf5444f34b96f02573e85
 
-## Email System
+## Key Files
 
-- **Client-side**: EmailJS via `utils/emailHelpers.ts` using dynamic imports to avoid server bundling
-  - Requires `NEXT_PUBLIC_EMAILJS_SERVICE_ID`, `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY`, `NEXT_PUBLIC_EMAILJS_TEMPLATE_ID`
-  - Call `sendEmail({ to_email, to_name, ...params }, templateId?)`
-- **Server-side**: Firebase Admin or Resend API for transactional emails
-  - Used in `pages/api/offers/accept.ts` for company notifications
-  - Requires `RESEND_API_KEY` environment variable
+| Concern | Location |
+|---------|----------|
+| Firebase client | `services/firebase.ts` |
+| Firebase Admin | `lib/firebaseAdmin.ts` |
+| API auth | `lib/apiAuth.ts` (`withAuth`, `verifyAuth`) |
+| Firestore CRUD | `utils/firestoreHelpers.ts` |
+| Auth helpers | `utils/firebaseHelpers.ts` |
+| Types | `types/index.ts`, `types/api.ts` |
+| Security rules | `firebase.firestore.rules`, `firebase.storage.rules` |
+| Styling | `globals.css` |
 
+<<<<<<< HEAD
 ## Media Upload System
 
 **Token-based uploads**: Customers can upload photos/videos later via secure tokens (7-day expiry).
@@ -197,3 +181,12 @@ Copy `.env copy.example` → `.env`. Required vars:
 | Dashboards           | `pages/customer/dashboard.tsx`, `pages/company/dashboard.tsx`  |
 | Security rules       | `firebase.firestore.rules`, `firebase.storage.rules`           |
 | Styling              | `globals.css` (Tailwind v4 `@theme{}` config)                  |
+=======
+## Environment
+
+Required in `.env`:
+- `NEXT_PUBLIC_FIREBASE_*` — Client config
+- `FIREBASE_ADMIN_*` — Service account (check `adminReady` before admin ops)
+- `NEXT_PUBLIC_EMAILJS_*` — Client emails via `utils/emailHelpers.ts`
+- `RESEND_API_KEY` — Server transactional emails
+>>>>>>> 3fcd890a9c37e9f080bbf5444f34b96f02573e85
