@@ -1,0 +1,88 @@
+"use client";
+
+import Link from "next/link";
+import { MapPin } from "lucide-react";
+import { cityData, CityData } from "@/utils/citySlugData";
+
+export default function CityLinksSection() {
+  // Group cities by tier for better organization
+  const tier1Cities = cityData.filter((city) => city.tier === 1);
+  const tier2Cities = cityData.filter((city) => city.tier === 2);
+
+  return (
+    <section className="border-t border-gray-200 bg-gradient-to-br from-slate-50 to-gray-50 py-16">
+      <div className="mx-auto max-w-7xl px-6">
+        {/* Header */}
+        <div className="mb-10 text-center">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-2">
+            <MapPin className="h-5 w-5 text-emerald-600" />
+            <span className="text-sm font-semibold text-emerald-700">Acoperire Națională</span>
+          </div>
+          <h2 className="mb-3 text-3xl font-bold text-gray-900">
+            Servicii de Mutări în Toată România
+          </h2>
+          <p className="mx-auto max-w-2xl text-gray-600">
+            Compară oferte gratuite de la firme locale verificate în peste 40 de orașe
+          </p>
+        </div>
+
+        {/* Tier 1 Cities - Major Cities */}
+        <div className="mb-10">
+          <h3 className="mb-4 text-lg font-semibold text-gray-700 flex items-center gap-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
+            Orașe Majore
+          </h3>
+          <div className="grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
+            {tier1Cities.map((city) => (
+              <Link
+                key={city.slug}
+                href={`/mutari/${city.slug}`}
+                className="group rounded-lg border border-gray-200 bg-white px-4 py-3 text-center transition-all hover:border-emerald-400 hover:shadow-md hover:-translate-y-0.5"
+              >
+                <span className="font-medium text-gray-900 group-hover:text-emerald-600">
+                  {city.name}
+                </span>
+                <div className="mt-1 text-xs text-gray-500">{city.population}</div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Tier 2 Cities - County Capitals */}
+        <div>
+          <h3 className="mb-4 text-lg font-semibold text-gray-700 flex items-center gap-2">
+            <span className="inline-block h-2 w-2 rounded-full bg-sky-500" />
+            Reședințe de Județ
+          </h3>
+          <div className="grid gap-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+            {tier2Cities.map((city) => (
+              <Link
+                key={city.slug}
+                href={`/mutari/${city.slug}`}
+                className="group rounded-lg border border-gray-200 bg-white px-3 py-2 text-center text-sm transition-all hover:border-sky-400 hover:shadow-md"
+              >
+                <span className="font-medium text-gray-800 group-hover:text-sky-600">
+                  {city.name}
+                </span>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* CTA */}
+        <div className="mt-10 text-center">
+          <p className="mb-4 text-sm text-gray-600">
+            Nu găsești orașul tău? Oferim servicii în întreaga țară!
+          </p>
+          <Link
+            href="/customer/auth"
+            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-3 font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:opacity-95"
+          >
+            <MapPin className="h-5 w-5" />
+            Cere Oferte pentru Orașul Tău
+          </Link>
+        </div>
+      </div>
+    </section>
+  );
+}
