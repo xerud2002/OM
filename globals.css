@@ -18,8 +18,8 @@
 }
 
 /* Source paths for Tailwind to scan */
-@source "../pages/**/*.{ts,tsx}";
-@source "../components/**/*.{ts,tsx}";
+@source "./pages/**/*.{ts,tsx}";
+@source "./components/**/*.{ts,tsx}";
 
 /* 🎨 Paletă de culori personalizată */
 :root {

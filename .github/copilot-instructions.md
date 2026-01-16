@@ -17,7 +17,7 @@ npm run format     # Prettier formatting
 
 **Dual-role system**: Users are either `customer` or `company` — never both. Profiles stored in `customers/{uid}` or `companies/{uid}`. Auth helper `ensureUserProfile()` in `utils/firebaseHelpers.ts` enforces this by checking opposite collection before creating profile, throwing `ROLE_CONFLICT` error if violated. Security rules in `firebase.firestore.rules` enforce this at DB level via `canCreateCustomer()`/`canCreateCompany()` functions.
 
-**Key data flow**: Customer creates request → Sequential REQ-XXXXXX code generated via Firestore transaction → Companies view and submit offers → Customer accepts one offer (batch write declines all others via `pages/api/offers/accept.ts`) → Email notifications sent to company → Request status updated to 'accepted'.
+**Key data flow**: Customer creates request → Sequential REQ-XXXXXX code generated via Firestore transaction on `meta/counters` doc (starts at 141000) → Companies view and submit offers → Customer accepts one offer (batch write declines all others via `pages/api/offers/accept.ts`) → Email notifications sent to company → Request status updated to 'accepted'.
 
 ## Critical Patterns
 
@@ -74,7 +74,7 @@ export default withAuth(async (req, res, uid) => {
   // uid is verified, proceed with logic
 });
 
-// Option 2: Manual verification
+// Option 2: Manual verification (when you need more control)
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 const authResult = await verifyAuth(req);
 if (!authResult.success) return sendAuthError(res, authResult);
