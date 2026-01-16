@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MapPin } from "lucide-react";
-import { cityData, CityData } from "@/utils/citySlugData";
+import { cityData } from "@/utils/citySlugData";
 
 export default function CityLinksSection() {
   // Group cities by tier for better organization
@@ -10,7 +10,7 @@ export default function CityLinksSection() {
   const tier2Cities = cityData.filter((city) => city.tier === 2);
 
   return (
-    <section className="border-t border-gray-200 bg-gradient-to-br from-slate-50 to-gray-50 py-12 sm:py-16">
+    <section className="border-t border-gray-200 bg-linear-to-br from-slate-50 to-gray-50 py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Header */}
         <div className="mb-8 sm:mb-10 text-center">

@@ -5,8 +5,6 @@ import {
   Wrench,
   CheckCircle,
   ArrowRight,
-  Shield,
-  Clock,
   DollarSign,
   Star,
   Sofa,

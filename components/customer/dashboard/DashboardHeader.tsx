@@ -28,7 +28,7 @@ export default function DashboardHeader({
         <div className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-400/10 blur-2xl" />
       </div>
 
-      <div className="relative mx-auto max-w-[1400px] px-4 pt-24 pb-8 sm:px-6 sm:pt-28 sm:pb-10 lg:pt-32 lg:pb-14">
+      <div className="relative mx-auto max-w-350 px-4 pt-24 pb-8 sm:px-6 sm:pt-28 sm:pb-10 lg:pt-32 lg:pb-14">
         {/* Header */}
         <div className="flex flex-col gap-4 sm:gap-6 md:flex-row md:items-center md:justify-between">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
@@ -49,7 +49,7 @@ export default function DashboardHeader({
             onClick={onNewRequest}
             className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40 active:scale-95 w-full md:w-auto"
           >
-            <PlusSquare size={20} className="sm:w-[22px] sm:h-[22px] transition-transform group-hover:rotate-90" />
+            <PlusSquare size={20} className="sm:w-5.5 sm:h-5.5 transition-transform group-hover:rotate-90" />
             Cerere nouă
           </motion.button>
         </div>

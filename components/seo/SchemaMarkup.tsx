@@ -5,11 +5,6 @@ interface FAQItem {
   answer: string;
 }
 
-interface SchemaMarkupProps {
-  type: "FAQPage" | "LocalBusiness" | "BreadcrumbList";
-  data: any;
-}
-
 export function FAQPageSchema({ faqs }: { faqs: FAQItem[] }) {
   const schema = {
     "@context": "https://schema.org",

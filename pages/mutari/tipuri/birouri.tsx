@@ -3,7 +3,6 @@ import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
   Building,
-  CheckCircle,
   ArrowRight,
   Shield,
   Truck,
@@ -13,7 +12,6 @@ import {
   Monitor,
   Server,
   Calendar,
-  Star,
   Users,
   FileText,
   Briefcase,

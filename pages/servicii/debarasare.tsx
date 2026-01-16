@@ -5,13 +5,11 @@ import {
   Trash2,
   CheckCircle,
   ArrowRight,
-  Truck,
   DollarSign,
   Star,
   Package,
   Sofa,
   Recycle,
-  Clock,
 } from "lucide-react";
 
 export default function DebarasarePage() {

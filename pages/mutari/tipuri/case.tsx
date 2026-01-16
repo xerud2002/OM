@@ -11,13 +11,11 @@ import {
   Truck,
   Package,
   Users,
-  Clock,
   DollarSign,
   Sofa,
   Key,
   Heart,
   Star,
-  Calendar,
 } from "lucide-react";
 
 export default function MutariCasePage() {

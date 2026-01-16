@@ -16,7 +16,6 @@ import {
   AlertTriangle,
   Wine,
   Frame,
-  Wrench,
 } from "lucide-react";
 
 export default function ImpachetareProfesionalaPage() {
@@ -273,7 +272,7 @@ export default function ImpachetareProfesionalaPage() {
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
-                <span className="text-gray-700">Marcaje "FRAGIL" pentru obiecte delicate</span>
+                <span className="text-gray-700">Marcaje &ldquo;FRAGIL&rdquo; pentru obiecte delicate</span>
               </div>
               <div className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />

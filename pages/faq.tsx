@@ -304,7 +304,7 @@ export default function FAQPage() {
           </div>
 
           {/* Cities Coverage Badge */}
-          <div className="mb-10 rounded-xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-6">
+          <div className="mb-10 rounded-xl border-2 border-emerald-200 bg-linear-to-br from-emerald-50 to-teal-50 p-6">
             <div className="flex items-center justify-center gap-2 mb-3">
               <MapPin className="h-5 w-5 text-emerald-600" />
               <h3 className="font-bold text-emerald-800 text-lg">Acoperim Toată România</h3>
@@ -363,7 +363,7 @@ export default function FAQPage() {
           </div>
 
           {/* Additional Cities Section for SEO */}
-          <div className="mt-16 rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 sm:p-8">
+          <div className="mt-16 rounded-xl bg-linear-to-br from-slate-50 to-gray-100 p-6 sm:p-8">
             <h3 className="mb-4 text-lg sm:text-xl font-bold text-center text-gray-900">
               Servicii Mutări în Toate Orașele României
             </h3>

@@ -7,7 +7,6 @@ import {
   ArrowRight,
   Box,
   Circle,
-  Maximize2,
   DollarSign,
   Star,
   Package,

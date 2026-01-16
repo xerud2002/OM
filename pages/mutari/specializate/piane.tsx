@@ -10,7 +10,6 @@ import {
   DollarSign,
   Star,
   AlertTriangle,
-  Users,
   Package,
   Heart,
   Award,

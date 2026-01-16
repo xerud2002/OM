@@ -156,7 +156,7 @@ function FooterColumn({
               className="group relative inline-block transition-all duration-300 hover:text-emerald-600"
             >
               {label}
-              <span className="absolute bottom-0 left-0 h-[1px] w-0 bg-linear-to-r from-emerald-500 to-sky-500 transition-all duration-300 group-hover:w-full" />
+              <span className="absolute bottom-0 left-0 h-px w-0 bg-linear-to-r from-emerald-500 to-sky-500 transition-all duration-300 group-hover:w-full" />
             </Link>
           </li>
         ))}

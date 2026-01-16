@@ -6,16 +6,13 @@ import {
   CheckCircle,
   ArrowRight,
   Shield,
-  Clock,
   DollarSign,
   Star,
-  Package,
   Lock,
   Thermometer,
   Camera,
   Key,
   Calendar,
-  Box,
 } from "lucide-react";
 
 export default function DepozitarePage() {

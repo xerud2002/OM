@@ -341,7 +341,7 @@ async function createPostImages() {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
-  console.log("🎨 Generating Moz-style Facebook post images...\n");
+  console.warn("🎨 Generating Moz-style Facebook post images...\n");
 
   for (const post of posts) {
     const outputPath = path.join(outputDir, `post-${post.id}.png`);
@@ -349,14 +349,14 @@ async function createPostImages() {
 
     try {
       await sharp(Buffer.from(svg)).png({ quality: 95 }).toFile(outputPath);
-      console.log(`✅ Post ${post.id}: ${post.title} ${post.titleHighlight}`);
+      console.warn(`✅ Post ${post.id}: ${post.title} ${post.titleHighlight}`);
     } catch (error) {
       console.error(`❌ Error creating post ${post.id}:`, error.message);
     }
   }
 
-  console.log("\n🎉 Done! Moz-style images saved to: public/fb-posts/");
-  console.log("📐 Size: 1200x630px (optimal for Facebook)");
+  console.warn("\n🎉 Done! Moz-style images saved to: public/fb-posts/");
+  console.warn("📐 Size: 1200x630px (optimal for Facebook)");
 }
 
 createPostImages().catch(console.error);

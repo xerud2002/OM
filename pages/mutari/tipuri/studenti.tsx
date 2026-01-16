@@ -5,8 +5,6 @@ import {
   GraduationCap,
   CheckCircle,
   ArrowRight,
-  Shield,
-  Truck,
   Package,
   Clock,
   DollarSign,
@@ -215,7 +213,7 @@ export default function MutariStudentiPage() {
                   <h3 className="font-bold text-gray-900">Volume mici, fără probleme</h3>
                   <p className="text-gray-600">
                     Chiar și pentru câteva cutii și un pat, găsești oferte. Nu e nevoie de mutare 
-                    "completă".
+                    &ldquo;completă&rdquo;.
                   </p>
                 </div>
               </div>

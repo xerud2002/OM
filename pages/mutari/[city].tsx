@@ -4,12 +4,9 @@ import { GetStaticPaths, GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
   MapPin,
-  Phone,
-  Clock,
   Shield,
   Truck,
   Package,
-  Users,
   Star,
   CheckCircle,
   ArrowRight,
@@ -18,7 +15,7 @@ import {
   Calendar,
   TrendingDown,
 } from "lucide-react";
-import { cityData, getCityBySlug, getAllCitySlugs, CityData } from "@/utils/citySlugData";
+import { getCityBySlug, getAllCitySlugs, CityData } from "@/utils/citySlugData";
 
 interface CityPageProps {
   city: CityData;
