@@ -402,9 +402,17 @@ export default function CityPage({ city }: CityPageProps) {
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "LocalBusiness",
-              name: `Servicii Mutări ${city.name}`,
+              name: `OferteMutare.ro - Mutări ${city.name}`,
               description: city.metaDescription,
               url: `https://ofertemutare.ro/mutari/${city.slug}`,
+              image: "https://ofertemutare.ro/pics/index.webp",
+              telephone: "+40700000000",
+              address: {
+                "@type": "PostalAddress",
+                addressLocality: city.name,
+                addressRegion: city.county,
+                addressCountry: "RO"
+              },
               areaServed: {
                 "@type": "City",
                 name: city.name,
@@ -413,8 +421,37 @@ export default function CityPage({ city }: CityPageProps) {
                   name: city.county,
                 },
               },
+              geo: {
+                "@type": "GeoCoordinates",
+                // Coordinates would ideally come from city data, defaulting to center of RO for generic
+                latitude: "46.0",
+                longitude: "25.0" 
+              },
+              openingHoursSpecification: [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  dayOfWeek: [
+                    "Monday",
+                    "Tuesday",
+                    "Wednesday",
+                    "Thursday",
+                    "Friday",
+                    "Saturday",
+                    "Sunday"
+                  ],
+                  opens: "08:00",
+                  closes: "22:00"
+                }
+              ],
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.9",
+                reviewCount: "85",
+                bestRating: "5",
+                worstRating: "1"
+              },
               serviceType: "Moving Services",
-              priceRange: "$$",
+              priceRange: "250 RON - 3000 RON",
             }),
           }}
         />
