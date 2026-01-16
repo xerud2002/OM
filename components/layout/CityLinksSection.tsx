@@ -42,7 +42,6 @@ export default function CityLinksSection() {
                 <span className="font-medium text-gray-900 group-hover:text-emerald-600">
                   {city.name}
                 </span>
-                <div className="mt-1 text-xs text-gray-500">{city.population}</div>
               </Link>
             ))}
           </div>
