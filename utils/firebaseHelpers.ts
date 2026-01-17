@@ -8,6 +8,9 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   sendPasswordResetEmail,
+  linkWithCredential,
+  fetchSignInMethodsForEmail,
+  EmailAuthProvider,
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -122,25 +125,44 @@ export async function getUserRole(u: User): Promise<UserRole | null> {
 
 export async function loginWithGoogle(role: UserRole) {
   try {
-    // Force account chooser so user can pick a different Google account
     const provider = new GoogleAuthProvider();
     provider.setCustomParameters({ prompt: "select_account" });
     const cred = await signInWithPopup(auth, provider);
     await ensureUserProfile(cred.user, role);
 
-    // Track user in GA4
     setUserId(cred.user.uid);
     setUserProperties({ user_role: role });
     trackLogin("google", role);
 
     return cred.user;
   } catch (error: any) {
-    // Don't throw popup-blocked errors - these are user-initiated cancellations
-    if (error?.code === "auth/popup-blocked") {
-      console.warn("Google sign-in popup was blocked by browser");
-      return null; // Return null instead of throwing
+    if (error?.code === "auth/popup-blocked" || error?.code === "auth/popup-closed-by-user") {
+      console.warn("Google sign-in popup was blocked or cancelled");
+      return null;
     }
-    // Re-throw other errors
+    
+    // Handle account exists with different credential - show helpful message
+    if (error?.code === "auth/account-exists-with-different-credential") {
+      const email = error.customData?.email;
+      if (email) {
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+        if (methods.includes("password")) {
+          const err: any = new Error(
+            "Acest email are deja un cont cu parolă. Te rugăm să te autentifici cu email și parolă."
+          );
+          err.code = "NEEDS_PASSWORD";
+          throw err;
+        }
+        if (methods.includes("facebook.com")) {
+          const err: any = new Error(
+            "Acest email este asociat cu Facebook. Te rugăm să te autentifici cu Facebook."
+          );
+          err.code = "USE_FACEBOOK";
+          throw err;
+        }
+      }
+    }
+    
     throw error;
   }
 }
@@ -151,18 +173,68 @@ export async function loginWithFacebook(role: UserRole) {
     const cred = await signInWithPopup(auth, provider);
     await ensureUserProfile(cred.user, role);
 
-    // Track user in GA4
     setUserId(cred.user.uid);
     setUserProperties({ user_role: role });
     trackLogin("facebook", role);
 
     return cred.user;
   } catch (error: any) {
-    // Don't throw popup-blocked/cancelled errors
     if (error?.code === "auth/popup-blocked" || error?.code === "auth/popup-closed-by-user") {
       console.warn("Facebook sign-in popup was blocked or cancelled");
       return null;
     }
+    
+    // Handle account exists with different credential
+    if (error?.code === "auth/account-exists-with-different-credential") {
+      const email = error.customData?.email;
+      const pendingCred = error.credential; // OAuthCredential from Facebook
+      
+      if (email) {
+        const methods = await fetchSignInMethodsForEmail(auth, email);
+        
+        // If user has Google account, try to sign in with Google and link Facebook
+        if (methods.includes("google.com")) {
+          try {
+            // Sign in with Google first
+            const googleProvider = new GoogleAuthProvider();
+            googleProvider.setCustomParameters({ login_hint: email });
+            const googleResult = await signInWithPopup(auth, googleProvider);
+            
+            // Link the Facebook credential to this account
+            if (pendingCred) {
+              await linkWithCredential(googleResult.user, pendingCred);
+            }
+            
+            await ensureUserProfile(googleResult.user, role);
+            setUserId(googleResult.user.uid);
+            setUserProperties({ user_role: role });
+            trackLogin("facebook", role);
+            
+            return googleResult.user;
+          } catch (linkError: any) {
+            // If linking fails, just return the Google user
+            if (linkError?.code === "auth/popup-closed-by-user") {
+              return null;
+            }
+            console.warn("Could not link Facebook to Google account:", linkError);
+            const err: any = new Error(
+              "Acest email este asociat cu Google. Te rugăm să te autentifici cu Google."
+            );
+            err.code = "USE_GOOGLE";
+            throw err;
+          }
+        }
+        
+        if (methods.includes("password")) {
+          const err: any = new Error(
+            "Acest email are deja un cont cu parolă. Te rugăm să te autentifici cu email și parolă."
+          );
+          err.code = "NEEDS_PASSWORD";
+          throw err;
+        }
+      }
+    }
+    
     throw error;
   }
 }
