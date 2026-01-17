@@ -4,7 +4,6 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
-import ReviewsSection from "@/components/reviews/ReviewsSection";
 import TrustSignals from "@/components/cro/TrustSignals";
 import UrgencyBanner from "@/components/cro/UrgencyBanner";
 import { AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
@@ -350,10 +349,7 @@ export default function HomePage() {
       <ClientAccount />
       <Services />
       
-      {/* Reviews Section */}
-      <div className="mx-auto max-w-7xl px-4 py-16">
-        <ReviewsSection maxReviews={6} />
-      </div>
+
       
       <GuaranteeSection />
       <PartnerSection />

@@ -157,7 +157,7 @@ export default function Hero() {
                 { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
                 { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
                 { icon: Star, label: "4.9/5 Rating", color: "text-amber-500" },
-                { icon: TrendingUp, label: "Economie ~40%", color: "text-purple-600" },
+                { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
               ].map((item, i) => (
                 <div
                   key={i}
