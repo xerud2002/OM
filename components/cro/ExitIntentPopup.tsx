@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { X, Gift, ArrowRight } from "lucide-react";
+import { X, Sparkles, ArrowRight, Clock, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { trackExitIntentShown, trackExitIntentConversion } from "@/utils/analytics";
 
@@ -10,23 +10,18 @@ export default function ExitIntentPopup() {
   useEffect(() => {
     const handleMouseLeave = (e: MouseEvent) => {
       if (
-        e.clientY <= 0 && // Mouse leaves top of screen
-        !hasShown && // Haven't shown it yet
-        window.innerWidth > 768 // Desktop only
+        e.clientY <= 0 &&
+        !hasShown &&
+        window.innerWidth > 768
       ) {
         setIsVisible(true);
         setHasShown(true);
-        trackExitIntentShown(); // Track impression
-        // Optionally save to localStorage to not annoy user
-        // localStorage.setItem('exitPopupShown', 'true');
+        trackExitIntentShown();
       }
     };
 
     document.addEventListener("mouseleave", handleMouseLeave);
-
-    return () => {
-      document.removeEventListener("mouseleave", handleMouseLeave);
-    };
+    return () => document.removeEventListener("mouseleave", handleMouseLeave);
   }, [hasShown]);
 
   const handleClose = () => {
@@ -42,53 +37,72 @@ export default function ExitIntentPopup() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm transition-opacity duration-300">
-      <div className="relative w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl animate-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+      <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl animate-in zoom-in-95 duration-300">
+        {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute right-4 top-4 rounded-full bg-gray-100 p-2 text-gray-500 hover:bg-gray-200 hover:text-gray-700"
+          className="absolute right-3 top-3 z-10 rounded-full bg-white/80 p-1.5 text-gray-400 backdrop-blur-sm transition-all hover:bg-gray-100 hover:text-gray-600"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
 
-        <div className="grid md:grid-cols-2">
-          {/* Image Side */}
-          <div className="hidden bg-orange-600 p-8 text-white md:flex md:flex-col md:justify-center">
-            <Gift className="mb-4 h-12 w-12" />
-            <h3 className="mb-2 text-2xl font-bold">Așteaptă!</h3>
-            <p className="text-orange-100">
-              Nu rata ocazia de a economisi până la 40% la mutarea ta.
-            </p>
+        {/* Header with gradient */}
+        <div className="relative bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 px-6 py-8 text-center text-white">
+          {/* Animated sparkle */}
+          <div className="absolute top-4 left-4 animate-pulse">
+            <Sparkles className="h-6 w-6 text-yellow-300" />
+          </div>
+          <div className="absolute bottom-4 right-4 animate-pulse delay-150">
+            <Sparkles className="h-5 w-5 text-yellow-300/80" />
+          </div>
+          
+          <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-sm">
+            <Clock className="h-3 w-3" />
+            Ofertă limitată
+          </div>
+          
+          <h3 className="mb-2 text-2xl font-bold">
+            Hei, nu pleca încă! 👋
+          </h3>
+          <p className="text-emerald-50">
+            Ai uitat să ceri oferte gratuite pentru mutarea ta
+          </p>
+        </div>
+
+        {/* Content */}
+        <div className="p-6">
+          <div className="mb-5 space-y-3">
+            {[
+              "Compari până la 5 oferte în 24h",
+              "Firme verificate, fără bătăi de cap",
+              "100% gratuit, fără obligații"
+            ].map((item, i) => (
+              <div key={i} className="flex items-center gap-2.5 text-sm text-gray-600">
+                <CheckCircle className="h-4 w-4 shrink-0 text-emerald-500" />
+                <span>{item}</span>
+              </div>
+            ))}
           </div>
 
-          {/* Content Side */}
-          <div className="p-8">
-            <h3 className="mb-2 text-xl font-bold text-gray-900 md:hidden">
-              Așteaptă! Nu pleca încă!
-            </h3>
-            <p className="mb-6 text-gray-600">
-              Primești <span className="font-bold text-orange-600">Ghidul Complet de Mutare</span> + 
-              Checklist gratuit dacă soliciți oferte acum.
-            </p>
+          <Link
+            href="/customer/auth"
+            className="group mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 hover:-translate-y-0.5"
+            onClick={handleConvert}
+          >
+            Vreau oferte gratuite
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+          </Link>
 
-            <Link
-              href="/customer/auth"
-              className="group mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-orange-600 px-6 py-3 font-bold text-white shadow-lg transition-all hover:bg-orange-700 hover:shadow-xl hover:-translate-y-0.5"
-              onClick={handleConvert}
-            >
-              Vreau Oferte & Ghid
-              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <button
-              onClick={handleClose}
-              className="w-full text-center text-sm font-medium text-gray-400 hover:text-gray-600"
-            >
-              Nu, mulțumesc, prefer să plătesc prețul întreg
-            </button>
-          </div>
+          <button
+            onClick={handleClose}
+            className="w-full text-center text-xs text-gray-400 transition-colors hover:text-gray-500"
+          >
+            Nu acum, poate mai târziu
+          </button>
         </div>
       </div>
     </div>
   );
 }
+
