@@ -4,6 +4,9 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
 import Steps from "@/components/home/Steps";
+import TrustSignals from "@/components/cro/TrustSignals";
+import UrgencyBanner from "@/components/cro/UrgencyBanner";
+import { AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
 
 // Lazy load below-the-fold components for better LCP
 const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
@@ -321,15 +324,34 @@ export default function HomePage() {
         />
       </Head>
 
+      {/* Schema Markup */}
+      <AggregateRatingSchema ratingValue="4.8" reviewCount="127" />
+
       {/* ==========================
           🔹 Page Sections
       =========================== */}
       <Hero />
+      
+      {/* CRO: Urgency & Trust */}
+      <div className="mx-auto max-w-7xl px-4 -mt-8 mb-8">
+        <UrgencyBanner />
+      </div>
+      
       <Steps />
+      
+      {/* Trust Signals */}
+      <div className="mx-auto max-w-7xl px-4 py-4 border-t border-b border-gray-100 bg-gray-50">
+        <TrustSignals className="justify-center" />
+      </div>
+      
       <ClientAccount />
-      <Services />
-      <GuaranteeSection />
       <PartnerSection />
+      <Services />
+      
+
+      
+      <GuaranteeSection />
+
       <Testimonials />
       <Articles />
       <CTASection />

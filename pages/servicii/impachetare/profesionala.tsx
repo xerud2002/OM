@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import FAQSection from "@/components/content/FAQSection";
+import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { SERVICE_FAQS } from "@/data/faqData";
 import {
   Package,
   CheckCircle,
@@ -20,6 +23,7 @@ import {
 
 export default function ImpachetareProfesionalaPage() {
   const currentYear = new Date().getFullYear();
+  const faqItems = SERVICE_FAQS.impachetare;
 
   return (
     <>
@@ -41,6 +45,11 @@ export default function ImpachetareProfesionalaPage() {
         <meta property="og:description" content="Servicii complete de împachetare pentru mutări. Materiale premium!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/packing1.webp" />
       </Head>
+
+      {/* Schema Markup */}
+      <FAQPageSchema faqs={faqItems} />
+      <LocalBusinessSchema serviceName="Împachetare Profesională" />
+      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Împachetare Profesională" }]} />
 
       <LayoutWrapper>
         {/* Hero Section */}
@@ -318,6 +327,9 @@ export default function ImpachetareProfesionalaPage() {
               </li>
             </ul>
           </section>
+
+          {/* FAQ Section */}
+          <FAQSection items={faqItems} title="Întrebări Frecvente - Împachetare Profesională" />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-rose-600 to-pink-600 p-8 text-center text-white">

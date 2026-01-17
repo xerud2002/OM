@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import FAQSection from "@/components/content/FAQSection";
+import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { SERVICE_FAQS } from "@/data/faqData";
 import {
   GraduationCap,
   CheckCircle,
@@ -19,6 +22,7 @@ import {
 
 export default function MutariStudentiPage() {
   const currentYear = new Date().getFullYear();
+  const faqItems = SERVICE_FAQS.studenti;
 
   return (
     <>
@@ -43,6 +47,18 @@ export default function MutariStudentiPage() {
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
+
+      {/* Schema Markup */}
+      <FAQPageSchema faqs={faqItems} />
+      <LocalBusinessSchema serviceName="Mutări Studenți" />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Mutări", url: "/mutari" },
+          { name: "Tipuri", url: "/mutari/tipuri" },
+          { name: "Studenți" },
+        ]}
+      />
 
       <LayoutWrapper>
         {/* Hero Section */}
@@ -283,6 +299,9 @@ export default function MutariStudentiPage() {
               </div>
             </div>
           </section>
+
+          {/* FAQ Section */}
+          <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Studenți" />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-orange-500 to-red-500 p-8 text-center text-white">

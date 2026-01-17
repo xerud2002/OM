@@ -6,6 +6,7 @@ import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react"
 import { useRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
 import dynamic from "next/dynamic";
+import { trackCTAClick } from "@/utils/analytics";
 
 // Lazy load Firebase helpers to reduce initial bundle
 const NotificationBell = dynamic(() => import("@/components/company/NotificationBell"), {
@@ -75,6 +76,7 @@ export default function Navbar() {
 
   /* 🔹 Navigation logic */
   const handleGetOffers = () => {
+    trackCTAClick("get_offers", "navbar");
     if (user) router.push("/customer/dashboard");
     else {
       localStorage.setItem("redirectAfterLogin", "/customer/dashboard");

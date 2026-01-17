@@ -21,6 +21,8 @@ npm run lint     # ESLint with 0 warnings max (enforced by husky pre-commit)
 **Key data flow**: Customer creates request → Sequential REQ-XXXXXX code generated via Firestore transaction on `meta/counters` doc (starts at 141000) → Companies view and submit offers → Customer accepts one offer (batch write declines all others via `pages/api/offers/accept.ts`) → Email notifications sent to company → Request status updated to 'accepted'.
 >>>>>>> 807d0f046dfb415594613dc4471af6126ed60fad
 
+**Firebase initialization**: Client SDK in `services/firebase.ts` handles hot reload with `getApps()` check. Admin SDK in `lib/firebaseAdmin.ts` gracefully degrades if credentials missing — always verify `adminReady` flag before privileged operations.
+
 ## Critical Patterns
 
 ### Firebase Imports — Always use singletons
@@ -86,6 +88,19 @@ return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
 
 ## Conventions
 
+<<<<<<< HEAD
+- **Tailwind v4**: Config in `globals.css` via `@theme{}`. Use `.card`, `.btn-primary`, `.btn-outline` utility classes.
+- **Timestamps**: Always use `serverTimestamp()` for Firestore writes.
+- **Undefined fields**: `firestoreHelpers.ts` strips these automatically before writes.
+- **Romanian localization**: Use `cities.ts`/`counties.ts` for locations, `utils/date.ts` for formatting.
+- **Validation**: Use `utils/validation.ts` for Romanian phone (`07xxxxxxxx`) and CIF validation.
+- **Animations**: Import variants from `utils/animations.ts` (`fadeUp`, `staggerContainer`).
+- **Toasts**: Use `sonner` — `toast.success()`, `toast.error()` for user feedback.
+- **No hard deletes**: Use `archived: true` flag or `status: 'closed'` instead of deleting requests.
+- **Address building**: Use helper functions in `firestoreHelpers.ts` (`buildAddressString`, `buildMoveDateFields`) for consistent formatting.
+- **ESLint**: Zero warnings policy enforced by husky/lint-staged pre-commit hooks. Use `npm run lint` to check.
+- **Code Formatting**: Prettier with Tailwind plugin. Run `npm run format` before committing.
+=======
 - **Timestamps**: Always `serverTimestamp()` for `createdAt`/`updatedAt`
 - **No hard deletes**: Use `archived: true` or `status: 'closed'`
 - **Tailwind v4**: Config in `globals.css` via `@theme{}`. Use `.card`, `.btn-primary`, `.btn-outline`
@@ -93,6 +108,7 @@ return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
 - **Animations**: `utils/animations.ts` (`fadeUp`, `staggerContainer`)
 - **Toasts**: `sonner` — `toast.success()`, `toast.error()`
 - **Address formatting**: Use `buildAddressString()`, `buildMoveDateFields()` from `firestoreHelpers.ts`
+>>>>>>> 3fcd890a9c37e9f080bbf5444f34b96f02573e85
 
 ## Key Files
 
@@ -107,6 +123,65 @@ return res.status(400).json(apiError("Invalid input", ErrorCodes.BAD_REQUEST));
 | Security rules | `firebase.firestore.rules`, `firebase.storage.rules` |
 | Styling | `globals.css` |
 
+<<<<<<< HEAD
+## Media Upload System
+
+**Token-based uploads**: Customers can upload photos/videos later via secure tokens (7-day expiry).
+
+```tsx
+// Generate token (server-side via API)
+POST /api/generateUploadLink { requestId }
+// Creates uploadTokens/{token} doc with:
+// - requestId, customerId, customerEmail
+// - expiresAt: 7 days from creation
+// - used: false
+
+// Validate token before upload
+GET /api/validateUploadToken?token={token}
+// Checks existence, expiry, and used status
+
+// Upload page
+/upload/[token] — Public page for customers to upload media
+// Calls /api/markUploadTokenUsed after successful uploads
+// Notifies companies via /api/notifyCompaniesOnUpload
+```
+
+**Automatic reminders**: Use `/api/sendUploadReminders` (cron job) to email customers with unused tokens.
+
+## Environment Setup
+
+Copy `.env copy.example` → `.env`. Required vars:
+
+- `NEXT_PUBLIC_FIREBASE_*` — Firebase client config
+- `FIREBASE_ADMIN_*` — Service account for API routes (check `adminReady` before privileged ops)
+- `NEXT_PUBLIC_EMAILJS_*` — Client-side emails via `utils/emailHelpers.ts`
+- `RESEND_API_KEY` — Server-side transactional emails
+
+**Important**: `lib/firebaseAdmin.ts` initializes gracefully with fallback when admin credentials missing. Always check `adminReady` flag before admin operations.
+
+## Deployment & Infrastructure
+
+- **VPS Deployment**: See `VPS_README.md` and `auto-deploy-vps.sh` for server setup
+- **Nginx Config**: Use `nginx-om.conf` for reverse proxy configuration
+- **PM2 Management**: See `ecosystem.config.cjs` for process management
+- **Vercel Alternative**: `vercel.json` for serverless deployment option
+
+## File Locations
+
+| Concern              | Location                                                       |
+| -------------------- | -------------------------------------------------------------- |
+| Firebase client init | `services/firebase.ts`                                         |
+| Firebase Admin       | `lib/firebaseAdmin.ts`                                         |
+| API auth middleware  | `lib/apiAuth.ts` (`verifyAuth`, `withAuth`)                    |
+| Auth helpers         | `utils/firebaseHelpers.ts`                                     |
+| Firestore CRUD       | `utils/firestoreHelpers.ts`                                    |
+| Types                | `types/index.ts`, `types/api.ts`                               |
+| Role guard           | `components/auth/RequireRole.tsx`                              |
+| API routes           | `pages/api/**` (offers/accept, offers/decline, offers/message) |
+| Dashboards           | `pages/customer/dashboard.tsx`, `pages/company/dashboard.tsx`  |
+| Security rules       | `firebase.firestore.rules`, `firebase.storage.rules`           |
+| Styling              | `globals.css` (Tailwind v4 `@theme{}` config)                  |
+=======
 ## Environment
 
 Required in `.env`:
@@ -114,3 +189,4 @@ Required in `.env`:
 - `FIREBASE_ADMIN_*` — Service account (check `adminReady` before admin ops)
 - `NEXT_PUBLIC_EMAILJS_*` — Client emails via `utils/emailHelpers.ts`
 - `RESEND_API_KEY` — Server transactional emails
+>>>>>>> 3fcd890a9c37e9f080bbf5444f34b96f02573e85

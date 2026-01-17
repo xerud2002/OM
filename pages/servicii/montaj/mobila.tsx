@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import FAQSection from "@/components/content/FAQSection";
+import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { SERVICE_FAQS } from "@/data/faqData";
 import {
   Wrench,
   CheckCircle,
@@ -17,6 +20,7 @@ import {
 
 export default function DemontareMontareMobilaPage() {
   const currentYear = new Date().getFullYear();
+  const faqItems = SERVICE_FAQS.montaj;
 
   return (
     <>
@@ -38,6 +42,11 @@ export default function DemontareMontareMobilaPage() {
         <meta property="og:description" content="Servicii profesionale de demontare și montare mobilier în toată România!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
+
+      {/* Schema Markup */}
+      <FAQPageSchema faqs={faqItems} />
+      <LocalBusinessSchema serviceName="Demontare și Montare Mobilă" />
+      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Montaj Mobilă" }]} />
 
       <LayoutWrapper>
         {/* Hero Section */}
@@ -321,6 +330,9 @@ export default function DemontareMontareMobilaPage() {
               </div>
             </div>
           </section>
+
+          {/* FAQ Section */}
+          <FAQSection items={faqItems} title="Întrebări Frecvente - Demontare și Montare Mobilă" />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-cyan-600 to-teal-600 p-8 text-center text-white">

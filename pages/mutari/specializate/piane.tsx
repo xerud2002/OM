@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import FAQSection from "@/components/content/FAQSection";
+import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { SERVICE_FAQS } from "@/data/faqData";
 import {
   Music,
   CheckCircle,
@@ -17,6 +20,7 @@ import {
 
 export default function MutariPianePage() {
   const currentYear = new Date().getFullYear();
+  const faqItems = SERVICE_FAQS.piane;
 
   return (
     <>
@@ -305,6 +309,9 @@ export default function MutariPianePage() {
               </li>
             </ul>
           </section>
+
+          {/* FAQ Section */}
+          <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Piane" />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-slate-800 to-zinc-900 p-8 text-center text-white">

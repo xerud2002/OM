@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import FAQSection from "@/components/content/FAQSection";
+import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { SERVICE_FAQS } from "@/data/faqData";
 import {
   Trash2,
   CheckCircle,
@@ -14,6 +17,7 @@ import {
 
 export default function DebarasarePage() {
   const currentYear = new Date().getFullYear();
+  const faqItems = SERVICE_FAQS.debarasare;
 
   return (
     <>
@@ -35,6 +39,11 @@ export default function DebarasarePage() {
         <meta property="og:description" content="Evacuare mobilă și gunoi. Transport și reciclare!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
+
+      {/* Schema Markup */}
+      <FAQPageSchema faqs={faqItems} />
+      <LocalBusinessSchema serviceName="Debarasare Mobilă și Gunoi" />
+      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Debarasare" }]} />
 
       <LayoutWrapper>
         {/* Hero Section */}
@@ -190,6 +199,9 @@ export default function DebarasarePage() {
               </li>
             </ul>
           </section>
+
+          {/* FAQ Section */}
+          <FAQSection items={faqItems} title="Întrebări Frecvente - Debarasare" />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-green-700 to-emerald-700 p-8 text-center text-white">

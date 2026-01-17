@@ -84,3 +84,30 @@ export function BreadcrumbSchema({ items }: { items: { name: string; url?: strin
     </Head>
   );
 }
+
+export function AggregateRatingSchema({ 
+  ratingValue, 
+  reviewCount, 
+  bestRating = "5" 
+}: { 
+  ratingValue: string; 
+  reviewCount: string; 
+  bestRating?: string;
+}) {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "AggregateRating",
+    ratingValue: ratingValue,
+   reviewCount: reviewCount,
+    bestRating: bestRating,
+  };
+
+  return (
+    <Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+    </Head>
+  );
+}

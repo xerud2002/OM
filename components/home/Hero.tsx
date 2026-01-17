@@ -68,7 +68,7 @@ export default function Hero() {
   }, [user, router]);
 
   return (
-    <section className="relative min-h-screen overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-12 sm:pt-24 sm:pb-16 lg:pt-32 lg:pb-24">
+    <section className="relative min-h-[85vh] overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-16 pb-8 sm:pt-20 sm:pb-12 lg:pt-24 lg:pb-16 flex items-center">
       {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-75 w-75 rounded-full bg-emerald-200/40 blur-[80px] sm:h-100 sm:w-100 lg:h-125 lg:w-125 lg:blur-[100px]" />
@@ -157,7 +157,7 @@ export default function Hero() {
                 { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
                 { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
                 { icon: Star, label: "4.9/5 Rating", color: "text-amber-500" },
-                { icon: TrendingUp, label: "Economie ~40%", color: "text-purple-600" },
+                { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
               ].map((item, i) => (
                 <div
                   key={i}
@@ -179,8 +179,8 @@ export default function Hero() {
               <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
                 <div className="relative aspect-4/3 bg-linear-to-br from-slate-50 to-emerald-50/50">
                   <Image
-                    src="/pics/index.webp"
-                    alt="Platforma Oferte Mutare"
+                    src="/pics/hero-branded-v1.png"
+                    alt="Servicii de Mutare Profesionale - OferteMutare.ro"
                     fill
                     className="object-cover"
                     priority

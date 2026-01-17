@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import FAQSection from "@/components/content/FAQSection";
+import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { SERVICE_FAQS } from "@/data/faqData";
 import {
   Building,
   ArrowRight,
@@ -20,6 +23,7 @@ import {
 
 export default function MutariCompaniiPage() {
   const currentYear = new Date().getFullYear();
+  const faqItems = SERVICE_FAQS.birouri;
 
   return (
     <>
@@ -44,6 +48,18 @@ export default function MutariCompaniiPage() {
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
+
+      {/* Schema Markup */}
+      <FAQPageSchema faqs={faqItems} />
+      <LocalBusinessSchema serviceName="Mutări Birouri și Companii" />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Mutări", url: "/mutari" },
+          { name: "Tipuri", url: "/mutari/tipuri" },
+          { name: "Birouri" },
+        ]}
+      />
 
       <LayoutWrapper>
         {/* Hero Section */}
@@ -332,6 +348,9 @@ export default function MutariCompaniiPage() {
               </div>
             </div>
           </section>
+
+          {/* FAQ Section */}
+          <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Birouri" />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-slate-800 to-slate-900 p-8 text-center text-white">

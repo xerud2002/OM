@@ -24,6 +24,7 @@ import {
   archiveRequest,
   unarchiveRequest,
 } from "@/utils/firestoreHelpers";
+import { trackRequestCreated } from "@/utils/analytics";
 
 // Lazy load heavy components to reduce initial bundle
 const RequestForm = dynamic(() => import("@/components/customer/RequestForm"), {
@@ -405,6 +406,12 @@ export default function CustomerDashboard() {
         customerEmail: user.email,
         createdAt: serverTimestamp(),
       } as any);
+
+      trackRequestCreated(
+        form.fromCity || form.fromCounty || "unknown",
+        form.toCity || form.toCounty || "unknown",
+        Number(aggregatedRooms) || 0
+      );
 
       // If user chose "now" for media upload, upload files immediately
       if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
