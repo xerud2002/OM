@@ -6,7 +6,6 @@ import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react"
 import { useRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
 import dynamic from "next/dynamic";
-import NextImage from "next/image";
 import { trackCTAClick } from "@/utils/analytics";
 
 // Lazy load Firebase helpers to reduce initial bundle
@@ -113,37 +112,19 @@ export default function Navbar() {
         <Link href="/" aria-label="Acasă" className="-ml-2 flex items-center select-none">
           {/* Desktop Logo */}
           <div className="hidden sm:block">
-            <div className="flex items-center gap-2 transition-transform duration-200 hover:scale-105">
-              <Image 
-                src="/pics/logo-truck-icon.png" 
-                alt="Logo Camion" 
-                width={40} 
-                height={40} 
-                className="h-10 w-10 object-contain"
-              />
-              <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
-                <span className="tracking-tight">Oferte</span>
-                <span className="text-emerald-500">mutare</span>
-                <span className="align-top text-xs text-emerald-600">.ro</span>
-              </div>
+            <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-2xl font-bold text-transparent transition-transform duration-200 hover:scale-105 md:text-3xl">
+              <span className="tracking-tight">Oferte</span>
+              <span className="text-emerald-500">mutare</span>
+              <span className="align-top text-xs text-emerald-600">.ro</span>
             </div>
           </div>
 
           {/* Mobile Logo */}
           <div className="block sm:hidden">
-             <div className="flex items-center gap-1.5 transition-transform duration-200">
-              <Image 
-                src="/pics/logo-truck-icon.png" 
-                alt="Logo Camion" 
-                width={32} 
-                height={32} 
-                className="h-8 w-8 object-contain"
-              />
-              <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent">
-                <span className="tracking-tight">Oferte</span>
-                <span className="text-emerald-500">mutare</span>
-                <span className="align-top text-xs text-emerald-600">.ro</span>
-              </div>
+            <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent">
+              <span className="tracking-tight">Oferte</span>
+              <span className="text-emerald-500">mutare</span>
+              <span className="align-top text-xs text-emerald-600">.ro</span>
             </div>
           </div>
         </Link>
