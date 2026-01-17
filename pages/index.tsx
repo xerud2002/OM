@@ -347,12 +347,13 @@ export default function HomePage() {
       </div>
       
       <ClientAccount />
+      <PartnerSection />
       <Services />
       
 
       
       <GuaranteeSection />
-      <PartnerSection />
+
       <Testimonials />
       <Articles />
       <CTASection />
