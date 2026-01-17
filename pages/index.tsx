@@ -3,6 +3,7 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
+import MobileHero from "@/components/home/MobileHero";
 
 // Lazy load ALL below-the-fold components for better LCP
 const Steps = dynamic(() => import("@/components/home/Steps"), {
@@ -342,7 +343,12 @@ export default function HomePage() {
       {/* ==========================
           🔹 Page Sections
       =========================== */}
-      <Hero />
+      <div className="md:hidden">
+        <MobileHero />
+      </div>
+      <div className="hidden md:block">
+        <Hero />
+      </div>
       
       {/* CRO: Urgency & Trust */}
       <div className="mx-auto max-w-7xl px-4 -mt-8 mb-8">

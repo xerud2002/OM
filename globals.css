@@ -39,6 +39,13 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Optimize background scrolling for mobile */
+@media (max-width: 768px) {
+  body {
+    background-attachment: scroll;
+  }
+}
+
 /* 🌿 CARD (folosit în MoveForm și alte componente) */
 .card {
   @apply rounded-3xl border border-emerald-100 bg-white/70 shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100/50;
