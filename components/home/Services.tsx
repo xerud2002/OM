@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Package, Wrench, Truck, Warehouse, Trash2, ArrowRight } from "lucide-react";
 
 export default function Services() {
@@ -145,15 +146,18 @@ export default function Services() {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mx-auto mt-10 max-w-2xl text-center sm:mt-16"
         >
-          <div className="inline-flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:py-3">
+          <Link 
+            href="/customer/auth"
+            className="inline-flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md hover:shadow-emerald-100 sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:py-3"
+          >
             <span className="text-sm text-slate-600 sm:text-base">
               Ai nevoie de un serviciu specific?
             </span>
             <span className="flex items-center gap-1 font-semibold text-emerald-600 sm:gap-2">
               Descrie-l în cererea ta!
-              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 sm:h-4 sm:w-4" />
             </span>
-          </div>
+          </Link>
         </motion.div>
       </div>
     </section>

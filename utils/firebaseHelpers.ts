@@ -12,7 +12,7 @@ import {
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/services/firebase";
-import { GoogleAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
 import type { UserRole, CustomerProfile, CompanyProfile } from "@/types";
 import {
   setUserId,
@@ -141,6 +141,28 @@ export async function loginWithGoogle(role: UserRole) {
       return null; // Return null instead of throwing
     }
     // Re-throw other errors
+    throw error;
+  }
+}
+
+export async function loginWithFacebook(role: UserRole) {
+  try {
+    const provider = new FacebookAuthProvider();
+    const cred = await signInWithPopup(auth, provider);
+    await ensureUserProfile(cred.user, role);
+
+    // Track user in GA4
+    setUserId(cred.user.uid);
+    setUserProperties({ user_role: role });
+    trackLogin("facebook", role);
+
+    return cred.user;
+  } catch (error: any) {
+    // Don't throw popup-blocked/cancelled errors
+    if (error?.code === "auth/popup-blocked" || error?.code === "auth/popup-closed-by-user") {
+      console.warn("Facebook sign-in popup was blocked or cancelled");
+      return null;
+    }
     throw error;
   }
 }

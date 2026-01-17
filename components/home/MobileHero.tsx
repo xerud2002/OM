@@ -23,7 +23,7 @@ export default function MobileHero() {
 
         {/* Headline - No gradient animation, just text */}
         <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900">
-          Compara oferte pentru
+          Compară oferte pentru
           <br />
           <span className="text-emerald-600">mutarea ta</span>
         </h1>
@@ -65,7 +65,7 @@ export default function MobileHero() {
           </div>
           <div className="flex items-center justify-center gap-1 rounded-full bg-white/80 py-1.5 shadow-sm">
              <Star className="h-3.5 w-3.5 text-amber-500" />
-             4.9/5 Rating
+             Recenzii
           </div>
           <div className="flex items-center justify-center gap-1 rounded-full bg-white/80 py-1.5 shadow-sm">
              <TrendingUp className="h-3.5 w-3.5 text-purple-600" />

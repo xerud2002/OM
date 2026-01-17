@@ -14,6 +14,10 @@ const TrustSignals = dynamic(() => import("@/components/cro/TrustSignals"), {
   loading: () => null,
   ssr: false,
 });
+const LogoTicker = dynamic(() => import("@/components/home/LogoTicker"), {
+  loading: () => null,
+  ssr: false,
+});
 const UrgencyBanner = dynamic(() => import("@/components/cro/UrgencyBanner"), {
   loading: () => null,
   ssr: false,
@@ -350,10 +354,7 @@ export default function HomePage() {
         <Hero />
       </div>
       
-      {/* CRO: Urgency & Trust */}
-      <div className="mx-auto max-w-7xl px-4 -mt-8 mb-8">
-        <UrgencyBanner />
-      </div>
+      <LogoTicker />
       
       <Steps />
       
@@ -366,12 +367,16 @@ export default function HomePage() {
       <PartnerSection />
       <Services />
       
-
-      
       <GuaranteeSection />
 
       <Testimonials />
       <Articles />
+      
+      {/* CRO: Urgency & Trust */}
+      <div className="mx-auto max-w-7xl px-4 py-8">
+        <UrgencyBanner />
+      </div>
+
       <CTASection />
     </>
   );

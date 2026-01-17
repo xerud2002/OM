@@ -94,7 +94,7 @@ export default function Hero() {
 
             {/* Headline - Critical LCP element */}
             <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
-              Compara oferte pentru
+              Compară oferte pentru
               <br />
               <span className="relative inline-block">
                 <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
@@ -125,10 +125,8 @@ export default function Hero() {
 
             {/* Subheadline */}
             <p className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-slate-600 sm:mb-10 sm:text-lg lg:mx-0 lg:text-xl">
-              Completezi o singură cerere și primești{" "}
-              <span className="font-semibold text-emerald-600">până la 5 oferte</span> de la firme
-              verificate. Compari, alegi și{" "}
-              <span className="font-semibold text-emerald-600">economisești până la 40%</span>.
+              Găsește firma de mutări perfectă, <span className="font-semibold text-slate-900">fără zeci de telefoane</span>. 
+              Obține oferte personalizate, compară prețurile și <span className="font-semibold text-emerald-600">ia cea mai bună decizie</span> pentru bugetul tău.
             </p>
 
             {/* CTA Buttons */}
@@ -156,7 +154,7 @@ export default function Hero() {
               {[
                 { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
                 { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
-                { icon: Star, label: "4.9/5 Rating", color: "text-amber-500" },
+                { icon: Star, label: "Recenzii", color: "text-amber-500" },
                 { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
               ].map((item, i) => (
                 <div
