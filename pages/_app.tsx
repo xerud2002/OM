@@ -3,6 +3,7 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import { Inter } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
@@ -103,6 +104,9 @@ export default function App({ Component, pageProps }: AppProps) {
 
       {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
       <Toaster richColors position="top-right" closeButton />
+
+      {/* Google Analytics 4 */}
+      <GoogleAnalytics gaId="G-6624X6E5GQ" />
     </ErrorBoundary>
   );
 }

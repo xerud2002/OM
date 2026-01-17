@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Facebook, Instagram, Linkedin, Mail } from "lucide-react";
+import { Facebook, Mail } from "lucide-react";
 
 /* 🔹 Constants */
 const CONTACT_INFO = [
@@ -39,9 +39,7 @@ const LEGAL = [
 ];
 
 const SOCIAL_LINKS = [
-  { icon: Facebook, href: "#", label: "Facebook" },
-  { icon: Instagram, href: "#", label: "Instagram" },
-  { icon: Linkedin, href: "#", label: "LinkedIn" },
+  { icon: Facebook, href: "https://www.facebook.com/profile.php?id=61585990396718", label: "Facebook" },
 ];
 
 export default function Footer() {

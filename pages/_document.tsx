@@ -33,21 +33,7 @@ export default function Document() {
           imageSizes="(max-width: 768px) 100vw, 600px"
         />
 
-        {/* Google Analytics 4 */}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              gtag('config', 'G-XXXXXXXXXX', {
-                page_path: window.location.pathname,
-                anonymize_ip: true
-              });
-            `,
-          }}
-        />
+        {/* Google Analytics - loaded via @next/third-parties in _app.tsx */}
       </Head>
       <body>
         <Main />

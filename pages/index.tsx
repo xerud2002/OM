@@ -91,8 +91,7 @@ export default function HomePage() {
                 availableLanguage: ["Romanian"]
               },
               sameAs: [
-                "https://www.facebook.com/ofertemutare",
-                "https://www.instagram.com/ofertemutare"
+                "https://www.facebook.com/profile.php?id=61585990396718"
               ],
               aggregateRating: {
                 "@type": "AggregateRating",
@@ -116,7 +115,6 @@ export default function HomePage() {
               name: "OferteMutare.ro",
               image: "https://ofertemutare.ro/pics/index.webp",
               url: "https://ofertemutare.ro",
-              telephone: "+40-xxx-xxx-xxx",
               priceRange: "Lei 250-3000",
               address: {
                 "@type": "PostalAddress",
