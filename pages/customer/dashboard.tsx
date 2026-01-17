@@ -94,8 +94,12 @@ export default function CustomerDashboard() {
     return {
       fromCity: "",
       fromCounty: "",
+      fromStreet: "",
+      fromNumber: "",
       toCity: "",
       toCounty: "",
+      toStreet: "",
+      toNumber: "",
       moveDate: "",
       moveDateMode: "exact",
       moveDateStart: "",
@@ -375,8 +379,12 @@ export default function CustomerDashboard() {
       // Address essentials
       if (!form.fromCounty) errors.push("Județ (plecare)");
       if (!form.fromCity) errors.push("Localitate (plecare)");
+      if (!form.fromStreet) errors.push("Strada (plecare)");
+      if (!form.fromNumber) errors.push("Număr (plecare)");
       if (!form.toCounty) errors.push("Județ (destinație)");
       if (!form.toCity) errors.push("Localitate (destinație)");
+      if (!form.toStreet) errors.push("Strada (destinație)");
+      if (!form.toNumber) errors.push("Număr (destinație)");
 
       // Contact
       if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
@@ -537,8 +545,12 @@ export default function CustomerDashboard() {
       const emptyForm = {
         fromCity: "",
         fromCounty: "",
+        fromStreet: "",
+        fromNumber: "",
         toCity: "",
         toCounty: "",
+        toStreet: "",
+        toNumber: "",
         moveDate: "",
         moveDateMode: "exact",
         moveDateStart: "",
@@ -588,8 +600,12 @@ export default function CustomerDashboard() {
     const emptyForm = {
       fromCity: "",
       fromCounty: "",
+      fromStreet: "",
+      fromNumber: "",
       toCity: "",
       toCounty: "",
+      toStreet: "",
+      toNumber: "",
       moveDate: "",
       moveDateMode: "exact",
       moveDateStart: "",
