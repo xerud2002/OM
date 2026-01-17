@@ -3,12 +3,24 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import Hero from "@/components/home/Hero";
-import Steps from "@/components/home/Steps";
-import TrustSignals from "@/components/cro/TrustSignals";
-import UrgencyBanner from "@/components/cro/UrgencyBanner";
-import { AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
 
-// Lazy load below-the-fold components for better LCP
+// Lazy load ALL below-the-fold components for better LCP
+const Steps = dynamic(() => import("@/components/home/Steps"), {
+  loading: () => <div className="min-h-100" />,
+  ssr: true,
+});
+const TrustSignals = dynamic(() => import("@/components/cro/TrustSignals"), {
+  loading: () => null,
+  ssr: false,
+});
+const UrgencyBanner = dynamic(() => import("@/components/cro/UrgencyBanner"), {
+  loading: () => null,
+  ssr: false,
+});
+const AggregateRatingSchema = dynamic(
+  () => import("@/components/seo/SchemaMarkup").then((mod) => ({ default: mod.AggregateRatingSchema })),
+  { ssr: true }
+);
 const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
   loading: () => <div className="min-h-100" />,
 });
