@@ -49,7 +49,7 @@ const nextConfig = {
 
   // Experimental optimizations
   experimental: {
-    optimizePackageImports: ["lucide-react", "sonner", "framer-motion", "date-fns"],
+    optimizePackageImports: ["lucide-react", "sonner", "framer-motion", "date-fns", "firebase", "firebase/auth", "firebase/firestore", "firebase/storage"],
   },
 
   // 301 Redirects for URL restructuring (preserve SEO)
