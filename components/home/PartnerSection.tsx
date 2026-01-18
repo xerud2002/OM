@@ -6,6 +6,9 @@ import { motion } from "framer-motion";
 import { ArrowRight, CheckCircle, Building2, TrendingUp, Users } from "lucide-react";
 
 export default function PartnerSection() {
+  // Small blur placeholder to avoid layout shift on image reveal
+  const blurDataURL =
+    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAHAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIDBAAFBhESITFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEuO";
   const benefits = [
     { icon: Users, text: "Cereri de mutare verificate zilnic" },
     { icon: TrendingUp, text: "Comunicare directă, fără comisioane" },
@@ -17,10 +20,10 @@ export default function PartnerSection() {
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/4 rounded-full bg-emerald-100/40 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
-        <div className="absolute right-0 top-0 hidden h-[400px] w-[400px] translate-x-1/4 -translate-y-1/4 rounded-full bg-sky-100/40 blur-[100px] sm:block" />
+        <div className="absolute top-0 right-0 hidden h-[400px] w-[400px] translate-x-1/4 -translate-y-1/4 rounded-full bg-sky-100/40 blur-[100px] sm:block" />
       </div>
 
-      <div className="container relative z-10 mx-auto px-4">
+      <div className="relative z-10 container mx-auto px-4">
         <div className="mx-auto max-w-6xl">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -48,15 +51,20 @@ export default function PartnerSection() {
                       width={450}
                       height={350}
                       className="relative rounded-xl object-cover shadow-2xl sm:rounded-2xl"
+                      sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 450px"
+                      decoding="async"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL={blurDataURL}
                     />
-                    
+
                     {/* Floating stats card */}
                     <motion.div
                       initial={{ scale: 0, opacity: 0 }}
                       whileInView={{ scale: 1, opacity: 1 }}
                       viewport={{ once: true }}
                       transition={{ delay: 0.8, type: "spring", stiffness: 200 }}
-                      className="absolute -bottom-3 -right-3 rounded-xl border border-emerald-100 bg-white p-2.5 shadow-xl sm:-bottom-4 sm:-right-4 sm:rounded-2xl sm:p-4"
+                      className="absolute -right-3 -bottom-3 rounded-xl border border-emerald-100 bg-white p-2.5 shadow-xl sm:-right-4 sm:-bottom-4 sm:rounded-2xl sm:p-4"
                     >
                       <div className="flex items-center gap-2 sm:gap-3">
                         <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-linear-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-12 sm:w-12 sm:rounded-xl">
@@ -82,7 +90,9 @@ export default function PartnerSection() {
                 >
                   <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-1.5 sm:mb-6 sm:px-4 sm:py-2">
                     <Building2 className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
-                    <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Pentru Companii</span>
+                    <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+                      Pentru Companii
+                    </span>
                   </div>
 
                   <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-3xl lg:text-4xl">
@@ -94,8 +104,9 @@ export default function PartnerSection() {
                   </h2>
 
                   <p className="mb-6 text-base leading-relaxed text-slate-600 sm:mb-8 sm:text-lg">
-                    Ai o firmă de mutări și vrei mai mulți clienți fără costuri mari de publicitate? 
-                    Primești cereri reale de la clienți interesați din orașul tău și din întreaga țară.
+                    Ai o firmă de mutări și vrei mai mulți clienți fără costuri mari de publicitate?
+                    Primești cereri reale de la clienți interesați din orașul tău și din întreaga
+                    țară.
                   </p>
 
                   {/* Benefits */}
@@ -112,16 +123,15 @@ export default function PartnerSection() {
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 sm:h-10 sm:w-10 sm:rounded-xl">
                           <CheckCircle className="h-4 w-4 text-emerald-600 sm:h-5 sm:w-5" />
                         </div>
-                        <span className="text-sm font-medium text-slate-700 sm:text-base">{benefit.text}</span>
+                        <span className="text-sm font-medium text-slate-700 sm:text-base">
+                          {benefit.text}
+                        </span>
                       </motion.div>
                     ))}
                   </div>
 
                   {/* CTA */}
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
+                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Link
                       href="/company/auth"
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:px-8 sm:py-4 sm:text-base"

@@ -114,6 +114,7 @@ export default function Services() {
                     sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 20vw"
                     className="object-contain p-2 transition-transform duration-500 group-hover:scale-110 sm:p-4"
                     loading="lazy"
+                    decoding="async"
                   />
                 </div>
 
@@ -128,6 +129,8 @@ export default function Services() {
                       width={56}
                       height={56}
                       className="object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
                 </div>
@@ -157,7 +160,7 @@ export default function Services() {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mx-auto mt-10 max-w-2xl text-center sm:mt-16"
         >
-          <Link 
+          <Link
             href="/customer/auth"
             className="inline-flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md hover:shadow-emerald-100 sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:py-3"
           >

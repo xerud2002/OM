@@ -158,17 +158,23 @@ export default function ClientAccount() {
                   <motion.div
                     whileHover={{ rotate: -2, scale: 1.02 }}
                     transition={{ type: "spring", stiffness: 200 }}
-                    className="relative"
+                    className="group/image relative"
                   >
-                    <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
+                    <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-emerald-500/20 to-sky-500/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover/image:opacity-100" />
                     <Image
                       src="/pics/client-dashboard.png"
                       alt="Dashboard client ofertemutare.ro"
                       width={400}
                       height={400}
-                      className="relative rounded-2xl object-cover shadow-2xl"
-                      priority
+                      className="relative rounded-2xl object-cover shadow-2xl transition-transform duration-500 ease-in-out group-hover/image:scale-[1.01]"
+                      sizes="(max-width: 1024px) 70vw, 400px"
+                      decoding="async"
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAHAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIDBAAFBhESITFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEuO"
                     />
+                    {/* Tint and ring for consistency */}
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-emerald-50/25 via-white/10 to-sky-50/25 mix-blend-multiply" />
 
                     {/* Floating notification card */}
                     <motion.div

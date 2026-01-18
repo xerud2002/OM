@@ -1,10 +1,23 @@
 "use client";
 
-import { FileText, Users, CheckCircle2, Zap, Clock, Shield, Coins, ArrowRight, Rocket } from "lucide-react";
+import {
+  FileText,
+  Users,
+  CheckCircle2,
+  Zap,
+  Clock,
+  Shield,
+  Coins,
+  ArrowRight,
+  Rocket,
+} from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 
 export default function Steps() {
+  // Tiny blur placeholder to avoid CLS on illustrations
+  const blurDataURL =
+    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAHAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIDBAAFBhESITFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEuO";
   const steps = [
     {
       id: "01",
@@ -15,7 +28,7 @@ export default function Steps() {
       bullets: [
         "De unde și unde te muți",
         "Ce obiecte ai de transportat",
-        "Data dorită pentru mutare"
+        "Data dorită pentru mutare",
       ],
       time: "~2 min",
       gradient: "from-blue-500 to-indigo-600",
@@ -31,7 +44,7 @@ export default function Steps() {
       bullets: [
         "Până la 5 oferte competitive",
         "Prețuri transparente detaliate",
-        "Recenzii și rating-uri reale"
+        "Recenzii și rating-uri reale",
       ],
       time: "24h",
       gradient: "from-emerald-500 to-teal-600",
@@ -47,7 +60,7 @@ export default function Steps() {
       bullets: [
         "Fără obligații sau costuri ascunse",
         "Contactezi direct firma aleasă",
-        "Suport gratuit pe tot parcursul"
+        "Suport gratuit pe tot parcursul",
       ],
       time: "Tu decizi",
       gradient: "from-purple-500 to-pink-600",
@@ -67,19 +80,20 @@ export default function Steps() {
         <header className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 shadow-sm sm:mb-4 sm:px-4 sm:py-2">
             <Zap className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
-            <span className="text-xs font-bold text-emerald-700 sm:text-sm">
-              Simplu & Rapid
-            </span>
+            <span className="text-xs font-bold text-emerald-700 sm:text-sm">Simplu & Rapid</span>
           </div>
-          <h2 id="steps-heading" className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
+          <h2
+            id="steps-heading"
+            className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl"
+          >
             Cum{" "}
             <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               funcționează?
             </span>
           </h2>
           <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
-            Găsește cea mai bună firmă de mutări în <strong>3 pași simpli</strong>. 
-            Fără zeci de telefoane, fără negocieri interminabile — noi facem munca grea pentru tine.
+            Găsește cea mai bună firmă de mutări în <strong>3 pași simpli</strong>. Fără zeci de
+            telefoane, fără negocieri interminabile — noi facem munca grea pentru tine.
           </p>
         </header>
 
@@ -89,7 +103,7 @@ export default function Steps() {
             {steps.map((step, i) => (
               <li
                 key={i}
-                className="group relative flex flex-col rounded-3xl bg-white p-6 shadow-xl shadow-slate-200/40 ring-1 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-900/10 sm:p-8"
+                className="group relative flex flex-col rounded-3xl bg-white p-6 shadow-xl ring-1 shadow-slate-200/40 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-900/10 sm:p-8"
               >
                 {/* Step Number Badge */}
                 <div className="absolute -top-3 left-6 flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-xs font-bold text-white shadow-lg">
@@ -103,19 +117,27 @@ export default function Steps() {
                 </div>
 
                 {/* Step Illustration */}
-                <div className="relative mb-5 mt-4 h-28 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 sm:h-36">
+                <div className="group/image relative mt-4 mb-5 h-28 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 sm:h-36">
+                  {/* Base Image */}
                   <Image
                     src={step.image}
                     alt={step.title}
                     fill
-                    sizes="(max-width: 768px) 100vw, 300px"
-                    className="object-contain p-2"
+                    sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 320px"
+                    className="object-contain p-2 transition-transform duration-500 ease-in-out group-hover/image:scale-105"
+                    loading="lazy"
+                    decoding="async"
+                    placeholder="blur"
+                    blurDataURL={blurDataURL}
                   />
+                  {/* Soft tint + ring for consistent card style */}
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-emerald-50/20 via-white/10 to-sky-50/20 mix-blend-multiply" />
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
+                  {/* Glow effect on hover */}
+                  <div className="absolute -inset-2 z-0 rounded-3xl bg-gradient-to-br from-emerald-200/50 via-sky-200/50 to-purple-200/50 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
 
-                <h3 className="mb-3 text-xl font-bold text-slate-900 sm:text-2xl">
-                  {step.title}
-                </h3>
+                <h3 className="mb-3 text-xl font-bold text-slate-900 sm:text-2xl">{step.title}</h3>
                 <p className="mb-4 text-sm leading-relaxed text-slate-600 sm:text-base">
                   {step.desc}
                 </p>
@@ -124,7 +146,7 @@ export default function Steps() {
                 <ul className="mb-4 space-y-2 text-sm text-slate-600">
                   {step.bullets.map((bullet, j) => (
                     <li key={j} className="flex items-start gap-2">
-                      <CheckCircle2 className={`h-4 w-4 mt-0.5 shrink-0 ${step.iconColor}`} />
+                      <CheckCircle2 className={`mt-0.5 h-4 w-4 shrink-0 ${step.iconColor}`} />
                       <span>{bullet}</span>
                     </li>
                   ))}
@@ -132,7 +154,7 @@ export default function Steps() {
 
                 {/* Arrow connector on desktop */}
                 {i < steps.length - 1 && (
-                  <div className="absolute -right-5 top-1/2 z-10 hidden -translate-y-1/2 md:block lg:-right-7">
+                  <div className="absolute top-1/2 -right-5 z-10 hidden -translate-y-1/2 md:block lg:-right-7">
                     <ArrowRight className="h-6 w-6 text-slate-300 lg:h-8 lg:w-8" />
                   </div>
                 )}
@@ -149,65 +171,66 @@ export default function Steps() {
                 <Shield className="h-5 w-5 text-emerald-600" />
               </div>
               <p className="text-xs font-semibold text-slate-900 sm:text-sm">100% Gratuit</p>
-              <p className="text-xs text-slate-500 hidden sm:block">Fără taxe ascunse</p>
+              <p className="hidden text-xs text-slate-500 sm:block">Fără taxe ascunse</p>
             </div>
             <div className="flex flex-col items-center text-center">
               <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
                 <Clock className="h-5 w-5 text-blue-600" />
               </div>
               <p className="text-xs font-semibold text-slate-900 sm:text-sm">Sub 2 minute</p>
-              <p className="text-xs text-slate-500 hidden sm:block">Completare rapidă</p>
+              <p className="hidden text-xs text-slate-500 sm:block">Completare rapidă</p>
             </div>
             <div className="flex flex-col items-center text-center">
               <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
                 <Coins className="h-5 w-5 text-purple-600" />
               </div>
               <p className="text-xs font-semibold text-slate-900 sm:text-sm">Economisești</p>
-              <p className="text-xs text-slate-500 hidden sm:block">Compari prețuri</p>
+              <p className="hidden text-xs text-slate-500 sm:block">Compari prețuri</p>
             </div>
           </div>
         </div>
 
         {/* Bottom CTA */}
         <div className="mx-auto mt-10 max-w-3xl text-center sm:mt-14">
-           <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-6 py-8 text-white shadow-2xl shadow-emerald-500/25 sm:px-12 sm:py-10">
-             {/* Animated background pattern */}
-             <div className="absolute inset-0 opacity-10">
-               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnY0em0wLTZ2LTRoLTJ2NGgyek0yNiAzNGgtMnYtNGgydjR6bTAtNnYtNGgtMnY0aDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')]" />
-             </div>
-             
-             <div className="relative z-10 flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
-               <div className="flex items-center gap-4">
-                 <div className="relative">
-                   <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm ring-2 ring-white/30">
-                     <Rocket className="h-7 w-7 text-white" />
-                   </div>
-                   <span className="absolute -top-1 -right-1 flex h-4 w-4">
-                     <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
-                     <span className="relative inline-flex h-4 w-4 rounded-full bg-yellow-400"></span>
-                   </span>
-                 </div>
-                 <div className="text-left">
-                    <p className="text-xl font-bold sm:text-2xl">Gata să începi?</p>
-                    <p className="text-emerald-100 text-sm sm:text-base">Primești oferte gratuite în mai puțin de 2 minute</p>
-                 </div>
-               </div>
-               <Link 
+          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-6 py-8 text-white shadow-2xl shadow-emerald-500/25 sm:px-12 sm:py-10">
+            {/* Animated background pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnY0em0wLTZ2LTRoLTJ2NGgyek0yNiAzNGgtMnYtNGgydjR6bTAtNnYtNGgtMnY0aDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')]" />
+            </div>
+
+            <div className="relative z-10 flex flex-col items-center gap-5 sm:flex-row sm:justify-between">
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 ring-2 ring-white/30 backdrop-blur-sm">
+                    <Rocket className="h-7 w-7 text-white" />
+                  </div>
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-yellow-400 opacity-75"></span>
+                    <span className="relative inline-flex h-4 w-4 rounded-full bg-yellow-400"></span>
+                  </span>
+                </div>
+                <div className="text-left">
+                  <p className="text-xl font-bold sm:text-2xl">Gata să începi?</p>
+                  <p className="text-sm text-emerald-100 sm:text-base">
+                    Primești oferte gratuite în mai puțin de 2 minute
+                  </p>
+                </div>
+              </div>
+              <Link
                 href="/customer/auth"
                 className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-emerald-700 shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95 sm:w-auto"
-               >
-                 Obține oferte acum
-                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
-               </Link>
-             </div>
-             
-             {/* Decorative elements */}
-             <div className="absolute top-0 right-0 -mr-20 -mt-20 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
-             <div className="absolute bottom-0 left-0 -ml-20 -mb-20 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl" />
-           </div>
+              >
+                Obține oferte acum
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              </Link>
+            </div>
+
+            {/* Decorative elements */}
+            <div className="absolute top-0 right-0 -mt-20 -mr-20 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
+            <div className="absolute bottom-0 left-0 -mb-20 -ml-20 h-48 w-48 rounded-full bg-cyan-400/20 blur-3xl" />
+          </div>
         </div>
       </div>
     </section>
   );
 }
-

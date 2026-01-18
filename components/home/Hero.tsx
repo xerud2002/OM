@@ -68,7 +68,7 @@ export default function Hero() {
   }, [user, router]);
 
   return (
-    <section className="relative min-h-[85vh] overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-16 pb-8 sm:pt-20 sm:pb-12 lg:pt-24 lg:pb-16 flex items-center">
+    <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-16 pb-8 sm:pt-20 sm:pb-12 lg:pt-24 lg:pb-16">
       {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-75 w-75 rounded-full bg-emerald-200/40 blur-[80px] sm:h-100 sm:w-100 lg:h-125 lg:w-125 lg:blur-[100px]" />
@@ -125,8 +125,11 @@ export default function Hero() {
 
             {/* Subheadline */}
             <p className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-slate-600 sm:mb-10 sm:text-lg lg:mx-0 lg:text-xl">
-              Găsește firma de mutări perfectă, <span className="font-semibold text-slate-900">fără zeci de telefoane</span>. 
-              Obține oferte personalizate, compară prețurile și <span className="font-semibold text-emerald-600">ia cea mai bună decizie</span> pentru bugetul tău.
+              Găsește firma de mutări perfectă,{" "}
+              <span className="font-semibold text-slate-900">fără zeci de telefoane</span>. Obține
+              oferte personalizate, compară prețurile și{" "}
+              <span className="font-semibold text-emerald-600">ia cea mai bună decizie</span> pentru
+              bugetul tău.
             </p>
 
             {/* CTA Buttons */}
@@ -174,13 +177,13 @@ export default function Hero() {
           <div className="relative w-full flex-1 lg:w-auto">
             <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
               {/* Main Card with Hero Image - LCP element */}
-              <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
-                <div className="relative aspect-4/3 bg-linear-to-br from-slate-50 to-emerald-50/50">
+              <div className="group relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
+                <div className="relative aspect-4/3 bg-linear-to-br from-slate-50 to-emerald-50/50 transition-transform duration-500 group-hover:scale-[1.02]">
                   <Image
                     src="/pics/hero-branded-v1.webp"
                     alt="Servicii de Mutare Profesionale - OferteMutare.ro"
                     fill
-                    className="object-cover"
+                    className="object-cover brightness-[1.05] contrast-[.98] saturate-[.88]"
                     priority
                     sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
                     quality={75}
@@ -188,6 +191,13 @@ export default function Hero() {
                     placeholder="blur"
                     blurDataURL={blurDataURL}
                   />
+                  {/* Subtle gradient tint to match page style */}
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-emerald-50/30 via-white/15 to-sky-50/30 mix-blend-multiply sm:rounded-3xl" />
+                  {/* Soft inner ring for consistent card look */}
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5 sm:rounded-3xl" />
+                  {/* Corner glow accents */}
+                  <div className="pointer-events-none absolute -top-6 -left-6 h-24 w-24 rounded-full bg-emerald-100/40 blur-[40px] sm:h-32 sm:w-32" />
+                  <div className="pointer-events-none absolute -right-6 -bottom-6 hidden h-24 w-24 rounded-full bg-sky-100/40 blur-[40px] sm:block sm:h-32 sm:w-32" />
                 </div>
               </div>
 
