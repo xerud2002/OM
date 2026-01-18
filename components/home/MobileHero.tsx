@@ -86,7 +86,7 @@ export default function MobileHero() {
               fill
               className="object-cover"
               priority={true}
-              sizes="(max-width: 640px) 100vw, 320px"
+              sizes="(max-width: 420px) 90vw, (max-width: 640px) 80vw, 320px"
               quality={75}
               fetchPriority="high"
               decoding="async"
