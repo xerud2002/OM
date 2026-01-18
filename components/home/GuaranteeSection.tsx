@@ -2,11 +2,13 @@
 
 import { motion } from "framer-motion";
 import { Shield, Lock, ThumbsUp, Clock, Award, HeartHandshake } from "lucide-react";
+import Image from "next/image";
 
 export default function GuaranteeSection() {
   const guarantees = [
     {
       icon: Shield,
+      iconImg: "/pics/icon-free.png",
       title: "100% Gratuit",
       desc: "Platforma este complet gratuită. Nu plătești nimic pentru a primi oferte.",
       gradient: "from-emerald-500 to-teal-600",
@@ -14,6 +16,7 @@ export default function GuaranteeSection() {
     },
     {
       icon: Lock,
+      iconImg: "/pics/icon-secure-data.png",
       title: "Date Protejate",
       desc: "Informațiile tale sunt criptate și nu sunt distribuite terților.",
       gradient: "from-blue-500 to-indigo-600",
@@ -21,6 +24,7 @@ export default function GuaranteeSection() {
     },
     {
       icon: ThumbsUp,
+      iconImg: "/pics/icon-no-obligations.png",
       title: "Fără Obligații",
       desc: "Primești oferte fără nicio obligație de a accepta. Tu decizi!",
       gradient: "from-purple-500 to-pink-600",
@@ -28,6 +32,7 @@ export default function GuaranteeSection() {
     },
     {
       icon: Clock,
+      iconImg: "/pics/icon-fast-response.png",
       title: "Răspuns în 24h",
       desc: "Primești oferte de la firme verificate în maximum 24 de ore.",
       gradient: "from-orange-500 to-red-500",
@@ -84,11 +89,17 @@ export default function GuaranteeSection() {
               >
                 {/* Icon */}
                 <motion.div
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                  className={`mb-3 flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br ${g.gradient} shadow-lg sm:mb-6 sm:h-16 sm:w-16 sm:rounded-2xl`}
+                  whileHover={{ rotate: 5, scale: 1.1 }}
+                  transition={{ duration: 0.3 }}
+                  className={`mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20`}
                 >
-                  <g.icon className="h-6 w-6 text-white sm:h-8 sm:w-8" strokeWidth={1.5} />
+                  <Image
+                    src={g.iconImg}
+                    alt={g.title}
+                    width={80}
+                    height={80}
+                    className="object-cover"
+                  />
                 </motion.div>
 
                 {/* Content */}

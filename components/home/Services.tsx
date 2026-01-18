@@ -8,7 +8,8 @@ import { Package, Wrench, Truck, Warehouse, Trash2, ArrowRight } from "lucide-re
 export default function Services() {
   const services = [
     {
-      img: "/pics/packing1.webp",
+      img: "/pics/service-packing.png",
+      iconImg: "/pics/icon-packing.png",
       icon: Package,
       title: "Împachetare profesională",
       desc: "Obiectele fragile și mobilierul sunt împachetate cu materiale de protecție de calitate.",
@@ -16,7 +17,8 @@ export default function Services() {
       bgColor: "bg-blue-50",
     },
     {
-      img: "/pics/dism.webp",
+      img: "/pics/service-furniture.png",
+      iconImg: "/pics/icon-furniture.png",
       icon: Wrench,
       title: "Demontare mobilier",
       desc: "Dezasamblare și reasamblare a mobilierului mare, rapid și fără daune.",
@@ -24,7 +26,8 @@ export default function Services() {
       bgColor: "bg-emerald-50",
     },
     {
-      img: "/pics/loading4.webp",
+      img: "/pics/service-transport.png",
+      iconImg: "/pics/icon-transport.png",
       icon: Truck,
       title: "Transport sigur",
       desc: "De la garsoniere la case întregi, transport cu autoutilitare curate și echipate.",
@@ -32,7 +35,8 @@ export default function Services() {
       bgColor: "bg-purple-50",
     },
     {
-      img: "/pics/storage.webp",
+      img: "/pics/service-storage.png",
+      iconImg: "/pics/icon-storage.png",
       icon: Warehouse,
       title: "Depozitare temporară",
       desc: "Spații sigure, ventilate și monitorizate 24/7 pentru obiectele tale.",
@@ -40,7 +44,8 @@ export default function Services() {
       bgColor: "bg-orange-50",
     },
     {
-      img: "/pics/disposal.webp",
+      img: "/pics/service-disposal.png",
+      iconImg: "/pics/icon-disposal.png",
       icon: Trash2,
       title: "Debarasare",
       desc: "Colectare și eliminare ecologică a mobilierului vechi sau obiectelor inutile.",
@@ -113,11 +118,17 @@ export default function Services() {
                 </div>
 
                 {/* Icon badge - positioned outside image container */}
-                <div className="relative z-10 -mt-4 flex justify-center sm:-mt-6">
+                <div className="relative z-10 -mt-5 flex justify-center sm:-mt-8">
                   <div
-                    className={`flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br ${service.color} shadow-lg sm:h-12 sm:w-12 sm:rounded-xl`}
+                    className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg ring-4 ring-white sm:h-14 sm:w-14 sm:rounded-2xl`}
                   >
-                    <service.icon className="h-4 w-4 text-white sm:h-6 sm:w-6" strokeWidth={1.5} />
+                    <Image
+                      src={service.iconImg}
+                      alt={service.title}
+                      width={56}
+                      height={56}
+                      className="object-cover"
+                    />
                   </div>
                 </div>
 

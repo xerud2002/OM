@@ -2,12 +2,14 @@
 
 import { FileText, Users, CheckCircle2, Zap, Clock, Shield, Coins, ArrowRight, Rocket } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Steps() {
   const steps = [
     {
       id: "01",
       icon: FileText,
+      image: "/pics/step1-form.png",
       title: "Completezi cererea online",
       desc: "Formularul nostru simplu îți ia mai puțin de 2 minute. Ne spui detaliile mutării tale:",
       bullets: [
@@ -23,6 +25,7 @@ export default function Steps() {
     {
       id: "02",
       icon: Users,
+      image: "/pics/step2-offers.png",
       title: "Primești oferte personalizate",
       desc: "Firmele de mutări verificate din rețeaua noastră îți trimit oferte în maxim 24 de ore:",
       bullets: [
@@ -38,6 +41,7 @@ export default function Steps() {
     {
       id: "03",
       icon: CheckCircle2,
+      image: "/pics/step3-choose.png",
       title: "Alegi și te muți relaxat",
       desc: "Compari ofertele primite și alegi firma care ți se potrivește cel mai bine:",
       bullets: [
@@ -98,11 +102,15 @@ export default function Steps() {
                   {step.time}
                 </div>
 
-                {/* Icon Circle */}
-                <div
-                  className={`mb-5 mt-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br ${step.gradient} text-white shadow-lg transition-transform duration-500 group-hover:scale-110 sm:h-18 sm:w-18`}
-                >
-                  <step.icon className="h-8 w-8" strokeWidth={1.5} />
+                {/* Step Illustration */}
+                <div className="relative mb-5 mt-4 h-28 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 sm:h-36">
+                  <Image
+                    src={step.image}
+                    alt={step.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    className="object-contain p-2"
+                  />
                 </div>
 
                 <h3 className="mb-3 text-xl font-bold text-slate-900 sm:text-2xl">

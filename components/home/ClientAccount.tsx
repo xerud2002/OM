@@ -162,7 +162,7 @@ export default function ClientAccount() {
                   >
                     <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
                     <Image
-                      src="/pics/oferta.webp"
+                      src="/pics/client-dashboard.png"
                       alt="Dashboard client ofertemutare.ro"
                       width={400}
                       height={400}
