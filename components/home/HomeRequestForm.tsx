@@ -34,52 +34,52 @@ export default function HomeRequestForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [form, setForm] = useState<FormShape>(() => {
-    // Try to restore from localStorage
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          // ignore
-        }
+  // Initialize with default values to avoid hydration mismatch
+  const [form, setForm] = useState<FormShape>({
+    fromCounty: "",
+    fromCity: "",
+    fromStreet: "",
+    fromNumber: "",
+    fromType: "flat",
+    fromRooms: "",
+    fromFloor: "",
+    fromElevator: false,
+    toCounty: "",
+    toCity: "",
+    toStreet: "",
+    toNumber: "",
+    toType: "flat",
+    toRooms: "",
+    toFloor: "",
+    toElevator: false,
+    moveDateMode: "exact",
+    moveDate: "",
+    moveDateStart: "",
+    moveDateEnd: "",
+    contactFirstName: "",
+    contactLastName: "",
+    phone: "",
+    serviceMoving: true,
+    servicePacking: false,
+    serviceDisassembly: false,
+    serviceStorage: false,
+    surveyType: "quick-estimate",
+    mediaUpload: "later",
+    acceptedTerms: false,
+    details: "",
+  });
+
+  // Restore form from localStorage after mount (client-side only)
+  useEffect(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) {
+      try {
+        setForm(JSON.parse(saved));
+      } catch {
+        // ignore invalid JSON
       }
     }
-    return {
-      fromCounty: "",
-      fromCity: "",
-      fromStreet: "",
-      fromNumber: "",
-      fromType: "flat",
-      fromRooms: "",
-      fromFloor: "",
-      fromElevator: false,
-      toCounty: "",
-      toCity: "",
-      toStreet: "",
-      toNumber: "",
-      toType: "flat",
-      toRooms: "",
-      toFloor: "",
-      toElevator: false,
-      moveDateMode: "exact",
-      moveDate: "",
-      moveDateStart: "",
-      moveDateEnd: "",
-      contactFirstName: "",
-      contactLastName: "",
-      phone: "",
-      serviceMoving: true,
-      servicePacking: false,
-      serviceDisassembly: false,
-      serviceStorage: false,
-      surveyType: "quick-estimate",
-      mediaUpload: "later",
-      acceptedTerms: false,
-      details: "",
-    };
-  });
+  }, []);
 
   // Save form to localStorage on change
   useEffect(() => {
