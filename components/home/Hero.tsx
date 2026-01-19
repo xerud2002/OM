@@ -1,74 +1,26 @@
 "use client";
 
-import { ArrowRight, CheckCircle, Star, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
-import { useRouter } from "next/router";
-import { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
+import { CheckCircle, Star, ShieldCheck, TrendingUp } from "lucide-react";
+import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 
-// Tiny blur placeholder (10x7 px encoded as base64) - prevents CLS
-const blurDataURL =
-  "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAHAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIDBAAFBhESITFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEuO";
+// Lazy load the form for better LCP
+const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
+  loading: () => (
+    <div className="mx-auto h-[420px] w-full max-w-md animate-pulse rounded-2xl border border-gray-200 bg-white/50" />
+  ),
+});
 
 export default function Hero() {
-  const router = useRouter();
-  const [user, setUser] = useState<{ uid: string } | null>(null);
   const [animationsReady, setAnimationsReady] = useState(false);
-  const [, setAuthChecked] = useState(false);
 
-  // Defer Firebase loading until after LCP - use requestIdleCallback
   useEffect(() => {
     const timer = setTimeout(() => setAnimationsReady(true), 100);
-    let unsub: (() => void) | undefined;
-    let mounted = true;
-
-    const loadAuth = async () => {
-      if (!mounted) return;
-      try {
-        // Dynamically import Firebase auth only when needed
-        const { auth } = await import("@/services/firebase");
-        const { onAuthStateChanged } = await import("firebase/auth");
-        unsub = onAuthStateChanged(auth, (u) => {
-          if (!mounted) return;
-          setUser(u ? { uid: u.uid } : null);
-          setAuthChecked(true);
-        });
-      } catch {
-        setAuthChecked(true);
-      }
-    };
-
-    // Use requestIdleCallback to load Firebase after browser is idle
-    if ("requestIdleCallback" in window) {
-      const idleId = requestIdleCallback(() => loadAuth(), { timeout: 4000 });
-      return () => {
-        mounted = false;
-        clearTimeout(timer);
-        cancelIdleCallback(idleId);
-        unsub?.();
-      };
-    } else {
-      // Fallback: load after 3s to allow LCP to complete first
-      const authTimer = setTimeout(loadAuth, 3000);
-      return () => {
-        mounted = false;
-        clearTimeout(timer);
-        clearTimeout(authTimer);
-        unsub?.();
-      };
-    }
+    return () => clearTimeout(timer);
   }, []);
 
-  const handleCTA = useCallback(() => {
-    if (user) {
-      router.push("/customer/dashboard");
-    } else {
-      localStorage.setItem("redirectAfterLogin", "form");
-      router.push("/customer/auth");
-    }
-  }, [user, router]);
-
   return (
-    <section className="relative flex min-h-[85vh] items-center overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-16 pb-8 sm:pt-20 sm:pb-12 lg:pt-24 lg:pb-16">
+    <section className="relative flex min-h-[70vh] items-center overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-12 pb-6 sm:pt-16 sm:pb-10 lg:pt-20 lg:pb-12">
       {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-75 w-75 rounded-full bg-emerald-200/40 blur-[80px] sm:h-100 sm:w-100 lg:h-125 lg:w-125 lg:blur-[100px]" />
@@ -76,10 +28,10 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 container mx-auto">
-        <div className="flex flex-col items-center gap-10 sm:gap-12 lg:flex-row lg:gap-20">
+        <div className="flex flex-col items-center gap-8 sm:gap-10 lg:flex-row lg:items-start lg:justify-center lg:gap-16">
           {/* Text Content - renders immediately without animation delay */}
           <div
-            className={`flex-1 text-center transition-all duration-500 lg:text-left ${animationsReady ? "translate-y-0 opacity-100" : "opacity-100"}`}
+            className={`max-w-xl flex-1 text-center transition-all duration-500 lg:text-left ${animationsReady ? "translate-y-0 opacity-100" : "opacity-100"}`}
           >
             {/* Badge */}
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5">
@@ -93,7 +45,7 @@ export default function Hero() {
             </div>
 
             {/* Headline - Critical LCP element */}
-            <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">
+            <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl">
               Compară oferte pentru
               <br />
               <span className="relative inline-block">
@@ -124,7 +76,7 @@ export default function Hero() {
             </h1>
 
             {/* Subheadline */}
-            <p className="mx-auto mb-8 max-w-xl text-base leading-relaxed text-slate-600 sm:mb-10 sm:text-lg lg:mx-0 lg:text-xl">
+            <p className="mx-auto mb-6 max-w-xl text-base leading-relaxed text-slate-600 sm:mb-8 sm:text-lg lg:mx-0 lg:text-xl">
               Găsește firma de mutări perfectă,{" "}
               <span className="font-semibold text-slate-900">fără zeci de telefoane</span>. Obține
               oferte personalizate, compară prețurile și{" "}
@@ -132,33 +84,13 @@ export default function Hero() {
               bugetul tău.
             </p>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4 lg:justify-start">
-              <button
-                onClick={handleCTA}
-                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3.5 text-base font-bold text-white shadow-xl shadow-emerald-500/25 transition-all hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-2xl hover:shadow-emerald-500/30 active:scale-[0.98] sm:w-auto sm:gap-3 sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
-              >
-                <Sparkles className="h-4 w-4 sm:h-5 sm:w-5" />
-                Obține oferte gratuite
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5" />
-              </button>
-              <button
-                onClick={() =>
-                  document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
-                }
-                className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-6 py-3.5 text-base font-semibold text-slate-700 transition-all hover:scale-[1.02] hover:border-emerald-200 hover:bg-emerald-50 active:scale-[0.98] sm:w-auto sm:rounded-2xl sm:px-8 sm:py-4 sm:text-lg"
-              >
-                Cum funcționează?
-              </button>
-            </div>
-
             {/* Trust Indicators */}
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 sm:mt-12 sm:gap-4 lg:justify-start lg:gap-6">
+            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:justify-start lg:gap-6">
               {[
                 { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
                 { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
-                { icon: Star, label: "Recenzii", color: "text-amber-500" },
-                { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
+                { icon: Star, label: "4.9/5 Recenzii", color: "text-amber-500" },
+                { icon: TrendingUp, label: "Economie 40%", color: "text-purple-600" },
               ].map((item, i) => (
                 <div
                   key={i}
@@ -171,44 +103,28 @@ export default function Hero() {
                 </div>
               ))}
             </div>
+
+            {/* How it works link - mobile only */}
+            <button
+              onClick={() =>
+                document.getElementById("how-it-works")?.scrollIntoView({ behavior: "smooth" })
+              }
+              className="mt-6 text-sm font-medium text-emerald-600 underline hover:text-emerald-700 lg:hidden"
+            >
+              Cum funcționează? ↓
+            </button>
           </div>
 
-          {/* Visual Content - Image loads with priority */}
-          <div className="relative w-full flex-1 lg:w-auto">
-            <div className="relative mx-auto max-w-md sm:max-w-lg lg:max-w-none">
-              {/* Main Card with Hero Image - LCP element */}
-              <div className="group relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-3xl">
-                <div className="relative aspect-4/3 bg-linear-to-br from-slate-50 to-emerald-50/50 transition-transform duration-500 group-hover:scale-[1.02]">
-                  <Image
-                    src="/pics/hero-branded-v1.webp"
-                    alt="Servicii de Mutare Profesionale - OferteMutare.ro"
-                    fill
-                    className="object-cover brightness-[1.05] contrast-[.98] saturate-[.88]"
-                    priority
-                    sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
-                    quality={75}
-                    fetchPriority="high"
-                    placeholder="blur"
-                    blurDataURL={blurDataURL}
-                  />
-                  {/* Subtle gradient tint to match page style */}
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-emerald-50/30 via-white/15 to-sky-50/30 mix-blend-multiply sm:rounded-3xl" />
-                  {/* Soft inner ring for consistent card look */}
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5 sm:rounded-3xl" />
-                  {/* Corner glow accents */}
-                  <div className="pointer-events-none absolute -top-6 -left-6 h-24 w-24 rounded-full bg-emerald-100/40 blur-[40px] sm:h-32 sm:w-32" />
-                  <div className="pointer-events-none absolute -right-6 -bottom-6 hidden h-24 w-24 rounded-full bg-sky-100/40 blur-[40px] sm:block sm:h-32 sm:w-32" />
-                </div>
+          {/* Form Section */}
+          <div className="w-full max-w-md lg:w-[420px] lg:flex-shrink-0">
+            <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xl shadow-slate-200/50 backdrop-blur-sm sm:rounded-3xl sm:p-6">
+              <div className="mb-4 text-center">
+                <h2 className="text-lg font-bold text-gray-800 sm:text-xl">
+                  Completează în 2 minute
+                </h2>
+                <p className="text-sm text-gray-500">Primești 3-5 oferte în 24h</p>
               </div>
-
-              {/* Floating Badge - Top Right */}
-              <div className="absolute -top-2 -right-2 -rotate-6 rounded-xl border border-amber-200 bg-linear-to-br from-amber-50 to-orange-50 px-2.5 py-2 shadow-lg sm:-top-4 sm:-right-4 sm:rounded-2xl sm:px-4 sm:py-3">
-                <div className="flex items-center gap-1.5 sm:gap-2">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400 sm:h-5 sm:w-5" />
-                  <span className="text-xs font-bold text-amber-700 sm:text-sm">4.9/5</span>
-                </div>
-                <p className="text-[10px] text-amber-600 sm:text-xs">500+ reviews</p>
-              </div>
+              <HomeRequestForm />
             </div>
           </div>
         </div>

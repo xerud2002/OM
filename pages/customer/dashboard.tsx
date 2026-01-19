@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useRef } from "react";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
 import RequireRole from "@/components/auth/RequireRole";
 import {
   PlusSquare,
@@ -71,14 +72,28 @@ type Offer = {
 };
 
 export default function CustomerDashboard() {
+  const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [requests, setRequests] = useState<Request[]>([]); // active (non-archived)
   const [archivedRequests, setArchivedRequests] = useState<Request[]>([]);
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
+  const autoSubmitTriggeredRef = useRef(false);
 
   const [form, setForm] = useState<any>(() => {
     // Try to restore form from localStorage on mount
     if (typeof window !== "undefined") {
+      // First check if there's a home page form (takes priority for auto-submit flow)
+      const homeForm = localStorage.getItem("homeRequestForm");
+      if (homeForm) {
+        try {
+          const parsed = JSON.parse(homeForm);
+          return { ...parsed, mediaFiles: [] };
+        } catch (err) {
+          console.warn("Failed to parse home form", err);
+        }
+      }
+
+      // Otherwise use dashboard form
       const saved = localStorage.getItem("customerDashboardForm");
       if (saved) {
         try {
@@ -281,6 +296,33 @@ export default function CustomerDashboard() {
     });
     return () => unsubAuth();
   }, []);
+
+  // Auto-submit form if coming from home page with pending request
+  useEffect(() => {
+    const shouldAutoSubmit = router.query.autoSubmit === "true";
+    const hasHomeForm = typeof window !== "undefined" && localStorage.getItem("homeRequestForm");
+
+    if (shouldAutoSubmit && hasHomeForm && user && !autoSubmitTriggeredRef.current) {
+      autoSubmitTriggeredRef.current = true;
+
+      // Trigger form submission after a short delay to ensure everything is loaded
+      const timer = setTimeout(() => {
+        // Get submit button and simulate click
+        const submitBtn = document.querySelector("[data-auto-submit]");
+        if (submitBtn instanceof HTMLButtonElement) {
+          submitBtn.click();
+        }
+
+        // Clean up home form from localStorage after submission attempt
+        localStorage.removeItem("homeRequestForm");
+
+        // Remove autoSubmit from URL without reload
+        router.replace("/customer/dashboard", undefined, { shallow: true });
+      }, 1000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [router.query.autoSubmit, user, router]);
 
   // Real-time offers listener for all user requests
   useEffect(() => {
@@ -588,6 +630,7 @@ export default function CustomerDashboard() {
       // Clear localStorage
       if (typeof window !== "undefined") {
         localStorage.removeItem("customerDashboardForm");
+        localStorage.removeItem("homeRequestForm"); // Also clear home page form
       }
       setActiveTab("requests");
     } catch (err) {

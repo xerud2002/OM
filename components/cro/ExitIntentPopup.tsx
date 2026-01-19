@@ -9,11 +9,11 @@ export default function ExitIntentPopup() {
 
   useEffect(() => {
     const handleMouseLeave = (e: MouseEvent) => {
-      if (
-        e.clientY <= 0 &&
-        !hasShown &&
-        window.innerWidth > 768
-      ) {
+      // Only trigger when mouse exits near the top-right (close button area)
+      // clientY <= 0 means exiting from top, clientX > 70% of window width means right side
+      const isNearCloseButton = e.clientY <= 0 && e.clientX > window.innerWidth * 0.7;
+
+      if (isNearCloseButton && !hasShown && window.innerWidth > 768) {
         setIsVisible(true);
         setHasShown(true);
         trackExitIntentShown();
@@ -38,11 +38,11 @@ export default function ExitIntentPopup() {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-      <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl animate-in zoom-in-95 duration-300">
+      <div className="animate-in zoom-in-95 relative w-full max-w-md overflow-hidden rounded-3xl bg-white shadow-2xl duration-300">
         {/* Close Button */}
         <button
           onClick={handleClose}
-          className="absolute right-3 top-3 z-10 rounded-full bg-white/80 p-1.5 text-gray-400 backdrop-blur-sm transition-all hover:bg-gray-100 hover:text-gray-600"
+          className="absolute top-3 right-3 z-10 rounded-full bg-white/80 p-1.5 text-gray-400 backdrop-blur-sm transition-all hover:bg-gray-100 hover:text-gray-600"
         >
           <X className="h-4 w-4" />
         </button>
@@ -53,21 +53,17 @@ export default function ExitIntentPopup() {
           <div className="absolute top-4 left-4 animate-pulse">
             <Sparkles className="h-6 w-6 text-yellow-300" />
           </div>
-          <div className="absolute bottom-4 right-4 animate-pulse delay-150">
+          <div className="absolute right-4 bottom-4 animate-pulse delay-150">
             <Sparkles className="h-5 w-5 text-yellow-300/80" />
           </div>
-          
+
           <div className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/20 px-3 py-1 text-xs font-medium backdrop-blur-sm">
             <Clock className="h-3 w-3" />
             Ofertă limitată
           </div>
-          
-          <h3 className="mb-2 text-2xl font-bold">
-            Hei, nu pleca încă! 👋
-          </h3>
-          <p className="text-emerald-50">
-            Ai uitat să ceri oferte gratuite pentru mutarea ta
-          </p>
+
+          <h3 className="mb-2 text-2xl font-bold">Hei, nu pleca încă! 👋</h3>
+          <p className="text-emerald-50">Ai uitat să ceri oferte gratuite pentru mutarea ta</p>
         </div>
 
         {/* Content */}
@@ -76,7 +72,7 @@ export default function ExitIntentPopup() {
             {[
               "Compari până la 5 oferte în 24h",
               "Firme verificate, fără bătăi de cap",
-              "100% gratuit, fără obligații"
+              "100% gratuit, fără obligații",
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-2.5 text-sm text-gray-600">
                 <CheckCircle className="h-4 w-4 shrink-0 text-emerald-500" />
@@ -87,7 +83,7 @@ export default function ExitIntentPopup() {
 
           <Link
             href="/customer/auth"
-            className="group mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 hover:-translate-y-0.5"
+            className="group mb-4 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3.5 font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-emerald-500/30"
             onClick={handleConvert}
           >
             Vreau oferte gratuite
@@ -105,4 +101,3 @@ export default function ExitIntentPopup() {
     </div>
   );
 }
-

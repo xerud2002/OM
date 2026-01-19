@@ -20,12 +20,29 @@ export default function CustomerAuthPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
+  // Handle post-auth redirect and form submission
+  const handlePostAuthRedirect = async () => {
+    const pendingSubmission = localStorage.getItem("pendingRequestSubmission");
+
+    if (pendingSubmission === "true") {
+      // Clear the flag
+      localStorage.removeItem("pendingRequestSubmission");
+      // Redirect to dashboard where form will auto-submit
+      router.push("/customer/dashboard?autoSubmit=true");
+    } else {
+      router.push("/customer/dashboard");
+    }
+  };
+
   // ✅ Redirect if already logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) router.push("/customer/dashboard");
+      if (user) {
+        handlePostAuthRedirect();
+      }
     });
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   // ✅ Google sign-in
@@ -50,7 +67,7 @@ export default function CustomerAuthPage() {
         router.push("/company/auth");
         return;
       }
-      router.push("/customer/dashboard");
+      await handlePostAuthRedirect();
     } catch (err: any) {
       // If role conflict occurred, attempt to detect existing role and redirect
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
@@ -93,7 +110,7 @@ export default function CustomerAuthPage() {
         router.push("/company/auth");
         return;
       }
-      router.push("/customer/dashboard");
+      await handlePostAuthRedirect();
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {
@@ -123,8 +140,9 @@ export default function CustomerAuthPage() {
 
     try {
       const mod = await import("@/utils/firebaseHelpers");
+      let user;
       if (isLogin) {
-        const user = await mod.loginWithEmail({ email, password });
+        user = await mod.loginWithEmail({ email, password });
         const role = await mod.getUserRole(user);
         if (role !== "customer") {
           setMessage(
@@ -134,10 +152,10 @@ export default function CustomerAuthPage() {
           return;
         }
       } else {
-        await mod.registerWithEmail("customer", { email, password });
+        user = await mod.registerWithEmail("customer", { email, password });
         // registration sets role via ensureUserProfile; proceed to dashboard
       }
-      router.push("/customer/dashboard");
+      await handlePostAuthRedirect();
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {
