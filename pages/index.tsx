@@ -2,9 +2,13 @@
 
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import Hero from "@/components/home/Hero";
 import MobileHero from "@/components/home/MobileHero";
 
+// Lazy load Desktop Hero to reduce initial bundle size (it's heavy with framer-motion)
+const Hero = dynamic(() => import("@/components/home/Hero"), {
+  loading: () => <div className="hidden md:block min-h-[85vh] bg-slate-50" />,
+  ssr: true,
+});
 // Lazy load ALL below-the-fold components for better LCP
 const Steps = dynamic(() => import("@/components/home/Steps"), {
   loading: () => <div className="min-h-100" />,
