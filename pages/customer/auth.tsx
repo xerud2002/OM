@@ -10,6 +10,7 @@ import { Mail, Lock, User, ArrowRight, Sparkles, Shield, CheckCircle } from "luc
 import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
+import { translateFirebaseError } from "@/utils/authErrors";
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -26,28 +27,6 @@ export default function CustomerAuthPage() {
     });
     return () => unsubscribe();
   }, [router]);
-
-  // Helper to translate Firebase errors to Romanian
-  const translateFirebaseError = (error: any): string => {
-    const code = error?.code || "";
-    const translations: Record<string, string> = {
-      "auth/invalid-email": "Adresa de email nu este validă.",
-      "auth/user-disabled": "Acest cont a fost dezactivat.",
-      "auth/user-not-found": "Nu există niciun cont cu acest email.",
-      "auth/wrong-password": "Parola introdusă este incorectă.",
-      "auth/email-already-in-use": "Există deja un cont cu acest email.",
-      "auth/weak-password": "Parola trebuie să aibă cel puțin 6 caractere.",
-      "auth/too-many-requests": "Prea multe încercări. Te rugăm să încerci mai târziu.",
-      "auth/network-request-failed": "Eroare de conexiune. Verifică internetul.",
-      "auth/popup-closed-by-user": "Fereastra de autentificare a fost închisă.",
-      "auth/account-exists-with-different-credential": "Acest email este asociat cu o altă metodă de autentificare.",
-      "auth/invalid-credential": "Email sau parolă incorectă.",
-      "NEEDS_PASSWORD": error?.message || "Te rugăm să te autentifici cu email și parolă.",
-      "USE_GOOGLE": error?.message || "Te rugăm să te autentifici cu Google.",
-      "USE_FACEBOOK": error?.message || "Te rugăm să te autentifici cu Facebook.",
-    };
-    return translations[code] || error?.message || "A apărut o eroare neașteptată.";
-  };
 
   // ✅ Google sign-in
   const handleGoogleLogin = async () => {
@@ -379,7 +358,8 @@ export default function CustomerAuthPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full bg-transparent text-gray-900 placeholder-transparent outline-none"
-                      autoComplete={isLogin ? "current-password" : "new-password"}
+                      autoComplete="off"
+                      name="password"
                     />
                   </div>
                 </div>
@@ -457,7 +437,7 @@ export default function CustomerAuthPage() {
                   className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-[#1877F2] bg-[#1877F2] px-4 py-4 font-medium text-white shadow-sm transition-all hover:bg-[#166FE5] hover:shadow-md disabled:opacity-50"
                 >
                   <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                   </svg>
                   Facebook
                 </motion.button>

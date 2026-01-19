@@ -111,10 +111,11 @@ export default function Services() {
                     src={service.img}
                     alt={service.title}
                     fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 20vw"
+                    sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 200px"
                     className="object-contain p-2 transition-transform duration-500 group-hover:scale-110 sm:p-4"
                     loading="lazy"
                     decoding="async"
+                    quality={75}
                   />
                 </div>
 
@@ -130,8 +131,7 @@ export default function Services() {
                       height={56}
                       className="object-cover"
                       loading="lazy"
-                      decoding="async"
-                    />
+                      decoding="async"                      quality={80}                    />
                   </div>
                 </div>
 

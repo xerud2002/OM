@@ -74,7 +74,6 @@ export default function ServiciiIndexPage() {
         <meta property="og:locale" content="ro_RO" />
         
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="theme-color" content="#7c3aed" />
       </Head>
 
       <LayoutWrapper>

@@ -91,8 +91,6 @@ export default function MutariIndexPage() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={`Servicii Mutări ${currentYear}`} />
         <meta name="twitter:description" content="Toate tipurile de mutări. Oferte gratuite!" />
-        
-        <meta name="theme-color" content="#7c3aed" />
       </Head>
 
       <LayoutWrapper>

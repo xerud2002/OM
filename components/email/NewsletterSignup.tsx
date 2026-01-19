@@ -10,7 +10,7 @@ export default function NewsletterSignup({ className = "" }: { className?: strin
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !email.includes("@")) {
       setStatus("error");
       setMessage("Te rog introdu o adresă de email validă");
@@ -21,17 +21,17 @@ export default function NewsletterSignup({ className = "" }: { className?: strin
 
     try {
       // TODO: Replace with actual API call to email service
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate API call
-      
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
+
       setStatus("success");
       setMessage("✅ Te-ai înscris cu succes! Verifică inbox-ul.");
       setEmail("");
-      
+
       setTimeout(() => {
         setStatus("idle");
         setMessage("");
       }, 5000);
-    } catch (error) {
+    } catch {
       setStatus("error");
       setMessage("Oops! Ceva nu a mers bine. Încearcă din nou.");
     }
@@ -39,14 +39,14 @@ export default function NewsletterSignup({ className = "" }: { className?: strin
 
   return (
     <div className={className}>
-      <div className="flex items-center gap-2 mb-3">
+      <div className="mb-3 flex items-center gap-2">
         <Mail className="h-5 w-5 text-orange-600" />
         <h3 className="text-lg font-bold text-gray-900">Newsletter Mutări</h3>
       </div>
       <p className="mb-4 text-sm text-gray-600">
         Primește sfaturi exclusive și oferte speciale săptămânal
       </p>
-      
+
       <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="email"
@@ -76,7 +76,7 @@ export default function NewsletterSignup({ className = "" }: { className?: strin
           )}
         </button>
       </form>
-      
+
       {message && (
         <p className={`mt-2 text-sm ${status === "error" ? "text-red-600" : "text-green-600"}`}>
           {message}

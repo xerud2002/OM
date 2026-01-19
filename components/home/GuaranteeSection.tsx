@@ -99,6 +99,9 @@ export default function GuaranteeSection() {
                     width={80}
                     height={80}
                     className="object-cover"
+                    loading="lazy"
+                    decoding="async"
+                    quality={80}
                   />
                 </motion.div>
 

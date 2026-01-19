@@ -193,14 +193,34 @@ export default function FAQPage() {
 
   // Cities for SEO targeting
   const majorCities = [
-    "București", "Cluj-Napoca", "Timișoara", "Iași", "Constanța", 
-    "Brașov", "Galați", "Craiova", "Ploiești", "Oradea"
+    "București",
+    "Cluj-Napoca",
+    "Timișoara",
+    "Iași",
+    "Constanța",
+    "Brașov",
+    "Galați",
+    "Craiova",
+    "Ploiești",
+    "Oradea",
   ];
 
   const countyCities = [
-    "Brăila", "Arad", "Pitești", "Sibiu", "Bacău", "Târgu-Mureș",
-    "Baia Mare", "Buzău", "Botoșani", "Satu Mare", "Suceava",
-    "Piatra-Neamț", "Drobeta-Turnu Severin", "Târgoviște", "Focșani"
+    "Brăila",
+    "Arad",
+    "Pitești",
+    "Sibiu",
+    "Bacău",
+    "Târgu-Mureș",
+    "Baia Mare",
+    "Buzău",
+    "Botoșani",
+    "Satu Mare",
+    "Suceava",
+    "Piatra-Neamț",
+    "Drobeta-Turnu Severin",
+    "Târgoviște",
+    "Focșani",
   ];
 
   return (
@@ -216,9 +236,12 @@ export default function FAQPage() {
           content="faq mutări românia, întrebări mutări, cost mutare, firme mutări verificate, proces mutare, mutări bucurești, mutări cluj, mutări timișoara"
         />
         <link rel="canonical" href="https://ofertemutare.ro/faq" />
-        
+
         {/* Open Graph */}
-        <meta property="og:title" content="Întrebări Frecvente Mutări România | Ghid Complet 2026" />
+        <meta
+          property="og:title"
+          content="Întrebări Frecvente Mutări România | Ghid Complet 2026"
+        />
         <meta
           property="og:description"
           content="Tot ce trebuie să știi despre mutări: prețuri, proces, firme, termene. Acoperire în toate orașele din România."
@@ -229,7 +252,10 @@ export default function FAQPage() {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="FAQ Mutări România → Prețuri, Proces, Firme Verificate" />
+        <meta
+          name="twitter:title"
+          content="FAQ Mutări România → Prețuri, Proces, Firme Verificate"
+        />
         <meta
           name="twitter:description"
           content="Răspunsuri complete la toate întrebările despre mutări în România. 100% gratuit!"
@@ -257,18 +283,18 @@ export default function FAQPage() {
                 logo: "https://ofertemutare.ro/logo.webp",
               },
               areaServed: [
-                ...majorCities.map(city => ({
+                ...majorCities.map((city) => ({
                   "@type": "City",
                   name: city,
                   containedIn: {
                     "@type": "Country",
-                    name: "România"
-                  }
+                    name: "România",
+                  },
                 })),
                 {
                   "@type": "Country",
-                  name: "România"
-                }
+                  name: "România",
+                },
               ],
               availableChannel: {
                 "@type": "ServiceChannel",
@@ -276,9 +302,9 @@ export default function FAQPage() {
                 servicePhone: "+40-729-XXX-XXX",
                 availableLanguage: {
                   "@type": "Language",
-                  name: "Romanian"
-                }
-              }
+                  name: "Romanian",
+                },
+              },
             }),
           }}
         />
@@ -291,13 +317,13 @@ export default function FAQPage() {
             <div className="mb-4 inline-flex rounded-full bg-linear-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
               <HelpCircle className="h-8 w-8 text-emerald-600" />
             </div>
-            <h1 className="mb-4 text-3xl sm:text-4xl font-bold text-slate-900">
+            <h1 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl">
               Întrebări{" "}
-              <span className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-3 sm:px-4 py-1 text-white">
+              <span className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-3 py-1 text-white sm:px-4">
                 Frecvente
               </span>
             </h1>
-            <p className="mx-auto max-w-2xl text-base sm:text-lg text-gray-600 px-4">
+            <p className="mx-auto max-w-2xl px-4 text-base text-gray-600 sm:text-lg">
               Răspunsuri clare la cele mai comune întrebări despre platformă, proces, prețuri și mai
               mult.
             </p>
@@ -305,19 +331,20 @@ export default function FAQPage() {
 
           {/* Cities Coverage Badge */}
           <div className="mb-10 rounded-xl border-2 border-emerald-200 bg-linear-to-br from-emerald-50 to-teal-50 p-6">
-            <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="mb-3 flex items-center justify-center gap-2">
               <MapPin className="h-5 w-5 text-emerald-600" />
-              <h3 className="font-bold text-emerald-800 text-lg">Acoperim Toată România</h3>
+              <h3 className="text-lg font-bold text-emerald-800">Acoperim Toată România</h3>
             </div>
-            <p className="text-center text-sm text-gray-700 mb-3">
-              Servicii de mutări disponibile în: <strong>{majorCities.join(", ")}</strong> și peste <strong>30 de reședințe de județ</strong>
+            <p className="mb-3 text-center text-sm text-gray-700">
+              Servicii de mutări disponibile în: <strong>{majorCities.join(", ")}</strong> și peste{" "}
+              <strong>30 de reședințe de județ</strong>
             </p>
             <div className="flex flex-wrap justify-center gap-2">
               {majorCities.slice(0, 5).map((city) => (
                 <Link
                   key={city}
-                  href={`/mutari/${city.toLowerCase().replace(/ă/g, 'a').replace(/â/g, 'a').replace(/î/g, 'i').replace(/ș/g, 's').replace(/ț/g, 't').replace(/ /g, '-')}`}
-                  className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-medium text-emerald-700 shadow-sm hover:shadow-md transition-shadow"
+                  href={`/mutari/${city.toLowerCase().replace(/ă/g, "a").replace(/â/g, "a").replace(/î/g, "i").replace(/ș/g, "s").replace(/ț/g, "t").replace(/ /g, "-")}`}
+                  className="inline-flex items-center gap-1 rounded-full bg-white px-3 py-1 text-xs font-medium text-emerald-700 shadow-sm transition-shadow hover:shadow-md"
                 >
                   <Building2 className="h-3 w-3" />
                   {city}
@@ -328,7 +355,7 @@ export default function FAQPage() {
 
           {/* Quick Contact */}
           <div className="mb-12 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5 sm:p-6">
-            <p className="text-center text-sm sm:text-base text-gray-700">
+            <p className="text-center text-sm text-gray-700 sm:text-base">
               <strong>Nu găsești răspunsul?</strong> Contactează-ne la{" "}
               <a
                 href="mailto:contact@ofertemutare.ro"
@@ -343,18 +370,22 @@ export default function FAQPage() {
           <div className="space-y-12">
             {faqs.map((category, catIndex) => (
               <div key={catIndex}>
-                <h2 className="mb-6 text-xl sm:text-2xl font-bold text-gray-800">{category.category}</h2>
+                <h2 className="mb-6 text-xl font-bold text-gray-800 sm:text-2xl">
+                  {category.category}
+                </h2>
                 <div className="space-y-4">
                   {category.questions.map((faq, qIndex) => (
                     <details
                       key={qIndex}
-                      className="group rounded-lg border border-gray-200 bg-white p-4 sm:p-5 shadow-sm transition-shadow hover:shadow-md"
+                      className="group rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md sm:p-5"
                     >
                       <summary className="flex cursor-pointer items-start justify-between gap-4 font-semibold text-gray-800 hover:text-emerald-600">
                         <span className="flex-1 text-sm sm:text-base">{faq.q}</span>
                         <Check className="mt-1 h-5 w-5 shrink-0 text-emerald-500 opacity-0 transition-opacity group-open:opacity-100" />
                       </summary>
-                      <p className="mt-4 leading-relaxed text-gray-600 text-sm sm:text-base">{faq.a}</p>
+                      <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
+                        {faq.a}
+                      </p>
                     </details>
                   ))}
                 </div>
@@ -364,17 +395,17 @@ export default function FAQPage() {
 
           {/* Additional Cities Section for SEO */}
           <div className="mt-16 rounded-xl bg-linear-to-br from-slate-50 to-gray-100 p-6 sm:p-8">
-            <h3 className="mb-4 text-lg sm:text-xl font-bold text-center text-gray-900">
+            <h3 className="mb-4 text-center text-lg font-bold text-gray-900 sm:text-xl">
               Servicii Mutări în Toate Orașele României
             </h3>
-            <p className="mb-6 text-center text-sm sm:text-base text-gray-600">
+            <p className="mb-6 text-center text-sm text-gray-600 sm:text-base">
               Platformă națională de comparare oferte mutări. Acoperim toate orașele mari și medii:
             </p>
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 mb-6">
+            <div className="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
               {[...majorCities, ...countyCities].map((city) => (
                 <div
                   key={city}
-                  className="rounded-lg bg-white px-3 py-2 text-center text-xs sm:text-sm font-medium text-gray-700 shadow-sm"
+                  className="rounded-lg bg-white px-3 py-2 text-center text-xs font-medium text-gray-700 shadow-sm sm:text-sm"
                 >
                   {city}
                 </div>
@@ -386,14 +417,14 @@ export default function FAQPage() {
           </div>
 
           {/* CTA */}
-          <div className="mt-16 rounded-xl bg-linear-to-r from-emerald-600 to-blue-600 p-6 sm:p-8 text-center text-white">
-            <h3 className="mb-4 text-xl sm:text-2xl font-bold">Gata să Începi?</h3>
+          <div className="mt-16 rounded-xl bg-linear-to-r from-emerald-600 to-blue-600 p-6 text-center text-white sm:p-8">
+            <h3 className="mb-4 text-xl font-bold sm:text-2xl">Gata să Începi?</h3>
             <p className="mb-6 text-base sm:text-lg">
               Solicită oferte gratuite de la cele mai bune firme de mutări din România
             </p>
             <Link
               href="/customer/dashboard"
-              className="inline-block rounded-lg bg-white px-6 sm:px-8 py-3 text-sm sm:text-base font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg active:scale-95"
+              className="inline-block rounded-lg bg-white px-6 py-3 text-sm font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg active:scale-95 sm:px-8 sm:text-base"
             >
               Solicită Oferte Gratuite
             </Link>

@@ -2,7 +2,6 @@ import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
 import {
   Music,
@@ -39,7 +38,10 @@ export default function MutariPianePage() {
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro/mutari/specializate/piane" />
         <meta property="og:title" content={`Mutări Piane ${currentYear}`} />
-        <meta property="og:description" content="Transport specializat pentru piane. Echipe cu experiență!" />
+        <meta
+          property="og:description"
+          content="Transport specializat pentru piane. Echipe cu experiență!"
+        />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Service Schema with Pricing */}
@@ -50,14 +52,15 @@ export default function MutariPianePage() {
               "@context": "https://schema.org",
               "@type": "Service",
               name: "Mutări Piane",
-              description: "Servicii specializate de transport piane verticale și piane cu coadă în România. Echipe cu experiență, echipamente profesionale.",
+              description:
+                "Servicii specializate de transport piane verticale și piane cu coadă în România. Echipe cu experiență, echipamente profesionale.",
               provider: {
                 "@type": "Organization",
-                name: "OferteMutare.ro"
+                name: "OferteMutare.ro",
               },
               areaServed: {
                 "@type": "Country",
-                name: "România"
+                name: "România",
               },
               hasOfferCatalog: {
                 "@type": "OfferCatalog",
@@ -68,42 +71,42 @@ export default function MutariPianePage() {
                     itemOffered: {
                       "@type": "Service",
                       name: "Mutare Pian Vertical (același oraș)",
-                      description: "150-250kg, apartament → apartament"
+                      description: "150-250kg, apartament → apartament",
                     },
                     priceSpecification: {
                       "@type": "PriceSpecification",
                       priceCurrency: "RON",
-                      price: "400-700"
-                    }
+                      price: "400-700",
+                    },
                   },
                   {
                     "@type": "Offer",
                     itemOffered: {
                       "@type": "Service",
                       name: "Mutare Pian Vertical (\u00eentre ora\u0219e)",
-                      description: "Transport interurban pian vertical"
+                      description: "Transport interurban pian vertical",
                     },
                     priceSpecification: {
                       "@type": "PriceSpecification",
                       priceCurrency: "RON",
-                      price: "800-1500"
-                    }
+                      price: "800-1500",
+                    },
                   },
                   {
                     "@type": "Offer",
                     itemOffered: {
                       "@type": "Service",
                       name: "Mutare Pian cu Coad\u0103",
-                      description: "300-500kg, echip\u0103 4+ persoane"
+                      description: "300-500kg, echip\u0103 4+ persoane",
                     },
                     priceSpecification: {
                       "@type": "PriceSpecification",
                       priceCurrency: "RON",
-                      price: "1500-3000"
-                    }
-                  }
-                ]
-              }
+                      price: "1500-3000",
+                    },
+                  },
+                ],
+              },
             }),
           }}
         />
@@ -118,9 +121,11 @@ export default function MutariPianePage() {
           </div>
 
           <div className="relative mx-auto max-w-6xl px-4">
-            <div className="flex items-center gap-2 mb-6">
+            <div className="mb-6 flex items-center gap-2">
               <Music className="h-6 w-6 text-slate-300" />
-              <span className="text-slate-300 text-sm font-medium">Servicii Specializate • Piane</span>
+              <span className="text-sm font-medium text-slate-300">
+                Servicii Specializate • Piane
+              </span>
             </div>
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
@@ -131,36 +136,36 @@ export default function MutariPianePage() {
             </h1>
 
             <p className="mb-8 max-w-2xl text-lg text-slate-300 md:text-xl">
-              Transport specializat pentru piane verticale, piane cu coadă și instrumente valoroase. 
+              Transport specializat pentru piane verticale, piane cu coadă și instrumente valoroase.
               Echipe cu experiență, echipamente profesionale, protecție maximă.
             </p>
 
             <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">400+</div>
                 <div className="text-sm text-slate-300">Lei minim</div>
               </div>
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">3-4</div>
                 <div className="text-sm text-slate-300">Persoane echipă</div>
               </div>
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">✓</div>
                 <div className="text-sm text-slate-300">Asigurare</div>
               </div>
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">🎹</div>
                 <div className="text-sm text-slate-300">Experți</div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/customer/auth"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-8 py-4 font-bold text-slate-900 shadow-xl transition-all hover:bg-amber-400 hover:shadow-2xl hover:-translate-y-0.5"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-8 py-4 font-bold text-slate-900 shadow-xl transition-all hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-2xl"
               >
                 Cere Ofertă Transport Pian
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>
           </div>
@@ -174,21 +179,22 @@ export default function MutariPianePage() {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                Un <strong>pian</strong> poate cântări între 150kg (pian vertical) și 500kg (pian cu coadă). 
-                Este extrem de fragil, cu mii de piese delicate, și poate costa între 5.000-100.000+ euro. 
-                O mișcare greșită poate cauza daune permanente la mecanica internă sau zgârieturi ireversibile.
+                Un <strong>pian</strong> poate cântări între 150kg (pian vertical) și 500kg (pian cu
+                coadă). Este extrem de fragil, cu mii de piese delicate, și poate costa între
+                5.000-100.000+ euro. O mișcare greșită poate cauza daune permanente la mecanica
+                internă sau zgârieturi ireversibile.
               </p>
               <p>
-                Firmele partenere specializate în <strong>mutări piane</strong> au experiență, echipamente 
-                profesionale (cărucioare speciale, curele, protecții) și asigurare completă. Nu riscați pianul 
-                tău cu o firmă generalistă!
+                Firmele partenere specializate în <strong>mutări piane</strong> au experiență,
+                echipamente profesionale (cărucioare speciale, curele, protecții) și asigurare
+                completă. Nu riscați pianul tău cu o firmă generalistă!
               </p>
             </div>
           </section>
 
           {/* Pricing */}
           <section className="mb-12">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <DollarSign className="h-7 w-7 text-green-600" />
               Prețuri mutări piane în {currentYear}
             </h2>
@@ -222,37 +228,45 @@ export default function MutariPianePage() {
 
           {/* Challenges */}
           <section className="mb-12 rounded-2xl bg-linear-to-r from-slate-50 to-gray-50 p-8">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <AlertTriangle className="h-7 w-7 text-orange-600" />
               Provocări în mutarea pianelor
             </h2>
             <div className="grid gap-4 md:grid-cols-2">
               <div className="flex gap-3 rounded-lg bg-white p-4 shadow-sm">
-                <Package className="h-5 w-5 shrink-0 text-orange-500 mt-1" />
+                <Package className="mt-1 h-5 w-5 shrink-0 text-orange-500" />
                 <div>
                   <h3 className="font-bold text-gray-900">Greutate enormă</h3>
-                  <p className="text-sm text-gray-600">150-500kg concentrate într-un spațiu mic → risc de accidentare</p>
+                  <p className="text-sm text-gray-600">
+                    150-500kg concentrate într-un spațiu mic → risc de accidentare
+                  </p>
                 </div>
               </div>
               <div className="flex gap-3 rounded-lg bg-white p-4 shadow-sm">
-                <Heart className="h-5 w-5 shrink-0 text-red-500 mt-1" />
+                <Heart className="mt-1 h-5 w-5 shrink-0 text-red-500" />
                 <div>
                   <h3 className="font-bold text-gray-900">Extrem de fragil</h3>
-                  <p className="text-sm text-gray-600">Mecanica internă se dezacordează la mișcări bruste</p>
+                  <p className="text-sm text-gray-600">
+                    Mecanica internă se dezacordează la mișcări bruste
+                  </p>
                 </div>
               </div>
               <div className="flex gap-3 rounded-lg bg-white p-4 shadow-sm">
-                <Shield className="h-5 w-5 shrink-0 text-blue-500 mt-1" />
+                <Shield className="mt-1 h-5 w-5 shrink-0 text-blue-500" />
                 <div>
                   <h3 className="font-bold text-gray-900">Valoare mare</h3>
-                  <p className="text-sm text-gray-600">Piane de calitate costă 10.000-100.000€ → daune financiare uriașe</p>
+                  <p className="text-sm text-gray-600">
+                    Piane de calitate costă 10.000-100.000€ → daune financiare uriașe
+                  </p>
                 </div>
               </div>
               <div className="flex gap-3 rounded-lg bg-white p-4 shadow-sm">
-                <Truck className="h-5 w-5 shrink-0 text-purple-500 mt-1" />
+                <Truck className="mt-1 h-5 w-5 shrink-0 text-purple-500" />
                 <div>
                   <h3 className="font-bold text-gray-900">Acces dificil</h3>
-                  <p className="text-sm text-gray-600">Scări înguste, lifturi mici, curbe strânse</p>
+                  <p className="text-sm text-gray-600">
+                    Scări înguste, lifturi mici, curbe strânse
+                  </p>
                 </div>
               </div>
             </div>
@@ -260,52 +274,74 @@ export default function MutariPianePage() {
 
           {/* What's Included */}
           <section className="mb-12">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Award className="h-7 w-7 text-amber-600" />
               Ce include serviciul de mutare piane?
             </h2>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-green-500 mt-1" />
-                <span><strong>Echipă specializată:</strong> 3-4 persoane cu experiență în mutări piane</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-500" />
+                <span>
+                  <strong>Echipă specializată:</strong> 3-4 persoane cu experiență în mutări piane
+                </span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-green-500 mt-1" />
-                <span><strong>Echipamente profesionale:</strong> Cărucioare speciale, curele de ridicare, rampă</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-500" />
+                <span>
+                  <strong>Echipamente profesionale:</strong> Cărucioare speciale, curele de
+                  ridicare, rampă
+                </span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-green-500 mt-1" />
-                <span><strong>Protecții premium:</strong> Pături groase, folie stretch, protecții colțuri</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-500" />
+                <span>
+                  <strong>Protecții premium:</strong> Pături groase, folie stretch, protecții
+                  colțuri
+                </span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-green-500 mt-1" />
-                <span><strong>Asigurare extinsă:</strong> Acoperire completă pentru valoarea pianului</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-500" />
+                <span>
+                  <strong>Asigurare extinsă:</strong> Acoperire completă pentru valoarea pianului
+                </span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-green-500 mt-1" />
-                <span><strong>Poziționare exactă:</strong> Plasăm pianul exact unde vrei în noua locuință</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-green-500" />
+                <span>
+                  <strong>Poziționare exactă:</strong> Plasăm pianul exact unde vrei în noua
+                  locuință
+                </span>
               </li>
             </ul>
           </section>
 
           {/* Tips */}
           <section className="mb-12 rounded-2xl bg-linear-to-r from-blue-50 to-cyan-50 p-8">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Star className="h-7 w-7 text-blue-600" />
               Sfaturi pentru mutarea pianului
             </h2>
             <ul className="space-y-3 text-gray-700">
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-blue-500 mt-1" />
-                <span><strong>Măsoară accesul:</strong> Verifică dimensiunile ușilor, liftului și scărilor înainte.</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-blue-500" />
+                <span>
+                  <strong>Măsoară accesul:</strong> Verifică dimensiunile ușilor, liftului și
+                  scărilor înainte.
+                </span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-blue-500 mt-1" />
-                <span><strong>Programează acordare:</strong> După mutare, pianul va avea nevoie de acord (2-4 săptămâni).</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-blue-500" />
+                <span>
+                  <strong>Programează acordare:</strong> După mutare, pianul va avea nevoie de acord
+                  (2-4 săptămâni).
+                </span>
               </li>
               <li className="flex items-start gap-3">
-                <CheckCircle className="h-5 w-5 shrink-0 text-blue-500 mt-1" />
-                <span><strong>Declară valoarea:</strong> Pentru asigurare corectă, declară valoarea reală a pianului.</span>
+                <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-blue-500" />
+                <span>
+                  <strong>Declară valoarea:</strong> Pentru asigurare corectă, declară valoarea
+                  reală a pianului.
+                </span>
               </li>
             </ul>
           </section>
@@ -315,9 +351,7 @@ export default function MutariPianePage() {
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-slate-800 to-zinc-900 p-8 text-center text-white">
-            <h2 className="mb-4 text-3xl font-bold">
-              Găsește specialiști pentru mutarea pianului
-            </h2>
+            <h2 className="mb-4 text-3xl font-bold">Găsește specialiști pentru mutarea pianului</h2>
             <p className="mb-8 text-lg text-slate-300">
               Compară oferte de la firme specializate în mutări piane în 24h!
             </p>
@@ -326,7 +360,7 @@ export default function MutariPianePage() {
               className="group inline-flex items-center gap-2 rounded-xl bg-amber-500 px-8 py-4 font-bold text-slate-900 shadow-xl transition-all hover:bg-amber-400"
             >
               Cere Oferte Acum
-              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
           </section>
         </article>
