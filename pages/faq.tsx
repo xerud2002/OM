@@ -97,10 +97,7 @@ export default function FAQPage() {
           a: (
             <>
               1) Completezi{" "}
-              <Link
-                href="/customer/dashboard"
-                className="text-emerald-600 underline hover:text-emerald-700"
-              >
+              <Link href="/" className="text-emerald-600 underline hover:text-emerald-700">
                 formularul
               </Link>{" "}
               cu detalii despre mutare (5 minute), 2) Firmele verificate primesc cererea ta, 3)
@@ -354,10 +351,7 @@ export default function FAQPage() {
           a: (
             <>
               Nu inițial! Poți completa{" "}
-              <Link
-                href="/customer/dashboard"
-                className="text-emerald-600 underline hover:text-emerald-700"
-              >
+              <Link href="/" className="text-emerald-600 underline hover:text-emerald-700">
                 formularul
               </Link>{" "}
               fără cont. După trimitere, vei primi un email pentru a-ți crea cont și a gestiona
