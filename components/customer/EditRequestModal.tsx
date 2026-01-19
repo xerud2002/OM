@@ -96,7 +96,7 @@ export default function EditRequestModal({
 
     try {
       // Upload new media files if any
-      let newMediaUrls: string[] = [];
+      const newMediaUrls: string[] = [];
       if (form.mediaFiles && form.mediaFiles.length > 0) {
         // Check auth before attempting upload
         const { auth } = await import("@/services/firebase");
@@ -222,6 +222,8 @@ export default function EditRequestModal({
                   onClick={onClose}
                   className="rounded-lg p-2 transition-colors hover:bg-white/80"
                   disabled={isSaving}
+                  aria-label="Închide"
+                  title="Închide"
                 >
                   <X size={24} className="text-gray-600" />
                 </button>
@@ -277,7 +279,10 @@ export default function EditRequestModal({
                                     src={url}
                                     alt={`Media ${index + 1}`}
                                     fill
+                                    sizes="(max-width: 640px) 45vw, (max-width: 768px) 25vw, 150px"
                                     className="object-cover"
+                                    loading="lazy"
+                                    quality={75}
                                   />
                                   <a
                                     href={url}
@@ -293,7 +298,7 @@ export default function EditRequestModal({
                                       e.stopPropagation();
                                       handleDeleteMedia(url);
                                     }}
-                                    className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity hover:bg-red-600 group-hover:opacity-100"
+                                    className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-red-600"
                                     title="Șterge"
                                   >
                                     <Trash2 size={16} />
@@ -321,7 +326,9 @@ export default function EditRequestModal({
                                       src={URL.createObjectURL(file)}
                                       alt={file.name}
                                       fill
+                                      sizes="(max-width: 640px) 45vw, (max-width: 768px) 25vw, 150px"
                                       className="object-cover"
+                                      quality={75}
                                     />
                                   ) : (
                                     <div className="flex h-full items-center justify-center">
@@ -335,7 +342,7 @@ export default function EditRequestModal({
                                       ).filter((_, i) => i !== index);
                                       setForm((s: any) => ({ ...s, mediaFiles: newFiles }));
                                     }}
-                                    className="absolute right-2 top-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity hover:bg-red-600 group-hover:opacity-100"
+                                    className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-red-600"
                                     title="Șterge"
                                   >
                                     <X size={16} />

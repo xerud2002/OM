@@ -2,12 +2,14 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import { Package, Wrench, Truck, Warehouse, Trash2, ArrowRight } from "lucide-react";
 
 export default function Services() {
   const services = [
     {
-      img: "/pics/packing1.webp",
+      img: "/pics/service-packing.png",
+      iconImg: "/pics/icon-packing.png",
       icon: Package,
       title: "Împachetare profesională",
       desc: "Obiectele fragile și mobilierul sunt împachetate cu materiale de protecție de calitate.",
@@ -15,7 +17,8 @@ export default function Services() {
       bgColor: "bg-blue-50",
     },
     {
-      img: "/pics/dism.webp",
+      img: "/pics/service-furniture.png",
+      iconImg: "/pics/icon-furniture.png",
       icon: Wrench,
       title: "Demontare mobilier",
       desc: "Dezasamblare și reasamblare a mobilierului mare, rapid și fără daune.",
@@ -23,7 +26,8 @@ export default function Services() {
       bgColor: "bg-emerald-50",
     },
     {
-      img: "/pics/loading4.webp",
+      img: "/pics/service-transport.png",
+      iconImg: "/pics/icon-transport.png",
       icon: Truck,
       title: "Transport sigur",
       desc: "De la garsoniere la case întregi, transport cu autoutilitare curate și echipate.",
@@ -31,7 +35,8 @@ export default function Services() {
       bgColor: "bg-purple-50",
     },
     {
-      img: "/pics/storage.webp",
+      img: "/pics/service-storage.png",
+      iconImg: "/pics/icon-storage.png",
       icon: Warehouse,
       title: "Depozitare temporară",
       desc: "Spații sigure, ventilate și monitorizate 24/7 pentru obiectele tale.",
@@ -39,7 +44,8 @@ export default function Services() {
       bgColor: "bg-orange-50",
     },
     {
-      img: "/pics/disposal.webp",
+      img: "/pics/service-disposal.png",
+      iconImg: "/pics/icon-disposal.png",
       icon: Trash2,
       title: "Debarasare",
       desc: "Colectare și eliminare ecologică a mobilierului vechi sau obiectelor inutile.",
@@ -105,18 +111,27 @@ export default function Services() {
                     src={service.img}
                     alt={service.title}
                     fill
-                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 50vw, 20vw"
+                    sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 200px"
                     className="object-contain p-2 transition-transform duration-500 group-hover:scale-110 sm:p-4"
                     loading="lazy"
+                    decoding="async"
+                    quality={75}
                   />
                 </div>
 
                 {/* Icon badge - positioned outside image container */}
-                <div className="relative z-10 -mt-4 flex justify-center sm:-mt-6">
+                <div className="relative z-10 -mt-5 flex justify-center sm:-mt-8">
                   <div
-                    className={`flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br ${service.color} shadow-lg sm:h-12 sm:w-12 sm:rounded-xl`}
+                    className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg ring-4 ring-white sm:h-14 sm:w-14 sm:rounded-2xl`}
                   >
-                    <service.icon className="h-4 w-4 text-white sm:h-6 sm:w-6" strokeWidth={1.5} />
+                    <Image
+                      src={service.iconImg}
+                      alt={service.title}
+                      width={56}
+                      height={56}
+                      className="object-cover"
+                      loading="lazy"
+                      decoding="async"                      quality={80}                    />
                   </div>
                 </div>
 
@@ -145,15 +160,18 @@ export default function Services() {
           transition={{ delay: 0.5, duration: 0.5 }}
           className="mx-auto mt-10 max-w-2xl text-center sm:mt-16"
         >
-          <div className="inline-flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:py-3">
+          <Link
+            href="/customer/auth"
+            className="inline-flex flex-col items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 shadow-sm transition-all hover:border-emerald-300 hover:shadow-md hover:shadow-emerald-100 sm:flex-row sm:gap-2 sm:rounded-full sm:px-6 sm:py-3"
+          >
             <span className="text-sm text-slate-600 sm:text-base">
               Ai nevoie de un serviciu specific?
             </span>
             <span className="flex items-center gap-1 font-semibold text-emerald-600 sm:gap-2">
               Descrie-l în cererea ta!
-              <ArrowRight className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 sm:h-4 sm:w-4" />
             </span>
-          </div>
+          </Link>
         </motion.div>
       </div>
     </section>

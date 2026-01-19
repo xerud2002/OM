@@ -142,12 +142,12 @@ select option:checked {
 
 /* 🌿 Calendar container */
 .calendar-box {
-  @apply mx-auto w-full max-w-md rounded-2xl sm:rounded-3xl border border-emerald-100 bg-white/80 p-4 sm:p-6 shadow-lg backdrop-blur-sm transition-all hover:shadow-emerald-100;
+  @apply mx-auto w-full max-w-md rounded-2xl border border-emerald-100 bg-white/80 p-4 shadow-lg backdrop-blur-sm transition-all hover:shadow-emerald-100 sm:rounded-3xl sm:p-6;
 }
 
 /* 🌿 HERO OVERLAY (pentru homepage) */
 .hero-overlay {
-  @apply rounded-2xl sm:rounded-3xl border border-white/30 bg-white/20 p-6 sm:p-8 text-center shadow-md backdrop-blur-[2px];
+  @apply rounded-2xl border border-white/30 bg-white/20 p-6 text-center shadow-md backdrop-blur-[2px] sm:rounded-3xl sm:p-8;
 }
 
 /* 🌿 Animations */
@@ -295,9 +295,7 @@ select option:checked {
 
 /* Ensure smooth scrolling on all devices */
 html {
-  -webkit-overflow-scrolling: touch;
-  -webkit-text-size-adjust: 100%;
-  text-size-adjust: 100%;
+  scroll-behavior: smooth;
 }
 
 /* Improve tap target sizes (minimum 44x44px for accessibility) */

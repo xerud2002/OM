@@ -24,14 +24,6 @@ export default function Document() {
         />
         <link rel="dns-prefetch" href="https://apis.google.com" />
 
-        {/* Preload LCP hero image for faster rendering */}
-        <link
-          rel="preload"
-          as="image"
-          href="/pics/hero-branded-v1.webp"
-          type="image/webp"
-        />
-
         {/* Google Analytics - loaded via @next/third-parties in _app.tsx */}
       </Head>
       <body>

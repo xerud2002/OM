@@ -112,6 +112,8 @@ export default function RequestDetailsModal({
                 <button
                   onClick={onClose}
                   className="rounded-lg p-2 transition-colors hover:bg-white/80"
+                  aria-label="Închide"
+                  title="Închide"
                 >
                   <X size={24} className="text-gray-600" />
                 </button>
@@ -331,7 +333,10 @@ export default function RequestDetailsModal({
                             src={url}
                             alt={`Media ${index + 1}`}
                             fill
+                            sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 200px"
                             className="object-cover transition-transform group-hover:scale-110"
+                            loading="lazy"
+                            quality={75}
                           />
                           <a
                             href={url}

@@ -1688,6 +1688,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         <div className="flex items-center gap-3 pt-2">
           <button
             type="submit"
+            data-auto-submit="true"
             className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-emerald-600 to-emerald-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl hover:shadow-emerald-500/40"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">

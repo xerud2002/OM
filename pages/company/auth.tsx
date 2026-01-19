@@ -10,8 +10,9 @@ import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Building2, ArrowRight, Users, TrendingUp, Award } from "lucide-react";
 import Image from "next/image";
+import { translateFirebaseError } from "@/utils/authErrors";
 
-export default function CustomerAuthPage() {
+export default function CompanyAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,7 +64,7 @@ export default function CustomerAuthPage() {
           // ignore
         }
       }
-      setMessage(err.message);
+      setMessage(translateFirebaseError(err));
     } finally {
       setLoading(false);
     }
@@ -104,7 +105,7 @@ export default function CustomerAuthPage() {
           // ignore
         }
       }
-      setMessage(err.message);
+      setMessage(translateFirebaseError(err));
     } finally {
       setLoading(false);
     }
@@ -117,7 +118,7 @@ export default function CustomerAuthPage() {
       await mod.resetPassword(email);
       setMessage("Email de resetare trimis ✉️");
     } catch (err: any) {
-      setMessage(err.message);
+      setMessage(translateFirebaseError(err));
     }
   };
 
@@ -330,7 +331,8 @@ export default function CustomerAuthPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full bg-transparent text-gray-900 placeholder-transparent outline-none"
-                      autoComplete={isLogin ? "current-password" : "new-password"}
+                      autoComplete="off"
+                      name="company-password"
                     />
                   </div>
                 </div>

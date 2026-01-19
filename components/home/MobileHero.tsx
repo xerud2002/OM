@@ -3,11 +3,14 @@ import Image from "next/image";
 import { ArrowRight, CheckCircle, Star, ShieldCheck, Sparkles, TrendingUp } from "lucide-react";
 
 export default function MobileHero() {
+  // Tiny blur placeholder (matches desktop Hero to prevent CLS)
+  const blurDataURL =
+    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAHAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIDBAAFBhESITFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEuO";
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-24 pb-12 block lg:hidden">
+    <section className="relative block overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-24 pb-12 lg:hidden">
       {/* Static Background Elements - CSS only, no blur calculation overhead */}
       <div className="pointer-events-none absolute inset-0 z-0">
-         {/* Removed blurred blobs for maximum mobile performance */}
+        {/* Removed blurred blobs for maximum mobile performance */}
       </div>
 
       <div className="relative z-10 mx-auto max-w-lg text-center">
@@ -23,15 +26,16 @@ export default function MobileHero() {
 
         {/* Headline - No gradient animation, just text */}
         <h1 className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900">
-          Compara oferte pentru
+          Compară oferte pentru
           <br />
           <span className="text-emerald-600">mutarea ta</span>
         </h1>
 
         {/* Subheadline */}
         <p className="mx-auto mb-8 text-base leading-relaxed text-slate-600">
-          Primești <span className="font-semibold text-emerald-600">până la 5 oferte</span> de la firme verificate.
-          Economisești <span className="font-semibold text-emerald-600">până la 40%</span>.
+          Primești <span className="font-semibold text-emerald-600">până la 5 oferte</span> de la
+          firme verificate. Economisești{" "}
+          <span className="font-semibold text-emerald-600">până la 40%</span>.
         </p>
 
         {/* CTA Buttons - Simple Links instead of handlers to avoid hydration */}
@@ -44,7 +48,7 @@ export default function MobileHero() {
             Obține oferte gratuite
             <ArrowRight className="h-4 w-4" />
           </Link>
-          
+
           <a
             href="#how-it-works"
             className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-6 py-3.5 text-base font-semibold text-slate-700 active:bg-slate-50"
@@ -56,35 +60,40 @@ export default function MobileHero() {
         {/* Trust Indicators - Static Grid */}
         <div className="mt-8 grid grid-cols-2 gap-2 text-xs font-medium text-slate-700">
           <div className="flex items-center justify-center gap-1 rounded-full bg-white/80 py-1.5 shadow-sm">
-             <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-             Firme Verificate
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+            Firme Verificate
           </div>
           <div className="flex items-center justify-center gap-1 rounded-full bg-white/80 py-1.5 shadow-sm">
-             <CheckCircle className="h-3.5 w-3.5 text-sky-600" />
-             100% Gratuit
+            <CheckCircle className="h-3.5 w-3.5 text-sky-600" />
+            100% Gratuit
           </div>
           <div className="flex items-center justify-center gap-1 rounded-full bg-white/80 py-1.5 shadow-sm">
-             <Star className="h-3.5 w-3.5 text-amber-500" />
-             4.9/5 Rating
+            <Star className="h-3.5 w-3.5 text-amber-500" />
+            Recenzii
           </div>
           <div className="flex items-center justify-center gap-1 rounded-full bg-white/80 py-1.5 shadow-sm">
-             <TrendingUp className="h-3.5 w-3.5 text-purple-600" />
-             Economie timp
+            <TrendingUp className="h-3.5 w-3.5 text-purple-600" />
+            Economie timp
           </div>
         </div>
 
         {/* Image - Optimized for Mobile LCP */}
-        <div className="mt-8 relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-xl">
-           <div className="relative aspect-4/3">
-              <Image
-                src="/pics/hero-branded-v1.webp"
-                alt="Servicii Mutare"
-                fill
-                className="object-cover"
-                priority={true}
-                sizes="(max-width: 640px) 100vw, 300px"
-              />
-           </div>
+        <div className="relative mt-8 overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-xl">
+          <div className="relative aspect-4/3">
+            <Image
+              src="/pics/hero-branded-v1.webp"
+              alt="Servicii Mutare"
+              fill
+              className="object-cover"
+              priority={true}
+              sizes="(max-width: 420px) 90vw, (max-width: 640px) 80vw, 320px"
+              quality={75}
+              fetchPriority="high"
+              decoding="async"
+              placeholder="blur"
+              blurDataURL={blurDataURL}
+            />
+          </div>
         </div>
       </div>
     </section>

@@ -11,15 +11,19 @@ const Hero = dynamic(() => import("@/components/home/Hero"), {
 });
 // Lazy load ALL below-the-fold components for better LCP
 const Steps = dynamic(() => import("@/components/home/Steps"), {
-  loading: () => <div className="min-h-100" />,
+  loading: () => <div className="min-h-[600px]" />,
   ssr: true,
 });
 const TrustSignals = dynamic(() => import("@/components/cro/TrustSignals"), {
-  loading: () => null,
+  loading: () => <div className="min-h-[100px]" />,
+  ssr: false,
+});
+const LogoTicker = dynamic(() => import("@/components/home/LogoTicker"), {
+  loading: () => <div className="min-h-[100px]" />,
   ssr: false,
 });
 const UrgencyBanner = dynamic(() => import("@/components/cro/UrgencyBanner"), {
-  loading: () => null,
+  loading: () => <div className="min-h-[200px]" />,
   ssr: false,
 });
 const AggregateRatingSchema = dynamic(
@@ -27,25 +31,25 @@ const AggregateRatingSchema = dynamic(
   { ssr: true }
 );
 const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
-  loading: () => <div className="min-h-100" />,
+  loading: () => <div className="min-h-[500px]" />,
 });
 const Services = dynamic(() => import("@/components/home/Services"), {
-  loading: () => <div className="min-h-100" />,
+  loading: () => <div className="min-h-[600px]" />,
 });
 const Articles = dynamic(() => import("@/components/home/Articles"), {
-  loading: () => <div className="min-h-75" />,
+  loading: () => <div className="min-h-[400px]" />,
 });
 const PartnerSection = dynamic(() => import("@/components/home/PartnerSection"), {
-  loading: () => <div className="min-h-75" />,
+  loading: () => <div className="min-h-[500px]" />,
 });
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
-  loading: () => <div className="min-h-100" />,
+  loading: () => <div className="min-h-[500px]" />,
 });
 const GuaranteeSection = dynamic(() => import("@/components/home/GuaranteeSection"), {
-  loading: () => <div className="min-h-75" />,
+  loading: () => <div className="min-h-[400px]" />,
 });
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
-  loading: () => <div className="min-h-50" />,
+  loading: () => <div className="min-h-[300px]" />,
 });
 
 export default function HomePage() {
@@ -354,10 +358,7 @@ export default function HomePage() {
         <Hero />
       </div>
       
-      {/* CRO: Urgency & Trust */}
-      <div className="mx-auto max-w-7xl px-4 -mt-8 mb-8">
-        <UrgencyBanner />
-      </div>
+      <LogoTicker />
       
       <Steps />
       
@@ -370,12 +371,16 @@ export default function HomePage() {
       <PartnerSection />
       <Services />
       
-
-      
       <GuaranteeSection />
 
       <Testimonials />
       <Articles />
+      
+      {/* CRO: Urgency & Trust */}
+      <div className="mx-auto max-w-7xl px-4 py-8">
+        <UrgencyBanner />
+      </div>
+
       <CTASection />
     </>
   );

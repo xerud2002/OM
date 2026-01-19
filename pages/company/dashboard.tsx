@@ -343,7 +343,11 @@ export default function CompanyDashboard() {
                   </div>
                   <div className="flex items-center gap-2">
                     <Filter className="h-4 w-4 text-slate-400" />
+                    <label htmlFor="status-filter" className="sr-only">
+                      Filtrare după status
+                    </label>
                     <select
+                      id="status-filter"
                       value={statusFilter}
                       onChange={(e) => setStatusFilter(e.target.value as any)}
                       className="rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 text-sm font-medium transition-all focus:border-emerald-500 focus:bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"

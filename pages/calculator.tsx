@@ -12,6 +12,29 @@ export default function CalculatorPage() {
           name="description"
           content="Folosește calculatorul nostru gratuit pentru a estima costul mutării tale și vezi cât poți economisi comparând oferte. Prețuri actualizate 2026."
         />
+        <meta
+          name="keywords"
+          content="calculator mutare, preț mutare, cost mutare, estimare mutare, cât costă mutarea"
+        />
+        <link rel="canonical" href="https://ofertemutare.ro/calculator" />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ofertemutare.ro/calculator" />
+        <meta property="og:title" content="Calculator Preț Mutare 2026 | OferteMutare.ro" />
+        <meta
+          property="og:description"
+          content="Estimează costul mutării tale și vezi cât economisești. 100% gratuit!"
+        />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/calculator" />
+        <meta name="twitter:title" content="Calculator Preț Mutare 2026" />
+        <meta
+          name="twitter:description"
+          content="Estimează costul mutării tale și vezi cât economisești."
+        />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <LayoutWrapper>
@@ -27,9 +50,7 @@ export default function CalculatorPage() {
             <SavingsCalculator />
 
             <div className="mt-16 text-center">
-              <h2 className="mb-6 text-2xl font-bold text-gray-900">
-                Cum funcționează estimarea?
-              </h2>
+              <h2 className="mb-6 text-2xl font-bold text-gray-900">Cum funcționează estimarea?</h2>
               <div className="grid gap-8 md:grid-cols-3">
                 <div className="rounded-xl bg-white p-6 shadow-sm">
                   <div className="mb-4 text-3xl">📊</div>

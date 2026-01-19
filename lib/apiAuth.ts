@@ -38,7 +38,7 @@ export async function verifyAuth(req: NextApiRequest): Promise<AuthResult> {
   try {
     const decoded = await adminAuth.verifyIdToken(match[1]);
     return { success: true, uid: decoded.uid };
-  } catch (_err) {
+  } catch {
     return {
       success: false,
       error: "Invalid or expired token",

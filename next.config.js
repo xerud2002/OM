@@ -162,36 +162,6 @@ const nextConfig = {
           },
         ],
       },
-      // Cache Next.js static files
-      {
-        source: "/_next/static/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      // Cache JavaScript chunks
-      {
-        source: "/_next/static/chunks/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
-      // Cache CSS
-      {
-        source: "/_next/static/css/(.*)",
-        headers: [
-          {
-            key: "Cache-Control",
-            value: "public, max-age=31536000, immutable",
-          },
-        ],
-      },
     ];
   },
 

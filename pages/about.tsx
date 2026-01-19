@@ -263,7 +263,10 @@ export default function AboutPage() {
                           src="/pics/partner.webp"
                           alt="Echipa Ofertemutare.ro"
                           fill
+                          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
                           className="object-cover transition-transform duration-500 hover:scale-105"
+                          loading="lazy"
+                          quality={75}
                         />
                       </div>
                     </div>
@@ -653,8 +656,10 @@ export default function AboutPage() {
                           src="/pics/oferta.webp"
                           alt="Platforma Ofertemutare.ro"
                           fill
-                          sizes="(max-width: 768px) 100vw, 500px"
+                          sizes="(max-width: 768px) 90vw, (max-width: 1200px) 45vw, 500px"
                           className="object-cover transition-transform duration-500 hover:scale-105"
+                          loading="lazy"
+                          quality={75}
                         />
                       </div>
 

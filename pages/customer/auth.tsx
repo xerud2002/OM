@@ -10,6 +10,7 @@ import { Mail, Lock, User, ArrowRight, Sparkles, Shield, CheckCircle } from "luc
 import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
+import { translateFirebaseError } from "@/utils/authErrors";
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,12 +20,29 @@ export default function CustomerAuthPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
+  // Handle post-auth redirect and form submission
+  const handlePostAuthRedirect = async () => {
+    const pendingSubmission = localStorage.getItem("pendingRequestSubmission");
+
+    if (pendingSubmission === "true") {
+      // Clear the flag
+      localStorage.removeItem("pendingRequestSubmission");
+      // Redirect to dashboard where form will auto-submit
+      router.push("/customer/dashboard?autoSubmit=true");
+    } else {
+      router.push("/customer/dashboard");
+    }
+  };
+
   // ✅ Redirect if already logged in
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) router.push("/customer/dashboard");
+      if (user) {
+        handlePostAuthRedirect();
+      }
     });
     return () => unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router]);
 
   // ✅ Google sign-in
@@ -49,7 +67,7 @@ export default function CustomerAuthPage() {
         router.push("/company/auth");
         return;
       }
-      router.push("/customer/dashboard");
+      await handlePostAuthRedirect();
     } catch (err: any) {
       // If role conflict occurred, attempt to detect existing role and redirect
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
@@ -66,7 +84,49 @@ export default function CustomerAuthPage() {
           // fall back to generic message
         }
       }
-      setMessage(err.message || "Eroare la autentificare cu Google.");
+      setMessage(translateFirebaseError(err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ✅ Facebook sign-in
+  const handleFacebookLogin = async () => {
+    try {
+      setLoading(true);
+      const mod = await import("@/utils/firebaseHelpers");
+      const user = await mod.loginWithFacebook("customer");
+
+      if (!user) {
+        setLoading(false);
+        return;
+      }
+
+      const role = await mod.getUserRole(user);
+      if (role !== "customer") {
+        setMessage(
+          "Contul tău este înregistrat ca firmă — folosește pagina de autentificare pentru firme."
+        );
+        router.push("/company/auth");
+        return;
+      }
+      await handlePostAuthRedirect();
+    } catch (err: any) {
+      if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
+        try {
+          const mod = await import("@/utils/firebaseHelpers");
+          const current = auth.currentUser;
+          const role = current ? await mod.getUserRole(current) : null;
+          if (role === "company") {
+            setMessage("Contul tău este înregistrat ca firmă. Redirecționare...");
+            router.push("/company/auth");
+            return;
+          }
+        } catch {
+          // fall back to generic message
+        }
+      }
+      setMessage(translateFirebaseError(err));
     } finally {
       setLoading(false);
     }
@@ -80,8 +140,9 @@ export default function CustomerAuthPage() {
 
     try {
       const mod = await import("@/utils/firebaseHelpers");
+      let user;
       if (isLogin) {
-        const user = await mod.loginWithEmail({ email, password });
+        user = await mod.loginWithEmail({ email, password });
         const role = await mod.getUserRole(user);
         if (role !== "customer") {
           setMessage(
@@ -91,10 +152,10 @@ export default function CustomerAuthPage() {
           return;
         }
       } else {
-        await mod.registerWithEmail("customer", { email, password });
+        user = await mod.registerWithEmail("customer", { email, password });
         // registration sets role via ensureUserProfile; proceed to dashboard
       }
-      router.push("/customer/dashboard");
+      await handlePostAuthRedirect();
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {
@@ -110,7 +171,7 @@ export default function CustomerAuthPage() {
           // ignore
         }
       }
-      setMessage(err.message || "A apărut o eroare neașteptată.");
+      setMessage(translateFirebaseError(err));
     } finally {
       setLoading(false);
     }
@@ -124,7 +185,7 @@ export default function CustomerAuthPage() {
       await mod.resetPassword(email);
       setMessage("✉️ Email de resetare trimis cu succes!");
     } catch (err: any) {
-      setMessage(err.message);
+      setMessage(translateFirebaseError(err));
     }
   };
 
@@ -315,7 +376,8 @@ export default function CustomerAuthPage() {
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       className="w-full bg-transparent text-gray-900 placeholder-transparent outline-none"
-                      autoComplete={isLogin ? "current-password" : "new-password"}
+                      autoComplete="off"
+                      name="password"
                     />
                   </div>
                 </div>
@@ -372,17 +434,32 @@ export default function CustomerAuthPage() {
                 </div>
               </div>
 
-              {/* === Google Login === */}
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={handleGoogleLogin}
-                disabled={loading}
-                className="group flex w-full items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-6 py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
-              >
-                <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
-                Google
-              </motion.button>
+              {/* === Social Login Buttons === */}
+              <div className="flex gap-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleGoogleLogin}
+                  disabled={loading}
+                  className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-4 py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
+                >
+                  <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
+                  Google
+                </motion.button>
+
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={handleFacebookLogin}
+                  disabled={loading}
+                  className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-[#1877F2] bg-[#1877F2] px-4 py-4 font-medium text-white shadow-sm transition-all hover:bg-[#166FE5] hover:shadow-md disabled:opacity-50"
+                >
+                  <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                  </svg>
+                  Facebook
+                </motion.button>
+              </div>
 
               {/* === Status Message === */}
               <AnimatePresence>
