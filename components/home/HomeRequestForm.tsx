@@ -5,20 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import counties from "@/counties";
 import cities from "@/cities";
-import {
-  ArrowRight,
-  MapPin,
-  Home,
-  Sparkles,
-  Calendar,
-  Phone,
-  User,
-  Package,
-  Truck,
-  PackageCheck,
-  Wrench,
-  Warehouse,
-} from "lucide-react";
+import { ArrowRight, MapPin, Home, Sparkles, Calendar, Phone, User, Package } from "lucide-react";
 import type { FormShape } from "@/components/customer/requestForm/types";
 
 // Special-case: București sectors
