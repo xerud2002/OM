@@ -2,15 +2,78 @@ import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import { HelpCircle, Check, MapPin, Building2 } from "lucide-react";
+import { ReactNode } from "react";
+
+// Type for FAQ with JSX support
+type FAQItem = {
+  q: string;
+  a: ReactNode;
+  aText?: string; // Plain text version for Schema.org
+};
+
+type FAQCategory = {
+  category: string;
+  questions: FAQItem[];
+};
 
 export default function FAQPage() {
-  const faqs = [
+  const faqs: FAQCategory[] = [
     {
       category: "General",
       questions: [
         {
           q: "Ce este OferteMutare.ro?",
-          a: "OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești 3-5 oferte personalizate în 24 ore. Acoperim toate orașele majore (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova, Ploiești, Oradea) și peste 30 de reședințe de județ.",
+          a: (
+            <>
+              OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări
+              verificate din România. Completezi un singur formular și primești 3-5 oferte
+              personalizate în 24 ore. Acoperim toate orașele majore (
+              <Link
+                href="/mutari/bucuresti"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                București
+              </Link>
+              ,{" "}
+              <Link
+                href="/mutari/cluj-napoca"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                Cluj-Napoca
+              </Link>
+              ,{" "}
+              <Link
+                href="/mutari/timisoara"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                Timișoara
+              </Link>
+              ,{" "}
+              <Link
+                href="/mutari/iasi"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                Iași
+              </Link>
+              ,{" "}
+              <Link
+                href="/mutari/constanta"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                Constanța
+              </Link>
+              ,{" "}
+              <Link
+                href="/mutari/brasov"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                Brașov
+              </Link>
+              ) și peste 30 de reședințe de județ.
+            </>
+          ),
+          aText:
+            "OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești 3-5 oferte personalizate în 24 ore. Acoperim toate orașele majore (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova, Ploiești, Oradea) și peste 30 de reședințe de județ.",
         },
         {
           q: "Serviciul este cu adevărat gratuit?",
@@ -31,7 +94,22 @@ export default function FAQPage() {
       questions: [
         {
           q: "Cum funcționează procesul?",
-          a: "1) Completezi formularul cu detalii despre mutare (5 minute), 2) Firmele verificate primesc cererea ta, 3) Primești 3-5 oferte în 24h, 4) Compari și alegi oferta potrivită, 5) Confirmarea directă cu firma aleasă.",
+          a: (
+            <>
+              1) Completezi{" "}
+              <Link
+                href="/customer/dashboard"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                formularul
+              </Link>{" "}
+              cu detalii despre mutare (5 minute), 2) Firmele verificate primesc cererea ta, 3)
+              Primești 3-5 oferte în 24h, 4) Compari și alegi oferta potrivită, 5) Confirmarea
+              directă cu firma aleasă.
+            </>
+          ),
+          aText:
+            "1) Completezi formularul cu detalii despre mutare (5 minute), 2) Firmele verificate primesc cererea ta, 3) Primești 3-5 oferte în 24h, 4) Compari și alegi oferta potrivită, 5) Confirmarea directă cu firma aleasă.",
         },
         {
           q: "Ce informații trebuie să furnizez?",
@@ -39,7 +117,21 @@ export default function FAQPage() {
         },
         {
           q: "Pot modifica cererea după ce am trimis-o?",
-          a: "Da! După autentificare în contul de client, poți edita detaliile cererii, adăuga/șterge fotografii sau anula cererea complet dacă planurile s-au schimbat.",
+          a: (
+            <>
+              Da! După autentificare în{" "}
+              <Link
+                href="/customer/auth"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                contul de client
+              </Link>
+              , poți edita detaliile cererii, adăuga/șterge fotografii sau anula cererea complet
+              dacă planurile s-au schimbat.
+            </>
+          ),
+          aText:
+            "Da! După autentificare în contul de client, poți edita detaliile cererii, adăuga/șterge fotografii sau anula cererea complet dacă planurile s-au schimbat.",
         },
         {
           q: "Cât timp durează până primesc ofertele?",
@@ -52,7 +144,20 @@ export default function FAQPage() {
       questions: [
         {
           q: "În ce orașe operați?",
-          a: "Oferim servicii în toată România! Orașe majore acoperite: București (toate sectoarele), Cluj-Napoca (Mănăștur, Zorilor, Gheorgheni), Timișoara (Circumvalațiunii, Fabric), Iași (Tatarași, Copou), Constanța (Mamaia, Tomis), Brașov (Tractorul, Noua), Galați, Craiova, Ploiești, Oradea, Brăila, Arad, Pitești, Sibiu, Bacău, Târgu-Mureș, Baia Mare, Buzău, Botoșani, Satu Mare, Suceava, Piatra-Neamț, Drobeta-Turnu Severin, Târgoviște, Focșani, Tulcea, și multe alte orașe.",
+          a: (
+            <>
+              Oferim servicii în toată România! Vezi{" "}
+              <Link href="/mutari" className="text-emerald-600 underline hover:text-emerald-700">
+                toate orașele acoperite
+              </Link>
+              : București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova,
+              Ploiești, Oradea, Brăila, Arad, Pitești, Sibiu, Bacău, Târgu-Mureș, Baia Mare, Buzău,
+              Botoșani, Satu Mare, Suceava, Piatra-Neamț, Drobeta-Turnu Severin, Târgoviște,
+              Focșani, Tulcea, și multe alte orașe.
+            </>
+          ),
+          aText:
+            "Oferim servicii în toată România! Orașe majore acoperite: București (toate sectoarele), Cluj-Napoca (Mănăștur, Zorilor, Gheorgheni), Timișoara (Circumvalațiunii, Fabric), Iași (Tatarași, Copou), Constanța (Mamaia, Tomis), Brașov (Tractorul, Noua), Galați, Craiova, Ploiești, Oradea, Brăila, Arad, Pitești, Sibiu, Bacău, Târgu-Mureș, Baia Mare, Buzău, Botoșani, Satu Mare, Suceava, Piatra-Neamț, Drobeta-Turnu Severin, Târgoviște, Focșani, Tulcea, și multe alte orașe.",
         },
         {
           q: "Aveți firme verificate în orașele mici sau comune?",
@@ -77,7 +182,18 @@ export default function FAQPage() {
         },
         {
           q: "Ce fac dacă am probleme cu o firmă?",
-          a: "Contactează-ne imediat la contact@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu respectă standardele, este exclusă de pe platformă. De asemenea, poți lăsa o recenzie după mutare.",
+          a: (
+            <>
+              <Link href="/contact" className="text-emerald-600 underline hover:text-emerald-700">
+                Contactează-ne
+              </Link>{" "}
+              imediat la contact@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu
+              respectă standardele, este exclusă de pe platformă. De asemenea, poți lăsa o recenzie
+              după mutare.
+            </>
+          ),
+          aText:
+            "Contactează-ne imediat la contact@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu respectă standardele, este exclusă de pe platformă. De asemenea, poți lăsa o recenzie după mutare.",
         },
         {
           q: "Pot vedea recenzii despre firme înainte să aleg?",
@@ -94,7 +210,22 @@ export default function FAQPage() {
       questions: [
         {
           q: "Cât costă o mutare în România?",
-          a: "Depinde de: distanță, volum, etaj, acces, servicii extra. Orientativ: garsonieră 800-1.500 lei, 2 camere 1.500-2.500 lei, 3+ camere 2.500-4.500 lei, casă/vilă 4.000-10.000+ lei.",
+          a: (
+            <>
+              Depinde de: distanță, volum, etaj, acces, servicii extra. Orientativ: garsonieră
+              800-1.500 lei, 2 camere 1.500-2.500 lei, 3+ camere 2.500-4.500 lei, casă/vilă
+              4.000-10.000+ lei. Folosește{" "}
+              <Link
+                href="/calculator"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                calculatorul nostru
+              </Link>{" "}
+              pentru o estimare rapidă.
+            </>
+          ),
+          aText:
+            "Depinde de: distanță, volum, etaj, acces, servicii extra. Orientativ: garsonieră 800-1.500 lei, 2 camere 1.500-2.500 lei, 3+ camere 2.500-4.500 lei, casă/vilă 4.000-10.000+ lei.",
         },
         {
           q: "Cum plătesc firma de mutări?",
@@ -136,19 +267,82 @@ export default function FAQPage() {
       questions: [
         {
           q: "Oferiți servicii de împachetare profesională?",
-          a: "Da! Majoritatea firmelor oferă împachetare completă (materiale incluse): vesela, obiectele fragile, haine, cărți. Costă în plus 200-800 lei funcție de volum. Materialele (cutii, bubble wrap, folie) pot fi cumpărate separat.",
+          a: (
+            <>
+              Da! Majoritatea firmelor oferă{" "}
+              <Link
+                href="/servicii/impachetare/profesionala"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                împachetare completă
+              </Link>{" "}
+              (materiale incluse): vesela, obiectele fragile, haine, cărți. Costă în plus 200-800
+              lei funcție de volum. Vezi și{" "}
+              <Link
+                href="/servicii/impachetare/materiale"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                materialele disponibile
+              </Link>
+              .
+            </>
+          ),
+          aText:
+            "Da! Majoritatea firmelor oferă împachetare completă (materiale incluse): vesela, obiectele fragile, haine, cărți. Costă în plus 200-800 lei funcție de volum. Materialele (cutii, bubble wrap, folie) pot fi cumpărate separat.",
         },
         {
           q: "Puteți muta obiecte foarte grele (piane, trezoruri, seifuri)?",
-          a: "Da, avem firme specializate în mutări de obiecte grele. Un pian vertical: +300-600 lei, pian cu coadă: +800-1.500 lei. Trebuie specificat în cerere pentru echipament special.",
+          a: (
+            <>
+              Da, avem firme specializate în{" "}
+              <Link
+                href="/mutari/specializate/piane"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                mutări de piane
+              </Link>{" "}
+              și obiecte grele. Un pian vertical: +300-600 lei, pian cu coadă: +800-1.500 lei.
+              Trebuie specificat în cerere pentru echipament special.
+            </>
+          ),
+          aText:
+            "Da, avem firme specializate în mutări de obiecte grele. Un pian vertical: +300-600 lei, pian cu coadă: +800-1.500 lei. Trebuie specificat în cerere pentru echipament special.",
         },
         {
           q: "Oferiți depozitare temporară?",
-          a: "Da! Multe firme au depozite proprii sau parteneriate. Costă 50-150 lei/zi pentru un apartament de 2 camere. Util dacă ai nevoie de câteva zile între mutări sau renovezi.",
+          a: (
+            <>
+              Da! Multe firme au{" "}
+              <Link
+                href="/servicii/depozitare"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                depozite proprii
+              </Link>{" "}
+              sau parteneriate. Costă 50-150 lei/zi pentru un apartament de 2 camere. Util dacă ai
+              nevoie de câteva zile între mutări sau renovezi.
+            </>
+          ),
+          aText:
+            "Da! Multe firme au depozite proprii sau parteneriate. Costă 50-150 lei/zi pentru un apartament de 2 camere. Util dacă ai nevoie de câteva zile între mutări sau renovezi.",
         },
         {
           q: "Puteți muta și debarasa simultan?",
-          a: "Da! Poți cere servicii de debarasare (mobilier vechi, electronice, moloz) în același timp cu mutarea. Costă +200-800 lei funcție de cantitate și necesită mențiune în cerere.",
+          a: (
+            <>
+              Da! Poți cere servicii de{" "}
+              <Link
+                href="/servicii/debarasare"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                debarasare
+              </Link>{" "}
+              (mobilier vechi, electronice, moloz) în același timp cu mutarea. Costă +200-800 lei
+              funcție de cantitate și necesită mențiune în cerere.
+            </>
+          ),
+          aText:
+            "Da! Poți cere servicii de debarasare (mobilier vechi, electronice, moloz) în același timp cu mutarea. Costă +200-800 lei funcție de cantitate și necesită mențiune în cerere.",
         },
       ],
     },
@@ -157,15 +351,54 @@ export default function FAQPage() {
       questions: [
         {
           q: "Trebuie să creez cont pentru a solicita oferte?",
-          a: "Nu inițial! Poți completa formularul fără cont. După trimitere, vei primi un email pentru a-ți crea cont și a gestiona cererile și ofertele primite.",
+          a: (
+            <>
+              Nu inițial! Poți completa{" "}
+              <Link
+                href="/customer/dashboard"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                formularul
+              </Link>{" "}
+              fără cont. După trimitere, vei primi un email pentru a-ți crea cont și a gestiona
+              cererile și ofertele primite.
+            </>
+          ),
+          aText:
+            "Nu inițial! Poți completa formularul fără cont. După trimitere, vei primi un email pentru a-ți crea cont și a gestiona cererile și ofertele primite.",
         },
         {
           q: "Ce faceți cu datele mele personale?",
-          a: "Le folosim doar pentru a-ți trimite oferte și a facilita comunicarea cu firmele. Nu vindem/partajăm datele cu terțe părți. Vezi Politica de confidențialitate pentru detalii complete.",
+          a: (
+            <>
+              Le folosim doar pentru a-ți trimite oferte și a facilita comunicarea cu firmele. Nu
+              vindem/partajăm datele cu terțe părți. Vezi{" "}
+              <Link href="/privacy" className="text-emerald-600 underline hover:text-emerald-700">
+                Politica de confidențialitate
+              </Link>{" "}
+              pentru detalii complete.
+            </>
+          ),
+          aText:
+            "Le folosim doar pentru a-ți trimite oferte și a facilita comunicarea cu firmele. Nu vindem/partajăm datele cu terțe părți. Vezi Politica de confidențialitate pentru detalii complete.",
         },
         {
           q: "Pot șterge contul și datele mele?",
-          a: "Da, oricând! Accesează Setările contului și alege 'Șterge cont'. Toate datele tale vor fi șterse permanent în conformitate cu GDPR.",
+          a: (
+            <>
+              Da, oricând! Accesează{" "}
+              <Link
+                href="/customer/settings"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
+                Setările contului
+              </Link>{" "}
+              și alege &apos;Șterge cont&apos;. Toate datele tale vor fi șterse permanent în
+              conformitate cu GDPR.
+            </>
+          ),
+          aText:
+            "Da, oricând! Accesează Setările contului și alege 'Șterge cont'. Toate datele tale vor fi șterse permanent în conformitate cu GDPR.",
         },
         {
           q: "Primesc spam după ce solicit oferte?",
@@ -175,7 +408,7 @@ export default function FAQPage() {
     },
   ];
 
-  // Generate Schema.org FAQ structured data
+  // Generate Schema.org FAQ structured data (using plain text versions)
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -185,7 +418,7 @@ export default function FAQPage() {
         name: faq.q,
         acceptedAnswer: {
           "@type": "Answer",
-          text: faq.a,
+          text: faq.aText || (typeof faq.a === "string" ? faq.a : faq.q),
         },
       }))
     ),
