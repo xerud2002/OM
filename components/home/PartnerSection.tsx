@@ -96,7 +96,7 @@ export default function PartnerSection() {
                   </div>
 
                   <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-3xl lg:text-4xl">
-                    Devino partener
+                    Devino Partener
                     <br />
                     <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                       ofertemutare.ro
@@ -133,7 +133,7 @@ export default function PartnerSection() {
                   {/* CTA */}
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                     <Link
-                      href="/company/auth"
+                      href="/partener"
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:px-8 sm:py-4 sm:text-base"
                     >
                       Înregistrează-ți firma

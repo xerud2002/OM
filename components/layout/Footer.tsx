@@ -10,7 +10,7 @@ const USEFUL_LINKS = [
   { href: "/about", label: "Despre noi" },
   { href: "/contact", label: "Contact" },
   { href: "/customer/auth", label: "Autentificare client" },
-  { href: "/company/auth", label: "Devino partener" },
+  { href: "/partener", label: "Devino partener" },
 ];
 
 const RESOURCES = [

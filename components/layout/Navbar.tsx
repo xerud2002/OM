@@ -88,7 +88,7 @@ export default function Navbar() {
   const navLinks = [
     { href: "/about", label: "Despre Noi" },
     { href: "/contact", label: "Contact" },
-    { href: "/company/auth", label: "Devino Partener" },
+    { href: "/partener", label: "Devino Partener" },
   ];
 
   return (
