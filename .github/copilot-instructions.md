@@ -18,7 +18,7 @@ npm run lint     # Zero-warnings (Husky enforced)
 
 ### ⚠️ Dual-Role System (CRITICAL)
 
-Users are **exclusively** `customer` OR `company` — never both. Enforced at 3 levels:
+Users are **exclusively** `customer` OR `company` – never both. Enforced at 3 levels:
 
 | Layer         | Enforcement                                                  |
 | ------------- | ------------------------------------------------------------ | ----------------------- |
@@ -101,7 +101,7 @@ import { ensureUserProfile, getUserRole } from "@/utils/firebaseHelpers";
 | 🚫 No hard deletes | Use `archived: true` or status changes              |
 | ⏰ Timestamps      | Always `serverTimestamp()`                          |
 | 🔔 Toasts          | `sonner`: `toast.success()`, `toast.error()`        |
-| 📞 Romanian phone  | `07xxxxxxxx` — use `utils/validation.ts`            |
+| 📞 Romanian phone  | `07xxxxxxxx` – use `utils/validation.ts`            |
 | 🔗 Denormalization | Include `requestId`/`requestCode` in subcollections |
 
 ---
@@ -124,7 +124,7 @@ Config: `globals.css` with `@theme{}`. Use these classes:
 | ----------- | ---------------------------- | ----------------------- |
 | **EmailJS** | `utils/emailHelpers.ts`      | `NEXT_PUBLIC_EMAILJS_*` |
 | **Resend**  | `pages/api/offers/accept.ts` | `RESEND_API_KEY`        |
-| **GA4**     | `utils/analytics.ts`         | —                       |
+| **GA4**     | `utils/analytics.ts`         | –                       |
 
 ---
 

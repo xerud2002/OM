@@ -8,7 +8,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
 
   console.error = (...args: any[]) => {
     const errorMessage = args.join(" ");
-    
+
     // Suppress common development errors that don't affect functionality
     const suppressedErrors = [
       "WebSocket connection to",
@@ -16,11 +16,11 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
       "_next/webpack-hmr",
       "link preload",
       "was preloaded using link preload but not used within a few seconds",
+      "Cross-Origin-Opener-Policy",
+      "Abort fetching component for route",
     ];
 
-    const shouldSuppress = suppressedErrors.some(pattern => 
-      errorMessage.includes(pattern)
-    );
+    const shouldSuppress = suppressedErrors.some((pattern) => errorMessage.includes(pattern));
 
     if (!shouldSuppress) {
       originalConsoleError.apply(console, args);
@@ -29,7 +29,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
 
   console.warn = (...args: any[]) => {
     const warnMessage = args.join(" ");
-    
+
     // Suppress common development warnings
     const suppressedWarnings = [
       "was preloaded using link preload",
@@ -37,9 +37,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
       "Cross origin request detected",
     ];
 
-    const shouldSuppress = suppressedWarnings.some(pattern => 
-      warnMessage.includes(pattern)
-    );
+    const shouldSuppress = suppressedWarnings.some((pattern) => warnMessage.includes(pattern));
 
     if (!shouldSuppress) {
       originalConsoleWarn.apply(console, args);

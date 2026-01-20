@@ -103,7 +103,7 @@ export default function App({ Component, pageProps }: AppProps) {
 
         <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
         <link rel="icon" href="/logo.webp" type="image/webp" sizes="any" />
-        <title>Ofertemutare.ro — Oferte reale de la firme de mutări verificate</title>
+        <title>Ofertemutare.ro – Oferte reale de la firme de mutări verificate</title>
         <meta
           name="description"
           content="Primește rapid oferte reale de la firme de mutări verificate din România. Compară prețuri și alege varianta potrivită pentru tine."

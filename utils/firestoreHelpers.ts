@@ -33,7 +33,7 @@ function buildAddressString(
 // Helper: Build move date fields from data
 function buildMoveDateFields(data: any): Record<string, any> {
   const fields: Record<string, any> = {};
-  
+
   if (data.moveDateMode) {
     fields.moveDateMode = data.moveDateMode;
 
@@ -50,7 +50,7 @@ function buildMoveDateFields(data: any): Record<string, any> {
       fields.moveDateFlexDays = data.moveDateFlexDays;
     }
   }
-  
+
   return fields;
 }
 
@@ -73,7 +73,8 @@ async function generateRequestCode(): Promise<string> {
   return `REQ-${six}`;
 }
 
-export async function createRequest(data: any) {
+// Helper: Clean and prepare request data
+function prepareRequestData(data: any): Record<string, any> {
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
   const excludeFields = [
     "mediaFiles",
@@ -116,6 +117,45 @@ export async function createRequest(data: any) {
       clean.toApartment
     );
   }
+
+  return clean;
+}
+
+/**
+ * Create a guest request (no authentication required).
+ * Requires updated Firestore rules that allow unauthenticated writes with guestEmail.
+ */
+export async function createGuestRequest(
+  data: any
+): Promise<{ requestId: string; requestCode: string }> {
+  const clean = prepareRequestData(data);
+
+  // Ensure guest request fields
+  const guestEmail = (data.email || data.customerEmail || "").toLowerCase().trim();
+  if (!guestEmail) {
+    throw new Error("Email este obligatoriu");
+  }
+
+  // Generate friendly code for this request
+  const requestCode = await generateRequestCode();
+
+  const docRef = await addDoc(collection(db, "requests"), {
+    ...clean,
+    requestCode,
+    guestEmail,
+    customerId: null,
+    customerName: `${data.contactFirstName || ""} ${data.contactLastName || ""}`.trim(),
+    customerEmail: guestEmail,
+    status: "active",
+    archived: false,
+    createdAt: serverTimestamp(),
+  });
+
+  return { requestId: docRef.id, requestCode };
+}
+
+export async function createRequest(data: any) {
+  const clean = prepareRequestData(data);
 
   // Generate friendly code for this request
   const requestCode = await generateRequestCode();

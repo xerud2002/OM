@@ -21,8 +21,30 @@ export default function CustomerAuthPage() {
   const [message, setMessage] = useState("");
   const router = useRouter();
 
+  // Link any guest requests to this account
+  const linkGuestRequests = async (user: any) => {
+    try {
+      const token = await user.getIdToken();
+      await fetch("/api/requests/linkToAccount", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+    } catch (err) {
+      console.warn("Failed to link guest requests:", err);
+      // Non-critical, don't show error to user
+    }
+  };
+
   // Handle post-auth redirect and form submission
-  const handlePostAuthRedirect = async () => {
+  const handlePostAuthRedirect = async (user?: any) => {
+    // Link any guest requests first
+    if (user) {
+      await linkGuestRequests(user);
+    }
+
     const pendingSubmission = localStorage.getItem("pendingRequestSubmission");
 
     if (pendingSubmission === "true") {
@@ -39,7 +61,7 @@ export default function CustomerAuthPage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        handlePostAuthRedirect();
+        handlePostAuthRedirect(user);
       }
     });
     return () => unsubscribe();
@@ -63,12 +85,12 @@ export default function CustomerAuthPage() {
       const role = await mod.getUserRole(user);
       if (role !== "customer") {
         setMessage(
-          "Contul tău este înregistrat ca firmă — folosește pagina de autentificare pentru firme."
+          "Contul tău este înregistrat ca firmă – folosește pagina de autentificare pentru firme."
         );
         router.push("/company/auth");
         return;
       }
-      await handlePostAuthRedirect();
+      await handlePostAuthRedirect(user);
     } catch (err: any) {
       // If role conflict occurred, attempt to detect existing role and redirect
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
@@ -106,12 +128,12 @@ export default function CustomerAuthPage() {
       const role = await mod.getUserRole(user);
       if (role !== "customer") {
         setMessage(
-          "Contul tău este înregistrat ca firmă — folosește pagina de autentificare pentru firme."
+          "Contul tău este înregistrat ca firmă – folosește pagina de autentificare pentru firme."
         );
         router.push("/company/auth");
         return;
       }
-      await handlePostAuthRedirect();
+      await handlePostAuthRedirect(user);
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {
@@ -156,7 +178,7 @@ export default function CustomerAuthPage() {
         user = await mod.registerWithEmail("customer", { email, password });
         // registration sets role via ensureUserProfile; proceed to dashboard
       }
-      await handlePostAuthRedirect();
+      await handlePostAuthRedirect(user);
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {

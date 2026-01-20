@@ -93,7 +93,7 @@ export default function Steps() {
           </h2>
           <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
             Găsește cea mai bună firmă de mutări în <strong>3 pași simpli</strong>. Fără zeci de
-            telefoane, fără negocieri interminabile — noi facem munca grea pentru tine.
+            telefoane, fără negocieri interminabile – noi facem munca grea pentru tine.
           </p>
         </header>
 

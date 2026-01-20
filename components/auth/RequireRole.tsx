@@ -81,7 +81,7 @@ export default function RequireRole({ allowedRole, children }: Props) {
 
   if (checking)
     return (
-      // Minimal loading placeholder while we verify role — avoids flashing or aborting navigation
+      // Minimal loading placeholder while we verify role - avoids flashing or aborting navigation
       <div className="flex h-full w-full items-center justify-center p-8">
         Verificare permisiuni…
       </div>

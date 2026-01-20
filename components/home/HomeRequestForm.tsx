@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
-import { useRouter } from "next/router";
 import Link from "next/link";
 import counties from "@/counties";
 import cities from "@/cities";
@@ -15,6 +14,9 @@ import {
   Package,
   ChevronLeft,
   ChevronRight,
+  CheckCircle,
+  X,
+  Mail,
 } from "lucide-react";
 import type { FormShape } from "@/components/customer/requestForm/types";
 
@@ -191,9 +193,10 @@ function InlineCalendar({
 }
 
 export default function HomeRequestForm() {
-  const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [submittedRequestCode, setSubmittedRequestCode] = useState<string | null>(null);
 
   // Initialize with default values to avoid hydration mismatch
   const [form, setForm] = useState<FormShape>({
@@ -288,27 +291,38 @@ export default function HomeRequestForm() {
       e.preventDefault();
       setIsSubmitting(true);
 
+      const { toast } = await import("sonner");
+
       // Validate required fields
       const errors: string[] = [];
 
       if (!form.fromCounty) errors.push("Județ plecare");
       if (!form.fromCity) errors.push("Localitate plecare");
-      // Removed street/number requirements
       if (!form.fromRooms) errors.push("Camere plecare");
 
       if (!form.toCounty) errors.push("Județ destinație");
       if (!form.toCity) errors.push("Localitate destinație");
-      // Removed street/number requirements
       if (!form.toRooms) errors.push("Camere destinație");
 
       if (!form.contactFirstName) errors.push("Prenume");
       if (!form.contactLastName) errors.push("Nume");
       if (!form.phone) errors.push("Telefon");
+      if (!form.email) errors.push("Email");
 
       if (!form.acceptedTerms) errors.push("Acceptă termenii");
 
+      // Validate phone format
+      const phoneClean = (form.phone || "").replace(/\s+/g, "");
+      if (form.phone && !/^07\d{8}$/.test(phoneClean)) {
+        errors.push("Format telefon invalid (07xxxxxxxx)");
+      }
+
+      // Validate email format
+      if (form.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) {
+        errors.push("Format email invalid");
+      }
+
       if (errors.length > 0) {
-        const { toast } = await import("sonner");
         toast.error(
           `Completează câmpurile: ${errors.slice(0, 3).join(", ")}${errors.length > 3 ? "..." : ""}`
         );
@@ -316,14 +330,98 @@ export default function HomeRequestForm() {
         return;
       }
 
-      // Save form to localStorage for post-auth submission
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(form));
-      localStorage.setItem("pendingRequestSubmission", "true");
+      try {
+        let requestCode: string | null = null;
 
-      // Redirect to auth page
-      router.push("/customer/auth?redirect=submit");
+        // Try API first
+        const response = await fetch("/api/requests/createGuest", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form),
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          requestCode = result.data.requestCode;
+        } else if (response.status === 503) {
+          // Admin SDK not ready - use client-side Firebase directly
+          const { createGuestRequest } = await import("@/utils/firestoreHelpers");
+          const result = await createGuestRequest(form);
+          requestCode = result.requestCode;
+        } else {
+          const result = await response.json().catch(() => ({}));
+          throw new Error(result.error || "Eroare la trimiterea cererii");
+        }
+
+        // Success! Show modal
+        setSubmittedRequestCode(requestCode);
+        setShowSuccessModal(true);
+
+        // Clear form from localStorage
+        localStorage.removeItem(STORAGE_KEY);
+
+        // Reset form to initial state
+        setForm({
+          fromCounty: "",
+          fromCity: "",
+          fromCityManual: false,
+          fromStreet: "",
+          fromNumber: "",
+          fromType: "flat",
+          fromRooms: "",
+          fromFloor: "",
+          fromElevator: false,
+          toCounty: "",
+          toCity: "",
+          toCityManual: false,
+          toStreet: "",
+          toNumber: "",
+          toType: "flat",
+          toRooms: "",
+          toFloor: "",
+          toElevator: false,
+          moveDateMode: "exact",
+          moveDate: "",
+          moveDateStart: "",
+          moveDateEnd: "",
+          contactFirstName: "",
+          contactLastName: "",
+          phone: "",
+          email: "",
+          serviceMoving: true,
+          servicePacking: false,
+          serviceDisassembly: false,
+          serviceStorage: false,
+          serviceCleanout: false,
+          serviceTransportOnly: false,
+          servicePiano: false,
+          serviceFewItems: false,
+          surveyType: "quick-estimate",
+          mediaUpload: "later",
+          acceptedTerms: false,
+          details: "",
+        });
+        setCurrentStep(1);
+
+        // Track analytics
+        try {
+          const { trackRequestCreated } = await import("@/utils/analytics");
+          trackRequestCreated(
+            form.fromCity || "",
+            form.toCity || "",
+            parseInt(String(form.fromRooms || 0), 10)
+          );
+        } catch {
+          // Ignore analytics errors
+        }
+      } catch (error: any) {
+        console.error("Submit error:", error);
+        toast.error(error.message || "Eroare la trimiterea cererii. Te rugăm să încerci din nou.");
+      } finally {
+        setIsSubmitting(false);
+      }
     },
-    [form, router]
+    [form]
   );
 
   const nextStep = useCallback(() => {
@@ -941,6 +1039,75 @@ export default function HomeRequestForm() {
       <p className="mt-4 text-center text-xs text-gray-500">
         🔒 100% gratuit • Fără obligații • Date securizate
       </p>
+
+      {/* Success Modal */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+            {/* Close button */}
+            <button
+              onClick={() => setShowSuccessModal(false)}
+              className="absolute top-4 right-4 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            {/* Success icon */}
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+              <CheckCircle className="h-10 w-10 text-emerald-600" />
+            </div>
+
+            {/* Title */}
+            <h2 className="mb-2 text-center text-xl font-bold text-gray-900">
+              Mulțumim pentru cerere! 🎉
+            </h2>
+
+            {/* Request code */}
+            {submittedRequestCode && (
+              <p className="mb-4 text-center text-sm text-gray-600">
+                Codul cererii tale:{" "}
+                <span className="font-semibold text-emerald-600">{submittedRequestCode}</span>
+              </p>
+            )}
+
+            {/* Message */}
+            <div className="mb-6 rounded-lg bg-emerald-50 p-4 text-center">
+              <p className="text-sm text-gray-700">
+                <strong>Vei primi 3-5 oferte în maxim 24h</strong> de la firme de mutări verificate.
+              </p>
+              <p className="mt-2 text-sm text-gray-600">
+                Ofertele vor fi trimise pe adresa de email furnizată.
+              </p>
+            </div>
+
+            {/* Account creation CTA */}
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4">
+              <div className="mb-3 flex items-center gap-2">
+                <Mail className="h-5 w-5 text-emerald-600" />
+                <span className="font-semibold text-gray-800">Creează-ți cont gratuit</span>
+              </div>
+              <p className="mb-3 text-sm text-gray-600">
+                Cu un cont poți vedea toate ofertele, comunica direct cu transportatorii și gestiona
+                mutarea ta.
+              </p>
+              <div className="flex gap-2">
+                <Link
+                  href="/customer/auth"
+                  className="flex-1 rounded-lg bg-emerald-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-emerald-600"
+                >
+                  Creează cont
+                </Link>
+                <button
+                  onClick={() => setShowSuccessModal(false)}
+                  className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                >
+                  Mai târziu
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

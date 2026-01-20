@@ -68,7 +68,7 @@ textarea {
   @apply w-full rounded-lg border border-gray-300 bg-white/70 p-3 transition-all focus:border-emerald-400 focus:ring-2 focus:ring-emerald-300 focus:outline-none;
 }
 
-/* 🌿 SELECT personalizat — paletă brand (emerald + sky) */
+/* 🌿 SELECT personalizat – paletă brand (emerald + sky) */
 select {
   background-color: white;
   border-radius: 12px;
