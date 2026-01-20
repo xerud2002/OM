@@ -15,6 +15,7 @@
     "@emailjs/browser": "^4.4.1",
     "@next/third-parties": "^14.2.35",
     "@tailwindcss/postcss": "^4.1.18",
+    "@vercel/analytics": "^1.6.1",
     "date-fns": "^3.6.0",
     "firebase": "^12.8.0",
     "firebase-admin": "^12.7.0",
@@ -31,7 +32,7 @@
     "@types/react": "^18.3.27",
     "@types/react-dom": "^18.3.7",
     "eslint": "^8.57.1",
-    "eslint-config-next": "^14.2.35",
+    "eslint-config-next": "14.2.35",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.0.1",
@@ -52,11 +53,11 @@
     ]
   },
   "browserslist": [
-    "Chrome >= 105",
-    "Firefox >= 104",
-    "Safari >= 16",
-    "Edge >= 105",
-    "iOS >= 16",
+    "Chrome >= 90",
+    "Firefox >= 90",
+    "Safari >= 15",
+    "Edge >= 90",
+    "iOS >= 15",
     "not dead",
     "not op_mini all"
   ],

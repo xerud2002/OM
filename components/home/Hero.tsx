@@ -84,8 +84,8 @@ export default function Hero() {
               bugetul tău.
             </p>
 
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4 lg:justify-start lg:gap-6">
+            {/* Trust Indicators - All 4 on one row for desktop */}
+            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 lg:flex-nowrap lg:justify-start lg:gap-4">
               {[
                 { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
                 { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },

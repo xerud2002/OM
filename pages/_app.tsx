@@ -5,7 +5,8 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Inter } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { loadGoogleAnalytics } from "@/utils/interactionLoader";
+import { Analytics } from "@vercel/analytics/next";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
@@ -81,6 +82,11 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
+  // Load Google Analytics on first user interaction (deferred for performance)
+  useEffect(() => {
+    loadGoogleAnalytics("G-6624X6E5GQ");
+  }, []);
+
   return (
     <ErrorBoundary>
       {/* Fallback meta for pages that don't set their own <Head> */}
@@ -133,8 +139,10 @@ export default function App({ Component, pageProps }: AppProps) {
       {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
       <Toaster richColors position="top-right" closeButton />
 
-      {/* Google Analytics 4 */}
-      <GoogleAnalytics gaId="G-6624X6E5GQ" />
+      {/* Google Analytics 4 - Loaded on interaction via interactionLoader */}
+
+      {/* Vercel Analytics - Deferred */}
+      <Analytics />
     </ErrorBoundary>
   );
 }

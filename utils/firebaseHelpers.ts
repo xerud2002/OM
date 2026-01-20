@@ -16,6 +16,8 @@ import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firest
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/services/firebase";
 import { GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
+// Feature flags
+const FACEBOOK_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === "true";
 import type { UserRole, CustomerProfile, CompanyProfile } from "@/types";
 import {
   setUserId,
@@ -140,7 +142,7 @@ export async function loginWithGoogle(role: UserRole) {
       console.warn("Google sign-in popup was blocked or cancelled");
       return null;
     }
-    
+
     // Handle account exists with different credential - show helpful message
     if (error?.code === "auth/account-exists-with-different-credential") {
       const email = error.customData?.email;
@@ -162,13 +164,18 @@ export async function loginWithGoogle(role: UserRole) {
         }
       }
     }
-    
+
     throw error;
   }
 }
 
 export async function loginWithFacebook(role: UserRole) {
   try {
+    if (!FACEBOOK_ENABLED) {
+      const err: any = new Error("Autentificarea cu Facebook este dezactivată temporar.");
+      err.code = "FACEBOOK_DISABLED";
+      throw err;
+    }
     const provider = new FacebookAuthProvider();
     const cred = await signInWithPopup(auth, provider);
     await ensureUserProfile(cred.user, role);
@@ -183,15 +190,15 @@ export async function loginWithFacebook(role: UserRole) {
       console.warn("Facebook sign-in popup was blocked or cancelled");
       return null;
     }
-    
+
     // Handle account exists with different credential
     if (error?.code === "auth/account-exists-with-different-credential") {
       const email = error.customData?.email;
       const pendingCred = error.credential; // OAuthCredential from Facebook
-      
+
       if (email) {
         const methods = await fetchSignInMethodsForEmail(auth, email);
-        
+
         // If user has Google account, try to sign in with Google and link Facebook
         if (methods.includes("google.com")) {
           try {
@@ -199,17 +206,17 @@ export async function loginWithFacebook(role: UserRole) {
             const googleProvider = new GoogleAuthProvider();
             googleProvider.setCustomParameters({ login_hint: email });
             const googleResult = await signInWithPopup(auth, googleProvider);
-            
+
             // Link the Facebook credential to this account
             if (pendingCred) {
               await linkWithCredential(googleResult.user, pendingCred);
             }
-            
+
             await ensureUserProfile(googleResult.user, role);
             setUserId(googleResult.user.uid);
             setUserProperties({ user_role: role });
             trackLogin("facebook", role);
-            
+
             return googleResult.user;
           } catch (linkError: any) {
             // If linking fails, just return the Google user
@@ -224,7 +231,7 @@ export async function loginWithFacebook(role: UserRole) {
             throw err;
           }
         }
-        
+
         if (methods.includes("password")) {
           const err: any = new Error(
             "Acest email are deja un cont cu parolă. Te rugăm să te autentifici cu email și parolă."
@@ -234,7 +241,7 @@ export async function loginWithFacebook(role: UserRole) {
         }
       }
     }
-    
+
     throw error;
   }
 }

@@ -5,7 +5,17 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import counties from "@/counties";
 import cities from "@/cities";
-import { ArrowRight, MapPin, Home, Sparkles, Calendar, Phone, User, Package } from "lucide-react";
+import {
+  ArrowRight,
+  MapPin,
+  Home,
+  Sparkles,
+  Calendar,
+  User,
+  Package,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import type { FormShape } from "@/components/customer/requestForm/types";
 
 // Special-case: București sectors
@@ -29,6 +39,157 @@ const formatYMD = (d: Date) => {
 const STORAGE_KEY = "homeRequestForm";
 const TOTAL_STEPS = 7;
 
+// Inline Calendar Component
+function InlineCalendar({
+  value,
+  onChange,
+  minDate,
+}: {
+  value: string;
+  onChange: (date: string) => void;
+  minDate: string;
+}) {
+  const today = new Date();
+  const [viewDate, setViewDate] = useState(() => {
+    if (value) return new Date(`${value}T00:00:00`);
+    return today;
+  });
+
+  const roMonthsFull = [
+    "Ianuarie",
+    "Februarie",
+    "Martie",
+    "Aprilie",
+    "Mai",
+    "Iunie",
+    "Iulie",
+    "August",
+    "Septembrie",
+    "Octombrie",
+    "Noiembrie",
+    "Decembrie",
+  ];
+  const roWeekdaysShort = ["Lu", "Ma", "Mi", "Jo", "Vi", "Sâ", "Du"];
+
+  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year: number, month: number) => {
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1; // Monday = 0
+  };
+
+  const formatDateYMD = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const daysInMonth = getDaysInMonth(year, month);
+  const firstDay = getFirstDayOfMonth(year, month);
+
+  const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
+
+  const isDateDisabled = (day: number) => {
+    const date = new Date(year, month, day);
+    const minD = new Date(`${minDate}T00:00:00`);
+    minD.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    return date < minD;
+  };
+
+  const isSelected = (day: number) => {
+    if (!value) return false;
+    const selected = new Date(`${value}T00:00:00`);
+    return (
+      selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day
+    );
+  };
+
+  const isToday = (day: number) => {
+    return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+  };
+
+  const handleSelect = (day: number) => {
+    if (isDateDisabled(day)) return;
+    const date = new Date(year, month, day);
+    onChange(formatDateYMD(date));
+  };
+
+  // Build calendar grid
+  const days: (number | null)[] = [];
+  for (let i = 0; i < firstDay; i++) days.push(null);
+  for (let d = 1; d <= daysInMonth; d++) days.push(d);
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-3">
+      {/* Header */}
+      <div className="mb-3 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={prevMonth}
+          className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <span className="text-sm font-semibold text-gray-800">
+          {roMonthsFull[month]} {year}
+        </span>
+        <button
+          type="button"
+          onClick={nextMonth}
+          className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Weekday headers */}
+      <div className="mb-2 grid grid-cols-7 gap-1">
+        {roWeekdaysShort.map((wd) => (
+          <div key={wd} className="text-center text-xs font-medium text-gray-400">
+            {wd}
+          </div>
+        ))}
+      </div>
+
+      {/* Days grid */}
+      <div className="grid grid-cols-7 gap-1">
+        {days.map((day, idx) => {
+          if (day === null) {
+            return <div key={`empty-${idx}`} className="h-9" />;
+          }
+          const disabled = isDateDisabled(day);
+          const selected = isSelected(day);
+          const todayClass = isToday(day) && !selected;
+
+          return (
+            <button
+              key={day}
+              type="button"
+              onClick={() => handleSelect(day)}
+              disabled={disabled}
+              className={`h-9 w-full rounded-lg text-sm font-medium transition ${
+                disabled
+                  ? "cursor-not-allowed text-gray-300"
+                  : selected
+                    ? "bg-emerald-500 text-white shadow-sm"
+                    : todayClass
+                      ? "border border-emerald-300 text-emerald-600 hover:bg-emerald-50"
+                      : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function HomeRequestForm() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
@@ -38,6 +199,7 @@ export default function HomeRequestForm() {
   const [form, setForm] = useState<FormShape>({
     fromCounty: "",
     fromCity: "",
+    fromCityManual: false,
     fromStreet: "",
     fromNumber: "",
     fromType: "flat",
@@ -46,6 +208,7 @@ export default function HomeRequestForm() {
     fromElevator: false,
     toCounty: "",
     toCity: "",
+    toCityManual: false,
     toStreet: "",
     toNumber: "",
     toType: "flat",
@@ -63,6 +226,10 @@ export default function HomeRequestForm() {
     servicePacking: false,
     serviceDisassembly: false,
     serviceStorage: false,
+    serviceCleanout: false,
+    serviceTransportOnly: false,
+    servicePiano: false,
+    serviceFewItems: false,
     surveyType: "quick-estimate",
     mediaUpload: "later",
     acceptedTerms: false,
@@ -91,6 +258,31 @@ export default function HomeRequestForm() {
   const today = new Date();
   const minDate = formatYMD(today);
 
+  // Calendar helpers for a friendlier UX
+  const roWeekdays = ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"];
+  const roMonths = [
+    "ian",
+    "feb",
+    "mar",
+    "apr",
+    "mai",
+    "iun",
+    "iul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+
+  const formatWeekdayPreview = (ymd?: string) => {
+    if (!ymd) return "";
+    const d = new Date(`${ymd}T00:00:00`);
+    const wd = roWeekdays[d.getDay()];
+    const month = roMonths[d.getMonth()];
+    return `${wd}, ${d.getDate()} ${month}`;
+  };
+
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -101,14 +293,12 @@ export default function HomeRequestForm() {
 
       if (!form.fromCounty) errors.push("Județ plecare");
       if (!form.fromCity) errors.push("Localitate plecare");
-      if (!form.fromStreet) errors.push("Strada plecare");
-      if (!form.fromNumber) errors.push("Număr plecare");
+      // Removed street/number requirements
       if (!form.fromRooms) errors.push("Camere plecare");
 
       if (!form.toCounty) errors.push("Județ destinație");
       if (!form.toCity) errors.push("Localitate destinație");
-      if (!form.toStreet) errors.push("Strada destinație");
-      if (!form.toNumber) errors.push("Număr destinație");
+      // Removed street/number requirements
       if (!form.toRooms) errors.push("Camere destinație");
 
       if (!form.contactFirstName) errors.push("Prenume");
@@ -146,7 +336,7 @@ export default function HomeRequestForm() {
 
   // Step 1: FROM Location (county + city only)
   const renderStep1 = () => (
-    <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/50 to-white p-4">
+    <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow">
           <MapPin className="h-4 w-4 text-white" />
@@ -159,7 +349,14 @@ export default function HomeRequestForm() {
           <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
           <select
             value={form.fromCounty || ""}
-            onChange={(e) => setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))}
+            onChange={(e) =>
+              setForm((s) => ({
+                ...s,
+                fromCounty: e.target.value,
+                fromCity: "",
+                fromCityManual: false,
+              }))
+            }
             className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
           >
             <option value="">Selectează județ</option>
@@ -172,19 +369,46 @@ export default function HomeRequestForm() {
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
-          <select
-            value={form.fromCity || ""}
-            onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
-            disabled={!form.fromCounty}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none disabled:opacity-50"
-          >
-            <option value="">Selectează localitate</option>
-            {getCityOptions(form.fromCounty).map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          {!form.fromCityManual ? (
+            <select
+              value={form.fromCity || ""}
+              onChange={(e) => {
+                if (e.target.value === "__manual__") {
+                  setForm((s) => ({ ...s, fromCity: "", fromCityManual: true }));
+                } else {
+                  setForm((s) => ({ ...s, fromCity: e.target.value }));
+                }
+              }}
+              disabled={!form.fromCounty}
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none disabled:opacity-50"
+            >
+              <option value="">Selectează localitate</option>
+              {getCityOptions(form.fromCounty).map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+              <option value="__manual__">--- Altă localitate ---</option>
+            </select>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={form.fromCity || ""}
+                onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
+                placeholder="Scrie numele localității"
+                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={() => setForm((s) => ({ ...s, fromCity: "", fromCityManual: false }))}
+                className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 hover:bg-gray-100"
+              >
+                Listă
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -192,7 +416,7 @@ export default function HomeRequestForm() {
 
   // Step 2: TO Location (county + city only)
   const renderStep2 = () => (
-    <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50/50 to-white p-4">
+    <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 shadow">
           <Home className="h-4 w-4 text-white" />
@@ -205,7 +429,9 @@ export default function HomeRequestForm() {
           <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
           <select
             value={form.toCounty || ""}
-            onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
+            onChange={(e) =>
+              setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "", toCityManual: false }))
+            }
             className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
           >
             <option value="">Selectează județ</option>
@@ -218,19 +444,46 @@ export default function HomeRequestForm() {
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
-          <select
-            value={form.toCity || ""}
-            onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
-            disabled={!form.toCounty}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none disabled:opacity-50"
-          >
-            <option value="">Selectează localitate</option>
-            {getCityOptions(form.toCounty).map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          {!form.toCityManual ? (
+            <select
+              value={form.toCity || ""}
+              onChange={(e) => {
+                if (e.target.value === "__manual__") {
+                  setForm((s) => ({ ...s, toCity: "", toCityManual: true }));
+                } else {
+                  setForm((s) => ({ ...s, toCity: e.target.value }));
+                }
+              }}
+              disabled={!form.toCounty}
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none disabled:opacity-50"
+            >
+              <option value="">Selectează localitate</option>
+              {getCityOptions(form.toCounty).map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+              <option value="__manual__">--- Altă localitate ---</option>
+            </select>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={form.toCity || ""}
+                onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
+                placeholder="Scrie numele localității"
+                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={() => setForm((s) => ({ ...s, toCity: "", toCityManual: false }))}
+                className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 hover:bg-gray-100"
+              >
+                Listă
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -238,7 +491,7 @@ export default function HomeRequestForm() {
 
   // Step 3: FROM Address details
   const renderStep3 = () => (
-    <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/50 to-white p-4">
+    <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow">
           <MapPin className="h-4 w-4 text-white" />
@@ -247,24 +500,19 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-3">
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Strada *</label>
-          <input
-            value={form.fromStreet || ""}
-            onChange={(e) => setForm((s) => ({ ...s, fromStreet: e.target.value }))}
-            placeholder="Numele străzii"
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-          />
-        </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Nr. *</label>
-            <input
-              value={form.fromNumber || ""}
-              onChange={(e) => setForm((s) => ({ ...s, fromNumber: e.target.value }))}
-              placeholder="Nr."
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-            />
+            <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
+            <select
+              value={form.fromType || "flat"}
+              onChange={(e) =>
+                setForm((s) => ({ ...s, fromType: e.target.value as "house" | "flat" }))
+              }
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+            >
+              <option value="flat">Apartament</option>
+              <option value="house">Casă</option>
+            </select>
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
@@ -279,40 +527,29 @@ export default function HomeRequestForm() {
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
-            <select
-              value={form.fromType || "flat"}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, fromType: e.target.value as "house" | "flat" }))
-              }
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-            >
-              <option value="flat">Apartament</option>
-              <option value="house">Casă</option>
-            </select>
-          </div>
         </div>
         {form.fromType === "flat" && (
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
               <label className="mb-1 block text-xs font-medium text-gray-600">Etaj</label>
               <input
                 value={form.fromFloor || ""}
                 onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                placeholder="Etaj"
+                placeholder="ex: 3"
                 className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
               />
             </div>
-            <label className="flex items-center gap-2 pt-5 text-sm text-gray-600">
-              <input
-                type="checkbox"
-                checked={!!form.fromElevator}
-                onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
-                className="h-4 w-4 rounded border-gray-300"
-              />
-              Lift
-            </label>
+            <div className="flex items-end">
+              <label className="flex h-9.5 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-emerald-300">
+                <input
+                  type="checkbox"
+                  checked={!!form.fromElevator}
+                  onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
+                  className="h-4 w-4 rounded border-gray-300 text-emerald-600"
+                />
+                Lift
+              </label>
+            </div>
           </div>
         )}
       </div>
@@ -321,7 +558,7 @@ export default function HomeRequestForm() {
 
   // Step 4: TO Address details
   const renderStep4 = () => (
-    <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50/50 to-white p-4">
+    <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 shadow">
           <Home className="h-4 w-4 text-white" />
@@ -330,24 +567,19 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-3">
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Strada *</label>
-          <input
-            value={form.toStreet || ""}
-            onChange={(e) => setForm((s) => ({ ...s, toStreet: e.target.value }))}
-            placeholder="Numele străzii"
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-          />
-        </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Nr. *</label>
-            <input
-              value={form.toNumber || ""}
-              onChange={(e) => setForm((s) => ({ ...s, toNumber: e.target.value }))}
-              placeholder="Nr."
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-            />
+            <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
+            <select
+              value={form.toType || "flat"}
+              onChange={(e) =>
+                setForm((s) => ({ ...s, toType: e.target.value as "house" | "flat" }))
+              }
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none"
+            >
+              <option value="flat">Apartament</option>
+              <option value="house">Casă</option>
+            </select>
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
@@ -362,40 +594,29 @@ export default function HomeRequestForm() {
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
             />
           </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
-            <select
-              value={form.toType || "flat"}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, toType: e.target.value as "house" | "flat" }))
-              }
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none"
-            >
-              <option value="flat">Apartament</option>
-              <option value="house">Casă</option>
-            </select>
-          </div>
         </div>
         {form.toType === "flat" && (
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
               <label className="mb-1 block text-xs font-medium text-gray-600">Etaj</label>
               <input
                 value={form.toFloor || ""}
                 onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                placeholder="Etaj"
+                placeholder="ex: 5"
                 className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none"
               />
             </div>
-            <label className="flex items-center gap-2 pt-5 text-sm text-gray-600">
-              <input
-                type="checkbox"
-                checked={!!form.toElevator}
-                onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
-                className="h-4 w-4 rounded border-gray-300"
-              />
-              Lift
-            </label>
+            <div className="flex items-end">
+              <label className="flex h-9.5 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-sky-300">
+                <input
+                  type="checkbox"
+                  checked={!!form.toElevator}
+                  onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
+                  className="h-4 w-4 rounded border-gray-300 text-sky-600"
+                />
+                Lift
+              </label>
+            </div>
           </div>
         )}
       </div>
@@ -405,12 +626,14 @@ export default function HomeRequestForm() {
   // Step 5: Move Date
   const renderStep5 = () => (
     <div className="rounded-xl border border-gray-200 bg-white p-4">
-      <div className="mb-3 flex items-center gap-2">
-        <Calendar className="h-5 w-5 text-emerald-600" />
+      <div className="mb-4 flex items-center gap-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
+          <Calendar className="h-4 w-4 text-emerald-600" />
+        </div>
         <span className="font-semibold text-gray-800">Când te muți?</span>
       </div>
 
-      <div className="mb-3 flex flex-wrap gap-2">
+      <div className="mb-4 grid grid-cols-3 gap-2">
         {[
           { value: "exact", label: "Dată exactă" },
           { value: "flexible", label: "Flexibil" },
@@ -425,10 +648,10 @@ export default function HomeRequestForm() {
                 moveDateMode: opt.value as "exact" | "flexible" | "none",
               }))
             }
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${
               form.moveDateMode === opt.value
-                ? "bg-emerald-500 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-emerald-500 text-white shadow-sm"
+                : "border border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-emerald-50"
             }`}
           >
             {opt.label}
@@ -437,30 +660,55 @@ export default function HomeRequestForm() {
       </div>
 
       {form.moveDateMode === "exact" && (
-        <input
-          type="date"
-          min={minDate}
-          value={form.moveDate || ""}
-          onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-        />
+        <div className="space-y-2">
+          <InlineCalendar
+            value={form.moveDate || ""}
+            onChange={(date) => setForm((s) => ({ ...s, moveDate: date }))}
+            minDate={minDate}
+          />
+          {form.moveDate && (
+            <p className="text-center text-sm font-medium text-emerald-600">
+              📅 {formatWeekdayPreview(form.moveDate)}
+            </p>
+          )}
+        </div>
       )}
       {form.moveDateMode === "flexible" && (
-        <div className="space-y-2">
-          <input
-            type="date"
-            min={minDate}
+        <div className="space-y-3">
+          <InlineCalendar
             value={form.moveDate || ""}
-            onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+            onChange={(date) => setForm((s) => ({ ...s, moveDate: date }))}
+            minDate={minDate}
           />
-          <p className="text-xs text-gray-500">± câteva zile flexibilitate</p>
+          {form.moveDate && (
+            <p className="text-center text-sm font-medium text-emerald-600">
+              📅 {formatWeekdayPreview(form.moveDate)}
+            </p>
+          )}
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-600">Flexibilitate</label>
+            <select
+              value={String(form.moveDateFlexDays ?? 7)}
+              onChange={(e) => setForm((s) => ({ ...s, moveDateFlexDays: Number(e.target.value) }))}
+              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            >
+              <option value={3}>± 3 zile</option>
+              <option value={7}>± 7 zile</option>
+              <option value={14}>± 14 zile</option>
+              <option value={30}>± 30 zile</option>
+            </select>
+          </div>
+          <p className="rounded-lg bg-emerald-50 p-3 text-center text-xs text-emerald-700">
+            💡 Companiile pot propune date în jurul perioadei selectate.
+          </p>
         </div>
       )}
       {form.moveDateMode === "none" && (
-        <p className="rounded-lg bg-gray-50 p-3 text-sm text-gray-500">
-          Nu-i problemă! Companiile îți vor propune mai multe date.
-        </p>
+        <div className="rounded-lg bg-gray-50 p-4 text-center">
+          <p className="text-sm text-gray-600">
+            Nu-i problemă! Companiile îți vor propune mai multe date disponibile.
+          </p>
+        </div>
       )}
     </div>
   );
@@ -476,10 +724,14 @@ export default function HomeRequestForm() {
 
         <div className="grid grid-cols-2 gap-2">
           {[
-            { key: "serviceMoving", label: "Transport" },
+            { key: "serviceMoving", label: "Mutare" },
             { key: "servicePacking", label: "Ambalare" },
             { key: "serviceDisassembly", label: "Montaj" },
+            { key: "serviceCleanout", label: "Debarasare" },
             { key: "serviceStorage", label: "Depozitare" },
+            { key: "serviceTransportOnly", label: "Doar Transport", sublabel: "(fără încărcare)" },
+            { key: "servicePiano", label: "Mutare Pian" },
+            { key: "serviceFewItems", label: "Câteva lucruri" },
           ].map((svc) => (
             <label
               key={svc.key}
@@ -493,9 +745,14 @@ export default function HomeRequestForm() {
                 type="checkbox"
                 checked={!!(form as Record<string, boolean>)[svc.key]}
                 onChange={(e) => setForm((s) => ({ ...s, [svc.key]: e.target.checked }))}
-                className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
               />
-              <span className="text-sm text-gray-700">{svc.label}</span>
+              <span className="text-sm leading-tight text-gray-700">
+                {svc.label}
+                {"sublabel" in svc && (
+                  <span className="block text-xs text-gray-500">{svc.sublabel}</span>
+                )}
+              </span>
             </label>
           ))}
         </div>
@@ -547,16 +804,24 @@ export default function HomeRequestForm() {
 
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Telefon *</label>
-            <div className="flex items-center gap-2">
-              <Phone className="h-4 w-4 text-gray-400" />
-              <input
-                type="tel"
-                value={form.phone || ""}
-                onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-                placeholder="07xx xxx xxx"
-                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              />
-            </div>
+            <input
+              type="tel"
+              value={form.phone || ""}
+              onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+              placeholder="07xx xxx xxx"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-600">Email *</label>
+            <input
+              type="email"
+              value={form.email || ""}
+              onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
+              placeholder="exemplu@email.com"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            />
           </div>
         </div>
       </div>
@@ -628,7 +893,7 @@ export default function HomeRequestForm() {
 
       <form onSubmit={handleSubmit}>
         {/* Form Steps */}
-        <div className="min-h-[280px]">
+        <div className="min-h-70">
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
@@ -662,7 +927,7 @@ export default function HomeRequestForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
             >
               <Sparkles className="h-5 w-5" />
               {isSubmitting ? "Se procesează..." : "Obține Oferte Gratuite"}

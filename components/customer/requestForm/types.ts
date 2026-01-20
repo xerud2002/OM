@@ -36,12 +36,17 @@ export type FormShape = {
   toRooms?: string | number;
   rooms?: string | number;
   phone?: string;
+  email?: string;
   details?: string;
   serviceMoving?: boolean;
   servicePacking?: boolean;
   serviceDisassembly?: boolean;
   serviceCleanout?: boolean;
   serviceStorage?: boolean;
+  // Additional service options
+  serviceTransportOnly?: boolean;
+  servicePiano?: boolean;
+  serviceFewItems?: boolean;
   surveyType?: SurveyType;
   mediaUpload?: MediaUpload;
   mediaFiles?: File[];

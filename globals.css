@@ -360,3 +360,20 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Progressive rendering: defer offscreen sections for all devices */
+@supports (content-visibility: auto) {
+  main > section {
+    content-visibility: auto;
+  }
+}
+
+/* Mobile GPU savings: reduce heavy blur/backdrop filters */
+@media (max-width: 640px) {
+  [class*="blur-"] {
+    filter: none !important;
+  }
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+  }
+}

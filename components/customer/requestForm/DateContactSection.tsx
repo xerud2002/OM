@@ -21,6 +21,27 @@ export default function DateContactSection({ form, setForm }: Props) {
   // Get today's date in YYYY-MM-DD format for min attribute
   const today = new Date().toISOString().split("T")[0];
 
+  const roWeekdays = ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"];
+  const roMonths = [
+    "ian",
+    "feb",
+    "mar",
+    "apr",
+    "mai",
+    "iun",
+    "iul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+  const formatWeekdayPreview = (ymd?: string) => {
+    if (!ymd) return "";
+    const d = new Date(`${ymd}T00:00:00`);
+    return `${roWeekdays[d.getDay()]}, ${d.getDate()} ${roMonths[d.getMonth()]}`;
+  };
+
   return (
     <div className="space-y-6">
       {/* Move Date Section */}
@@ -97,6 +118,11 @@ export default function DateContactSection({ form, setForm }: Props) {
                 onChange={(e) => setForm((s) => ({ ...s, moveDateStart: e.target.value }))}
                 className="w-full max-w-xs rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none"
               />
+              {form.moveDateStart && (
+                <p className="mt-1 text-xs text-gray-500">
+                  {formatWeekdayPreview(form.moveDateStart)}
+                </p>
+              )}
             </div>
           )}
 
@@ -114,6 +140,11 @@ export default function DateContactSection({ form, setForm }: Props) {
                   onChange={(e) => setForm((s) => ({ ...s, moveDateStart: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none"
                 />
+                {form.moveDateStart && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    {formatWeekdayPreview(form.moveDateStart)}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">
@@ -127,6 +158,11 @@ export default function DateContactSection({ form, setForm }: Props) {
                   onChange={(e) => setForm((s) => ({ ...s, moveDateEnd: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none"
                 />
+                {form.moveDateEnd && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    {formatWeekdayPreview(form.moveDateEnd)}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -145,6 +181,11 @@ export default function DateContactSection({ form, setForm }: Props) {
                   onChange={(e) => setForm((s) => ({ ...s, moveDateStart: e.target.value }))}
                   className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-cyan-500 focus:ring-2 focus:ring-cyan-500/20 focus:outline-none"
                 />
+                {form.moveDateStart && (
+                  <p className="mt-1 text-xs text-gray-500">
+                    {formatWeekdayPreview(form.moveDateStart)}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-700">

@@ -91,6 +91,10 @@ export type MovingRequest = {
   serviceDisassembly?: boolean;
   serviceCleanout?: boolean;
   serviceStorage?: boolean;
+  // Additional service options
+  serviceTransportOnly?: boolean; // Doar transport (fără încărcare/descărcare)
+  servicePiano?: boolean; // Mutare pian
+  serviceFewItems?: boolean; // Câteva lucruri
   // Survey & Estimate
   surveyType?: "in-person" | "video" | "quick-estimate";
   // Media upload

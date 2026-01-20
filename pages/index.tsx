@@ -2,9 +2,13 @@
 
 import Head from "next/head";
 import dynamic from "next/dynamic";
-import Hero from "@/components/home/Hero";
 import MobileHero from "@/components/home/MobileHero";
 
+// Lazy load Desktop Hero to reduce initial bundle size (it's heavy with framer-motion)
+const Hero = dynamic(() => import("@/components/home/Hero"), {
+  loading: () => <div className="hidden md:block min-h-[85vh] bg-slate-50" />,
+  ssr: true,
+});
 // Lazy load ALL below-the-fold components for better LCP
 const Steps = dynamic(() => import("@/components/home/Steps"), {
   loading: () => <div className="min-h-[600px]" />,
@@ -44,8 +48,13 @@ const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
 const GuaranteeSection = dynamic(() => import("@/components/home/GuaranteeSection"), {
   loading: () => <div className="min-h-[400px]" />,
 });
+import { SERVICE_FAQS } from "@/data/faqData";
+
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
   loading: () => <div className="min-h-[300px]" />,
+});
+const FAQSection = dynamic(() => import("@/components/content/FAQSection"), {
+  loading: () => <div className="min-h-[400px]" />,
 });
 
 export default function HomePage() {
@@ -372,6 +381,11 @@ export default function HomePage() {
       <Testimonials />
       <Articles />
       
+      {/* FAQ Section */}
+      <div className="mx-auto max-w-4xl px-4 py-8">
+        <FAQSection items={SERVICE_FAQS.general} />
+      </div>
+
       {/* CRO: Urgency & Trust */}
       <div className="mx-auto max-w-7xl px-4 py-8">
         <UrgencyBanner />

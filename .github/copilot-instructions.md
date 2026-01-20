@@ -1,121 +1,158 @@
 # Copilot Instructions for OM (OferteMutare.ro)
 
-Next.js 14 Pages Router + Firebase + Tailwind v4 platform connecting Romanian customers with moving companies.
+> Actionable guidance for AI agents on this **Next.js 14 + Firebase** moving quote platform.
 
-## Quick Start
+---
+
+## 🚀 Quick Start
 
 ```bash
 npm run dev      # http://localhost:3000
-npm run build    # Always run before deploy (required)
-npm run lint     # Zero-warnings policy (Husky pre-commit enforced)
+npm run build    # Run before deploy
+npm run lint     # Zero-warnings (Husky enforced)
 ```
 
-## Core Architecture
+---
 
-### Dual-Role System (CRITICAL)
+## 🏗️ Core Architecture
 
-Users are **exclusively** `customer` OR `company` - never both. Enforced at 3 levels:
+### ⚠️ Dual-Role System (CRITICAL)
 
-1. **Firestore rules**: `canCreateCustomer()` / `canCreateCompany()` check opposite role doesn't exist
-2. **Application**: `ensureUserProfile()` throws `ROLE_CONFLICT` if dual-role attempted
-3. **UI**: `<RequireRole allowedRole="customer|company">` component guards pages
+Users are **exclusively** `customer` OR `company` — never both. Enforced at 3 levels:
 
-Profiles stored in `customers/{uid}` or `companies/{uid}`.
+| Layer         | Enforcement                                                  |
+| ------------- | ------------------------------------------------------------ | ----------------------- |
+| **Firestore** | `canCreateCustomer()` / `canCreateCompany()` block dual-role |
+| **App**       | `ensureUserProfile()` throws `ROLE_CONFLICT`                 |
+| **UI**        | `<RequireRole allowedRole="customer                          | company">` guards pages |
 
-### Firebase Singleton Pattern (CRITICAL)
+> 📁 Profiles: `customers/{uid}` or `companies/{uid}`
 
-Never instantiate Firebase twice - always import from designated modules:
+### ⚠️ Firebase Singleton (CRITICAL)
+
+Never instantiate Firebase twice:
 
 ```typescript
-// Client-side (components, pages)
+// 🖥️ Client-side (components, pages)
 import { auth, db, storage } from "@/services/firebase";
 
-// Server-side (API routes only)
+// 🔐 Server-side (API routes only)
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 if (!adminReady) return res.status(503).json(apiError("Admin not ready"));
 ```
 
-## API Route Pattern
+---
 
-All protected endpoints in `pages/api/` follow this structure:
+## 🔒 API Routes
+
+All protected endpoints in `pages/api/` follow this pattern:
 
 ```typescript
-import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
+import { verifyAuth, sendAuthError, withAuth } from "@/lib/apiAuth";
 import { apiSuccess, apiError } from "@/types/api";
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") return res.status(405).json(apiError("Method Not Allowed"));
+// ✅ Preferred: Wrapper
+export default withAuth(async (req, res, uid) => {
+  // uid is verified, proceed with logic
+});
 
-  const authResult = await verifyAuth(req);
-  if (!authResult.success) return sendAuthError(res, authResult);
-  const uid = authResult.uid;
-
-  // ALWAYS validate ownership
-  if (requestData.customerId !== uid) return res.status(403).json(apiError("Not authorized"));
-
-  return res.json(apiSuccess({ data }));
-}
+// Alternative: Manual check
+const auth = await verifyAuth(req);
+if (!auth.success) return sendAuthError(res, auth);
+if (data.customerId !== auth.uid) return res.status(403).json(apiError("Forbidden"));
 ```
 
-Alternative: wrap entire handler with `withAuth(async (req, res, uid) => { ... })`.
+---
 
-## Data Model & Collections
+## 📊 Data Model
 
-**Request lifecycle**: Customer creates → Companies submit offers → Customer accepts one → Others auto-declined
+**Flow**: Customer creates request → Companies submit offers → Customer accepts one → Others auto-declined
 
-| Collection                      | Key Fields                                                 | Notes                        |
-| ------------------------------- | ---------------------------------------------------------- | ---------------------------- |
-| `requests/{id}`                 | `customerId`, `requestCode`, `fromCity/toCity`, `status`   | Main request document        |
-| `requests/{id}/offers/{id}`     | `companyId`, `price`, `status`, `requestId`, `requestCode` | **Denormalize parent refs!** |
-| `companies/{id}/notifications/` | `type`, `requestId`, `read`                                | Real-time company alerts     |
+| Collection                      | Key Fields                                       | Notes                      |
+| ------------------------------- | ------------------------------------------------ | -------------------------- |
+| `requests/{id}`                 | `customerId`, `requestCode`, `status`            | Main document              |
+| `requests/{id}/offers/{id}`     | `companyId`, `price`, `requestId`, `requestCode` | ⚠️ Denormalize parent refs |
+| `companies/{id}/notifications/` | `type`, `requestId`, `read`                      | Real-time alerts           |
 
-**Status values**: `active` | `closed` | `paused` | `cancelled` (requests), `pending` | `accepted` | `declined` (offers)
+**Statuses**:
 
-## Helper Functions (USE THESE!)
+- Requests: `active` · `closed` · `paused` · `cancelled`
+- Offers: `pending` · `accepted` · `declined`
+
+---
+
+## 🛠️ Helper Functions
+
+> **Always prefer helpers over raw Firestore SDK**
 
 ```typescript
-// Instead of raw Firestore, use:
 import { createRequest, addOffer, updateRequest, archiveRequest } from "@/utils/firestoreHelpers";
 import { ensureUserProfile, getUserRole } from "@/utils/firebaseHelpers";
 ```
 
-`createRequest()` auto-generates `REQ-XXXXXX` codes via Firestore transaction on `meta/counters.requestSeq`.
+`createRequest()` auto-generates `REQ-XXXXXX` via transaction on `meta/counters.requestSeq`.
 
-## Key Conventions
+---
 
-| Rule                | Implementation                                             |
-| ------------------- | ---------------------------------------------------------- |
-| **No hard deletes** | Use `archived: true` or status changes                     |
-| **Timestamps**      | Always `serverTimestamp()` for writes                      |
-| **Toasts**          | Use `sonner`: `toast.success()`, `toast.error()`           |
-| **Romanian phone**  | Format: `07xxxxxxxx` - validate with `utils/validation.ts` |
-| **Denormalization** | Always include `requestId`/`requestCode` on subcollections |
+## 📋 Conventions
 
-## Styling (Tailwind v4)
+| Rule               | Implementation                                      |
+| ------------------ | --------------------------------------------------- |
+| 🚫 No hard deletes | Use `archived: true` or status changes              |
+| ⏰ Timestamps      | Always `serverTimestamp()`                          |
+| 🔔 Toasts          | `sonner`: `toast.success()`, `toast.error()`        |
+| 📞 Romanian phone  | `07xxxxxxxx` — use `utils/validation.ts`            |
+| 🔗 Denormalization | Include `requestId`/`requestCode` in subcollections |
 
-Config in `globals.css` using `@theme{}`. Use existing utility classes:
+---
 
-- `.card` - rounded card with glass effect
-- `.btn-primary` - emerald gradient button
-- `.btn-outline` - outlined variant
+## 🎨 Styling (Tailwind v4)
 
-## Media Upload Flow
+Config: `globals.css` with `@theme{}`. Use these classes:
 
-Token-based system for deferred uploads:
+| Class          | Purpose                   |
+| -------------- | ------------------------- |
+| `.card`        | Rounded glass-effect card |
+| `.btn-primary` | Emerald gradient button   |
+| `.btn-outline` | Outlined variant          |
 
-1. `generateUploadLink.ts` creates token → `pages/upload/[token].tsx` public page
-2. `validateUploadToken.ts` / `markUploadTokenUsed.ts` manage lifecycle
-3. `notifyCompaniesOnUpload.ts` alerts companies when media added
+---
 
-## Key Files Reference
+## 🔌 Integrations
 
-| Purpose              | File                              |
-| -------------------- | --------------------------------- |
-| Client Firebase      | `services/firebase.ts`            |
-| Admin Firebase       | `lib/firebaseAdmin.ts`            |
-| API auth middleware  | `lib/apiAuth.ts`                  |
-| Firestore CRUD       | `utils/firestoreHelpers.ts`       |
-| Auth/profile helpers | `utils/firebaseHelpers.ts`        |
-| Types                | `types/index.ts`, `types/api.ts`  |
-| Security rules       | `firebase.firestore.rules`        |
-| Page protection      | `components/auth/RequireRole.tsx` |
+| Service     | Location                     | Env Vars                |
+| ----------- | ---------------------------- | ----------------------- |
+| **EmailJS** | `utils/emailHelpers.ts`      | `NEXT_PUBLIC_EMAILJS_*` |
+| **Resend**  | `pages/api/offers/accept.ts` | `RESEND_API_KEY`        |
+| **GA4**     | `utils/analytics.ts`         | —                       |
+
+---
+
+## 📤 Media Upload Flow
+
+Token-based deferred upload system:
+
+```
+generateUploadLink.ts → creates token
+       ↓
+pages/upload/[token].tsx → public upload page
+       ↓
+validateUploadToken.ts / markUploadTokenUsed.ts → lifecycle
+       ↓
+notifyCompaniesOnUpload.ts → alerts companies
+```
+
+---
+
+## 📁 Key Files
+
+| Purpose         | Path                                                 |
+| --------------- | ---------------------------------------------------- |
+| Client Firebase | `services/firebase.ts`                               |
+| Admin Firebase  | `lib/firebaseAdmin.ts`                               |
+| API Auth        | `lib/apiAuth.ts`                                     |
+| Firestore CRUD  | `utils/firestoreHelpers.ts`                          |
+| Auth Helpers    | `utils/firebaseHelpers.ts`                           |
+| Types           | `types/index.ts`, `types/api.ts`                     |
+| Security Rules  | `firebase.firestore.rules`, `firebase.storage.rules` |
+| Page Guards     | `components/auth/RequireRole.tsx`                    |

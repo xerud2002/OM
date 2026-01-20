@@ -2,6 +2,28 @@
 // Acesta este un fișier helper - FAQs organizate pe categorii
 
 export const SERVICE_FAQS = {
+  general: [
+    {
+      question: "Cum primesc ofertele de mutare?",
+      answer: "Completezi formularul simplu în 2 minute. Cererea ta ajunge instant la firmele verificate din zona ta. În maxim 24h primești 3-5 oferte personalizate pe email sau telefon.",
+    },
+    {
+      question: "Este acest serviciu gratuit?",
+      answer: "Da, 100% gratuit pentru clienți. Nu percepem niciun comision pentru solicitarea ofertelor. Plătești doar serviciul de mutare direct firmei pe care o alegi.",
+    },
+    {
+      question: "Firmele de mutări sunt verificate?",
+      answer: "Absolut. Verificăm legalitatea, experiența și recenziile fiecărei firme partenere. Doar firmele serioase cu rating bun rămân în rețeaua noastră.",
+    },
+    {
+      question: "Cât timp durează până primesc ofertele?",
+      answer: "Primele oferte pot apărea în câteva minute. Majoritatea clienților primesc toate cele 3-5 oferte în maxim 24 de ore lucrătoare.",
+    },
+    {
+      question: "Pot refuza toate ofertele dacă nu sunt mulțumit?",
+      answer: "Da, nu ai nicio obligație. Dacă ofertele nu corespund bugetului sau cerințelor tale, nu ești obligat să alegi niciuna.",
+    },
+  ],
   case: [
     {
       question: "Cât costă mutarea unei case în România?",
