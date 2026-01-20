@@ -16,13 +16,8 @@ export default function Document() {
           href="https://firebasestorage.googleapis.com"
           crossOrigin="anonymous"
         />
-        <link rel="preconnect" href="https://www.googleapis.com" crossOrigin="anonymous" />
-        <link
-          rel="preconnect"
-          href="https://identitytoolkit.googleapis.com"
-          crossOrigin="anonymous"
-        />
-        <link rel="dns-prefetch" href="https://apis.google.com" />
+        <link rel="preconnect" href="https://apis.google.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
         {/* Google Analytics - loaded via @next/third-parties in _app.tsx */}
       </Head>
