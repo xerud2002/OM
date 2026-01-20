@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Inter } from "next/font/google";
 import { loadGoogleAnalytics } from "@/utils/interactionLoader";
+import { Analytics } from "@vercel/analytics/next";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
@@ -139,6 +140,9 @@ export default function App({ Component, pageProps }: AppProps) {
       <Toaster richColors position="top-right" closeButton />
 
       {/* Google Analytics 4 - Loaded on interaction via interactionLoader */}
+
+      {/* Vercel Analytics - Deferred */}
+      <Analytics />
     </ErrorBoundary>
   );
 }
