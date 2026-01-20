@@ -1,4 +1,3 @@
-import Image from "next/image";
 import dynamic from "next/dynamic";
 import { CheckCircle, Star, ShieldCheck, TrendingUp } from "lucide-react";
 
@@ -10,9 +9,6 @@ const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
 });
 
 export default function MobileHero() {
-  // Tiny blur placeholder (matches desktop Hero to prevent CLS)
-  const blurDataURL =
-    "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAMCAgMCAgMDAwMEAwMEBQgFBQQEBQoHBwYIDAoMCwsKCwsNDhIQDQ4RDgsLEBYQERMUFRUVDA8XGBYUGBIUFRT/2wBDAQMEBAUEBQkFBQkUDQsNFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBT/wAARCAAHAAoDASIAAhEBAxEB/8QAFgABAQEAAAAAAAAAAAAAAAAAAAUH/8QAIBAAAgIBBAMBAAAAAAAAAAAAAQIDBAAFBhESITFBUf/EABQBAQAAAAAAAAAAAAAAAAAAAAP/xAAZEQACAwEAAAAAAAAAAAAAAAABAgADESH/2gAMAwEAAhEDEEuO";
   return (
     <section className="relative overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-24 pb-12">
       {/* Static Background Elements */}
@@ -63,24 +59,7 @@ export default function MobileHero() {
           </div>
         </div>
 
-        {/* Image - Above Form */}
-        <div className="mb-6 relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-xl">
-          <div className="relative aspect-4/3">
-            <Image
-              src="/pics/hero-branded-v1.webp"
-              alt="Servicii Mutare"
-              fill
-              className="object-cover"
-              sizes="(max-width: 420px) 90vw, (max-width: 640px) 80vw, 320px"
-              quality={75}
-              priority={true}
-              placeholder="blur"
-              blurDataURL={blurDataURL}
-            />
-          </div>
-        </div>
-
-        {/* Mini Form Section - After Image */}
+        {/* Mini Form Section */}
         <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-4 shadow-xl backdrop-blur-sm">
           <div className="mb-3 text-center">
             <h2 className="text-lg font-bold text-gray-800">Completează în 2 minute</h2>
