@@ -256,7 +256,7 @@ export default function HomeRequestForm() {
             className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
           />
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Nr. *</label>
             <input
@@ -339,7 +339,7 @@ export default function HomeRequestForm() {
             className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
           />
         </div>
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Nr. *</label>
             <input
