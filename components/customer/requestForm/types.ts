@@ -36,6 +36,7 @@ export type FormShape = {
   toRooms?: string | number;
   rooms?: string | number;
   phone?: string;
+  email?: string;
   details?: string;
   serviceMoving?: boolean;
   servicePacking?: boolean;

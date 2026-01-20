@@ -11,7 +11,6 @@ import {
   Home,
   Sparkles,
   Calendar,
-  Phone,
   User,
   Package,
   ChevronLeft,
@@ -810,6 +809,17 @@ export default function HomeRequestForm() {
               value={form.phone || ""}
               onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
               placeholder="07xx xxx xxx"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            />
+          </div>
+
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-600">Email *</label>
+            <input
+              type="email"
+              value={form.email || ""}
+              onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
+              placeholder="exemplu@email.com"
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
             />
           </div>
