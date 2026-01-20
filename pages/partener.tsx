@@ -15,6 +15,18 @@ import {
   Phone,
   Mail,
 } from "lucide-react";
+import { GetServerSideProps } from "next";
+import { adminDb, adminReady } from "@/lib/firebaseAdmin";
+
+type LatestRequest = {
+  fromCity: string;
+  fromCounty: string;
+  toCity: string;
+  toCounty: string;
+  fromRooms: string | number;
+  moveDate: string;
+  createdAt: string;
+} | null;
 
 const benefits = [
   {
@@ -88,7 +100,50 @@ const stats = [
   { value: "24h", label: "Timp Răspuns" },
 ];
 
-export default function PartenerPage() {
+type Props = {
+  latestRequest: LatestRequest;
+};
+
+// Helper to format time ago
+const getTimeAgo = (dateStr: string) => {
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+
+  if (diffMins < 1) return "Acum";
+  if (diffMins < 60) return `Acum ${diffMins} minute`;
+
+  const diffHours = Math.floor(diffMins / 60);
+  if (diffHours < 24) return `Acum ${diffHours} ore`;
+
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays === 1) return "Ieri";
+  return `Acum ${diffDays} zile`;
+};
+
+// Helper to format date
+const formatDate = (dateStr: string) => {
+  if (!dateStr) return "-";
+  const date = new Date(dateStr);
+  const months = [
+    "Ian",
+    "Feb",
+    "Mar",
+    "Apr",
+    "Mai",
+    "Iun",
+    "Iul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
+};
+
+export default function PartenerPage({ latestRequest }: Props) {
   return (
     <Layout>
       <Head>
@@ -145,25 +200,37 @@ export default function PartenerPage() {
                     </div>
                     <div>
                       <p className="font-semibold text-gray-900">Cerere Nouă!</p>
-                      <p className="text-sm text-gray-500">Acum 2 minute</p>
+                      <p className="text-sm text-gray-500">
+                        {latestRequest ? getTimeAgo(latestRequest.createdAt) : "Acum 2 minute"}
+                      </p>
                     </div>
                   </div>
                   <div className="space-y-3 rounded-xl bg-gray-50 p-4">
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">De la:</span>
-                      <span className="font-medium text-gray-900">București, Sector 3</span>
+                      <span className="font-medium text-gray-900">
+                        {latestRequest
+                          ? `${latestRequest.fromCity}, ${latestRequest.fromCounty}`
+                          : "București, Sector 3"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Către:</span>
-                      <span className="font-medium text-gray-900">Cluj-Napoca</span>
+                      <span className="font-medium text-gray-900">
+                        {latestRequest ? latestRequest.toCity : "Cluj-Napoca"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
-                      <span className="text-sm text-gray-500">Cameră:</span>
-                      <span className="font-medium text-gray-900">3 camere</span>
+                      <span className="text-sm text-gray-500">Camere:</span>
+                      <span className="font-medium text-gray-900">
+                        {latestRequest ? `${latestRequest.fromRooms} camere` : "3 camere"}
+                      </span>
                     </div>
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Data:</span>
-                      <span className="font-medium text-gray-900">15 Feb 2026</span>
+                      <span className="font-medium text-gray-900">
+                        {latestRequest ? formatDate(latestRequest.moveDate) : "15 Feb 2026"}
+                      </span>
                     </div>
                   </div>
                   <button className="mt-4 w-full rounded-xl bg-emerald-500 py-3 font-semibold text-white transition hover:bg-emerald-600">
@@ -316,3 +383,40 @@ export default function PartenerPage() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps<Props> = async () => {
+  try {
+    if (!adminReady || !adminDb) {
+      return { props: { latestRequest: null } };
+    }
+
+    const snapshot = await adminDb
+      .collection("requests")
+      .where("status", "==", "active")
+      .orderBy("createdAt", "desc")
+      .limit(1)
+      .get();
+
+    if (snapshot.empty) {
+      return { props: { latestRequest: null } };
+    }
+
+    const doc = snapshot.docs[0];
+    const data = doc.data();
+
+    const latestRequest = {
+      fromCity: data.fromCity || "București",
+      fromCounty: data.fromCounty || "",
+      toCity: data.toCity || "România",
+      toCounty: data.toCounty || "",
+      fromRooms: data.fromRooms || data.rooms || "2-3",
+      moveDate: data.moveDate || "",
+      createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+    };
+
+    return { props: { latestRequest } };
+  } catch (error) {
+    console.error("Error fetching latest request:", error);
+    return { props: { latestRequest: null } };
+  }
+};
