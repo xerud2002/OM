@@ -805,16 +805,13 @@ export default function HomeRequestForm() {
 
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Telefon *</label>
-            <div className="flex items-center gap-2">
-              <Phone className="h-4 w-4 text-gray-400" />
-              <input
-                type="tel"
-                value={form.phone || ""}
-                onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
-                placeholder="07xx xxx xxx"
-                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              />
-            </div>
+            <input
+              type="tel"
+              value={form.phone || ""}
+              onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+              placeholder="07xx xxx xxx"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            />
           </div>
         </div>
       </div>
