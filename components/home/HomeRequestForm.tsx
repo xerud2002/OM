@@ -38,6 +38,7 @@ export default function HomeRequestForm() {
   const [form, setForm] = useState<FormShape>({
     fromCounty: "",
     fromCity: "",
+    fromCityManual: false,
     fromStreet: "",
     fromNumber: "",
     fromType: "flat",
@@ -46,6 +47,7 @@ export default function HomeRequestForm() {
     fromElevator: false,
     toCounty: "",
     toCity: "",
+    toCityManual: false,
     toStreet: "",
     toNumber: "",
     toType: "flat",
@@ -120,25 +122,6 @@ export default function HomeRequestForm() {
     return `${wd}, ${d.getDate()} ${month}`;
   };
 
-  const getNextDow = (start: Date, targetDow: number) => {
-    const d = new Date(start);
-    const diff = (targetDow - d.getDay() + 7) % 7;
-    // If today already matches target, offer the next week's target
-    d.setDate(d.getDate() + (diff === 0 ? 7 : diff));
-    return formatYMD(d);
-  };
-
-  const getNextWorkday = (start: Date) => {
-    const d = new Date(start);
-    for (let i = 0; i < 14; i++) {
-      const check = new Date(d);
-      check.setDate(d.getDate() + i + 1);
-      const dow = check.getDay();
-      if (dow >= 1 && dow <= 5) return formatYMD(check);
-    }
-    return formatYMD(d);
-  };
-
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
@@ -205,7 +188,14 @@ export default function HomeRequestForm() {
           <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
           <select
             value={form.fromCounty || ""}
-            onChange={(e) => setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))}
+            onChange={(e) =>
+              setForm((s) => ({
+                ...s,
+                fromCounty: e.target.value,
+                fromCity: "",
+                fromCityManual: false,
+              }))
+            }
             className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
           >
             <option value="">Selectează județ</option>
@@ -218,19 +208,46 @@ export default function HomeRequestForm() {
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
-          <select
-            value={form.fromCity || ""}
-            onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
-            disabled={!form.fromCounty}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none disabled:opacity-50"
-          >
-            <option value="">Selectează localitate</option>
-            {getCityOptions(form.fromCounty).map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          {!form.fromCityManual ? (
+            <select
+              value={form.fromCity || ""}
+              onChange={(e) => {
+                if (e.target.value === "__manual__") {
+                  setForm((s) => ({ ...s, fromCity: "", fromCityManual: true }));
+                } else {
+                  setForm((s) => ({ ...s, fromCity: e.target.value }));
+                }
+              }}
+              disabled={!form.fromCounty}
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none disabled:opacity-50"
+            >
+              <option value="">Selectează localitate</option>
+              {getCityOptions(form.fromCounty).map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+              <option value="__manual__">--- Altă localitate ---</option>
+            </select>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={form.fromCity || ""}
+                onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
+                placeholder="Scrie numele localității"
+                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={() => setForm((s) => ({ ...s, fromCity: "", fromCityManual: false }))}
+                className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 hover:bg-gray-100"
+              >
+                Listă
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -251,7 +268,9 @@ export default function HomeRequestForm() {
           <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
           <select
             value={form.toCounty || ""}
-            onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
+            onChange={(e) =>
+              setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "", toCityManual: false }))
+            }
             className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
           >
             <option value="">Selectează județ</option>
@@ -264,19 +283,46 @@ export default function HomeRequestForm() {
         </div>
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
-          <select
-            value={form.toCity || ""}
-            onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
-            disabled={!form.toCounty}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none disabled:opacity-50"
-          >
-            <option value="">Selectează localitate</option>
-            {getCityOptions(form.toCounty).map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
+          {!form.toCityManual ? (
+            <select
+              value={form.toCity || ""}
+              onChange={(e) => {
+                if (e.target.value === "__manual__") {
+                  setForm((s) => ({ ...s, toCity: "", toCityManual: true }));
+                } else {
+                  setForm((s) => ({ ...s, toCity: e.target.value }));
+                }
+              }}
+              disabled={!form.toCounty}
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none disabled:opacity-50"
+            >
+              <option value="">Selectează localitate</option>
+              {getCityOptions(form.toCounty).map((c) => (
+                <option key={c} value={c}>
+                  {c}
+                </option>
+              ))}
+              <option value="__manual__">--- Altă localitate ---</option>
+            </select>
+          ) : (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={form.toCity || ""}
+                onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
+                placeholder="Scrie numele localității"
+                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                autoFocus
+              />
+              <button
+                type="button"
+                onClick={() => setForm((s) => ({ ...s, toCity: "", toCityManual: false }))}
+                className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 hover:bg-gray-100"
+              >
+                Listă
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -293,7 +339,7 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-3">
-        <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
+        <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
             <select
@@ -322,25 +368,27 @@ export default function HomeRequestForm() {
           </div>
         </div>
         {form.fromType === "flat" && (
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
               <label className="mb-1 block text-xs font-medium text-gray-600">Etaj</label>
               <input
                 value={form.fromFloor || ""}
                 onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                placeholder="Etaj"
+                placeholder="ex: 3"
                 className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
               />
             </div>
-            <label className="flex items-center gap-2 pt-5 text-sm text-gray-600">
-              <input
-                type="checkbox"
-                checked={!!form.fromElevator}
-                onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
-                className="h-4 w-4 rounded border-gray-300"
-              />
-              Lift (Da/Nu)
-            </label>
+            <div className="flex items-end">
+              <label className="flex h-[38px] w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-emerald-300">
+                <input
+                  type="checkbox"
+                  checked={!!form.fromElevator}
+                  onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
+                  className="h-4 w-4 rounded border-gray-300 text-emerald-600"
+                />
+                Lift
+              </label>
+            </div>
           </div>
         )}
       </div>
@@ -358,7 +406,7 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-3">
-        <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
+        <div className="grid grid-cols-2 gap-3">
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
             <select
@@ -387,25 +435,27 @@ export default function HomeRequestForm() {
           </div>
         </div>
         {form.toType === "flat" && (
-          <div className="flex items-center gap-3">
-            <div className="flex-1">
+          <div className="grid grid-cols-2 gap-3">
+            <div>
               <label className="mb-1 block text-xs font-medium text-gray-600">Etaj</label>
               <input
                 value={form.toFloor || ""}
                 onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                placeholder="Etaj"
+                placeholder="ex: 5"
                 className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none"
               />
             </div>
-            <label className="flex items-center gap-2 pt-5 text-sm text-gray-600">
-              <input
-                type="checkbox"
-                checked={!!form.toElevator}
-                onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
-                className="h-4 w-4 rounded border-gray-300"
-              />
-              Lift (Da/Nu)
-            </label>
+            <div className="flex items-end">
+              <label className="flex h-[38px] w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-sky-300">
+                <input
+                  type="checkbox"
+                  checked={!!form.toElevator}
+                  onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
+                  className="h-4 w-4 rounded border-gray-300 text-sky-600"
+                />
+                Lift
+              </label>
+            </div>
           </div>
         )}
       </div>
@@ -415,12 +465,14 @@ export default function HomeRequestForm() {
   // Step 5: Move Date
   const renderStep5 = () => (
     <div className="rounded-xl border border-gray-200 bg-white p-4">
-      <div className="mb-3 flex items-center gap-2">
-        <Calendar className="h-5 w-5 text-emerald-600" />
+      <div className="mb-4 flex items-center gap-2">
+        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
+          <Calendar className="h-4 w-4 text-emerald-600" />
+        </div>
         <span className="font-semibold text-gray-800">Când te muți?</span>
       </div>
 
-      <div className="mb-3 flex flex-wrap gap-2">
+      <div className="mb-4 grid grid-cols-3 gap-2">
         {[
           { value: "exact", label: "Dată exactă" },
           { value: "flexible", label: "Flexibil" },
@@ -435,10 +487,10 @@ export default function HomeRequestForm() {
                 moveDateMode: opt.value as "exact" | "flexible" | "none",
               }))
             }
-            className={`rounded-full px-4 py-2 text-sm font-medium transition ${
+            className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${
               form.moveDateMode === opt.value
-                ? "bg-emerald-500 text-white"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                ? "bg-emerald-500 text-white shadow-sm"
+                : "border border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-emerald-50"
             }`}
           >
             {opt.label}
@@ -446,100 +498,66 @@ export default function HomeRequestForm() {
         ))}
       </div>
 
-      {/* Quick suggestions to speed selection */}
-      <div className="mb-3 flex flex-wrap items-center gap-2">
-        <span className="text-xs text-gray-500">Sugestii rapide:</span>
-        <button
-          type="button"
-          onClick={() =>
-            setForm((s) => ({
-              ...s,
-              moveDateMode: "exact",
-              moveDate: getNextDow(today, 6), // Sâmbătă
-            }))
-          }
-          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-700 transition hover:bg-gray-200"
-        >
-          Sâmbătă
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            setForm((s) => ({
-              ...s,
-              moveDateMode: "exact",
-              moveDate: getNextDow(today, 0), // Duminică
-            }))
-          }
-          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-700 transition hover:bg-gray-200"
-        >
-          Duminică
-        </button>
-        <button
-          type="button"
-          onClick={() =>
-            setForm((s) => ({
-              ...s,
-              moveDateMode: "exact",
-              moveDate: getNextWorkday(today),
-            }))
-          }
-          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-700 transition hover:bg-gray-200"
-        >
-          Zi lucrătoare
-        </button>
-      </div>
-
       {form.moveDateMode === "exact" && (
-        <input
-          type="date"
-          min={minDate}
-          value={form.moveDate || ""}
-          onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-        />
-      )}
-      {form.moveDateMode === "exact" && form.moveDate && (
-        <p className="mt-1 text-xs text-gray-500">{formatWeekdayPreview(form.moveDate)}</p>
+        <div className="space-y-2">
+          <div className="relative">
+            <input
+              type="date"
+              min={minDate}
+              value={form.moveDate || ""}
+              onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
+              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+              style={{ colorScheme: "light" }}
+            />
+          </div>
+          {form.moveDate && (
+            <p className="text-center text-sm font-medium text-emerald-600">
+              📅 {formatWeekdayPreview(form.moveDate)}
+            </p>
+          )}
+        </div>
       )}
       {form.moveDateMode === "flexible" && (
-        <div className="space-y-2">
-          <input
-            type="date"
-            min={minDate}
-            value={form.moveDate || ""}
-            onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-          />
-          {form.moveDate && (
-            <p className="text-xs text-gray-500">{formatWeekdayPreview(form.moveDate)}</p>
-          )}
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">Flexibilitate</label>
-              <select
-                value={String(form.moveDateFlexDays ?? 7)}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, moveDateFlexDays: Number(e.target.value) }))
-                }
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-              >
-                <option value={3}>± 3 zile</option>
-                <option value={7}>± 7 zile</option>
-                <option value={14}>± 14 zile</option>
-                <option value={30}>± 30 zile</option>
-              </select>
-            </div>
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-2 text-xs text-gray-600">
-              Companiile pot propune date în jurul perioadei selectate.
-            </div>
+        <div className="space-y-3">
+          <div className="relative">
+            <input
+              type="date"
+              min={minDate}
+              value={form.moveDate || ""}
+              onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
+              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+              style={{ colorScheme: "light" }}
+            />
           </div>
+          {form.moveDate && (
+            <p className="text-center text-sm font-medium text-emerald-600">
+              📅 {formatWeekdayPreview(form.moveDate)}
+            </p>
+          )}
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-600">Flexibilitate</label>
+            <select
+              value={String(form.moveDateFlexDays ?? 7)}
+              onChange={(e) => setForm((s) => ({ ...s, moveDateFlexDays: Number(e.target.value) }))}
+              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            >
+              <option value={3}>± 3 zile</option>
+              <option value={7}>± 7 zile</option>
+              <option value={14}>± 14 zile</option>
+              <option value={30}>± 30 zile</option>
+            </select>
+          </div>
+          <p className="rounded-lg bg-emerald-50 p-3 text-center text-xs text-emerald-700">
+            💡 Companiile pot propune date în jurul perioadei selectate.
+          </p>
         </div>
       )}
       {form.moveDateMode === "none" && (
-        <p className="rounded-lg bg-gray-50 p-3 text-sm text-gray-500">
-          Nu-i problemă! Companiile îți vor propune mai multe date.
-        </p>
+        <div className="rounded-lg bg-gray-50 p-4 text-center">
+          <p className="text-sm text-gray-600">
+            Nu-i problemă! Companiile îți vor propune mai multe date disponibile.
+          </p>
+        </div>
       )}
     </div>
   );
