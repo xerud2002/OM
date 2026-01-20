@@ -61,6 +61,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       batch.set(notifRef, {
         type: "media_uploaded",
         requestId,
+        title: "Poze noi disponibile",
         message: "Clientul a încărcat poze și video pentru cererea de mutare.",
         createdAt: new Date().toISOString(),
         read: false,

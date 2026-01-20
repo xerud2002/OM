@@ -74,13 +74,13 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
     const now = new Date();
     const diffMs = now.getTime() - date.getTime();
     const diffMins = Math.floor(diffMs / 60000);
-    
+
     if (diffMins < 1) return "acum";
     if (diffMins < 60) return `${diffMins}m`;
-    
+
     const diffHours = Math.floor(diffMins / 60);
     if (diffHours < 24) return `${diffHours}h`;
-    
+
     const diffDays = Math.floor(diffHours / 24);
     return `${diffDays}z`;
   };
@@ -94,7 +94,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
       >
         <Bell size={24} />
         {unreadCount > 0 && (
-          <span className="absolute right-0 top-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+          <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -105,17 +105,14 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
         {showDropdown && (
           <>
             {/* Backdrop */}
-            <div
-              className="fixed inset-0 z-40"
-              onClick={() => setShowDropdown(false)}
-            />
+            <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
 
             {/* Notifications Panel */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: -10 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              className="absolute right-0 top-full z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl"
+              className="absolute top-full right-0 z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl"
             >
               {/* Header */}
               <div className="flex items-center justify-between border-b border-gray-200 bg-linear-to-r from-emerald-50 to-white px-4 py-3">
@@ -167,13 +164,15 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                           <div className="flex-1">
                             <div className="mb-1 flex items-start justify-between gap-2">
                               <h4 className="font-semibold text-gray-900">
-                                {notification.title}
+                                {notification.title || "Notificare nouă"}
                               </h4>
                               {!notification.read && (
                                 <div className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
                               )}
                             </div>
-                            <p className="text-sm text-gray-600">{notification.message}</p>
+                            <p className="text-sm text-gray-600">
+                              {notification.message || "Ai o notificare nouă. Verifică detaliile."}
+                            </p>
                             <div className="mt-2 flex items-center justify-between">
                               <p className="text-xs text-gray-400">
                                 {getTimeAgo(notification.createdAt)}
@@ -181,7 +180,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                               {!notification.read && (
                                 <button
                                   onClick={() => markAsRead(notification.id)}
-                                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-600 opacity-0 transition-all hover:bg-emerald-100 group-hover:opacity-100"
+                                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-600 opacity-0 transition-all group-hover:opacity-100 hover:bg-emerald-100"
                                 >
                                   <Check size={14} />
                                   Marchează ca citit
