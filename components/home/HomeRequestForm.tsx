@@ -295,19 +295,6 @@ export default function HomeRequestForm() {
       <div className="space-y-3">
         <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={form.fromRooms || ""}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, fromRooms: e.target.value.replace(/\D/g, "") }))
-              }
-              placeholder="ex: 2"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-            />
-          </div>
-          <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
             <select
               value={form.fromType || "flat"}
@@ -319,6 +306,19 @@ export default function HomeRequestForm() {
               <option value="flat">Apartament</option>
               <option value="house">Casă</option>
             </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={form.fromRooms || ""}
+              onChange={(e) =>
+                setForm((s) => ({ ...s, fromRooms: e.target.value.replace(/\D/g, "") }))
+              }
+              placeholder="ex: 2"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            />
           </div>
         </div>
         {form.fromType === "flat" && (
@@ -339,7 +339,7 @@ export default function HomeRequestForm() {
                 onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
                 className="h-4 w-4 rounded border-gray-300"
               />
-              Lift
+              Lift (Da/Nu)
             </label>
           </div>
         )}
@@ -360,19 +360,6 @@ export default function HomeRequestForm() {
       <div className="space-y-3">
         <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={form.toRooms || ""}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, toRooms: e.target.value.replace(/\D/g, "") }))
-              }
-              placeholder="ex: 3"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-            />
-          </div>
-          <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
             <select
               value={form.toType || "flat"}
@@ -384,6 +371,19 @@ export default function HomeRequestForm() {
               <option value="flat">Apartament</option>
               <option value="house">Casă</option>
             </select>
+          </div>
+          <div>
+            <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
+            <input
+              type="text"
+              inputMode="numeric"
+              value={form.toRooms || ""}
+              onChange={(e) =>
+                setForm((s) => ({ ...s, toRooms: e.target.value.replace(/\D/g, "") }))
+              }
+              placeholder="ex: 3"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+            />
           </div>
         </div>
         {form.toType === "flat" && (
@@ -404,7 +404,7 @@ export default function HomeRequestForm() {
                 onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
                 className="h-4 w-4 rounded border-gray-300"
               />
-              Lift
+              Lift (Da/Nu)
             </label>
           </div>
         )}
