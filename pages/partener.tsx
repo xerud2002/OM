@@ -232,7 +232,7 @@ export default function PartenerPage({ latestRequest }: Props) {
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Camere:</span>
                       <span className="font-medium text-gray-900">
-                        {latestRequest ? `${latestRequest.fromRooms} camere` : "3 camere"}
+                        {latestRequest ? latestRequest.fromRooms : "3"}
                       </span>
                     </div>
                     <div className="flex justify-between">
