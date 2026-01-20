@@ -289,6 +289,12 @@ export default function HomeRequestForm() {
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
       e.preventDefault();
+
+      // Only submit if we're on the last step (prevents Enter key submission on other steps)
+      if (currentStep !== TOTAL_STEPS) {
+        return;
+      }
+
       setIsSubmitting(true);
 
       const { toast } = await import("sonner");
@@ -421,7 +427,7 @@ export default function HomeRequestForm() {
         setIsSubmitting(false);
       }
     },
-    [form]
+    [form, currentStep]
   );
 
   const nextStep = useCallback(() => {
