@@ -5,7 +5,18 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import counties from "@/counties";
 import cities from "@/cities";
-import { ArrowRight, MapPin, Home, Sparkles, Calendar, Phone, User, Package } from "lucide-react";
+import {
+  ArrowRight,
+  MapPin,
+  Home,
+  Sparkles,
+  Calendar,
+  Phone,
+  User,
+  Package,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import type { FormShape } from "@/components/customer/requestForm/types";
 
 // Special-case: București sectors
@@ -28,6 +39,157 @@ const formatYMD = (d: Date) => {
 
 const STORAGE_KEY = "homeRequestForm";
 const TOTAL_STEPS = 7;
+
+// Inline Calendar Component
+function InlineCalendar({
+  value,
+  onChange,
+  minDate,
+}: {
+  value: string;
+  onChange: (date: string) => void;
+  minDate: string;
+}) {
+  const today = new Date();
+  const [viewDate, setViewDate] = useState(() => {
+    if (value) return new Date(`${value}T00:00:00`);
+    return today;
+  });
+
+  const roMonthsFull = [
+    "Ianuarie",
+    "Februarie",
+    "Martie",
+    "Aprilie",
+    "Mai",
+    "Iunie",
+    "Iulie",
+    "August",
+    "Septembrie",
+    "Octombrie",
+    "Noiembrie",
+    "Decembrie",
+  ];
+  const roWeekdaysShort = ["Lu", "Ma", "Mi", "Jo", "Vi", "Sâ", "Du"];
+
+  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year: number, month: number) => {
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1; // Monday = 0
+  };
+
+  const formatDateYMD = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const daysInMonth = getDaysInMonth(year, month);
+  const firstDay = getFirstDayOfMonth(year, month);
+
+  const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
+
+  const isDateDisabled = (day: number) => {
+    const date = new Date(year, month, day);
+    const minD = new Date(`${minDate}T00:00:00`);
+    minD.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    return date < minD;
+  };
+
+  const isSelected = (day: number) => {
+    if (!value) return false;
+    const selected = new Date(`${value}T00:00:00`);
+    return (
+      selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day
+    );
+  };
+
+  const isToday = (day: number) => {
+    return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+  };
+
+  const handleSelect = (day: number) => {
+    if (isDateDisabled(day)) return;
+    const date = new Date(year, month, day);
+    onChange(formatDateYMD(date));
+  };
+
+  // Build calendar grid
+  const days: (number | null)[] = [];
+  for (let i = 0; i < firstDay; i++) days.push(null);
+  for (let d = 1; d <= daysInMonth; d++) days.push(d);
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-3">
+      {/* Header */}
+      <div className="mb-3 flex items-center justify-between">
+        <button
+          type="button"
+          onClick={prevMonth}
+          className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+        >
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <span className="text-sm font-semibold text-gray-800">
+          {roMonthsFull[month]} {year}
+        </span>
+        <button
+          type="button"
+          onClick={nextMonth}
+          className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+        >
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Weekday headers */}
+      <div className="mb-2 grid grid-cols-7 gap-1">
+        {roWeekdaysShort.map((wd) => (
+          <div key={wd} className="text-center text-xs font-medium text-gray-400">
+            {wd}
+          </div>
+        ))}
+      </div>
+
+      {/* Days grid */}
+      <div className="grid grid-cols-7 gap-1">
+        {days.map((day, idx) => {
+          if (day === null) {
+            return <div key={`empty-${idx}`} className="h-9" />;
+          }
+          const disabled = isDateDisabled(day);
+          const selected = isSelected(day);
+          const todayClass = isToday(day) && !selected;
+
+          return (
+            <button
+              key={day}
+              type="button"
+              onClick={() => handleSelect(day)}
+              disabled={disabled}
+              className={`h-9 w-full rounded-lg text-sm font-medium transition ${
+                disabled
+                  ? "cursor-not-allowed text-gray-300"
+                  : selected
+                    ? "bg-emerald-500 text-white shadow-sm"
+                    : todayClass
+                      ? "border border-emerald-300 text-emerald-600 hover:bg-emerald-50"
+                      : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
 
 export default function HomeRequestForm() {
   const router = useRouter();
@@ -175,7 +337,7 @@ export default function HomeRequestForm() {
 
   // Step 1: FROM Location (county + city only)
   const renderStep1 = () => (
-    <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/50 to-white p-4">
+    <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow">
           <MapPin className="h-4 w-4 text-white" />
@@ -255,7 +417,7 @@ export default function HomeRequestForm() {
 
   // Step 2: TO Location (county + city only)
   const renderStep2 = () => (
-    <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50/50 to-white p-4">
+    <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 shadow">
           <Home className="h-4 w-4 text-white" />
@@ -330,7 +492,7 @@ export default function HomeRequestForm() {
 
   // Step 3: FROM Address details
   const renderStep3 = () => (
-    <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/50 to-white p-4">
+    <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow">
           <MapPin className="h-4 w-4 text-white" />
@@ -379,7 +541,7 @@ export default function HomeRequestForm() {
               />
             </div>
             <div className="flex items-end">
-              <label className="flex h-[38px] w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-emerald-300">
+              <label className="flex h-9.5 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-emerald-300">
                 <input
                   type="checkbox"
                   checked={!!form.fromElevator}
@@ -397,7 +559,7 @@ export default function HomeRequestForm() {
 
   // Step 4: TO Address details
   const renderStep4 = () => (
-    <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50/50 to-white p-4">
+    <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 shadow">
           <Home className="h-4 w-4 text-white" />
@@ -446,7 +608,7 @@ export default function HomeRequestForm() {
               />
             </div>
             <div className="flex items-end">
-              <label className="flex h-[38px] w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-sky-300">
+              <label className="flex h-9.5 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-sky-300">
                 <input
                   type="checkbox"
                   checked={!!form.toElevator}
@@ -500,16 +662,11 @@ export default function HomeRequestForm() {
 
       {form.moveDateMode === "exact" && (
         <div className="space-y-2">
-          <div className="relative">
-            <input
-              type="date"
-              min={minDate}
-              value={form.moveDate || ""}
-              onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              style={{ colorScheme: "light" }}
-            />
-          </div>
+          <InlineCalendar
+            value={form.moveDate || ""}
+            onChange={(date) => setForm((s) => ({ ...s, moveDate: date }))}
+            minDate={minDate}
+          />
           {form.moveDate && (
             <p className="text-center text-sm font-medium text-emerald-600">
               📅 {formatWeekdayPreview(form.moveDate)}
@@ -519,16 +676,11 @@ export default function HomeRequestForm() {
       )}
       {form.moveDateMode === "flexible" && (
         <div className="space-y-3">
-          <div className="relative">
-            <input
-              type="date"
-              min={minDate}
-              value={form.moveDate || ""}
-              onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
-              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-              style={{ colorScheme: "light" }}
-            />
-          </div>
+          <InlineCalendar
+            value={form.moveDate || ""}
+            onChange={(date) => setForm((s) => ({ ...s, moveDate: date }))}
+            minDate={minDate}
+          />
           {form.moveDate && (
             <p className="text-center text-sm font-medium text-emerald-600">
               📅 {formatWeekdayPreview(form.moveDate)}
@@ -578,7 +730,7 @@ export default function HomeRequestForm() {
             { key: "serviceDisassembly", label: "Montaj" },
             { key: "serviceCleanout", label: "Debarasare" },
             { key: "serviceStorage", label: "Depozitare" },
-            { key: "serviceTransportOnly", label: "Doar Transport (fără încărcare/descărcare)" },
+            { key: "serviceTransportOnly", label: "Doar Transport", sublabel: "(fără încărcare)" },
             { key: "servicePiano", label: "Mutare Pian" },
             { key: "serviceFewItems", label: "Câteva lucruri" },
           ].map((svc) => (
@@ -594,9 +746,14 @@ export default function HomeRequestForm() {
                 type="checkbox"
                 checked={!!(form as Record<string, boolean>)[svc.key]}
                 onChange={(e) => setForm((s) => ({ ...s, [svc.key]: e.target.checked }))}
-                className="h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
               />
-              <span className="text-sm text-gray-700">{svc.label}</span>
+              <span className="text-sm leading-tight text-gray-700">
+                {svc.label}
+                {"sublabel" in svc && (
+                  <span className="block text-xs text-gray-500">{svc.sublabel}</span>
+                )}
+              </span>
             </label>
           ))}
         </div>
@@ -729,7 +886,7 @@ export default function HomeRequestForm() {
 
       <form onSubmit={handleSubmit}>
         {/* Form Steps */}
-        <div className="min-h-[280px]">
+        <div className="min-h-70">
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
@@ -763,7 +920,7 @@ export default function HomeRequestForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
             >
               <Sparkles className="h-5 w-5" />
               {isSubmitting ? "Se procesează..." : "Obține Oferte Gratuite"}
