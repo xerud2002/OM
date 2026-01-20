@@ -63,6 +63,10 @@ export default function HomeRequestForm() {
     servicePacking: false,
     serviceDisassembly: false,
     serviceStorage: false,
+    serviceCleanout: false,
+    serviceTransportOnly: false,
+    servicePiano: false,
+    serviceFewItems: false,
     surveyType: "quick-estimate",
     mediaUpload: "later",
     acceptedTerms: false,
@@ -90,6 +94,50 @@ export default function HomeRequestForm() {
 
   const today = new Date();
   const minDate = formatYMD(today);
+
+  // Calendar helpers for a friendlier UX
+  const roWeekdays = ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"];
+  const roMonths = [
+    "ian",
+    "feb",
+    "mar",
+    "apr",
+    "mai",
+    "iun",
+    "iul",
+    "aug",
+    "sep",
+    "oct",
+    "nov",
+    "dec",
+  ];
+
+  const formatWeekdayPreview = (ymd?: string) => {
+    if (!ymd) return "";
+    const d = new Date(`${ymd}T00:00:00`);
+    const wd = roWeekdays[d.getDay()];
+    const month = roMonths[d.getMonth()];
+    return `${wd}, ${d.getDate()} ${month}`;
+  };
+
+  const getNextDow = (start: Date, targetDow: number) => {
+    const d = new Date(start);
+    const diff = (targetDow - d.getDay() + 7) % 7;
+    // If today already matches target, offer the next week's target
+    d.setDate(d.getDate() + (diff === 0 ? 7 : diff));
+    return formatYMD(d);
+  };
+
+  const getNextWorkday = (start: Date) => {
+    const d = new Date(start);
+    for (let i = 0; i < 14; i++) {
+      const check = new Date(d);
+      check.setDate(d.getDate() + i + 1);
+      const dow = check.getDay();
+      if (dow >= 1 && dow <= 5) return formatYMD(check);
+    }
+    return formatYMD(d);
+  };
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
@@ -436,6 +484,50 @@ export default function HomeRequestForm() {
         ))}
       </div>
 
+      {/* Quick suggestions to speed selection */}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <span className="text-xs text-gray-500">Sugestii rapide:</span>
+        <button
+          type="button"
+          onClick={() =>
+            setForm((s) => ({
+              ...s,
+              moveDateMode: "exact",
+              moveDate: getNextDow(today, 6), // Sâmbătă
+            }))
+          }
+          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-700 transition hover:bg-gray-200"
+        >
+          Sâmbătă
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            setForm((s) => ({
+              ...s,
+              moveDateMode: "exact",
+              moveDate: getNextDow(today, 0), // Duminică
+            }))
+          }
+          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-700 transition hover:bg-gray-200"
+        >
+          Duminică
+        </button>
+        <button
+          type="button"
+          onClick={() =>
+            setForm((s) => ({
+              ...s,
+              moveDateMode: "exact",
+              moveDate: getNextWorkday(today),
+            }))
+          }
+          className="rounded-full bg-gray-100 px-3 py-1.5 text-xs text-gray-700 transition hover:bg-gray-200"
+        >
+          Zi lucrătoare
+        </button>
+      </div>
+
       {form.moveDateMode === "exact" && (
         <input
           type="date"
@@ -444,6 +536,9 @@ export default function HomeRequestForm() {
           onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
           className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
         />
+      )}
+      {form.moveDateMode === "exact" && form.moveDate && (
+        <p className="mt-1 text-xs text-gray-500">{formatWeekdayPreview(form.moveDate)}</p>
       )}
       {form.moveDateMode === "flexible" && (
         <div className="space-y-2">
@@ -454,7 +549,29 @@ export default function HomeRequestForm() {
             onChange={(e) => setForm((s) => ({ ...s, moveDate: e.target.value }))}
             className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
           />
-          <p className="text-xs text-gray-500">± câteva zile flexibilitate</p>
+          {form.moveDate && (
+            <p className="text-xs text-gray-500">{formatWeekdayPreview(form.moveDate)}</p>
+          )}
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-xs font-medium text-gray-600">Flexibilitate</label>
+              <select
+                value={String(form.moveDateFlexDays ?? 7)}
+                onChange={(e) =>
+                  setForm((s) => ({ ...s, moveDateFlexDays: Number(e.target.value) }))
+                }
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+              >
+                <option value={3}>± 3 zile</option>
+                <option value={7}>± 7 zile</option>
+                <option value={14}>± 14 zile</option>
+                <option value={30}>± 30 zile</option>
+              </select>
+            </div>
+            <div className="rounded-lg border border-gray-200 bg-gray-50 p-2 text-xs text-gray-600">
+              Companiile pot propune date în jurul perioadei selectate.
+            </div>
+          </div>
         </div>
       )}
       {form.moveDateMode === "none" && (
@@ -476,10 +593,14 @@ export default function HomeRequestForm() {
 
         <div className="grid grid-cols-2 gap-2">
           {[
-            { key: "serviceMoving", label: "Transport" },
+            { key: "serviceMoving", label: "Mutare" },
             { key: "servicePacking", label: "Ambalare" },
             { key: "serviceDisassembly", label: "Montaj" },
+            { key: "serviceCleanout", label: "Debarasare" },
             { key: "serviceStorage", label: "Depozitare" },
+            { key: "serviceTransportOnly", label: "Doar Transport (fără încărcare/descărcare)" },
+            { key: "servicePiano", label: "Mutare Pian" },
+            { key: "serviceFewItems", label: "Câteva lucruri" },
           ].map((svc) => (
             <label
               key={svc.key}

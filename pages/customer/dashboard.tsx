@@ -144,6 +144,9 @@ export default function CustomerDashboard() {
       serviceDisassembly: false,
       serviceCleanout: false,
       serviceStorage: false,
+      serviceTransportOnly: false,
+      servicePiano: false,
+      serviceFewItems: false,
       surveyType: "quick-estimate",
       mediaUpload: "later",
       mediaFiles: [],
@@ -405,7 +408,10 @@ export default function CustomerDashboard() {
         !!form.servicePacking ||
         !!form.serviceDisassembly ||
         !!form.serviceCleanout ||
-        !!form.serviceStorage;
+        !!form.serviceStorage ||
+        !!(form as any).serviceTransportOnly ||
+        !!(form as any).servicePiano ||
+        !!(form as any).serviceFewItems;
 
       const digitsOnly = (v: any) =>
         typeof v === "number" ? Number.isInteger(v) : /^\d+$/.test((v || "").toString());
@@ -622,6 +628,9 @@ export default function CustomerDashboard() {
         serviceDisassembly: false,
         serviceCleanout: false,
         serviceStorage: false,
+        serviceTransportOnly: false,
+        servicePiano: false,
+        serviceFewItems: false,
         surveyType: "quick-estimate",
         mediaUpload: "later",
         mediaFiles: [],
@@ -678,6 +687,9 @@ export default function CustomerDashboard() {
       serviceDisassembly: false,
       serviceCleanout: false,
       serviceStorage: false,
+      serviceTransportOnly: false,
+      servicePiano: false,
+      serviceFewItems: false,
       surveyType: "quick-estimate",
       mediaUpload: "later",
       mediaFiles: [],

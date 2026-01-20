@@ -42,6 +42,10 @@ export type FormShape = {
   serviceDisassembly?: boolean;
   serviceCleanout?: boolean;
   serviceStorage?: boolean;
+  // Additional service options
+  serviceTransportOnly?: boolean;
+  servicePiano?: boolean;
+  serviceFewItems?: boolean;
   surveyType?: SurveyType;
   mediaUpload?: MediaUpload;
   mediaFiles?: File[];
