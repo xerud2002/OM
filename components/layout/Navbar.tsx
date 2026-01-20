@@ -30,7 +30,7 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  /* 🔹 Lazy load Firebase auth after LCP - defer until idle or interaction */
+  /* 🔹 Lazy load Firebase auth on first user interaction for maximum performance */
   useEffect(() => {
     let unsub: (() => void) | undefined;
     let mounted = true;
@@ -54,24 +54,16 @@ export default function Navbar() {
       }
     };
 
-    // Use requestIdleCallback if available, otherwise setTimeout with longer delay
-    // This ensures auth loads after LCP and main content is ready
-    if ("requestIdleCallback" in window) {
-      const idleId = requestIdleCallback(() => loadAuth(), { timeout: 3000 });
-      return () => {
-        mounted = false;
-        cancelIdleCallback(idleId);
-        unsub?.();
-      };
-    } else {
-      // Fallback: load after 1.5s to allow LCP to complete
-      const timer = setTimeout(loadAuth, 1500);
-      return () => {
-        mounted = false;
-        clearTimeout(timer);
-        unsub?.();
-      };
-    }
+    // Use interaction-based loading for maximum LCP performance
+    // Firebase only loads when user clicks, scrolls, or touches the page
+    import("@/utils/interactionLoader").then(({ loadOnInteraction }) => {
+      loadOnInteraction(loadAuth);
+    });
+
+    return () => {
+      mounted = false;
+      unsub?.();
+    };
   }, []);
 
   /* 🔹 Navigation logic */
