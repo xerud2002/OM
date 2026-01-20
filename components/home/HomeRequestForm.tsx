@@ -149,14 +149,12 @@ export default function HomeRequestForm() {
 
       if (!form.fromCounty) errors.push("Județ plecare");
       if (!form.fromCity) errors.push("Localitate plecare");
-      if (!form.fromStreet) errors.push("Strada plecare");
-      if (!form.fromNumber) errors.push("Număr plecare");
+      // Removed street/number requirements
       if (!form.fromRooms) errors.push("Camere plecare");
 
       if (!form.toCounty) errors.push("Județ destinație");
       if (!form.toCity) errors.push("Localitate destinație");
-      if (!form.toStreet) errors.push("Strada destinație");
-      if (!form.toNumber) errors.push("Număr destinație");
+      // Removed street/number requirements
       if (!form.toRooms) errors.push("Camere destinație");
 
       if (!form.contactFirstName) errors.push("Prenume");
@@ -295,25 +293,7 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-3">
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Strada *</label>
-          <input
-            value={form.fromStreet || ""}
-            onChange={(e) => setForm((s) => ({ ...s, fromStreet: e.target.value }))}
-            placeholder="Numele străzii"
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-          />
-        </div>
         <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Nr. *</label>
-            <input
-              value={form.fromNumber || ""}
-              onChange={(e) => setForm((s) => ({ ...s, fromNumber: e.target.value }))}
-              placeholder="Nr."
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-            />
-          </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
             <input
@@ -378,25 +358,7 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-3">
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Strada *</label>
-          <input
-            value={form.toStreet || ""}
-            onChange={(e) => setForm((s) => ({ ...s, toStreet: e.target.value }))}
-            placeholder="Numele străzii"
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-          />
-        </div>
         <div className="grid grid-cols-[1fr_1fr_1.4fr] gap-2">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Nr. *</label>
-            <input
-              value={form.toNumber || ""}
-              onChange={(e) => setForm((s) => ({ ...s, toNumber: e.target.value }))}
-              placeholder="Nr."
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-            />
-          </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
             <input

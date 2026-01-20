@@ -45,8 +45,6 @@ export default function LocationSection({ type, form, setForm }: Props) {
   const countyKey = isFrom ? "fromCounty" : "toCounty";
   const cityKey = isFrom ? "fromCity" : "toCity";
   const cityManualKey = isFrom ? "fromCityManual" : "toCityManual";
-  const streetKey = isFrom ? "fromStreet" : "toStreet";
-  const numberKey = isFrom ? "fromNumber" : "toNumber";
   const blocKey = isFrom ? "fromBloc" : "toBloc";
   const staircaseKey = isFrom ? "fromStaircase" : "toStaircase";
   const apartmentKey = isFrom ? "fromApartment" : "toApartment";
@@ -279,24 +277,7 @@ export default function LocationSection({ type, form, setForm }: Props) {
               />
             )}
           </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Strada</label>
-            <input
-              value={(form[streetKey] as string) || ""}
-              onChange={(e) => setForm((s) => ({ ...s, [streetKey]: e.target.value }))}
-              className={`w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition ${inputFocusColor} focus:ring-2 focus:outline-none`}
-              placeholder="Numele străzii"
-            />
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-700">Număr</label>
-            <input
-              value={(form[numberKey] as string) || ""}
-              onChange={(e) => setForm((s) => ({ ...s, [numberKey]: e.target.value }))}
-              className={`w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition ${inputFocusColor} focus:ring-2 focus:outline-none`}
-              placeholder="Nr."
-            />
-          </div>
+          {/* Strada și Număr eliminate */}
         </div>
         {propertyType === "flat" && (
           <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">

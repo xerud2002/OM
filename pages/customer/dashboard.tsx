@@ -427,12 +427,10 @@ export default function CustomerDashboard() {
       // Address essentials
       if (!form.fromCounty) errors.push("Județ (plecare)");
       if (!form.fromCity) errors.push("Localitate (plecare)");
-      if (!form.fromStreet) errors.push("Strada (plecare)");
-      if (!form.fromNumber) errors.push("Număr (plecare)");
+      // Strada/Număr nu mai sunt obligatorii
       if (!form.toCounty) errors.push("Județ (destinație)");
       if (!form.toCity) errors.push("Localitate (destinație)");
-      if (!form.toStreet) errors.push("Strada (destinație)");
-      if (!form.toNumber) errors.push("Număr (destinație)");
+      // Strada/Număr nu mai sunt obligatorii
 
       // Contact
       if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
