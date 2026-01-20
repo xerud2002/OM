@@ -387,36 +387,48 @@ export default function PartenerPage({ latestRequest }: Props) {
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
   try {
     if (!adminReady || !adminDb) {
+      console.log("[partener] Admin not ready");
       return { props: { latestRequest: null } };
     }
 
+    // Query the most recent request (any status for now, to test)
     const snapshot = await adminDb
       .collection("requests")
-      .where("status", "==", "active")
       .orderBy("createdAt", "desc")
       .limit(1)
       .get();
 
+    console.log("[partener] Query returned", snapshot.size, "documents");
+
     if (snapshot.empty) {
+      console.log("[partener] No requests found");
       return { props: { latestRequest: null } };
     }
 
     const doc = snapshot.docs[0];
     const data = doc.data();
+    console.log(
+      "[partener] Found request:",
+      doc.id,
+      "fromCity:",
+      data.fromCity,
+      "toCity:",
+      data.toCity
+    );
 
     const latestRequest = {
       fromCity: data.fromCity || "București",
       fromCounty: data.fromCounty || "",
       toCity: data.toCity || "România",
       toCounty: data.toCounty || "",
-      fromRooms: data.fromRooms || data.rooms || "2-3",
+      fromRooms: data.rooms || "2-3",
       moveDate: data.moveDate || "",
       createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
     };
 
     return { props: { latestRequest } };
   } catch (error) {
-    console.error("Error fetching latest request:", error);
+    console.error("[partener] Error fetching latest request:", error);
     return { props: { latestRequest: null } };
   }
 };
