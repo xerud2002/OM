@@ -104,22 +104,27 @@ type Props = {
   latestRequest: LatestRequest;
 };
 
-// Helper to format time ago
+// Helper to format time ago with proper Romanian grammar
 const getTimeAgo = (dateStr: string) => {
   const date = new Date(dateStr);
   const now = new Date();
   const diffMs = now.getTime() - date.getTime();
   const diffMins = Math.floor(diffMs / 60000);
 
-  if (diffMins < 1) return "Acum";
-  if (diffMins < 60) return `Acum ${diffMins} minute`;
+  if (diffMins < 1) return "Chiar acum";
+  if (diffMins === 1) return "Acum 1 minut";
+  if (diffMins < 20) return `Acum ${diffMins} minute`;
+  if (diffMins < 60) return `Acum ${diffMins} de minute`;
 
   const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `Acum ${diffHours} ore`;
+  if (diffHours === 1) return "Acum 1 oră";
+  if (diffHours < 20) return `Acum ${diffHours} ore`;
+  if (diffHours < 24) return `Acum ${diffHours} de ore`;
 
   const diffDays = Math.floor(diffHours / 24);
   if (diffDays === 1) return "Ieri";
-  return `Acum ${diffDays} zile`;
+  if (diffDays < 20) return `Acum ${diffDays} zile`;
+  return `Acum ${diffDays} de zile`;
 };
 
 // Helper to format date
@@ -217,7 +222,11 @@ export default function PartenerPage({ latestRequest }: Props) {
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Către:</span>
                       <span className="font-medium text-gray-900">
-                        {latestRequest ? latestRequest.toCity : "Cluj-Napoca"}
+                        {latestRequest
+                          ? latestRequest.toCounty
+                            ? `${latestRequest.toCity}, ${latestRequest.toCounty}`
+                            : latestRequest.toCity
+                          : "Cluj-Napoca"}
                       </span>
                     </div>
                     <div className="flex justify-between">
