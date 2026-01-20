@@ -48,8 +48,13 @@ const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
 const GuaranteeSection = dynamic(() => import("@/components/home/GuaranteeSection"), {
   loading: () => <div className="min-h-[400px]" />,
 });
+import { SERVICE_FAQS } from "@/data/faqData";
+
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
   loading: () => <div className="min-h-[300px]" />,
+});
+const FAQSection = dynamic(() => import("@/components/content/FAQSection"), {
+  loading: () => <div className="min-h-[400px]" />,
 });
 
 export default function HomePage() {
@@ -376,6 +381,11 @@ export default function HomePage() {
       <Testimonials />
       <Articles />
       
+      {/* FAQ Section */}
+      <div className="mx-auto max-w-4xl px-4 py-8">
+        <FAQSection items={SERVICE_FAQS.general} />
+      </div>
+
       {/* CRO: Urgency & Trust */}
       <div className="mx-auto max-w-7xl px-4 py-8">
         <UrgencyBanner />
