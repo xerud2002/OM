@@ -6,7 +6,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Inter } from "next/font/google";
 import { loadGoogleAnalytics } from "@/utils/interactionLoader";
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/react";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
