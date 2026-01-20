@@ -133,8 +133,8 @@ const services = [
         />
       </svg>
     ),
-    label: "Câteva Lucruri",
-    desc: "Obiecte individuale",
+    label: "Am o listă",
+    desc: "Câteva obiecte de mutat",
   },
 ];
 

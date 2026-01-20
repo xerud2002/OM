@@ -5,6 +5,7 @@ import { X, MapPin, Calendar, Package, Phone, User, FileText, Wrench, Trash2 } f
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import Image from "next/image";
+import ConfirmModal from "@/components/ConfirmModal";
 
 type RequestDetailsModalProps = {
   request: MovingRequest | null;
@@ -20,6 +21,7 @@ export default function RequestDetailsModal({
   const [localMediaUrls, setLocalMediaUrls] = useState<string[]>(request?.mediaUrls || []);
   const [isOwner, setIsOwner] = useState<boolean>(false);
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
+  const [deleteMediaUrl, setDeleteMediaUrl] = useState<string | null>(null);
 
   // Sync local media when modal opens or request changes
   useEffect(() => {
@@ -51,8 +53,6 @@ export default function RequestDetailsModal({
   const handleDeleteMedia = async (url: string) => {
     if (!isOwner || !request) return;
     const { toast } = await import("sonner");
-    const confirmed = window.confirm("Ștergi acest fișier din cerere?");
-    if (!confirmed) return;
     try {
       setDeletingUrl(url);
 
@@ -72,6 +72,7 @@ export default function RequestDetailsModal({
       toast.error("Nu s-a putut șterge fișierul");
     } finally {
       setDeletingUrl(null);
+      setDeleteMediaUrl(null);
     }
   };
 
@@ -351,7 +352,7 @@ export default function RequestDetailsModal({
                               onClick={(e) => {
                                 e.stopPropagation();
                                 e.preventDefault();
-                                handleDeleteMedia(url);
+                                setDeleteMediaUrl(url);
                               }}
                               disabled={deletingUrl === url}
                               title="Șterge"
@@ -380,6 +381,19 @@ export default function RequestDetailsModal({
                   Închide
                 </button>
               </div>
+
+              {/* Delete Media Confirm Modal */}
+              <ConfirmModal
+                isOpen={!!deleteMediaUrl}
+                onClose={() => setDeleteMediaUrl(null)}
+                onConfirm={() => deleteMediaUrl && handleDeleteMedia(deleteMediaUrl)}
+                title="Șterge fișier"
+                message="Sigur vrei să ștergi acest fișier din cerere? Acțiunea nu poate fi anulată."
+                confirmText="Șterge"
+                cancelText="Anulează"
+                variant="danger"
+                icon="trash"
+              />
             </motion.div>
           </div>
         </>

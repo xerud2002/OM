@@ -14,6 +14,7 @@ import {
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import RequestDetailsModal from "./RequestDetailsModal";
+import ConfirmModal from "@/components/ConfirmModal";
 
 type MyRequestCardProps = {
   request: MovingRequest;
@@ -33,6 +34,7 @@ const MyRequestCard = memo(function MyRequestCard({
   onArchive,
 }: MyRequestCardProps) {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
 
   // Normalize status to valid values
   const getStatus = (): "active" | "closed" | "paused" | "cancelled" => {
@@ -280,15 +282,7 @@ const MyRequestCard = memo(function MyRequestCard({
 
                 {/* Archive */}
                 <button
-                  onClick={() => {
-                    if (
-                      confirm(
-                        "Sigur vrei să arhivezi această cerere? O vei putea vedea în secțiunea Arhivă."
-                      )
-                    ) {
-                      onArchive(request.id);
-                    }
-                  }}
+                  onClick={() => setShowArchiveModal(true)}
                   className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-gray-300 hover:bg-gray-100 hover:text-gray-700 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
                   title="Arhivează cererea"
                 >
@@ -306,6 +300,19 @@ const MyRequestCard = memo(function MyRequestCard({
         request={request}
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
+      />
+
+      {/* Archive Confirm Modal */}
+      <ConfirmModal
+        isOpen={showArchiveModal}
+        onClose={() => setShowArchiveModal(false)}
+        onConfirm={() => onArchive(request.id)}
+        title="Arhivează cererea"
+        message="Sigur vrei să arhivezi această cerere? O vei putea vedea în secțiunea Arhivă."
+        confirmText="Arhivează"
+        cancelText="Anulează"
+        variant="warning"
+        icon="archive"
       />
     </motion.div>
   );

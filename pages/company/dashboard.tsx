@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import RequireRole from "@/components/auth/RequireRole";
 import RequestsView from "@/components/company/RequestsView";
 import NotificationBell from "@/components/company/NotificationBell";
+import ConfirmModal from "@/components/ConfirmModal";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import {
@@ -51,6 +52,7 @@ export default function CompanyDashboard() {
   const [editPrice, setEditPrice] = useState<string>("");
   const [editMessage, setEditMessage] = useState<string>("");
   const [savingId, setSavingId] = useState<string | null>(null);
+  const [withdrawOffer, setWithdrawOffer] = useState<any>(null);
 
   // Track logged-in company
   useEffect(() => {
@@ -507,10 +509,7 @@ export default function CompanyDashboard() {
                                     <button
                                       onClick={(e) => {
                                         e.stopPropagation();
-                                        if (
-                                          confirm("Ești sigur că vrei să retragi această ofertă?")
-                                        )
-                                          removeOffer(offer);
+                                        setWithdrawOffer(offer);
                                       }}
                                       className="inline-flex items-center gap-2 rounded-xl border-2 border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
                                     >
@@ -536,8 +535,7 @@ export default function CompanyDashboard() {
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
-                                      if (confirm("Ești sigur că vrei să retragi această ofertă?"))
-                                        removeOffer(offer);
+                                      setWithdrawOffer(offer);
                                     }}
                                     className="inline-flex items-center gap-2 rounded-xl border border-rose-200 bg-white px-4 py-2.5 text-sm font-semibold text-rose-600 transition hover:bg-rose-50"
                                   >
@@ -579,6 +577,22 @@ export default function CompanyDashboard() {
             </motion.div>
           )}
         </div>
+
+        {/* Withdraw Offer Confirm Modal */}
+        <ConfirmModal
+          isOpen={!!withdrawOffer}
+          onClose={() => setWithdrawOffer(null)}
+          onConfirm={() => {
+            if (withdrawOffer) removeOffer(withdrawOffer);
+            setWithdrawOffer(null);
+          }}
+          title="Retrage oferta"
+          message="Ești sigur că vrei să retragi această ofertă? Clientul nu o va mai putea vedea."
+          confirmText="Retrage oferta"
+          cancelText="Anulează"
+          variant="danger"
+          icon="trash"
+        />
       </main>
     </RequireRole>
   );

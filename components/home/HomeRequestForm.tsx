@@ -835,7 +835,7 @@ export default function HomeRequestForm() {
             { key: "serviceStorage", label: "Depozitare" },
             { key: "serviceTransportOnly", label: "Doar Transport", sublabel: "(fără încărcare)" },
             { key: "servicePiano", label: "Mutare Pian" },
-            { key: "serviceFewItems", label: "Câteva lucruri" },
+            { key: "serviceFewItems", label: "Am o listă" },
           ].map((svc) => (
             <label
               key={svc.key}
