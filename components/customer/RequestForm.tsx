@@ -326,37 +326,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
               {/* Strada și Număr eliminate din formularul de plecare */}
             </div>
-            {form.fromType === "flat" && (
-              <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-                <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-700">Bloc</label>
-                  <input
-                    value={form.fromBloc || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, fromBloc: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                    placeholder="Bloc"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-700">Scară</label>
-                  <input
-                    value={form.fromStaircase || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, fromStaircase: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                    placeholder="Scară"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-700">Apartament</label>
-                  <input
-                    value={form.fromApartment || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, fromApartment: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                    placeholder="Ap."
-                  />
-                </div>
-              </div>
-            )}
+            {/* Bloc/Scară/Apartament eliminate din plecare */}
           </div>
         </div>
 
@@ -534,37 +504,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
               {/* Strada și Număr eliminate din formularul de destinație */}
             </div>
-            {form.toType === "flat" && (
-              <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-                <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-700">Bloc</label>
-                  <input
-                    value={form.toBloc || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, toBloc: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-                    placeholder="Bloc"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-700">Scară</label>
-                  <input
-                    value={form.toStaircase || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, toStaircase: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-                    placeholder="Scară"
-                  />
-                </div>
-                <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-700">Apartament</label>
-                  <input
-                    value={form.toApartment || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, toApartment: e.target.value }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-                    placeholder="Ap."
-                  />
-                </div>
-              </div>
-            )}
+            {/* Bloc/Scară/Apartament eliminate din destinație */}
           </div>
         </div>
 

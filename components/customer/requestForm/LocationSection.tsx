@@ -45,9 +45,6 @@ export default function LocationSection({ type, form, setForm }: Props) {
   const countyKey = isFrom ? "fromCounty" : "toCounty";
   const cityKey = isFrom ? "fromCity" : "toCity";
   const cityManualKey = isFrom ? "fromCityManual" : "toCityManual";
-  const blocKey = isFrom ? "fromBloc" : "toBloc";
-  const staircaseKey = isFrom ? "fromStaircase" : "toStaircase";
-  const apartmentKey = isFrom ? "fromApartment" : "toApartment";
   const typeKey = isFrom ? "fromType" : "toType";
   const floorKey = isFrom ? "fromFloor" : "toFloor";
   const elevatorKey = isFrom ? "fromElevator" : "toElevator";
@@ -279,37 +276,7 @@ export default function LocationSection({ type, form, setForm }: Props) {
           </div>
           {/* Strada și Număr eliminate */}
         </div>
-        {propertyType === "flat" && (
-          <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Bloc</label>
-              <input
-                value={(form[blocKey] as string) || ""}
-                onChange={(e) => setForm((s) => ({ ...s, [blocKey]: e.target.value }))}
-                className={`w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition ${inputFocusColor} focus:ring-2 focus:outline-none`}
-                placeholder="Bloc"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Scară</label>
-              <input
-                value={(form[staircaseKey] as string) || ""}
-                onChange={(e) => setForm((s) => ({ ...s, [staircaseKey]: e.target.value }))}
-                className={`w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition ${inputFocusColor} focus:ring-2 focus:outline-none`}
-                placeholder="Scară"
-              />
-            </div>
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-700">Apartament</label>
-              <input
-                value={(form[apartmentKey] as string) || ""}
-                onChange={(e) => setForm((s) => ({ ...s, [apartmentKey]: e.target.value }))}
-                className={`w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition ${inputFocusColor} focus:ring-2 focus:outline-none`}
-                placeholder="Ap."
-              />
-            </div>
-          </div>
-        )}
+        {/* Bloc/Scară/Apartament eliminate */}
       </div>
     </div>
   );
