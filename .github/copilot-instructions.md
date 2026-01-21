@@ -1,139 +1,121 @@
 # Copilot Instructions for OM (OferteMutare.ro)
 
-> Actionable guidance for AI agents on this **Next.js 14 + Firebase** moving quote platform.
+> **Next.js 14 (Pages Router) + Firebase** moving quote platform connecting customers with moving companies in Romania.
 
----
-
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 npm run dev      # http://localhost:3000
-npm run build    # Run before deploy
-npm run lint     # Zero-warnings (Husky enforced)
+npm run build    # Run before deploy (catches type errors)
+npm run lint     # Zero-warnings enforced via Husky pre-commit
 ```
 
----
+## ⚠️ Critical Architecture Rules
 
-## 🏗️ Core Architecture
+### 1. Dual-Role System (NEVER violate)
 
-### ⚠️ Dual-Role System (CRITICAL)
+Users are **exclusively** `customer` OR `company` – enforced at 3 layers:
 
-Users are **exclusively** `customer` OR `company` – never both. Enforced at 3 levels:
+- **Firestore rules**: `canCreateCustomer()` / `canCreateCompany()` block dual-role
+- **App code**: `ensureUserProfile()` throws `ROLE_CONFLICT` error
+- **UI guards**: `<RequireRole allowedRole="customer|company">` protects pages
 
-| Layer         | Enforcement                                                  |
-| ------------- | ------------------------------------------------------------ | ----------------------- |
-| **Firestore** | `canCreateCustomer()` / `canCreateCompany()` block dual-role |
-| **App**       | `ensureUserProfile()` throws `ROLE_CONFLICT`                 |
-| **UI**        | `<RequireRole allowedRole="customer                          | company">` guards pages |
+Profile locations: `customers/{uid}` or `companies/{uid}` (never both)
 
-> 📁 Profiles: `customers/{uid}` or `companies/{uid}`
-
-### ⚠️ Firebase Singleton (CRITICAL)
-
-Never instantiate Firebase twice:
+### 2. Firebase Singleton Pattern
 
 ```typescript
-// 🖥️ Client-side (components, pages)
+// ✅ Client-side (components, pages)
 import { auth, db, storage } from "@/services/firebase";
 
-// 🔐 Server-side (API routes only)
+// ✅ Server-side (API routes ONLY)
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 if (!adminReady) return res.status(503).json(apiError("Admin not ready"));
 ```
 
----
+**Never** instantiate Firebase twice or use Admin SDK in client code.
 
-## 🔒 API Routes
+## API Routes Pattern
 
-All protected endpoints in `pages/api/` follow this pattern:
+All protected endpoints in `pages/api/` use this structure:
 
 ```typescript
-import { verifyAuth, sendAuthError, withAuth } from "@/lib/apiAuth";
+import { withAuth } from "@/lib/apiAuth";
 import { apiSuccess, apiError } from "@/types/api";
 
-// ✅ Preferred: Wrapper
+// ✅ Preferred: Wrapper automatically handles auth
 export default withAuth(async (req, res, uid) => {
-  // uid is verified, proceed with logic
+  // Always verify ownership for sensitive operations
+  if (data.customerId !== uid) return res.status(403).json(apiError("Forbidden"));
+  return res.status(200).json(apiSuccess({ result }));
 });
-
-// Alternative: Manual check
-const auth = await verifyAuth(req);
-if (!auth.success) return sendAuthError(res, auth);
-if (data.customerId !== auth.uid) return res.status(403).json(apiError("Forbidden"));
 ```
 
----
+Key API endpoints:
 
-## 📊 Data Model
+- `pages/api/offers/` – accept, decline, message
+- `pages/api/requests/` – createGuest, linkToAccount
+- `pages/api/generateUploadLink.ts` – token-based media upload
 
-**Flow**: Customer creates request → Companies submit offers → Customer accepts one → Others auto-declined
+## Data Model & Flow
 
-| Collection                      | Key Fields                                       | Notes                      |
-| ------------------------------- | ------------------------------------------------ | -------------------------- |
-| `requests/{id}`                 | `customerId`, `requestCode`, `status`            | Main document              |
-| `requests/{id}/offers/{id}`     | `companyId`, `price`, `requestId`, `requestCode` | ⚠️ Denormalize parent refs |
-| `companies/{id}/notifications/` | `type`, `requestId`, `read`                      | Real-time alerts           |
+**Core flow**: Customer creates request → Companies view & submit offers → Customer accepts one → Others auto-declined
 
-**Statuses**:
+| Collection                      | Key Fields                            | Notes                        |
+| ------------------------------- | ------------------------------------- | ---------------------------- |
+| `requests/{id}`                 | `customerId`, `requestCode`, `status` | Main document                |
+| `requests/{id}/offers/{id}`     | `companyId`, `price`, `requestId`     | ⚠️ Denormalize `requestCode` |
+| `companies/{id}/notifications/` | `type`, `requestId`, `read`           | Real-time via Firestore      |
 
-- Requests: `active` · `closed` · `paused` · `cancelled`
-- Offers: `pending` · `accepted` · `declined`
+**Statuses**: Requests: `active`/`closed`/`paused`/`cancelled` · Offers: `pending`/`accepted`/`declined`
 
----
-
-## 🛠️ Helper Functions
-
-> **Always prefer helpers over raw Firestore SDK**
+## Helper Functions (Use These!)
 
 ```typescript
+// ✅ Always use helpers over raw Firestore SDK
 import { createRequest, addOffer, updateRequest, archiveRequest } from "@/utils/firestoreHelpers";
-import { ensureUserProfile, getUserRole } from "@/utils/firebaseHelpers";
+import { ensureUserProfile, getUserRole, onAuthChange } from "@/utils/firebaseHelpers";
 ```
 
-`createRequest()` auto-generates `REQ-XXXXXX` via transaction on `meta/counters.requestSeq`.
+- `createRequest()` auto-generates sequential `REQ-XXXXXX` via Firestore transaction on `meta/counters.requestSeq`
+- `ensureUserProfile()` handles profile creation with role conflict detection
 
----
+## Project Conventions
 
-## 📋 Conventions
+| Rule                    | Implementation                                                   |
+| ----------------------- | ---------------------------------------------------------------- |
+| **No hard deletes**     | Use `archived: true` or status field changes                     |
+| **Timestamps**          | Always `serverTimestamp()` – never `new Date()`                  |
+| **Toast notifications** | Use `sonner`: `toast.success()`, `toast.error()` (Romanian text) |
+| **Phone validation**    | Romanian format `07xxxxxxxx` – see `utils/validation.ts`         |
+| **Denormalization**     | Always include `requestId`/`requestCode` in subcollections       |
 
-| Rule               | Implementation                                      |
-| ------------------ | --------------------------------------------------- |
-| 🚫 No hard deletes | Use `archived: true` or status changes              |
-| ⏰ Timestamps      | Always `serverTimestamp()`                          |
-| 🔔 Toasts          | `sonner`: `toast.success()`, `toast.error()`        |
-| 📞 Romanian phone  | `07xxxxxxxx` – use `utils/validation.ts`            |
-| 🔗 Denormalization | Include `requestId`/`requestCode` in subcollections |
+## Styling (Tailwind v4)
 
----
+Configuration in `globals.css` with `@theme{}` block. Use predefined classes:
 
-## 🎨 Styling (Tailwind v4)
+```css
+.card         /* Rounded glass-effect with hover shadow */
+.btn-primary  /* Emerald→Sky gradient button */
+.btn-outline  /* Emerald outlined button */
+```
 
-Config: `globals.css` with `@theme{}`. Use these classes:
+Brand colors: `emerald-500` (#10b981), `sky-500` (#0ea5e9), `dark` (#064e3b)
 
-| Class          | Purpose                   |
-| -------------- | ------------------------- |
-| `.card`        | Rounded glass-effect card |
-| `.btn-primary` | Emerald gradient button   |
-| `.btn-outline` | Outlined variant          |
+## Integrations
 
----
+| Service     | Location                     | Notes                           |
+| ----------- | ---------------------------- | ------------------------------- |
+| **EmailJS** | `utils/emailHelpers.ts`      | Client-side transactional email |
+| **Resend**  | `pages/api/offers/accept.ts` | Server-side email               |
+| **GA4**     | `utils/analytics.ts`         | `trackSignUp()`, `trackLogin()` |
 
-## 🔌 Integrations
-
-| Service     | Location                     | Env Vars                |
-| ----------- | ---------------------------- | ----------------------- |
-| **EmailJS** | `utils/emailHelpers.ts`      | `NEXT_PUBLIC_EMAILJS_*` |
-| **Resend**  | `pages/api/offers/accept.ts` | `RESEND_API_KEY`        |
-| **GA4**     | `utils/analytics.ts`         | –                       |
-
----
-
-## 📤 Media Upload Flow
+## Media Upload Flow
 
 Token-based deferred upload system:
 
 ```
-generateUploadLink.ts → creates token
+generateUploadLink.ts → creates token in Firestore
        ↓
 pages/upload/[token].tsx → public upload page
        ↓
@@ -142,9 +124,7 @@ validateUploadToken.ts / markUploadTokenUsed.ts → lifecycle
 notifyCompaniesOnUpload.ts → alerts companies
 ```
 
----
-
-## 📁 Key Files
+## Key File Reference
 
 | Purpose         | Path                                                 |
 | --------------- | ---------------------------------------------------- |
@@ -156,3 +136,12 @@ notifyCompaniesOnUpload.ts → alerts companies
 | Types           | `types/index.ts`, `types/api.ts`                     |
 | Security Rules  | `firebase.firestore.rules`, `firebase.storage.rules` |
 | Page Guards     | `components/auth/RequireRole.tsx`                    |
+
+## Types Quick Reference
+
+```typescript
+type UserRole = "customer" | "company";
+type MovingRequest = { id, customerId, requestCode, status, fromCity, toCity, moveDate, ... };
+type Offer = { id, requestId, companyId, price, message, status };
+type ApiResponse<T> = ApiSuccessResponse<T> | ApiErrorResponse;
+```
