@@ -175,12 +175,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       );
     }
 
+    // Compute legacy rooms field (prefer destination, then pickup)
+    const rooms = clean.toRooms || clean.fromRooms || "";
+
     // Generate request code
     const requestCode = await generateRequestCode();
 
     // Create the request document
     const requestData = {
       ...clean,
+      rooms, // Store aggregated rooms for backward compatibility
       requestCode,
       customerName,
       customerEmail: email,

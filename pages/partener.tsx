@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import {
   CheckCircle,
@@ -127,6 +128,14 @@ const getTimeAgo = (dateStr: string) => {
   return `Acum ${diffDays} de zile`;
 };
 
+// Helper to extract first number from rooms (e.g., "2-3" -> "2")
+const extractRooms = (rooms: string | number | undefined): string => {
+  if (!rooms) return "3";
+  const str = String(rooms);
+  const match = str.match(/^\d+/);
+  return match ? match[0] : str;
+};
+
 // Helper to format date
 const formatDate = (dateStr: string) => {
   if (!dateStr) return "-";
@@ -148,7 +157,42 @@ const formatDate = (dateStr: string) => {
   return `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
 };
 
-export default function PartenerPage({ latestRequest }: Props) {
+export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props) {
+  const [latestRequest, setLatestRequest] = useState<LatestRequest>(ssrLatestRequest);
+
+  // Client-side fallback when server-side fetch fails (admin not ready)
+  useEffect(() => {
+    if (ssrLatestRequest) return; // Already have data from SSR
+
+    const fetchLatestRequest = async () => {
+      try {
+        const { db } = await import("@/services/firebase");
+        const { collection, query, orderBy, limit, getDocs } = await import("firebase/firestore");
+
+        const q = query(collection(db, "requests"), orderBy("createdAt", "desc"), limit(1));
+        const snapshot = await getDocs(q);
+
+        if (!snapshot.empty) {
+          const doc = snapshot.docs[0];
+          const data = doc.data();
+          setLatestRequest({
+            fromCity: data.fromCity || "București",
+            fromCounty: data.fromCounty || "",
+            toCity: data.toCity || "România",
+            toCounty: data.toCounty || "",
+            fromRooms: extractRooms(data.rooms),
+            moveDate: data.moveDate || "",
+            createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
+          });
+        }
+      } catch (error) {
+        console.error("[partener] Client-side fetch failed:", error);
+      }
+    };
+
+    fetchLatestRequest();
+  }, [ssrLatestRequest]);
+
   return (
     <Layout>
       <Head>
@@ -232,7 +276,7 @@ export default function PartenerPage({ latestRequest }: Props) {
                     <div className="flex justify-between">
                       <span className="text-sm text-gray-500">Camere:</span>
                       <span className="font-medium text-gray-900">
-                        {latestRequest ? `${latestRequest.fromRooms} camere` : "3 camere"}
+                        {latestRequest ? latestRequest.fromRooms : "3"}
                       </span>
                     </div>
                     <div className="flex justify-between">
@@ -425,12 +469,17 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
       data.toCity
     );
 
+    // Extract just the first number from rooms (e.g., "2-3" -> "2")
+    const roomsStr = String(data.rooms || "3");
+    const roomsMatch = roomsStr.match(/^\d+/);
+    const fromRooms = roomsMatch ? roomsMatch[0] : roomsStr;
+
     const latestRequest = {
       fromCity: data.fromCity || "București",
       fromCounty: data.fromCounty || "",
       toCity: data.toCity || "România",
       toCounty: data.toCounty || "",
-      fromRooms: data.rooms || "2-3",
+      fromRooms,
       moveDate: data.moveDate || "",
       createdAt: data.createdAt?.toDate?.()?.toISOString() || new Date().toISOString(),
     };

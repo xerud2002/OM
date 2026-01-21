@@ -109,32 +109,14 @@ export default function App({ Component, pageProps }: AppProps) {
           content="Primește rapid oferte reale de la firme de mutări verificate din România. Compară prețuri și alege varianta potrivită pentru tine."
         />
 
-        {/* Open Graph tags */}
+        {/* Open Graph tags - only global defaults, pages override with their own */}
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="OferteMutare.ro" />
-        <meta
-          property="og:title"
-          content="Ofertemutare.ro – Oferte reale de la firme de mutări verificate"
-        />
-        <meta
-          property="og:description"
-          content="Primește rapid oferte reale de la firme de mutări verificate din România. Compară prețuri și alege varianta potrivită pentru tine."
-        />
-        <meta property="og:url" content="https://ofertemutare.ro" />
-        <meta property="og:image" content="https://ofertemutare.ro/fb-cover-820x312.png" />
         <meta property="og:locale" content="ro_RO" />
+        {/* og:url, og:title, og:description are set per-page to match canonical URLs */}
 
-        {/* Twitter Card tags */}
+        {/* Twitter Card tags - only card type, pages set their own title/description */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta
-          name="twitter:title"
-          content="Ofertemutare.ro – Oferte reale de la firme de mutări verificate"
-        />
-        <meta
-          name="twitter:description"
-          content="Primește rapid oferte reale de la firme de mutări verificate din România. Compară prețuri și alege varianta potrivită pentru tine."
-        />
-        <meta name="twitter:image" content="https://ofertemutare.ro/fb-cover-820x312.png" />
       </Head>
 
       {/* A11y: skip link for keyboard users */}

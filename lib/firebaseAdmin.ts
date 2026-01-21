@@ -1,6 +1,10 @@
 import admin from "firebase-admin";
 
-let adminHasCredentials = false;
+// Use global to persist state across hot-reloads in development
+declare global {
+  // eslint-disable-next-line no-var
+  var _firebaseAdminHasCredentials: boolean | undefined;
+}
 
 // Initialize Firebase Admin SDK once per runtime
 if (!admin.apps.length) {
@@ -35,7 +39,7 @@ if (!admin.apps.length) {
         }),
         storageBucket,
       });
-      adminHasCredentials = true;
+      globalThis._firebaseAdminHasCredentials = true;
     } else {
       const reason = missingEssentials
         ? "missing credentials"
@@ -51,19 +55,19 @@ if (!admin.apps.length) {
       admin.initializeApp({
         projectId: projectId || "demo-project",
       });
-      adminHasCredentials = false;
+      globalThis._firebaseAdminHasCredentials = false;
     }
   } catch (e) {
     console.warn("Firebase Admin initialization failed; falling back to minimal config.", e);
     admin.initializeApp({
       projectId: projectId || "demo-project",
     });
-    adminHasCredentials = false;
+    globalThis._firebaseAdminHasCredentials = false;
   }
 }
 
 export const adminDb = admin.firestore();
 export const adminAuth = admin.auth();
-export const adminReady = adminHasCredentials;
+export const adminReady = globalThis._firebaseAdminHasCredentials ?? false;
 
 export default admin;

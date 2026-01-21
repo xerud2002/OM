@@ -2,7 +2,11 @@ import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import {
+  FAQPageSchema,
+  LocalBusinessSchema,
+  BreadcrumbSchema,
+} from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
 import {
   Building,
@@ -31,7 +35,7 @@ export default function MutariCompaniiPage() {
         <title>Mutări Birouri {currentYear} → Relocare Firme</title>
         <meta
           name="description"
-          content="Servicii mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier office, arhivă. Zero downtime! Weekend/noapte disponibil. Primește 3-5 oferte gratuite în 24h de la firme specializate în mutări corporative."
+          content="Mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier, arhivă. Zero downtime! Primești 3-5 oferte GRATUITE în 24h."
         />
         <meta
           name="keywords"
@@ -67,16 +71,14 @@ export default function MutariCompaniiPage() {
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
-            <div className="absolute top-1/3 left-1/4 h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-            <div className="absolute top-2/3 right-1/3 h-2 w-2 rounded-full bg-blue-400 animate-pulse" />
+            <div className="absolute top-1/3 left-1/4 h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
+            <div className="absolute top-2/3 right-1/3 h-2 w-2 animate-pulse rounded-full bg-blue-400" />
           </div>
 
           <div className="relative mx-auto max-w-6xl px-4">
-            <div className="flex items-center gap-2 mb-6">
+            <div className="mb-6 flex items-center gap-2">
               <Building className="h-6 w-6 text-slate-300" />
-              <span className="text-slate-300 text-sm font-medium">
-                Servicii B2B • Corporativ
-              </span>
+              <span className="text-sm font-medium text-slate-300">Servicii B2B • Corporativ</span>
             </div>
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
@@ -87,37 +89,37 @@ export default function MutariCompaniiPage() {
             </h1>
 
             <p className="mb-8 max-w-2xl text-lg text-slate-300 md:text-xl">
-              Relocare profesională pentru firme, birouri și sedii corporate. 
-              Transport echipamente IT, mobilier office, arhive. Zero downtime!
+              Relocare profesională pentru firme, birouri și sedii corporate. Transport echipamente
+              IT, mobilier office, arhive. Zero downtime!
             </p>
 
             {/* Stats */}
             <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">24/7</div>
                 <div className="text-sm text-slate-300">Disponibilitate</div>
               </div>
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">0%</div>
                 <div className="text-sm text-slate-300">Downtime</div>
               </div>
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">✓</div>
                 <div className="text-sm text-slate-300">Asigurare extinsă</div>
               </div>
-              <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
+              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">B2B</div>
                 <div className="text-sm text-slate-300">Factură fiscală</div>
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row">
               <Link
                 href="/customer/auth"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 font-bold text-white shadow-xl transition-all hover:bg-emerald-600 hover:shadow-2xl hover:-translate-y-0.5"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 font-bold text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-emerald-600 hover:shadow-2xl"
               >
                 Solicită Ofertă B2B
-                <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
               <Link
                 href="/contact"
@@ -139,15 +141,16 @@ export default function MutariCompaniiPage() {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                Mutarea unui <strong>birou sau sediu de companie</strong> este o decizie strategică 
-                importantă. Trebuie coordonată perfect pentru a minimiza timpul de inactivitate și 
-                a proteja echipamentele valoroase &ndash; de la servere și calculatoare, până la 
+                Mutarea unui <strong>birou sau sediu de companie</strong> este o decizie strategică
+                importantă. Trebuie coordonată perfect pentru a minimiza timpul de inactivitate și a
+                proteja echipamentele valoroase &ndash; de la servere și calculatoare, până la
                 mobilierul de birou și arhivele confidențiale.
               </p>
               <p>
-                Pe <strong>OferteMutare.ro</strong>, conectăm companiile cu firme de mutări 
-                specializate în relocări corporate. Oferim <strong>mutări în weekend sau noaptea</strong> 
-                pentru zero impact asupra programului de lucru, plus documentație completă și 
+                Pe <strong>OferteMutare.ro</strong>, conectăm companiile cu firme de mutări
+                specializate în relocări corporate. Oferim{" "}
+                <strong>mutări în weekend sau noaptea</strong>
+                pentru zero impact asupra programului de lucru, plus documentație completă și
                 factură fiscală.
               </p>
             </div>
@@ -155,7 +158,7 @@ export default function MutariCompaniiPage() {
 
           {/* What We Move */}
           <section className="mb-12 rounded-2xl bg-linear-to-r from-slate-50 to-gray-100 p-8">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Package className="h-7 w-7 text-slate-600" />
               Ce transportăm pentru companii
             </h2>
@@ -201,36 +204,36 @@ export default function MutariCompaniiPage() {
 
           {/* Pricing */}
           <section className="mb-12">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <DollarSign className="h-7 w-7 text-emerald-600" />
               Prețuri orientative mutări birouri
             </h2>
             <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center hover:border-emerald-300 transition-colors">
-                <Users className="h-10 w-10 mx-auto mb-3 text-slate-400" />
-                <div className="text-sm text-gray-500 mb-1">Birou mic (5-10 angajați)</div>
+              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition-colors hover:border-emerald-300">
+                <Users className="mx-auto mb-3 h-10 w-10 text-slate-400" />
+                <div className="mb-1 text-sm text-gray-500">Birou mic (5-10 angajați)</div>
                 <div className="text-2xl font-bold text-gray-900">1.500-3.000 lei</div>
               </div>
               <div className="rounded-xl border-2 border-emerald-400 bg-emerald-50 p-6 text-center">
-                <Building className="h-10 w-10 mx-auto mb-3 text-emerald-600" />
-                <div className="text-sm text-gray-500 mb-1">Birou mediu (20-50 angajați)</div>
+                <Building className="mx-auto mb-3 h-10 w-10 text-emerald-600" />
+                <div className="mb-1 text-sm text-gray-500">Birou mediu (20-50 angajați)</div>
                 <div className="text-2xl font-bold text-gray-900">4.000-8.000 lei</div>
-                <div className="text-xs text-emerald-600 mt-1">Cel mai frecvent</div>
+                <div className="mt-1 text-xs text-emerald-600">Cel mai frecvent</div>
               </div>
-              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center hover:border-emerald-300 transition-colors">
-                <Building className="h-10 w-10 mx-auto mb-3 text-slate-500" />
-                <div className="text-sm text-gray-500 mb-1">Corporate (100+ angajați)</div>
+              <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition-colors hover:border-emerald-300">
+                <Building className="mx-auto mb-3 h-10 w-10 text-slate-500" />
+                <div className="mb-1 text-sm text-gray-500">Corporate (100+ angajați)</div>
                 <div className="text-2xl font-bold text-gray-900">Ofertă personalizată</div>
               </div>
             </div>
-            <p className="mt-4 text-sm text-gray-600 text-center">
+            <p className="mt-4 text-center text-sm text-gray-600">
               💼 Toate prețurile includ TVA. Oferim factură fiscală și contract B2B.
             </p>
           </section>
 
           {/* Benefits */}
           <section className="mb-12">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Shield className="h-7 w-7 text-slate-600" />
               De ce companii aleg OferteMutare.ro
             </h2>
@@ -243,8 +246,8 @@ export default function MutariCompaniiPage() {
                   <div>
                     <h3 className="font-bold text-gray-900">Mutări în weekend sau noapte</h3>
                     <p className="text-gray-600">
-                      Relocare completă vineri seara &rarr; luni dimineața operationali. 
-                      Zero impact asupra clienților și angajaților.
+                      Relocare completă vineri seara &rarr; luni dimineața operationali. Zero impact
+                      asupra clienților și angajaților.
                     </p>
                   </div>
                 </div>
@@ -255,10 +258,12 @@ export default function MutariCompaniiPage() {
                     <Shield className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Asigurare extinsă pentru echipamente</h3>
+                    <h3 className="font-bold text-gray-900">
+                      Asigurare extinsă pentru echipamente
+                    </h3>
                     <p className="text-gray-600">
-                      Asigurare cargo pentru servere, echipamente IT și mobilier valoros. 
-                      Acoperire completă în caz de daune.
+                      Asigurare cargo pentru servere, echipamente IT și mobilier valoros. Acoperire
+                      completă în caz de daune.
                     </p>
                   </div>
                 </div>
@@ -271,7 +276,7 @@ export default function MutariCompaniiPage() {
                   <div>
                     <h3 className="font-bold text-gray-900">Documentație completă</h3>
                     <p className="text-gray-600">
-                      Factură fiscală, contract de prestări servicii, proces verbal de 
+                      Factură fiscală, contract de prestări servicii, proces verbal de
                       predare-primire, inventar detaliat.
                     </p>
                   </div>
@@ -285,8 +290,8 @@ export default function MutariCompaniiPage() {
                   <div>
                     <h3 className="font-bold text-gray-900">Echipe dedicate & project manager</h3>
                     <p className="text-gray-600">
-                      Pentru mutări mari, primești un manager de proiect dedicat care 
-                      coordonează întreaga operațiune.
+                      Pentru mutări mari, primești un manager de proiect dedicat care coordonează
+                      întreaga operațiune.
                     </p>
                   </div>
                 </div>
@@ -296,25 +301,25 @@ export default function MutariCompaniiPage() {
 
           {/* Process */}
           <section className="mb-12 rounded-2xl bg-linear-to-r from-emerald-50 to-cyan-50 p-8">
-            <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
+            <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Calendar className="h-7 w-7 text-emerald-600" />
               Procesul de relocare corporativă
             </h2>
             <div className="space-y-4">
               <div className="flex gap-4">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white font-bold">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">
                   1
                 </div>
                 <div>
                   <h3 className="font-bold text-gray-900">Survey la sediu</h3>
                   <p className="text-sm text-gray-600">
-                    Evaluare la fața locului: inventar echipamente, măsurători, identificare 
+                    Evaluare la fața locului: inventar echipamente, măsurători, identificare
                     provocări logistice.
                   </p>
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white font-bold">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">
                   2
                 </div>
                 <div>
@@ -325,7 +330,7 @@ export default function MutariCompaniiPage() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white font-bold">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">
                   3
                 </div>
                 <div>
@@ -336,7 +341,7 @@ export default function MutariCompaniiPage() {
                 </div>
               </div>
               <div className="flex gap-4">
-                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white font-bold">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-emerald-600 font-bold text-white">
                   4
                 </div>
                 <div>
@@ -354,9 +359,7 @@ export default function MutariCompaniiPage() {
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-slate-800 to-slate-900 p-8 text-center text-white">
-            <h2 className="mb-4 text-3xl font-bold">
-              Relocați biroul în siguranță
-            </h2>
+            <h2 className="mb-4 text-3xl font-bold">Relocați biroul în siguranță</h2>
             <p className="mb-8 text-lg text-slate-300">
               Solicită o ofertă personalizată pentru compania ta. Răspundem în maxim 24h.
             </p>
@@ -365,7 +368,7 @@ export default function MutariCompaniiPage() {
               className="group inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 font-bold text-white shadow-xl transition-all hover:bg-emerald-600"
             >
               Solicită Ofertă B2B
-              <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform" />
+              <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
             </Link>
           </section>
         </article>

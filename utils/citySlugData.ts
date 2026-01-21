@@ -365,7 +365,7 @@ export const cityData: CityData[] = [
     landmarks: ["Parcul Trivale", "Primărie", "Bascov"],
     neighborhoods: ["Nord", "Sud", "Găvana", "Craiovei", "Exercițiu"],
     metaDescription:
-      "Mutări Pitești ✓ Transport mobilă în Argeș ✓ Oferte gratuite în 24h ✓ Firme verificate",
+      "Mutări Pitești ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în tot județul Argeș ✓ Firme verificate ✓ Economisești 40%",
     heroSubtitle: "Capitală auto a României, la poalele Carpaților. Mutări rapide în Pitești.",
     articleIntro:
       "Piteștiul, capitala auto a României și gazda uzinei Dacia-Renault, este un oraș industrial dinamic cu 155.000 de locuitori și economie în creștere. Piteștenii lucrează în mare parte la Dacia sau companiile furnizoare, ceea ce generează flux constant de mutări între cartierele Nord, Sud și Găvana. Provocările specifice includ traficul intens pe DN7 către București și către Curtea de Argeș, blocurile înalte fără lift din zona Exercițiu și necesitatea mutărilor rapide pentru angajații mobilizați de Dacia. Firmele de pe OferteMutare.ro oferă servicii flexibile adaptate ritmului alert al industriei auto.",
@@ -391,7 +391,7 @@ export const cityData: CityData[] = [
     landmarks: ["Teatrul Bacovia", "Parcul Cancicov", "Centrul Vechi"],
     neighborhoods: ["Centru", "Ștefan cel Mare", "Cornișa", "Sud", "Miorița"],
     metaDescription:
-      "Servicii mutări Bacău ✓ Transport mobilă în Moldova ✓ Compară oferte gratuite de la firme locale",
+      "Mutări Bacău ✓ Compară 3-5 oferte GRATUITE în 24h de la firme locale verificate ✓ Transport mobilă în Moldova ✓ Economisești 40%",
     heroSubtitle: "În inima Moldovei, oraș în dezvoltare. Mutări de calitate pentru băcăuani.",
     articleIntro:
       "Bacăul, important nod feroviar și rutier în inima Moldovei cu 144.000 de locuitori, este un oraș dinamic cu economie în diversificare. Băcăuanii se mută frecvent între blocurile din cartierele Ștefan cel Mare și Sud și casele din zona Cornișa, sau către apartamente renovate în Centrul Vechi. Provocările specifice includ blocurile înalte fără lift din era comunistă, străzile înguste în zona Cornișa cu vedere la Bârlad, și traficul pe drumurile europene E85 și E574. Firmele locale oferă servicii adaptate nevoilor moldovenilor.",
@@ -443,7 +443,7 @@ export const cityData: CityData[] = [
     landmarks: ["Centrul Vechi", "Parcul Mihai Eminescu", "Memorial Eminescu"],
     neighborhoods: ["Centru", "Imparat Traian", "Bucovina", "Plevna"],
     metaDescription:
-      "Firme mutări Botoșani ✓ Transport mobilă în nordul Moldovei ✓ Compară oferte gratuite",
+      "Mutări Botoșani ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în nordul Moldovei ✓ Firme verificate ✓ Prețuri accesibile",
     heroSubtitle: "Plaiuri eminesciene, tradiție și cultură. Mutări profesionale în Botoșani.",
     articleIntro:
       "Botoșaniul, orașul lui Mihai Eminescu și Nicolae Iorga cu 106.000 de locuitori, este cel mai nordic oraș important din Moldova și un centru cultural tradițional. Botoșănenii se mută între apartamentele din cartierele Imparat Traian și Plevna și casele din zona Bucovina, sau emigrează către orașe mai mari (Iași, București). Provocările specifice includ blocurile vechi fără lift din era comunistă, infrastructura deficitară în cartierele periferice și necesitatea mutărilor rapide pentru tinerii care pleacă la studii.",
@@ -781,7 +781,7 @@ export const cityData: CityData[] = [
     landmarks: ["Turnul Pompierilor", "Parcul Vasile Lucaciu", "Centrul Vechi"],
     neighborhoods: ["Centru", "Carpați", "Micro 17", "Solidarității"],
     metaDescription:
-      "Mutări Satu Mare ✓ Transport mobilă în nord-vest ✓ Oferte gratuite în 24h ✓ Firme verificate",
+      "Mutări Satu Mare ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în nord-vest ✓ Firme verificate ✓ Economisești 40%",
     heroSubtitle: "În țara Oașului, la granița cu Ungaria. Mutări profesionale în Satu Mare.",
     articleIntro:
       "Satu Mare, orașul de la granița cu Ungaria cu 102.000 de locuitori și o comunitate multietnică româno-maghiară, este poarta către Ținutul Oașului și nordul Transilvaniei. Sătmărenii se mută frecvent între blocurile din cartierele Carpați și Micro 17 și casele din zona Solidarității, sau emigrează către Ungaria (15 km). Provocările specifice includ necesitatea serviciilor bilingve, traficul pe DN19 către Ungaria, și infrastructura învăchită în cartierele comuniste. Firmele locale oferă servicii la standarde europene datorită proximității graniței.",

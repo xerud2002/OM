@@ -456,7 +456,7 @@ export default function FAQPage() {
         <title>Întrebări Frecvente (FAQ) Mutări România 2026 | OferteMutare.ro</title>
         <meta
           name="description"
-          content="🚚 Răspunsuri complete despre serviciile de mutări în București, Cluj, Timișoara, Iași și toată România. Prețuri, proces, firme verificate, termene. 100% gratuit!"
+          content="🚚 Răspunsuri complete despre mutări în București, Cluj, Timișoara, Iași. Prețuri, proces, firme verificate, termene. 100% gratuit!"
         />
         <meta
           name="keywords"

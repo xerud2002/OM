@@ -136,11 +136,15 @@ export async function createGuestRequest(
     throw new Error("Email este obligatoriu");
   }
 
+  // Compute legacy rooms field (prefer destination, then pickup)
+  const rooms = data.toRooms || data.fromRooms || clean.rooms || "";
+
   // Generate friendly code for this request
   const requestCode = await generateRequestCode();
 
   const docRef = await addDoc(collection(db, "requests"), {
     ...clean,
+    rooms, // Store aggregated rooms for backward compatibility
     requestCode,
     guestEmail,
     customerId: null,
