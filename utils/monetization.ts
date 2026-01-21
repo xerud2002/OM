@@ -1,5 +1,14 @@
 import { db } from "@/services/firebase";
-import { doc, getDoc, setDoc, updateDoc, runTransaction, serverTimestamp } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  runTransaction,
+  serverTimestamp,
+  collection,
+  addDoc,
+} from "firebase/firestore";
 
 // --- Types ---
 
@@ -72,7 +81,7 @@ export async function depositFunds(companyId: string, amount: number) {
 
   // Check First Deposit (this logic needs transaction lock really, simplifying for now)
   const companyRef = doc(db, "companies", companyId);
-  
+
   await runTransaction(db, async (transaction) => {
     const companyDoc = await transaction.get(companyRef);
     if (!companyDoc.exists()) throw new Error("Company not found");
@@ -81,14 +90,14 @@ export async function depositFunds(companyId: string, amount: number) {
     let finalAmount = amount;
 
     // First deposit bonus?
-    // Implementation note: we need to track if it's first deposit. 
+    // Implementation note: we need to track if it's first deposit.
     // We'll rely on a field `hasDeposited: boolean` or check transaction history count.
     // For now, let's just check tiers.
 
     if (settings.promotions.active) {
       // Find highest applicable tier
       const applicableTier = settings.promotions.tiers
-        .filter(t => t.active && amount >= t.minAmount)
+        .filter((t) => t.active && amount >= t.minAmount)
         .sort((a, b) => b.minAmount - a.minAmount)[0];
 
       if (applicableTier) {
@@ -103,14 +112,21 @@ export async function depositFunds(companyId: string, amount: number) {
       walletBalance: newBalance,
       updatedAt: serverTimestamp(),
     });
-
-    // Log transaction
-    const transactionRef = doc(collection(db, "transactions")); // Invalid: collection needs to be imported or use db.collection if admin
-    // Client SDK: collection(db, "transactions") -> addDoc
-    // Inside transaction we use ref.
-    
-    // Changing approach: Use update only here, allow caller to log transaction
   });
+
+  // Log transaction after successful update (outside transaction for simplicity)
+  try {
+    await addDoc(collection(db, "companies", companyId, "transactions"), {
+      type: "deposit",
+      amount,
+      bonus,
+      totalAdded: amount + bonus,
+      timestamp: serverTimestamp(),
+    });
+  } catch (error) {
+    console.error("Failed to log transaction:", error);
+    // Don't fail the whole operation if logging fails
+  }
 
   return { amount, bonus };
 }
@@ -122,7 +138,7 @@ export function getLeadUnlockPrice(settings: SystemSettings, county: string, cit
   if (settings.monetization.pricingRules[city]) {
     return settings.monetization.pricingRules[city];
   }
-  
+
   // Check County rule
   if (settings.monetization.pricingRules[county]) {
     return settings.monetization.pricingRules[county];
