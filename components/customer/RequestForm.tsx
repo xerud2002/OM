@@ -535,7 +535,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {/* Mutare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-checked:border-purple-500 has-checked:bg-linear-to-br has-checked:from-purple-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceMoving}
@@ -578,7 +578,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Împachetare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-checked:border-purple-500 has-checked:bg-linear-to-br has-checked:from-purple-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.servicePacking}
@@ -621,7 +621,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Demontare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-checked:border-purple-500 has-checked:bg-linear-to-br has-checked:from-purple-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceDisassembly}
@@ -665,7 +665,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Debarasare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-checked:border-purple-500 has-checked:bg-linear-to-br has-checked:from-purple-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceCleanout}
@@ -708,7 +708,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Depozitare */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-[:checked]:border-purple-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-purple-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-purple-200 bg-white transition-all duration-200 hover:border-purple-400 hover:shadow-lg has-checked:border-purple-500 has-checked:bg-linear-to-br has-checked:from-purple-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="checkbox"
                 checked={!!form.serviceStorage}
@@ -797,7 +797,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             {/* In-person */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-checked:border-amber-500 has-checked:bg-linear-to-br has-checked:from-amber-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
@@ -849,7 +849,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Video */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-checked:border-amber-500 has-checked:bg-linear-to-br has-checked:from-amber-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
@@ -899,7 +899,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </div>
             </label>
             {/* Quick estimate */}
-            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-[:checked]:border-amber-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-amber-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+            <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-amber-200 bg-white transition-all duration-200 hover:border-amber-400 hover:shadow-lg has-checked:border-amber-500 has-checked:bg-linear-to-br has-checked:from-amber-50 has-checked:to-white has-checked:shadow-md">
               <input
                 type="radio"
                 name="surveyType"
@@ -979,7 +979,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           <div className="space-y-5">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               {/* Upload now */}
-              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-checked:border-blue-500 has-checked:bg-linear-to-br has-checked:from-blue-50 has-checked:to-white has-checked:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"
@@ -1026,7 +1026,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
               </label>
               {/* Upload later */}
-              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-checked:border-blue-500 has-checked:bg-linear-to-br has-checked:from-blue-50 has-checked:to-white has-checked:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"
@@ -1074,7 +1074,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               </label>
 
               {/* No media */}
-              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-[:checked]:border-blue-500 has-[:checked]:bg-linear-to-br has-[:checked]:from-blue-50 has-[:checked]:to-white has-[:checked]:shadow-md">
+              <label className="group relative cursor-pointer overflow-hidden rounded-xl border-2 border-blue-200 bg-white transition-all duration-200 hover:border-blue-400 hover:shadow-lg has-checked:border-blue-500 has-checked:bg-linear-to-br has-checked:from-blue-50 has-checked:to-white has-checked:shadow-md">
                 <input
                   type="radio"
                   name="mediaUpload"

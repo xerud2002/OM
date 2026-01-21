@@ -712,7 +712,7 @@ export default function CustomerDashboard() {
             <div className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-400/10 blur-2xl" />
           </div>
 
-          <div className="relative mx-auto max-w-[1400px] px-4 pt-28 pb-10 sm:px-6 sm:pt-32 lg:pb-14">
+          <div className="relative mx-auto max-w-350 px-4 pt-28 pb-10 sm:px-6 sm:pt-32 lg:pb-14">
             {/* Header */}
             <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
               <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
@@ -802,7 +802,7 @@ export default function CustomerDashboard() {
           </div>
         </div>
 
-        <section className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6">
+        <section className="mx-auto max-w-350 px-4 py-8 sm:px-6">
           {/* Navigation Tabs - Modern pill style */}
           <div className="mb-8">
             <div className="inline-flex flex-wrap gap-2 rounded-2xl bg-gray-100 p-2">
@@ -982,7 +982,7 @@ export default function CustomerDashboard() {
                 <div className="grid grid-cols-1 gap-0 lg:grid-cols-[320px,1fr]">
                   {/* Sidebar: requests list */}
                   <aside className="border-b border-gray-100 bg-linear-to-br from-gray-50 to-white lg:border-r lg:border-b-0">
-                    <div className="sticky top-[80px] max-h-[calc(100vh-120px)] overflow-auto p-5">
+                    <div className="sticky top-20 max-h-[calc(100vh-120px)] overflow-auto p-5">
                       <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-900">
                         <List size={16} className="text-emerald-600" />
                         Selectează o cerere

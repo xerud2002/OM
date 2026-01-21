@@ -139,13 +139,13 @@ export default function AboutPage() {
         <section ref={heroRef} className="relative overflow-hidden pt-24 pb-20 sm:pt-32 sm:pb-32">
           {/* Animated Background Elements */}
           <motion.div className="pointer-events-none absolute inset-0" style={{ y: heroY }}>
-            <div className="absolute top-0 left-1/4 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-linear-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
-            <div className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-y-1/2 rounded-full bg-linear-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
-            <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
+            <div className="absolute top-0 left-1/4 h-125 w-125 -translate-y-1/2 rounded-full bg-linear-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
+            <div className="absolute right-1/4 bottom-0 h-100 w-100 translate-y-1/2 rounded-full bg-linear-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
+            <div className="absolute top-1/2 left-1/2 h-75 w-75 -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
           </motion.div>
 
           {/* Grid Pattern */}
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-size-[50px_50px]" />
 
           <div className="relative z-10 container mx-auto px-4">
             <motion.div
@@ -251,14 +251,14 @@ export default function AboutPage() {
                 >
                   <div className="relative">
                     {/* Decorative frame */}
-                    <div className="absolute -inset-4 rounded-[2rem] bg-linear-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
+                    <div className="absolute -inset-4 rounded-4xl bg-linear-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
 
                     <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-emerald-50 to-sky-50 p-6 sm:p-10">
                       {/* Decorative orbs */}
                       <div className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-emerald-200/40 blur-3xl" />
                       <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-sky-200/40 blur-3xl" />
 
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white shadow-2xl">
+                      <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-white shadow-2xl">
                         <Image
                           src="/pics/partner.webp"
                           alt="Echipa Ofertemutare.ro"
@@ -341,13 +341,13 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-2xl sm:p-14"
+              className="relative mx-auto max-w-5xl overflow-hidden rounded-4xl bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-2xl sm:p-14"
             >
               {/* Background effects */}
               <div className="pointer-events-none absolute inset-0">
                 <div className="absolute -top-20 -left-20 h-60 w-60 rounded-full bg-emerald-500/10 blur-3xl" />
                 <div className="absolute -right-20 -bottom-20 h-60 w-60 rounded-full bg-sky-500/10 blur-3xl" />
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[50px_50px]" />
               </div>
 
               {/* Title */}
@@ -527,10 +527,10 @@ export default function AboutPage() {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              className="relative mx-auto max-w-4xl overflow-hidden rounded-[2rem] bg-linear-to-br from-emerald-600 via-teal-600 to-sky-600 p-8 shadow-2xl sm:p-14"
+              className="relative mx-auto max-w-4xl overflow-hidden rounded-4xl bg-linear-to-br from-emerald-600 via-teal-600 to-sky-600 p-8 shadow-2xl sm:p-14"
             >
               {/* Background pattern */}
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:30px_30px]" />
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-size-[30px_30px]" />
 
               {/* Decorative elements */}
               <div className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
@@ -644,14 +644,14 @@ export default function AboutPage() {
                 >
                   <div className="relative">
                     {/* Decorative frame */}
-                    <div className="absolute -inset-4 rounded-[2rem] bg-linear-to-br from-amber-200/50 via-orange-100/30 to-rose-200/50 blur-2xl" />
+                    <div className="absolute -inset-4 rounded-4xl bg-linear-to-br from-amber-200/50 via-orange-100/30 to-rose-200/50 blur-2xl" />
 
                     <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-amber-50 to-orange-50 p-6 sm:p-10">
                       {/* Decorative orbs */}
                       <div className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-amber-200/40 blur-3xl" />
                       <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-orange-200/40 blur-3xl" />
 
-                      <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-white shadow-2xl">
+                      <div className="relative aspect-4/3 overflow-hidden rounded-2xl bg-white shadow-2xl">
                         <Image
                           src="/pics/oferta.webp"
                           alt="Platforma Ofertemutare.ro"
@@ -702,12 +702,12 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative mx-auto max-w-5xl overflow-hidden rounded-[2rem] border border-emerald-200/50 bg-linear-to-br from-emerald-50 via-white to-sky-50 p-10 text-center shadow-2xl sm:p-16"
+              className="relative mx-auto max-w-5xl overflow-hidden rounded-4xl border border-emerald-200/50 bg-linear-to-br from-emerald-50 via-white to-sky-50 p-10 text-center shadow-2xl sm:p-16"
             >
               {/* Decorative elements */}
               <div className="absolute -top-20 -left-20 h-60 w-60 rounded-full bg-emerald-200/30 blur-3xl" />
               <div className="absolute -right-20 -bottom-20 h-60 w-60 rounded-full bg-sky-200/30 blur-3xl" />
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:30px_30px]" />
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-size-[30px_30px]" />
 
               <div className="relative">
                 <motion.div

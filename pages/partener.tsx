@@ -206,7 +206,7 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
       </Head>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 py-20">
+      <section className="relative overflow-hidden bg-linear-to-br from-emerald-600 via-emerald-500 to-teal-500 py-20">
         <div className="absolute inset-0 bg-[url('/pics/pattern.svg')] opacity-10" />
         <div className="relative mx-auto max-w-6xl px-4">
           <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -381,7 +381,7 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-br from-emerald-600 to-teal-600 py-20">
+      <section className="bg-linear-to-br from-emerald-600 to-teal-600 py-20">
         <div className="mx-auto max-w-4xl px-4 text-center">
           <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
             Gata să Crești Afacerea?
