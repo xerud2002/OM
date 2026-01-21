@@ -85,21 +85,29 @@ export function BreadcrumbSchema({ items }: { items: { name: string; url?: strin
   );
 }
 
-export function AggregateRatingSchema({ 
-  ratingValue, 
-  reviewCount, 
-  bestRating = "5" 
-}: { 
-  ratingValue: string; 
-  reviewCount: string; 
+export function AggregateRatingSchema({
+  ratingValue,
+  reviewCount,
+  bestRating = "5",
+}: {
+  ratingValue: string;
+  reviewCount: string;
   bestRating?: string;
 }) {
   const schema = {
     "@context": "https://schema.org",
-    "@type": "AggregateRating",
-    ratingValue: ratingValue,
-   reviewCount: reviewCount,
-    bestRating: bestRating,
+    "@type": "Organization",
+    name: "OferteMutare.ro",
+    url: "https://ofertemutare.ro",
+    logo: "https://ofertemutare.ro/pics/index.webp",
+    description:
+      "Platformă modernă pentru conectarea clienților cu firme de mutări verificate din România.",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: ratingValue,
+      reviewCount: reviewCount,
+      bestRating: bestRating,
+    },
   };
 
   return (

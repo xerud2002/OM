@@ -25,9 +25,20 @@ export type CompanyProfile = BaseProfile & {
   city?: string;
   county?: string;
   description?: string;
-  verified?: boolean;
+  verified?: boolean; // Legacy verification
   averageRating?: number;
   totalReviews?: number;
+  // Monetization & Verification
+  verificationStatus?: 'unverified' | 'pending' | 'verified' | 'rejected';
+  documents?: {
+    registration?: string; // URL
+    insurance?: string; // URL
+  };
+  phoneVerified?: boolean;
+  emailVerified?: boolean;
+  walletBalance?: number; // RON
+  freeLeadCredits?: number; // Count
+  trialEndsAt?: Timestamp;
 };
 
 export type Review = {
@@ -58,6 +69,7 @@ export type MovingRequest = {
   fromType?: "house" | "flat";
   fromFloor?: string;
   fromElevator?: boolean;
+  fromRooms?: number | string; // New: Number of rooms at pickup
   toCity: string;
   toCounty?: string;
   toAddress?: string; // Deprecated: folosit pentru compatibilitate backward
@@ -69,6 +81,7 @@ export type MovingRequest = {
   toType?: "house" | "flat";
   toFloor?: string;
   toElevator?: boolean;
+  toRooms?: number | string; // New: Number of rooms at delivery
   // Dates
   moveDate?: string; // legacy single date, kept for backward compatibility and quick filters
   moveDateMode?: "exact" | "range" | "none" | "flexible";
@@ -78,9 +91,11 @@ export type MovingRequest = {
   // Friendly tracking code
   requestCode?: string;
   details?: string;
-  rooms?: number | string;
+  rooms?: number | string; // Legacy aggregate rooms
   volumeM3?: number;
   phone?: string;
+  phoneVerified?: boolean; // New
+  emailVerified?: boolean; // New
   budgetEstimate?: number;
   needPacking?: boolean;
   hasElevator?: boolean;

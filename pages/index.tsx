@@ -26,11 +26,6 @@ const UrgencyBanner = dynamic(() => import("@/components/cro/UrgencyBanner"), {
   loading: () => <div className="min-h-50" />,
   ssr: false,
 });
-const AggregateRatingSchema = dynamic(
-  () =>
-    import("@/components/seo/SchemaMarkup").then((mod) => ({ default: mod.AggregateRatingSchema })),
-  { ssr: true }
-);
 const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
   loading: () => <div className="min-h-125" />,
 });
@@ -357,9 +352,6 @@ export default function HomePage() {
           }}
         />
       </Head>
-
-      {/* Schema Markup */}
-      <AggregateRatingSchema ratingValue="4.8" reviewCount="127" />
 
       {/* ==========================
           🔹 Page Sections

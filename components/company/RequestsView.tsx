@@ -391,6 +391,11 @@ function RequestCardCompact({
                         </p>
                       )}
                   <div className="mt-2 flex flex-wrap gap-1.5">
+                    {(r as any).fromRooms && (
+                      <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                        {(r as any).fromRooms} camere
+                      </span>
+                    )}
                     {(r as any).fromType && (
                       <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
                         {(r as any).fromType === "house" ? "Casă" : "Apartament"}
@@ -465,6 +470,11 @@ function RequestCardCompact({
                         </p>
                       )}
                   <div className="mt-2 flex flex-wrap gap-1.5">
+                    {(r as any).toRooms && (
+                      <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
+                        {(r as any).toRooms} camere
+                      </span>
+                    )}
                     {(r as any).toType && (
                       <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
                         {(r as any).toType === "house" ? "Casă" : "Apartament"}
