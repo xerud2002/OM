@@ -5,10 +5,13 @@
 ## Quick Start
 
 ```bash
-npm run dev      # http://localhost:3000
+npm run dev      # http://localhost:3000 (default port 3000, not 3001)
 npm run build    # Run before deploy (catches type errors)
-npm run lint     # Zero-warnings enforced via Husky pre-commit
+npm run lint     # Zero-warnings enforced via Husky pre-commit (--max-warnings=0)
+npm run format   # Prettier formatting (auto-runs in pre-commit)
 ```
+
+**Environment**: Node.js 18+, TypeScript 5.9+, Next.js 14.2+, Firebase 12.8+
 
 ## ⚠️ Critical Architecture Rules
 
@@ -16,13 +19,15 @@ npm run lint     # Zero-warnings enforced via Husky pre-commit
 
 Users are **exclusively** `customer` OR `company` – enforced at 3 layers:
 
-- **Firestore rules**: `canCreateCustomer()` / `canCreateCompany()` block dual-role
-- **App code**: `ensureUserProfile()` throws `ROLE_CONFLICT` error
-- **UI guards**: `<RequireRole allowedRole="customer|company">` protects pages
+- **Firestore rules**: `canCreateCustomer()` / `canCreateCompany()` check opposite role doesn't exist
+- **App code**: `ensureUserProfile()` throws `ROLE_CONFLICT` error if opposite role doc found
+- **UI guards**: `<RequireRole allowedRole="customer|company">` protects pages with auth checks
 
 Profile locations: `customers/{uid}` or `companies/{uid}` (never both)
 
-### 2. Firebase Singleton Pattern
+**Why this matters**: The entire business model depends on separate Customer/Company experiences. Dual-role detection prevents data corruption and ensures proper access control in Firestore rules that use `isCustomer()` and `isCompany()` helper functions.
+
+### 2. Firebase Singleton Pattern (Client vs. Server)
 
 ```typescript
 // ✅ Client-side (components, pages)
@@ -34,6 +39,8 @@ if (!adminReady) return res.status(503).json(apiError("Admin not ready"));
 ```
 
 **Never** instantiate Firebase twice or use Admin SDK in client code.
+
+**Why this matters**: Admin SDK bypasses Firestore security rules and requires service account credentials. Mixing client/server SDKs causes initialization conflicts and security vulnerabilities. Always check `adminReady` in production as missing env vars fail gracefully.
 
 ## API Routes Pattern
 
@@ -56,6 +63,9 @@ Key API endpoints:
 - `pages/api/offers/` – accept, decline, message
 - `pages/api/requests/` – createGuest, linkToAccount
 - `pages/api/generateUploadLink.ts` – token-based media upload
+- `pages/api/sendUploadReminders.ts` – cron job (requires `CRON_API_KEY` query param in production)
+
+**Important**: `withAuth()` wrapper extracts Firebase ID token from `Authorization: Bearer <token>` header, verifies it via Admin SDK, and provides `uid` to handler. Always validate ownership (e.g., `requestData.customerId === uid`) before mutations.
 
 ## Data Model & Flow
 
@@ -79,6 +89,10 @@ import { ensureUserProfile, getUserRole, onAuthChange } from "@/utils/firebaseHe
 
 - `createRequest()` auto-generates sequential `REQ-XXXXXX` via Firestore transaction on `meta/counters.requestSeq`
 - `ensureUserProfile()` handles profile creation with role conflict detection
+- `buildAddressString()` and `buildMoveDateFields()` – internal helpers in `firestoreHelpers.ts` for consistent data formatting
+- `prepareRequestData()` – removes undefined/non-serializable fields (e.g., File objects) before Firestore writes
+
+**Why helpers matter**: They encapsulate business logic (sequential codes, denormalization, validation) and prevent common mistakes like forgetting to set `requestCode` in offers subcollections or using client-side timestamps.
 
 ## Project Conventions
 
@@ -123,6 +137,14 @@ validateUploadToken.ts / markUploadTokenUsed.ts → lifecycle
        ↓
 notifyCompaniesOnUpload.ts → alerts companies
 ```
+
+**Flow details**:
+
+1. Customer submits request without media → `generateUploadLink.ts` creates `uploadTokens/{token}` doc with 7-day expiration
+2. Public upload page (`/upload/[token]`) validates token via `validateUploadToken.ts` before showing upload UI
+3. After successful upload, `markUploadTokenUsed.ts` sets `used: true` and `uploadedAt` timestamp
+4. `notifyCompaniesOnUpload.ts` creates notifications in `companies/{id}/notifications/` collection
+5. Emails sent via EmailJS (client-side) using templates in `utils/emailHelpers.ts`
 
 ## Key File Reference
 
