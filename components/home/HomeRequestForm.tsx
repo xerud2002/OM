@@ -39,7 +39,7 @@ const formatYMD = (d: Date) => {
 };
 
 const STORAGE_KEY = "homeRequestForm";
-const TOTAL_STEPS = 9;
+const TOTAL_STEPS = 7;
 
 // Inline Calendar Component
 function InlineCalendar({
@@ -161,7 +161,7 @@ function InlineCalendar({
       <div className="grid grid-cols-7 gap-1">
         {days.map((day, idx) => {
           if (day === null) {
-            return <div key={`empty-${idx}`} className="h-9" />;
+            return <div key={`empty-${idx}`} className="h-8" />;
           }
           const disabled = isDateDisabled(day);
           const selected = isSelected(day);
@@ -173,7 +173,7 @@ function InlineCalendar({
               type="button"
               onClick={() => handleSelect(day)}
               disabled={disabled}
-              className={`h-9 w-full rounded-lg text-sm font-medium transition ${
+              className={`h-8 w-full rounded-lg text-sm font-medium transition ${
                 disabled
                   ? "cursor-not-allowed text-gray-300"
                   : selected
@@ -235,6 +235,7 @@ export default function HomeRequestForm() {
     serviceFewItems: false,
     surveyType: "quick-estimate",
     mediaUpload: "later",
+    itemsList: "",
     acceptedTerms: false,
     details: "",
   });
@@ -433,8 +434,8 @@ export default function HomeRequestForm() {
   );
 
   const nextStep = useCallback(async () => {
-    // Validate before moving to step 7 (contact info)
-    if (currentStep === 6) {
+    // Validate step 1 before moving to step 2
+    if (currentStep === 1) {
       const { toast } = await import("sonner");
       const errors: string[] = [];
 
@@ -442,15 +443,24 @@ export default function HomeRequestForm() {
       if (!form.fromCity) errors.push("Localitate plecare");
       if (!form.fromRooms) errors.push("Camere plecare");
 
+      if (errors.length > 0) {
+        toast.error(`Completează câmpurile: ${errors.join(", ")}`);
+        return;
+      }
+    }
+
+    // Validate step 2 before moving to step 3
+    if (currentStep === 2) {
+      const { toast } = await import("sonner");
+      const errors: string[] = [];
+
       if (!form.toCounty) errors.push("Județ destinație");
       if (!form.toCity) errors.push("Localitate destinație");
       if (!form.toRooms) errors.push("Camere destinație");
 
       if (errors.length > 0) {
-        toast.error(
-          `Completează câmpurile: ${errors.slice(0, 3).join(", ")}${errors.length > 3 ? "..." : ""}`
-        );
-        return; // Don't advance to step 7
+        toast.error(`Completează câmpurile: ${errors.join(", ")}`);
+        return;
       }
     }
 
@@ -461,7 +471,7 @@ export default function HomeRequestForm() {
     setCurrentStep((s) => Math.max(s - 1, 1));
   }, []);
 
-  // Step 1: FROM Location (county + city only)
+  // Step 1: FROM Location (county + city + details)
   const renderStep1 = () => (
     <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
@@ -471,7 +481,8 @@ export default function HomeRequestForm() {
         <span className="font-semibold text-gray-800">De unde te muți?</span>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
+        {/* County */}
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
           <select
@@ -484,9 +495,11 @@ export default function HomeRequestForm() {
                 fromCityManual: false,
               }))
             }
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+            className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none ${form.fromCounty ? "text-gray-900" : "text-gray-500"}`}
           >
-            <option value="">Selectează județ</option>
+            <option value="" className="text-gray-500">
+              Selectează județ
+            </option>
             {counties.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -494,11 +507,14 @@ export default function HomeRequestForm() {
             ))}
           </select>
         </div>
+
+        {/* City */}
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
           {!form.fromCityManual ? (
             <select
               value={form.fromCity || ""}
+              disabled={!form.fromCounty}
               onChange={(e) => {
                 if (e.target.value === "__manual__") {
                   setForm((s) => ({ ...s, fromCity: "", fromCityManual: true }));
@@ -506,10 +522,11 @@ export default function HomeRequestForm() {
                   setForm((s) => ({ ...s, fromCity: e.target.value }));
                 }
               }}
-              disabled={!form.fromCounty}
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none disabled:opacity-50"
+              className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none ${!form.fromCounty ? "cursor-not-allowed opacity-50" : ""} ${form.fromCity ? "text-gray-900" : "text-gray-500"}`}
             >
-              <option value="">Selectează localitate</option>
+              <option value="" className="text-gray-500">
+                {form.fromCounty ? "Selectează localitate" : "Selectează mai întâi județul"}
+              </option>
               {getCityOptions(form.fromCounty).map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -524,24 +541,104 @@ export default function HomeRequestForm() {
                 value={form.fromCity || ""}
                 onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
                 placeholder="Scrie numele localității"
-                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                 autoFocus
               />
               <button
                 type="button"
                 onClick={() => setForm((s) => ({ ...s, fromCity: "", fromCityManual: false }))}
-                className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 hover:bg-gray-100"
+                className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs text-gray-600 hover:bg-gray-100"
               >
                 Listă
               </button>
             </div>
           )}
         </div>
+
+        {/* Details - appear after city is selected */}
+        {form.fromCity && (
+          <>
+            <div className="grid grid-cols-3 gap-2">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">
+                  Tip Proprietate *
+                </label>
+                <select
+                  value={form.fromType || "flat"}
+                  onChange={(e) =>
+                    setForm((s) => ({
+                      ...s,
+                      fromType: e.target.value as "house" | "flat" | "office",
+                    }))
+                  }
+                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                >
+                  <option value="flat">Apartament</option>
+                  <option value="house">Casă</option>
+                  <option value="office">Birou / Office</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={form.fromRooms || ""}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, fromRooms: e.target.value.replace(/\D/g, "") }))
+                  }
+                  placeholder="ex: 2"
+                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                />
+              </div>
+              {(form.fromType === "flat" || form.fromType === "office") && (
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
+                  <input
+                    value={form.fromFloor || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
+                    placeholder="ex: 3"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
+              )}
+            </div>
+            {(form.fromType === "flat" || form.fromType === "office") && (
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">Lift *</label>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setForm((s) => ({ ...s, fromElevator: true }))}
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.fromElevator === true
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
+                    }`}
+                  >
+                    Da
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForm((s) => ({ ...s, fromElevator: false }))}
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.fromElevator === false
+                        ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
+                    }`}
+                  >
+                    Nu
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
 
-  // Step 2: TO Location (county + city only)
+  // Step 2: TO Location (county + city + details)
   const renderStep2 = () => (
     <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
@@ -551,7 +648,8 @@ export default function HomeRequestForm() {
         <span className="font-semibold text-gray-800">Unde te muți?</span>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2">
+        {/* County */}
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
           <select
@@ -559,9 +657,11 @@ export default function HomeRequestForm() {
             onChange={(e) =>
               setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "", toCityManual: false }))
             }
-            className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+            className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none ${form.toCounty ? "text-gray-900" : "text-gray-500"}`}
           >
-            <option value="">Selectează județ</option>
+            <option value="" className="text-gray-500">
+              Selectează județ
+            </option>
             {counties.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -569,11 +669,14 @@ export default function HomeRequestForm() {
             ))}
           </select>
         </div>
+
+        {/* City */}
         <div>
           <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
           {!form.toCityManual ? (
             <select
               value={form.toCity || ""}
+              disabled={!form.toCounty}
               onChange={(e) => {
                 if (e.target.value === "__manual__") {
                   setForm((s) => ({ ...s, toCity: "", toCityManual: true }));
@@ -581,10 +684,11 @@ export default function HomeRequestForm() {
                   setForm((s) => ({ ...s, toCity: e.target.value }));
                 }
               }}
-              disabled={!form.toCounty}
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none disabled:opacity-50"
+              className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none ${!form.toCounty ? "cursor-not-allowed opacity-50" : ""} ${form.toCity ? "text-gray-900" : "text-gray-500"}`}
             >
-              <option value="">Selectează localitate</option>
+              <option value="" className="text-gray-500">
+                {form.toCounty ? "Selectează localitate" : "Selectează mai întâi județul"}
+              </option>
               {getCityOptions(form.toCounty).map((c) => (
                 <option key={c} value={c}>
                   {c}
@@ -599,159 +703,105 @@ export default function HomeRequestForm() {
                 value={form.toCity || ""}
                 onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
                 placeholder="Scrie numele localității"
-                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                 autoFocus
               />
               <button
                 type="button"
                 onClick={() => setForm((s) => ({ ...s, toCity: "", toCityManual: false }))}
-                className="rounded-lg border border-gray-200 bg-gray-50 px-3 py-2 text-xs text-gray-600 hover:bg-gray-100"
+                className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs text-gray-600 hover:bg-gray-100"
               >
                 Listă
               </button>
             </div>
           )}
         </div>
+
+        {/* Details - appear after city is selected */}
+        {form.toCity && (
+          <>
+            <div className="grid grid-cols-3 gap-2">
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">
+                  Tip Proprietate *
+                </label>
+                <select
+                  value={form.toType || "flat"}
+                  onChange={(e) =>
+                    setForm((s) => ({
+                      ...s,
+                      toType: e.target.value as "house" | "flat" | "office",
+                    }))
+                  }
+                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
+                >
+                  <option value="flat">Apartament</option>
+                  <option value="house">Casă</option>
+                  <option value="office">Birou / Office</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
+                <input
+                  type="text"
+                  inputMode="numeric"
+                  value={form.toRooms || ""}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, toRooms: e.target.value.replace(/\D/g, "") }))
+                  }
+                  placeholder="ex: 3"
+                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                />
+              </div>
+              {(form.toType === "flat" || form.toType === "office") && (
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
+                  <input
+                    value={form.toFloor || ""}
+                    onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
+                    placeholder="ex: 5"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
+                  />
+                </div>
+              )}
+            </div>
+            {(form.toType === "flat" || form.toType === "office") && (
+              <div>
+                <label className="mb-1 block text-xs font-medium text-gray-600">Lift *</label>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setForm((s) => ({ ...s, toElevator: true }))}
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.toElevator === true
+                        ? "border-sky-500 bg-sky-50 text-sky-700"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
+                    }`}
+                  >
+                    Da
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForm((s) => ({ ...s, toElevator: false }))}
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.toElevator === false
+                        ? "border-sky-500 bg-sky-50 text-sky-700"
+                        : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
+                    }`}
+                  >
+                    Nu
+                  </button>
+                </div>
+              </div>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
 
-  // Step 3: FROM Address details
+  // Step 3: Move Date
   const renderStep3 = () => (
-    <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50/50 to-white p-4">
-      <div className="mb-3 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow">
-          <MapPin className="h-4 w-4 text-white" />
-        </div>
-        <span className="font-semibold text-gray-800">Detalii plecare</span>
-      </div>
-
-      <div className="space-y-3">
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
-            <select
-              value={form.fromType || "flat"}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, fromType: e.target.value as "house" | "flat" }))
-              }
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-            >
-              <option value="flat">Apartament</option>
-              <option value="house">Casă</option>
-            </select>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={form.fromRooms || ""}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, fromRooms: e.target.value.replace(/\D/g, "") }))
-              }
-              placeholder="ex: 2"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-            />
-          </div>
-        </div>
-        {form.fromType === "flat" && (
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">Etaj</label>
-              <input
-                value={form.fromFloor || ""}
-                onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                placeholder="ex: 3"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
-              />
-            </div>
-            <div className="flex items-end">
-              <label className="flex h-9.5 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-emerald-300">
-                <input
-                  type="checkbox"
-                  checked={!!form.fromElevator}
-                  onChange={(e) => setForm((s) => ({ ...s, fromElevator: e.target.checked }))}
-                  className="h-4 w-4 rounded border-gray-300 text-emerald-600"
-                />
-                Lift
-              </label>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  // Step 4: TO Address details
-  const renderStep4 = () => (
-    <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50/50 to-white p-4">
-      <div className="mb-3 flex items-center gap-2">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 shadow">
-          <Home className="h-4 w-4 text-white" />
-        </div>
-        <span className="font-semibold text-gray-800">Detalii destinație</span>
-      </div>
-
-      <div className="space-y-3">
-        <div className="grid grid-cols-2 gap-3">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Tip</label>
-            <select
-              value={form.toType || "flat"}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, toType: e.target.value as "house" | "flat" }))
-              }
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none"
-            >
-              <option value="flat">Apartament</option>
-              <option value="house">Casă</option>
-            </select>
-          </div>
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
-            <input
-              type="text"
-              inputMode="numeric"
-              value={form.toRooms || ""}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, toRooms: e.target.value.replace(/\D/g, "") }))
-              }
-              placeholder="ex: 3"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-            />
-          </div>
-        </div>
-        {form.toType === "flat" && (
-          <div className="grid grid-cols-2 gap-3">
-            <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">Etaj</label>
-              <input
-                value={form.toFloor || ""}
-                onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                placeholder="ex: 5"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none"
-              />
-            </div>
-            <div className="flex items-end">
-              <label className="flex h-9.5 w-full cursor-pointer items-center justify-center gap-2 rounded-lg border border-gray-200 bg-white px-3 text-sm text-gray-600 transition hover:border-sky-300">
-                <input
-                  type="checkbox"
-                  checked={!!form.toElevator}
-                  onChange={(e) => setForm((s) => ({ ...s, toElevator: e.target.checked }))}
-                  className="h-4 w-4 rounded border-gray-300 text-sky-600"
-                />
-                Lift
-              </label>
-            </div>
-          </div>
-        )}
-      </div>
-    </div>
-  );
-
-  // Step 5: Move Date
-  const renderStep5 = () => (
     <div className="rounded-xl border border-gray-200 bg-white p-4">
       <div className="mb-4 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
@@ -840,8 +890,8 @@ export default function HomeRequestForm() {
     </div>
   );
 
-  // Step 6: Services
-  const renderStep6 = () => (
+  // Step 4: Services
+  const renderStep4 = () => (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
@@ -865,8 +915,6 @@ export default function HomeRequestForm() {
               label: "Doar Transport",
               desc: "Fără încărcare/descărcare",
             },
-            { key: "servicePiano", label: "Mutare Pian", desc: "Transport specializat piane" },
-            { key: "serviceFewItems", label: "Am o listă", desc: "Câteva obiecte de mutat" },
           ].map((svc) => (
             <label
               key={svc.key}
@@ -898,14 +946,14 @@ export default function HomeRequestForm() {
           onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
           rows={2}
           placeholder="Obiecte speciale, acces dificil..."
-          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
         />
       </div>
     </div>
   );
 
-  // Step 7: Survey Type
-  const renderStep7 = () => (
+  // Step 5: Survey Type
+  const renderStep5 = () => (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
@@ -967,8 +1015,8 @@ export default function HomeRequestForm() {
     </div>
   );
 
-  // Step 8: Media Upload
-  const renderStep8 = () => {
+  // Step 6: Media Upload
+  const renderStep6 = () => {
     const handleAddFiles = (list: FileList | null) => {
       if (!list) return;
       const newFiles = Array.from(list);
@@ -1021,9 +1069,14 @@ export default function HomeRequestForm() {
                 desc: "Vei primi un email cu link de încărcare",
               },
               {
+                value: "list",
+                label: "Am o listă de lucruri",
+                desc: "Scrie ce ai de mutat (listă de obiecte)",
+              },
+              {
                 value: "none",
                 label: "Fără materiale",
-                desc: "Preferă să nu adauge imagini/video",
+                desc: "Continui fără detalii suplimentare",
               },
             ].map((opt) => (
               <label
@@ -1117,6 +1170,25 @@ export default function HomeRequestForm() {
               </p>
             </div>
           )}
+
+          {/* Items list textarea when "list" is selected */}
+          {form.mediaUpload === "list" && (
+            <div className="mt-4">
+              <label className="mb-2 block text-sm font-medium text-gray-700">
+                Lista de lucruri de mutat
+              </label>
+              <textarea
+                value={form.itemsList || ""}
+                onChange={(e) => setForm((s) => ({ ...s, itemsList: e.target.value }))}
+                placeholder="Ex: canapea 3 locuri, dulap dormitor, masă sufragerie, 10 cutii cărți..."
+                rows={4}
+                className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                Scrie obiectele principale pe care le ai de mutat
+              </p>
+            </div>
+          )}
         </div>
         <p className="text-center text-xs text-gray-500">
           Fotografiile ajută firmele să estimeze mai exact volumul și costul mutării.
@@ -1125,8 +1197,8 @@ export default function HomeRequestForm() {
     );
   };
 
-  // Step 9: Contact
-  const renderStep9 = () => (
+  // Step 7: Contact
+  const renderStep7 = () => (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
@@ -1142,7 +1214,7 @@ export default function HomeRequestForm() {
                 value={form.contactFirstName || ""}
                 onChange={(e) => setForm((s) => ({ ...s, contactFirstName: e.target.value }))}
                 placeholder="Ion"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
               />
             </div>
             <div>
@@ -1151,7 +1223,7 @@ export default function HomeRequestForm() {
                 value={form.contactLastName || ""}
                 onChange={(e) => setForm((s) => ({ ...s, contactLastName: e.target.value }))}
                 placeholder="Popescu"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
               />
             </div>
           </div>
@@ -1163,7 +1235,7 @@ export default function HomeRequestForm() {
               value={form.phone || ""}
               onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
               placeholder="07xx xxx xxx"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
             />
           </div>
 
@@ -1174,7 +1246,7 @@ export default function HomeRequestForm() {
               value={form.email || ""}
               onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
               placeholder="exemplu@email.com"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
             />
           </div>
         </div>
@@ -1203,17 +1275,7 @@ export default function HomeRequestForm() {
     </div>
   );
 
-  const stepLabels = [
-    "De unde",
-    "Unde",
-    "Plecare",
-    "Destinație",
-    "Când",
-    "Servicii",
-    "Evaluare",
-    "Media",
-    "Contact",
-  ];
+  const stepLabels = ["Plecare", "Destinație", "Când", "Servicii", "Evaluare", "Media", "Contact"];
 
   return (
     <div className="mx-auto w-full max-w-md">
@@ -1257,7 +1319,7 @@ export default function HomeRequestForm() {
 
       <form onSubmit={handleSubmit}>
         {/* Form Steps */}
-        <div className="min-h-70">
+        <div className="min-h-64">
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
@@ -1265,12 +1327,10 @@ export default function HomeRequestForm() {
           {currentStep === 5 && renderStep5()}
           {currentStep === 6 && renderStep6()}
           {currentStep === 7 && renderStep7()}
-          {currentStep === 8 && renderStep8()}
-          {currentStep === 9 && renderStep9()}
         </div>
 
         {/* Navigation */}
-        <div className="mt-4 flex gap-3">
+        <div className="mt-1 flex gap-3">
           {currentStep > 1 && (
             <button
               type="button"

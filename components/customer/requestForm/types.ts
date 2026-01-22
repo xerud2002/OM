@@ -2,9 +2,9 @@
 // Shared types for the request form
 
 export type SurveyType = "in-person" | "video" | "quick-estimate";
-export type MediaUpload = "now" | "later" | "none";
+export type MediaUpload = "now" | "later" | "none" | "list";
 export type MoveDateMode = "exact" | "range" | "none" | "flexible";
-export type PropertyType = "house" | "flat";
+export type PropertyType = "house" | "flat" | "office";
 
 export type FormShape = {
   fromCounty?: string;
@@ -50,6 +50,7 @@ export type FormShape = {
   surveyType?: SurveyType;
   mediaUpload?: MediaUpload;
   mediaFiles?: File[];
+  itemsList?: string;
   moveDateMode?: MoveDateMode;
   moveDateStart?: string;
   moveDateEnd?: string;
