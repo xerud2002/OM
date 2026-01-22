@@ -84,20 +84,20 @@ export default function Hero() {
               bugetul tău.
             </p>
 
-            {/* Trust Indicators - All 4 on one row for desktop */}
-            <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 lg:flex-nowrap lg:justify-start lg:gap-4">
+            {/* Trust Indicators - All 4 on one row */}
+            <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-3 lg:justify-start lg:gap-4">
               {[
                 { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
                 { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
-                { icon: Star, label: "4.9/5 Recenzii", color: "text-amber-500" },
-                { icon: TrendingUp, label: "Economie 40%", color: "text-purple-600" },
+                { icon: Star, label: "Recenzii", color: "text-amber-500" },
+                { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-center gap-1.5 rounded-full bg-white/80 px-3 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-2"
+                  className="flex flex-shrink-0 items-center gap-1 rounded-full bg-white/80 px-2.5 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-2"
                 >
-                  <item.icon className={`h-4 w-4 ${item.color} sm:h-5 sm:w-5`} />
-                  <span className="text-xs font-medium text-slate-700 sm:text-sm">
+                  <item.icon className={`h-3.5 w-3.5 flex-shrink-0 ${item.color} sm:h-5 sm:w-5`} />
+                  <span className="text-[10px] font-medium whitespace-nowrap text-slate-700 sm:text-sm">
                     {item.label}
                   </span>
                 </div>

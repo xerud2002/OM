@@ -9,9 +9,12 @@ npm run dev      # http://localhost:3000 (default port 3000, not 3001)
 npm run build    # Run before deploy (catches type errors)
 npm run lint     # Zero-warnings enforced via Husky pre-commit (--max-warnings=0)
 npm run format   # Prettier formatting (auto-runs in pre-commit)
+npm run prepare  # Install Husky git hooks (runs automatically after npm install)
 ```
 
 **Environment**: Node.js 18+, TypeScript 5.9+, Next.js 14.2+, Firebase 12.8+
+
+**Deployment**: Self-hosted on VPS (80.96.6.93) using PM2 cluster mode with Nginx reverse proxy. See `VPS_README.md` for deployment instructions. Auto-deploy script: `./auto-deploy-vps.sh`
 
 ## ⚠️ Critical Architecture Rules
 
@@ -142,10 +145,13 @@ import { ensureUserProfile, getUserRole, onAuthChange } from "@/utils/firebaseHe
 ## Page Structure & Performance
 
 - **Pages Router**: All routes in `pages/` (not App Router)
-- **Dynamic imports**: Use `next/dynamic` for below-the-fold components (see `index.tsx`)
+- **Dynamic imports**: Use `next/dynamic` for below-the-fold components (see `pages/index.tsx`, `_app.tsx`)
 - **Loading skeletons**: Provide `loading` prop with placeholder `<div>` matching min-height
 - **SSR control**: Set `ssr: false` for client-only components (TrustSignals, UrgencyBanner)
 - **Mobile-first**: Separate mobile components when needed (e.g., `MobileHero` vs `Hero`)
+- **Layout components**: Navbar, Footer, CityLinksSection are lazy-loaded in `_app.tsx` with SSR enabled
+- **Performance monitoring**: Uses `utils/interactionLoader.ts` for deferred loading (GA4, WhatsApp widget)
+- **Error handling**: Global `ErrorBoundary` wrapper in `_app.tsx` catches React errors
 
 Example dynamic import pattern:
 
@@ -155,6 +161,8 @@ const Steps = dynamic(() => import("@/components/home/Steps"), {
   ssr: true,
 });
 ```
+
+**Critical**: Dev environment has error suppressor (`utils/devErrorSuppressor.ts`) to reduce console noise. Remove for production debugging.
 
 ## Styling (Tailwind v4)
 
@@ -171,11 +179,13 @@ Brand colors: `emerald-500` (#10b981), `sky-500` (#0ea5e9), `dark` (#064e3b)
 Global styles:
 
 - Body has fixed gradient background (`linear-gradient(to bottom right, #ecfdf5, #ffffff, #f0f9ff)`)
+  - **Mobile optimization**: `background-attachment: scroll` on screens <768px (prevents background rendering issues on iOS)
 - Inputs/select/textarea have consistent rounded-lg borders with emerald focus rings
-- Custom select dropdown with emerald SVG arrow icon
+- Custom select dropdown with emerald SVG arrow icon (data URL in CSS)
 - Calendar (`.rdp`) uses `--rdp-accent-color: var(--color-emerald)`
+- Self-hosted Inter font via `next/font/google` with CSS variable `--font-inter`
 
-**Important**: Tailwind v4 uses CSS-first config – add new theme values in `@theme{}` block, not JS config.
+**Important**: Tailwind v4 uses CSS-first config – add new theme values in `@theme{}` block, not JS config. Source paths defined in `@source` directives.
 
 ## Environment Variables
 
@@ -254,7 +264,22 @@ notifyCompaniesOnUpload.ts → alerts companies
 
 ## Types Quick Reference
 
-```typescript
+type AuthResult = { success: true; uid: string } | { success: false; error: string; status: number; code: string };
+
+```
+
+**Types location**: `types/index.ts` (domain models), `types/api.ts` (API responses + error codes)
+
+## Common Pitfalls & Solutions
+
+1. **Firebase initialization errors**: Always check `adminReady` before using Admin SDK in API routes
+2. **Role conflicts**: Never create both customer and company profiles for same user – helpers enforce this
+3. **Timestamp serialization**: Use `serverTimestamp()` – `new Date()` causes serialization errors in Firestore
+4. **Missing requestCode in offers**: Always denormalize from parent request when creating offers
+5. **401 errors in API routes**: Ensure `Authorization: Bearer <token>` header is set on all authenticated requests
+6. **Romanian phone validation**: Must match `07xxxxxxxx` format – see `utils/validation.ts`
+7. **Dynamic imports without loading**: Always provide loading skeleton to prevent layout shift
+8. **CSS conflicts**: Tailwind v4 requires `@source` directives – don't modify `tailwind.config.js`typescript
 type UserRole = "customer" | "company";
 type MovingRequest = { id, customerId, requestCode, status, fromCity, toCity, moveDate, ... };
 type Offer = { id, requestId, companyId, price, message, status };

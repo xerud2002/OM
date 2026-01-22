@@ -558,7 +558,12 @@ export default function HomeRequestForm() {
         {/* Details - appear after city is selected */}
         {form.fromCity && (
           <>
-            <div className="grid grid-cols-3 gap-2">
+            <div
+              className="grid gap-2"
+              style={{
+                gridTemplateColumns: form.fromType === "house" ? "2fr 1fr 1fr" : "2fr 1fr 1fr",
+              }}
+            >
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-600">
                   Tip Proprietate *
@@ -571,7 +576,7 @@ export default function HomeRequestForm() {
                       fromType: e.target.value as "house" | "flat" | "office",
                     }))
                   }
-                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
                 >
                   <option value="flat">Apartament</option>
                   <option value="house">Casă</option>
@@ -588,9 +593,24 @@ export default function HomeRequestForm() {
                     setForm((s) => ({ ...s, fromRooms: e.target.value.replace(/\D/g, "") }))
                   }
                   placeholder="ex: 2"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                 />
               </div>
+              {form.fromType === "house" && (
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaje *</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={form.fromFloor || ""}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, fromFloor: e.target.value.replace(/\D/g, "") }))
+                    }
+                    placeholder="ex: 2"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
+              )}
               {(form.fromType === "flat" || form.fromType === "office") && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
@@ -598,7 +618,7 @@ export default function HomeRequestForm() {
                     value={form.fromFloor || ""}
                     onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
                     placeholder="ex: 3"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-emerald-500 focus:outline-none"
                   />
                 </div>
               )}
@@ -720,7 +740,12 @@ export default function HomeRequestForm() {
         {/* Details - appear after city is selected */}
         {form.toCity && (
           <>
-            <div className="grid grid-cols-3 gap-2">
+            <div
+              className="grid gap-2"
+              style={{
+                gridTemplateColumns: form.toType === "house" ? "2fr 1fr 1fr" : "2fr 1fr 1fr",
+              }}
+            >
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-600">
                   Tip Proprietate *
@@ -733,7 +758,7 @@ export default function HomeRequestForm() {
                       toType: e.target.value as "house" | "flat" | "office",
                     }))
                   }
-                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
+                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
                 >
                   <option value="flat">Apartament</option>
                   <option value="house">Casă</option>
@@ -750,9 +775,24 @@ export default function HomeRequestForm() {
                     setForm((s) => ({ ...s, toRooms: e.target.value.replace(/\D/g, "") }))
                   }
                   placeholder="ex: 3"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                 />
               </div>
+              {form.toType === "house" && (
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaje *</label>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    value={form.toFloor || ""}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, toFloor: e.target.value.replace(/\D/g, "") }))
+                    }
+                    placeholder="ex: 2"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-sky-500 focus:outline-none"
+                  />
+                </div>
+              )}
               {(form.toType === "flat" || form.toType === "office") && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
@@ -760,7 +800,7 @@ export default function HomeRequestForm() {
                     value={form.toFloor || ""}
                     onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
                     placeholder="ex: 5"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-2 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-sky-500 focus:outline-none"
                   />
                 </div>
               )}
@@ -1072,11 +1112,6 @@ export default function HomeRequestForm() {
                 value: "list",
                 label: "Am o listă de lucruri",
                 desc: "Scrie ce ai de mutat (listă de obiecte)",
-              },
-              {
-                value: "none",
-                label: "Fără materiale",
-                desc: "Continui fără detalii suplimentare",
               },
             ].map((opt) => (
               <label
