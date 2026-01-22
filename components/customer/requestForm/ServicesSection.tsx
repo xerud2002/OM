@@ -37,8 +37,8 @@ const services = [
         />
       </svg>
     ),
-    label: "Împachetare",
-    desc: "Ambalare profesională",
+    label: "Ambalare",
+    desc: "Împachetare profesională",
   },
   {
     key: "serviceDisassembly" as const,
@@ -58,8 +58,8 @@ const services = [
         />
       </svg>
     ),
-    label: "Demontare / Montare",
-    desc: "Mobilier și corpuri complexe",
+    label: "Montaj",
+    desc: "Demontare/montare mobilier",
   },
   {
     key: "serviceCleanout" as const,

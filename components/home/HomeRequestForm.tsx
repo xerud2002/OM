@@ -39,7 +39,7 @@ const formatYMD = (d: Date) => {
 };
 
 const STORAGE_KEY = "homeRequestForm";
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 9;
 
 // Inline Calendar Component
 function InlineCalendar({
@@ -292,6 +292,8 @@ export default function HomeRequestForm() {
 
       // Only submit if we're on the last step (prevents Enter key submission on other steps)
       if (currentStep !== TOTAL_STEPS) {
+        // If not on last step, just advance to next step
+        await nextStep();
         return;
       }
 
@@ -430,9 +432,30 @@ export default function HomeRequestForm() {
     [form, currentStep]
   );
 
-  const nextStep = useCallback(() => {
+  const nextStep = useCallback(async () => {
+    // Validate before moving to step 7 (contact info)
+    if (currentStep === 6) {
+      const { toast } = await import("sonner");
+      const errors: string[] = [];
+
+      if (!form.fromCounty) errors.push("Județ plecare");
+      if (!form.fromCity) errors.push("Localitate plecare");
+      if (!form.fromRooms) errors.push("Camere plecare");
+
+      if (!form.toCounty) errors.push("Județ destinație");
+      if (!form.toCity) errors.push("Localitate destinație");
+      if (!form.toRooms) errors.push("Camere destinație");
+
+      if (errors.length > 0) {
+        toast.error(
+          `Completează câmpurile: ${errors.slice(0, 3).join(", ")}${errors.length > 3 ? "..." : ""}`
+        );
+        return; // Don't advance to step 7
+      }
+    }
+
     setCurrentStep((s) => Math.min(s + 1, TOTAL_STEPS));
-  }, []);
+  }, [currentStep, form]);
 
   const prevStep = useCallback(() => {
     setCurrentStep((s) => Math.max(s - 1, 1));
@@ -828,14 +851,22 @@ export default function HomeRequestForm() {
 
         <div className="grid grid-cols-2 gap-2">
           {[
-            { key: "serviceMoving", label: "Mutare" },
-            { key: "servicePacking", label: "Ambalare" },
-            { key: "serviceDisassembly", label: "Montaj" },
-            { key: "serviceCleanout", label: "Debarasare" },
-            { key: "serviceStorage", label: "Depozitare" },
-            { key: "serviceTransportOnly", label: "Doar Transport", sublabel: "(fără încărcare)" },
-            { key: "servicePiano", label: "Mutare Pian" },
-            { key: "serviceFewItems", label: "Am o listă" },
+            {
+              key: "serviceMoving",
+              label: "Mutare Completă",
+              desc: "Transport mobilier și obiecte",
+            },
+            { key: "servicePacking", label: "Ambalare", desc: "Împachetare profesională" },
+            { key: "serviceDisassembly", label: "Montaj", desc: "Demontare/montare mobilier" },
+            { key: "serviceCleanout", label: "Debarasare", desc: "Aruncare lucruri" },
+            { key: "serviceStorage", label: "Depozitare", desc: "Stocare temporară" },
+            {
+              key: "serviceTransportOnly",
+              label: "Doar Transport",
+              desc: "Fără încărcare/descărcare",
+            },
+            { key: "servicePiano", label: "Mutare Pian", desc: "Transport specializat piane" },
+            { key: "serviceFewItems", label: "Am o listă", desc: "Câteva obiecte de mutat" },
           ].map((svc) => (
             <label
               key={svc.key}
@@ -853,9 +884,7 @@ export default function HomeRequestForm() {
               />
               <span className="text-sm leading-tight text-gray-700">
                 {svc.label}
-                {"sublabel" in svc && (
-                  <span className="block text-xs text-gray-500">{svc.sublabel}</span>
-                )}
+                <span className="block text-xs text-gray-500">{svc.desc}</span>
               </span>
             </label>
           ))}
@@ -875,8 +904,229 @@ export default function HomeRequestForm() {
     </div>
   );
 
-  // Step 7: Contact
+  // Step 7: Survey Type
   const renderStep7 = () => (
+    <div className="space-y-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <svg
+            className="h-5 w-5 text-emerald-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+            />
+          </svg>
+          <span className="font-semibold text-gray-800">Tip evaluare *</span>
+        </div>
+        <p className="mb-3 text-xs text-gray-500">Cum preferi să primești oferta?</p>
+
+        <div className="grid grid-cols-1 gap-2">
+          {[
+            {
+              value: "in-person",
+              label: "Evaluare la fața locului",
+              desc: "Un specialist vine să evalueze volumul",
+            },
+            { value: "video", label: "Video-evaluare", desc: "Consultație video pentru estimare" },
+            {
+              value: "quick-estimate",
+              label: "Estimare rapidă",
+              desc: "Ofertă bazată pe informații",
+            },
+          ].map((opt) => (
+            <label
+              key={opt.value}
+              className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
+                form.surveyType === opt.value
+                  ? "border-emerald-500 bg-emerald-50"
+                  : "border-gray-200 hover:border-emerald-200"
+              }`}
+            >
+              <input
+                type="radio"
+                name="surveyType"
+                value={opt.value}
+                checked={form.surveyType === opt.value}
+                onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value as any }))}
+                className="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-emerald-500"
+              />
+              <div>
+                <span className="text-sm font-medium text-gray-800">{opt.label}</span>
+                <span className="block text-xs text-gray-500">{opt.desc}</span>
+              </div>
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+
+  // Step 8: Media Upload
+  const renderStep8 = () => {
+    const handleAddFiles = (list: FileList | null) => {
+      if (!list) return;
+      const newFiles = Array.from(list);
+      setForm((s) => ({
+        ...s,
+        mediaFiles: [...(s.mediaFiles || []), ...newFiles],
+      }));
+    };
+
+    const handleRemoveFile = (idx: number) => {
+      setForm((s) => ({
+        ...s,
+        mediaFiles: (s.mediaFiles || []).filter((_, i) => i !== idx),
+      }));
+    };
+
+    return (
+      <div className="space-y-4">
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <div className="mb-3 flex items-center gap-2">
+            <svg
+              className="h-5 w-5 text-emerald-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+              />
+            </svg>
+            <span className="font-semibold text-gray-800">Fotografii / Video</span>
+          </div>
+          <p className="mb-3 text-xs text-gray-500">Ajută firmele să-ți facă oferte mai precise</p>
+
+          <div className="grid grid-cols-1 gap-2">
+            {[
+              { value: "now", label: "Încarcă acum", desc: "Adaugă fotografii sau video imediat" },
+              {
+                value: "later",
+                label: "Primește link",
+                desc: "Vei primi un email cu link de încărcare",
+              },
+              {
+                value: "none",
+                label: "Fără materiale",
+                desc: "Preferă să nu adauge imagini/video",
+              },
+            ].map((opt) => (
+              <label
+                key={opt.value}
+                className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
+                  form.mediaUpload === opt.value
+                    ? "border-emerald-500 bg-emerald-50"
+                    : "border-gray-200 hover:border-emerald-200"
+                }`}
+              >
+                <input
+                  type="radio"
+                  name="mediaUpload"
+                  value={opt.value}
+                  checked={form.mediaUpload === opt.value}
+                  onChange={(e) => setForm((s) => ({ ...s, mediaUpload: e.target.value as any }))}
+                  className="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                />
+                <div>
+                  <span className="text-sm font-medium text-gray-800">{opt.label}</span>
+                  <span className="block text-xs text-gray-500">{opt.desc}</span>
+                </div>
+              </label>
+            ))}
+          </div>
+
+          {/* Upload zone when "now" is selected */}
+          {form.mediaUpload === "now" && (
+            <div className="mt-4 rounded-lg border-2 border-dashed border-emerald-300 bg-emerald-50/50 p-4 text-center">
+              <input
+                type="file"
+                multiple
+                accept="image/*,video/*"
+                onChange={(e) => {
+                  handleAddFiles(e.target.files);
+                  e.currentTarget.value = "";
+                }}
+                className="hidden"
+                id="heroMediaUpload"
+              />
+              <label htmlFor="heroMediaUpload" className="cursor-pointer">
+                <svg
+                  className="mx-auto h-10 w-10 text-emerald-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                  />
+                </svg>
+                <p className="mt-2 text-sm font-medium text-gray-700">Click pentru a încărca</p>
+                <p className="mt-1 text-xs text-gray-500">Poze sau video (max 50MB)</p>
+              </label>
+
+              {/* File List */}
+              {form.mediaFiles && form.mediaFiles.length > 0 && (
+                <div className="mt-3 space-y-2 text-left">
+                  <p className="text-xs font-semibold text-gray-700">
+                    {form.mediaFiles.length} fișier(e) selectate
+                  </p>
+                  {form.mediaFiles.map((file, i) => (
+                    <div
+                      key={i}
+                      className="flex items-center justify-between rounded-md border border-gray-200 bg-white px-2 py-1.5"
+                    >
+                      <span className="truncate text-xs text-gray-700">{file.name}</span>
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveFile(i)}
+                        className="ml-2 text-red-500 hover:text-red-700"
+                      >
+                        <X className="h-4 w-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Info when "later" is selected */}
+          {form.mediaUpload === "later" && (
+            <div className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-3">
+              <p className="text-xs text-blue-800">
+                📧 Vei primi un email cu link personalizat pentru încărcarea pozelor sau
+                videoclipurilor cu ce ai de mutat.
+              </p>
+            </div>
+          )}
+        </div>
+        <p className="text-center text-xs text-gray-500">
+          Fotografiile ajută firmele să estimeze mai exact volumul și costul mutării.
+        </p>
+      </div>
+    );
+  };
+
+  // Step 9: Contact
+  const renderStep9 = () => (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
@@ -953,7 +1203,17 @@ export default function HomeRequestForm() {
     </div>
   );
 
-  const stepLabels = ["De unde", "Unde", "Plecare", "Destinație", "Când", "Servicii", "Contact"];
+  const stepLabels = [
+    "De unde",
+    "Unde",
+    "Plecare",
+    "Destinație",
+    "Când",
+    "Servicii",
+    "Evaluare",
+    "Media",
+    "Contact",
+  ];
 
   return (
     <div className="mx-auto w-full max-w-md">
@@ -1005,6 +1265,8 @@ export default function HomeRequestForm() {
           {currentStep === 5 && renderStep5()}
           {currentStep === 6 && renderStep6()}
           {currentStep === 7 && renderStep7()}
+          {currentStep === 8 && renderStep8()}
+          {currentStep === 9 && renderStep9()}
         </div>
 
         {/* Navigation */}

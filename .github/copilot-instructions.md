@@ -44,28 +44,60 @@ if (!adminReady) return res.status(503).json(apiError("Admin not ready"));
 
 ## API Routes Pattern
 
-All protected endpoints in `pages/api/` use this structure:
+All protected endpoints in `pages/api/` follow one of two patterns:
+
+### Pattern 1: Manual Auth (Most API routes)
 
 ```typescript
-import { withAuth } from "@/lib/apiAuth";
+import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
+import { adminDb, adminAuth } from "@/lib/firebaseAdmin";
 import { apiSuccess, apiError } from "@/types/api";
 
-// ✅ Preferred: Wrapper automatically handles auth
-export default withAuth(async (req, res, uid) => {
-  // Always verify ownership for sensitive operations
-  if (data.customerId !== uid) return res.status(403).json(apiError("Forbidden"));
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== "POST") {
+    res.setHeader("Allow", ["POST"]);
+    return res.status(405).json(apiError("Method Not Allowed"));
+  }
+
+  // ✅ Step 1: Verify Firebase ID token
+  const authResult = await verifyAuth(req);
+  if (!authResult.success) return sendAuthError(res, authResult);
+  const uid = authResult.uid;
+
+  // ✅ Step 2: Validate ownership before mutations
+  const requestRef = adminDb.doc(`requests/${requestId}`);
+  const requestSnap = await requestRef.get();
+  if (requestSnap.data().customerId !== uid) {
+    return res.status(403).json(apiError("Forbidden"));
+  }
+
+  // ✅ Step 3: Return structured response
   return res.status(200).json(apiSuccess({ result }));
-});
+}
+```
+
+### Pattern 2: Public/Cron Routes
+
+```typescript
+// For cron jobs (sendUploadReminders.ts) - protect with CRON_API_KEY header
+const apiKey = req.headers["x-api-key"];
+if (process.env.NODE_ENV === "production" && process.env.CRON_API_KEY) {
+  if (apiKey !== process.env.CRON_API_KEY) {
+    return res.status(401).json({ error: "Unauthorized" });
+  }
+}
+
+// For public endpoints (validateUploadToken.ts, generateUploadLink.ts) - no auth required
 ```
 
 Key API endpoints:
 
-- `pages/api/offers/` – accept, decline, message
-- `pages/api/requests/` – createGuest, linkToAccount
-- `pages/api/generateUploadLink.ts` – token-based media upload
-- `pages/api/sendUploadReminders.ts` – cron job (requires `CRON_API_KEY` query param in production)
+- `pages/api/offers/{accept,decline,message}.ts` – offer lifecycle (requires auth, validates customer ownership)
+- `pages/api/requests/{createGuest,linkToAccount}.ts` – request creation (guest=no auth, link=auth)
+- `pages/api/generateUploadLink.ts` – creates token (no auth, tied to requestId)
+- `pages/api/sendUploadReminders.ts` – cron job (requires `x-api-key` header = `CRON_API_KEY` env var)
 
-**Important**: `withAuth()` wrapper extracts Firebase ID token from `Authorization: Bearer <token>` header, verifies it via Admin SDK, and provides `uid` to handler. Always validate ownership (e.g., `requestData.customerId === uid`) before mutations.
+**Important**: Manual auth pattern (`verifyAuth()` + `sendAuthError()`) is preferred over `withAuth()` wrapper. All routes use Admin SDK (`adminDb`, `adminAuth`) – never client SDK.
 
 ## Data Model & Flow
 
@@ -103,6 +135,26 @@ import { ensureUserProfile, getUserRole, onAuthChange } from "@/utils/firebaseHe
 | **Toast notifications** | Use `sonner`: `toast.success()`, `toast.error()` (Romanian text) |
 | **Phone validation**    | Romanian format `07xxxxxxxx` – see `utils/validation.ts`         |
 | **Denormalization**     | Always include `requestId`/`requestCode` in subcollections       |
+| **Method restrictions** | API routes: Check `req.method` and set `Allow` header on 405     |
+| **Error responses**     | Use `apiError(message, code?)` from `types/api.ts`               |
+| **Success responses**   | Use `apiSuccess(data)` from `types/api.ts`                       |
+
+## Page Structure & Performance
+
+- **Pages Router**: All routes in `pages/` (not App Router)
+- **Dynamic imports**: Use `next/dynamic` for below-the-fold components (see `index.tsx`)
+- **Loading skeletons**: Provide `loading` prop with placeholder `<div>` matching min-height
+- **SSR control**: Set `ssr: false` for client-only components (TrustSignals, UrgencyBanner)
+- **Mobile-first**: Separate mobile components when needed (e.g., `MobileHero` vs `Hero`)
+
+Example dynamic import pattern:
+
+```typescript
+const Steps = dynamic(() => import("@/components/home/Steps"), {
+  loading: () => <div className="min-h-150" />,
+  ssr: true,
+});
+```
 
 ## Styling (Tailwind v4)
 
@@ -115,6 +167,47 @@ Configuration in `globals.css` with `@theme{}` block. Use predefined classes:
 ```
 
 Brand colors: `emerald-500` (#10b981), `sky-500` (#0ea5e9), `dark` (#064e3b)
+
+Global styles:
+
+- Body has fixed gradient background (`linear-gradient(to bottom right, #ecfdf5, #ffffff, #f0f9ff)`)
+- Inputs/select/textarea have consistent rounded-lg borders with emerald focus rings
+- Custom select dropdown with emerald SVG arrow icon
+- Calendar (`.rdp`) uses `--rdp-accent-color: var(--color-emerald)`
+
+**Important**: Tailwind v4 uses CSS-first config – add new theme values in `@theme{}` block, not JS config.
+
+## Environment Variables
+
+Required in `.env.local` (never commit):
+
+```bash
+# Firebase Client SDK
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+
+# Firebase Admin SDK (server-side only)
+FIREBASE_SERVICE_ACCOUNT_KEY={"type":"service_account",...}  # JSON string
+FIREBASE_ADMIN_PROJECT_ID=
+
+# Optional features
+NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED=false  # Enable Facebook OAuth
+CRON_API_KEY=  # For sendUploadReminders.ts (production only)
+
+# EmailJS (client-side emails)
+NEXT_PUBLIC_EMAILJS_SERVICE_ID=
+NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=
+NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=
+
+# Analytics
+NEXT_PUBLIC_GA_ID=  # Google Analytics 4
+```
+
+**Critical**: `FIREBASE_SERVICE_ACCOUNT_KEY` must be a **stringified JSON** object. Admin SDK checks `adminReady` flag before operations. See `CREDENTIALE_NECESARE.md` for setup details.
 
 ## Integrations
 
