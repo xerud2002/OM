@@ -132,6 +132,28 @@ const MyRequestCard = memo(function MyRequestCard({
               </h3>
             </div>
 
+            {/* Request Code */}
+            {(request as any).requestCode && (
+              <div className="mb-3 sm:mb-4">
+                <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-2.5 py-1 font-mono text-xs font-semibold text-gray-700">
+                  <svg
+                    className="h-3.5 w-3.5 text-gray-500"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
+                    />
+                  </svg>
+                  {(request as any).requestCode}
+                </span>
+              </div>
+            )}
+
             {/* Metadata badges - horizontal scroll on mobile */}
             <div className="mb-3 flex flex-nowrap gap-2 overflow-x-auto pb-1 sm:mb-4 sm:flex-wrap sm:overflow-visible sm:pb-0">
               {/* Status badge */}

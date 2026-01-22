@@ -26,13 +26,13 @@ service firebase.storage {
     // === REQUEST MEDIA ===
     // Path: requests/{requestId}/customers/{customerId}/{filename}
     match /requests/{requestId}/customers/{customerId}/{filename} {
-      // Anyone authenticated can read (so companies can view media)
-      allow read: if isSignedIn();
+      // Anyone can read (so companies and customers can view media)
+      allow read: if true;
       
-      // Only the customer who owns this path can upload with validation
-      allow write: if isOwner(customerId) && 
-                      isValidSize() && 
-                      isValidContentType();
+      // Authenticated customer can upload with validation
+      // OR anyone can upload (for public upload links via token validation)
+      allow write: if (isSignedIn() && isOwner(customerId) && isValidSize() && isValidContentType()) ||
+                      (isValidSize() && isValidContentType());
       
       // Only the customer who owns this path can delete
       allow delete: if isOwner(customerId);

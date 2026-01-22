@@ -76,7 +76,8 @@ service cloud.firestore {
         // Request owner and offer company can read
         allow get, list: if isSignedIn() && (
           resource.data.companyId == request.auth.uid ||
-          get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid
+          (exists(/databases/$(database)/documents/requests/$(requestId)) && 
+           get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid)
         );
 
         // Only companies can create offers for requests on active, non-archived requests

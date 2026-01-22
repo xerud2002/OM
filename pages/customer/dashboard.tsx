@@ -432,10 +432,10 @@ export default function CustomerDashboard() {
       if (!form.toCity) errors.push("Localitate (destinație)");
       // Strada/Număr nu mai sunt obligatorii
 
-      // Contact
-      if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
-      if (!(form as any).contactLastName?.trim()) errors.push("Nume");
-      if (!form.phone?.trim()) errors.push("Număr de telefon");
+      // Contact - validare se face doar la submit, nu mai afișăm notificare prematură
+      // if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
+      // if (!(form as any).contactLastName?.trim()) errors.push("Nume");
+      // if (!form.phone?.trim()) errors.push("Număr de telefon");
 
       // Services at least one
       if (!hasAtLeastOneService) errors.push("Alege cel puțin un serviciu");
@@ -712,126 +712,61 @@ export default function CustomerDashboard() {
             <div className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-400/10 blur-2xl" />
           </div>
 
-          <div className="relative mx-auto max-w-350 px-4 pt-28 pb-10 sm:px-6 sm:pt-32 lg:pb-14">
+          <div className="relative mx-auto max-w-350 px-4 pt-20 pb-8 sm:px-6 sm:pt-24 lg:pb-10">
             {/* Header */}
-            <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
-              <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
-                <h1 className="text-3xl font-bold text-white sm:text-4xl">
-                  Bună,{" "}
-                  <span className="bg-linear-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
-                    {user?.displayName || "Client"}
-                  </span>
-                  !
-                </h1>
-                <p className="mt-2 text-base text-slate-300">
-                  Gestionează cererile tale de mutare și ofertele primite
-                </p>
-              </motion.div>
-              <motion.button
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                onClick={() => setActiveTab("new")}
-                className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40"
-              >
-                <PlusSquare size={22} className="transition-transform group-hover:rotate-90" />
-                Cerere nouă
-              </motion.button>
-            </div>
-
-            {/* Stats Cards */}
-            <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                whileHover={{ y: -4, scale: 1.02 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-emerald-400">Cereri active</p>
-                    <p className="mt-2 text-4xl font-bold text-white">{requests.length}</p>
-                    <p className="mt-1 text-xs text-slate-400">În așteptarea ofertelor</p>
-                  </div>
-                  <div className="rounded-xl bg-linear-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
-                    <List size={26} className="text-emerald-400" />
-                  </div>
-                </div>
-                <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                whileHover={{ y: -4, scale: 1.02 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-sky-400">Oferte primite</p>
-                    <p className="mt-2 text-4xl font-bold text-white">{totalOffers}</p>
-                    <p className="mt-1 text-xs text-slate-400">De la firme verificate</p>
-                  </div>
-                  <div className="rounded-xl bg-linear-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
-                    <Inbox size={26} className="text-sky-400" />
-                  </div>
-                </div>
-                <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-sky-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                whileHover={{ y: -4, scale: 1.02 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all sm:col-span-2 lg:col-span-1"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-amber-400">Arhivate</p>
-                    <p className="mt-2 text-4xl font-bold text-white">{archivedRequests.length}</p>
-                    <p className="mt-1 text-xs text-slate-400">Cereri finalizate</p>
-                  </div>
-                  <div className="rounded-xl bg-linear-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">
-                    <ArchiveIcon size={26} className="text-amber-400" />
-                  </div>
-                </div>
-                <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
-              </motion.div>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center"
+            >
+              <h1 className="text-4xl font-bold text-white sm:text-5xl">
+                Bună,{" "}
+                <span className="bg-linear-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
+                  {user?.displayName?.split(" ")[0] || "Client"}
+                </span>
+                ! 👋
+              </h1>
+            </motion.div>
           </div>
         </div>
 
-        <section className="mx-auto max-w-350 px-4 py-8 sm:px-6">
+        <section className="mx-auto max-w-350 px-4 py-6 sm:px-6 sm:py-10">
           {/* Navigation Tabs - Modern pill style */}
-          <div className="mb-8">
-            <div className="inline-flex flex-wrap gap-2 rounded-2xl bg-gray-100 p-2">
+          <div className="mb-6 sm:mb-10">
+            <div className="flex flex-wrap justify-center gap-2 rounded-2xl bg-white p-2 shadow-xl shadow-gray-900/5 sm:inline-flex">
               {/* Cerere Nouă */}
               <button
                 onClick={() => setActiveTab("new")}
-                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
                   activeTab === "new"
-                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
-                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                    ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
                 <PlusSquare size={18} />
-                <span>Cerere Nouă</span>
+                <span className="hidden sm:inline">Cerere Nouă</span>
+                <span className="sm:hidden">Nouă</span>
               </button>
 
               {/* Oferte */}
               <button
                 onClick={() => setActiveTab("offers")}
-                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
                   activeTab === "offers"
-                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
-                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                    ? "bg-linear-to-r from-sky-500 to-blue-500 text-white shadow-lg shadow-sky-500/30"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
                 <Inbox size={18} />
                 <span>Oferte</span>
                 {totalOffers > 0 && (
-                  <span className="rounded-full bg-linear-to-r from-emerald-500 to-teal-500 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
+                  <span
+                    className={`rounded-full px-2.5 py-0.5 text-xs font-bold shadow-sm ${
+                      activeTab === "offers"
+                        ? "bg-white/20 text-white ring-1 ring-white/30"
+                        : "bg-emerald-500 text-white"
+                    }`}
+                  >
                     {totalOffers}
                   </span>
                 )}
@@ -840,23 +775,24 @@ export default function CustomerDashboard() {
               {/* Cererile mele */}
               <button
                 onClick={() => setActiveTab("requests")}
-                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
                   activeTab === "requests"
-                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
-                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                    ? "bg-linear-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
                 <List size={18} />
-                <span>Cererile mele</span>
+                <span className="hidden sm:inline">Cererile mele</span>
+                <span className="sm:hidden">Cereri</span>
               </button>
 
               {/* Arhivă */}
               <button
                 onClick={() => setActiveTab("archive")}
-                className={`relative flex items-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-all duration-300 ${
+                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
                   activeTab === "archive"
-                    ? "bg-white text-emerald-600 shadow-lg shadow-emerald-500/10"
-                    : "text-gray-600 hover:bg-white/50 hover:text-gray-900"
+                    ? "bg-linear-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30"
+                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
                 <ArchiveIcon size={18} />
@@ -882,21 +818,23 @@ export default function CustomerDashboard() {
                 <motion.div
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-linear-to-br from-gray-50 to-white p-14 text-center"
+                  className="flex flex-col items-center justify-center rounded-3xl bg-linear-to-br from-emerald-50 via-teal-50 to-sky-50 p-12 text-center sm:p-16"
                 >
-                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
-                    <List size={36} className="text-white" />
+                  <div className="relative">
+                    <div className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-20" />
+                    <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-2xl shadow-emerald-500/40">
+                      <List size={40} className="text-white" />
+                    </div>
                   </div>
-                  <h3 className="mt-6 text-xl font-bold text-gray-900">Nicio cerere încă</h3>
-                  <p className="mt-3 max-w-md text-gray-500">
-                    Creează prima ta cerere de mutare și primește oferte personalizate de la firme
-                    verificate
+                  <h3 className="mt-8 text-2xl font-bold text-gray-900">Nicio cerere încă</h3>
+                  <p className="mt-4 max-w-md text-base text-gray-600">
+                    Începe acum și primește oferte personalizate de la firme de mutări verificate
                   </p>
                   <button
                     onClick={() => setActiveTab("new")}
-                    className="mt-8 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl"
+                    className="group mt-8 inline-flex items-center gap-3 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all duration-300 hover:scale-105 hover:shadow-emerald-500/50"
                   >
-                    <PlusSquare size={22} />
+                    <PlusSquare size={24} className="transition-transform group-hover:rotate-90" />
                     Creează prima cerere
                   </button>
                 </motion.div>

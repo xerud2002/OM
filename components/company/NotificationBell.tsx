@@ -125,7 +125,10 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                 <div className="flex items-center gap-2">
                   {unreadCount > 0 && (
                     <button
-                      onClick={markAllAsRead}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        markAllAsRead();
+                      }}
                       className="rounded-lg px-2 py-1 text-xs font-medium text-emerald-600 transition-colors hover:bg-emerald-100"
                     >
                       Marchează toate
@@ -179,7 +182,10 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                               </p>
                               {!notification.read && (
                                 <button
-                                  onClick={() => markAsRead(notification.id)}
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    markAsRead(notification.id);
+                                  }}
                                   className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-600 opacity-0 transition-all group-hover:opacity-100 hover:bg-emerald-100"
                                 >
                                   <Check size={14} />
