@@ -179,13 +179,6 @@ const MyRequestCard = memo(function MyRequestCard({
               )}
             </div>
 
-            {/* Details - hidden on mobile, shown on tap */}
-            {request.details && (
-              <p className="line-clamp-2 rounded-lg bg-gray-50 p-2 text-xs text-gray-600 sm:rounded-xl sm:p-3 sm:text-sm">
-                {request.details}
-              </p>
-            )}
-
             {/* Services - horizontal scroll on mobile */}
             {(request.serviceMoving ||
               request.servicePacking ||
@@ -248,24 +241,14 @@ const MyRequestCard = memo(function MyRequestCard({
 
                 {/* Status actions */}
                 {status === "active" && (
-                  <>
-                    <button
-                      onClick={() => onStatusChange(request.id, "closed")}
-                      className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
-                      title="Am găsit companie"
-                    >
-                      <CheckCircle2 size={16} className="sm:hidden" />
-                      <CheckCircle2 size={18} className="hidden sm:block" />
-                    </button>
-                    <button
-                      onClick={() => onStatusChange(request.id, "paused")}
-                      className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-amber-300 hover:bg-amber-50 hover:text-amber-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
-                      title="Nu mai primesc oferte"
-                    >
-                      <PauseCircle size={16} className="sm:hidden" />
-                      <PauseCircle size={18} className="hidden sm:block" />
-                    </button>
-                  </>
+                  <button
+                    onClick={() => onStatusChange(request.id, "closed")}
+                    className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
+                    title="Am găsit companie"
+                  >
+                    <CheckCircle2 size={16} className="sm:hidden" />
+                    <CheckCircle2 size={18} className="hidden sm:block" />
+                  </button>
                 )}
 
                 {/* Reopen for closed or paused */}
