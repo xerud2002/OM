@@ -84,22 +84,21 @@ select {
 select:focus {
   border-color: var(--color-emerald);
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
-  background-image: linear-gradient(to right, #10b981, #0ea5e9);
-  background-origin: border-box;
   color: #064e3b;
 }
 
-/* 🌿 Dropdown options – gradient emerald-sky */
-option:checked,
-option:hover {
-  background: linear-gradient(to right, #10b981, #0ea5e9) !important;
-  color: #fff !important;
+/* 🌿 Dropdown options styling */
+select option {
+  background-color: white;
+  color: #064e3b;
+  padding: 8px 12px;
 }
 
-/* Firefox fix pentru highlight */
+option:checked,
+option:hover,
 select option:checked {
-  background: linear-gradient(to right, #10b981, #0ea5e9) !important;
-  color: white !important;
+  background-color: white !important;
+  color: #064e3b !important;
 }
 
 /* 🌿 Calendar (stil curat, modern) */

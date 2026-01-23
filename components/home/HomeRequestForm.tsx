@@ -1314,41 +1314,36 @@ export default function HomeRequestForm() {
 
   return (
     <div className="mx-auto w-full max-w-md">
-      {/* Progress Steps */}
-      <div className="mb-4 flex items-center justify-center gap-1">
+      {/* Progress Steps with Labels */}
+      <div className="mb-4 flex items-start justify-center gap-1">
         {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((step) => (
           <React.Fragment key={step}>
-            <button
-              type="button"
-              onClick={() => setCurrentStep(step)}
-              className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition ${
-                currentStep === step
-                  ? "bg-emerald-500 text-white shadow-lg"
-                  : currentStep > step
-                    ? "bg-emerald-200 text-emerald-700"
-                    : "bg-gray-200 text-gray-500"
-              }`}
-            >
-              {step}
-            </button>
+            <div className="flex flex-col items-center">
+              <button
+                type="button"
+                onClick={() => setCurrentStep(step)}
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition ${
+                  currentStep === step
+                    ? "bg-emerald-500 text-white shadow-lg"
+                    : currentStep > step
+                      ? "bg-emerald-200 text-emerald-700"
+                      : "bg-gray-200 text-gray-500"
+                }`}
+              >
+                {step}
+              </button>
+              <span
+                className={`mt-1 text-[10px] ${currentStep === step ? "font-semibold text-emerald-600" : "text-gray-500"}`}
+              >
+                {stepLabels[step - 1]}
+              </span>
+            </div>
             {step < TOTAL_STEPS && (
               <div
-                className={`h-0.5 w-4 rounded ${currentStep > step ? "bg-emerald-300" : "bg-gray-200"}`}
+                className={`mt-3.5 h-0.5 w-4 rounded ${currentStep > step ? "bg-emerald-300" : "bg-gray-200"}`}
               />
             )}
           </React.Fragment>
-        ))}
-      </div>
-
-      {/* Step Labels */}
-      <div className="mb-4 flex justify-between text-[10px] text-gray-500">
-        {stepLabels.map((label, i) => (
-          <span
-            key={label}
-            className={currentStep === i + 1 ? "font-semibold text-emerald-600" : ""}
-          >
-            {label}
-          </span>
         ))}
       </div>
 
