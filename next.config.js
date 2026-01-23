@@ -49,7 +49,16 @@ const nextConfig = {
 
   // Experimental optimizations
   experimental: {
-    optimizePackageImports: ["lucide-react", "sonner", "framer-motion", "date-fns", "firebase", "firebase/auth", "firebase/firestore", "firebase/storage"],
+    optimizePackageImports: [
+      "lucide-react",
+      "sonner",
+      "framer-motion",
+      "date-fns",
+      "firebase",
+      "firebase/auth",
+      "firebase/firestore",
+      "firebase/storage",
+    ],
   },
 
   // 301 Redirects for URL restructuring (preserve SEO)
@@ -57,45 +66,45 @@ const nextConfig = {
     return [
       // Mutări - moved to /mutari/tipuri/
       {
-        source: '/servicii/mutari-apartamente',
-        destination: '/mutari/tipuri/apartamente',
+        source: "/servicii/mutari-apartamente",
+        destination: "/mutari/tipuri/apartamente",
         permanent: true,
       },
       {
-        source: '/servicii/mutari-case',
-        destination: '/mutari/tipuri/case',
+        source: "/servicii/mutari-case",
+        destination: "/mutari/tipuri/case",
         permanent: true,
       },
       {
-        source: '/servicii/mutari-studenti',
-        destination: '/mutari/tipuri/studenti',
+        source: "/servicii/mutari-studenti",
+        destination: "/mutari/tipuri/studenti",
         permanent: true,
       },
       {
-        source: '/servicii/mutari-companii',
-        destination: '/mutari/tipuri/birouri',
+        source: "/servicii/mutari-companii",
+        destination: "/mutari/tipuri/birouri",
         permanent: true,
       },
       // Specializate
       {
-        source: '/servicii/mutari-piane',
-        destination: '/mutari/specializate/piane',
+        source: "/servicii/mutari-piane",
+        destination: "/mutari/specializate/piane",
         permanent: true,
       },
       // Servicii - reorganized
       {
-        source: '/servicii/impachetare-profesionala',
-        destination: '/servicii/impachetare/profesionala',
+        source: "/servicii/impachetare-profesionala",
+        destination: "/servicii/impachetare/profesionala",
         permanent: true,
       },
       {
-        source: '/servicii/materiale-impachetare',
-        destination: '/servicii/impachetare/materiale',
+        source: "/servicii/materiale-impachetare",
+        destination: "/servicii/impachetare/materiale",
         permanent: true,
       },
       {
-        source: '/servicii/demontare-montare-mobila',
-        destination: '/servicii/montaj/mobila',
+        source: "/servicii/demontare-montare-mobila",
+        destination: "/servicii/montaj/mobila",
         permanent: true,
       },
     ];
@@ -155,6 +164,16 @@ const nextConfig = {
       // Optimize static assets (images)
       {
         source: "/pics/(.*)",
+        headers: [
+          {
+            key: "Cache-Control",
+            value: "public, max-age=31536000, immutable",
+          },
+        ],
+      },
+      // Optimize JS/CSS chunks
+      {
+        source: "/_next/static/(.*)",
         headers: [
           {
             key: "Cache-Control",

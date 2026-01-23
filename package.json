@@ -53,11 +53,11 @@
     ]
   },
   "browserslist": [
-    "Chrome >= 90",
-    "Firefox >= 90",
-    "Safari >= 15",
-    "Edge >= 90",
-    "iOS >= 15",
+    "Chrome >= 100",
+    "Firefox >= 100",
+    "Safari >= 16",
+    "Edge >= 100",
+    "iOS >= 16",
     "not dead",
     "not op_mini all"
   ],

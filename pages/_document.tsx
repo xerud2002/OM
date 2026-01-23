@@ -9,8 +9,14 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
         <link rel="apple-touch-icon" href="/favicon-32x32.png" />
 
-        {/* Critical preconnects for Firebase (LCP improvement ~310ms) */}
+        {/* Critical preconnects for Firebase auth chain (reduces network dependency ~500ms) */}
         <link rel="preconnect" href="https://omro-e5a88.firebaseapp.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://identitytoolkit.googleapis.com"
+          crossOrigin="anonymous"
+        />
+        <link rel="preconnect" href="https://securetoken.googleapis.com" crossOrigin="anonymous" />
         <link
           rel="preconnect"
           href="https://firebasestorage.googleapis.com"
@@ -19,6 +25,7 @@ export default function Document() {
         <link rel="preconnect" href="https://apis.google.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googleapis.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
         {/* Google Analytics - loaded via @next/third-parties in _app.tsx */}
       </Head>
