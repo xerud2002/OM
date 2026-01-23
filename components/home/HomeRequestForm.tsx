@@ -1347,7 +1347,15 @@ export default function HomeRequestForm() {
         ))}
       </div>
 
-      <form onSubmit={handleSubmit}>
+      <form
+        onSubmit={handleSubmit}
+        onKeyDown={(e) => {
+          // Prevent Enter key from submitting the form - only allow button click
+          if (e.key === "Enter" && e.target instanceof HTMLInputElement) {
+            e.preventDefault();
+          }
+        }}
+      >
         {/* Form Steps */}
         <div className="min-h-64">
           {currentStep === 1 && renderStep1()}
