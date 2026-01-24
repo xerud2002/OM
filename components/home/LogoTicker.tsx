@@ -76,21 +76,6 @@ export default function LogoTicker() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes marquee {
-          from {
-            transform: translateX(0);
-          }
-          to {
-            transform: translateX(-100%);
-          }
-        }
-        .animate-marquee {
-          animation: marquee linear infinite;
-          will-change: transform;
-        }
-      `}</style>
     </div>
   );
 }
