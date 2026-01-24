@@ -4,6 +4,7 @@ import Head from "next/head";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { Mail, Lock, User, ArrowRight, Sparkles, Shield, CheckCircle } from "lucide-react";
 import LayoutWrapper from "@/components/layout/Layout";
@@ -224,22 +225,28 @@ export default function CustomerAuthPage() {
 
       <LayoutWrapper>
         <div className="container mx-auto px-4 py-12">
-          <div className="relative mx-auto grid max-w-6xl gap-0 overflow-hidden rounded-3xl bg-white shadow-2xl lg:grid-cols-2">
+          <div className="mx-auto grid max-w-6xl gap-8 overflow-hidden rounded-3xl bg-white shadow-2xl lg:grid-cols-2">
             {/* Left Side - Illustration & Benefits */}
-            <div
-              className="relative hidden bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-12 lg:flex lg:flex-col lg:justify-between"
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="relative hidden bg-linear-to-br from-emerald-500 via-teal-500 to-cyan-500 p-12 lg:flex lg:flex-col lg:justify-between"
             >
               {/* Decorative circles */}
               <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
               <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
 
               <div className="relative z-10">
-                <div
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.3 }}
                   className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm"
                 >
                   <Sparkles size={16} />
                   Pentru Clienți
-                </div>
+                </motion.div>
 
                 <h2 className="mb-4 text-4xl font-bold text-white">
                   Mutări simple,
@@ -259,15 +266,18 @@ export default function CustomerAuthPage() {
                   { icon: Shield, text: "Firme verificate" },
                   { icon: Sparkles, text: "Economisești până la 40%" },
                 ].map((item, i) => (
-                  <div
+                  <motion.div
                     key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.5 + i * 0.1 }}
                     className="flex items-center gap-3 text-white"
                   >
                     <div className="rounded-full bg-white/20 p-2 backdrop-blur-sm">
                       <item.icon size={20} />
                     </div>
                     <span className="text-emerald-50">{item.text}</span>
-                  </div>
+                  </motion.div>
                 ))}
               </div>
 
@@ -279,18 +289,37 @@ export default function CustomerAuthPage() {
                   <circle cx="100" cy="100" r="40" stroke="white" strokeWidth="2" />
                 </svg>
               </div>
-            </div>
+            </motion.div>
 
             {/* Right Side - Auth Form */}
-            <div className="p-8 lg:p-12">
+            <motion.div
+              initial={{ opacity: 0, x: 50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              className="p-8 lg:p-12"
+            >
               <div className="mb-8">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700">
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700"
+                >
                   <User size={16} />
                   Cont Client
-                </div>
+                </motion.div>
 
                 <h1 className="mb-2 text-3xl font-bold text-slate-900 lg:text-4xl">
-                  {isLogin ? "Bine ai revenit!" : "Creează cont"}
+                  <AnimatePresence mode="wait">
+                    <motion.span
+                      key={isLogin ? "login" : "register"}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -20 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {isLogin ? "Bine ai revenit!" : "Creează cont"}
+                    </motion.span>
+                  </AnimatePresence>
                 </h1>
                 <p className="text-gray-600">
                   {isLogin
@@ -313,13 +342,19 @@ export default function CustomerAuthPage() {
                   >
                     Adresa ta de email
                   </label>
-                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
-                    <div>
+                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-linear-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
+                    <motion.div
+                      animate={{
+                        scale: email ? 1.1 : 1,
+                        rotate: email ? [0, -10, 10, 0] : 0,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <Mail
                         size={20}
                         className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500"
                       />
-                    </div>
+                    </motion.div>
                     <input
                       id="email"
                       type="email"
@@ -344,13 +379,19 @@ export default function CustomerAuthPage() {
                   >
                     Parola ta
                   </label>
-                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
-                    <div>
+                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-linear-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
+                    <motion.div
+                      animate={{
+                        scale: password ? 1.1 : 1,
+                        rotate: password ? [0, 5, -5, 0] : 0,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
                       <Lock
                         size={20}
                         className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500"
                       />
-                    </div>
+                    </motion.div>
                     <input
                       id="password"
                       type="password"
@@ -364,15 +405,21 @@ export default function CustomerAuthPage() {
                   </div>
                 </div>
 
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-6 py-4 font-semibold text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl active:scale-[0.98] disabled:opacity-50"
+                  className="group relative w-full overflow-hidden rounded-xl bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 px-6 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {loading ? (
                       <>
-                        <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                          className="h-5 w-5 rounded-full border-2 border-white border-t-transparent"
+                        />
                         Se procesează...
                       </>
                     ) : (
@@ -385,8 +432,8 @@ export default function CustomerAuthPage() {
                       </>
                     )}
                   </span>
-                  <div className="absolute inset-0 -z-0 bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 opacity-0 transition-opacity group-hover:opacity-100" />
-                </button>
+                  <div className="absolute inset-0 -z-0 bg-linear-to-r from-emerald-700 via-teal-700 to-cyan-700 opacity-0 transition-opacity group-hover:opacity-100" />
+                </motion.button>
 
                 {isLogin && (
                   <div className="text-right">
@@ -412,34 +459,45 @@ export default function CustomerAuthPage() {
 
               {/* === Social Login Buttons === */}
               <div className="flex gap-3">
-                <button
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={handleGoogleLogin}
                   disabled={loading}
-                  className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-4 py-4 font-medium text-gray-700 shadow-sm transition-all hover:scale-[1.02] hover:border-gray-300 hover:shadow-md active:scale-[0.98] disabled:opacity-50"
+                  className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-4 py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
                 >
                   <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
                   Google
-                </button>
+                </motion.button>
                 {FACEBOOK_ENABLED && (
-                  <button
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
                     onClick={handleFacebookLogin}
                     disabled={loading}
-                    className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-[#1877F2] bg-[#1877F2] px-4 py-4 font-medium text-white shadow-sm transition-all hover:scale-[1.02] hover:bg-[#166FE5] hover:shadow-md active:scale-[0.98] disabled:opacity-50"
+                    className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-[#1877F2] bg-[#1877F2] px-4 py-4 font-medium text-white shadow-sm transition-all hover:bg-[#166FE5] hover:shadow-md disabled:opacity-50"
                   >
                     <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
                     </svg>
                     Facebook
-                  </button>
+                  </motion.button>
                 )}
               </div>
 
               {/* === Status Message === */}
-              {message && (
-                <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800">
-                  {message}
-                </div>
-              )}
+              <AnimatePresence>
+                {message && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-800"
+                  >
+                    {message}
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
               {/* === Toggle login/register === */}
               <div className="mt-8 text-center text-sm text-gray-600">
@@ -462,7 +520,7 @@ export default function CustomerAuthPage() {
                   Click aici
                 </Link>
               </div>
-            </div>
+            </motion.div>
           </div>
         </div>
       </LayoutWrapper>
