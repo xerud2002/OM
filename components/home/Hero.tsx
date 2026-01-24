@@ -1,6 +1,5 @@
 "use client";
 
-import { CheckCircle, Star, ShieldCheck, TrendingUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
@@ -9,7 +8,58 @@ const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
   loading: () => (
     <div className="mx-auto h-[420px] w-full max-w-md animate-pulse rounded-2xl border border-gray-200 bg-white/50" />
   ),
+  ssr: false,
 });
+
+// Lazy load trust indicators (they use Lucide icons)
+const TrustIndicators = dynamic(
+  () =>
+    import("lucide-react").then((mod) => {
+      const { CheckCircle, Star, ShieldCheck, TrendingUp } = mod;
+      const indicators = [
+        { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
+        { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
+        { icon: Star, label: "Recenzii", color: "text-amber-500" },
+        { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
+      ];
+      return {
+        default: () => (
+          <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-3 lg:justify-start lg:gap-4">
+            {indicators.map((item, i) => (
+              <div
+                key={i}
+                className="flex flex-shrink-0 items-center gap-1 rounded-full bg-white/80 px-2.5 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-2"
+              >
+                <item.icon className={`h-3.5 w-3.5 flex-shrink-0 ${item.color} sm:h-5 sm:w-5`} />
+                <span className="text-[10px] font-medium whitespace-nowrap text-slate-700 sm:text-sm">
+                  {item.label}
+                </span>
+              </div>
+            ))}
+          </div>
+        ),
+      };
+    }),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-3 lg:justify-start lg:gap-4">
+        <span className="rounded-full bg-white/80 px-2.5 py-1.5 text-[10px] font-medium shadow-sm sm:px-4 sm:py-2 sm:text-sm">
+          ✓ Firme Verificate
+        </span>
+        <span className="rounded-full bg-white/80 px-2.5 py-1.5 text-[10px] font-medium shadow-sm sm:px-4 sm:py-2 sm:text-sm">
+          ✓ 100% Gratuit
+        </span>
+        <span className="rounded-full bg-white/80 px-2.5 py-1.5 text-[10px] font-medium shadow-sm sm:px-4 sm:py-2 sm:text-sm">
+          ⭐ Recenzii
+        </span>
+        <span className="rounded-full bg-white/80 px-2.5 py-1.5 text-[10px] font-medium shadow-sm sm:px-4 sm:py-2 sm:text-sm">
+          ↗ Economie timp
+        </span>
+      </div>
+    ),
+  }
+);
 
 export default function Hero() {
   const [animationsReady, setAnimationsReady] = useState(false);
@@ -20,7 +70,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative flex min-h-[70vh] items-center overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-12 pb-6 sm:pt-16 sm:pb-10 lg:pt-20 lg:pb-12">
+    <section className="relative hidden min-h-[70vh] items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-12 pb-6 sm:pt-16 sm:pb-10 md:flex lg:pt-20 lg:pb-12">
       {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-75 w-75 rounded-full bg-emerald-200/40 blur-[80px] sm:h-100 sm:w-100 lg:h-125 lg:w-125 lg:blur-[100px]" />
@@ -84,25 +134,8 @@ export default function Hero() {
               bugetul tău.
             </p>
 
-            {/* Trust Indicators - All 4 on one row */}
-            <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-3 lg:justify-start lg:gap-4">
-              {[
-                { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
-                { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
-                { icon: Star, label: "Recenzii", color: "text-amber-500" },
-                { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
-              ].map((item, i) => (
-                <div
-                  key={i}
-                  className="flex flex-shrink-0 items-center gap-1 rounded-full bg-white/80 px-2.5 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-2"
-                >
-                  <item.icon className={`h-3.5 w-3.5 flex-shrink-0 ${item.color} sm:h-5 sm:w-5`} />
-                  <span className="text-[10px] font-medium whitespace-nowrap text-slate-700 sm:text-sm">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
-            </div>
+            {/* Trust Indicators - lazy loaded */}
+            <TrustIndicators />
 
             {/* How it works link - mobile only */}
             <button

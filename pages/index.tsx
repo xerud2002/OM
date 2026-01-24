@@ -356,12 +356,10 @@ export default function HomePage() {
       {/* ==========================
           🔹 Page Sections
       =========================== */}
-      <div className="md:hidden">
-        <MobileHero />
-      </div>
-      <div className="hidden md:block">
-        <Hero />
-      </div>
+      
+      {/* MobileHero has md:hidden built in, Hero has hidden md:flex built in */}
+      <MobileHero />
+      <Hero />
 
       <LogoTicker />
 
