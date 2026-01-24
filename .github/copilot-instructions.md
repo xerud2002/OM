@@ -18,9 +18,9 @@ npm run lint     # Zero-warnings enforced (Husky pre-commit)
 
 Users are **exclusively** `customer` OR `company` – profile in `customers/{uid}` OR `companies/{uid}` (never both). Enforced by:
 
-- Firestore rules: `canCreateCustomer()`/`canCreateCompany()`
+- Firestore rules: `canCreateCustomer()`/`canCreateCompany()` – see `firebase.firestore.rules`
 - App code: `ensureUserProfile()` throws `ROLE_CONFLICT`
-- UI: `<RequireRole allowedRole="customer|company">`
+- UI: `<RequireRole allowedRole="customer|company">` – wraps protected pages
 
 ### 2. Firebase Client vs Server SDK
 
@@ -35,6 +35,8 @@ if (!adminReady) return res.status(503).json(apiError("Admin not ready"));
 
 ### 3. API Route Pattern
 
+All API routes must follow this exact structure (see `pages/api/offers/accept.ts` for reference):
+
 ```typescript
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiSuccess, apiError } from "@/types/api";
@@ -46,7 +48,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   const authResult = await verifyAuth(req);
   if (!authResult.success) return sendAuthError(res, authResult);
-  // Validate ownership before mutations
+  // ALWAYS validate ownership before mutations
   return res.status(200).json(apiSuccess({ result }));
 }
 ```
@@ -63,16 +65,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 **Statuses**: Requests: `active`/`closed`/`paused`/`cancelled` · Offers: `pending`/`accepted`/`declined`
 
+**Types**: All types defined in `types/index.ts` – use `MovingRequest`, `Offer`, `CustomerProfile`, `CompanyProfile`
+
 ## Required Helpers
 
 ```typescript
 // ✅ Use helpers over raw Firestore SDK
 import { createRequest, addOffer, updateRequest } from "@/utils/firestoreHelpers";
-import { ensureUserProfile, getUserRole } from "@/utils/firebaseHelpers";
+import { ensureUserProfile, getUserRole, onAuthChange } from "@/utils/firebaseHelpers";
 ```
 
-- `createRequest()` auto-generates `REQ-XXXXXX` via transaction
+- `createRequest()` auto-generates `REQ-XXXXXX` via transaction (counter in `meta/counters`)
 - Always use `serverTimestamp()` – never `new Date()`
+- Address fields: use helper `buildAddressString()` for Romanian format (Str, Bl, Sc, Ap)
 
 ## Conventions
 
@@ -83,16 +88,19 @@ import { ensureUserProfile, getUserRole } from "@/utils/firebaseHelpers";
 | **Toasts**          | `sonner`: `toast.success()`, `toast.error()` (Romanian) |
 | **Phone format**    | Romanian `07xxxxxxxx` – see `utils/validation.ts`       |
 | **Dynamic imports** | Always include `loading` skeleton                       |
+| **Error codes**     | Use `ErrorCodes` from `types/api.ts`                    |
 
 ## Styling (Tailwind v4)
 
-Config in `globals.css` `@theme{}` block. Brand: `emerald-500`, `sky-500`, `dark` (#064e3b)
+Config in `globals.css` `@theme{}` block – NOT in `tailwind.config.js`. Brand: `emerald-500`, `sky-500`, `dark` (#064e3b)
 
 ```css
 .card         /* Glass-effect card */
 .btn-primary  /* Emerald→Sky gradient */
 .btn-outline  /* Emerald outlined */
 ```
+
+Custom animations (like marquee in `LogoTicker.tsx`) use `<style jsx>` blocks.
 
 ## Key Files
 
@@ -106,12 +114,15 @@ Config in `globals.css` `@theme{}` block. Brand: `emerald-500`, `sky-500`, `dark
 | Types           | `types/index.ts`, `types/api.ts`  |
 | Security Rules  | `firebase.firestore.rules`        |
 | Page Guards     | `components/auth/RequireRole.tsx` |
+| Global Styles   | `globals.css`                     |
+| Romanian cities | `cities.ts`, `counties.ts`        |
 
 ## Common Pitfalls
 
-1. **Admin SDK errors**: Always check `adminReady` in API routes
-2. **Role conflicts**: Never create both customer/company profiles
+1. **Admin SDK errors**: Always check `adminReady` before using `adminDb`/`adminAuth`
+2. **Role conflicts**: Never create both customer/company profiles for same UID
 3. **Timestamps**: `serverTimestamp()` only (not `new Date()`)
-4. **Offers**: Must include denormalized `requestId`/`requestCode`
+4. **Offers**: Must include denormalized `requestId` and `requestCode`
 5. **Auth header**: `Authorization: Bearer <token>` on protected routes
 6. **Tailwind v4**: Extend theme in `globals.css` `@theme{}`, not JS config
+7. **Move dates**: Support `moveDateMode`: `exact`, `range`, `flexible` – use `buildMoveDateFields()` helper
