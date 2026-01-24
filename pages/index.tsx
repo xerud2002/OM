@@ -356,7 +356,7 @@ export default function HomePage() {
       {/* ==========================
           🔹 Page Sections
       =========================== */}
-      
+
       {/* MobileHero has md:hidden built in, Hero has hidden md:flex built in */}
       <MobileHero />
       <Hero />
