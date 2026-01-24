@@ -21,15 +21,29 @@ interface CityPageProps {
   city: CityData;
 }
 
+// Vibrant gradient backgrounds for hero sections (8 different color combinations)
+const heroGradients = [
+  'linear-gradient(to bottom right, #059669, #047857, #115e59)', // Emerald → Teal
+  'linear-gradient(to bottom right, #2563eb, #4338ca, #7e22ce)', // Blue → Purple
+  'linear-gradient(to bottom right, #0891b2, #0369a1, #2563eb)', // Cyan → Blue
+  'linear-gradient(to bottom right, #7c3aed, #7e22ce, #c026d3)', // Violet → Fuchsia
+  'linear-gradient(to bottom right, #0d9488, #0e7490, #0284c7)', // Teal → Sky
+  'linear-gradient(to bottom right, #e11d48, #db2777, #c026d3)', // Rose → Pink
+  'linear-gradient(to bottom right, #ea580c, #d97706, #eab308)', // Orange → Yellow
+  'linear-gradient(to bottom right, #4f46e5, #2563eb, #0891b2)', // Indigo → Cyan
+];
+
 export default function CityPage({ city }: CityPageProps) {
   const currentYear = new Date().getFullYear();
+
+  // Generate consistent gradient based on city slug (same city = same gradient)
+  const gradientIndex = city.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % heroGradients.length;
+  const heroGradient = heroGradients[gradientIndex];
 
   return (
     <>
       <Head>
-        <title>
-          Mutări {city.name} {currentYear} → Oferte Gratuite
-        </title>
+        <title>{`Mutări ${city.name} ${currentYear} → Oferte Gratuite`}</title>
         <meta name="description" content={city.metaDescription} />
         <meta
           name="keywords"
@@ -60,7 +74,12 @@ export default function CityPage({ city }: CityPageProps) {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-800 py-20">
+        <section
+          style={{
+            background: heroGradient
+          }}
+          className="relative overflow-hidden py-20"
+        >
           {/* Decorative elements */}
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />

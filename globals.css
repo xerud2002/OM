@@ -86,9 +86,29 @@
   --color-amber-700: #b45309;
 
   /* Orange */
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
   --color-orange-300: #fdba74;
   --color-orange-400: #fb923c;
   --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+
+  /* Pink */
+  --color-pink-50: #fdf2f8;
+  --color-pink-100: #fce7f3;
+  --color-pink-200: #fbcfe8;
+  --color-pink-300: #f9a8d4;
+  --color-pink-400: #f472b6;
+  --color-pink-500: #ec4899;
+  --color-pink-600: #db2777;
+
+  /* Rose */
+  --color-rose-50: #fff1f2;
+  --color-rose-100: #ffe4e6;
+  --color-rose-400: #fb7185;
+  --color-rose-500: #f43f5e;
+  --color-rose-600: #e11d48;
 
   /* Yellow */
   --color-yellow-300: #fde047;
@@ -139,17 +159,10 @@
 @source "./pages/**/*.{ts,tsx}";
 @source "./components/**/*.{ts,tsx}";
 
-/* 🎨 Paletă de culori personalizată */
-:root {
-  --color-emerald: #10b981;
-  --color-sky: #0ea5e9;
-  --color-dark: #064e3b;
-}
-
-/* 🌿 BODY global */
+/* Global body styles */
 body {
   font-family: var(--font-sans);
-  color: rgb(31, 41, 55); /* echivalent text-gray-800 */
+  color: #1f2937;
   background: linear-gradient(to bottom right, #ecfdf5, #ffffff, #f0f9ff);
   background-attachment: fixed;
   min-height: 100vh;
@@ -157,73 +170,51 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Optimize background scrolling for mobile */
+/* Mobile optimization for background */
 @media (max-width: 768px) {
   body {
     background-attachment: scroll;
   }
 }
 
-/* 🌿 CARD (folosit în MoveForm și alte componente) */
+/* Utility classes */
 .card {
-  @apply rounded-3xl border border-emerald-100 bg-white/70 shadow-md backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100/50;
+  @apply rounded-3xl border border-emerald-100 bg-white shadow-md transition-all duration-300 hover:shadow-lg hover:shadow-emerald-100/50;
 }
 
-/* 🌿 Butoane principale */
 .btn-primary {
   @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-medium text-white shadow-md transition-all hover:opacity-95 hover:shadow-lg;
 }
 
-/* 🌿 Butoane contur */
 .btn-outline {
   @apply inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-400 px-5 py-2 font-medium text-emerald-700 transition-all hover:bg-emerald-50;
 }
 
-/* 🌿 INPUTS / SELECT / TEXTAREA */
+/* Form inputs */
 input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {
-  @apply w-full rounded-lg border border-gray-300 bg-white/70 p-3 transition-all focus:border-emerald-400 focus:ring-2 focus:ring-emerald-300 focus:outline-none;
+  @apply w-full rounded-lg border border-gray-300 bg-white p-3 transition-all focus:border-emerald-400 focus:ring-2 focus:ring-emerald-300 focus:outline-none;
 }
 
-/* 🌿 SELECT personalizat – paletă brand (emerald + sky) */
+/* Select styling */
 select {
-  background-color: white;
-  border-radius: 12px;
   appearance: none;
-  background-clip: padding-box;
-  color: #064e3b;
+  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2310b981' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E") no-repeat right 0.75rem center/1rem;
   padding-right: 2rem;
-  background: white
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%2310b981' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E")
-    no-repeat right 0.75rem center/1rem;
+  color: #064e3b;
 }
 
 select:focus {
-  border-color: var(--color-emerald);
+  border-color: #10b981;
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
-  color: #064e3b;
 }
 
-/* 🌿 Dropdown options styling */
-select option {
-  background-color: white;
-  color: #064e3b;
-  padding: 8px 12px;
-}
-
-option:checked,
-option:hover,
-select option:checked {
-  background-color: white !important;
-  color: #064e3b !important;
-}
-
-/* 🌿 Calendar (stil curat, modern) */
+/* Calendar styling */
 .rdp {
   --rdp-cell-size: 40px !important;
-  --rdp-accent-color: var(--color-emerald);
-  --rdp-background-color: var(--color-emerald);
+  --rdp-accent-color: #10b981;
+  --rdp-background-color: #10b981;
   margin: 0 auto;
   width: 100%;
   max-width: 480px !important;
@@ -232,7 +223,6 @@ select option:checked {
   border-radius: 1.5rem;
 }
 
-/* Mobile calendar optimization */
 @media (max-width: 640px) {
   .rdp {
     --rdp-cell-size: 36px !important;
@@ -257,17 +247,11 @@ select option:checked {
   @apply border border-emerald-400 font-medium text-emerald-700;
 }
 
-/* 🌿 Calendar container */
 .calendar-box {
-  @apply mx-auto w-full max-w-md rounded-2xl border border-emerald-100 bg-white/80 p-4 shadow-lg backdrop-blur-sm transition-all hover:shadow-emerald-100 sm:rounded-3xl sm:p-6;
+  @apply mx-auto w-full max-w-md rounded-2xl border border-emerald-100 bg-white p-4 shadow-lg backdrop-blur-sm transition-all hover:shadow-emerald-100 sm:rounded-3xl sm:p-6;
 }
 
-/* 🌿 HERO OVERLAY (pentru homepage) */
-.hero-overlay {
-  @apply rounded-2xl border border-white/30 bg-white/20 p-6 text-center shadow-md backdrop-blur-[2px] sm:rounded-3xl sm:p-8;
-}
-
-/* 🌿 Animations */
+/* Animations */
 .fade-in {
   animation: fadeIn 0.5s ease-in-out forwards;
 }
@@ -277,80 +261,62 @@ select option:checked {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
 
-/* 🌿 Scrollbar subtil pentru pagini lungi */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, var(--color-emerald), var(--color-sky));
+  background: linear-gradient(to bottom, #10b981, #0ea5e9);
   border-radius: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: #f9fafb;
 }
 
-/* 🌿 React Calendar */
-.react-calendar {
-  width: 100%;
-  background: transparent;
-  border: none;
-  font-family: "Inter", "Poppins", sans-serif;
+/* Focus styles for accessibility */
+*:focus-visible {
+  outline: 2px solid #10b981;
+  outline-offset: 2px;
 }
 
-.react-calendar__tile {
-  padding: 12px 6px;
-  border-radius: 9999px;
-  transition: all 0.2s ease;
+/* Marquee animation */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
 }
 
-.react-calendar__tile:hover {
-  background-color: #ecfdf5;
-  color: #065f46;
+.animate-marquee {
+  animation: marquee linear infinite;
+  will-change: transform;
 }
 
-.react-calendar__tile--now {
-  border: 1px solid #10b981;
-  color: #047857;
-  font-weight: 500;
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-.selected-tile {
-  background: linear-gradient(to right, #10b981, #0ea5e9);
-  color: white !important;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.4);
-  transform: scale(1.05);
-}
-
-.react-calendar__navigation button {
-  color: #065f46;
-  font-weight: 600;
-  font-size: 0.9rem;
-  border-radius: 8px;
-  padding: 4px 8px;
-  transition: all 0.2s ease;
-}
-
-.react-calendar__navigation button:hover {
-  background-color: #ecfdf5;
-}
-
-.react-calendar__month-view__weekdays {
-  color: #059669;
-  font-weight: 600;
-  text-transform: lowercase;
-}
-
-.shadow-avatar {
-  box-shadow: 0 0 25px rgba(16, 185, 129, 0.15);
-}
-
-/* 🖨️ PRINT STYLES FOR A4 */
+/* Print styles */
 @media print {
   @page {
     size: A4;
@@ -362,26 +328,24 @@ select option:checked {
     color: black !important;
   }
 
-  /* Hide non-essential elements */
   nav,
   footer,
   [class*="print:hidden"] {
     display: none !important;
   }
 
-  /* Ensure content fits on page */
   * {
     box-shadow: none !important;
     text-shadow: none !important;
+    animation-duration: 0s !important;
+    transition: none !important;
   }
 
-  /* Remove backgrounds for better print quality */
   .bg-gradient-to-br,
   .bg-gradient-to-r {
     background: white !important;
   }
 
-  /* Ensure text is black */
   h1,
   h2,
   h3,
@@ -393,29 +357,9 @@ select option:checked {
   div {
     color: black !important;
   }
-
-  /* Page breaks */
-  [class*="print:break-inside-avoid"] {
-    break-inside: avoid;
-    page-break-inside: avoid;
-  }
-
-  /* Remove animations */
-  * {
-    animation-duration: 0s !important;
-    animation-delay: 0s !important;
-    transition: none !important;
-  }
 }
 
-/* 📱 MOBILE & TABLET OPTIMIZATIONS */
-
-/* Ensure smooth scrolling on all devices */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Improve tap target sizes (minimum 44x44px for accessibility) */
+/* Mobile tap targets */
 button:not([class*="text-"]),
 a:not([class*="text-"]),
 [role="button"],
@@ -423,14 +367,15 @@ a:not([class*="text-"]),
   min-height: 44px;
 }
 
-/* Optimize images for mobile */
+/* Optimize images */
 img {
   max-width: 100%;
   height: auto;
 }
 
-/* Better touch feedback */
+/* Touch feedback for mobile */
 @media (hover: none) {
+
   button:active,
   a:active {
     opacity: 0.7;
@@ -438,74 +383,15 @@ img {
   }
 }
 
-/* Mobile-specific spacing improvements */
+/* Mobile modal optimization */
 @media (max-width: 640px) {
-  /* Make modals full-screen on mobile */
   [role="dialog"] {
     max-width: 100vw !important;
     margin: 0.5rem !important;
   }
 
-  /* Better heading sizes */
   .hero-title {
     font-size: 1.875rem !important;
     line-height: 1.2 !important;
-  }
-}
-
-/* Tablet optimizations */
-@media (min-width: 641px) and (max-width: 1024px) {
-  .container {
-    padding-left: 2rem;
-    padding-right: 2rem;
-  }
-}
-
-/* Improve focus visibility for keyboard navigation */
-*:focus-visible {
-  outline: 2px solid #10b981;
-  outline-offset: 2px;
-}
-
-/* Marquee animation for LogoTicker */
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-100%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee linear infinite;
-  will-change: transform;
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-
-/* Progressive rendering: defer offscreen sections for all devices */
-@supports (content-visibility: auto) {
-  main > section {
-    content-visibility: auto;
-  }
-}
-
-/* Mobile GPU savings: reduce heavy blur/backdrop filters */
-@media (max-width: 640px) {
-  [class*="blur-"] {
-    filter: none !important;
-  }
-  [class*="backdrop-blur"] {
-    backdrop-filter: none !important;
   }
 }

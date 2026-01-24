@@ -1,0 +1,40 @@
+﻿
+> ofertemutare@1.0.0 build
+> next build
+
+  Ôû▓ Next.js 14.2.35
+
+   Linting and checking validity of types ...
+   Creating an optimized production build ...
+ Ô£ô Compiled successfully
+   Collecting page data ...
+node.exe : Firebase Admin not configured (missing credentials). Guest requests will fall 
+back to client-side.
+At C:\Program Files\nodejs\npm.ps1:29 char:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (Firebase Admin ...to client-side.:String) [], R 
+   emoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+FirebaseError: Firebase: Error (auth/invalid-api-key).
+    at f (C:\Users\Cip\Desktop\OM\.next\server\chunks\7926.js:11:30710)
+    at g (C:\Users\Cip\Desktop\OM\.next\server\chunks\7926.js:11:30758)
+    at Component.instanceFactory 
+(C:\Users\Cip\Desktop\OM\.next\server\chunks\7926.js:11:86456)
+    at Provider.getOrInitializeService (file:///C:/Users/Cip/Desktop/OM/node_modules/@firebas
+e/component/dist/esm/index.esm.js:289:39)
+    at Provider.initialize (file:///C:/Users/Cip/Desktop/OM/node_modules/@firebase/component/
+dist/esm/index.esm.js:233:31)
+    at C:\Users\Cip\Desktop\OM\.next\server\chunks\7926.js:11:84963
+    at eE (C:\Users\Cip\Desktop\OM\.next\server\chunks\7926.js:11:84992)
+    at C:\Users\Cip\Desktop\OM\.next\server\chunks\6579.js:5:696 {
+  code: 'auth/invalid-api-key',
+  customData: { appName: '[DEFAULT]' }
+}
+
+> Build error occurred
+Error: Failed to collect page data for /upload/[token]
+    at C:\Users\Cip\Desktop\OM\node_modules\next\dist\build\utils.js:1269:15 {
+  type: 'Error'
+}
