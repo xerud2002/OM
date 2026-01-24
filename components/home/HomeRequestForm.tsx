@@ -332,9 +332,6 @@ export default function HomeRequestForm() {
       }
 
       if (errors.length > 0) {
-        toast.error(
-          `Completează câmpurile: ${errors.slice(0, 3).join(", ")}${errors.length > 3 ? "..." : ""}`
-        );
         setIsSubmitting(false);
         return;
       }
@@ -437,30 +434,14 @@ export default function HomeRequestForm() {
   const nextStep = useCallback(async () => {
     // Validate step 1 before moving to step 2
     if (currentStep === 1) {
-      const { toast } = await import("sonner");
-      const errors: string[] = [];
-
-      if (!form.fromCounty) errors.push("Județ plecare");
-      if (!form.fromCity) errors.push("Localitate plecare");
-      if (!form.fromRooms) errors.push("Camere plecare");
-
-      if (errors.length > 0) {
-        toast.error(`Completează câmpurile: ${errors.join(", ")}`);
+      if (!form.fromCounty || !form.fromCity || !form.fromRooms) {
         return;
       }
     }
 
     // Validate step 2 before moving to step 3
     if (currentStep === 2) {
-      const { toast } = await import("sonner");
-      const errors: string[] = [];
-
-      if (!form.toCounty) errors.push("Județ destinație");
-      if (!form.toCity) errors.push("Localitate destinație");
-      if (!form.toRooms) errors.push("Camere destinație");
-
-      if (errors.length > 0) {
-        toast.error(`Completează câmpurile: ${errors.join(", ")}`);
+      if (!form.toCounty || !form.toCity || !form.toRooms) {
         return;
       }
     }
