@@ -1,11 +1,12 @@
 import { CheckCircle, Star, ShieldCheck, TrendingUp } from "lucide-react";
 import dynamic from "next/dynamic";
 
-// Lazy load the form for better LCP
+// Lazy load the form - deferred to prioritize LCP
 const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
   loading: () => (
     <div className="mx-auto h-[380px] w-full animate-pulse rounded-xl border border-gray-200 bg-white/50" />
   ),
+  ssr: false, // Don't SSR the form - it needs client JS anyway
 });
 
 export default function MobileHero() {
