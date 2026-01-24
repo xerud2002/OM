@@ -70,8 +70,8 @@ export default function CityPage({ city }: CityPageProps) {
 
           <div className="relative mx-auto max-w-6xl px-4">
             <div className="mb-6 flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-emerald-200" />
-              <span className="text-sm font-medium text-emerald-100">
+              <MapPin className="h-5 w-5 text-white" />
+              <span className="text-sm font-medium text-white">
                 Județul {city.county} • {city.population} locuitori
               </span>
             </div>
@@ -83,7 +83,7 @@ export default function CityPage({ city }: CityPageProps) {
               </span>
             </h1>
 
-            <p className="mb-8 max-w-2xl text-lg text-emerald-100 md:text-xl">
+            <p className="mb-8 max-w-2xl text-lg text-white md:text-xl">
               {city.heroSubtitle}
             </p>
 
@@ -91,19 +91,19 @@ export default function CityPage({ city }: CityPageProps) {
             <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">3-5</div>
-                <div className="text-sm text-emerald-100">Oferte în 24h</div>
+                <div className="text-sm text-white">Oferte în 24h</div>
               </div>
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">40%</div>
-                <div className="text-sm text-emerald-100">Economie medie</div>
+                <div className="text-sm text-white">Economie medie</div>
               </div>
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">100%</div>
-                <div className="text-sm text-emerald-100">Gratuit</div>
+                <div className="text-sm text-white">Gratuit</div>
               </div>
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">✓</div>
-                <div className="text-sm text-emerald-100">Firme verificate</div>
+                <div className="text-sm text-white">Firme verificate</div>
               </div>
             </div>
 
