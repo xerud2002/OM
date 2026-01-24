@@ -58,7 +58,7 @@ export default function ArticleTips() {
           <header className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               50+ Sfaturi Expert Pentru{" "}
-              <span className="bg-linear-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
                 Mutări în România
               </span>
             </h1>
@@ -69,7 +69,7 @@ export default function ArticleTips() {
           </header>
 
           {/* Stats Banner */}
-          <section className="mb-12 rounded-lg bg-linear-to-r from-emerald-600 to-blue-600 p-6 text-white">
+          <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-6 text-white">
             <div className="grid gap-6 md:grid-cols-3">
               <div className="text-center">
                 <div className="mb-2 text-4xl font-bold">40%</div>
@@ -720,7 +720,7 @@ export default function ArticleTips() {
           </section>
 
           {/* Pro Tips from Experts */}
-          <section className="mb-16 rounded-lg bg-linear-to-r from-amber-50 to-orange-50 p-8">
+          <section className="mb-16 rounded-lg bg-gradient-to-r from-amber-50 to-orange-50 p-8">
             <div className="mb-6 flex items-center gap-3">
               <Star className="h-8 w-8 text-amber-600" />
               <h2 className="text-3xl font-bold text-gray-800">
@@ -849,7 +849,7 @@ export default function ArticleTips() {
           </section>
 
           {/* CTA Section */}
-          <section className="mb-12 rounded-lg bg-linear-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
+          <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
             <div className="mb-4 flex justify-center">
               <MessageCircle className="h-12 w-12" />
             </div>

@@ -42,7 +42,7 @@ export default function ArticleImpachetare() {
           <header className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               Ghid Complet de Împachetare pentru{" "}
-              <span className="bg-linear-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 Mutare
               </span>
             </h1>
@@ -260,7 +260,7 @@ export default function ArticleImpachetare() {
           </div>
 
           {/* CTA */}
-          <div className="mt-12 rounded-lg bg-linear-to-r from-emerald-500 to-sky-500 p-8 text-center text-white">
+          <div className="mt-12 rounded-lg bg-gradient-to-r from-emerald-500 to-sky-500 p-8 text-center text-white">
             <h3 className="mb-4 text-2xl font-bold">Primește Oferte pentru Mutarea Ta!</h3>
             <p className="mb-6">
               Compară prețuri de la firme verificate. Servicii complete: transport, împachetare și

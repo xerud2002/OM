@@ -72,15 +72,15 @@ const MyRequestCard = memo(function MyRequestCard({
   const getGradientClass = () => {
     switch (status) {
       case "active":
-        return "bg-linear-to-r from-emerald-500 via-teal-500 to-sky-500";
+        return "bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500";
       case "closed":
-        return "bg-linear-to-r from-gray-400 to-gray-500";
+        return "bg-gradient-to-r from-gray-400 to-gray-500";
       case "paused":
-        return "bg-linear-to-r from-amber-500 to-orange-500";
+        return "bg-gradient-to-r from-amber-500 to-orange-500";
       case "cancelled":
-        return "bg-linear-to-r from-red-500 to-rose-500";
+        return "bg-gradient-to-r from-red-500 to-rose-500";
       default:
-        return "bg-linear-to-r from-emerald-500 via-teal-500 to-sky-500";
+        return "bg-gradient-to-r from-emerald-500 via-teal-500 to-sky-500";
     }
   };
 
@@ -106,12 +106,12 @@ const MyRequestCard = memo(function MyRequestCard({
               <div
                 className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg sm:h-10 sm:w-10 sm:rounded-xl ${
                   status === "active"
-                    ? "bg-linear-to-br from-emerald-500 to-teal-500"
+                    ? "bg-gradient-to-br from-emerald-500 to-teal-500"
                     : status === "closed"
-                      ? "bg-linear-to-br from-gray-400 to-gray-500"
+                      ? "bg-gradient-to-br from-gray-400 to-gray-500"
                       : status === "paused"
-                        ? "bg-linear-to-br from-amber-500 to-orange-500"
-                        : "bg-linear-to-br from-red-500 to-rose-500"
+                        ? "bg-gradient-to-br from-amber-500 to-orange-500"
+                        : "bg-gradient-to-br from-red-500 to-rose-500"
                 } shadow-lg ${
                   status === "active"
                     ? "shadow-emerald-500/30"
@@ -209,27 +209,27 @@ const MyRequestCard = memo(function MyRequestCard({
               request.serviceStorage) && (
               <div className="mt-3 flex flex-nowrap gap-1.5 overflow-x-auto pb-1 sm:mt-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:pb-0">
                 {request.serviceMoving && (
-                  <span className="shrink-0 rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
                     Transport
                   </span>
                 )}
                 {request.servicePacking && (
-                  <span className="shrink-0 rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
                     Ambalare
                   </span>
                 )}
                 {request.serviceDisassembly && (
-                  <span className="shrink-0 rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
                     Demontare
                   </span>
                 )}
                 {request.serviceCleanout && (
-                  <span className="shrink-0 rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
                     Debarasare
                   </span>
                 )}
                 {request.serviceStorage && (
-                  <span className="shrink-0 rounded-full bg-linear-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
                     Depozitare
                   </span>
                 )}
@@ -240,7 +240,7 @@ const MyRequestCard = memo(function MyRequestCard({
           {/* Right side: Offers count + Menu - row on mobile, column on desktop */}
           <div className="flex shrink-0 items-center justify-between gap-3 border-t border-gray-100 pt-3 sm:flex-col sm:items-end sm:border-0 sm:pt-0">
             {/* Offers badge - smaller on mobile */}
-            <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-linear-to-br from-emerald-500 via-teal-500 to-sky-500 shadow-lg shadow-emerald-500/30 sm:h-20 sm:w-20 sm:rounded-2xl sm:shadow-xl">
+            <div className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl bg-gradient-to-br from-emerald-500 via-teal-500 to-sky-500 shadow-lg shadow-emerald-500/30 sm:h-20 sm:w-20 sm:rounded-2xl sm:shadow-xl">
               <div className="absolute inset-0 bg-white/10" />
               <div className="text-center">
                 <div className="text-xl font-bold text-white sm:text-3xl">{offersCount}</div>

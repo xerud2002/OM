@@ -33,7 +33,7 @@ export default function Document() {
             __html: `
               h1{font-weight:800;letter-spacing:-.025em;color:#0f172a}
               .text-emerald-600{color:#059669}
-              .bg-linear-to-br{background:linear-gradient(to bottom right,#f8fafc,#fff,rgba(236,253,245,.3))}
+              .bg-gradient-to-br{background:linear-gradient(to bottom right,#f8fafc,#fff,rgba(236,253,245,.3))}
             `,
           }}
         />

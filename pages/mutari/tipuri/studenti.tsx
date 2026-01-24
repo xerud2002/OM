@@ -66,7 +66,7 @@ export default function MutariStudentiPage() {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-linear-to-br from-orange-500 via-orange-600 to-red-600 py-20">
+        <section className="relative overflow-hidden bg-gradient-to-br from-orange-500 via-orange-600 to-red-600 py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
@@ -82,7 +82,7 @@ export default function MutariStudentiPage() {
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Mutări pentru{" "}
-              <span className="bg-linear-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">
                 Studenți
               </span>
             </h1>
@@ -146,7 +146,7 @@ export default function MutariStudentiPage() {
           </section>
 
           {/* Student Scenarios */}
-          <section className="mb-12 rounded-2xl bg-linear-to-r from-orange-50 to-red-50 p-8">
+          <section className="mb-12 rounded-2xl bg-gradient-to-r from-orange-50 to-red-50 p-8">
             <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <BookOpen className="h-7 w-7 text-orange-600" />
               Scenarii tipice pentru studenți
@@ -241,7 +241,7 @@ export default function MutariStudentiPage() {
           </section>
 
           {/* Tips */}
-          <section className="mb-12 rounded-2xl bg-linear-to-r from-amber-50 to-yellow-50 p-8">
+          <section className="mb-12 rounded-2xl bg-gradient-to-r from-amber-50 to-yellow-50 p-8">
             <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Star className="h-7 w-7 text-amber-600" />
               Sfaturi pentru mutarea de student
@@ -308,7 +308,7 @@ export default function MutariStudentiPage() {
           <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Studenți" />
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-linear-to-r from-orange-500 to-red-500 p-8 text-center text-white">
+          <section className="rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Gata de mutare, coleg(ă)?</h2>
             <p className="mb-8 text-lg text-orange-100">
               Primește oferte gratuite în 24h și vezi cât economisești!

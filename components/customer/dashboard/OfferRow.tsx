@@ -62,13 +62,13 @@ export default function OfferRow({ index, requestId, offer, onAccept, onDecline 
       className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
       {/* Gradient accent */}
-      <div className="absolute inset-x-0 top-0 h-1 bg-linear-to-r from-emerald-500 to-sky-500" />
+      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 to-sky-500" />
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Company info */}
         <div className="flex-1">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white shadow-lg shadow-emerald-500/30">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white shadow-lg shadow-emerald-500/30">
               {offer.companyName?.charAt(0)?.toUpperCase() || "F"}
             </div>
             <div>
@@ -96,7 +96,7 @@ export default function OfferRow({ index, requestId, offer, onAccept, onDecline 
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onAccept(requestId, offer.id)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
               <CheckCircle2 size={16} />
               Acceptă
@@ -140,7 +140,7 @@ export default function OfferRow({ index, requestId, offer, onAccept, onDecline 
             </button>
             <button
               onClick={sendMessage}
-              className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-xl"
+              className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-xl"
             >
               Trimite
             </button>

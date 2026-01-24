@@ -213,7 +213,7 @@ export default function EditRequestModal({
               className="relative max-h-[90vh] w-full max-w-5xl overflow-hidden rounded-2xl bg-white shadow-2xl"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-gray-200 bg-linear-to-r from-emerald-50 to-sky-50 px-6 py-4">
+              <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-6 py-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Modifică cererea</h2>
                   <p className="mt-1 text-sm text-gray-600">Actualizează detaliile mutării tale</p>
@@ -257,7 +257,7 @@ export default function EditRequestModal({
                     {/* Media Management Section */}
                     {(existingMediaUrls.length > 0 ||
                       (form.mediaFiles && form.mediaFiles.length > 0)) && (
-                      <div className="mb-6 rounded-xl border border-amber-200 bg-linear-to-br from-amber-50 to-white p-5">
+                      <div className="mb-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-5">
                         <div className="mb-4 flex items-center gap-2">
                           <ImageIcon size={20} className="text-amber-600" />
                           <h3 className="text-lg font-semibold text-gray-900">Poze și video</h3>
@@ -380,7 +380,7 @@ export default function EditRequestModal({
                   <button
                     onClick={handleSave}
                     disabled={isSaving}
-                    className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-emerald-600 to-emerald-500 px-5 py-2 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100"
+                    className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-500 px-5 py-2 font-semibold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl disabled:opacity-50 disabled:hover:scale-100"
                   >
                     {isSaving ? (
                       <>

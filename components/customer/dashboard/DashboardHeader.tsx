@@ -20,7 +20,7 @@ export default function DashboardHeader({
   onNewRequest,
 }: Props) {
   return (
-    <div className="relative overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-emerald-900">
+    <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
       {/* Animated gradient orbs */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-10 -left-20 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
@@ -34,7 +34,7 @@ export default function DashboardHeader({
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}>
             <h1 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
               Bună,{" "}
-              <span className="bg-linear-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
                 {displayName || "Client"}
               </span>
               !
@@ -47,7 +47,7 @@ export default function DashboardHeader({
             initial={{ opacity: 0, x: 20 }}
             animate={{ opacity: 1, x: 0 }}
             onClick={onNewRequest}
-            className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40 active:scale-95 w-full md:w-auto"
+            className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40 active:scale-95 w-full md:w-auto"
           >
             <PlusSquare size={20} className="sm:w-5.5 sm:h-5.5 transition-transform group-hover:rotate-90" />
             Cerere nouă
@@ -68,7 +68,7 @@ export default function DashboardHeader({
                 <p className="mt-2 text-4xl font-bold text-white">{activeRequestsCount}</p>
                 <p className="mt-1 text-xs text-slate-400">În așteptarea ofertelor</p>
               </div>
-              <div className="rounded-xl bg-linear-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
+              <div className="rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
                 <List size={26} className="text-emerald-400" />
               </div>
             </div>
@@ -88,7 +88,7 @@ export default function DashboardHeader({
                 <p className="mt-2 text-4xl font-bold text-white">{totalOffersCount}</p>
                 <p className="mt-1 text-xs text-slate-400">De la firme verificate</p>
               </div>
-              <div className="rounded-xl bg-linear-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
+              <div className="rounded-xl bg-gradient-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
                 <Inbox size={26} className="text-sky-400" />
               </div>
             </div>
@@ -108,7 +108,7 @@ export default function DashboardHeader({
                 <p className="mt-2 text-4xl font-bold text-white">{archivedCount}</p>
                 <p className="mt-1 text-xs text-slate-400">Cereri finalizate</p>
               </div>
-              <div className="rounded-xl bg-linear-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">
+              <div className="rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">
                 <ArchiveIcon size={26} className="text-amber-400" />
               </div>
             </div>

@@ -115,7 +115,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
               className="absolute top-full right-0 z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-gray-200 bg-linear-to-r from-emerald-50 to-white px-4 py-3">
+              <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-white px-4 py-3">
                 <div>
                   <h3 className="font-semibold text-gray-900">Notificări</h3>
                   {unreadCount > 0 && (

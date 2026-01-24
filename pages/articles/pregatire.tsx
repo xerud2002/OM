@@ -57,7 +57,7 @@ export default function ArticlePregatire() {
           <header className="mb-12 text-center">
             <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
               Cum să Te Pregătești pentru Mutare:{" "}
-              <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Ghid Complet
               </span>
             </h1>
@@ -557,7 +557,7 @@ export default function ArticlePregatire() {
           </section>
 
           {/* Tips for Efficiency */}
-          <section className="mb-16 rounded-lg bg-linear-to-r from-emerald-50 to-blue-50 p-8">
+          <section className="mb-16 rounded-lg bg-gradient-to-r from-emerald-50 to-blue-50 p-8">
             <h2 className="mb-6 text-3xl font-bold text-gray-800">
               Sfaturi pentru o Mutare Ultra-Eficientă
             </h2>

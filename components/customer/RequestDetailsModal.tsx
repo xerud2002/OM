@@ -103,7 +103,7 @@ export default function RequestDetailsModal({
               className="relative mb-4 max-h-[90vh] w-full max-w-3xl overflow-hidden rounded-2xl bg-white shadow-2xl"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-gray-200 bg-linear-to-r from-emerald-50 to-sky-50 px-6 py-4">
+              <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-6 py-4">
                 <div>
                   <h2 className="text-2xl font-bold text-gray-900">Detalii cerere</h2>
                   <p className="mt-1 text-sm text-gray-600">
@@ -123,7 +123,7 @@ export default function RequestDetailsModal({
               {/* Content */}
               <div className="max-h-[calc(90vh-180px)] overflow-y-auto p-6">
                 {/* Route Section */}
-                <div className="mb-6 rounded-xl border border-emerald-100 bg-linear-to-br from-emerald-50 to-white p-5">
+                <div className="mb-6 rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5">
                   <div className="mb-4 flex items-center gap-2">
                     <MapPin size={20} className="text-emerald-600" />
                     <h3 className="text-lg font-semibold text-gray-900">Traseu</h3>
@@ -254,7 +254,7 @@ export default function RequestDetailsModal({
                   request.serviceDisassembly ||
                   request.serviceCleanout ||
                   request.serviceStorage) && (
-                  <div className="mb-6 rounded-xl border border-purple-100 bg-linear-to-br from-purple-50 to-white p-5">
+                  <div className="mb-6 rounded-xl border border-purple-100 bg-gradient-to-br from-purple-50 to-white p-5">
                     <div className="mb-3 flex items-center gap-2">
                       <Wrench size={20} className="text-purple-600" />
                       <h3 className="text-lg font-semibold text-gray-900">Servicii solicitate</h3>

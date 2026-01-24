@@ -132,9 +132,9 @@ export default function CompanyDashboard() {
 
   return (
     <RequireRole allowedRole="company">
-      <main className="min-h-screen bg-linear-to-b from-slate-50 via-white to-slate-50">
+      <main className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-50">
         {/* Hero Header */}
-        <section className="relative overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 pt-28 pb-16 sm:pt-32 sm:pb-20">
+        <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 pt-28 pb-16 sm:pt-32 sm:pb-20">
           {/* Background elements */}
           <div className="pointer-events-none absolute inset-0">
             <div className="absolute top-0 left-1/4 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-500/10 blur-[100px]" />
@@ -155,7 +155,7 @@ export default function CompanyDashboard() {
                 </div>
                 <h1 className="mb-3 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
                   Bine ai revenit,{" "}
-                  <span className="bg-linear-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-emerald-400 to-teal-400 bg-clip-text text-transparent">
                     {company?.displayName || "Partener"}
                   </span>
                 </h1>
@@ -201,7 +201,7 @@ export default function CompanyDashboard() {
                 {activeTab === "requests" && (
                   <motion.div
                     layoutId="activeCompanyTab"
-                    className="absolute inset-0 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 shadow-lg"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -217,7 +217,7 @@ export default function CompanyDashboard() {
                 {activeTab === "offers" && (
                   <motion.div
                     layoutId="activeCompanyTab"
-                    className="absolute inset-0 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 shadow-lg"
+                    className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                   />
                 )}
@@ -300,7 +300,7 @@ export default function CompanyDashboard() {
                     transition={{ duration: 0.4, delay: i * 0.1 }}
                   >
                     <div
-                      className={`group relative overflow-hidden rounded-2xl bg-linear-to-br ${stat.gradient} p-5 text-white shadow-lg transition-transform hover:scale-[1.02]`}
+                      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.gradient} p-5 text-white shadow-lg transition-transform hover:scale-[1.02]`}
                     >
                       {/* Background decoration */}
                       <div className="absolute -top-4 -right-4 h-20 w-20 rounded-full bg-white/10 blur-xl" />
@@ -327,7 +327,7 @@ export default function CompanyDashboard() {
                 transition={{ duration: 0.4, delay: 0.4 }}
                 className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
               >
-                <div className="border-b border-slate-100 bg-linear-to-r from-slate-50 to-white px-6 py-4">
+                <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-6 py-4">
                   <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
                     <Send className="h-5 w-5 text-emerald-600" />
                     Ofertele mele
@@ -385,10 +385,10 @@ export default function CompanyDashboard() {
                         <div
                           className={`w-1.5 ${
                             offer.status === "accepted"
-                              ? "bg-linear-to-b from-emerald-500 to-teal-500"
+                              ? "bg-gradient-to-b from-emerald-500 to-teal-500"
                               : offer.status === "rejected" || offer.status === "declined"
-                                ? "bg-linear-to-b from-rose-500 to-pink-500"
-                                : "bg-linear-to-b from-amber-500 to-orange-500"
+                                ? "bg-gradient-to-b from-rose-500 to-pink-500"
+                                : "bg-gradient-to-b from-amber-500 to-orange-500"
                           }`}
                         />
 
@@ -432,7 +432,7 @@ export default function CompanyDashboard() {
                                 </span>
                               </div>
                             </div>
-                            <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-50 to-teal-50 px-4 py-2">
+                            <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-2">
                               <TrendingUp className="h-4 w-4 text-emerald-600" />
                               <span className="text-lg font-bold text-emerald-700">
                                 {offer.price ?? "—"} lei
@@ -491,7 +491,7 @@ export default function CompanyDashboard() {
                                         setEditingId(null);
                                       }}
                                       disabled={savingId === offer.id}
-                                      className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-xl disabled:opacity-60"
+                                      className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-xl disabled:opacity-60"
                                     >
                                       <Save className="h-4 w-4" />
                                       {savingId === offer.id ? "Se salvează..." : "Salvează"}
@@ -566,7 +566,7 @@ export default function CompanyDashboard() {
                   </p>
                   <button
                     onClick={() => setActiveTab("requests")}
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:shadow-xl"
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 font-semibold text-white shadow-lg transition hover:shadow-xl"
                   >
                     <FileText className="h-5 w-5" />
                     Vezi cererile disponibile

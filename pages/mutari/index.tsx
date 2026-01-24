@@ -95,7 +95,7 @@ export default function MutariIndexPage() {
 
       <LayoutWrapper>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-linear-to-br from-purple-600 via-purple-700 to-violet-800 py-20">
+        <section className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-purple-700 to-violet-800 py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
@@ -104,7 +104,7 @@ export default function MutariIndexPage() {
           <div className="relative mx-auto max-w-6xl px-4 text-center">
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Servicii Complete de{" "}
-              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Mutări
               </span>
             </h1>
@@ -204,7 +204,7 @@ export default function MutariIndexPage() {
           </section>
 
           {/* CTA */}
-          <section className="rounded-2xl bg-linear-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-gradient-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Gata să începi?</h2>
             <p className="mb-8 text-lg text-purple-100">
               Primește 3-5 oferte gratuite în 24h și economisește până la 40%.

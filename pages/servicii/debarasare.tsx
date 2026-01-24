@@ -47,7 +47,7 @@ export default function DebarasarePage() {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-linear-to-br from-green-700 via-emerald-700 to-teal-800 py-20">
+        <section className="relative overflow-hidden bg-gradient-to-br from-green-700 via-emerald-700 to-teal-800 py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
@@ -61,7 +61,7 @@ export default function DebarasarePage() {
 
             <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
               Debarasare{" "}
-              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Mobilă & Gunoi
               </span>
             </h1>
@@ -118,7 +118,7 @@ export default function DebarasarePage() {
           </section>
 
           {/* What We Remove */}
-          <section className="mb-12 rounded-2xl bg-linear-to-r from-green-50 to-emerald-50 p-8">
+          <section className="mb-12 rounded-2xl bg-gradient-to-r from-green-50 to-emerald-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Package className="h-7 w-7 text-green-600" />
               Ce evacuăm?
@@ -204,7 +204,7 @@ export default function DebarasarePage() {
           <FAQSection items={faqItems} title="Întrebări Frecvente - Debarasare" />
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-linear-to-r from-green-700 to-emerald-700 p-8 text-center text-white">
+          <section className="rounded-2xl bg-gradient-to-r from-green-700 to-emerald-700 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">
               Scapă de mobilă veche și gunoi!
             </h2>

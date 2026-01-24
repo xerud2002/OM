@@ -61,9 +61,9 @@ const mediaOptions: { value: MediaUpload; label: string; desc: string; icon: Rea
 
 export default function MediaSection({ form, setForm }: Props) {
   return (
-    <div className="rounded-xl border border-pink-200 bg-linear-to-br from-pink-50 to-white p-6">
+    <div className="rounded-xl border border-pink-200 bg-gradient-to-br from-pink-50 to-white p-6">
       <div className="mb-5 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-pink-500 to-pink-600 shadow-lg">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 shadow-lg">
           <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"

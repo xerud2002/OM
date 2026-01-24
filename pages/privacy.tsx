@@ -37,12 +37,12 @@ export default function PrivacyPage() {
         <div className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex rounded-full bg-linear-to-r from-blue-100 to-indigo-100 p-3 shadow-sm">
+            <div className="mb-4 inline-flex rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 p-3 shadow-sm">
               <Shield className="h-8 w-8 text-blue-600" />
             </div>
             <h1 className="mb-4 text-4xl font-bold text-slate-900">
               Politica de{" "}
-              <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Confidențialitate
               </span>
             </h1>

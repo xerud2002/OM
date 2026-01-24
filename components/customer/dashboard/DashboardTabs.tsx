@@ -51,7 +51,7 @@ export default function DashboardTabs({ activeTab, onTabChange, totalOffers }: P
             {tab.icon}
             <span>{tab.label}</span>
             {tab.badge && (
-              <span className="rounded-full bg-linear-to-r from-emerald-500 to-teal-500 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
+              <span className="rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 px-2.5 py-0.5 text-xs font-bold text-white shadow-sm">
                 {tab.badge}
               </span>
             )}

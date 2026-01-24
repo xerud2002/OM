@@ -28,11 +28,11 @@ export default function LocationSection({ type, form, setForm }: Props) {
   const isFrom = type === "from";
   const borderColor = isFrom ? "border-emerald-200" : "border-sky-200";
   const bgGradient = isFrom
-    ? "bg-linear-to-br from-emerald-50 to-white"
-    : "bg-linear-to-br from-sky-50 to-white";
+    ? "bg-gradient-to-br from-emerald-50 to-white"
+    : "bg-gradient-to-br from-sky-50 to-white";
   const iconBg = isFrom
-    ? "bg-linear-to-br from-emerald-500 to-emerald-600"
-    : "bg-linear-to-br from-sky-500 to-sky-600";
+    ? "bg-gradient-to-br from-emerald-500 to-emerald-600"
+    : "bg-gradient-to-br from-sky-500 to-sky-600";
   const inputFocusColor = isFrom
     ? "focus:border-emerald-500 focus:ring-emerald-500/20"
     : "focus:border-sky-500 focus:ring-sky-500/20";

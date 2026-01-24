@@ -45,9 +45,9 @@ export default function DateContactSection({ form, setForm }: Props) {
   return (
     <div className="space-y-6">
       {/* Move Date Section */}
-      <div className="rounded-xl border border-cyan-200 bg-linear-to-br from-cyan-50 to-white p-6">
+      <div className="rounded-xl border border-cyan-200 bg-gradient-to-br from-cyan-50 to-white p-6">
         <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-cyan-500 to-cyan-600 shadow-lg">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cyan-500 to-cyan-600 shadow-lg">
             <svg
               className="h-5 w-5 text-white"
               fill="none"
@@ -210,9 +210,9 @@ export default function DateContactSection({ form, setForm }: Props) {
       </div>
 
       {/* Contact Section */}
-      <div className="rounded-xl border border-indigo-200 bg-linear-to-br from-indigo-50 to-white p-6">
+      <div className="rounded-xl border border-indigo-200 bg-gradient-to-br from-indigo-50 to-white p-6">
         <div className="mb-5 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-indigo-500 to-indigo-600 shadow-lg">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-500 to-indigo-600 shadow-lg">
             <svg
               className="h-5 w-5 text-white"
               fill="none"

@@ -37,12 +37,12 @@ export default function GuideMutare() {
         <div className="mx-auto max-w-6xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex rounded-full bg-linear-to-br from-emerald-100 to-blue-100 p-4">
+            <div className="mb-4 inline-flex rounded-full bg-gradient-to-br from-emerald-100 to-blue-100 p-4">
               <BookOpen className="h-10 w-10 text-emerald-600" />
             </div>
             <h1 className="mb-4 text-4xl font-bold text-slate-900">
               Ghidul Complet pentru{" "}
-              <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Mutarea Ta
               </span>
             </h1>
@@ -53,7 +53,7 @@ export default function GuideMutare() {
           </div>
 
           {/* Why Follow Guide */}
-          <div className="mb-12 rounded-xl bg-linear-to-br from-emerald-50 to-blue-50 p-8">
+          <div className="mb-12 rounded-xl bg-gradient-to-br from-emerald-50 to-blue-50 p-8">
             <h2 className="mb-6 text-center text-2xl font-bold text-gray-800">
               De Ce Să Urmezi Acest Ghid?
             </h2>
@@ -95,7 +95,7 @@ export default function GuideMutare() {
               href="/articles/pregatire"
               className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
-              <div className="bg-linear-to-br from-emerald-500 to-emerald-600 p-6 text-white">
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Clipboard className="h-8 w-8" />
                 </div>
@@ -133,7 +133,7 @@ export default function GuideMutare() {
               href="/articles/impachetare"
               className="group overflow-hidden rounded-xl border-2 border-blue-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
-              <div className="bg-linear-to-br from-blue-500 to-blue-600 p-6 text-white">
+              <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Package className="h-8 w-8" />
                 </div>
@@ -171,7 +171,7 @@ export default function GuideMutare() {
               href="/articles/survey"
               className="group overflow-hidden rounded-xl border-2 border-purple-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
-              <div className="bg-linear-to-br from-purple-500 to-purple-600 p-6 text-white">
+              <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Clipboard className="h-8 w-8" />
                 </div>
@@ -209,7 +209,7 @@ export default function GuideMutare() {
               href="/articles/tips"
               className="group overflow-hidden rounded-xl border-2 border-amber-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
-              <div className="bg-linear-to-br from-amber-500 to-amber-600 p-6 text-white">
+              <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Lightbulb className="h-8 w-8" />
                 </div>
@@ -301,7 +301,7 @@ export default function GuideMutare() {
           </div>
 
           {/* CTA Section */}
-          <div className="rounded-xl bg-linear-to-r from-emerald-600 to-blue-600 p-8 text-center text-white shadow-xl">
+          <div className="rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white shadow-xl">
             <h2 className="mb-4 text-3xl font-bold">Gata să Începi Mutarea?</h2>
             <p className="mb-6 text-lg text-emerald-50">
               Solicită oferte personalizate de la firmele de mutări verificate din zona ta

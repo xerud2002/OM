@@ -83,7 +83,7 @@ export default function MediaUploadSection({ form, setForm }: Props) {
   return (
     <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-6">
       <div className="mb-5 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-500 to-blue-600 shadow-lg">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
           <svg className="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               strokeLinecap="round"
@@ -109,7 +109,7 @@ export default function MediaUploadSection({ form, setForm }: Props) {
                 key={opt.value}
                 className={`group relative cursor-pointer overflow-hidden rounded-xl border-2 bg-white transition-all duration-200 ${
                   isSelected
-                    ? "border-blue-500 bg-linear-to-br from-blue-50 to-white shadow-md"
+                    ? "border-blue-500 bg-gradient-to-br from-blue-50 to-white shadow-md"
                     : "border-blue-200 hover:border-blue-400 hover:shadow-lg"
                 }`}
               >

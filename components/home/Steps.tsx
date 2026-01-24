@@ -87,7 +87,7 @@ export default function Steps() {
             className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl"
           >
             Cum{" "}
-            <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               funcționează?
             </span>
           </h2>
@@ -131,7 +131,7 @@ export default function Steps() {
                     blurDataURL={blurDataURL}
                   />
                   {/* Soft tint + ring for consistent card style */}
-                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-emerald-50/20 via-white/10 to-sky-50/20 mix-blend-multiply" />
+                  <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-50/20 via-white/10 to-sky-50/20 mix-blend-multiply" />
                   <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
                   {/* Glow effect on hover */}
                   <div className="absolute -inset-2 z-0 rounded-3xl bg-gradient-to-br from-emerald-200/50 via-sky-200/50 to-purple-200/50 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
