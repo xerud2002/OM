@@ -27,6 +27,17 @@ export default function Document() {
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
 
+        {/* Critical CSS for LCP - inline to avoid render-blocking */}
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              h1{font-weight:800;letter-spacing:-.025em;color:#0f172a}
+              .text-emerald-600{color:#059669}
+              .bg-linear-to-br{background:linear-gradient(to bottom right,#f8fafc,#fff,rgba(236,253,245,.3))}
+            `,
+          }}
+        />
+
         {/* Google Analytics - loaded via @next/third-parties in _app.tsx */}
       </Head>
       <body>

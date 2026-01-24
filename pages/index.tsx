@@ -1,10 +1,10 @@
-"use client";
-
 import Head from "next/head";
 import dynamic from "next/dynamic";
+
+// MobileHero is critical for LCP on mobile - import statically for SSR
 import MobileHero from "@/components/home/MobileHero";
 
-// Lazy load Desktop Hero to reduce initial bundle size (it's heavy with framer-motion)
+// Lazy load Desktop Hero - heavy with framer-motion, only needed on desktop
 const Hero = dynamic(() => import("@/components/home/Hero"), {
   loading: () => <div className="hidden min-h-[85vh] bg-slate-50 md:block" />,
   ssr: true,
