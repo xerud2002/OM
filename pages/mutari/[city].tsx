@@ -83,9 +83,7 @@ export default function CityPage({ city }: CityPageProps) {
               </span>
             </h1>
 
-            <p className="mb-8 max-w-2xl text-lg text-white md:text-xl">
-              {city.heroSubtitle}
-            </p>
+            <p className="mb-8 max-w-2xl text-lg text-white md:text-xl">{city.heroSubtitle}</p>
 
             {/* Stats */}
             <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
