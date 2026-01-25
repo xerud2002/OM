@@ -231,29 +231,29 @@ export default function CustomerAuthPage() {
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="relative hidden bg-gradient-to-br from-emerald-500 via-teal-500 to-cyan-500 p-12 lg:flex lg:flex-col lg:justify-between"
+              className="relative hidden bg-emerald-50 p-12 lg:flex lg:flex-col lg:justify-between"
             >
               {/* Decorative circles */}
-              <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
-              <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
+              <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-emerald-100/50 blur-3xl" />
+              <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-emerald-100/50 blur-3xl" />
 
               <div className="relative z-10">
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.3 }}
-                  className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm"
+                  className="mb-8 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-emerald-800 shadow-sm"
                 >
-                  <Sparkles size={16} />
+                  <Sparkles size={16} className="text-emerald-600" />
                   Pentru Clienți
                 </motion.div>
 
-                <h2 className="mb-4 text-4xl font-bold text-white">
+                <h2 className="mb-4 text-4xl font-bold text-emerald-950">
                   Mutări simple,
                   <br />
-                  <span className="text-emerald-100">prețuri corecte.</span>
+                  <span className="text-emerald-600">prețuri corecte.</span>
                 </h2>
-                <p className="text-lg text-emerald-50">
+                <p className="text-lg text-emerald-700">
                   Primești până la 5 oferte de la firme verificate și alegi cea mai bună pentru
                   tine.
                 </p>
@@ -271,22 +271,22 @@ export default function CustomerAuthPage() {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.5 + i * 0.1 }}
-                    className="flex items-center gap-3 text-white"
+                    className="flex items-center gap-3 text-emerald-800"
                   >
-                    <div className="rounded-full bg-white/20 p-2 backdrop-blur-sm">
-                      <item.icon size={20} />
+                    <div className="rounded-full bg-white p-2 shadow-sm">
+                      <item.icon size={20} className="text-emerald-600" />
                     </div>
-                    <span className="text-emerald-50">{item.text}</span>
+                    <span className="font-medium">{item.text}</span>
                   </motion.div>
                 ))}
               </div>
 
               {/* Decorative illustration */}
-              <div className="absolute right-8 bottom-8 opacity-10">
+              <div className="absolute right-8 bottom-8 opacity-5">
                 <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
-                  <circle cx="100" cy="100" r="80" stroke="white" strokeWidth="2" />
-                  <circle cx="100" cy="100" r="60" stroke="white" strokeWidth="2" />
-                  <circle cx="100" cy="100" r="40" stroke="white" strokeWidth="2" />
+                  <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="2" className="text-emerald-900" />
+                  <circle cx="100" cy="100" r="60" stroke="currentColor" strokeWidth="2" className="text-emerald-900" />
+                  <circle cx="100" cy="100" r="40" stroke="currentColor" strokeWidth="2" className="text-emerald-900" />
                 </svg>
               </div>
             </motion.div>
@@ -334,11 +334,10 @@ export default function CustomerAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="email"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
-                      email
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${email
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
-                    }`}
+                      }`}
                   >
                     Adresa ta de email
                   </label>
@@ -371,11 +370,10 @@ export default function CustomerAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="password"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
-                      password
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${password
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
-                    }`}
+                      }`}
                   >
                     Parola ta
                   </label>

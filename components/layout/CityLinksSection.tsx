@@ -53,14 +53,14 @@ export default function CityLinksSection() {
             <span className="inline-block h-2 w-2 rounded-full bg-sky-500" />
             Reședințe de Județ
           </h3>
-          <div className="grid gap-2 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          <div className="grid gap-2.5 sm:gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
             {tier2Cities.map((city) => (
               <Link
                 key={city.slug}
                 href={`/mutari/${city.slug}`}
-                className="group rounded-lg border border-gray-200 bg-white px-2.5 py-2 sm:px-3 sm:py-2 text-center text-xs sm:text-sm transition-all hover:border-sky-400 hover:shadow-md active:scale-95"
+                className="group rounded-lg border border-gray-200 bg-white px-3 py-2.5 sm:px-4 sm:py-3 text-center transition-all hover:border-emerald-400 hover:shadow-md hover:-translate-y-0.5 active:scale-95"
               >
-                <span className="font-medium text-gray-800 group-hover:text-sky-600">
+                <span className="text-sm sm:text-base font-medium text-gray-900 group-hover:text-emerald-600">
                   {city.name}
                 </span>
               </Link>

@@ -63,12 +63,7 @@ export default function AboutPage() {
     },
   ];
 
-  const stats = [
-    { value: "500+", label: "Clienți mulțumiți", icon: Users },
-    { value: "50+", label: "Firme partenere", icon: Building2 },
-    { value: "40%", label: "Economie medie", icon: TrendingUp },
-    { value: "24h", label: "Timp de răspuns", icon: Clock },
-  ];
+
 
   const timeline = [
     {
@@ -334,57 +329,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Stats Section - Enhanced with Icons */}
-        <section className="relative py-20 sm:py-28">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="relative mx-auto max-w-5xl overflow-hidden rounded-4xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-8 shadow-2xl sm:p-14"
-            >
-              {/* Background effects */}
-              <div className="pointer-events-none absolute inset-0">
-                <div className="absolute -top-20 -left-20 h-60 w-60 rounded-full bg-emerald-500/10 blur-3xl" />
-                <div className="absolute -right-20 -bottom-20 h-60 w-60 rounded-full bg-sky-500/10 blur-3xl" />
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[50px_50px]" />
-              </div>
 
-              {/* Title */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="relative mb-10 text-center"
-              >
-                <h3 className="text-lg font-semibold text-emerald-400 sm:text-xl">
-                  Rezultatele vorbesc de la sine
-                </h3>
-              </motion.div>
-
-              <div className="relative grid grid-cols-2 gap-6 sm:gap-10 lg:grid-cols-4">
-                {stats.map((stat, i) => (
-                  <motion.div
-                    key={i}
-                    initial={{ opacity: 0, y: 30, scale: 0.9 }}
-                    whileInView={{ opacity: 1, y: 0, scale: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    className="group text-center"
-                  >
-                    <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500/20 to-teal-500/20 transition-transform group-hover:scale-110">
-                      <stat.icon className="h-7 w-7 text-emerald-400" />
-                    </div>
-                    <p className="mb-1 text-3xl font-bold text-white sm:text-4xl lg:text-5xl">
-                      {stat.value}
-                    </p>
-                    <p className="text-sm text-slate-400 sm:text-base">{stat.label}</p>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          </div>
-        </section>
 
         {/* Timeline Section - NEW */}
         <section className="relative py-20 sm:py-28">
@@ -423,9 +368,8 @@ export default function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.15 }}
-                    className={`relative mb-8 flex flex-col sm:mb-12 sm:flex-row ${
-                      i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
-                    }`}
+                    className={`relative mb-8 flex flex-col sm:mb-12 sm:flex-row ${i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
+                      }`}
                   >
                     {/* Content card */}
                     <div className={`w-full sm:w-1/2 ${i % 2 === 0 ? "sm:pr-12" : "sm:pl-12"}`}>

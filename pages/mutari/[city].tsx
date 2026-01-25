@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import NextImage from "next/image";
 import { GetStaticPaths, GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
@@ -10,140 +11,248 @@ import {
   Star,
   CheckCircle,
   ArrowRight,
+  ChevronLeft,
+  ChevronRight,
   Building2,
   Home,
   Calendar,
   TrendingDown,
 } from "lucide-react";
-import { getCityBySlug, getAllCitySlugs, CityData } from "@/utils/citySlugData";
+import { getCityBySlug, getAllCitySlugs, CityData, cityData } from "@/utils/citySlugData";
 
 interface CityPageProps {
   city: CityData;
+  prevCity: { slug: string; name: string } | null;
+  nextCity: { slug: string; name: string } | null;
 }
 
-// Vibrant gradient backgrounds for hero sections (8 different color combinations)
+// Romanian flag-inspired gradients for hero sections (8 variations with flag colors)
 const heroGradients = [
-  'linear-gradient(to bottom right, #059669, #047857, #115e59)', // Emerald → Teal
-  'linear-gradient(to bottom right, #2563eb, #4338ca, #7e22ce)', // Blue → Purple
-  'linear-gradient(to bottom right, #0891b2, #0369a1, #2563eb)', // Cyan → Blue
-  'linear-gradient(to bottom right, #7c3aed, #7e22ce, #c026d3)', // Violet → Fuchsia
-  'linear-gradient(to bottom right, #0d9488, #0e7490, #0284c7)', // Teal → Sky
-  'linear-gradient(to bottom right, #e11d48, #db2777, #c026d3)', // Rose → Pink
-  'linear-gradient(to bottom right, #ea580c, #d97706, #eab308)', // Orange → Yellow
-  'linear-gradient(to bottom right, #4f46e5, #2563eb, #0891b2)', // Indigo → Cyan
+  'linear-gradient(to right, #002B7F 0%, #002B7F 33%, #FCD116 33%, #FCD116 66%, #CE1126 66%, #CE1126 100%)', // Classic flag
+  'linear-gradient(135deg, #002B7F 0%, #002B7F 33%, #FCD116 33%, #FCD116 66%, #CE1126 66%, #CE1126 100%)', // Diagonal flag
+  'linear-gradient(to bottom right, #002B7F, #0039a6, #FCD116)', // Blue to yellow blend
+  'linear-gradient(to bottom right, #FCD116, #f4c430, #CE1126)', // Yellow to red blend
+  'linear-gradient(to right, rgba(0,43,127,0.9), rgba(252,209,22,0.9), rgba(206,17,38,0.9))', // Flag with transparency
+  'linear-gradient(90deg, #002B7F 20%, #FCD116 50%, #CE1126 80%)', // Centered stripes
+  'linear-gradient(to bottom right, #002B7F, #004a9f, #FCD116, #f9d71c, #CE1126)', // Multi-blend
+  'linear-gradient(to right, #001f5c 0%, #002B7F 25%, #FCD116 50%, #CE1126 75%, #b01020 100%)', // Dark edges
 ];
 
-export default function CityPage({ city }: CityPageProps) {
+// Matching text gradients for city names (pairs with hero gradients)
+const textGradients = [
+  'from-yellow-300 to-orange-300',    // Warm contrast for Emerald
+  'from-yellow-200 to-amber-300',     // Warm contrast for Blue
+  'from-yellow-300 to-orange-400',    // Warm contrast for Cyan
+  'from-pink-300 to-rose-400',        // Pink contrast for Violet
+  'from-amber-300 to-yellow-400',     // Warm contrast for Teal
+  'from-yellow-200 to-orange-300',    // Warm contrast for Rose
+  'from-white to-yellow-100',         // Light contrast for Orange
+  'from-cyan-300 to-sky-200',         // Cool contrast for Indigo
+  'from-green-300 to-lime-300',       // Added for variety
+  'from-purple-300 to-fuchsia-300',   // Added for variety
+  'from-red-300 to-orange-300',       // Added for variety
+  'from-blue-300 to-indigo-300',      // Added for variety
+];
+
+export default function CityPage({ city, prevCity, nextCity }: CityPageProps) {
   const currentYear = new Date().getFullYear();
 
   // Generate consistent gradient based on city slug (same city = same gradient)
   const gradientIndex = city.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % heroGradients.length;
   const heroGradient = heroGradients[gradientIndex];
+  // Use a different hash for text gradient to ensure more variety if heroGradients and textGradients have different lengths
+  const textGradientIndex = city.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0) * 2, 0) % textGradients.length;
+  const textGradient = textGradients[textGradientIndex];
+  // Check if city has a hero image
+  const hasHeroImage = Boolean(city.heroImage);
 
   return (
     <>
       <Head>
-        <title>{`Mutări ${city.name} ${currentYear} → Oferte Gratuite`}</title>
+        <title>{"Mutări " + city.name + " " + currentYear + " → Oferte Gratuite"}</title>
         <meta name="description" content={city.metaDescription} />
         <meta
           name="keywords"
-          content={`mutări ${city.name}, firme mutări ${city.name}, transport mobilă ${city.name}, mutări ${city.county}, servicii mutare ${city.name}`}
+          content={"mutări " + city.name + ", firme mutări " + city.name + ", transport mobilă " + city.name + ", mutări " + city.county + ", servicii mutare " + city.name}
         />
-        <link rel="canonical" href={`https://ofertemutare.ro/mutari/${city.slug}`} />
+        <link rel="canonical" href={"https://ofertemutare.ro/mutari/" + city.slug} />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content={`https://ofertemutare.ro/mutari/${city.slug}`} />
+        <meta property="og:url" content={"https://ofertemutare.ro/mutari/" + city.slug} />
         <meta
           property="og:title"
-          content={`Mutări ${city.name} ${currentYear} | Economisește până la 40%`}
+          content={"Mutări " + city.name + " " + currentYear + " | Economisește până la 40%"}
         />
         <meta property="og:description" content={city.metaDescription} />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content={`https://ofertemutare.ro/mutari/${city.slug}`} />
+        <meta name="twitter:url" content={"https://ofertemutare.ro/mutari/" + city.slug} />
         <meta
           name="twitter:title"
-          content={`Mutări ${city.name} ${currentYear} | Economisește până la 40%`}
+          content={"Mutări " + city.name + " " + currentYear + " | Economisește până la 40%"}
         />
         <meta name="twitter:description" content={city.metaDescription} />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <LayoutWrapper>
-        {/* Hero Section */}
-        <section
-          style={{
-            background: heroGradient
-          }}
-          className="relative overflow-hidden py-20"
-        >
-          {/* Decorative elements */}
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
-            <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
-            <div className="absolute top-1/2 left-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-white/5" />
-          </div>
-
-          <div className="relative mx-auto max-w-6xl px-4">
-            <div className="mb-6 flex items-center gap-2">
-              <MapPin className="h-5 w-5 text-white" />
-              <span className="text-sm font-medium text-white">
-                Județul {city.county} • {city.population} locuitori
-              </span>
-            </div>
-
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
-              Mutări în{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                {city.name}
-              </span>
-            </h1>
-
-            <p className="mb-8 max-w-2xl text-lg text-white md:text-xl">
-              {city.heroSubtitle}
-            </p>
-
-            {/* Stats */}
-            <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
-                <div className="text-3xl font-bold text-white">3-5</div>
-                <div className="text-sm text-white">Oferte în 24h</div>
-              </div>
-              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
-                <div className="text-3xl font-bold text-white">40%</div>
-                <div className="text-sm text-white">Economie medie</div>
-              </div>
-              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
-                <div className="text-3xl font-bold text-white">100%</div>
-                <div className="text-sm text-white">Gratuit</div>
-              </div>
-              <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
-                <div className="text-3xl font-bold text-white">✓</div>
-                <div className="text-sm text-white">Firme verificate</div>
-              </div>
-            </div>
-
-            {/* CTA Buttons */}
-            <div className="flex flex-col gap-4 sm:flex-row">
+        {/* Hero Section - Image background on desktop, gradient on mobile */}
+        <div className="container mx-auto px-4 py-8">
+          <div className="relative max-w-6xl mx-auto">
+            {/* Desktop Navigation Arrows (Outside) */}
+            {prevCity && (
               <Link
-                href="/customer/auth"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-emerald-700 shadow-xl transition-all hover:-translate-y-0.5 hover:bg-emerald-50 hover:shadow-2xl"
+                href={`/mutari/${prevCity.slug}`}
+                className="hidden xl:flex absolute -left-20 top-1/2 z-10 -translate-y-1/2 rounded-full border border-gray-200 bg-white p-3 text-gray-400 shadow-lg transition-all hover:border-emerald-500 hover:text-emerald-600 hover:scale-110 hover:shadow-xl"
+                title={`Înapoi la ${prevCity.name}`}
               >
-                Cere Oferte Gratuite
-                <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                <ChevronLeft className="h-8 w-8" strokeWidth={2} />
               </Link>
+            )}
+            {nextCity && (
               <Link
-                href="/faq"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/30 px-8 py-4 font-semibold text-white transition-all hover:bg-white/10"
+                href={`/mutari/${nextCity.slug}`}
+                className="hidden xl:flex absolute -right-20 top-1/2 z-10 -translate-y-1/2 rounded-full border border-gray-200 bg-white p-3 text-gray-400 shadow-lg transition-all hover:border-emerald-500 hover:text-emerald-600 hover:scale-110 hover:shadow-xl"
+                title={`Înainte la ${nextCity.name}`}
               >
-                Cum funcționează?
+                <ChevronRight className="h-8 w-8" strokeWidth={2} />
               </Link>
-            </div>
+            )}
+
+            <section
+              className="group relative overflow-hidden rounded-3xl min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-5xl mx-auto"
+            >
+              {/* Background: Hidden on mobile (except for color), visible as image on desktop */}
+              <div
+                className="absolute inset-0 bg-slate-900"
+                style={{
+                  backgroundImage: hasHeroImage
+                    ? `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(${city.heroImage})`
+                    : 'none',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
+                  backgroundRepeat: 'no-repeat'
+                }}
+              >
+                {/* Mobile overlay to hide the desktop background image but keep the color */}
+                <div className="absolute inset-0 bg-slate-900 lg:hidden" />
+              </div>
+
+              {/* Decorative elements */}
+              <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
+                <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
+              </div>
+
+              {/* Mobile Navigation Arrows (Overlay) - Hidden on XL */}
+              {prevCity && (
+                <Link
+                  href={`/mutari/${prevCity.slug}`}
+                  className="xl:hidden absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-black/20 p-2 text-white/40 backdrop-blur-sm transition-all hover:bg-emerald-500/80 hover:text-white md:left-6 opacity-60 hover:opacity-100"
+                  title={`Înapoi la ${prevCity.name}`}
+                >
+                  <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2.5} />
+                </Link>
+              )}
+              {nextCity && (
+                <Link
+                  href={`/mutari/${nextCity.slug}`}
+                  className="xl:hidden absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-black/20 p-2 text-white/40 backdrop-blur-sm transition-all hover:bg-emerald-500/80 hover:text-white md:right-6 opacity-60 hover:opacity-100"
+                  title={`Înainte la ${nextCity.name}`}
+                >
+                  <ChevronRight className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2.5} />
+                </Link>
+              )}
+
+              {/* Content */}
+              <div className="relative z-10 mx-auto w-full max-w-4xl px-4 md:px-0">
+                <div className="mb-6 flex items-center justify-center gap-2 pt-6 md:justify-start md:pt-0">
+                  <MapPin className="h-5 w-5 text-white drop-shadow-md" />
+                  <span className="text-sm font-medium text-white drop-shadow-md">
+                    Județul {city.county} • {city.population} locuitori
+                  </span>
+                </div>
+
+                <h1 className="mb-6 text-center text-4xl font-extrabold text-white drop-shadow-lg md:text-left md:text-5xl lg:text-6xl">
+                  <span className="text-white">Mutări în </span>
+                  <span className="relative inline-block">
+                    <span className={`bg-gradient-to-r ${textGradient} bg-clip-text text-transparent`}>
+                      {city.name}
+                    </span>
+                    {/* Decorative underline */}
+                    <span
+                      className={`absolute -bottom-2 left-0 h-1 w-full bg-gradient-to-r ${textGradient} rounded-full`}
+                      style={{ opacity: 0.6 }}
+                    />
+                  </span>
+                </h1>
+
+                <p className="mx-auto mb-8 max-w-2xl text-center text-lg text-white md:mx-0 md:text-left md:text-xl">
+                  {city.heroSubtitle}
+                </p>
+
+                {/* Mobile only: Image card displayed below text */}
+                {hasHeroImage && (
+                  <div className="mb-8 lg:hidden block">
+                    <div className="relative overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10">
+                      <NextImage
+                        src={city.heroImage!}
+                        alt={`${city.name} - ${city.landmarks[0]}`}
+                        width={800}
+                        height={600}
+                        className="w-full h-auto"
+                        priority
+                      />
+                      <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                        <p className="text-sm font-semibold text-white">{city.landmarks[0]}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Stats */}
+                <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                  <div className="rounded-2xl border border-white/20 bg-transparent p-4 text-center transition-transform hover:scale-105">
+                    <div className="text-3xl font-bold text-white">3-5</div>
+                    <div className="text-sm text-white/90">Oferte în 24h</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/20 bg-transparent p-4 text-center transition-transform hover:scale-105">
+                    <div className="text-3xl font-bold text-white">40%</div>
+                    <div className="text-sm text-white/90">Economie medie</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/20 bg-transparent p-4 text-center transition-transform hover:scale-105">
+                    <div className="text-3xl font-bold text-white">100%</div>
+                    <div className="text-sm text-white/90">Gratuit</div>
+                  </div>
+                  <div className="rounded-2xl border border-white/20 bg-transparent p-4 text-center transition-transform hover:scale-105">
+                    <div className="text-3xl font-bold text-white">✓</div>
+                    <div className="text-sm text-white/90">Firme verificate</div>
+                  </div>
+                </div>
+
+                {/* CTA Buttons */}
+                <div className="flex flex-col gap-4 sm:flex-row pb-6 md:pb-0">
+                  <Link
+                    href="/customer/auth"
+                    className="group inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-white px-8 py-4 font-bold text-emerald-700 shadow-xl transition-all hover:shadow-2xl sm:w-auto"
+                  >
+                    Cere Oferte Gratuite
+                    <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                  </Link>
+                  <Link
+                    href="/faq"
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-2xl border-2 border-white/30 px-8 py-4 font-semibold text-white transition-all hover:bg-white/10 sm:w-auto"
+                  >
+                    Cum funcționează?
+                  </Link>
+                </div>
+              </div>
+            </section>
           </div>
-        </section>
+        </div>
 
         {/* Main Article Content */}
         <article className="mx-auto max-w-4xl px-4 py-16">
@@ -504,7 +613,16 @@ export const getStaticProps: GetStaticProps<CityPageProps> = async ({ params }) 
     return { notFound: true };
   }
 
+  // Find previous and next cities for navigation
+  const currentIndex = cityData.findIndex((c) => c.slug === slug);
+  // Ensure strict non-negative modulo result
+  const prevIndex = (currentIndex - 1 + cityData.length) % cityData.length;
+  const nextIndex = (currentIndex + 1) % cityData.length;
+
+  const prevCity = { slug: cityData[prevIndex].slug, name: cityData[prevIndex].name };
+  const nextCity = { slug: cityData[nextIndex].slug, name: cityData[nextIndex].name };
+
   return {
-    props: { city },
+    props: { city, prevCity, nextCity },
   };
 };
