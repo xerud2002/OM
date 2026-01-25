@@ -127,10 +127,10 @@ export default function CityPage({ city, prevCity, nextCity }: CityPageProps) {
             >
               {/* Background: Hidden on mobile (except for color), visible as image on desktop */}
               <div
-                className="absolute inset-0 bg-slate-900"
+                className={`absolute inset-0 ${hasHeroImage ? 'bg-slate-900' : 'bg-gradient-to-r from-green-600 to-blue-600'}`}
                 style={{
                   backgroundImage: hasHeroImage
-                    ? `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.5)), url(${city.heroImage})`
+                    ? `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url("${city.heroImage}")`
                     : 'none',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
@@ -138,7 +138,7 @@ export default function CityPage({ city, prevCity, nextCity }: CityPageProps) {
                 }}
               >
                 {/* Mobile overlay to hide the desktop background image but keep the color */}
-                <div className="absolute inset-0 bg-slate-900 lg:hidden" />
+                {hasHeroImage && <div className="absolute inset-0 bg-slate-900 lg:hidden" />}
               </div>
 
               {/* Decorative elements */}
