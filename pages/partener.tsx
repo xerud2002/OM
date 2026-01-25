@@ -206,7 +206,10 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
       </Head>
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 py-20">
+      <section
+        className="relative overflow-hidden py-20"
+        style={{ background: "linear-gradient(135deg, #16a34a 0%, #3b82f6 100%)" }}
+      >
         <div className="absolute inset-0 bg-[url('/pics/pattern.svg')] opacity-10" />
         <div className="relative mx-auto max-w-6xl px-4">
           <div className="grid items-center gap-12 lg:grid-cols-2">
@@ -357,9 +360,8 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
               {steps.map((step, index) => (
                 <div
                   key={step.number}
-                  className={`relative flex flex-col items-center gap-4 lg:flex-row ${
-                    index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                  }`}
+                  className={`relative flex flex-col items-center gap-4 lg:flex-row ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                    }`}
                 >
                   <div
                     className={`w-full lg:w-5/12 ${index % 2 === 0 ? "lg:text-right" : "lg:text-left"}`}
@@ -381,7 +383,10 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-br from-emerald-600 to-teal-600 py-20">
+      <section
+        className="py-20"
+        style={{ background: "linear-gradient(135deg, #16a34a 0%, #3b82f6 100%)" }}
+      >
         <div className="mx-auto max-w-4xl px-4 text-center">
           <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
             Gata să Crești Afacerea?

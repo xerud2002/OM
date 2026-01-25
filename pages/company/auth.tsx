@@ -141,7 +141,7 @@ export default function CompanyAuthPage() {
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="relative hidden bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600 p-12 lg:flex lg:flex-col lg:justify-between"
+              className="relative hidden bg-blue-600 bg-gradient-to-br from-blue-600 to-blue-800 p-12 lg:flex lg:flex-col lg:justify-between"
             >
               {/* Decorative circles */}
               <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
@@ -266,11 +266,10 @@ export default function CompanyAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="company-email"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
-                      email
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${email
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-blue-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-blue-600"
-                    }`}
+                      }`}
                   >
                     Email firmă
                   </label>
@@ -303,11 +302,10 @@ export default function CompanyAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="company-password"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
-                      password
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${password
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-blue-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-blue-600"
-                    }`}
+                      }`}
                   >
                     Parolă
                   </label>

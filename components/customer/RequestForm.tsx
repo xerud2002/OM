@@ -100,10 +100,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-emerald-50/30 p-4 shadow-lg sm:p-6">
-      <div className="mb-6 flex items-center gap-3 border-b border-emerald-100 pb-4">
+    <div className="rounded-2xl border border-gray-200 bg-gradient-to-br from-white to-green-50/30 p-4 shadow-lg sm:p-6">
+      <div className="mb-6 flex items-center gap-3 border-b border-green-100 pb-4">
         <svg
-          className="h-6 w-6 text-emerald-600"
+          className="h-6 w-6 text-green-600"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -122,14 +122,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         {/* Pickup & Destination - side by side on desktop */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
           {/* Pickup Location */}
-          <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+          <div className="rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
+                style={{ backgroundColor: "#dcfce7" }} // bg-green-100
+              >
                 <svg
                   className="h-5 w-5"
+                  style={{ color: "#16a34a" }} // text-green-600
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="white"
+                  stroke="currentColor"
                 >
                   <path
                     strokeLinecap="round"
@@ -163,7 +167,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   onChange={(e) =>
                     setForm((s) => ({ ...s, fromCounty: e.target.value, fromCity: "" }))
                   }
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
                 >
                   <option value="">Selectează județ</option>
                   {counties.map((c) => (
@@ -188,7 +192,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       fromCityManual: value === "__other__",
                     }));
                   }}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
                   disabled={!form.fromCounty}
                 >
                   <option value="">Selectează localitatea</option>
@@ -205,18 +209,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     value={form.fromCity === "__other__" ? "" : form.fromCity || ""}
                     onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
                     placeholder="Introdu localitatea"
-                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
                   />
                 )}
               </div>
             </div>
 
             {/* Property Details */}
-            <div className="rounded-lg border border-emerald-100 bg-white p-3">
+            <div className="rounded-lg border border-green-100 bg-white p-3">
               <div className="mb-2 flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-emerald-100">
+                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-green-100">
                   <svg
-                    className="h-4 w-4 text-emerald-600"
+                    className="h-4 w-4 text-green-600"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -229,7 +233,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     />
                   </svg>
                 </div>
-                <span className="text-xs font-semibold text-emerald-900">Detalii proprietate</span>
+                <span className="text-xs font-semibold text-green-900">Detalii proprietate</span>
               </div>
               <div className="grid gap-2" style={{ gridTemplateColumns: "2fr 1fr 1fr" }}>
                 <div>
@@ -239,7 +243,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <select
                     value={form.fromType || "flat"}
                     onChange={(e) => setForm((s) => ({ ...s, fromType: e.target.value as any }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-green-500 focus:outline-none"
                   >
                     <option value="flat">Apartament</option>
                     <option value="house">Casă</option>
@@ -258,7 +262,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       setForm((s) => ({ ...s, fromRooms: e.target.value.replace(/\D/g, "") }))
                     }
                     placeholder="ex: 2"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-green-500 focus:ring-2 focus:ring-green-500/20 focus:outline-none"
                   />
                 </div>
                 {form.fromType === "house" && (
@@ -274,7 +278,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         setForm((s) => ({ ...s, fromFloor: e.target.value.replace(/\D/g, "") }))
                       }
                       placeholder="ex: 2"
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-emerald-500 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-green-500 focus:outline-none"
                     />
                   </div>
                 )}
@@ -287,7 +291,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       value={form.fromFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
                       placeholder="ex: 3"
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-emerald-500 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-green-500 focus:outline-none"
                     />
                   </div>
                 )}
@@ -301,22 +305,20 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     <button
                       type="button"
                       onClick={() => setForm((s) => ({ ...s, fromElevator: true }))}
-                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${
-                        form.fromElevator === true
-                          ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                          : "border-gray-300 bg-white text-gray-600 hover:border-emerald-300"
-                      }`}
+                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${form.fromElevator === true
+                        ? "border-green-500 bg-green-50 text-green-700"
+                        : "border-gray-300 bg-white text-gray-600 hover:border-green-300"
+                        }`}
                     >
                       Da
                     </button>
                     <button
                       type="button"
                       onClick={() => setForm((s) => ({ ...s, fromElevator: false }))}
-                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${
-                        form.fromElevator === false
-                          ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                          : "border-gray-300 bg-white text-gray-600 hover:border-emerald-300"
-                      }`}
+                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${form.fromElevator === false
+                        ? "border-green-500 bg-green-50 text-green-700"
+                        : "border-gray-300 bg-white text-gray-600 hover:border-green-300"
+                        }`}
                     >
                       Nu
                     </button>
@@ -327,14 +329,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           </div>
 
           {/* Destination */}
-          <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50 to-white p-6">
+          <div className="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-sky-500 to-sky-600 shadow-lg">
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
+                style={{ backgroundColor: "#dbeafe" }} // bg-blue-100
+              >
                 <svg
                   className="h-5 w-5"
+                  style={{ color: "#2563eb" }} // text-blue-600
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="white"
+                  stroke="currentColor"
                 >
                   <path
                     strokeLinecap="round"
@@ -360,7 +366,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   required
                   value={form.toCounty || ""}
                   onChange={(e) => setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "" }))}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                 >
                   <option value="">Selectează județ</option>
                   {counties.map((c) => (
@@ -385,7 +391,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       toCityManual: value === "__other__",
                     }));
                   }}
-                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                  className="w-full appearance-none rounded-lg border border-gray-300 bg-white px-3 py-2 pr-8 text-sm shadow-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                   disabled={!form.toCounty}
                 >
                   <option value="">Selectează localitatea</option>
@@ -402,18 +408,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     value={form.toCity === "__other__" ? "" : form.toCity || ""}
                     onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
                     placeholder="Introdu localitatea"
-                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                    className="mt-2 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm shadow-sm transition focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                   />
                 )}
               </div>
             </div>
 
             {/* Property Details */}
-            <div className="rounded-lg border border-sky-100 bg-white p-3">
+            <div className="rounded-lg border border-blue-100 bg-white p-3">
               <div className="mb-2 flex items-center gap-2">
-                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sky-100">
+                <div className="flex h-7 w-7 items-center justify-center rounded-md bg-blue-100">
                   <svg
-                    className="h-4 w-4 text-sky-600"
+                    className="h-4 w-4 text-blue-600"
                     fill="none"
                     viewBox="0 0 24 24"
                     stroke="currentColor"
@@ -426,7 +432,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     />
                   </svg>
                 </div>
-                <span className="text-xs font-semibold text-sky-900">Detalii proprietate</span>
+                <span className="text-xs font-semibold text-blue-900">Detalii proprietate</span>
               </div>
               <div className="grid gap-2" style={{ gridTemplateColumns: "2fr 1fr 1fr" }}>
                 <div>
@@ -436,7 +442,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   <select
                     value={form.toType || "flat"}
                     onChange={(e) => setForm((s) => ({ ...s, toType: e.target.value as any }))}
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-sky-500 focus:outline-none"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
                   >
                     <option value="flat">Apartament</option>
                     <option value="house">Casă</option>
@@ -455,7 +461,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       setForm((s) => ({ ...s, toRooms: e.target.value.replace(/\D/g, "") }))
                     }
                     placeholder="ex: 3"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none"
                   />
                 </div>
                 {form.toType === "house" && (
@@ -471,7 +477,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         setForm((s) => ({ ...s, toFloor: e.target.value.replace(/\D/g, "") }))
                       }
                       placeholder="ex: 2"
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-sky-500 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-blue-500 focus:outline-none"
                     />
                   </div>
                 )}
@@ -484,7 +490,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       value={form.toFloor || ""}
                       onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
                       placeholder="ex: 5"
-                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-sky-500 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm focus:border-blue-500 focus:outline-none"
                     />
                   </div>
                 )}
@@ -498,22 +504,20 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     <button
                       type="button"
                       onClick={() => setForm((s) => ({ ...s, toElevator: true }))}
-                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${
-                        form.toElevator === true
-                          ? "border-sky-500 bg-sky-50 text-sky-700"
-                          : "border-gray-300 bg-white text-gray-600 hover:border-sky-300"
-                      }`}
+                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${form.toElevator === true
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-300 bg-white text-gray-600 hover:border-blue-300"
+                        }`}
                     >
                       Da
                     </button>
                     <button
                       type="button"
                       onClick={() => setForm((s) => ({ ...s, toElevator: false }))}
-                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${
-                        form.toElevator === false
-                          ? "border-sky-500 bg-sky-50 text-sky-700"
-                          : "border-gray-300 bg-white text-gray-600 hover:border-sky-300"
-                      }`}
+                      className={`flex-1 rounded-lg border py-2 text-sm font-medium transition ${form.toElevator === false
+                        ? "border-blue-500 bg-blue-50 text-blue-700"
+                        : "border-gray-300 bg-white text-gray-600 hover:border-blue-300"
+                        }`}
                     >
                       Nu
                     </button>
@@ -527,12 +531,16 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         {/* Services */}
         <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-purple-600 shadow-lg">
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
+              style={{ backgroundColor: "#f3e8ff" }} // bg-purple-100
+            >
               <svg
                 className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="white"
+                style={{ color: "#9333ea" }} // text-purple-600
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
                 <path
                   strokeLinecap="round"
@@ -823,10 +831,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             form.serviceStorage ||
             form.serviceTransportOnly
           ) && (
-            <p className="mt-2 text-xs font-medium text-red-600">
-              Selectează cel puțin un serviciu.
-            </p>
-          )}
+              <p className="mt-2 text-xs font-medium text-red-600">
+                Selectează cel puțin un serviciu.
+              </p>
+            )}
         </div>
 
         {/* Survey & Media - side by side on desktop */}
@@ -834,12 +842,16 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           {/* Survey */}
           <div className="rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-6">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 shadow-lg">
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
+                style={{ backgroundColor: "#fef3c7" }} // bg-amber-100
+              >
                 <svg
                   className="h-5 w-5"
+                  style={{ color: "#d97706" }} // text-amber-600
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="white"
+                  stroke="currentColor"
                 >
                   <path
                     strokeLinecap="round"
@@ -1047,12 +1059,16 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           {/* Media (cards) */}
           <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-6">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-500 to-blue-600 shadow-lg">
+              <div
+                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
+                style={{ backgroundColor: "#dbeafe" }} // bg-blue-100
+              >
                 <svg
                   className="h-5 w-5"
+                  style={{ color: "#2563eb" }} // text-blue-600
                   fill="none"
                   viewBox="0 0 24 24"
-                  stroke="white"
+                  stroke="currentColor"
                 >
                   <path
                     strokeLinecap="round"
@@ -1339,14 +1355,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         </div>
 
         {/* Date & Contact */}
-        <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50 to-white p-6">
+        <div className="rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 shadow-lg">
+            <div
+              className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
+              style={{ backgroundColor: "#dcfce7" }} // bg-green-100
+            >
               <svg
                 className="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="white"
+                style={{ color: "#16a34a" }} // text-green-600
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
                 <path
                   strokeLinecap="round"
@@ -1377,7 +1397,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                   { key: "none" as const, label: "Nu știu încă" },
                 ];
                 return (
-                  <div className="mb-4 flex justify-center gap-2 rounded-lg border border-emerald-300 bg-white p-1 text-xs shadow-sm">
+                  <div className="mb-4 flex justify-center gap-2 rounded-lg border border-green-300 bg-white p-1 text-xs shadow-sm">
                     {dateModes.map(({ key, label }) => (
                       <button
                         key={key}
@@ -1390,12 +1410,11 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                             ...(key === "none" ? { moveDate: "" } : {}),
                           }))
                         }
-                        className={`rounded-md px-4 py-2 font-medium transition-all duration-200 ${
-                          (form as any).moveDateMode === key ||
+                        className={`rounded-md px-4 py-2 font-medium transition-all duration-200 ${(form as any).moveDateMode === key ||
                           (!(form as any).moveDateMode && key === "exact")
-                            ? "bg-gradient-to-r from-emerald-600 to-emerald-700 text-white shadow-md"
-                            : "text-gray-700 hover:bg-emerald-50"
-                        }`}
+                          ? "bg-gradient-to-r from-green-600 to-green-700 text-white shadow-md"
+                          : "text-gray-700 hover:bg-green-50"
+                          }`}
                       >
                         {label}
                       </button>
@@ -1406,7 +1425,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
               {/* Inputs per mode */}
               {((form as any).moveDateMode ?? "exact") === "exact" && (
-                <div className="flex justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-md">
+                <div className="flex justify-center rounded-2xl border-2 border-green-300 bg-gradient-to-br from-white via-green-50/30 to-green-100/30 p-5 shadow-md">
                   <DayPicker
                     mode="single"
                     selected={parseYMD(form.moveDate)}
@@ -1431,18 +1450,18 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
                       nav: "flex items-center gap-2",
                       nav_button:
-                        "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                        "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-green-300 bg-white text-green-700 transition-all hover:bg-green-50 hover:border-green-400 hover:shadow-md",
                       nav_button_previous: "",
                       nav_button_next: "",
                       table: "w-full border-collapse mt-2",
                       head_row: "grid grid-cols-7 gap-1 mb-2",
                       head_cell:
-                        "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
+                        "text-center text-[10px] sm:text-xs font-bold text-green-700 w-9 sm:w-10 capitalize",
                       row: "grid grid-cols-7 gap-1 mb-1",
                       cell: "text-center",
-                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
+                      day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-green-100",
                       day_selected:
-                        "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
+                        "bg-green-900 text-white font-bold shadow-md border-2 border-green-900",
                       day_today: "font-medium text-gray-700",
                       day_outside: "text-gray-400 opacity-50",
                       day_disabled: "text-gray-300 opacity-30 cursor-not-allowed",
@@ -1454,10 +1473,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
               {/* Interval mode removed */}
 
               {((form as any).moveDateMode ?? "exact") === "none" && (
-                <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                <div className="rounded-lg border border-green-200 bg-green-50 p-4">
                   <div className="flex items-start gap-3">
                     <svg
-                      className="mt-0.5 h-5 w-5 shrink-0 text-emerald-600"
+                      className="mt-0.5 h-5 w-5 shrink-0 text-green-600"
                       fill="none"
                       viewBox="0 0 24 24"
                       stroke="currentColor"
@@ -1469,7 +1488,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                       />
                     </svg>
-                    <p className="text-sm text-emerald-900">
+                    <p className="text-sm text-green-900">
                       Nu ai data stabilită? Nu-i problemă! Poți continua fără a selecta o dată și
                       companiile îți vor oferi mai multe opțiuni.
                     </p>
@@ -1479,7 +1498,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
 
               {((form as any).moveDateMode ?? "exact") === "flexible" && (
                 <div className="mx-auto grid max-w-5xl grid-cols-1 gap-4 lg:grid-cols-2">
-                  <div className="flex justify-center rounded-2xl border-2 border-emerald-300 bg-gradient-to-br from-white via-emerald-50/30 to-emerald-100/30 p-5 shadow-xl">
+                  <div className="flex justify-center rounded-2xl border-2 border-green-300 bg-gradient-to-br from-white via-green-50/30 to-green-100/30 p-5 shadow-xl">
                     <DayPicker
                       mode="single"
                       selected={parseYMD(form.moveDate)}
@@ -1503,22 +1522,22 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                         caption_label: "text-sm sm:text-base font-bold text-gray-800 capitalize",
                         nav: "flex items-center gap-2",
                         nav_button:
-                          "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-emerald-300 bg-white text-emerald-700 transition-all hover:bg-emerald-50 hover:border-emerald-400 hover:shadow-md",
+                          "inline-flex h-8 w-8 items-center justify-center rounded-lg border border-green-300 bg-white text-green-700 transition-all hover:bg-green-50 hover:border-green-400 hover:shadow-md",
                         table: "w-full border-collapse mt-2",
                         head_row: "grid grid-cols-7 gap-1 mb-2",
                         head_cell:
-                          "text-center text-[10px] sm:text-xs font-bold text-emerald-700 w-9 sm:w-10 capitalize",
+                          "text-center text-[10px] sm:text-xs font-bold text-green-700 w-9 sm:w-10 capitalize",
                         row: "grid grid-cols-7 gap-1 mb-1",
                         cell: "text-center",
-                        day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-emerald-100",
+                        day: "h-9 w-9 sm:h-10 sm:w-10 grid place-items-center rounded-xl text-xs sm:text-sm font-medium transition-all hover:bg-green-100",
                         day_selected:
-                          "bg-emerald-900 text-white font-bold shadow-md border-2 border-emerald-900",
+                          "bg-green-900 text-white font-bold shadow-md border-2 border-green-900",
                         day_today: "font-medium text-gray-700",
                         day_outside: "text-gray-400 opacity-50",
                       }}
                     />
                   </div>
-                  <div className="rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
+                  <div className="rounded-xl border border-green-200 bg-white p-5 shadow-md">
                     <label className="mb-2 block text-sm font-semibold text-gray-800">
                       Flexibilitate
                     </label>
@@ -1530,7 +1549,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           moveDateFlexDays: Number(e.target.value),
                         }))
                       }
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/30 focus:outline-none"
                     >
                       <option value={3}>±3 zile</option>
                       <option value={7}>±7 zile</option>
@@ -1546,10 +1565,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
             </div>
 
             {/* Contact fields */}
-            <div className="rounded-xl border border-emerald-200 bg-white p-5 shadow-md">
+            <div className="rounded-xl border border-green-200 bg-white p-5 shadow-md">
               <h5 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-800">
                 <svg
-                  className="h-5 w-5 text-emerald-600"
+                  className="h-5 w-5 text-green-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1583,7 +1602,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           return { ...s, contactFirstName, contactName };
                         })
                       }
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/30 focus:outline-none"
                       placeholder="Prenume"
                     />
                     <input
@@ -1600,7 +1619,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                           return { ...s, contactLastName, contactName };
                         })
                       }
-                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
+                      className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/30 focus:outline-none"
                       placeholder="Nume"
                     />
                   </div>
@@ -1617,7 +1636,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                       setForm((s) => ({ ...s, phone: digits }));
                     }}
                     inputMode="numeric"
-                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
+                    className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/30 focus:outline-none"
                     placeholder="Număr de telefon"
                   />
                 </div>
@@ -1631,7 +1650,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 <textarea
                   value={form.details || ""}
                   onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
-                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/30 focus:outline-none"
+                  className="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm shadow-sm transition focus:border-green-500 focus:ring-2 focus:ring-green-500/30 focus:outline-none"
                   rows={3}
                   placeholder="Informații importante (acces, obiecte fragile, interval orar, etc.)"
                 />
@@ -1645,7 +1664,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     id="acceptTermsRequestForm"
                     checked={form.acceptedTerms || false}
                     onChange={(e) => setForm((s) => ({ ...s, acceptedTerms: e.target.checked }))}
-                    className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-gray-300 text-emerald-600 focus:ring-2 focus:ring-emerald-500"
+                    className="mt-0.5 h-5 w-5 shrink-0 cursor-pointer rounded border-gray-300 text-green-600 focus:ring-2 focus:ring-green-500"
                   />
                   <label
                     htmlFor="acceptTermsRequestForm"
@@ -1655,7 +1674,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     <Link
                       href="/terms"
                       target="_blank"
-                      className="font-semibold text-emerald-600 underline hover:text-emerald-700"
+                      className="font-semibold text-green-600 underline hover:text-green-700"
                     >
                       Termenii și Condițiile
                     </Link>{" "}
@@ -1663,7 +1682,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                     <Link
                       href="/privacy"
                       target="_blank"
-                      className="font-semibold text-emerald-600 underline hover:text-emerald-700"
+                      className="font-semibold text-green-600 underline hover:text-green-700"
                     >
                       Politica de Confidențialitate
                     </Link>
@@ -1679,7 +1698,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           <button
             type="submit"
             data-auto-submit="true"
-            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-emerald-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/30 transition hover:from-emerald-700 hover:to-emerald-800 hover:shadow-xl hover:shadow-emerald-500/40"
+            className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-green-700 px-6 py-2.5 text-sm font-semibold text-white shadow-lg shadow-green-500/30 transition hover:from-green-700 hover:to-green-800 hover:shadow-xl hover:shadow-green-500/40"
           >
             <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path

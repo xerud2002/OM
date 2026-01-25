@@ -22,10 +22,7 @@ const LogoTicker = dynamic(() => import("@/components/home/LogoTicker"), {
   loading: () => <div className="min-h-25" />,
   ssr: false,
 });
-const UrgencyBanner = dynamic(() => import("@/components/cro/UrgencyBanner"), {
-  loading: () => <div className="min-h-50" />,
-  ssr: false,
-});
+
 const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
   loading: () => <div className="min-h-125" />,
 });
@@ -384,10 +381,7 @@ export default function HomePage() {
         <FAQSection items={SERVICE_FAQS.general} />
       </div>
 
-      {/* CRO: Urgency & Trust */}
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        <UrgencyBanner />
-      </div>
+
 
       <CTASection />
     </>
