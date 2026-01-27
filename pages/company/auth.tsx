@@ -141,7 +141,7 @@ export default function CompanyAuthPage() {
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
-              className="relative hidden bg-blue-600 bg-gradient-to-br from-blue-600 to-blue-800 p-12 lg:flex lg:flex-col lg:justify-between"
+              className="relative hidden bg-gradient-company p-12 lg:flex lg:flex-col lg:justify-between"
             >
               {/* Decorative circles */}
               <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-white/10 blur-3xl" />

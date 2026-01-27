@@ -54,7 +54,7 @@ export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
 
       <LayoutWrapper>
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-amber-600 via-orange-600 to-red-600 py-20">
+        <section className="relative overflow-hidden bg-gradient-orange py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />

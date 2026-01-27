@@ -60,7 +60,7 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         
-        <title>📦 Servicii Mutare {currentYear} | Împachetare, Montaj, Depozitare</title>
+        <title>Servicii Mutare {currentYear} | Împachetare, Montaj, Depozitare</title>
         <meta
           name="description"
           content="✓ Servicii complete pentru mutare ✓ Împachetare, montaj mobilă, materiale, depozitare ✓ Oferte de la firme verificate → Compară gratuit!"
@@ -82,7 +82,7 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
 
       <LayoutWrapper>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-600 py-20">
+        <section className="relative overflow-hidden bg-gradient-brand py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />

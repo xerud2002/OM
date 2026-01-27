@@ -59,7 +59,7 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         
-        <title>🚚 Servicii Mutări {currentYear} | Toate Tipurile de Mutări</title>
+        <title>Servicii Mutări {currentYear} | Toate Tipurile de Mutări</title>
         <meta
           name="description"
           content="✓ Găsește firma perfectă pentru mutarea ta ✓ Apartamente, case, birouri, studenți ✓ 3-5 oferte GRATUITE în 24h → Compară și economisești 40%!"
@@ -84,7 +84,7 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
 
       <LayoutWrapper>
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-to-br from-purple-600 via-purple-700 to-violet-800 py-20">
+        <section className="relative overflow-hidden bg-gradient-mutari py-20">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
             <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
