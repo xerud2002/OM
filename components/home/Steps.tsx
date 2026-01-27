@@ -124,7 +124,7 @@ export default function Steps() {
                     alt={step.title}
                     fill
                     sizes="(max-width: 768px) 90vw, (max-width: 1200px) 30vw, 320px"
-                    className="object-contain p-2 transition-transform duration-500 ease-in-out group-hover/image:scale-105"
+                    className="object-contain p-2 transition-transform duration-500 ease-in-out group-hover/image:scale-105 z-10"
                     loading="lazy"
                     decoding="async"
                     placeholder="blur"

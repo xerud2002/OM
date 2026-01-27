@@ -86,18 +86,18 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { href: "/about", label: "Despre Noi" },
-    { href: "/contact", label: "Contact" },
+    { href: "/#services", label: "Servicii Mutare" },
+    { href: "/#how-it-works", label: "Cum funcționează" },
     { href: "/partener", label: "Devino Partener" },
+    { href: "/contact", label: "Contact" },
   ];
 
   return (
     <header
-      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 ${
-        scrolled
-          ? "border-b border-emerald-100 bg-white/90 shadow-md backdrop-blur-xl"
-          : "bg-white/60 backdrop-blur-sm"
-      }`}
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 ${scrolled
+        ? "border-b border-emerald-100 bg-white/90 shadow-md backdrop-blur-xl"
+        : "bg-white/60 backdrop-blur-sm"
+        }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
         {/* === LOGO === */}
@@ -127,11 +127,10 @@ export default function Navbar() {
             <Link
               key={href}
               href={href}
-              className={`flex min-h-12 min-w-12 items-center justify-center rounded-full px-5 py-3 font-medium transition-all duration-300 ${
-                pathname === href
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
-              }`}
+              className={`flex min-h-12 min-w-12 items-center justify-center rounded-full px-5 py-3 font-medium transition-all duration-300 ${pathname === href
+                ? "bg-emerald-50 text-emerald-700"
+                : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+                }`}
             >
               {label}
             </Link>
@@ -140,44 +139,33 @@ export default function Navbar() {
           {!user ? (
             <button
               onClick={handleGetOffers}
-              aria-label="Primește Oferte Gratuite"
+              aria-label="Contul Meu"
               className="ml-3 inline-flex min-h-12 items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-3 font-bold text-white shadow-lg transition-all hover:scale-[1.06] hover:shadow-xl"
             >
-              <PhoneCall size={18} /> Primește Oferte GRATUITE
+              <User size={18} /> Contul Meu
             </button>
           ) : (
-            <div className="relative ml-3 flex items-center gap-3">
+            <div className="ml-3 flex items-center gap-3">
               {/* Notification Bell for Companies */}
               {userRole === "company" && user?.uid && <NotificationBell companyId={user.uid} />}
 
-              <button
-                onClick={() => setShowUserMenu((v) => !v)}
-                aria-haspopup="true"
-                aria-expanded={showUserMenu}
+              {/* Smart Dashboard Link */}
+              <Link
+                href={userRole === "company" ? "/company/dashboard" : "/customer/dashboard"}
                 className="flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-4 py-2 font-semibold text-white shadow-md transition-all hover:scale-[1.04]"
               >
                 <User size={18} />
-                <span className="max-w-35 truncate">{user.email?.split("@")[0]}</span>
-              </button>
+                <span className="max-w-35 truncate">Contul Meu</span>
+              </Link>
 
-              {/* Dropdown menu - CSS animation instead of framer-motion */}
-              {showUserMenu && (
-                <div className="absolute top-full right-0 z-50 mt-2 w-44 origin-top-right scale-100 transform overflow-hidden rounded-xl border border-emerald-100 bg-white opacity-100 shadow-lg transition-all duration-200">
-                  <Link
-                    href="/customer/dashboard"
-                    onClick={() => setShowUserMenu(false)}
-                    className="flex items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
-                  >
-                    <LayoutDashboard size={16} /> Dashboard
-                  </Link>
-                  <button
-                    onClick={handleLogout}
-                    className="flex w-full items-center gap-2 px-4 py-2 text-gray-700 transition-all hover:bg-emerald-50"
-                  >
-                    <LogOut size={16} /> Logout
-                  </button>
-                </div>
-              )}
+              {/* Explicit Logout Button */}
+              <button
+                onClick={handleLogout}
+                className="group flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition-all hover:bg-red-50 hover:text-red-600 hover:shadow-md"
+                title="Deconectare"
+              >
+                <LogOut size={18} />
+              </button>
             </div>
           )}
         </nav>
@@ -194,9 +182,8 @@ export default function Navbar() {
 
       {/* === MOBILE MENU - CSS animation instead of framer-motion === */}
       <div
-        className={`transform overflow-hidden border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 md:hidden ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`transform overflow-hidden border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 md:hidden ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="flex flex-col space-y-1 px-6 py-4">
           {navLinks.map(({ href, label }) => (
@@ -204,11 +191,10 @@ export default function Navbar() {
               key={href}
               href={href}
               onClick={() => setIsOpen(false)}
-              className={`flex min-h-12 items-center rounded-lg px-4 py-3 font-medium transition-all ${
-                pathname === href
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
-              }`}
+              className={`flex min-h-12 items-center rounded-lg px-4 py-3 font-medium transition-all ${pathname === href
+                ? "bg-emerald-50 text-emerald-700"
+                : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+                }`}
             >
               {label}
             </Link>
@@ -226,11 +212,11 @@ export default function Navbar() {
               onClick={handleLogout}
               className="mt-3 flex min-h-12 items-center justify-center gap-2 rounded-full border border-gray-200 px-5 py-3 text-gray-700 transition-all hover:bg-emerald-50"
             >
-              <LogOut size={18} /> Logout
+              <LogOut size={18} /> Deconectare
             </button>
           )}
         </div>
       </div>
-    </header>
+    </header >
   );
 }

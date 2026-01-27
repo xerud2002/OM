@@ -7,19 +7,17 @@
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --max-warnings=0",
-    "format": "prettier --write .",
-    "prepare": "husky install"
+    "lint": "next lint --max-warnings=0"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
     "@next/third-parties": "^14.2.35",
     "@tailwindcss/postcss": "^4.1.18",
-    "@vercel/analytics": "^1.6.1",
     "date-fns": "^3.6.0",
     "firebase": "^12.8.0",
     "firebase-admin": "^12.7.0",
     "framer-motion": "^10.18.0",
+    "lucide-react": "^0.563.0",
     "next": "^14.2.35",
     "react": "18.3.1",
     "react-day-picker": "^8.10.1",
@@ -33,31 +31,18 @@
     "@types/react-dom": "^18.3.7",
     "eslint": "^8.57.1",
     "eslint-config-next": "14.2.35",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "husky": "^9.1.7",
-    "lint-staged": "^16.2.7",
-    "lucide-react": "^0.562.0",
     "postcss": "^8.5.6",
-    "prettier": "^3.8.0",
     "sharp": "^0.34.5",
-    "sharp-cli": "^5.2.0",
     "typescript": "^5.9.3"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
-  },
   "browserslist": [
-    "Chrome >= 105",
-    "Firefox >= 105",
-    "Safari >= 16.4",
-    "Edge >= 105",
-    "iOS >= 16.4",
-    "not dead"
+    "Chrome >= 90",
+    "Firefox >= 90",
+    "Safari >= 15",
+    "Edge >= 90",
+    "iOS >15",
+    "not dead",
+    "not op_mini all"
   ],
   "overrides": {
     "undici": "6.22.0"
