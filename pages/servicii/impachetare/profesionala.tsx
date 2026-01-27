@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
@@ -21,8 +22,11 @@ import {
   Frame,
 } from "lucide-react";
 
-export default function ImpachetareProfesionalaPage() {
-  const currentYear = new Date().getFullYear();
+interface ImpachetareProfesionalaPageProps {
+  currentYear: number;
+}
+
+export default function ImpachetareProfesionalaPage({ currentYear }: ImpachetareProfesionalaPageProps) {
   const faqItems = SERVICE_FAQS.impachetare;
 
   return (
@@ -352,3 +356,11 @@ export default function ImpachetareProfesionalaPage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<ImpachetareProfesionalaPageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

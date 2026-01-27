@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
@@ -18,8 +19,11 @@ import {
   Star,
 } from "lucide-react";
 
-export default function MutariCasePage() {
-  const currentYear = new Date().getFullYear();
+interface MutariCasePageProps {
+  currentYear: number;
+}
+
+export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
 
   const faqItems = [
     {
@@ -359,3 +363,11 @@ export default function MutariCasePage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<MutariCasePageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

@@ -1,47 +1,38 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
-  Building2,
-  Home,
-  GraduationCap,
-  Briefcase,
-  Music,
   ArrowRight,
   MapPin,
 } from "lucide-react";
 
-export default function MutariIndexPage() {
-  const currentYear = new Date().getFullYear();
+interface MutariIndexPageProps {
+  currentYear: number;
+}
+
+export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
 
   const mutariTypes = [
     {
       title: "Mutări Apartamente",
       description: "De la garsoniere la apartamente cu 4+ camere. Prețuri de la 400 lei.",
-      icon: Building2,
       href: "/mutari/tipuri/apartamente",
-      color: "purple",
     },
     {
       title: "Mutări Case și Vile",
       description: "Transport profesional pentru case mari și vile. Echipe 4-6 persoane.",
-      icon: Home,
       href: "/mutari/tipuri/case",
-      color: "blue",
     },
     {
       title: "Mutări Studenți",
       description: "Prețuri speciale pentru studenți. De la 300 lei pentru cămine.",
-      icon: GraduationCap,
       href: "/mutari/tipuri/studenti",
-      color: "orange",
     },
     {
       title: "Mutări Birouri",
       description: "Relocare companii cu zero downtime. Weekend și program noapte.",
-      icon: Briefcase,
       href: "/mutari/tipuri/birouri",
-      color: "slate",
     },
   ];
 
@@ -49,9 +40,7 @@ export default function MutariIndexPage() {
     {
       title: "Mutări Piane",
       description: "Transport specializat pentru piane verticale și cu coadă.",
-      icon: Music,
       href: "/mutari/specializate/piane",
-      color: "purple",
     },
   ];
 
@@ -121,27 +110,21 @@ export default function MutariIndexPage() {
             <h2 className="mb-8 text-3xl font-bold text-gray-900">Tipuri de Mutări</h2>
             <div className="grid gap-6 md:grid-cols-2">
               {mutariTypes.map((type) => {
-                const Icon = type.icon;
                 return (
                   <Link
                     key={type.href}
                     href={type.href}
                     className="group rounded-2xl border-2 border-gray-200 bg-white p-6 transition-all hover:border-purple-400 hover:shadow-xl"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className={`rounded-xl bg-${type.color}-100 p-3`}>
-                        <Icon className={`h-6 w-6 text-${type.color}-600`} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-purple-600">
-                          {type.title}
-                        </h3>
-                        <p className="mb-3 text-gray-600">{type.description}</p>
-                        <span className="inline-flex items-center gap-2 text-purple-600 font-semibold">
-                          Vezi detalii
-                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </span>
-                      </div>
+                    <div>
+                      <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-purple-600">
+                        {type.title}
+                      </h3>
+                      <p className="mb-3 text-gray-600">{type.description}</p>
+                      <span className="inline-flex items-center gap-2 text-purple-600 font-semibold">
+                        Vezi detalii
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
                     </div>
                   </Link>
                 );
@@ -154,27 +137,21 @@ export default function MutariIndexPage() {
             <h2 className="mb-8 text-3xl font-bold text-gray-900">Mutări Specializate</h2>
             <div className="grid gap-6">
               {mutariSpecializate.map((type) => {
-                const Icon = type.icon;
                 return (
                   <Link
                     key={type.href}
                     href={type.href}
                     className="group rounded-2xl border-2 border-gray-200 bg-white p-6 transition-all hover:border-purple-400 hover:shadow-xl"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className={`rounded-xl bg-${type.color}-100 p-3`}>
-                        <Icon className={`h-6 w-6 text-${type.color}-600`} />
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-purple-600">
-                          {type.title}
-                        </h3>
-                        <p className="mb-3 text-gray-600">{type.description}</p>
-                        <span className="inline-flex items-center gap-2 text-purple-600 font-semibold">
-                          Vezi detalii
-                          <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-                        </span>
-                      </div>
+                    <div>
+                      <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-purple-600">
+                        {type.title}
+                      </h3>
+                      <p className="mb-3 text-gray-600">{type.description}</p>
+                      <span className="inline-flex items-center gap-2 text-purple-600 font-semibold">
+                        Vezi detalii
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </span>
                     </div>
                   </Link>
                 );
@@ -222,3 +199,11 @@ export default function MutariIndexPage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<MutariIndexPageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

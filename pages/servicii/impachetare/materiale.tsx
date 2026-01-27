@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
   ShoppingCart,
@@ -16,8 +17,11 @@ import {
   Truck,
 } from "lucide-react";
 
-export default function MaterialeImpachetarePage() {
-  const currentYear = new Date().getFullYear();
+interface MaterialeImpachetarePageProps {
+  currentYear: number;
+}
+
+export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpachetarePageProps) {
 
   return (
     <>
@@ -370,3 +374,11 @@ export default function MaterialeImpachetarePage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<MaterialeImpachetarePageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

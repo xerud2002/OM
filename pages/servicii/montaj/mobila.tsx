@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
@@ -18,8 +19,11 @@ import {
   Zap,
 } from "lucide-react";
 
-export default function DemontareMontareMobilaPage() {
-  const currentYear = new Date().getFullYear();
+interface DemontareMontareMobilaPageProps {
+  currentYear: number;
+}
+
+export default function DemontareMontareMobilaPage({ currentYear }: DemontareMontareMobilaPageProps) {
   const faqItems = SERVICE_FAQS.montaj;
 
   return (
@@ -355,3 +359,11 @@ export default function DemontareMontareMobilaPage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<DemontareMontareMobilaPageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

@@ -130,7 +130,7 @@ export default function Footer() {
 
       {/* Bottom bar */}
       <div className="border-t border-gray-200 bg-gray-50 px-4 py-4 text-center text-xs text-gray-500 sm:py-5 sm:text-sm">
-        <p>
+        <p suppressHydrationWarning>
           © {new Date().getFullYear()}{" "}
           <span className="font-medium text-emerald-600">ofertemutare.ro</span> · Toate drepturile
           rezervate

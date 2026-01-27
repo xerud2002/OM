@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
@@ -15,8 +16,11 @@ import {
   Recycle,
 } from "lucide-react";
 
-export default function DebarasarePage() {
-  const currentYear = new Date().getFullYear();
+interface DebarasarePageProps {
+  currentYear: number;
+}
+
+export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
   const faqItems = SERVICE_FAQS.debarasare;
 
   return (
@@ -224,3 +228,11 @@ export default function DebarasarePage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<DebarasarePageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import {
@@ -24,8 +25,11 @@ import {
   MapPin,
 } from "lucide-react";
 
-export default function MutariStudentiPage() {
-  const currentYear = new Date().getFullYear();
+interface MutariStudentiPageProps {
+  currentYear: number;
+}
+
+export default function MutariStudentiPage({ currentYear }: MutariStudentiPageProps) {
   const faqItems = SERVICE_FAQS.studenti;
 
   return (
@@ -326,3 +330,11 @@ export default function MutariStudentiPage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<MutariStudentiPageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

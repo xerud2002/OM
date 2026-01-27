@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
@@ -18,8 +19,11 @@ import {
   Calendar,
 } from "lucide-react";
 
-export default function DepozitarePage() {
-  const currentYear = new Date().getFullYear();
+interface DepozitarePageProps {
+  currentYear: number;
+}
+
+export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
   const faqItems = SERVICE_FAQS.depozitare;
 
   return (
@@ -281,3 +285,11 @@ export default function DepozitarePage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<DepozitarePageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

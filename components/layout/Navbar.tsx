@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X, PhoneCall, LogOut, User, LayoutDashboard } from "lucide-react";
+import { Menu, X, PhoneCall, LogOut, User } from "lucide-react";
 import { useRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
 import dynamic from "next/dynamic";
@@ -19,7 +19,6 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const [userRole, setUserRole] = useState<"customer" | "company" | null>(null);
-  const [showUserMenu, setShowUserMenu] = useState(false);
   const router = useRouter();
   const pathname = router.pathname;
 
@@ -78,7 +77,6 @@ export default function Navbar() {
   };
 
   const handleLogout = async () => {
-    setShowUserMenu(false);
     router.push("/");
     const { logout } = await import("@/utils/firebaseHelpers");
     await logout();

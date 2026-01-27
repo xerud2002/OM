@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
@@ -17,8 +18,11 @@ import {
   AlertTriangle,
 } from "lucide-react";
 
-export default function MutariApartamentePage() {
-  const currentYear = new Date().getFullYear();
+interface MutariApartamentePageProps {
+  currentYear: number;
+}
+
+export default function MutariApartamentePage({ currentYear }: MutariApartamentePageProps) {
 
   const faqItems = [
     {
@@ -351,3 +355,11 @@ export default function MutariApartamentePage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<MutariApartamentePageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
   Package,
@@ -9,8 +10,11 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-export default function ServiciiIndexPage() {
-  const currentYear = new Date().getFullYear();
+interface ServiciiIndexPageProps {
+  currentYear: number;
+}
+
+export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProps) {
 
   const servicii = [
     {
@@ -170,3 +174,11 @@ export default function ServiciiIndexPage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<ServiciiIndexPageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

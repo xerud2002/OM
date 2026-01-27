@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { SERVICE_FAQS } from "@/data/faqData";
@@ -17,8 +18,11 @@ import {
   Award,
 } from "lucide-react";
 
-export default function MutariPianePage() {
-  const currentYear = new Date().getFullYear();
+interface MutariPianePageProps {
+  currentYear: number;
+}
+
+export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
   const faqItems = SERVICE_FAQS.piane;
 
   return (
@@ -368,3 +372,11 @@ export default function MutariPianePage() {
     </>
   );
 }
+
+export const getStaticProps: GetStaticProps<MutariPianePageProps> = async () => {
+  return {
+    props: {
+      currentYear: new Date().getFullYear(),
+    },
+  };
+};

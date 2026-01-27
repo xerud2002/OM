@@ -24,19 +24,8 @@ interface CityPageProps {
   city: CityData;
   prevCity: { slug: string; name: string } | null;
   nextCity: { slug: string; name: string } | null;
+  currentYear: number;
 }
-
-// Romanian flag-inspired gradients for hero sections (8 variations with flag colors)
-const heroGradients = [
-  'linear-gradient(to right, #002B7F 0%, #002B7F 33%, #FCD116 33%, #FCD116 66%, #CE1126 66%, #CE1126 100%)', // Classic flag
-  'linear-gradient(135deg, #002B7F 0%, #002B7F 33%, #FCD116 33%, #FCD116 66%, #CE1126 66%, #CE1126 100%)', // Diagonal flag
-  'linear-gradient(to bottom right, #002B7F, #0039a6, #FCD116)', // Blue to yellow blend
-  'linear-gradient(to bottom right, #FCD116, #f4c430, #CE1126)', // Yellow to red blend
-  'linear-gradient(to right, rgba(0,43,127,0.9), rgba(252,209,22,0.9), rgba(206,17,38,0.9))', // Flag with transparency
-  'linear-gradient(90deg, #002B7F 20%, #FCD116 50%, #CE1126 80%)', // Centered stripes
-  'linear-gradient(to bottom right, #002B7F, #004a9f, #FCD116, #f9d71c, #CE1126)', // Multi-blend
-  'linear-gradient(to right, #001f5c 0%, #002B7F 25%, #FCD116 50%, #CE1126 75%, #b01020 100%)', // Dark edges
-];
 
 // Matching text gradients for city names (pairs with hero gradients)
 const textGradients = [
@@ -54,13 +43,9 @@ const textGradients = [
   'from-blue-300 to-indigo-300',      // Added for variety
 ];
 
-export default function CityPage({ city, prevCity, nextCity }: CityPageProps) {
-  const currentYear = new Date().getFullYear();
+export default function CityPage({ city, prevCity, nextCity, currentYear }: CityPageProps) {
 
-  // Generate consistent gradient based on city slug (same city = same gradient)
-  const gradientIndex = city.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) % heroGradients.length;
-  const heroGradient = heroGradients[gradientIndex];
-  // Use a different hash for text gradient to ensure more variety if heroGradients and textGradients have different lengths
+  // Use a hash for text gradient to ensure more variety if heroGradients and textGradients have different lengths
   const textGradientIndex = city.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0) * 2, 0) % textGradients.length;
   const textGradient = textGradients[textGradientIndex];
   // Check if city has a hero image
@@ -623,6 +608,6 @@ export const getStaticProps: GetStaticProps<CityPageProps> = async ({ params }) 
   const nextCity = { slug: cityData[nextIndex].slug, name: cityData[nextIndex].name };
 
   return {
-    props: { city, prevCity, nextCity },
+    props: { city, prevCity, nextCity, currentYear: new Date().getFullYear() },
   };
 };

@@ -11,11 +11,20 @@ interface UrgencyBannerProps {
 }
 
 export default function UrgencyBanner({ city = "București", className = "" }: UrgencyBannerProps) {
+  // Use stable initial values to prevent hydration mismatch
+  const [isMounted, setIsMounted] = useState(false);
   const [requestCount, setRequestCount] = useState(23);
   const [activeUsers, setActiveUsers] = useState(84);
   const [recentAction, setRecentAction] = useState<string | null>(null);
 
+  // Mark as mounted to enable dynamic updates
   useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!isMounted) return;
+    
     // Randomize basic stats slightly for realism
     const interval = setInterval(() => {
       setRequestCount((prev) => prev + (Math.random() > 0.7 ? 1 : 0));
@@ -38,7 +47,7 @@ export default function UrgencyBanner({ city = "București", className = "" }: U
       clearInterval(interval);
       clearInterval(actionInterval);
     };
-  }, [city]);
+  }, [city, isMounted]);
 
   return (
     <div className={`relative z-20 flex flex-col items-center gap-2 ${className}`}>
