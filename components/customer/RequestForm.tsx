@@ -124,13 +124,9 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           {/* Pickup Location */}
           <div className="rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6">
             <div className="mb-5 flex items-center gap-3">
-              <div
-                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
-                style={{ backgroundColor: "#dcfce7" }} // bg-green-100
-              >
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm bg-green-100">
                 <svg
-                  className="h-5 w-5"
-                  style={{ color: "#16a34a" }} // text-green-600
+                  className="h-5 w-5 text-green-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -235,7 +231,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
                 <span className="text-xs font-semibold text-green-900">Detalii proprietate</span>
               </div>
-              <div className="grid gap-2" style={{ gridTemplateColumns: "2fr 1fr 1fr" }}>
+              <div className="grid gap-2 grid-cols-[2fr_1fr_1fr]">
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-700">
                     Tip Proprietate <span className="text-red-500">*</span>
@@ -332,12 +328,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           <div className="rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-white p-6">
             <div className="mb-5 flex items-center gap-3">
               <div
-                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
-                style={{ backgroundColor: "#dbeafe" }} // bg-blue-100
+                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm bg-blue-100"
               >
                 <svg
-                  className="h-5 w-5"
-                  style={{ color: "#2563eb" }} // text-blue-600
+                  className="h-5 w-5 text-blue-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -434,7 +428,7 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
                 </div>
                 <span className="text-xs font-semibold text-blue-900">Detalii proprietate</span>
               </div>
-              <div className="grid gap-2" style={{ gridTemplateColumns: "2fr 1fr 1fr" }}>
+              <div className="grid gap-2 grid-cols-[2fr_1fr_1fr]">
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-700">
                     Tip Proprietate <span className="text-red-500">*</span>
@@ -532,12 +526,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         <div className="rounded-xl border border-purple-200 bg-gradient-to-br from-purple-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
-              style={{ backgroundColor: "#f3e8ff" }} // bg-purple-100
+              className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm bg-purple-100"
             >
               <svg
-                className="h-5 w-5"
-                style={{ color: "#9333ea" }} // text-purple-600
+                className="h-5 w-5 text-purple-600"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -1060,12 +1052,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
           <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-6">
             <div className="mb-5 flex items-center gap-3">
               <div
-                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
-                style={{ backgroundColor: "#dbeafe" }} // bg-blue-100
+                className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm bg-blue-100"
               >
                 <svg
-                  className="h-5 w-5"
-                  style={{ color: "#2563eb" }} // text-blue-600
+                  className="h-5 w-5 text-blue-600"
                   fill="none"
                   viewBox="0 0 24 24"
                   stroke="currentColor"
@@ -1358,12 +1348,10 @@ export default function RequestForm({ form, setForm, onSubmit, onReset }: Props)
         <div className="rounded-xl border border-green-200 bg-gradient-to-br from-green-50 to-white p-6">
           <div className="mb-5 flex items-center gap-3">
             <div
-              className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm"
-              style={{ backgroundColor: "#dcfce7" }} // bg-green-100
+              className="flex h-10 w-10 items-center justify-center rounded-xl shadow-sm bg-green-100" // bg-green-100
             >
               <svg
-                className="h-5 w-5"
-                style={{ color: "#16a34a" }} // text-green-600
+                className="h-5 w-5 text-green-600" // text-green-600
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
