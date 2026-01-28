@@ -11,9 +11,9 @@ import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import { translateFirebaseError } from "@/utils/authErrors";
+import { toast } from "sonner";
 
 export default function CustomerAuthPage() {
-  const FACEBOOK_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === "true";
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -90,51 +90,10 @@ export default function CustomerAuthPage() {
         router.push("/company/auth");
         return;
       }
+      toast.success(`Bine ai revenit, ${user.displayName || "utilizator"}! 👋`);
       await handlePostAuthRedirect(user);
     } catch (err: any) {
       // If role conflict occurred, attempt to detect existing role and redirect
-      if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
-        try {
-          const mod = await import("@/utils/firebaseHelpers");
-          const current = auth.currentUser;
-          const role = current ? await mod.getUserRole(current) : null;
-          if (role === "company") {
-            setMessage("Contul tău este înregistrat ca firmă. Redirecționare...");
-            router.push("/company/auth");
-            return;
-          }
-        } catch {
-          // fall back to generic message
-        }
-      }
-      setMessage(translateFirebaseError(err));
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ✅ Facebook sign-in
-  const handleFacebookLogin = async () => {
-    try {
-      setLoading(true);
-      const mod = await import("@/utils/firebaseHelpers");
-      const user = await mod.loginWithFacebook("customer");
-
-      if (!user) {
-        setLoading(false);
-        return;
-      }
-
-      const role = await mod.getUserRole(user);
-      if (role !== "customer") {
-        setMessage(
-          "Contul tău este înregistrat ca firmă – folosește pagina de autentificare pentru firme."
-        );
-        router.push("/company/auth");
-        return;
-      }
-      await handlePostAuthRedirect(user);
-    } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {
           const mod = await import("@/utils/firebaseHelpers");
@@ -174,9 +133,10 @@ export default function CustomerAuthPage() {
           router.push("/company/auth");
           return;
         }
+        toast.success(`Bine ai revenit, ${user.displayName || user.email?.split("@")[0] || "utilizator"}! 👋`);
       } else {
         user = await mod.registerWithEmail("customer", { email, password });
-        // registration sets role via ensureUserProfile; proceed to dashboard
+        toast.success("Cont creat cu succes! Bine ai venit! 🎉");
       }
       await handlePostAuthRedirect(user);
     } catch (err: any) {
@@ -467,20 +427,6 @@ export default function CustomerAuthPage() {
                   <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
                   Google
                 </motion.button>
-                {FACEBOOK_ENABLED && (
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleFacebookLogin}
-                    disabled={loading}
-                    className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-[#1877F2] bg-[#1877F2] px-4 py-4 font-medium text-white shadow-sm transition-all hover:bg-[#166FE5] hover:shadow-md disabled:opacity-50"
-                  >
-                    <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-                    </svg>
-                    Facebook
-                  </motion.button>
-                )}
               </div>
 
               {/* === Status Message === */}

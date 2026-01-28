@@ -60,7 +60,6 @@ export default function RequireRole({ allowedRole, children }: Props) {
 
           if (role !== allowedRole) {
             // If role is mismatched, redirect to the appropriate place
-            toast.error("Acces nepermis pentru acest cont.");
             if (role === "company") router.push("/company/dashboard");
             else if (role === "customer") router.push("/customer/dashboard");
             else router.push("/");

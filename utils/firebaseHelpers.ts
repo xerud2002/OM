@@ -8,16 +8,13 @@ import {
   createUserWithEmailAndPassword,
   updateProfile,
   sendPasswordResetEmail,
-  linkWithCredential,
   fetchSignInMethodsForEmail,
   EmailAuthProvider,
+  GoogleAuthProvider,
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { auth, db, storage } from "@/services/firebase";
-import { GoogleAuthProvider, FacebookAuthProvider } from "firebase/auth";
-// Feature flags
-const FACEBOOK_ENABLED = process.env.NEXT_PUBLIC_FACEBOOK_AUTH_ENABLED === "true";
 import type { UserRole, CustomerProfile, CompanyProfile } from "@/types";
 import {
   setUserId,
@@ -148,90 +145,6 @@ export async function loginWithGoogle(role: UserRole) {
       const email = error.customData?.email;
       if (email) {
         const methods = await fetchSignInMethodsForEmail(auth, email);
-        if (methods.includes("password")) {
-          const err: any = new Error(
-            "Acest email are deja un cont cu parolă. Te rugăm să te autentifici cu email și parolă."
-          );
-          err.code = "NEEDS_PASSWORD";
-          throw err;
-        }
-        if (methods.includes("facebook.com")) {
-          const err: any = new Error(
-            "Acest email este asociat cu Facebook. Te rugăm să te autentifici cu Facebook."
-          );
-          err.code = "USE_FACEBOOK";
-          throw err;
-        }
-      }
-    }
-
-    throw error;
-  }
-}
-
-export async function loginWithFacebook(role: UserRole) {
-  try {
-    if (!FACEBOOK_ENABLED) {
-      const err: any = new Error("Autentificarea cu Facebook este dezactivată temporar.");
-      err.code = "FACEBOOK_DISABLED";
-      throw err;
-    }
-    const provider = new FacebookAuthProvider();
-    const cred = await signInWithPopup(auth, provider);
-    await ensureUserProfile(cred.user, role);
-
-    setUserId(cred.user.uid);
-    setUserProperties({ user_role: role });
-    trackLogin("facebook", role);
-
-    return cred.user;
-  } catch (error: any) {
-    if (error?.code === "auth/popup-blocked" || error?.code === "auth/popup-closed-by-user") {
-      console.warn("Facebook sign-in popup was blocked or cancelled");
-      return null;
-    }
-
-    // Handle account exists with different credential
-    if (error?.code === "auth/account-exists-with-different-credential") {
-      const email = error.customData?.email;
-      const pendingCred = error.credential; // OAuthCredential from Facebook
-
-      if (email) {
-        const methods = await fetchSignInMethodsForEmail(auth, email);
-
-        // If user has Google account, try to sign in with Google and link Facebook
-        if (methods.includes("google.com")) {
-          try {
-            // Sign in with Google first
-            const googleProvider = new GoogleAuthProvider();
-            googleProvider.setCustomParameters({ login_hint: email });
-            const googleResult = await signInWithPopup(auth, googleProvider);
-
-            // Link the Facebook credential to this account
-            if (pendingCred) {
-              await linkWithCredential(googleResult.user, pendingCred);
-            }
-
-            await ensureUserProfile(googleResult.user, role);
-            setUserId(googleResult.user.uid);
-            setUserProperties({ user_role: role });
-            trackLogin("facebook", role);
-
-            return googleResult.user;
-          } catch (linkError: any) {
-            // If linking fails, just return the Google user
-            if (linkError?.code === "auth/popup-closed-by-user") {
-              return null;
-            }
-            console.warn("Could not link Facebook to Google account:", linkError);
-            const err: any = new Error(
-              "Acest email este asociat cu Google. Te rugăm să te autentifici cu Google."
-            );
-            err.code = "USE_GOOGLE";
-            throw err;
-          }
-        }
-
         if (methods.includes("password")) {
           const err: any = new Error(
             "Acest email are deja un cont cu parolă. Te rugăm să te autentifici cu email și parolă."

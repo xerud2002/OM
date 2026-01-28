@@ -22,8 +22,6 @@ export const translateFirebaseError = (error: any): string => {
     // Custom app errors
     NEEDS_PASSWORD: error?.message || "Te rugăm să te autentifici cu email și parolă.",
     USE_GOOGLE: error?.message || "Te rugăm să te autentifici cu Google.",
-    USE_FACEBOOK: error?.message || "Te rugăm să te autentifici cu Facebook.",
-    FACEBOOK_DISABLED: "Autentificarea cu Facebook este dezactivată temporar.",
     ROLE_CONFLICT: "Acest cont este deja înregistrat cu un alt tip de utilizator.",
   };
   return translations[code] || error?.message || "A apărut o eroare neașteptată.";

@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Mail, Lock, Building2, ArrowRight, Users, TrendingUp, Award } from "lucide-react";
 import Image from "next/image";
 import { translateFirebaseError } from "@/utils/authErrors";
+import { toast } from "sonner";
 
 export default function CompanyAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -48,6 +49,7 @@ export default function CompanyAuthPage() {
         router.push("/customer/auth");
         return;
       }
+      toast.success(`Bine ai revenit, ${user.displayName || "partener"}! 👋`);
       router.push("/company/dashboard");
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
@@ -85,9 +87,11 @@ export default function CompanyAuthPage() {
           router.push("/customer/auth");
           return;
         }
+        toast.success(`Bine ai revenit, ${user.displayName || user.email?.split("@")[0] || "partener"}! 👋`);
         router.push("/company/dashboard");
       } else {
         await mod.registerWithEmail("company", { email, password });
+        toast.success("Cont firmă creat cu succes! Bine ai venit! 🎉");
         router.push("/company/dashboard");
       }
     } catch (err: any) {
