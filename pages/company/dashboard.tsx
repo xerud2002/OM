@@ -8,6 +8,7 @@ import NotificationBell from "@/components/company/NotificationBell";
 import ConfirmModal from "@/components/ConfirmModal";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import { logger } from "@/utils/logger";
 import {
   collectionGroup,
   query,
@@ -84,7 +85,7 @@ export default function CompanyDashboard() {
         setLoading(false);
       },
       (err) => {
-        console.warn("Error loading offers (this might be normal for new companies):", err);
+        logger.warn("Error loading offers (this might be normal for new companies):", err);
         // Set empty array instead of error state for better UX
         setOffers([]);
         setLoading(false);
@@ -116,7 +117,7 @@ export default function CompanyDashboard() {
       const offerRef = doc(db, "requests", offer.requestId, "offers", offer.id);
       await updateDoc(offerRef, fields);
     } catch (e) {
-      console.error("Failed to update offer", e);
+      logger.error("Failed to update offer", e);
     }
   }
 
@@ -126,7 +127,7 @@ export default function CompanyDashboard() {
       const offerRef = doc(db, "requests", offer.requestId, "offers", offer.id);
       await deleteDoc(offerRef);
     } catch (e) {
-      console.error("Failed to delete offer", e);
+      logger.error("Failed to delete offer", e);
     }
   }
 

@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
+import { logger } from "@/utils/logger";
 
 type OfferDoc = {
   companyId: string;
@@ -75,7 +76,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json({ ok: true, count });
   } catch (err) {
-    console.error("Error notifying companies:", err);
+    logger.error("Error notifying companies:", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

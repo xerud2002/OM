@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import { logger } from "@/utils/logger";
 import RequireRole from "@/components/auth/RequireRole";
 import {
   PlusSquare,
@@ -89,7 +90,7 @@ export default function CustomerDashboard() {
           const parsed = JSON.parse(homeForm);
           return { ...parsed, mediaFiles: [] };
         } catch (err) {
-          console.warn("Failed to parse home form", err);
+          logger.warn("Failed to parse home form", err);
         }
       }
 
@@ -101,7 +102,7 @@ export default function CustomerDashboard() {
           // mediaFiles can't be serialized, so always reset to empty array
           return { ...parsed, mediaFiles: [] };
         } catch (err) {
-          console.warn("Failed to parse saved form", err);
+          logger.warn("Failed to parse saved form", err);
         }
       }
     }
@@ -225,7 +226,7 @@ export default function CustomerDashboard() {
       }
       toast.success("Oferta a fost acceptată!");
     } catch (err) {
-      console.error("Failed to accept offer", err);
+      logger.error("Failed to accept offer", err);
       toast.error("Eroare la acceptarea ofertei");
     }
   };
@@ -259,7 +260,7 @@ export default function CustomerDashboard() {
       }
       toast.success("Oferta a fost refuzată");
     } catch (err) {
-      console.error("Failed to decline offer", err);
+      logger.error("Failed to decline offer", err);
       toast.error("Eroare la refuzarea ofertei");
     }
   };
@@ -353,7 +354,7 @@ export default function CustomerDashboard() {
           setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
         },
         (error) => {
-          console.warn(`Error listening to offers for request ${r.id}:`, error);
+          logger.warn(`Error listening to offers for request ${r.id}:`, error);
           // Set empty array for this request if there's an error
           setOffersByRequest((prev) => ({ ...prev, [r.id]: [] }));
         }
@@ -382,7 +383,7 @@ export default function CustomerDashboard() {
         delete formToSave.mediaFiles;
         localStorage.setItem("customerDashboardForm", JSON.stringify(formToSave));
       } catch (err) {
-        console.warn("Failed to save form to localStorage", err);
+        logger.warn("Failed to save form to localStorage", err);
       }
     }
   }, [form]);
@@ -470,7 +471,7 @@ export default function CustomerDashboard() {
       // If user chose "now" for media upload, upload files immediately
       if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
         try {
-          console.warn(
+          logger.log(
             `Auth UID: ${user.uid}, uploading ${form.mediaFiles.length} file(s) via API route`
           );
 
@@ -483,7 +484,7 @@ export default function CustomerDashboard() {
           for (let i = 0; i < form.mediaFiles.length; i++) {
             const file = form.mediaFiles[i];
 
-            console.warn(`Uploading ${file.name} (${i + 1}/${form.mediaFiles.length})`);
+            logger.log(`Uploading ${file.name} (${i + 1}/${form.mediaFiles.length})`);
 
             try {
               const fileName = `${Date.now()}_${file.name}`;
@@ -511,9 +512,9 @@ export default function CustomerDashboard() {
               });
 
               uploadedUrls.push(downloadURL);
-              console.warn(`Upload success: ${downloadURL}`);
+              logger.log(`Upload success: ${downloadURL}`);
             } catch (err) {
-              console.error(`Failed to upload ${file.name}:`, err);
+              logger.error(`Failed to upload ${file.name}:`, err);
               throw err;
             }
           }
@@ -526,8 +527,8 @@ export default function CustomerDashboard() {
 
           toast.success(`Cererea și ${uploadedUrls.length} fișier(e) au fost încărcate cu succes!`);
         } catch (uploadError) {
-          console.error("Media upload error:", uploadError);
-          console.error("Upload error details:", {
+          logger.error("Media upload error:", uploadError);
+          logger.error("Upload error details:", {
             code: (uploadError as any)?.code,
             message: (uploadError as any)?.message,
             serverResponse: (uploadError as any)?.serverResponse,
@@ -557,7 +558,7 @@ export default function CustomerDashboard() {
                 toast.info("Link-ul pentru upload a fost copiat în clipboard.");
               }
             } catch (copyErr) {
-              console.warn("Could not copy upload link to clipboard", copyErr);
+              logger.warn("Could not copy upload link to clipboard", copyErr);
             }
 
             const emailParams = {
@@ -571,7 +572,7 @@ export default function CustomerDashboard() {
                 "Cererea a fost trimisă! Vei primi un email cu link pentru upload poze."
               );
             } catch (emailError) {
-              console.error("Email send error:", emailError);
+              logger.error("Email send error:", emailError);
               toast.warning(
                 "Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis. Link-ul este în clipboard."
               );
@@ -580,7 +581,7 @@ export default function CustomerDashboard() {
             toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
           }
         } catch (err) {
-          console.warn("Failed to generate upload link", err);
+          logger.warn("Failed to generate upload link", err);
           toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
         }
       } else {
@@ -641,7 +642,7 @@ export default function CustomerDashboard() {
       }
       setActiveTab("requests");
     } catch (err) {
-      console.error("Failed to submit request", err);
+      logger.error("Failed to submit request", err);
       toast.error("Eroare la trimiterea cererii. Te rugăm să încerci din nou.");
     }
   };
@@ -861,7 +862,7 @@ export default function CustomerDashboard() {
                                   : "Cererea a fost reactivată"
                             );
                           } catch (error) {
-                            console.error("Error updating status:", error);
+                            logger.error("Error updating status:", error);
                             toast.error("Nu s-a putut actualiza statusul cererii");
                           }
                         }}
@@ -870,7 +871,7 @@ export default function CustomerDashboard() {
                             await archiveRequest(requestId);
                             toast.success("Cererea a fost arhivată");
                           } catch (error) {
-                            console.error("Error archiving request:", error);
+                            logger.error("Error archiving request:", error);
                             toast.error("Nu s-a putut arhiva cererea");
                           }
                         }}
@@ -1111,7 +1112,7 @@ export default function CustomerDashboard() {
                               await unarchiveRequest(r.id);
                               toast.success("Cererea a fost reactivată");
                             } catch (error) {
-                              console.error("Error unarchiving request:", error);
+                              logger.error("Error unarchiving request:", error);
                               toast.error("Nu s-a putut reactiva cererea");
                             }
                           }}
@@ -1176,7 +1177,7 @@ function OfferRow({
       setText("");
       setShowMessage(false);
     } catch (err) {
-      console.error("sendMessage failed", err);
+      logger.error("sendMessage failed", err);
       const msg = err instanceof Error ? err.message : "Eroare necunoscută";
       toast.error(`Eroare la trimiterea mesajului: ${msg}`);
     }

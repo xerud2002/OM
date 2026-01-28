@@ -9,6 +9,7 @@ import {
   collection,
   addDoc,
 } from "firebase/firestore";
+import { logger } from "@/utils/logger";
 
 // --- Types ---
 
@@ -55,7 +56,7 @@ export async function getSystemSettings(): Promise<SystemSettings> {
     await setDoc(docRef, DEFAULT_SETTINGS);
     return DEFAULT_SETTINGS;
   } catch (error) {
-    console.warn("⚠️ Failed to load system settings, using defaults:", error);
+    logger.warn("⚠️ Failed to load system settings, using defaults:", error);
     return DEFAULT_SETTINGS;
   }
 }
@@ -124,7 +125,7 @@ export async function depositFunds(companyId: string, amount: number) {
       timestamp: serverTimestamp(),
     });
   } catch (error) {
-    console.error("Failed to log transaction:", error);
+    logger.error("Failed to log transaction:", error);
     // Don't fail the whole operation if logging fails
   }
 

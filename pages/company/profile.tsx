@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import StarRating from "@/components/reviews/StarRating";
 import { sendEmail } from "@/utils/emailHelpers";
 import { toast } from "sonner";
+import { logger } from "@/utils/logger";
 
 export default function CompanyProfile() {
   const [company, setCompany] = useState<any>(null);
@@ -21,7 +22,7 @@ export default function CompanyProfile() {
   const [reviewEmail, setReviewEmail] = useState("");
   const [reviewCustomerName, setReviewCustomerName] = useState("");
   const [sendingReview, setSendingReview] = useState(false);
-  
+
   // Form fields
   const [companyName, setCompanyName] = useState("");
   const [cif, setCif] = useState("");
@@ -39,12 +40,12 @@ export default function CompanyProfile() {
   // Load company profile
   useEffect(() => {
     if (!company?.uid) return;
-    
+
     const loadProfile = async () => {
       try {
         const docRef = doc(db, "companies", company.uid);
         const docSnap = await getDoc(docRef);
-        
+
         if (docSnap.exists()) {
           const data = docSnap.data();
           setProfile(data);
@@ -56,19 +57,19 @@ export default function CompanyProfile() {
           setDescription(data.description || "");
         }
       } catch (err) {
-        console.error("Error loading profile:", err);
+        logger.error("Error loading profile:", err);
       } finally {
         setLoading(false);
       }
     };
-    
+
     loadProfile();
   }, [company?.uid]);
 
   const handleSave = async () => {
     if (!company?.uid) return;
     setSaving(true);
-    
+
     try {
       const docRef = doc(db, "companies", company.uid);
       await updateDoc(docRef, {
@@ -80,16 +81,16 @@ export default function CompanyProfile() {
         description,
         updatedAt: new Date(),
       });
-      
+
       // Reload profile
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setProfile(docSnap.data());
       }
-      
+
       setEditing(false);
     } catch (err) {
-      console.error("Error saving profile:", err);
+      logger.error("Error saving profile:", err);
       alert("A apărut o eroare la salvarea profilului. Te rugăm să încerci din nou.");
     } finally {
       setSaving(false);
@@ -146,7 +147,7 @@ export default function CompanyProfile() {
                     <p className="text-emerald-100">{profile?.email || company?.email}</p>
                   </div>
                 </div>
-                
+
                 {!editing && (
                   <button
                     onClick={() => setEditing(true)}
@@ -173,7 +174,8 @@ export default function CompanyProfile() {
                     </span>
                   </div>
                   <p className="mt-1 text-sm text-gray-500">
-                    {profile?.totalReviews || 0} {(profile?.totalReviews || 0) === 1 ? "recenzie" : "recenzii"}
+                    {profile?.totalReviews || 0}{" "}
+                    {(profile?.totalReviews || 0) === 1 ? "recenzie" : "recenzii"}
                   </p>
                 </div>
               </div>
@@ -198,9 +200,7 @@ export default function CompanyProfile() {
 
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">
-                        CIF
-                      </label>
+                      <label className="mb-1 block text-sm font-medium text-gray-700">CIF</label>
                       <input
                         type="text"
                         value={cif}
@@ -226,9 +226,7 @@ export default function CompanyProfile() {
 
                   <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Județ
-                      </label>
+                      <label className="mb-1 block text-sm font-medium text-gray-700">Județ</label>
                       <input
                         type="text"
                         value={county}
@@ -239,9 +237,7 @@ export default function CompanyProfile() {
                     </div>
 
                     <div>
-                      <label className="mb-1 block text-sm font-medium text-gray-700">
-                        Oraș
-                      </label>
+                      <label className="mb-1 block text-sm font-medium text-gray-700">Oraș</label>
                       <input
                         type="text"
                         value={city}
@@ -350,12 +346,17 @@ export default function CompanyProfile() {
                 className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white transition hover:bg-emerald-700"
               >
                 <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
                 </svg>
                 Cere Review
               </button>
             </div>
-            
+
             {!profile?.totalReviews || profile.totalReviews === 0 ? (
               <div className="rounded-lg bg-gray-50 py-12 text-center">
                 <svg
@@ -371,9 +372,7 @@ export default function CompanyProfile() {
                     d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"
                   />
                 </svg>
-                <p className="mt-4 text-lg font-semibold text-gray-700">
-                  Încă nu ai recenzii
-                </p>
+                <p className="mt-4 text-lg font-semibold text-gray-700">Încă nu ai recenzii</p>
                 <p className="mt-2 text-sm text-gray-500">
                   Recenziile de la clienți vor apărea aici după finalizarea mutărilor
                 </p>
@@ -403,7 +402,9 @@ export default function CompanyProfile() {
                 onClick={(e) => e.stopPropagation()}
                 className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
               >
-                <h3 className="mb-4 text-xl font-bold text-gray-900">📧 Cere Review de la Client</h3>
+                <h3 className="mb-4 text-xl font-bold text-gray-900">
+                  📧 Cere Review de la Client
+                </h3>
                 <p className="mb-4 text-sm text-gray-600">
                   Trimite un email unui client pentru a te evalua serviciile tale
                 </p>
@@ -437,7 +438,8 @@ export default function CompanyProfile() {
 
                   <div className="rounded-lg bg-blue-50 p-3">
                     <p className="text-xs text-blue-800">
-                      💡 Clientul va primi un email cu un link pentru a lăsa un review despre serviciile tale
+                      💡 Clientul va primi un email cu un link pentru a lăsa un review despre
+                      serviciile tale
                     </p>
                   </div>
 
@@ -448,14 +450,14 @@ export default function CompanyProfile() {
                           toast.error("Te rugăm să completezi toate câmpurile");
                           return;
                         }
-                        
+
                         // Validate email format
                         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                         if (!emailRegex.test(reviewEmail)) {
                           toast.error("Adresa de email nu este validă");
                           return;
                         }
-                        
+
                         setSendingReview(true);
                         try {
                           // Send review request email via EmailJS
@@ -468,13 +470,13 @@ export default function CompanyProfile() {
                             },
                             "template_review_request" // You'll need to create this template in EmailJS
                           );
-                          
+
                           toast.success(`✅ Email trimis către ${reviewCustomerName}`);
                           setShowRequestReview(false);
                           setReviewEmail("");
                           setReviewCustomerName("");
                         } catch (error) {
-                          console.error("Error sending review request:", error);
+                          logger.error("Error sending review request:", error);
                           toast.error("A apărut o eroare. Te rugăm să încerci din nou.");
                         } finally {
                           setSendingReview(false);

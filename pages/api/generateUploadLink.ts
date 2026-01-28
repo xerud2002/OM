@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes } from "crypto";
 import { adminDb } from "@/lib/firebaseAdmin";
+import { logger } from "@/utils/logger";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -48,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       customerName,
     });
   } catch (error) {
-    console.error("Error generating upload link:", error);
+    logger.error("Error generating upload link:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
+import { logger } from "@/utils/logger";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -51,7 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json({ ok: true });
   } catch (err) {
-    console.error("[markUploadTokenUsed] error", err);
+    logger.error("[markUploadTokenUsed] error", err);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

@@ -4,6 +4,8 @@
  * to improve initial page load performance.
  */
 
+import { logger } from "@/utils/logger";
+
 let hasLoaded = false;
 let loadCallbacks: (() => void)[] = [];
 
@@ -20,7 +22,7 @@ function triggerLoad() {
     try {
       cb();
     } catch (error) {
-      console.error("Error in interaction loader callback:", error);
+      logger.error("Error in interaction loader callback:", error);
     }
   });
 
@@ -45,9 +47,7 @@ export function loadOnInteraction(loadFn: () => void) {
   // Only set up listeners once (for the first registration)
   if (loadCallbacks.length === 1) {
     const events = ["click", "scroll", "keydown", "touchstart", "mousemove"];
-    events.forEach((e) =>
-      window.addEventListener(e, triggerLoad, { once: true, passive: true })
-    );
+    events.forEach((e) => window.addEventListener(e, triggerLoad, { once: true, passive: true }));
   }
 }
 

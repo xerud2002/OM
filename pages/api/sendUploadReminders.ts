@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb } from "@/lib/firebaseAdmin";
 import { sendEmail } from "@/utils/emailHelpers";
+import { logger } from "@/utils/logger";
 
 /**
  * API pentru verificarea token-urilor nefolosite și trimiterea reminder-elor
@@ -68,21 +69,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           sentCount++;
         } catch (emailError) {
-          console.error(`Failed to send reminder to ${tokenData.customerEmail}:`, emailError);
+          logger.error(`Failed to send reminder to ${tokenData.customerEmail}:`, emailError);
           failedCount++;
         }
       }
     }
 
-    return res.status(200).json({ 
-      ok: true, 
-      total: reminders.length, 
+    return res.status(200).json({
+      ok: true,
+      total: reminders.length,
       sent: sentCount,
       failed: failedCount,
-      reminders 
+      reminders,
     });
   } catch (error) {
-    console.error("Error checking upload reminders:", error);
+    logger.error("Error checking upload reminders:", error);
     return res.status(500).json({ error: "Internal server error" });
   }
 }

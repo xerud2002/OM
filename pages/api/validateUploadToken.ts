@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
+import { logger } from "@/utils/logger";
 
 type UploadTokenData = {
   requestId: string;
@@ -25,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     if (!adminReady) {
-      console.warn("[validateUploadToken] Firebase Admin not configured - returning invalid");
+      logger.warn("[validateUploadToken] Firebase Admin not configured - returning invalid");
       return res.status(200).json({
         valid: false,
         reason: "admin_unconfigured",
@@ -72,7 +73,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       expiresAt: tokenData.expiresAt,
     });
   } catch (error) {
-    console.error("Error validating token:", error);
+    logger.error("Error validating token:", error);
     return res.status(500).json({ error: "Internal server error", valid: false });
   }
 }

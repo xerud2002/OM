@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminAuth } from "@/lib/firebaseAdmin";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
+import { logger } from "@/utils/logger";
 
 type RequestDoc = {
   customerId: string;
@@ -67,7 +68,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const companyUser = await adminAuth.getUser(acceptedOfferData.companyId);
       companyEmail = companyUser.email || "";
     } catch (err) {
-      console.warn("Could not fetch company email:", err);
+      logger.warn("Could not fetch company email:", err);
     }
 
     // Accept selected offer and decline the rest in a batch
@@ -245,17 +246,17 @@ contact@ofertemutare.ro
             }),
           });
         } else {
-          console.warn("[offers/accept] RESEND_API_KEY missing – email not sent");
+          logger.warn("[offers/accept] RESEND_API_KEY missing – email not sent");
         }
       } catch (emailErr) {
-        console.error("[offers/accept] Email error:", emailErr);
+        logger.error("[offers/accept] Email error:", emailErr);
         // Don't fail the request if email fails
       }
     }
 
     return res.status(200).json(apiSuccess({ ok: true }));
   } catch (err) {
-    console.error("[offers/accept] error", err);
+    logger.error("[offers/accept] error", err);
     return res.status(500).json(apiError("Internal server error"));
   }
 }

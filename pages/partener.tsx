@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
+import { logger } from "@/utils/logger";
 import {
   CheckCircle,
   Users,
@@ -186,7 +187,7 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
           });
         }
       } catch (error) {
-        console.error("[partener] Client-side fetch failed:", error);
+        logger.error("[partener] Client-side fetch failed:", error);
       }
     };
 
@@ -360,8 +361,9 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
               {steps.map((step, index) => (
                 <div
                   key={step.number}
-                  className={`relative flex flex-col items-center gap-4 lg:flex-row ${index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
-                    }`}
+                  className={`relative flex flex-col items-center gap-4 lg:flex-row ${
+                    index % 2 === 0 ? "lg:flex-row" : "lg:flex-row-reverse"
+                  }`}
                 >
                   <div
                     className={`w-full lg:w-5/12 ${index % 2 === 0 ? "lg:text-right" : "lg:text-left"}`}
@@ -445,7 +447,7 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
 export const getServerSideProps: GetServerSideProps<Props> = async () => {
   try {
     if (!adminReady || !adminDb) {
-      console.log("[partener] Admin not ready");
+      logger.log("[partener] Admin not ready");
       return { props: { latestRequest: null } };
     }
 
@@ -456,16 +458,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
       .limit(1)
       .get();
 
-    console.log("[partener] Query returned", snapshot.size, "documents");
+    logger.log("[partener] Query returned", snapshot.size, "documents");
 
     if (snapshot.empty) {
-      console.log("[partener] No requests found");
+      logger.log("[partener] No requests found");
       return { props: { latestRequest: null } };
     }
 
     const doc = snapshot.docs[0];
     const data = doc.data();
-    console.log(
+    logger.log(
       "[partener] Found request:",
       doc.id,
       "fromCity:",
@@ -491,7 +493,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
 
     return { props: { latestRequest } };
   } catch (error) {
-    console.error("[partener] Error fetching latest request:", error);
+    logger.error("[partener] Error fetching latest request:", error);
     return { props: { latestRequest: null } };
   }
 };

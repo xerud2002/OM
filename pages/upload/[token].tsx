@@ -8,6 +8,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import Link from "next/link";
 import { onAuthStateChanged, User } from "firebase/auth";
+import { logger } from "@/utils/logger";
 
 interface FileWithProgress {
   file: File;
@@ -47,7 +48,7 @@ export default function UploadMediaPage() {
         const data = await resp.json();
         setTokenData(data);
       } catch (err) {
-        console.error("Token validation error:", err);
+        logger.error("Token validation error:", err);
         setTokenData({ valid: false, message: "Eroare la validarea token-ului" });
       } finally {
         setValidating(false);
@@ -153,7 +154,7 @@ export default function UploadMediaPage() {
               setFiles((prev) => prev.map((f, idx) => (idx === i ? { ...f, progress } : f)));
             },
             (error) => {
-              console.error("Upload error:", error);
+              logger.error("Upload error:", error);
               setFiles((prev) =>
                 prev.map((f, idx) => (idx === i ? { ...f, error: error.message } : f))
               );
@@ -193,7 +194,7 @@ export default function UploadMediaPage() {
           throw new Error(data.error || `HTTP ${resp.status}`);
         }
       } catch (e: any) {
-        console.error("Failed to mark token used:", e?.message || e);
+        logger.error("Failed to mark token used:", e?.message || e);
         toast.error("Nu am putut marca link-ul ca folosit.");
       }
 
@@ -203,7 +204,7 @@ export default function UploadMediaPage() {
       setUploaded(true);
       toast.success("Fișierele au fost încărcate cu succes!");
     } catch (err) {
-      console.error("Upload failed", err);
+      logger.error("Upload failed", err);
       toast.error("Eroare la încărcarea fișierelor. Te rugăm să încerci din nou.");
     } finally {
       setUploading(false);
@@ -213,7 +214,7 @@ export default function UploadMediaPage() {
   const notifyCompanies = async (requestId: string) => {
     try {
       if (!currentUser) {
-        console.warn("Cannot notify companies: user not authenticated");
+        logger.warn("Cannot notify companies: user not authenticated");
         return;
       }
       const idToken = await currentUser.getIdToken();
@@ -229,7 +230,7 @@ export default function UploadMediaPage() {
         throw new Error(`notifyCompaniesOnUpload failed: ${resp.status}`);
       }
     } catch (err) {
-      console.error("Failed to notify companies:", err);
+      logger.error("Failed to notify companies:", err);
     }
   };
 

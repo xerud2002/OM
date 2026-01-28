@@ -112,6 +112,43 @@ export default function ContactPage() {
   return (
     <>
       <Head>
+        <title>Contact - OferteMutare.ro | Contactează Echipa Noastră</title>
+        <meta
+          name="description"
+          content="Ai întrebări despre mutările tale? Contactează echipa OferteMutare.ro pentru suport rapid. Email: contact@ofertemutare.ro | Răspundem în maxim 24h."
+        />
+        <meta
+          name="keywords"
+          content="contact mutari, suport mutari, contact ofertemutare, asistenta mutari, intrebari mutari romania"
+        />
+
+        {/* Open Graph / Facebook */}
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://ofertemutare.ro/contact" />
+        <meta
+          property="og:title"
+          content="Contact - OferteMutare.ro | Contactează Echipa Noastră"
+        />
+        <meta
+          property="og:description"
+          content="Ai întrebări despre mutările tale? Contactează echipa OferteMutare.ro pentru suport rapid. Răspundem în maxim 24h."
+        />
+        <meta property="og:image" content="https://ofertemutare.ro/images/og-image.png" />
+
+        {/* Twitter */}
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://ofertemutare.ro/contact" />
+        <meta property="twitter:title" content="Contact - OferteMutare.ro" />
+        <meta
+          property="twitter:description"
+          content="Contactează echipa OferteMutare.ro pentru suport și întrebări despre mutări."
+        />
+        <meta property="twitter:image" content="https://ofertemutare.ro/images/og-image.png" />
+
+        {/* Canonical */}
+        <link rel="canonical" href="https://ofertemutare.ro/contact" />
+      </Head>
+      <Head>
         <title>Contact | OferteMutare.ro - Suport și Întrebări</title>
         <meta
           name="description"

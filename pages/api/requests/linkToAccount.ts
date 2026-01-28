@@ -5,6 +5,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 import { apiSuccess, apiError } from "@/types/api";
 import { FieldValue } from "firebase-admin/firestore";
+import { logger } from "@/utils/logger";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -65,7 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     return res.status(200).json(apiSuccess({ linked: linkedCount }));
   } catch (error) {
-    console.error("Error linking requests:", error);
+    logger.error("Error linking requests:", error);
     return res.status(500).json(apiError("Eroare la asocierea cererilor"));
   }
 }

@@ -23,6 +23,7 @@ import {
   trackSignUp,
   trackLogin,
 } from "@/utils/analytics";
+import { logger } from "@/utils/logger";
 
 // Re-export types for backward compatibility
 export type { UserRole, CustomerProfile, CompanyProfile };
@@ -136,7 +137,7 @@ export async function loginWithGoogle(role: UserRole) {
     return cred.user;
   } catch (error: any) {
     if (error?.code === "auth/popup-blocked" || error?.code === "auth/popup-closed-by-user") {
-      console.warn("Google sign-in popup was blocked or cancelled");
+      logger.warn("Google sign-in popup was blocked or cancelled");
       return null;
     }
 

@@ -12,6 +12,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import { translateFirebaseError } from "@/utils/authErrors";
 import { toast } from "sonner";
+import { logger } from "@/utils/logger";
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
@@ -33,7 +34,7 @@ export default function CustomerAuthPage() {
         },
       });
     } catch (err) {
-      console.warn("Failed to link guest requests:", err);
+      logger.warn("Failed to link guest requests:", err);
       // Non-critical, don't show error to user
     }
   };
@@ -133,7 +134,9 @@ export default function CustomerAuthPage() {
           router.push("/company/auth");
           return;
         }
-        toast.success(`Bine ai revenit, ${user.displayName || user.email?.split("@")[0] || "utilizator"}! 👋`);
+        toast.success(
+          `Bine ai revenit, ${user.displayName || user.email?.split("@")[0] || "utilizator"}! 👋`
+        );
       } else {
         user = await mod.registerWithEmail("customer", { email, password });
         toast.success("Cont creat cu succes! Bine ai venit! 🎉");
@@ -244,9 +247,30 @@ export default function CustomerAuthPage() {
               {/* Decorative illustration */}
               <div className="absolute right-8 bottom-8 opacity-5">
                 <svg width="200" height="200" viewBox="0 0 200 200" fill="none">
-                  <circle cx="100" cy="100" r="80" stroke="currentColor" strokeWidth="2" className="text-emerald-900" />
-                  <circle cx="100" cy="100" r="60" stroke="currentColor" strokeWidth="2" className="text-emerald-900" />
-                  <circle cx="100" cy="100" r="40" stroke="currentColor" strokeWidth="2" className="text-emerald-900" />
+                  <circle
+                    cx="100"
+                    cy="100"
+                    r="80"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="text-emerald-900"
+                  />
+                  <circle
+                    cx="100"
+                    cy="100"
+                    r="60"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="text-emerald-900"
+                  />
+                  <circle
+                    cx="100"
+                    cy="100"
+                    r="40"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    className="text-emerald-900"
+                  />
                 </svg>
               </div>
             </motion.div>
@@ -294,10 +318,11 @@ export default function CustomerAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="email"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${email
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                      email
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
-                      }`}
+                    }`}
                   >
                     Adresa ta de email
                   </label>
@@ -330,10 +355,11 @@ export default function CustomerAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="password"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${password
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                      password
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
-                      }`}
+                    }`}
                   >
                     Parola ta
                   </label>

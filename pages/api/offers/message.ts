@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import admin, { adminDb } from "@/lib/firebaseAdmin";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
+import { logger } from "@/utils/logger";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -63,13 +64,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           seen: false,
         });
       } catch (e) {
-        console.warn("[offers/message] failed to create notification", e);
+        logger.warn("[offers/message] failed to create notification", e);
       }
     }
 
     return res.status(200).json(apiSuccess({ ok: true }));
   } catch (err) {
-    console.error("[offers/message] error", err);
+    logger.error("[offers/message] error", err);
     return res.status(500).json(apiError("Internal server error"));
   }
 }

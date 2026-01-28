@@ -6,6 +6,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiSuccess, apiError } from "@/types/api";
 import { FieldValue } from "firebase-admin/firestore";
+import { logger } from "@/utils/logger";
 
 // Validate Romanian phone number format
 function isValidPhone(phone: string): boolean {
@@ -230,7 +231,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       })
     );
   } catch (error) {
-    console.error("Error creating guest request:", error);
+    logger.error("Error creating guest request:", error);
     return res.status(500).json(apiError("Eroare la crearea cererii"));
   }
 }
