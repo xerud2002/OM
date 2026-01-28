@@ -138,7 +138,7 @@ export default function GuideMutare() {
             {/* Article 2 - Impachetare */}
             <Link
               href="/articles/impachetare"
-              className="group overflow-hidden rounded-xl border-2 border-blue-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="group overflow-hidden rounded-xl border-2 border-blue-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
@@ -176,7 +176,7 @@ export default function GuideMutare() {
             {/* Article 3 - Survey */}
             <Link
               href="/articles/survey"
-              className="group overflow-hidden rounded-xl border-2 border-purple-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
@@ -214,7 +214,7 @@ export default function GuideMutare() {
             {/* Article 4 - Tips */}
             <Link
               href="/articles/tips"
-              className="group overflow-hidden rounded-xl border-2 border-amber-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="group overflow-hidden rounded-xl border-2 border-amber-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
@@ -315,7 +315,7 @@ export default function GuideMutare() {
             </p>
             <Link
               href="/customer/dashboard"
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 font-bold text-emerald-600 shadow-lg transition-transform hover:scale-105"
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 font-bold text-emerald-600 shadow-lg transition-transform"
             >
               Solicită Oferte Gratuite
               <ArrowRight className="h-5 w-5" />

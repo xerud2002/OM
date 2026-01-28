@@ -911,7 +911,7 @@ export default function CustomerDashboard() {
                   </p>
                   <button
                     onClick={() => setActiveTab("new")}
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
+                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all"
                   >
                     <PlusSquare className="h-4 w-4" />
                     Creează prima cerere
@@ -1116,7 +1116,7 @@ export default function CustomerDashboard() {
                               toast.error("Nu s-a putut reactiva cererea");
                             }
                           }}
-                          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:scale-105 hover:shadow-xl"
+                          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all"
                         >
                           Reactivează
                         </button>
@@ -1225,7 +1225,7 @@ function OfferRow({
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => onAccept(requestId, offer.id)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300"
             >
               <CheckCircle2 className="h-4 w-4" />
               Acceptă

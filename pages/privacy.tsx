@@ -1,7 +1,13 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ShieldCheckIcon as Shield, EyeIcon as Eye, LockClosedIcon as Lock, UserCircleIcon as UserCheck, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
+import {
+  ShieldCheckIcon as Shield,
+  EyeIcon as Eye,
+  LockClosedIcon as Lock,
+  UserCircleIcon as UserCheck,
+  EnvelopeIcon as Mail,
+} from "@heroicons/react/24/outline";
 
 export default function PrivacyPage() {
   return (
@@ -308,7 +314,7 @@ export default function PrivacyPage() {
               <h2 className="mb-4 text-2xl font-bold text-gray-800">6. Securitatea Datelor</h2>
               <div className="rounded-lg border-2 border-green-200 bg-green-50 p-6">
                 <p className="mb-4 font-semibold text-gray-800">
-                  🔒 Măsuri de Securitate Implementate:
+                  Măsuri de Securitate Implementate:
                 </p>
                 <ul className="space-y-2 text-gray-700">
                   <li>

@@ -119,7 +119,7 @@ export default function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="rounded-full border border-gray-200 p-2 text-gray-600 transition-all duration-200 hover:scale-110 hover:border-emerald-500 hover:text-emerald-600 active:scale-95"
+                className="rounded-full border border-gray-200 p-2 text-gray-600 transition-all duration-200 hover:border-emerald-500 hover:text-emerald-600 active:scale-95"
               >
                 <Icon className="h-4 w-4" />
               </a>

@@ -1,44 +1,29 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  ShieldCheckIcon as Shield,
-  LockClosedIcon as Lock,
-  HandThumbUpIcon as ThumbsUp,
-  ClockIcon as Clock,
-  TrophyIcon as Award,
-  HeartIcon as HeartHandshake,
-} from "@heroicons/react/24/outline";
+import { TrophyIcon as Award, HeartIcon as HeartHandshake } from "@heroicons/react/24/outline";
 
 export default function GuaranteeSection() {
   const guarantees = [
     {
-      icon: Shield,
-      iconImg: "/pics/icon-free.png",
       title: "100% Gratuit",
       desc: "Platforma este complet gratuită. Nu plătești nimic pentru a primi oferte.",
       gradient: "from-emerald-500 to-teal-600",
       bgLight: "bg-emerald-50",
     },
     {
-      icon: Lock,
-      iconImg: "/pics/icon-secure-data.png",
       title: "Date Protejate",
       desc: "Informațiile tale sunt criptate și nu sunt distribuite terților.",
       gradient: "from-blue-500 to-indigo-600",
       bgLight: "bg-blue-50",
     },
     {
-      icon: ThumbsUp,
-      iconImg: "/pics/icon-no-obligations.png",
       title: "Fără Obligații",
       desc: "Primești oferte fără nicio obligație de a accepta. Tu decizi!",
       gradient: "from-purple-500 to-pink-600",
       bgLight: "bg-purple-50",
     },
     {
-      icon: Clock,
-      iconImg: "/pics/icon-fast-response.png",
       title: "Răspuns în 24h",
       desc: "Primești oferte de la firme verificate în maximum 24 de ore.",
       gradient: "from-orange-500 to-red-500",
@@ -91,17 +76,11 @@ export default function GuaranteeSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
-              <motion.div
-                transition={{ type: "spring", stiffness: 300 }}
-                className="group relative flex h-full flex-col items-center rounded-xl border border-slate-200/50 bg-white p-4 text-center shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl sm:p-8"
-              >
-                {/* Icon */}
-                <motion.div
-                  transition={{ duration: 0.3 }}
+              <div className="relative flex h-full flex-col items-center rounded-xl border border-slate-200/50 bg-white p-4 text-center shadow-lg sm:rounded-2xl sm:p-8">
+                {/* Badge */}
+                <div
                   className={`mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br ${g.gradient} shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20`}
-                >
-                  <g.icon className="h-8 w-8 text-white sm:h-10 sm:w-10" />
-                </motion.div>
+                />
 
                 {/* Content */}
                 <h3 className="mb-2 text-sm font-bold text-slate-900 sm:mb-3 sm:text-lg">
@@ -115,7 +94,7 @@ export default function GuaranteeSection() {
                     className={`absolute -right-8 -top-8 h-16 w-16 rotate-45 ${g.bgLight} opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20`}
                   />
                 </div>
-              </motion.div>
+              </div>
             </motion.div>
           ))}
         </div>
@@ -138,7 +117,7 @@ export default function GuaranteeSection() {
               </div>
               <div>
                 <h3 className="mb-2 text-lg font-bold text-slate-900 sm:text-xl">
-                  💚 Garantăm siguranța și transparența procesului!
+                  Garantăm siguranța și transparența procesului!
                 </h3>
                 <p className="text-sm text-slate-600 sm:text-base">
                   Toate firmele partenere sunt verificate și au licențe valide. Citește recenziile

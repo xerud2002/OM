@@ -438,7 +438,7 @@ export default function AboutPage() {
 
                     {/* Icon */}
                     <div
-                      className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${value.gradient} shadow-lg transition-transform group-hover:scale-110`}
+                      className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${value.gradient} shadow-lg transition-transform`}
                     >
                       <value.icon className="h-8 w-8 text-white" />
                     </div>
@@ -559,7 +559,7 @@ export default function AboutPage() {
                         className="group flex gap-5 rounded-2xl border border-slate-100 bg-white p-5 shadow-md transition-all hover:shadow-xl"
                       >
                         <div
-                          className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} shadow-lg transition-transform group-hover:scale-110`}
+                          className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br ${item.gradient} shadow-lg transition-transform`}
                         >
                           <item.icon className="h-7 w-7 text-white" />
                         </div>
@@ -675,7 +675,7 @@ export default function AboutPage() {
                 </p>
 
                 <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-                  <motion.div whileHover={{ scale: 1.03 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div whileTap={{ scale: 0.98 }}>
                     <Link
                       href="/customer/dashboard"
                       className="group inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 px-10 py-5 text-lg font-semibold text-white shadow-xl shadow-emerald-500/25 transition-all hover:shadow-2xl hover:shadow-emerald-500/30"

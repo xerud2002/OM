@@ -158,7 +158,7 @@ export default function Navbar() {
               {/* Smart Dashboard Link */}
               <Link
                 href={userRole === "company" ? "/company/dashboard" : "/customer/dashboard"}
-                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-4 py-2 font-semibold text-white shadow-md transition-all hover:scale-[1.04]"
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-4 py-2 font-semibold text-white shadow-md transition-all"
               >
                 <User className="h-4 w-4" />
                 <span className="max-w-35 truncate">Contul Meu</span>
