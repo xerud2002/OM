@@ -5,7 +5,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   ArrowRightIcon as ArrowRight,
-  CheckCircleIcon as CheckCircle,
   BuildingOfficeIcon as Building2,
   ArrowTrendingUpIcon as TrendingUp,
   UsersIcon as Users,
