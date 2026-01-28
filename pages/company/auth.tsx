@@ -8,7 +8,15 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
 import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, Lock, Building2, ArrowRight, Users, TrendingUp, Award } from "lucide-react";
+import {
+  EnvelopeIcon as Mail,
+  LockClosedIcon as Lock,
+  BuildingOfficeIcon as Building2,
+  ArrowRightIcon as ArrowRight,
+  UsersIcon as Users,
+  ArrowTrendingUpIcon as TrendingUp,
+  TrophyIcon as Award,
+} from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { translateFirebaseError } from "@/utils/authErrors";
 import { toast } from "sonner";
@@ -87,7 +95,9 @@ export default function CompanyAuthPage() {
           router.push("/customer/auth");
           return;
         }
-        toast.success(`Bine ai revenit, ${user.displayName || user.email?.split("@")[0] || "partener"}! 👋`);
+        toast.success(
+          `Bine ai revenit, ${user.displayName || user.email?.split("@")[0] || "partener"}! 👋`
+        );
         router.push("/company/dashboard");
       } else {
         await mod.registerWithEmail("company", { email, password });
@@ -158,7 +168,7 @@ export default function CompanyAuthPage() {
                   transition={{ delay: 0.3 }}
                   className="mb-8 inline-flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-medium text-white backdrop-blur-sm"
                 >
-                  <Building2 size={16} />
+                  <Building2 className="h-4 w-4" />
                   Pentru Firme
                 </motion.div>
 
@@ -187,7 +197,7 @@ export default function CompanyAuthPage() {
                     className="flex items-center gap-3 text-white"
                   >
                     <div className="rounded-full bg-white/20 p-2 backdrop-blur-sm">
-                      <item.icon size={20} />
+                      <item.icon className="h-5 w-5" />
                     </div>
                     <span className="text-blue-50">{item.text}</span>
                   </motion.div>
@@ -241,7 +251,7 @@ export default function CompanyAuthPage() {
                   animate={{ scale: 1, opacity: 1 }}
                   className="mb-4 inline-flex items-center gap-2 rounded-full bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700"
                 >
-                  <Building2 size={16} />
+                  <Building2 className="h-4 w-4" />
                   Cont Firmă
                 </motion.div>
 
@@ -270,10 +280,11 @@ export default function CompanyAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="company-email"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${email
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                      email
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-blue-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-blue-600"
-                      }`}
+                    }`}
                   >
                     Email firmă
                   </label>
@@ -285,10 +296,7 @@ export default function CompanyAuthPage() {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Mail
-                        size={20}
-                        className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500"
-                      />
+                      <Mail className="h-5 w-5 mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500" />
                     </motion.div>
                     <input
                       id="company-email"
@@ -306,10 +314,11 @@ export default function CompanyAuthPage() {
                 <div className="group relative">
                   <label
                     htmlFor="company-password"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${password
+                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
+                      password
                         ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-blue-600"
                         : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-blue-600"
-                      }`}
+                    }`}
                   >
                     Parolă
                   </label>
@@ -321,10 +330,7 @@ export default function CompanyAuthPage() {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Lock
-                        size={20}
-                        className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500"
-                      />
+                      <Lock className="h-5 w-5 mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-blue-600 group-hover:text-gray-500" />
                     </motion.div>
                     <input
                       id="company-password"
@@ -340,7 +346,6 @@ export default function CompanyAuthPage() {
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
@@ -359,10 +364,7 @@ export default function CompanyAuthPage() {
                     ) : (
                       <>
                         {isLogin ? "Autentificare" : "Înregistrare firmă"}
-                        <ArrowRight
-                          size={20}
-                          className="transition-transform group-hover:translate-x-1"
-                        />
+                        <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                       </>
                     )}
                   </span>
@@ -392,7 +394,6 @@ export default function CompanyAuthPage() {
               </div>
 
               <motion.button
-                whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={handleGoogleLogin}
                 disabled={loading}

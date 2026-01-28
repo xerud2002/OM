@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Save, AlertCircle, Trash2, ImageIcon, Upload } from "lucide-react";
+import { XMarkIcon as X, CheckIcon as Save, ExclamationCircleIcon as AlertCircle, TrashIcon as Trash2, PhotoIcon as ImageIcon, ArrowUpTrayIcon as Upload } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import RequestForm from "./RequestForm";
 import Image from "next/image";
@@ -225,14 +225,14 @@ export default function EditRequestModal({
                   aria-label="Închide"
                   title="Închide"
                 >
-                  <X size={24} className="text-gray-600" />
+                  <X className="h-6 w-6 text-gray-600" />
                 </button>
               </div>
 
               {/* Warning */}
               <div className="border-b border-yellow-200 bg-yellow-50 px-6 py-3">
                 <div className="flex items-start gap-3">
-                  <AlertCircle size={20} className="mt-0.5 shrink-0 text-yellow-600" />
+                  <AlertCircle className="h-5 w-5 mt-0.5 shrink-0 text-yellow-600" />
                   <div className="text-sm text-yellow-800">
                     <p className="font-semibold">Notă importantă:</p>
                     <p>
@@ -259,7 +259,7 @@ export default function EditRequestModal({
                       (form.mediaFiles && form.mediaFiles.length > 0)) && (
                       <div className="mb-6 rounded-xl border border-amber-200 bg-gradient-to-br from-amber-50 to-white p-5">
                         <div className="mb-4 flex items-center gap-2">
-                          <ImageIcon size={20} className="text-amber-600" />
+                          <ImageIcon className="h-5 w-5 text-amber-600" />
                           <h3 className="text-lg font-semibold text-gray-900">Poze și video</h3>
                         </div>
 
@@ -301,7 +301,7 @@ export default function EditRequestModal({
                                     className="absolute top-2 right-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-red-600"
                                     title="Șterge"
                                   >
-                                    <Trash2 size={16} />
+                                    <Trash2 className="h-4 w-4" />
                                   </button>
                                 </div>
                               ))}
@@ -332,7 +332,7 @@ export default function EditRequestModal({
                                     />
                                   ) : (
                                     <div className="flex h-full items-center justify-center">
-                                      <Upload size={32} className="text-emerald-600" />
+                                      <Upload className="h-8 w-8 text-emerald-600" />
                                     </div>
                                   )}
                                   <button
@@ -345,7 +345,7 @@ export default function EditRequestModal({
                                     className="absolute top-2 right-2 flex h-8 w-8 items-center justify-center rounded-full bg-red-500 text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 hover:bg-red-600"
                                     title="Șterge"
                                   >
-                                    <X size={16} />
+                                    <X className="h-4 w-4" />
                                   </button>
                                 </div>
                               ))}
@@ -389,7 +389,7 @@ export default function EditRequestModal({
                       </>
                     ) : (
                       <>
-                        <Save size={18} />
+                        <Save className="h-4 w-4" />
                         Salvează modificările
                       </>
                     )}

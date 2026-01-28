@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { FileText } from "lucide-react";
+import { DocumentTextIcon as FileText } from "@heroicons/react/24/outline";
 
 export default function TermsPage() {
   return (

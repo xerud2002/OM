@@ -1,4 +1,4 @@
-import { Star } from "lucide-react";
+import { StarIcon as Star } from "@heroicons/react/24/outline";
 
 interface StarRatingProps {
   rating: number; // 0-5, suportă și .5 pentru half stars

@@ -4,19 +4,7 @@ import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { SERVICE_FAQS } from "@/data/faqData";
-import {
-  Music,
-  CheckCircle,
-  ArrowRight,
-  Shield,
-  Truck,
-  DollarSign,
-  Star,
-  AlertTriangle,
-  Package,
-  Heart,
-  Award,
-} from "lucide-react";
+import { MusicalNoteIcon as Music, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CurrencyDollarIcon as DollarSign, StarIcon as Star, ExclamationTriangleIcon as AlertTriangle, CubeIcon as Package, HeartIcon as Heart, TrophyIcon as Award } from "@heroicons/react/24/outline";
 
 interface MutariPianePageProps {
   currentYear: number;

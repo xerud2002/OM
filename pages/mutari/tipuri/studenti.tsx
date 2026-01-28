@@ -9,21 +9,7 @@ import {
   BreadcrumbSchema,
 } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
-import {
-  GraduationCap,
-  CheckCircle,
-  ArrowRight,
-  Package,
-  Clock,
-  DollarSign,
-  Bed,
-  BookOpen,
-  Calendar,
-  Star,
-  Percent,
-  Users,
-  MapPin,
-} from "lucide-react";
+import { AcademicCapIcon as GraduationCap, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, CubeIcon as Package, ClockIcon as Clock, CurrencyDollarIcon as DollarSign, HomeIcon as Bed, BookOpenIcon as BookOpen, CalendarIcon as Calendar, StarIcon as Star, ReceiptPercentIcon as Percent, UsersIcon as Users, MapPinIcon as MapPin } from "@heroicons/react/24/outline";
 
 interface MutariStudentiPageProps {
   currentYear: number;

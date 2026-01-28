@@ -1,18 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import {
-  Video,
-  Home,
-  Zap,
-  Shield,
-  CheckCircle,
-  XCircle,
-  AlertCircle,
-  Camera,
-  Phone,
-  FileText,
-} from "lucide-react";
+import { VideoCameraIcon as Video, HomeIcon as Home, BoltIcon as Zap, ShieldCheckIcon as Shield, CheckCircleIcon as CheckCircle, XCircleIcon as XCircle, ExclamationCircleIcon as AlertCircle, CameraIcon as Camera, PhoneIcon as Phone, DocumentTextIcon as FileText } from "@heroicons/react/24/outline";
 
 export default function ArticleSurvey() {
   return (

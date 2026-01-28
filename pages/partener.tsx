@@ -3,20 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import { logger } from "@/utils/logger";
-import {
-  CheckCircle,
-  Users,
-  TrendingUp,
-  Shield,
-  Bell,
-  BarChart3,
-  ArrowRight,
-  Building2,
-  Truck,
-  Star,
-  Phone,
-  Mail,
-} from "lucide-react";
+import { CheckCircleIcon as CheckCircle, UsersIcon as Users, ArrowTrendingUpIcon as TrendingUp, ShieldCheckIcon as Shield, BellIcon as Bell, ChartBarIcon as BarChart3, ArrowRightIcon as ArrowRight, BuildingOfficeIcon as Building2, TruckIcon as Truck, StarIcon as Star, PhoneIcon as Phone, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 

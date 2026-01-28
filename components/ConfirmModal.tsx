@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle, X, Trash2, Archive, RotateCcw, Info } from "lucide-react";
+import { ExclamationTriangleIcon as AlertTriangle, XMarkIcon as X, TrashIcon as Trash2, ArchiveBoxIcon as Archive, ArrowPathIcon as RotateCcw, InformationCircleIcon as Info } from "@heroicons/react/24/outline";
 
 type ConfirmModalProps = {
   isOpen: boolean;
@@ -87,7 +87,7 @@ export default function ConfirmModal({
                 onClick={onClose}
                 className="absolute top-4 right-4 rounded-lg p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
               >
-                <X size={20} />
+                <X className="h-5 w-5" />
               </button>
 
               <div className="p-6">

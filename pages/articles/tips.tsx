@@ -1,22 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import {
-  DollarSign,
-  Clock,
-  Shield,
-  Lightbulb,
-  CheckCircle,
-  AlertTriangle,
-  TrendingDown,
-  Calendar,
-  Users,
-  Package,
-  Truck,
-  Home,
-  Star,
-  MessageCircle,
-} from "lucide-react";
+import { CurrencyDollarIcon as DollarSign, ClockIcon as Clock, ShieldCheckIcon as Shield, LightBulbIcon as Lightbulb, CheckCircleIcon as CheckCircle, ExclamationTriangleIcon as AlertTriangle, ArrowTrendingDownIcon as TrendingDown, CalendarIcon as Calendar, UsersIcon as Users, CubeIcon as Package, TruckIcon as Truck, HomeIcon as Home, StarIcon as Star, ChatBubbleLeftRightIcon as MessageCircle } from "@heroicons/react/24/outline";
 
 export default function ArticleTips() {
   return (

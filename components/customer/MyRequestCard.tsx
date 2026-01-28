@@ -1,16 +1,16 @@
 import { useState, memo } from "react";
 import { motion } from "framer-motion";
 import {
-  Calendar,
-  MapPin,
-  Package,
-  CheckCircle2,
-  PauseCircle,
-  Archive,
-  XCircle,
-  Eye,
-  RotateCcw,
-} from "lucide-react";
+  CalendarIcon as Calendar,
+  MapPinIcon as MapPin,
+  CubeIcon as Package,
+  CheckCircleIcon as CheckCircle2,
+  PauseCircleIcon as PauseCircle,
+  ArchiveBoxIcon as Archive,
+  XCircleIcon as XCircle,
+  EyeIcon as Eye,
+  ArrowPathIcon as RotateCcw,
+} from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import RequestDetailsModal from "./RequestDetailsModal";
@@ -90,7 +90,6 @@ const MyRequestCard = memo(function MyRequestCard({
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={{ y: -3 }}
       className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg shadow-gray-100/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
       {/* Gradient accent bar */}
@@ -113,17 +112,18 @@ const MyRequestCard = memo(function MyRequestCard({
                         ? { background: "linear-gradient(135deg, #f59e0b 0%, #f97316 100%)" }
                         : { background: "linear-gradient(135deg, #ef4444 0%, #f43f5e 100%)" }
                 }
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow-lg sm:h-10 sm:w-10 sm:rounded-xl ${status === "active"
-                  ? "shadow-green-500/30"
-                  : status === "closed"
-                    ? "shadow-gray-500/20"
-                    : status === "paused"
-                      ? "shadow-amber-500/30"
-                      : "shadow-red-500/30"
-                  }`}
+                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow-lg sm:h-10 sm:w-10 sm:rounded-xl ${
+                  status === "active"
+                    ? "shadow-green-500/30"
+                    : status === "closed"
+                      ? "shadow-gray-500/20"
+                      : status === "paused"
+                        ? "shadow-amber-500/30"
+                        : "shadow-red-500/30"
+                }`}
               >
-                <MapPin size={16} className="text-white sm:hidden" />
-                <MapPin size={20} className="hidden text-white sm:block" />
+                <MapPin className="h-4 w-4 text-white sm:hidden" />
+                <MapPin className="h-5 w-5 hidden text-white sm:block" />
               </div>
               <h3 className="truncate text-base font-bold text-gray-900 sm:text-xl">
                 {request.fromCity || request.fromCounty}
@@ -145,7 +145,6 @@ const MyRequestCard = memo(function MyRequestCard({
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      strokeWidth={2}
                       d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
                     />
                   </svg>
@@ -158,23 +157,24 @@ const MyRequestCard = memo(function MyRequestCard({
             <div className="mb-3 flex flex-nowrap gap-2 overflow-x-auto pb-1 sm:mb-4 sm:flex-wrap sm:overflow-visible sm:pb-0">
               {/* Status badge */}
               <span
-                className={`shrink-0 ${status === "active"
-                  ? "inline-flex items-center gap-1 rounded-lg border border-green-200 bg-green-50 px-2 py-1 text-xs font-semibold text-green-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                  : status === "closed"
-                    ? "inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2 py-1 text-xs font-semibold text-gray-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                    : status === "paused"
-                      ? "inline-flex items-center gap-1 rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                      : "inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-semibold text-red-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                  }`}
+                className={`shrink-0 ${
+                  status === "active"
+                    ? "inline-flex items-center gap-1 rounded-lg border border-green-200 bg-green-50 px-2 py-1 text-xs font-semibold text-green-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
+                    : status === "closed"
+                      ? "inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2 py-1 text-xs font-semibold text-gray-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
+                      : status === "paused"
+                        ? "inline-flex items-center gap-1 rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
+                        : "inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-semibold text-red-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
+                }`}
               >
-                {status === "active" && <CheckCircle2 size={12} className="sm:hidden" />}
-                {status === "active" && <CheckCircle2 size={14} className="hidden sm:block" />}
-                {status === "closed" && <XCircle size={12} className="sm:hidden" />}
-                {status === "closed" && <XCircle size={14} className="hidden sm:block" />}
-                {status === "paused" && <PauseCircle size={12} className="sm:hidden" />}
-                {status === "paused" && <PauseCircle size={14} className="hidden sm:block" />}
-                {status === "cancelled" && <XCircle size={12} className="sm:hidden" />}
-                {status === "cancelled" && <XCircle size={14} className="hidden sm:block" />}
+                {status === "active" && <CheckCircle2 className="h-3 w-3 sm:hidden" />}
+                {status === "active" && <CheckCircle2 className="h-3.5 w-3.5 hidden sm:block" />}
+                {status === "closed" && <XCircle className="h-3 w-3 sm:hidden" />}
+                {status === "closed" && <XCircle className="h-3.5 w-3.5 hidden sm:block" />}
+                {status === "paused" && <PauseCircle className="h-3 w-3 sm:hidden" />}
+                {status === "paused" && <PauseCircle className="h-3.5 w-3.5 hidden sm:block" />}
+                {status === "cancelled" && <XCircle className="h-3 w-3 sm:hidden" />}
+                {status === "cancelled" && <XCircle className="h-3.5 w-3.5 hidden sm:block" />}
                 {getStatusLabel()}
               </span>
 
@@ -183,8 +183,8 @@ const MyRequestCard = memo(function MyRequestCard({
                 const display = formatMoveDateDisplay(request as any, { month: "short" });
                 return display && display !== "-" ? (
                   <span className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm">
-                    <Calendar size={12} className="text-gray-500 sm:hidden" />
-                    <Calendar size={14} className="hidden text-gray-500 sm:block" />
+                    <Calendar className="h-3 w-3 text-gray-500 sm:hidden" />
+                    <Calendar className="h-3.5 w-3.5 hidden text-gray-500 sm:block" />
                     {display}
                   </span>
                 ) : null;
@@ -193,8 +193,8 @@ const MyRequestCard = memo(function MyRequestCard({
               {/* Rooms badge */}
               {request.rooms && (
                 <span className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm">
-                  <Package size={12} className="text-gray-500 sm:hidden" />
-                  <Package size={14} className="hidden text-gray-500 sm:block" />
+                  <Package className="h-3 w-3 text-gray-500 sm:hidden" />
+                  <Package className="h-3.5 w-3.5 hidden text-gray-500 sm:block" />
                   {request.rooms} cam.
                 </span>
               )}
@@ -206,41 +206,43 @@ const MyRequestCard = memo(function MyRequestCard({
               request.serviceDisassembly ||
               request.serviceCleanout ||
               request.serviceStorage) && (
-                <div className="mt-3 flex flex-nowrap gap-1.5 overflow-x-auto pb-1 sm:mt-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:pb-0">
-                  {request.serviceMoving && (
-                    <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                      Transport
-                    </span>
-                  )}
-                  {request.servicePacking && (
-                    <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                      Ambalare
-                    </span>
-                  )}
-                  {request.serviceDisassembly && (
-                    <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                      Demontare
-                    </span>
-                  )}
-                  {request.serviceCleanout && (
-                    <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                      Debarasare
-                    </span>
-                  )}
-                  {request.serviceStorage && (
-                    <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                      Depozitare
-                    </span>
-                  )}
-                </div>
-              )}
+              <div className="mt-3 flex flex-nowrap gap-1.5 overflow-x-auto pb-1 sm:mt-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:pb-0">
+                {request.serviceMoving && (
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                    Transport
+                  </span>
+                )}
+                {request.servicePacking && (
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                    Ambalare
+                  </span>
+                )}
+                {request.serviceDisassembly && (
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                    Demontare
+                  </span>
+                )}
+                {request.serviceCleanout && (
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                    Debarasare
+                  </span>
+                )}
+                {request.serviceStorage && (
+                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
+                    Depozitare
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Right side: Offers count + Menu - row on mobile, column on desktop */}
           <div className="flex shrink-0 items-center justify-between gap-3 border-t border-gray-100 pt-3 sm:flex-col sm:items-end sm:border-0 sm:pt-0">
             {/* Offers badge - smaller on mobile */}
             <div
-              style={{ background: "linear-gradient(135deg, #22c55e 0%, #3b82f6 50%, #2563eb 100%)" }}
+              style={{
+                background: "linear-gradient(135deg, #22c55e 0%, #3b82f6 50%, #2563eb 100%)",
+              }}
               className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl shadow-lg shadow-green-500/30 sm:h-20 sm:w-20 sm:rounded-2xl sm:shadow-xl"
             >
               <div className="absolute inset-0 bg-white/10" />
@@ -259,8 +261,8 @@ const MyRequestCard = memo(function MyRequestCard({
                   className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
                   title="Vezi detalii cerere"
                 >
-                  <Eye size={16} className="sm:hidden" />
-                  <Eye size={18} className="hidden sm:block" />
+                  <Eye className="h-4 w-4 sm:hidden" />
+                  <Eye className="h-4 w-4 hidden sm:block" />
                 </button>
 
                 {/* Status actions */}
@@ -270,8 +272,8 @@ const MyRequestCard = memo(function MyRequestCard({
                     className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
                     title="Am găsit companie"
                   >
-                    <CheckCircle2 size={16} className="sm:hidden" />
-                    <CheckCircle2 size={18} className="hidden sm:block" />
+                    <CheckCircle2 className="h-4 w-4 sm:hidden" />
+                    <CheckCircle2 className="h-4 w-4 hidden sm:block" />
                   </button>
                 )}
 
@@ -282,8 +284,8 @@ const MyRequestCard = memo(function MyRequestCard({
                     className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
                     title="Redeschide cererea"
                   >
-                    <RotateCcw size={16} className="sm:hidden" />
-                    <RotateCcw size={18} className="hidden sm:block" />
+                    <RotateCcw className="h-4 w-4 sm:hidden" />
+                    <RotateCcw className="h-4 w-4 hidden sm:block" />
                   </button>
                 )}
 
@@ -293,8 +295,8 @@ const MyRequestCard = memo(function MyRequestCard({
                   className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-gray-300 hover:bg-gray-100 hover:text-gray-700 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
                   title="Arhivează cererea"
                 >
-                  <Archive size={16} className="sm:hidden" />
-                  <Archive size={18} className="hidden sm:block" />
+                  <Archive className="h-4 w-4 sm:hidden" />
+                  <Archive className="h-4 w-4 hidden sm:block" />
                 </button>
               </div>
             )}

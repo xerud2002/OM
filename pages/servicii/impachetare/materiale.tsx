@@ -2,20 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
-import {
-  ShoppingCart,
-  CheckCircle,
-  ArrowRight,
-  Box,
-  Circle,
-  DollarSign,
-  Star,
-  Package,
-  Layers,
-  Shield,
-  Sparkles,
-  Truck,
-} from "lucide-react";
+import { ShoppingCartIcon as ShoppingCart, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ArchiveBoxIcon as Box, StopIcon as Circle, CurrencyDollarIcon as DollarSign, StarIcon as Star, CubeIcon as Package, Squares2X2Icon as Layers, ShieldCheckIcon as Shield, SparklesIcon as Sparkles, TruckIcon as Truck } from "@heroicons/react/24/outline";
 
 interface MaterialeImpachetarePageProps {
   currentYear: number;

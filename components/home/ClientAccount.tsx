@@ -3,7 +3,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { LogIn, LayoutDashboard, User, Bell, FileText, ChevronRight, LogOut } from "lucide-react";
+import {
+  ArrowRightOnRectangleIcon as LogIn,
+  Squares2X2Icon as LayoutDashboard,
+  UserIcon as User,
+  BellIcon as Bell,
+  DocumentTextIcon as FileText,
+  ChevronRightIcon as ChevronRight,
+  ArrowRightOnRectangleIcon as LogOut,
+} from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
 import { onAuthChange, logout } from "@/utils/firebaseHelpers";
@@ -94,7 +102,7 @@ export default function ClientAccount() {
                   {/* CTA Buttons */}
                   {!user ? (
                     <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
-                      <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                      <motion.div>
                         <Link
                           href="/customer/auth"
                           className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
@@ -118,7 +126,7 @@ export default function ClientAccount() {
                         !
                       </p>
                       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:gap-3">
-                        <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                        <motion.div>
                           <Link
                             href="/customer/dashboard"
                             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl sm:w-auto sm:px-6 sm:py-3"
@@ -128,8 +136,6 @@ export default function ClientAccount() {
                           </Link>
                         </motion.div>
                         <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
                           onClick={async () => {
                             router.push("/");
                             await logout();
@@ -156,7 +162,6 @@ export default function ClientAccount() {
                 <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-sky-50 to-purple-50" />
                 <div className="relative flex h-full items-center justify-center p-8 lg:p-12">
                   <motion.div
-                    whileHover={{ rotate: -2, scale: 1.02 }}
                     transition={{ type: "spring", stiffness: 200 }}
                     className="group/image relative"
                   >

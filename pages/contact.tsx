@@ -5,21 +5,21 @@ import { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
 import {
-  Mail,
-  MapPin,
-  Send,
-  MessageCircle,
-  Building2,
-  User,
-  Clock,
-  CheckCircle,
-  AlertCircle,
-  Sparkles,
-  ArrowRight,
-  Shield,
-  Zap,
-  HelpCircle,
-} from "lucide-react";
+  EnvelopeIcon as Mail,
+  MapPinIcon as MapPin,
+  ChatBubbleLeftRightIcon as MessageCircle,
+  BuildingOfficeIcon as Building2,
+  UserIcon as User,
+  ClockIcon as Clock,
+  CheckCircleIcon as CheckCircle,
+  ExclamationCircleIcon as AlertCircle,
+  SparklesIcon as Sparkles,
+  ArrowRightIcon as ArrowRight,
+  ShieldCheckIcon as Shield,
+  BoltIcon as Zap,
+  QuestionMarkCircleIcon as HelpCircle,
+  PaperAirplaneIcon as Send,
+} from "@heroicons/react/24/outline";
 
 export default function ContactPage() {
   const heroRef = useRef(null);
@@ -271,7 +271,7 @@ export default function ContactPage() {
                     transition={{ delay: i * 0.1 }}
                     className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl"
                   >
-                    <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-gradient-to-br from-emerald-100/50 to-teal-100/50 blur-2xl transition-all group-hover:scale-150" />
+                    <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-gradient-to-br from-emerald-100/50 to-teal-100/50 blur-2xl" />
                     <div className="relative">
                       <div
                         className={`mb-4 inline-flex rounded-xl bg-gradient-to-br ${item.gradient} p-3 shadow-lg`}

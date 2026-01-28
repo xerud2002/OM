@@ -6,22 +6,22 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
 import {
-  Users,
-  Target,
-  Heart,
-  Shield,
-  Clock,
-  TrendingUp,
-  CheckCircle,
-  ArrowRight,
-  Sparkles,
-  Building2,
-  Handshake,
-  Award,
-  Quote,
-  Star,
-  Phone,
-} from "lucide-react";
+  UsersIcon as Users,
+  ArrowTrendingUpIcon as Target,
+  HeartIcon as Heart,
+  ShieldCheckIcon as Shield,
+  ClockIcon as Clock,
+  ArrowTrendingUpIcon as TrendingUp,
+  CheckCircleIcon as CheckCircle,
+  ArrowRightIcon as ArrowRight,
+  SparklesIcon as Sparkles,
+  BuildingOfficeIcon as Building2,
+  HandRaisedIcon as Handshake,
+  TrophyIcon as Award,
+  ChatBubbleLeftIcon as Quote,
+  StarIcon as Star,
+  PhoneIcon as Phone,
+} from "@heroicons/react/24/outline";
 
 export default function AboutPage() {
   const heroRef = useRef(null);
@@ -62,8 +62,6 @@ export default function AboutPage() {
       bg: "bg-amber-50",
     },
   ];
-
-
 
   const timeline = [
     {
@@ -329,8 +327,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-
-
         {/* Timeline Section - NEW */}
         <section className="relative py-20 sm:py-28">
           <div className="container mx-auto px-4">
@@ -368,15 +364,13 @@ export default function AboutPage() {
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.15 }}
-                    className={`relative mb-8 flex flex-col sm:mb-12 sm:flex-row ${i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
-                      }`}
+                    className={`relative mb-8 flex flex-col sm:mb-12 sm:flex-row ${
+                      i % 2 === 0 ? "sm:flex-row" : "sm:flex-row-reverse"
+                    }`}
                   >
                     {/* Content card */}
                     <div className={`w-full sm:w-1/2 ${i % 2 === 0 ? "sm:pr-12" : "sm:pl-12"}`}>
-                      <motion.div
-                        whileHover={{ y: -5 }}
-                        className="rounded-2xl border border-slate-200/50 bg-white p-6 shadow-lg transition-shadow hover:shadow-xl"
-                      >
+                      <motion.div className="rounded-2xl border border-slate-200/50 bg-white p-6 shadow-lg transition-shadow hover:shadow-xl">
                         <div className="mb-3 inline-flex rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-1">
                           <span className="text-sm font-bold text-white">{item.year}</span>
                         </div>
@@ -446,7 +440,7 @@ export default function AboutPage() {
                     <div
                       className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br ${value.gradient} shadow-lg transition-transform group-hover:scale-110`}
                     >
-                      <value.icon className="h-8 w-8 text-white" strokeWidth={1.5} />
+                      <value.icon className="h-8 w-8 text-white" />
                     </div>
 
                     {/* Content */}

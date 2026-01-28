@@ -5,19 +5,7 @@ import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
-import {
-  Wrench,
-  CheckCircle,
-  ArrowRight,
-  DollarSign,
-  Star,
-  Sofa,
-  Bed,
-  Box,
-  Layers,
-  AlertCircle,
-  Zap,
-} from "lucide-react";
+import { WrenchScrewdriverIcon as Wrench, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, CurrencyDollarIcon as DollarSign, StarIcon as Star, HomeIcon as Sofa, HomeIcon as Bed, ArchiveBoxIcon as Box, Squares2X2Icon as Layers, ExclamationCircleIcon as AlertCircle, BoltIcon as Zap } from "@heroicons/react/24/outline";
 
 interface DemontareMontareMobilaPageProps {
   currentYear: number;

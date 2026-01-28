@@ -6,13 +6,13 @@ import { useRouter } from "next/router";
 import { logger } from "@/utils/logger";
 import RequireRole from "@/components/auth/RequireRole";
 import {
-  PlusSquare,
-  List,
-  Inbox,
-  Archive as ArchiveIcon,
-  CheckCircle2,
-  MessageSquare,
-} from "lucide-react";
+  PlusCircleIcon as PlusSquare,
+  ListBulletIcon as List,
+  InboxIcon as Inbox,
+  ArchiveBoxIcon as ArchiveIcon,
+  CheckCircleIcon as CheckCircle2,
+  ChatBubbleBottomCenterTextIcon as MessageSquare,
+} from "@heroicons/react/24/outline";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -744,7 +744,7 @@ export default function CustomerDashboard() {
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <PlusSquare size={18} />
+                <PlusSquare className="h-4 w-4" />
                 <span className="hidden sm:inline">Cerere Nouă</span>
                 <span className="sm:hidden">Nouă</span>
               </button>
@@ -758,7 +758,7 @@ export default function CustomerDashboard() {
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <Inbox size={18} />
+                <Inbox className="h-4 w-4" />
                 <span>Oferte</span>
                 {totalOffers > 0 && (
                   <span
@@ -782,7 +782,7 @@ export default function CustomerDashboard() {
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <List size={18} />
+                <List className="h-4 w-4" />
                 <span className="hidden sm:inline">Cererile mele</span>
                 <span className="sm:hidden">Cereri</span>
               </button>
@@ -796,7 +796,7 @@ export default function CustomerDashboard() {
                     : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <ArchiveIcon size={18} />
+                <ArchiveIcon className="h-4 w-4" />
                 <span>Arhivă</span>
               </button>
             </div>
@@ -824,7 +824,7 @@ export default function CustomerDashboard() {
                   <div className="relative">
                     <div className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-20" />
                     <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-2xl shadow-emerald-500/40">
-                      <List size={40} className="text-white" />
+                      <List className="h-10 w-10 text-white" />
                     </div>
                   </div>
                   <h3 className="mt-8 text-2xl font-bold text-gray-900">Nicio cerere încă</h3>
@@ -833,9 +833,9 @@ export default function CustomerDashboard() {
                   </p>
                   <button
                     onClick={() => setActiveTab("new")}
-                    className="group mt-8 inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all duration-300 hover:scale-105 hover:shadow-emerald-500/50"
+                    className="group mt-8 inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all duration-300 hover:shadow-emerald-500/50"
                   >
-                    <PlusSquare size={24} className="transition-transform group-hover:rotate-90" />
+                    <PlusSquare className="h-6 w-6 transition-transform group-hover:rotate-90" />
                     Creează prima cerere
                   </button>
                 </motion.div>
@@ -903,7 +903,7 @@ export default function CustomerDashboard() {
               {requests.length === 0 ? (
                 <div className="p-12 text-center">
                   <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
-                    <Inbox size={36} className="text-white" />
+                    <Inbox className="h-9 w-9 text-white" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900">Nu ai încă cereri</h3>
                   <p className="mt-2 text-gray-500">
@@ -913,7 +913,7 @@ export default function CustomerDashboard() {
                     onClick={() => setActiveTab("new")}
                     className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:scale-105 hover:shadow-xl"
                   >
-                    <PlusSquare size={18} />
+                    <PlusSquare className="h-4 w-4" />
                     Creează prima cerere
                   </button>
                 </div>
@@ -923,7 +923,7 @@ export default function CustomerDashboard() {
                   <aside className="border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white lg:border-r lg:border-b-0">
                     <div className="sticky top-20 max-h-[calc(100vh-120px)] overflow-auto p-5">
                       <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-900">
-                        <List size={16} className="text-emerald-600" />
+                        <List className="h-4 w-4 text-emerald-600" />
                         Selectează o cerere
                       </h3>
                       <div className="space-y-3">
@@ -976,7 +976,7 @@ export default function CustomerDashboard() {
                     {!selectedRequestId ? (
                       <div className="flex flex-col items-center justify-center py-16 text-center">
                         <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-                          <Inbox size={28} className="text-gray-400" />
+                          <Inbox className="h-7 w-7 text-gray-400" />
                         </div>
                         <p className="text-gray-500">
                           Selectează o cerere din stânga pentru a vedea ofertele.
@@ -1002,7 +1002,7 @@ export default function CustomerDashboard() {
                         {!(offersByRequest[selectedRequestId] || []).length ? (
                           <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-12 text-center">
                             <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
-                              <Inbox size={36} className="text-white" />
+                              <Inbox className="h-9 w-9 text-white" />
                             </div>
                             <h4 className="mt-5 text-lg font-bold text-gray-900">
                               Nicio ofertă încă
@@ -1081,7 +1081,7 @@ export default function CustomerDashboard() {
                   className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-14 text-center"
                 >
                   <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-400 to-gray-500 shadow-xl shadow-gray-500/20">
-                    <ArchiveIcon size={36} className="text-white" />
+                    <ArchiveIcon className="h-9 w-9 text-white" />
                   </div>
                   <h3 className="mt-6 text-xl font-bold text-gray-900">Arhivă goală</h3>
                   <p className="mt-3 max-w-md text-gray-500">
@@ -1188,7 +1188,6 @@ function OfferRow({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      whileHover={{ y: -2 }}
       className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
       {/* Gradient accent */}
@@ -1228,7 +1227,7 @@ function OfferRow({
               onClick={() => onAccept(requestId, offer.id)}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
-              <CheckCircle2 size={16} />
+              <CheckCircle2 className="h-4 w-4" />
               Acceptă
             </button>
             <button
@@ -1241,7 +1240,7 @@ function OfferRow({
               onClick={() => setShowMessage((s) => !s)}
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600"
             >
-              <MessageSquare size={16} />
+              <MessageSquare className="h-4 w-4" />
               Mesaj
             </button>
           </div>

@@ -5,22 +5,7 @@ import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
-import {
-  Package,
-  CheckCircle,
-  ArrowRight,
-  Shield,
-  Box,
-  Sparkles,
-  Clock,
-  DollarSign,
-  Star,
-  Layers,
-  Heart,
-  AlertTriangle,
-  Wine,
-  Frame,
-} from "lucide-react";
+import { CubeIcon as Package, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, ArchiveBoxIcon as Box, SparklesIcon as Sparkles, ClockIcon as Clock, CurrencyDollarIcon as DollarSign, StarIcon as Star, Squares2X2Icon as Layers, HeartIcon as Heart, ExclamationTriangleIcon as AlertTriangle, BeakerIcon as Wine, PhotoIcon as Frame } from "@heroicons/react/24/outline";
 
 interface ImpachetareProfesionalaPageProps {
   currentYear: number;

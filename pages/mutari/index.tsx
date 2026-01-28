@@ -2,10 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
-import {
-  ArrowRight,
-  MapPin,
-} from "lucide-react";
+import { ArrowRightIcon as ArrowRight, MapPinIcon as MapPin } from "@heroicons/react/24/outline";
 
 interface MutariIndexPageProps {
   currentYear: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Facebook, Mail } from "lucide-react";
+import { BuildingOfficeIcon as Facebook, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
 
 /* 🔹 Constants */
 const CONTACT_INFO = [{ icon: Mail, text: "info@ofertemutare.ro", label: null }];
@@ -68,7 +68,7 @@ export default function Footer() {
           <div className="flex flex-col items-center gap-1 text-sm text-gray-600 sm:items-start">
             {CONTACT_INFO.map(({ icon: Icon, text, label }, i) => (
               <div key={i} className="flex items-center gap-2">
-                <Icon size={16} className="text-emerald-500" />
+                <Icon className="h-4 w-4 text-emerald-500" />
                 <a href={`mailto:${text}`} className="hover:text-emerald-600">
                   {text}
                 </a>
@@ -121,7 +121,7 @@ export default function Footer() {
                 aria-label={label}
                 className="rounded-full border border-gray-200 p-2 text-gray-600 transition-all duration-200 hover:scale-110 hover:border-emerald-500 hover:text-emerald-600 active:scale-95"
               >
-                <Icon size={18} />
+                <Icon className="h-4 w-4" />
               </a>
             ))}
           </div>

@@ -4,20 +4,20 @@ import NextImage from "next/image";
 import { GetStaticPaths, GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
-  MapPin,
-  Shield,
-  Truck,
-  Package,
-  Star,
-  CheckCircle,
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  Building2,
-  Home,
-  Calendar,
-  TrendingDown,
-} from "lucide-react";
+  MapPinIcon as MapPin,
+  ShieldCheckIcon as Shield,
+  TruckIcon as Truck,
+  CubeIcon as Package,
+  StarIcon as Star,
+  CheckCircleIcon as CheckCircle,
+  ArrowRightIcon as ArrowRight,
+  ChevronLeftIcon as ChevronLeft,
+  ChevronRightIcon as ChevronRight,
+  BuildingOfficeIcon as Building2,
+  HomeIcon as Home,
+  CalendarIcon as Calendar,
+  ArrowTrendingDownIcon as TrendingDown,
+} from "@heroicons/react/24/outline";
 import { getCityBySlug, getAllCitySlugs, CityData, cityData } from "@/utils/citySlugData";
 
 interface CityPageProps {
@@ -29,24 +29,25 @@ interface CityPageProps {
 
 // Matching text gradients for city names (pairs with hero gradients)
 const textGradients = [
-  'from-yellow-300 to-orange-300',    // Warm contrast for Emerald
-  'from-yellow-200 to-amber-300',     // Warm contrast for Blue
-  'from-yellow-300 to-orange-400',    // Warm contrast for Cyan
-  'from-pink-300 to-rose-400',        // Pink contrast for Violet
-  'from-amber-300 to-yellow-400',     // Warm contrast for Teal
-  'from-yellow-200 to-orange-300',    // Warm contrast for Rose
-  'from-white to-yellow-100',         // Light contrast for Orange
-  'from-cyan-300 to-sky-200',         // Cool contrast for Indigo
-  'from-green-300 to-lime-300',       // Added for variety
-  'from-purple-300 to-fuchsia-300',   // Added for variety
-  'from-red-300 to-orange-300',       // Added for variety
-  'from-blue-300 to-indigo-300',      // Added for variety
+  "from-yellow-300 to-orange-300", // Warm contrast for Emerald
+  "from-yellow-200 to-amber-300", // Warm contrast for Blue
+  "from-yellow-300 to-orange-400", // Warm contrast for Cyan
+  "from-pink-300 to-rose-400", // Pink contrast for Violet
+  "from-amber-300 to-yellow-400", // Warm contrast for Teal
+  "from-yellow-200 to-orange-300", // Warm contrast for Rose
+  "from-white to-yellow-100", // Light contrast for Orange
+  "from-cyan-300 to-sky-200", // Cool contrast for Indigo
+  "from-green-300 to-lime-300", // Added for variety
+  "from-purple-300 to-fuchsia-300", // Added for variety
+  "from-red-300 to-orange-300", // Added for variety
+  "from-blue-300 to-indigo-300", // Added for variety
 ];
 
 export default function CityPage({ city, prevCity, nextCity, currentYear }: CityPageProps) {
-
   // Use a hash for text gradient to ensure more variety if heroGradients and textGradients have different lengths
-  const textGradientIndex = city.slug.split('').reduce((acc, char) => acc + char.charCodeAt(0) * 2, 0) % textGradients.length;
+  const textGradientIndex =
+    city.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0) * 2, 0) %
+    textGradients.length;
   const textGradient = textGradients[textGradientIndex];
   // Check if city has a hero image
   const hasHeroImage = Boolean(city.heroImage);
@@ -58,7 +59,18 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
         <meta name="description" content={city.metaDescription} />
         <meta
           name="keywords"
-          content={"mutări " + city.name + ", firme mutări " + city.name + ", transport mobilă " + city.name + ", mutări " + city.county + ", servicii mutare " + city.name}
+          content={
+            "mutări " +
+            city.name +
+            ", firme mutări " +
+            city.name +
+            ", transport mobilă " +
+            city.name +
+            ", mutări " +
+            city.county +
+            ", servicii mutare " +
+            city.name
+          }
         />
         <link rel="canonical" href={"https://ofertemutare.ro/mutari/" + city.slug} />
 
@@ -91,10 +103,10 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
             {prevCity && (
               <Link
                 href={`/mutari/${prevCity.slug}`}
-                className="hidden xl:flex absolute -left-20 top-1/2 z-10 -translate-y-1/2 rounded-full border border-gray-200 bg-white p-3 text-gray-400 shadow-lg transition-all hover:border-emerald-500 hover:text-emerald-600 hover:scale-110 hover:shadow-xl"
+                className="hidden xl:flex absolute -left-20 top-1/2 z-10 -translate-y-1/2 rounded-full border border-gray-200 bg-white p-3 text-gray-400 shadow-lg transition-all hover:border-emerald-500 hover:text-emerald-600 hover:shadow-xl"
                 title={`Înapoi la ${prevCity.name}`}
               >
-                <ChevronLeft className="h-8 w-8" strokeWidth={2} />
+                <ChevronLeft className="h-8 w-8" />
               </Link>
             )}
             {nextCity && (
@@ -103,23 +115,21 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                 className="hidden xl:flex absolute -right-20 top-1/2 z-10 -translate-y-1/2 rounded-full border border-gray-200 bg-white p-3 text-gray-400 shadow-lg transition-all hover:border-emerald-500 hover:text-emerald-600 hover:scale-110 hover:shadow-xl"
                 title={`Înainte la ${nextCity.name}`}
               >
-                <ChevronRight className="h-8 w-8" strokeWidth={2} />
+                <ChevronRight className="h-8 w-8" />
               </Link>
             )}
 
-            <section
-              className="group relative overflow-hidden rounded-3xl min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-5xl mx-auto"
-            >
+            <section className="group relative overflow-hidden rounded-3xl min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-5xl mx-auto">
               {/* Background: Hidden on mobile (except for color), visible as image on desktop */}
               <div
-                className={`absolute inset-0 ${hasHeroImage ? 'bg-slate-900' : 'bg-gradient-to-r from-green-600 to-blue-600'}`}
+                className={`absolute inset-0 ${hasHeroImage ? "bg-slate-900" : "bg-gradient-to-r from-green-600 to-blue-600"}`}
                 style={{
                   backgroundImage: hasHeroImage
                     ? `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url("${city.heroImage}")`
-                    : 'none',
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                  backgroundRepeat: 'no-repeat'
+                    : "none",
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
                 }}
               >
                 {/* Mobile overlay to hide the desktop background image but keep the color */}
@@ -139,7 +149,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                   className="xl:hidden absolute left-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-black/20 p-2 text-white/40 backdrop-blur-sm transition-all hover:bg-emerald-500/80 hover:text-white md:left-6 opacity-60 hover:opacity-100"
                   title={`Înapoi la ${prevCity.name}`}
                 >
-                  <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2.5} />
+                  <ChevronLeft className="h-6 w-6 md:h-8 md:w-8" />
                 </Link>
               )}
               {nextCity && (
@@ -148,7 +158,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                   className="xl:hidden absolute right-2 top-1/2 z-20 -translate-y-1/2 rounded-full border border-white/10 bg-black/20 p-2 text-white/40 backdrop-blur-sm transition-all hover:bg-emerald-500/80 hover:text-white md:right-6 opacity-60 hover:opacity-100"
                   title={`Înainte la ${nextCity.name}`}
                 >
-                  <ChevronRight className="h-6 w-6 md:h-8 md:w-8" strokeWidth={2.5} />
+                  <ChevronRight className="h-6 w-6 md:h-8 md:w-8" />
                 </Link>
               )}
 
@@ -164,7 +174,9 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                 <h1 className="mb-6 text-center text-4xl font-extrabold text-white drop-shadow-lg md:text-left md:text-5xl lg:text-6xl">
                   <span className="text-white">Mutări în </span>
                   <span className="relative inline-block">
-                    <span className={`bg-gradient-to-r ${textGradient} bg-clip-text text-transparent`}>
+                    <span
+                      className={`bg-gradient-to-r ${textGradient} bg-clip-text text-transparent`}
+                    >
                       {city.name}
                     </span>
                     {/* Decorative underline */}

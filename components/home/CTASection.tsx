@@ -2,7 +2,14 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, Sparkles, ShieldCheck, Clock, Lock, Zap } from "lucide-react";
+import {
+  ArrowRightIcon as ArrowRight,
+  SparklesIcon as Sparkles,
+  ShieldCheckIcon as ShieldCheck,
+  ClockIcon as Clock,
+  LockClosedIcon as Lock,
+  BoltIcon as Zap,
+} from "@heroicons/react/24/outline";
 
 export default function CTASection() {
   const badges = [
@@ -18,10 +25,10 @@ export default function CTASection() {
         {/* Gradient orbs */}
         <div className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-500/20 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
         <div className="absolute bottom-0 right-1/4 hidden h-[500px] w-[500px] translate-y-1/2 rounded-full bg-sky-500/20 blur-[100px] sm:block" />
-        
+
         {/* Grid pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] sm:bg-[size:60px_60px]" />
-        
+
         {/* Radial gradient overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.15),transparent_70%)]" />
       </div>
@@ -37,7 +44,9 @@ export default function CTASection() {
             className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-1.5 sm:mb-8 sm:px-5 sm:py-2"
           >
             <Zap className="h-3.5 w-3.5 text-emerald-400 sm:h-4 sm:w-4" />
-            <span className="text-xs font-semibold text-emerald-400 sm:text-sm">Începe acum - durează 2 minute</span>
+            <span className="text-xs font-semibold text-emerald-400 sm:text-sm">
+              Începe acum - durează 2 minute
+            </span>
           </motion.div>
 
           {/* Headline */}
@@ -63,8 +72,10 @@ export default function CTASection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mx-auto mb-8 max-w-2xl text-base text-slate-300 sm:mb-10 sm:text-lg md:text-xl"
           >
-            Peste <span className="font-bold text-white">500 de români</span> au economisit deja prin Ofertemutare.ro. 
-            Completează cererea și primește <span className="font-bold text-emerald-400">oferte gratuite</span> de la firme verificate!
+            Peste <span className="font-bold text-white">500 de români</span> au economisit deja
+            prin Ofertemutare.ro. Completează cererea și primește{" "}
+            <span className="font-bold text-emerald-400">oferte gratuite</span> de la firme
+            verificate!
           </motion.p>
 
           {/* CTA Button */}
@@ -75,10 +86,7 @@ export default function CTASection() {
             transition={{ duration: 0.5, delay: 0.3 }}
             className="mb-8 sm:mb-12"
           >
-            <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.98 }}
-            >
+            <motion.div whileTap={{ scale: 0.98 }}>
               <Link
                 href="/customer/dashboard"
                 className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-4 text-sm font-bold text-white shadow-2xl shadow-emerald-500/30 transition-all hover:shadow-emerald-500/40 sm:gap-3 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
@@ -128,7 +136,9 @@ export default function CTASection() {
               { value: "50+", label: "Firme partenere" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <p className="text-lg font-bold text-emerald-400 sm:text-2xl lg:text-3xl">{stat.value}</p>
+                <p className="text-lg font-bold text-emerald-400 sm:text-2xl lg:text-3xl">
+                  {stat.value}
+                </p>
                 <p className="text-[10px] text-slate-400 sm:text-xs lg:text-sm">{stat.label}</p>
               </div>
             ))}

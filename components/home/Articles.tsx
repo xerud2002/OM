@@ -2,7 +2,12 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { ArrowRight, BookOpen, Clock, ChevronRight } from "lucide-react";
+import {
+  ArrowRightIcon as ArrowRight,
+  BookOpenIcon as BookOpen,
+  ClockIcon as Clock,
+  ChevronRightIcon as ChevronRight,
+} from "@heroicons/react/24/outline";
 
 const articles = [
   {
@@ -51,7 +56,9 @@ export default function Articles() {
         >
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
             <BookOpen className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
-            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Ghid de Mutare</span>
+            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+              Ghid de Mutare
+            </span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Sfaturi pentru o{" "}
@@ -76,7 +83,6 @@ export default function Articles() {
             >
               <Link href={article.link} className="group block h-full">
                 <motion.div
-                  whileHover={{ y: -8 }}
                   transition={{ type: "spring", stiffness: 300 }}
                   className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
                 >
@@ -86,7 +92,9 @@ export default function Articles() {
                   <div className="flex flex-1 flex-col p-4 sm:p-6">
                     {/* Meta info */}
                     <div className="mb-3 flex items-center justify-between sm:mb-4">
-                      <span className={`rounded-full bg-gradient-to-r ${article.gradient} px-2.5 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs`}>
+                      <span
+                        className={`rounded-full bg-gradient-to-r ${article.gradient} px-2.5 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs`}
+                      >
                         {article.category}
                       </span>
                       <span className="flex items-center gap-1 text-[10px] text-slate-500 sm:text-xs">

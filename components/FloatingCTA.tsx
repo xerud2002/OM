@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRightIcon as ArrowRight } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
@@ -70,14 +70,13 @@ export default function FloatingCTA() {
       initial={{ opacity: 0, scale: 0.8, y: 20 }}
       animate={{ opacity: 1, scale: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.8, y: 20 }}
-      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       onClick={handleClick}
       className="fixed right-6 bottom-6 z-40 flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-3 font-bold text-white shadow-2xl transition-all hover:shadow-emerald-400/50 md:hidden"
       aria-label="Primește oferte gratuite"
     >
       🎁 Primește Oferte
-      <ArrowRight size={20} />
+      <ArrowRight className="h-5 w-5" />
     </motion.button>
   );
 }

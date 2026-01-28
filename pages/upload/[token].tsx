@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import LayoutWrapper from "@/components/layout/Layout";
-import { Upload, CheckCircle, XCircle, Loader2, FileVideo } from "lucide-react";
+import { ArrowUpTrayIcon as Upload, CheckCircleIcon as CheckCircle, XCircleIcon as XCircle, ArrowPathIcon as Loader2, VideoCameraIcon as FileVideo } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { storage, db, auth } from "@/services/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";

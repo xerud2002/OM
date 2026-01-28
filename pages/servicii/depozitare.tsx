@@ -5,19 +5,7 @@ import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
-import {
-  Warehouse,
-  CheckCircle,
-  ArrowRight,
-  Shield,
-  DollarSign,
-  Star,
-  Lock,
-  Thermometer,
-  Camera,
-  Key,
-  Calendar,
-} from "lucide-react";
+import { BuildingStorefrontIcon as Warehouse, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, CurrencyDollarIcon as DollarSign, StarIcon as Star, LockClosedIcon as Lock, FireIcon as Thermometer, CameraIcon as Camera, KeyIcon as Key, CalendarIcon as Calendar } from "@heroicons/react/24/outline";
 
 interface DepozitarePageProps {
   currentYear: number;

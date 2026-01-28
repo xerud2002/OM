@@ -1,4 +1,4 @@
-import { CheckCircle, Shield, Lock, Users } from "lucide-react";
+import { CheckCircleIcon as CheckCircle, ShieldCheckIcon as Shield, LockClosedIcon as Lock, UsersIcon as Users } from "@heroicons/react/24/outline";
 
 export default function TrustSignals({ className = "" }: { className?: string }) {
   return (

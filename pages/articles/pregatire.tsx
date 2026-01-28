@@ -1,18 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import {
-  Calendar,
-  CheckCircle,
-  Clock,
-  Home,
-  Package,
-  Truck,
-  Users,
-  AlertTriangle,
-  FileText,
-  Phone,
-} from "lucide-react";
+import { CalendarIcon as Calendar, CheckCircleIcon as CheckCircle, ClockIcon as Clock, HomeIcon as Home, CubeIcon as Package, TruckIcon as Truck, UsersIcon as Users, ExclamationTriangleIcon as AlertTriangle, DocumentTextIcon as FileText, PhoneIcon as Phone } from "@heroicons/react/24/outline";
 
 export default function ArticlePregatire() {
   return (

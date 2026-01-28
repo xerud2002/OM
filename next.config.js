@@ -50,7 +50,7 @@ const nextConfig = {
   // Experimental optimizations
   experimental: {
     optimizePackageImports: [
-      "lucide-react",
+      "@heroicons/react",
       "sonner",
       "framer-motion",
       "date-fns",

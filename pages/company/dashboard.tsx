@@ -21,23 +21,23 @@ import {
 } from "firebase/firestore";
 import { motion } from "framer-motion";
 import {
-  Building2,
-  FileText,
-  Send,
-  CheckCircle2,
-  Clock,
-  XCircle,
-  Search,
-  Filter,
-  TrendingUp,
-  Settings,
-  Edit3,
-  Trash2,
-  Save,
-  X,
-  ChevronRight,
-  BarChart3,
-} from "lucide-react";
+  BuildingOfficeIcon as Building2,
+  DocumentTextIcon as FileText,
+  PaperAirplaneIcon as Send,
+  Cog6ToothIcon as Settings,
+  CheckCircleIcon as CheckCircle2,
+  ClockIcon as Clock,
+  XCircleIcon as XCircle,
+  MagnifyingGlassIcon as Search,
+  FunnelIcon as Filter,
+  ArrowTrendingUpIcon as TrendingUp,
+  PencilIcon as Edit3,
+  TrashIcon as Trash2,
+  CheckIcon as Save,
+  XMarkIcon as X,
+  ChevronRightIcon as ChevronRight,
+  ChartBarIcon as BarChart3,
+} from "@heroicons/react/24/outline";
 
 export default function CompanyDashboard() {
   const router = useRouter();
@@ -301,7 +301,7 @@ export default function CompanyDashboard() {
                     transition={{ duration: 0.4, delay: i * 0.1 }}
                   >
                     <div
-                      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.gradient} p-5 text-white shadow-lg transition-transform hover:scale-[1.02]`}
+                      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${stat.gradient} p-5 text-white shadow-lg`}
                     >
                       {/* Background decoration */}
                       <div className="absolute -top-4 -right-4 h-20 w-20 rounded-full bg-white/10 blur-xl" />

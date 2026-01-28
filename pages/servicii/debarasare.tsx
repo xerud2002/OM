@@ -5,16 +5,7 @@ import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
-import {
-  Trash2,
-  CheckCircle,
-  ArrowRight,
-  DollarSign,
-  Star,
-  Package,
-  Sofa,
-  Recycle,
-} from "lucide-react";
+import { TrashIcon as Trash2, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, CurrencyDollarIcon as DollarSign, StarIcon as Star, CubeIcon as Package, HomeIcon as Sofa, ArrowPathIcon as Recycle } from "@heroicons/react/24/outline";
 
 interface DebarasarePageProps {
   currentYear: number;

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { MapPin } from "lucide-react";
+import { MapPinIcon as MapPin } from "@heroicons/react/24/outline";
 import { cityData } from "@/utils/citySlugData";
 
 export default function CityLinksSection() {

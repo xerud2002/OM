@@ -2,13 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
-import {
-  Package,
-  Wrench,
-  Warehouse,
-  Trash2,
-  ArrowRight,
-} from "lucide-react";
+import { CubeIcon as Package, WrenchScrewdriverIcon as Wrench, BuildingStorefrontIcon as Warehouse, TrashIcon as Trash2, ArrowRightIcon as ArrowRight } from "@heroicons/react/24/outline";
 
 interface ServiciiIndexPageProps {
   currentYear: number;

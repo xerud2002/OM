@@ -2,6 +2,12 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import {
+  CheckCircleIcon,
+  StarIcon,
+  ShieldCheckIcon,
+  ArrowTrendingUpIcon,
+} from "@heroicons/react/24/outline";
 
 // Lazy load the form for better LCP
 const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
@@ -11,38 +17,15 @@ const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
   ssr: false,
 });
 
-// Lazy load trust indicators (they use Lucide icons)
-const TrustIndicators = dynamic(
-  () =>
-    import("lucide-react").then((mod) => {
-      const { CheckCircle, Star, ShieldCheck, TrendingUp } = mod;
-      const indicators = [
-        { icon: ShieldCheck, label: "Firme Verificate", color: "text-emerald-600" },
-        { icon: CheckCircle, label: "100% Gratuit", color: "text-sky-600" },
-        { icon: Star, label: "Recenzii", color: "text-amber-500" },
-        { icon: TrendingUp, label: "Economie timp", color: "text-purple-600" },
-      ];
-      return {
-        default: () => (
-          <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-3 lg:justify-start lg:gap-4">
-            {indicators.map((item, i) => (
-              <div
-                key={i}
-                className="flex flex-shrink-0 items-center gap-1 rounded-full bg-white/80 px-2.5 py-1.5 shadow-sm backdrop-blur-sm sm:gap-2 sm:px-4 sm:py-2"
-              >
-                <item.icon className={`h-3.5 w-3.5 flex-shrink-0 ${item.color} sm:h-5 sm:w-5`} />
-                <span className="text-[10px] font-medium whitespace-nowrap text-slate-700 sm:text-sm">
-                  {item.label}
-                </span>
-              </div>
-            ))}
-          </div>
-        ),
-      };
-    }),
-  {
-    ssr: false,
-    loading: () => (
+function TrustIndicators() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
       <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-3 lg:justify-start lg:gap-4">
         <span className="rounded-full bg-white/80 px-2.5 py-1.5 text-[10px] font-medium shadow-sm sm:px-4 sm:py-2 sm:text-sm">
           ✓ Firme Verificate
@@ -57,9 +40,30 @@ const TrustIndicators = dynamic(
           ↗ Economie timp
         </span>
       </div>
-    ),
+    );
   }
-);
+
+  const indicators = [
+    { icon: ShieldCheckIcon, label: "Firme Verificate", color: "text-emerald-600" },
+    { icon: CheckCircleIcon, label: "100% Gratuit", color: "text-sky-600" },
+    { icon: StarIcon, label: "Recenzii", color: "text-amber-500" },
+    { icon: ArrowTrendingUpIcon, label: "Economie timp", color: "text-purple-600" },
+  ];
+
+  return (
+    <div className="flex flex-nowrap items-center justify-center gap-1.5 sm:gap-3 lg:justify-start lg:gap-4">
+      {indicators.map((item, i) => (
+        <div
+          key={i}
+          className="flex items-center gap-1 whitespace-nowrap text-xs font-medium sm:gap-1.5 sm:text-sm"
+        >
+          <item.icon className={`h-4 w-4 sm:h-5 sm:w-5 ${item.color}`} />
+          <span className="text-slate-700">{item.label}</span>
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function Hero() {
   const [animationsReady, setAnimationsReady] = useState(false);

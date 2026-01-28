@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Bell, X, Check } from "lucide-react";
+import { BellIcon as Bell, XMarkIcon as X, CheckIcon as Check } from "@heroicons/react/24/outline";
 import { db } from "@/services/firebase";
 import { collection, query, orderBy, onSnapshot, updateDoc, doc } from "firebase/firestore";
 
@@ -92,7 +92,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
         onClick={() => setShowDropdown(!showDropdown)}
         className="relative rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
       >
-        <Bell size={24} />
+        <Bell className="h-6 w-6" />
         {unreadCount > 0 && (
           <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
             {unreadCount > 9 ? "9+" : unreadCount}
@@ -138,7 +138,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                     onClick={() => setShowDropdown(false)}
                     className="rounded-lg p-1 transition-colors hover:bg-gray-100"
                   >
-                    <X size={18} />
+                    <X className="h-4 w-4" />
                   </button>
                 </div>
               </div>
@@ -151,7 +151,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                   </div>
                 ) : notifications.length === 0 ? (
                   <div className="py-8 text-center">
-                    <Bell size={48} className="mx-auto mb-2 text-gray-300" />
+                    <Bell className="mx-auto mb-2 h-12 w-12 text-gray-300" />
                     <p className="text-sm text-gray-500">Nicio notificare</p>
                   </div>
                 ) : (
@@ -188,7 +188,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                                   }}
                                   className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-600 opacity-0 transition-all group-hover:opacity-100 hover:bg-emerald-100"
                                 >
-                                  <Check size={14} />
+                                  <Check className="h-3.5 w-3.5" />
                                   Marchează ca citit
                                 </button>
                               )}

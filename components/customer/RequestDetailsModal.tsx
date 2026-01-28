@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, MapPin, Calendar, Package, Phone, User, FileText, Wrench, Trash2 } from "lucide-react";
+import { XMarkIcon as X, MapPinIcon as MapPin, CalendarIcon as Calendar, CubeIcon as Package, PhoneIcon as Phone, UserIcon as User, DocumentTextIcon as FileText, WrenchScrewdriverIcon as Wrench, TrashIcon as Trash2 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import Image from "next/image";
@@ -116,7 +116,7 @@ export default function RequestDetailsModal({
                   aria-label="Închide"
                   title="Închide"
                 >
-                  <X size={24} className="text-gray-600" />
+                  <X className="h-6 w-6 text-gray-600" />
                 </button>
               </div>
 
@@ -125,7 +125,7 @@ export default function RequestDetailsModal({
                 {/* Route Section */}
                 <div className="mb-6 rounded-xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-white p-5">
                   <div className="mb-4 flex items-center gap-2">
-                    <MapPin size={20} className="text-emerald-600" />
+                    <MapPin className="h-5 w-5 text-emerald-600" />
                     <h3 className="text-lg font-semibold text-gray-900">Traseu</h3>
                   </div>
                   <div className="grid gap-4 md:grid-cols-[1fr_auto_1fr] md:items-start">
@@ -206,7 +206,7 @@ export default function RequestDetailsModal({
                     return display && display !== "-" ? (
                       <div className="rounded-xl border border-gray-200 bg-white p-4">
                         <div className="mb-2 flex items-center gap-2">
-                          <Calendar size={18} className="text-sky-600" />
+                          <Calendar className="h-4 w-4 text-sky-600" />
                           <h4 className="font-semibold text-gray-900">Data mutării</h4>
                         </div>
                         <p className="text-lg font-medium text-gray-700">{display}</p>
@@ -218,7 +218,7 @@ export default function RequestDetailsModal({
                   {request.rooms && (
                     <div className="rounded-xl border border-gray-200 bg-white p-4">
                       <div className="mb-2 flex items-center gap-2">
-                        <Package size={18} className="text-purple-600" />
+                        <Package className="h-4 w-4 text-purple-600" />
                         <h4 className="font-semibold text-gray-900">Camere</h4>
                       </div>
                       <p className="text-lg font-medium text-gray-700">{request.rooms} camere</p>
@@ -229,7 +229,7 @@ export default function RequestDetailsModal({
                   {request.phone && (
                     <div className="rounded-xl border border-gray-200 bg-white p-4">
                       <div className="mb-2 flex items-center gap-2">
-                        <Phone size={18} className="text-emerald-600" />
+                        <Phone className="h-4 w-4 text-emerald-600" />
                         <h4 className="font-semibold text-gray-900">Telefon</h4>
                       </div>
                       <p className="text-lg font-medium text-gray-700">{request.phone}</p>
@@ -240,7 +240,7 @@ export default function RequestDetailsModal({
                   {request.customerName && (
                     <div className="rounded-xl border border-gray-200 bg-white p-4">
                       <div className="mb-2 flex items-center gap-2">
-                        <User size={18} className="text-indigo-600" />
+                        <User className="h-4 w-4 text-indigo-600" />
                         <h4 className="font-semibold text-gray-900">Client</h4>
                       </div>
                       <p className="text-lg font-medium text-gray-700">{request.customerName}</p>
@@ -256,7 +256,7 @@ export default function RequestDetailsModal({
                   request.serviceStorage) && (
                   <div className="mb-6 rounded-xl border border-purple-100 bg-gradient-to-br from-purple-50 to-white p-5">
                     <div className="mb-3 flex items-center gap-2">
-                      <Wrench size={20} className="text-purple-600" />
+                      <Wrench className="h-5 w-5 text-purple-600" />
                       <h3 className="text-lg font-semibold text-gray-900">Servicii solicitate</h3>
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -293,7 +293,7 @@ export default function RequestDetailsModal({
                 {request.surveyType && (
                   <div className="mb-6 rounded-xl border border-gray-200 bg-white p-5">
                     <div className="mb-2 flex items-center gap-2">
-                      <FileText size={20} className="text-sky-600" />
+                      <FileText className="h-5 w-5 text-sky-600" />
                       <h3 className="text-lg font-semibold text-gray-900">Tip evaluare</h3>
                     </div>
                     <p className="text-gray-700">
@@ -310,7 +310,7 @@ export default function RequestDetailsModal({
                 {request.details && (
                   <div className="mb-6 rounded-xl border border-gray-200 bg-white p-5">
                     <div className="mb-2 flex items-center gap-2">
-                      <FileText size={20} className="text-gray-600" />
+                      <FileText className="h-5 w-5 text-gray-600" />
                       <h3 className="text-lg font-semibold text-gray-900">Detalii suplimentare</h3>
                     </div>
                     <p className="whitespace-pre-wrap text-gray-700">{request.details}</p>
@@ -321,7 +321,7 @@ export default function RequestDetailsModal({
                 {localMediaUrls && localMediaUrls.length > 0 && (
                   <div className="mb-6 rounded-xl border border-gray-200 bg-white p-5">
                     <div className="mb-3 flex items-center gap-2">
-                      <Package size={20} className="text-amber-600" />
+                      <Package className="h-5 w-5 text-amber-600" />
                       <h3 className="text-lg font-semibold text-gray-900">Media încărcată</h3>
                     </div>
                     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
@@ -361,7 +361,7 @@ export default function RequestDetailsModal({
                               {deletingUrl === url ? (
                                 <span className="inline-block h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
                               ) : (
-                                <Trash2 size={16} />
+                                <Trash2 className="h-4 w-4" />
                               )}
                             </button>
                           )}

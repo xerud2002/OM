@@ -1,4 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
+import {
+  CheckCircleIcon,
+  StarIcon,
+  ShieldCheckIcon,
+  ArrowTrendingUpIcon,
+} from "@heroicons/react/24/outline";
 
 // Lazy load the form - deferred to prioritize LCP
 const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
@@ -8,46 +17,45 @@ const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
   ssr: false,
 });
 
-// Lazy load trust indicators - they use Lucide icons
-const TrustIndicators = dynamic(
-  () =>
-    import("lucide-react").then((mod) => {
-      const { CheckCircle, Star, ShieldCheck, TrendingUp } = mod;
-      return {
-        default: () => (
-          <div className="mb-4 flex flex-wrap justify-center gap-1.5 text-xs font-medium text-slate-700">
-            <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
-              <ShieldCheck className="h-3 w-3 text-emerald-600" />
-              Verificate
-            </div>
-            <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
-              <CheckCircle className="h-3 w-3 text-sky-600" />
-              Gratuit
-            </div>
-            <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
-              <Star className="h-3 w-3 text-amber-500" />
-              4.9★
-            </div>
-            <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
-              <TrendingUp className="h-3 w-3 text-purple-600" />
-              -40%
-            </div>
-          </div>
-        ),
-      };
-    }),
-  {
-    ssr: false,
-    loading: () => (
+function TrustIndicators() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) {
+    return (
       <div className="mb-4 flex flex-wrap justify-center gap-1.5 text-xs font-medium text-slate-700">
         <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">✓ Verificate</span>
         <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">✓ Gratuit</span>
         <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">⭐ 4.9</span>
-        <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">↓ -40%</span>
+        <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">↑ Rapid</span>
       </div>
-    ),
+    );
   }
-);
+
+  return (
+    <div className="mb-4 flex flex-wrap justify-center gap-1.5 text-xs font-medium text-slate-700">
+      <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
+        <ShieldCheckIcon className="h-3 w-3 text-emerald-600" />
+        Verificate
+      </div>
+      <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
+        <CheckCircleIcon className="h-3 w-3 text-sky-600" />
+        Gratuit
+      </div>
+      <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
+        <StarIcon className="h-3 w-3 text-amber-500" />
+        4.9★
+      </div>
+      <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
+        <ArrowTrendingUpIcon className="h-3 w-3 text-purple-600" />
+        Rapid
+      </div>
+    </div>
+  );
+}
 
 export default function MobileHero() {
   return (

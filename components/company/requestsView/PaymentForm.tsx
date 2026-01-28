@@ -8,21 +8,21 @@ import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { addOffer } from "@/utils/firestoreHelpers";
 import type { CompanyUser } from "@/types";
 import {
-  Lock,
-  Unlock,
-  Phone,
-  Send,
-  HandshakeIcon,
-  MessageCircle,
-  Shield,
-  CheckCircle2,
-  Sparkles,
-  X,
-  Zap,
-  Gift,
-  Clock,
-  ArrowRight,
-} from "lucide-react";
+  LockClosedIcon as Lock,
+  LockOpenIcon as Unlock,
+  PhoneIcon as Phone,
+  HandRaisedIcon as HandshakeIcon,
+  ChatBubbleLeftRightIcon as MessageCircle,
+  ShieldCheckIcon as Shield,
+  CheckCircleIcon as CheckCircle2,
+  SparklesIcon as Sparkles,
+  XMarkIcon as X,
+  BoltIcon as Zap,
+  GiftIcon as Gift,
+  ClockIcon as Clock,
+  ArrowRightIcon as ArrowRight,
+  PaperAirplaneIcon as Send,
+} from "@heroicons/react/24/outline";
 
 type Props = {
   requestId: string;
@@ -164,7 +164,7 @@ export default function PaymentForm({ requestId, company, onPaymentSuccess }: Pr
                   disabled={sending}
                   className="absolute top-4 right-4 z-20 rounded-full bg-white/10 p-2 text-white/60 backdrop-blur-sm transition-all hover:bg-white/20 hover:text-white disabled:opacity-50"
                 >
-                  <X size={16} />
+                  <X className="h-4 w-4" />
                 </button>
 
                 <div className="relative z-10">

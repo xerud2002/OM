@@ -2,7 +2,12 @@
 // Dashboard hero section with stats
 
 import { motion } from "framer-motion";
-import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
+import {
+  PlusCircleIcon as PlusSquare,
+  ListBulletIcon as List,
+  InboxIcon as Inbox,
+  ArchiveBoxIcon as ArchiveIcon,
+} from "@heroicons/react/24/outline";
 
 type Props = {
   displayName: string | null;
@@ -49,7 +54,7 @@ export default function DashboardHeader({
             onClick={onNewRequest}
             className="group inline-flex items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 sm:px-8 sm:py-4 text-base sm:text-lg font-bold text-white shadow-xl shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:shadow-emerald-500/40 active:scale-95 w-full md:w-auto"
           >
-            <PlusSquare size={20} className="sm:w-5.5 sm:h-5.5 transition-transform group-hover:rotate-90" />
+            <PlusSquare className="h-5 w-5 sm:w-5.5 sm:h-5.5 transition-transform group-hover:rotate-90" />
             Cerere nouă
           </motion.button>
         </div>
@@ -59,7 +64,6 @@ export default function DashboardHeader({
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, scale: 1.02 }}
             className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all"
           >
             <div className="flex items-start justify-between">
@@ -69,7 +73,7 @@ export default function DashboardHeader({
                 <p className="mt-1 text-xs text-slate-400">În așteptarea ofertelor</p>
               </div>
               <div className="rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
-                <List size={26} className="text-emerald-400" />
+                <List className="h-6.5 w-6.5 text-emerald-400" />
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-emerald-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
@@ -79,7 +83,6 @@ export default function DashboardHeader({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            whileHover={{ y: -4, scale: 1.02 }}
             className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all"
           >
             <div className="flex items-start justify-between">
@@ -89,7 +92,7 @@ export default function DashboardHeader({
                 <p className="mt-1 text-xs text-slate-400">De la firme verificate</p>
               </div>
               <div className="rounded-xl bg-gradient-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
-                <Inbox size={26} className="text-sky-400" />
+                <Inbox className="h-6.5 w-6.5 text-sky-400" />
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-sky-500/10 blur-2xl transition-opacity group-hover:opacity-100" />
@@ -99,7 +102,6 @@ export default function DashboardHeader({
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            whileHover={{ y: -4, scale: 1.02 }}
             className="group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-sm transition-all sm:col-span-2 lg:col-span-1"
           >
             <div className="flex items-start justify-between">
@@ -109,7 +111,7 @@ export default function DashboardHeader({
                 <p className="mt-1 text-xs text-slate-400">Cereri finalizate</p>
               </div>
               <div className="rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">
-                <ArchiveIcon size={26} className="text-amber-400" />
+                <ArchiveIcon className="h-6.5 w-6.5 text-amber-400" />
               </div>
             </div>
             <div className="absolute -right-4 -bottom-4 h-28 w-28 rounded-full bg-amber-500/10 blur-2xl transition-opacity group-hover:opacity-100" />

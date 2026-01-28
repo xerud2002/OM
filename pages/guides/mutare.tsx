@@ -1,7 +1,14 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { BookOpen, Package, Clipboard, Lightbulb, ArrowRight, CheckCircle } from "lucide-react";
+import {
+  BookOpenIcon as BookOpen,
+  CubeIcon as Package,
+  ClipboardDocumentIcon as Clipboard,
+  LightBulbIcon as Lightbulb,
+  ArrowRightIcon as ArrowRight,
+  CheckCircleIcon as CheckCircle,
+} from "@heroicons/react/24/outline";
 
 export default function GuideMutare() {
   return (
@@ -93,7 +100,7 @@ export default function GuideMutare() {
             {/* Article 1 - Pregatire */}
             <Link
               href="/articles/pregatire"
-              className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300 hover:shadow-xl"
             >
               <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">

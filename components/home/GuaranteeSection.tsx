@@ -1,7 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Shield, Lock, ThumbsUp, Clock, Award, HeartHandshake } from "lucide-react";
+import {
+  ShieldCheckIcon as Shield,
+  LockClosedIcon as Lock,
+  HandThumbUpIcon as ThumbsUp,
+  ClockIcon as Clock,
+  TrophyIcon as Award,
+  HeartIcon as HeartHandshake,
+} from "@heroicons/react/24/outline";
 import Image from "next/image";
 
 export default function GuaranteeSection() {
@@ -58,7 +65,9 @@ export default function GuaranteeSection() {
         >
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
             <Award className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
-            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">Garanțiile Noastre</span>
+            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+              Garanțiile Noastre
+            </span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             De ce să alegi{" "}
@@ -68,7 +77,8 @@ export default function GuaranteeSection() {
             ?
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Suntem dedicați să îți oferim cea mai simplă și sigură experiență de comparare a ofertelor de mutare din România.
+            Suntem dedicați să îți oferim cea mai simplă și sigură experiență de comparare a
+            ofertelor de mutare din România.
           </p>
         </motion.div>
 
@@ -83,35 +93,28 @@ export default function GuaranteeSection() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
               <motion.div
-                whileHover={{ y: -8, scale: 1.02 }}
                 transition={{ type: "spring", stiffness: 300 }}
                 className="group relative flex h-full flex-col items-center rounded-xl border border-slate-200/50 bg-white p-4 text-center shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl sm:p-8"
               >
                 {/* Icon */}
                 <motion.div
-                  whileHover={{ rotate: 5, scale: 1.1 }}
                   transition={{ duration: 0.3 }}
-                  className={`mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20`}
+                  className={`mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br ${g.gradient} shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20`}
                 >
-                  <Image
-                    src={g.iconImg}
-                    alt={g.title}
-                    width={80}
-                    height={80}
-                    className="object-cover"
-                    loading="lazy"
-                    decoding="async"
-                    quality={80}
-                  />
+                  <g.icon className="h-8 w-8 text-white sm:h-10 sm:w-10" />
                 </motion.div>
 
                 {/* Content */}
-                <h3 className="mb-2 text-sm font-bold text-slate-900 sm:mb-3 sm:text-lg">{g.title}</h3>
+                <h3 className="mb-2 text-sm font-bold text-slate-900 sm:mb-3 sm:text-lg">
+                  {g.title}
+                </h3>
                 <p className="hidden text-sm leading-relaxed text-slate-600 sm:block">{g.desc}</p>
 
                 {/* Decorative corner */}
                 <div className="absolute right-0 top-0 h-16 w-16 overflow-hidden rounded-tr-xl sm:h-20 sm:w-20 sm:rounded-tr-2xl">
-                  <div className={`absolute -right-8 -top-8 h-16 w-16 rotate-45 ${g.bgLight} opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20`} />
+                  <div
+                    className={`absolute -right-8 -top-8 h-16 w-16 rotate-45 ${g.bgLight} opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20`}
+                  />
                 </div>
               </motion.div>
             </motion.div>
@@ -129,18 +132,19 @@ export default function GuaranteeSection() {
           <div className="relative overflow-hidden rounded-2xl border border-emerald-200/50 bg-gradient-to-br from-emerald-50 via-white to-sky-50 p-5 shadow-xl sm:rounded-3xl sm:p-8 lg:p-10">
             {/* Background pattern */}
             <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:20px_20px] sm:bg-[size:30px_30px]" />
-            
+
             <div className="relative flex flex-col items-center gap-4 text-center sm:gap-6 lg:flex-row lg:text-left">
               <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-20 sm:w-20 sm:rounded-2xl">
-                <HeartHandshake className="h-7 w-7 text-white sm:h-10 sm:w-10" strokeWidth={1.5} />
+                <HeartHandshake className="h-7 w-7 text-white sm:h-10 sm:w-10" />
               </div>
               <div>
                 <h3 className="mb-2 text-lg font-bold text-slate-900 sm:text-xl">
                   💚 Garantăm siguranța și transparența procesului!
                 </h3>
                 <p className="text-sm text-slate-600 sm:text-base">
-                  Toate firmele partenere sunt verificate și au licențe valide. Citește recenziile altor clienți și alege cu încredere. 
-                  Dacă nu ești mulțumit de ofertele primite, nu ești obligat să accepți niciuna.
+                  Toate firmele partenere sunt verificate și au licențe valide. Citește recenziile
+                  altor clienți și alege cu încredere. Dacă nu ești mulțumit de ofertele primite, nu
+                  ești obligat să accepți niciuna.
                 </p>
               </div>
             </div>

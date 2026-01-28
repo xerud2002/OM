@@ -3,7 +3,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle, Building2, TrendingUp, Users } from "lucide-react";
+import {
+  ArrowRightIcon as ArrowRight,
+  CheckCircleIcon as CheckCircle,
+  BuildingOfficeIcon as Building2,
+  ArrowTrendingUpIcon as TrendingUp,
+  UsersIcon as Users,
+} from "@heroicons/react/24/outline";
 
 export default function PartnerSection() {
   // Small blur placeholder to avoid layout shift on image reveal
@@ -121,7 +127,7 @@ export default function PartnerSection() {
                         className="flex items-center gap-3 sm:gap-4"
                       >
                         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-50 sm:h-10 sm:w-10 sm:rounded-xl">
-                          <CheckCircle className="h-4 w-4 text-emerald-600 sm:h-5 sm:w-5" />
+                          <benefit.icon className="h-4 w-4 text-emerald-600 sm:h-5 sm:w-5" />
                         </div>
                         <span className="text-sm font-medium text-slate-700 sm:text-base">
                           {benefit.text}
@@ -131,7 +137,7 @@ export default function PartnerSection() {
                   </div>
 
                   {/* CTA */}
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
+                  <motion.div>
                     <Link
                       href="/partener"
                       className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:px-8 sm:py-4 sm:text-base"

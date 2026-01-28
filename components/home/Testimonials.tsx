@@ -1,7 +1,12 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Star, Quote, MapPin, CheckCircle } from "lucide-react";
+import {
+  StarIcon as Star,
+  ChatBubbleLeftIcon as Quote,
+  MapPinIcon as MapPin,
+  CheckCircleIcon as CheckCircle,
+} from "@heroicons/react/24/outline";
 
 const testimonials = [
   {
@@ -62,7 +67,9 @@ export default function Testimonials() {
         >
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
             <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
-            <span className="text-xs font-semibold text-amber-700 sm:text-sm">4.9/5 din 500+ reviews</span>
+            <span className="text-xs font-semibold text-amber-700 sm:text-sm">
+              4.9/5 din 500+ reviews
+            </span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Ce spun{" "}
@@ -71,7 +78,9 @@ export default function Testimonials() {
             </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Peste 500 de utilizatori au folosit <span className="font-semibold text-emerald-600">ofertemutare.ro</span> pentru a compara oferte de mutare în siguranță.
+            Peste 500 de utilizatori au folosit{" "}
+            <span className="font-semibold text-emerald-600">ofertemutare.ro</span> pentru a compara
+            oferte de mutare în siguranță.
           </p>
         </motion.div>
 
@@ -86,7 +95,6 @@ export default function Testimonials() {
               transition={{ duration: 0.5, delay: idx * 0.1 }}
             >
               <motion.div
-                whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300 }}
                 className="group relative flex h-full flex-col rounded-xl border border-slate-200/50 bg-white p-4 shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl sm:p-6"
               >
@@ -96,7 +104,10 @@ export default function Testimonials() {
                 {/* Rating Stars */}
                 <div className="mb-3 flex gap-0.5 sm:mb-4 sm:gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
-                    <Star key={i} className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
+                    <Star
+                      key={i}
+                      className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4"
+                    />
                   ))}
                 </div>
 
@@ -108,12 +119,16 @@ export default function Testimonials() {
                 {/* Badge */}
                 <div className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 sm:mb-4 sm:gap-2 sm:px-3 sm:py-1.5">
                   <CheckCircle className="h-3 w-3 text-emerald-600 sm:h-4 sm:w-4" />
-                  <span className="text-xs font-semibold text-emerald-700 sm:text-sm">{t.badge}</span>
+                  <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+                    {t.badge}
+                  </span>
                 </div>
 
                 {/* Author */}
                 <div className="flex items-center gap-2 border-t border-slate-100 pt-3 sm:gap-3 sm:pt-4">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient} text-xs font-bold text-white sm:h-10 sm:w-10`}>
+                  <div
+                    className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient} text-xs font-bold text-white sm:h-10 sm:w-10`}
+                  >
                     {t.avatar}
                   </div>
                   <div>
@@ -147,7 +162,9 @@ export default function Testimonials() {
               { value: "4.9/5", label: "Rating mediu" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <p className="text-lg font-bold text-emerald-600 sm:text-2xl lg:text-3xl">{stat.value}</p>
+                <p className="text-lg font-bold text-emerald-600 sm:text-2xl lg:text-3xl">
+                  {stat.value}
+                </p>
                 <p className="text-[10px] text-slate-500 sm:text-xs lg:text-sm">{stat.label}</p>
               </div>
             ))}

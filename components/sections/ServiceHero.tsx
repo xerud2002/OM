@@ -85,7 +85,7 @@ export default function ServiceHero({
           >
             <a
               href={ctaHref}
-              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-lg font-semibold text-emerald-600 shadow-xl transition-all hover:scale-105 hover:shadow-2xl"
+              className="inline-flex items-center gap-2 rounded-full bg-white px-8 py-4 text-lg font-semibold text-emerald-600 shadow-xl transition-all hover:shadow-2xl"
             >
               {ctaText}
               <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

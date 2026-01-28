@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { Shield, Eye, Lock, UserCheck, Mail } from "lucide-react";
+import { ShieldCheckIcon as Shield, EyeIcon as Eye, LockClosedIcon as Lock, UserCircleIcon as UserCheck, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
 
 export default function PrivacyPage() {
   return (

@@ -1,16 +1,16 @@
 "use client";
 
 import {
-  FileText,
-  Users,
-  CheckCircle2,
-  Zap,
-  Clock,
-  Shield,
-  Coins,
-  ArrowRight,
-  Rocket,
-} from "lucide-react";
+  DocumentTextIcon as FileText,
+  UsersIcon as Users,
+  CheckCircleIcon as CheckCircle2,
+  BoltIcon as Zap,
+  ClockIcon as Clock,
+  ShieldCheckIcon as Shield,
+  CurrencyDollarIcon as Coins,
+  ArrowRightIcon as ArrowRight,
+  RocketLaunchIcon as Rocket,
+} from "@heroicons/react/24/outline";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -218,7 +218,7 @@ export default function Steps() {
               </div>
               <Link
                 href="/customer/auth"
-                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-emerald-700 shadow-lg transition-all hover:scale-105 hover:shadow-xl active:scale-95 sm:w-auto"
+                className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-emerald-700 shadow-lg transition-all hover:shadow-xl sm:w-auto"
               >
                 Obține oferte acum
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />

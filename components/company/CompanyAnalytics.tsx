@@ -1,7 +1,7 @@
 // Company Dashboard Analytics Component
 "use client";
 
-import { TrendingUp, Users, CheckCircle, Clock } from "lucide-react";
+import { ArrowTrendingUpIcon as TrendingUp, UsersIcon as Users, CheckCircleIcon as CheckCircle, ClockIcon as Clock } from "@heroicons/react/24/outline";
 
 interface DashboardStats {
   quotesReceived: number;

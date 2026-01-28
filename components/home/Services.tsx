@@ -3,7 +3,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
-import { Package, Wrench, Truck, Warehouse, Trash2, ArrowRight } from "lucide-react";
+import {
+  CubeIcon as Package,
+  WrenchScrewdriverIcon as Wrench,
+  TruckIcon as Truck,
+  BuildingStorefrontIcon as Warehouse,
+  TrashIcon as Trash2,
+  ArrowRightIcon as ArrowRight,
+} from "@heroicons/react/24/outline";
 
 export default function Services() {
   const services = [
@@ -101,7 +108,6 @@ export default function Services() {
               className="group relative"
             >
               <motion.div
-                whileHover={{ y: -8 }}
                 transition={{ type: "spring", stiffness: 300 }}
                 className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all duration-300 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
               >
@@ -112,7 +118,7 @@ export default function Services() {
                     alt={service.title}
                     fill
                     sizes="(max-width: 640px) 45vw, (max-width: 1024px) 33vw, 200px"
-                    className="object-contain p-2 transition-transform duration-500 group-hover:scale-110 sm:p-4"
+                    className="object-contain p-2 transition-transform duration-500 sm:p-4"
                     loading="lazy"
                     decoding="async"
                     quality={75}
@@ -131,7 +137,9 @@ export default function Services() {
                       height={56}
                       className="object-cover"
                       loading="lazy"
-                      decoding="async"                      quality={80}                    />
+                      decoding="async"
+                      quality={80}
+                    />
                   </div>
                 </div>
 

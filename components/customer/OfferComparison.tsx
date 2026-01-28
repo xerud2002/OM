@@ -1,5 +1,10 @@
 import React, { useMemo, useState } from "react";
-import { Check, X, ArrowUpDown, Star } from "lucide-react";
+import {
+  CheckIcon as Check,
+  XMarkIcon as X,
+  ArrowsUpDownIcon as ArrowUpDown,
+  StarIcon as Star,
+} from "@heroicons/react/24/outline";
 
 export type ComparableOffer = {
   id: string;
@@ -58,7 +63,9 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
               onChange={(e) => setOnlyFavorites(e.target.checked)}
             />
             <span className="flex items-center gap-1">
-              <Star size={14} className={onlyFavorites ? "text-amber-500" : "text-gray-400"} />
+              <Star
+                className={`h-3.5 w-3.5 ${onlyFavorites ? "text-amber-500" : "text-gray-400"}`}
+              />
               Doar favorite
             </span>
           </label>
@@ -69,14 +76,14 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
             className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs"
             title="Sortează după preț"
           >
-            <ArrowUpDown size={14} /> Preț
+            <ArrowUpDown className="h-3.5 w-3.5" /> Preț
           </button>
           <button
             onClick={() => setSort(sort === "date-asc" ? "date-desc" : "date-asc")}
             className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs"
             title="Sortează după dată"
           >
-            <ArrowUpDown size={14} /> Dată
+            <ArrowUpDown className="h-3.5 w-3.5" /> Dată
           </button>
         </div>
       </div>
@@ -113,13 +120,13 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
                   onClick={() => onAccept(o.requestId, o.id)}
                   className="flex flex-1 items-center justify-center gap-1 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
                 >
-                  <Check size={14} /> Acceptă
+                  <Check className="h-3.5 w-3.5" /> Acceptă
                 </button>
                 <button
                   onClick={() => onDecline(o.requestId, o.id)}
                   className="flex flex-1 items-center justify-center gap-1 rounded-md border border-rose-200 bg-white px-3 py-1.5 text-sm font-medium text-rose-600 hover:bg-rose-50"
                 >
-                  <X size={14} /> Refuză
+                  <X className="h-3.5 w-3.5" /> Refuză
                 </button>
               </div>
             )}

@@ -4,19 +4,7 @@ import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
-import {
-  Building2,
-  CheckCircle,
-  ArrowRight,
-  Package,
-  DollarSign,
-  Bed,
-  Sofa,
-  Star,
-  Layers,
-  ArrowUpDown,
-  AlertTriangle,
-} from "lucide-react";
+import { BuildingOfficeIcon as Building2, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, CubeIcon as Package, CurrencyDollarIcon as DollarSign, HomeIcon as Bed, HomeIcon as Sofa, StarIcon as Star, Squares2X2Icon as Layers, ArrowsUpDownIcon as ArrowUpDown, ExclamationTriangleIcon as AlertTriangle } from "@heroicons/react/24/outline";
 
 interface MutariApartamentePageProps {
   currentYear: number;

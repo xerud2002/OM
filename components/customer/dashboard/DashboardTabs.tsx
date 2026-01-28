@@ -1,7 +1,7 @@
 // components/customer/dashboard/DashboardTabs.tsx
 // Tab navigation for the customer dashboard
 
-import { PlusSquare, List, Inbox, Archive as ArchiveIcon } from "lucide-react";
+import { PlusCircleIcon as PlusSquare, ListBulletIcon as List, InboxIcon as Inbox, ArchiveBoxIcon as ArchiveIcon } from "@heroicons/react/24/outline";
 import type { DashboardTab } from "@/types";
 
 type Props = {
@@ -15,23 +15,23 @@ export default function DashboardTabs({ activeTab, onTabChange, totalOffers }: P
     {
       key: "new",
       label: "Cerere Nouă",
-      icon: <PlusSquare size={18} />,
+      icon: <PlusSquare className="h-4 w-4" />,
     },
     {
       key: "offers",
       label: "Oferte",
-      icon: <Inbox size={18} />,
+      icon: <Inbox className="h-4 w-4" />,
       badge: totalOffers > 0 ? totalOffers : undefined,
     },
     {
       key: "requests",
       label: "Cererile mele",
-      icon: <List size={18} />,
+      icon: <List className="h-4 w-4" />,
     },
     {
       key: "archive",
       label: "Arhivă",
-      icon: <ArchiveIcon size={18} />,
+      icon: <ArchiveIcon className="h-4 w-4" />,
     },
   ];
 

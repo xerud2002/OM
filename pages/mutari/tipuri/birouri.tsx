@@ -9,22 +9,7 @@ import {
   BreadcrumbSchema,
 } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
-import {
-  Building,
-  ArrowRight,
-  Shield,
-  Truck,
-  Package,
-  Clock,
-  DollarSign,
-  Monitor,
-  Server,
-  Calendar,
-  Users,
-  FileText,
-  Briefcase,
-  Phone,
-} from "lucide-react";
+import { BuildingOffice2Icon as Building, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CubeIcon as Package, ClockIcon as Clock, CurrencyDollarIcon as DollarSign, ComputerDesktopIcon as Monitor, ServerIcon as Server, CalendarIcon as Calendar, UsersIcon as Users, DocumentTextIcon as FileText, BriefcaseIcon as Briefcase, PhoneIcon as Phone } from "@heroicons/react/24/outline";
 
 interface MutariCompaniiPageProps {
   currentYear: number;

@@ -1,7 +1,7 @@
 import LayoutWrapper from "@/components/layout/Layout";
 import Head from "next/head";
 import Link from "next/link";
-import { Package, Shield, Clock, CheckCircle } from "lucide-react";
+import { CubeIcon as Package, ShieldCheckIcon as Shield, ClockIcon as Clock, CheckCircleIcon as CheckCircle } from "@heroicons/react/24/outline";
 
 export default function ArticleImpachetare() {
   return (
@@ -54,7 +54,7 @@ export default function ArticleImpachetare() {
           {/* Quick Tips Cards */}
           <div className="mb-12 grid gap-6 md:grid-cols-2">
             <div className="rounded-lg bg-emerald-50 p-6">
-              <Package className="mb-3 text-emerald-600" size={32} />
+              <Package className="h-8 w-8 mb-3 text-emerald-600" />
               <h3 className="mb-2 text-lg font-semibold text-gray-900">Materiale Necesare</h3>
               <p className="text-sm text-gray-700">
                 Cutii carton, bubble wrap, hârtie ziar, bandă adezivă, markere și etichete pentru
@@ -62,7 +62,7 @@ export default function ArticleImpachetare() {
               </p>
             </div>
             <div className="rounded-lg bg-sky-50 p-6">
-              <Clock className="mb-3 text-sky-600" size={32} />
+              <Clock className="h-8 w-8 mb-3 text-sky-600" />
               <h3 className="mb-2 text-lg font-semibold text-gray-900">Timp Necesar</h3>
               <p className="text-sm text-gray-700">
                 Începe împachetarea cu 2-3 săptămâni înainte pentru a evita stresul de ultim moment.
@@ -80,39 +80,39 @@ export default function ArticleImpachetare() {
             </p>
             <ul className="mb-6 space-y-2 text-gray-700">
               <li className="flex items-start">
-                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="h-5 w-5 mt-1 mr-2 shrink-0 text-emerald-600" />
                 <span>
                   <strong>Cutii de carton rezistente</strong> - diverse dimensiuni (mici pentru
                   cărți, mari pentru haine)
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="h-5 w-5 mt-1 mr-2 shrink-0 text-emerald-600" />
                 <span>
                   <strong>Folie cu bule (bubble wrap)</strong> - protecție excelentă pentru obiecte
                   fragile
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="h-5 w-5 mt-1 mr-2 shrink-0 text-emerald-600" />
                 <span>
                   <strong>Hârtie de ziar sau ambalare</strong> - pentru umplerea spațiilor goale
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="h-5 w-5 mt-1 mr-2 shrink-0 text-emerald-600" />
                 <span>
                   <strong>Bandă adezivă rezistentă</strong> - minimum 2 role pentru siguranță
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="h-5 w-5 mt-1 mr-2 shrink-0 text-emerald-600" />
                 <span>
                   <strong>Markere permanente</strong> - pentru etichetare clară și organizare
                 </span>
               </li>
               <li className="flex items-start">
-                <CheckCircle className="mt-1 mr-2 shrink-0 text-emerald-600" size={20} />
+                <CheckCircle className="h-5 w-5 mt-1 mr-2 shrink-0 text-emerald-600" />
                 <span>
                   <strong>Folie stretch</strong> - pentru protejarea mobilierului și gruparea
                   obiectelor
@@ -121,7 +121,7 @@ export default function ArticleImpachetare() {
             </ul>
 
             <div className="my-8 rounded-lg bg-amber-50 p-6">
-              <Shield className="mb-3 text-amber-600" size={32} />
+              <Shield className="h-8 w-8 mb-3 text-amber-600" />
               <h3 className="mb-3 text-xl font-semibold text-gray-900">
                 Sfat Profesional: Protejarea Obiectelor Fragile
               </h3>

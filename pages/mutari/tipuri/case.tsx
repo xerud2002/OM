@@ -4,20 +4,7 @@ import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
 import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
-import {
-  Home,
-  CheckCircle,
-  ArrowRight,
-  Shield,
-  Truck,
-  Package,
-  Users,
-  DollarSign,
-  Sofa,
-  Key,
-  Heart,
-  Star,
-} from "lucide-react";
+import { HomeIcon as Home, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CubeIcon as Package, UsersIcon as Users, CurrencyDollarIcon as DollarSign, HomeIcon as Sofa, KeyIcon as Key, HeartIcon as Heart, StarIcon as Star } from "@heroicons/react/24/outline";
 
 interface MutariCasePageProps {
   currentYear: number;

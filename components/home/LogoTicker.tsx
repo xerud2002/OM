@@ -1,16 +1,16 @@
 "use client";
 
 import {
-  Home,
-  Building2,
-  Building,
-  Wrench,
-  Warehouse,
-  Box,
-  Piano,
-  Factory,
-  Truck,
-} from "lucide-react";
+  HomeIcon as Home,
+  BuildingOfficeIcon as Building2,
+  BuildingOffice2Icon as Building,
+  WrenchScrewdriverIcon as Wrench,
+  BuildingStorefrontIcon as Warehouse,
+  ArchiveBoxIcon as Box,
+  MusicalNoteIcon as Piano,
+  BuildingOffice2Icon as Factory,
+  TruckIcon as Truck,
+} from "@heroicons/react/24/outline";
 
 const services = [
   { name: "Mutări Case", icon: Home },
@@ -46,7 +46,7 @@ export default function LogoTicker() {
               {services.map((service, index) => (
                 <div
                   key={index}
-                  className="group flex flex-shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:scale-105 hover:grayscale-0"
+                  className="group flex flex-shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:grayscale-0"
                 >
                   <service.icon className="h-6 w-6 text-emerald-600 sm:h-8 sm:w-8" />
                   <span className="text-lg font-bold whitespace-nowrap text-slate-700 sm:text-xl">
@@ -64,7 +64,7 @@ export default function LogoTicker() {
               {services.map((service, index) => (
                 <div
                   key={`clone-${index}`}
-                  className="group flex flex-shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:scale-105 hover:grayscale-0"
+                  className="group flex flex-shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:grayscale-0"
                 >
                   <service.icon className="h-6 w-6 text-emerald-600 sm:h-8 sm:w-8" />
                   <span className="text-lg font-bold whitespace-nowrap text-slate-700 sm:text-xl">

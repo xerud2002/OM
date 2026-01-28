@@ -1,7 +1,12 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { HelpCircle, Check, MapPin, Building2 } from "lucide-react";
+import {
+  QuestionMarkCircleIcon as HelpCircle,
+  CheckIcon as Check,
+  MapPinIcon as MapPin,
+  BuildingOfficeIcon as Building2,
+} from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
 
 // Type for FAQ with JSX support
@@ -651,7 +656,7 @@ export default function FAQPage() {
             </p>
             <Link
               href="/customer/dashboard"
-              className="inline-block rounded-lg bg-white px-6 py-3 text-sm font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg active:scale-95 sm:px-8 sm:text-base"
+              className="inline-block rounded-lg bg-white px-6 py-3 text-sm font-semibold text-emerald-600 hover:shadow-lg sm:px-8 sm:text-base"
             >
               Solicită Oferte Gratuite
             </Link>

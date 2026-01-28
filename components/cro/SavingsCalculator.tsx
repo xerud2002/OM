@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Calculator, TrendingDown, CheckCircle } from "lucide-react";
+import { CalculatorIcon as Calculator, ArrowTrendingDownIcon as TrendingDown, CheckCircleIcon as CheckCircle } from "@heroicons/react/24/outline";
 import { trackCalculatorUsage } from "@/utils/analytics";
 
 export default function SavingsCalculator() {

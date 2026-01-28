@@ -6,7 +6,15 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
-import { Mail, Lock, User, ArrowRight, Sparkles, Shield, CheckCircle } from "lucide-react";
+import {
+  EnvelopeIcon as Mail,
+  LockClosedIcon as Lock,
+  UserIcon as User,
+  ArrowRightIcon as ArrowRight,
+  SparklesIcon as Sparkles,
+  ShieldCheckIcon as Shield,
+  CheckCircleIcon as CheckCircle,
+} from "@heroicons/react/24/outline";
 import LayoutWrapper from "@/components/layout/Layout";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/services/firebase";
@@ -207,7 +215,7 @@ export default function CustomerAuthPage() {
                   transition={{ delay: 0.3 }}
                   className="mb-8 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm font-medium text-emerald-800 shadow-sm"
                 >
-                  <Sparkles size={16} className="text-emerald-600" />
+                  <Sparkles className="h-4 w-4 text-emerald-600" />
                   Pentru Clienți
                 </motion.div>
 
@@ -237,7 +245,7 @@ export default function CustomerAuthPage() {
                     className="flex items-center gap-3 text-emerald-800"
                   >
                     <div className="rounded-full bg-white p-2 shadow-sm">
-                      <item.icon size={20} className="text-emerald-600" />
+                      <item.icon className="h-5 w-5 text-emerald-600" />
                     </div>
                     <span className="font-medium">{item.text}</span>
                   </motion.div>
@@ -288,7 +296,7 @@ export default function CustomerAuthPage() {
                   animate={{ scale: 1, opacity: 1 }}
                   className="mb-4 inline-flex items-center gap-2 rounded-full bg-emerald-50 px-4 py-2 text-sm font-medium text-emerald-700"
                 >
-                  <User size={16} />
+                  <User className="h-4 w-4" />
                   Cont Client
                 </motion.div>
 
@@ -334,10 +342,7 @@ export default function CustomerAuthPage() {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Mail
-                        size={20}
-                        className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500"
-                      />
+                      <Mail className="h-5 w-5 mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
                     </motion.div>
                     <input
                       id="email"
@@ -371,10 +376,7 @@ export default function CustomerAuthPage() {
                       }}
                       transition={{ duration: 0.3 }}
                     >
-                      <Lock
-                        size={20}
-                        className="mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500"
-                      />
+                      <Lock className="h-5 w-5 mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
                     </motion.div>
                     <input
                       id="password"
@@ -390,7 +392,6 @@ export default function CustomerAuthPage() {
                 </div>
 
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
@@ -409,10 +410,7 @@ export default function CustomerAuthPage() {
                     ) : (
                       <>
                         {isLogin ? "Autentificare" : "Creează cont gratuit"}
-                        <ArrowRight
-                          size={20}
-                          className="transition-transform group-hover:translate-x-1"
-                        />
+                        <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
                       </>
                     )}
                   </span>
@@ -444,7 +442,6 @@ export default function CustomerAuthPage() {
               {/* === Social Login Buttons === */}
               <div className="flex gap-3">
                 <motion.button
-                  whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleGoogleLogin}
                   disabled={loading}

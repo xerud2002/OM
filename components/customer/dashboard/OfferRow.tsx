@@ -3,7 +3,10 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, MessageSquare } from "lucide-react";
+import {
+  CheckCircleIcon as CheckCircle2,
+  ChatBubbleBottomCenterTextIcon as MessageSquare,
+} from "@heroicons/react/24/outline";
 import { toast } from "sonner";
 import { auth } from "@/services/firebase";
 import { formatDateRO } from "@/utils/date";
@@ -58,7 +61,6 @@ export default function OfferRow({ index, requestId, offer, onAccept, onDecline 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      whileHover={{ y: -2 }}
       className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
       {/* Gradient accent */}
@@ -98,7 +100,7 @@ export default function OfferRow({ index, requestId, offer, onAccept, onDecline 
               onClick={() => onAccept(requestId, offer.id)}
               className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300 hover:scale-105 hover:shadow-xl"
             >
-              <CheckCircle2 size={16} />
+              <CheckCircle2 className="h-4 w-4" />
               Acceptă
             </button>
             <button
@@ -111,7 +113,7 @@ export default function OfferRow({ index, requestId, offer, onAccept, onDecline 
               onClick={() => setShowMessage((s) => !s)}
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600"
             >
-              <MessageSquare size={16} />
+              <MessageSquare className="h-4 w-4" />
               Mesaj
             </button>
           </div>

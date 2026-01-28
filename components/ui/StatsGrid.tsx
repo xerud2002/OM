@@ -64,7 +64,7 @@ export default function StatsGrid({
       {stats.map((stat, index) => (
         <Item
           key={index}
-          className={`rounded-xl ${variantStyles[variant]} p-4 text-center transition-transform hover:scale-105`}
+          className={`rounded-xl ${variantStyles[variant]} p-4 text-center`}
           {...(animate ? { variants: itemVariants } : {})}
         >
           {stat.icon && <div className="mb-2 flex justify-center">{stat.icon}</div>}

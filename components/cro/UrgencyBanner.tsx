@@ -1,6 +1,6 @@
 "use client";
 
-import { Zap } from "lucide-react";
+import { BoltIcon as Zap } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
@@ -92,7 +92,7 @@ export default function UrgencyBanner({ city = "București", className = "" }: U
         {/* Right: Request Stats */}
         <div className="flex items-center gap-3">
           <div className="rounded-full bg-orange-50 p-2 text-orange-600">
-            <Zap size={18} className="fill-orange-600" />
+            <Zap className="h-4 w-4 fill-orange-600" />
           </div>
           <div className="text-sm">
             <p className="leading-none font-bold text-slate-800">{requestCount} cereri azi</p>
