@@ -1,40 +1,33 @@
 "use client";
 
 import { motion } from "framer-motion";
-import {
-  TrophyIcon as Award,
-  HeartIcon as HeartHandshake,
-  SparklesIcon,
-  ShieldCheckIcon,
-  HandThumbUpIcon,
-  ClockIcon,
-} from "@heroicons/react/24/outline";
+import { TrophyIcon as Award, HeartIcon as HeartHandshake } from "@heroicons/react/24/outline";
 
 export default function GuaranteeSection() {
   const guarantees = [
     {
-      icon: SparklesIcon,
+      letter: "G",
       title: "100% Gratuit",
       desc: "Platforma este complet gratuită. Nu plătești nimic pentru a primi oferte.",
       gradient: "from-emerald-500 to-teal-600",
       bgLight: "bg-emerald-50",
     },
     {
-      icon: ShieldCheckIcon,
+      letter: "D",
       title: "Date Protejate",
       desc: "Informațiile tale sunt criptate și nu sunt distribuite terților.",
       gradient: "from-blue-500 to-indigo-600",
       bgLight: "bg-blue-50",
     },
     {
-      icon: HandThumbUpIcon,
+      letter: "F",
       title: "Fără Obligații",
       desc: "Primești oferte fără nicio obligație de a accepta. Tu decizi!",
       gradient: "from-purple-500 to-pink-600",
       bgLight: "bg-purple-50",
     },
     {
-      icon: ClockIcon,
+      letter: "R",
       title: "Răspuns în 24h",
       desc: "Primești oferte de la firme verificate în maximum 24 de ore.",
       gradient: "from-orange-500 to-red-500",
@@ -76,39 +69,34 @@ export default function GuaranteeSection() {
         </motion.div>
 
         <div className="mx-auto grid max-w-5xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4">
-          {guarantees.map((g, idx) => {
-            const IconComponent = g.icon;
-            return (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.1 }}
-              >
-                <div className="relative flex h-full flex-col items-center rounded-xl border border-slate-200/50 bg-white p-4 text-center shadow-lg sm:rounded-2xl sm:p-8">
-                  <div
-                    className={`mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br ${g.gradient} shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20`}
-                  >
-                    <IconComponent className="h-8 w-8 text-white sm:h-10 sm:w-10" />
-                  </div>
-
-                  <h3 className="mb-2 text-sm font-bold text-slate-900 sm:mb-3 sm:text-lg">
-                    {g.title}
-                  </h3>
-                  <p className="hidden text-sm leading-relaxed text-slate-600 sm:block">
-                    {g.desc}
-                  </p>
-
-                  <div className="absolute right-0 top-0 h-16 w-16 overflow-hidden rounded-tr-xl sm:h-20 sm:w-20 sm:rounded-tr-2xl">
-                    <div
-                      className={`absolute -right-8 -top-8 h-16 w-16 rotate-45 ${g.bgLight} opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20`}
-                    />
-                  </div>
+          {guarantees.map((g, idx) => (
+            <motion.div
+              key={idx}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: idx * 0.1 }}
+            >
+              <div className="relative flex h-full flex-col items-center rounded-xl border border-slate-200/50 bg-white p-4 text-center shadow-lg sm:rounded-2xl sm:p-8">
+                <div
+                  className={`mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br ${g.gradient} shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20`}
+                >
+                  <span className="text-2xl font-bold text-white sm:text-3xl">{g.letter}</span>
                 </div>
-              </motion.div>
-            );
-          })}
+
+                <h3 className="mb-2 text-sm font-bold text-slate-900 sm:mb-3 sm:text-lg">
+                  {g.title}
+                </h3>
+                <p className="hidden text-sm leading-relaxed text-slate-600 sm:block">{g.desc}</p>
+
+                <div className="absolute right-0 top-0 h-16 w-16 overflow-hidden rounded-tr-xl sm:h-20 sm:w-20 sm:rounded-tr-2xl">
+                  <div
+                    className={`absolute -right-8 -top-8 h-16 w-16 rotate-45 ${g.bgLight} opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20`}
+                  />
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
         <motion.div
@@ -131,8 +119,8 @@ export default function GuaranteeSection() {
                 </h3>
                 <p className="text-sm text-slate-600 sm:text-base">
                   Toate firmele partenere sunt verificate și au licențe valide. Citește recenziile
-                  altor clienți și alege cu încredere. Dacă nu ești mulțumit de ofertele primite, nu
-                  ești obligat să accepți niciuna.
+                  altor clienți și alege cu încredere. Dacă nu ești mulțumit de ofertelor primite,
+                  nu ești obligat să accepți niciuna.
                 </p>
               </div>
             </div>
