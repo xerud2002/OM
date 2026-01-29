@@ -7,10 +7,12 @@
 ```bash
 npm run dev      # http://localhost:3000
 npm run build    # Run before deploy (catches TypeScript errors)
-npm run lint     # Zero-warnings enforced (Husky pre-commit)
+npm run lint     # Zero-warnings enforced (max-warnings=0)
 ```
 
-**Stack**: Node.js 18+, TypeScript 5.9+, Next.js 14.2+, Firebase 12.8+, Tailwind v4
+**Stack**: Node.js 18+, TypeScript 5.9+, Next.js 14.2+, Firebase 12.8+, Tailwind v4  
+**Deployment**: PM2 cluster mode on VPS (see `ecosystem.config.cjs`)  
+**Key Features**: Dual-role system, guest requests, sequential codes, real-time notifications
 
 ## ⚠️ Critical Rules
 
@@ -24,14 +26,19 @@ Users are **exclusively** `customer` OR `company` – profile in `customers/{uid
 
 ### 2. Firebase Client vs Server SDK
 
+**CRITICAL**: Client and server SDKs are incompatible – mixing them causes runtime errors.
+
 ```typescript
-// ✅ Client (components, pages) – from services/firebase.ts
+// ✅ Client (components, pages, client-side logic) – from services/firebase.ts
 import { auth, db, storage } from "@/services/firebase";
+import { serverTimestamp, collection, addDoc } from "firebase/firestore";
 
 // ✅ Server (API routes ONLY) – from lib/firebaseAdmin.ts
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 if (!adminReady) return res.status(503).json(apiError("Admin not ready", ErrorCodes.ADMIN_NOT_READY));
 ```
+
+**Admin SDK graceful degradation**: `adminReady` checks if credentials are valid (not placeholders). Guest request flows fall back to client-side when false.
 
 ### 3. API Route Pattern (Mandatory)
 
@@ -52,6 +59,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // ALWAYS validate ownership before mutations (e.g., requestData.customerId === uid)
   return res.status(200).json(apiSuccess({ result }));
 }
+```
+
+**Alternative**: Use `withAuth()` wrapper from `lib/apiAuth.ts` for cleaner handlers:
+```typescript
+export default withAuth(async (req, res, uid) => {
+  // uid is automatically validated and provided
+  // Write handler logic directly without manual auth checks
+});
 ```
 
 **API Endpoints**: `pages/api/offers/{accept,decline,message}.ts`, `pages/api/requests/{createGuest,linkToAccount}.ts`
@@ -128,6 +143,16 @@ Custom animations use `<style jsx>` blocks (see `components/home/LogoTicker.tsx`
 | Romanian geo data    | `cities.ts`, `counties.ts`              |
 | Validation           | `utils/validation.ts`                   |
 
+## Environment Variables
+
+**Required for production** (see `.env` file):
+- `FIREBASE_ADMIN_PROJECT_ID` / `FIREBASE_ADMIN_CLIENT_EMAIL` / `FIREBASE_ADMIN_PRIVATE_KEY` – Server-side auth
+- `NEXT_PUBLIC_FIREBASE_*` – Client SDK config (7 vars total)
+- `RESEND_API_KEY` + `NOTIFY_FROM_EMAIL` – Email notifications via Resend
+- `CRON_API_KEY` – Protects scheduled task endpoints
+
+**Admin SDK validation**: `adminReady` flag indicates if real credentials are present (not placeholders). When false, guest flows fallback to client-side Firebase operations.
+
 ## Common Pitfalls
 
 1. **Admin SDK errors**: Always check `adminReady` before using `adminDb`/`adminAuth`
@@ -137,3 +162,13 @@ Custom animations use `<style jsx>` blocks (see `components/home/LogoTicker.tsx`
 5. **Auth header**: `Authorization: Bearer <token>` required on all protected API routes
 6. **Tailwind v4**: Extend theme in `globals.css` `@theme{}` block, not JS config
 7. **Ownership checks**: Always verify `customerId === uid` or `companyId === uid` before mutations
+
+## Deployment
+
+**Production**: VPS with PM2 cluster mode (see `ecosystem.config.cjs`)
+- Runs `max` instances (all CPU cores) on port 3000
+- Max 500MB per instance, auto-restarts on crashes (max 10 restarts)
+- Logs: `/var/log/pm2/om-{error,out}.log`
+- Deploy scripts: `deploy.sh`, `auto-deploy-vps.sh`
+
+**Build checks**: Run `npm run build` locally before deploying – catches TypeScript errors. Lint must pass with zero warnings (`max-warnings=0`).
