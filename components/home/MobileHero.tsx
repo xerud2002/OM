@@ -1,10 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import {
   CheckCircleIcon,
-  StarIcon,
   ShieldCheckIcon,
   ArrowTrendingUpIcon,
 } from "@heroicons/react/24/outline";
@@ -18,23 +16,6 @@ const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
 });
 
 function TrustIndicators() {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) {
-    return (
-      <div className="mb-4 flex flex-wrap justify-center gap-1.5 text-xs font-medium text-slate-700">
-        <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">✓ Verificate</span>
-        <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">✓ Gratuit</span>
-        <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">⭐ 4.9</span>
-        <span className="rounded-full bg-white/80 px-2 py-1 shadow-sm">↑ Rapid</span>
-      </div>
-    );
-  }
-
   return (
     <div className="mb-4 flex flex-wrap justify-center gap-1.5 text-xs font-medium text-slate-700">
       <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
@@ -44,10 +25,6 @@ function TrustIndicators() {
       <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
         <CheckCircleIcon className="h-3 w-3 text-sky-600" />
         Gratuit
-      </div>
-      <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
-        <StarIcon className="h-3 w-3 text-amber-500" />
-        4.9★
       </div>
       <div className="flex items-center gap-1 rounded-full bg-white/80 px-2 py-1 shadow-sm">
         <ArrowTrendingUpIcon className="h-3 w-3 text-purple-600" />
@@ -65,7 +42,7 @@ export default function MobileHero() {
         <div className="mb-4 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/50 px-3 py-1.5 shadow-sm">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span className="text-xs font-semibold text-emerald-700">🎉 500+ mutări realizate</span>
+            <span className="text-xs font-semibold text-emerald-700">Compară oferte gratuit</span>
           </div>
         </div>
 

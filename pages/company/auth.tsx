@@ -52,7 +52,7 @@ export default function CompanyAuthPage() {
       const role = await mod.getUserRole(user);
       if (role !== "company") {
         setMessage(
-          "Contul tău este înregistrat ca client – folosește pagina de autentificare pentru clienți."
+          "Contul tău este înregistrat ca client. Folosește pagina de autentificare pentru clienți."
         );
         router.push("/customer/auth");
         return;

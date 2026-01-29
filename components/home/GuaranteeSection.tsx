@@ -1,37 +1,44 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { TrophyIcon as Award, HeartIcon as HeartHandshake } from "@heroicons/react/24/outline";
+import {
+  TrophyIcon as Award,
+  HeartIcon as HeartHandshake,
+  GiftIcon,
+  ShieldCheckIcon,
+  HandRaisedIcon,
+  ClockIcon,
+} from "@heroicons/react/24/outline";
 
 export default function GuaranteeSection() {
   const guarantees = [
     {
-      letter: "G",
+      icon: GiftIcon,
       title: "100% Gratuit",
       desc: "Platforma este complet gratuită. Nu plătești nimic pentru a primi oferte.",
-      gradient: "from-emerald-500 to-teal-600",
-      bgLight: "bg-emerald-50",
+      gradient: "linear-gradient(to bottom right, #10b981, #0d9488)",
+      bgLight: "#ecfdf5",
     },
     {
-      letter: "D",
-      title: "Date Protejate",
-      desc: "Informațiile tale sunt criptate și nu sunt distribuite terților.",
-      gradient: "from-blue-500 to-indigo-600",
-      bgLight: "bg-blue-50",
+      icon: ShieldCheckIcon,
+      title: "Firme Locale",
+      desc: "Lucrăm cu firme de mutări din orașul tău și zonele apropiate.",
+      gradient: "linear-gradient(to bottom right, #3b82f6, #4f46e5)",
+      bgLight: "#eff6ff",
     },
     {
-      letter: "F",
+      icon: HandRaisedIcon,
       title: "Fără Obligații",
       desc: "Primești oferte fără nicio obligație de a accepta. Tu decizi!",
-      gradient: "from-purple-500 to-pink-600",
-      bgLight: "bg-purple-50",
+      gradient: "linear-gradient(to bottom right, #a855f7, #ec4899)",
+      bgLight: "#faf5ff",
     },
     {
-      letter: "R",
+      icon: ClockIcon,
       title: "Răspuns în 24h",
-      desc: "Primești oferte de la firme verificate în maximum 24 de ore.",
-      gradient: "from-orange-500 to-red-500",
-      bgLight: "bg-orange-50",
+      desc: "Primești oferte de la firme locale în maximum 24 de ore.",
+      gradient: "linear-gradient(to bottom right, #f97316, #ef4444)",
+      bgLight: "#fff7ed",
     },
   ];
 
@@ -79,9 +86,10 @@ export default function GuaranteeSection() {
             >
               <div className="relative flex h-full flex-col items-center rounded-xl border border-slate-200/50 bg-white p-4 text-center shadow-lg sm:rounded-2xl sm:p-8">
                 <div
-                  className={`mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-gradient-to-br ${g.gradient} shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20`}
+                  className="mb-3 flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl shadow-lg ring-4 ring-white sm:mb-6 sm:h-20 sm:w-20"
+                  style={{ background: g.gradient }}
                 >
-                  <span className="text-2xl font-bold text-white sm:text-3xl">{g.letter}</span>
+                  <g.icon className="h-8 w-8 text-white sm:h-10 sm:w-10" />
                 </div>
 
                 <h3 className="mb-2 text-sm font-bold text-slate-900 sm:mb-3 sm:text-lg">
@@ -91,7 +99,8 @@ export default function GuaranteeSection() {
 
                 <div className="absolute right-0 top-0 h-16 w-16 overflow-hidden rounded-tr-xl sm:h-20 sm:w-20 sm:rounded-tr-2xl">
                   <div
-                    className={`absolute -right-8 -top-8 h-16 w-16 rotate-45 ${g.bgLight} opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20`}
+                    className="absolute -right-8 -top-8 h-16 w-16 rotate-45 opacity-50 sm:-right-10 sm:-top-10 sm:h-20 sm:w-20"
+                    style={{ backgroundColor: g.bgLight }}
                   />
                 </div>
               </div>
@@ -110,17 +119,19 @@ export default function GuaranteeSection() {
             <div className="absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:20px_20px] sm:bg-[size:30px_30px]" />
 
             <div className="relative flex flex-col items-center gap-4 text-center sm:gap-6 lg:flex-row lg:text-left">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-20 sm:w-20 sm:rounded-2xl">
+              <div
+                className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl shadow-lg sm:h-20 sm:w-20 sm:rounded-2xl"
+                style={{ background: "linear-gradient(to bottom right, #10b981, #0d9488)" }}
+              >
                 <HeartHandshake className="h-7 w-7 text-white sm:h-10 sm:w-10" />
               </div>
               <div>
                 <h3 className="mb-2 text-lg font-bold text-slate-900 sm:text-xl">
-                  Garantăm siguranța și transparența procesului!
+                  Doar firme verificate, zero bătăi de cap
                 </h3>
                 <p className="text-sm text-slate-600 sm:text-base">
-                  Toate firmele partenere sunt verificate și au licențe valide. Citește recenziile
-                  altor clienți și alege cu încredere. Dacă nu ești mulțumit de ofertelor primite,
-                  nu ești obligat să accepți niciuna.
+                  Lucrăm doar cu firme de mutări cu acte în regulă și recenzii reale. Compari
+                  ofertele, alegi ce ți se potrivește — fără presiune, fără obligații.
                 </p>
               </div>
             </div>

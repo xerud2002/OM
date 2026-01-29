@@ -16,15 +16,15 @@ const articles = [
     link: "/articles/impachetare",
     readTime: "5 min",
     category: "Împachetare",
-    gradient: "from-blue-500 to-indigo-600",
+    gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",
   },
   {
     title: "Cum îți pregătești locuința pentru ziua mutării",
-    desc: "De la etichetarea cutiilor până la protejarea podelelor – iată cum să ai o zi de mutare organizată.",
+    desc: "De la etichetarea cutiilor până la protejarea podelelor, iată cum să ai o zi de mutare organizată.",
     link: "/articles/pregatire",
     readTime: "7 min",
     category: "Pregătire",
-    gradient: "from-emerald-500 to-teal-600",
+    gradient: "linear-gradient(to right, #10b981, #0d9488)",
   },
   {
     title: "De ce o vizită virtuală te ajută să primești oferta corectă",
@@ -32,7 +32,7 @@ const articles = [
     link: "/articles/survey",
     readTime: "4 min",
     category: "Sfaturi",
-    gradient: "from-purple-500 to-pink-600",
+    gradient: "linear-gradient(to right, #a855f7, #ec4899)",
   },
 ];
 
@@ -62,12 +62,12 @@ export default function Articles() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Sfaturi pentru o{" "}
-            <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               mutare reușită
             </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Articole utile și ghiduri practice care te ajută să te pregătești pentru ziua mutării.
+            Ghidul tău complet pentru o mutare fără stres, de la împachetare până la instalare.
           </p>
         </motion.div>
 
@@ -87,13 +87,17 @@ export default function Articles() {
                   className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
                 >
                   {/* Top gradient bar */}
-                  <div className={`h-1.5 w-full bg-gradient-to-r ${article.gradient} sm:h-2`} />
+                  <div
+                    className="h-1.5 w-full sm:h-2"
+                    style={{ background: article.gradient }}
+                  />
 
                   <div className="flex flex-1 flex-col p-4 sm:p-6">
                     {/* Meta info */}
                     <div className="mb-3 flex items-center justify-between sm:mb-4">
                       <span
-                        className={`rounded-full bg-gradient-to-r ${article.gradient} px-2.5 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs`}
+                        className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs"
+                        style={{ background: article.gradient }}
                       >
                         {article.category}
                       </span>
@@ -119,9 +123,6 @@ export default function Articles() {
                       <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1 sm:h-4 sm:w-4" />
                     </div>
                   </div>
-
-                  {/* Hover overlay */}
-                  <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-emerald-50/0 via-transparent to-sky-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                 </motion.div>
               </Link>
             </motion.div>
@@ -137,7 +138,7 @@ export default function Articles() {
           className="mt-8 text-center sm:mt-12"
         >
           <Link
-            href="/articles/tips"
+            href="/blog"
             className="group inline-flex items-center gap-2 rounded-xl border-2 border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 transition-all hover:border-emerald-200 hover:bg-emerald-50 hover:text-emerald-700 sm:rounded-full sm:px-6 sm:py-3"
           >
             Vezi toate articolele

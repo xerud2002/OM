@@ -90,8 +90,7 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { href: "/#services", label: "Servicii Mutare" },
-    { href: "/#how-it-works", label: "Cum funcționează" },
+    { href: "/blog", label: "Blog" },
     { href: "/partener", label: "Devino Partener" },
     { href: "/contact", label: "Contact" },
   ];

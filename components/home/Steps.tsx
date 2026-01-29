@@ -6,8 +6,6 @@ import {
   CheckCircleIcon as CheckCircle2,
   BoltIcon as Zap,
   ClockIcon as Clock,
-  ShieldCheckIcon as Shield,
-  CurrencyDollarIcon as Coins,
   ArrowRightIcon as ArrowRight,
   RocketLaunchIcon as Rocket,
 } from "@heroicons/react/24/outline";
@@ -93,7 +91,7 @@ export default function Steps() {
           </h2>
           <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
             Găsește cea mai bună firmă de mutări în <strong>3 pași simpli</strong>. Fără zeci de
-            telefoane, fără negocieri interminabile – noi facem munca grea pentru tine.
+            telefoane, fără negocieri interminabile. Noi facem munca grea pentru tine.
           </p>
         </header>
 
@@ -161,33 +159,6 @@ export default function Steps() {
               </li>
             ))}
           </ol>
-        </div>
-
-        {/* Trust & Benefits Row */}
-        <div className="mx-auto mt-12 max-w-4xl">
-          <div className="grid grid-cols-3 gap-4 rounded-2xl bg-white p-4 shadow-lg ring-1 ring-slate-100 sm:p-6">
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100">
-                <Shield className="h-5 w-5 text-emerald-600" />
-              </div>
-              <p className="text-xs font-semibold text-slate-900 sm:text-sm">100% Gratuit</p>
-              <p className="hidden text-xs text-slate-500 sm:block">Fără taxe ascunse</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-blue-100">
-                <Clock className="h-5 w-5 text-blue-600" />
-              </div>
-              <p className="text-xs font-semibold text-slate-900 sm:text-sm">Sub 2 minute</p>
-              <p className="hidden text-xs text-slate-500 sm:block">Completare rapidă</p>
-            </div>
-            <div className="flex flex-col items-center text-center">
-              <div className="mb-2 flex h-10 w-10 items-center justify-center rounded-full bg-purple-100">
-                <Coins className="h-5 w-5 text-purple-600" />
-              </div>
-              <p className="text-xs font-semibold text-slate-900 sm:text-sm">Economisești</p>
-              <p className="hidden text-xs text-slate-500 sm:block">Compari prețuri</p>
-            </div>
-          </div>
         </div>
 
         {/* Bottom CTA */}

@@ -94,7 +94,7 @@ export default function Hero() {
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 sm:h-2.5 sm:w-2.5"></span>
               </span>
               <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
-                🎉 Peste 500+ mutări realizate cu succes
+                Compară oferte gratuit
               </span>
             </div>
 

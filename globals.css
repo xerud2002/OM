@@ -2,53 +2,10 @@
 @source "./pages";
 @source "./components";
 
-/* Tailwind v4 Configuration */
 @theme {
   --font-sans: var(--font-inter), "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
-/* 
-   CRITICAL: Hardcoded gradients to ensure visibility regardless of Tailwind scanning issues.
-   These override or supplement utility classes.
-*/
-.bg-gradient-brand {
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%) !important;
-}
-
-.bg-gradient-company {
-  background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%) !important;
-}
-
-.bg-gradient-mutari {
-  background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%) !important;
-}
-
-.bg-gradient-orange {
-  background: linear-gradient(135deg, #d97706 0%, #ea580c 50%, #dc2626 100%) !important;
-}
-
-.bg-gradient-green {
-  background: linear-gradient(135deg, #059669 0%, #10b981 50%, #064e3b 100%) !important;
-}
-
-.bg-gradient-blue {
-    background: linear-gradient(135deg, #2563eb 0%, #3b82f6 50%, #60a5fa 100%) !important;
-}
-
-.bg-gradient-slate {
-    background: linear-gradient(135deg, #334155 0%, #1e293b 50%, #0f172a 100%) !important;
-}
-
-.bg-gradient-rose {
-     background: linear-gradient(135deg, #e11d48 0%, #be123c 50%, #881337 100%) !important;
-}
-
-.bg-gradient-cyan {
-    background: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #22d3ee 100%) !important;
-}
-
-
-/* Global Styles */
 body {
   font-family: var(--font-sans);
   color: #1f2937;

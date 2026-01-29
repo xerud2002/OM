@@ -421,9 +421,9 @@ export default function CustomerDashboard() {
       if (!form.fromType) errors.push("Tip proprietate (plecare)");
       if (!form.toType) errors.push("Tip proprietate (destinație)");
       if (!form.fromRooms || !digitsOnly(form.fromRooms))
-        errors.push("Număr camere (plecare – doar cifre)");
+        errors.push("Număr camere (plecare, doar cifre)");
       if (!form.toRooms || !digitsOnly(form.toRooms))
-        errors.push("Număr camere (destinație – doar cifre)");
+        errors.push("Număr camere (destinație, doar cifre)");
 
       // Address essentials
       if (!form.fromCounty) errors.push("Județ (plecare)");

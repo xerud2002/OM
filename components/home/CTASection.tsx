@@ -7,7 +7,6 @@ import {
   SparklesIcon as Sparkles,
   ShieldCheckIcon as ShieldCheck,
   ClockIcon as Clock,
-  LockClosedIcon as Lock,
   BoltIcon as Zap,
 } from "@heroicons/react/24/outline";
 
@@ -15,7 +14,6 @@ export default function CTASection() {
   const badges = [
     { icon: ShieldCheck, text: "100% Gratuit" },
     { icon: Clock, text: "Răspuns în 24h" },
-    { icon: Lock, text: "Date protejate" },
   ];
 
   return (

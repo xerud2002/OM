@@ -65,22 +65,22 @@ export default function Testimonials() {
           transition={{ duration: 0.6 }}
           className="mx-auto mb-10 max-w-3xl text-center sm:mb-16"
         >
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-200 bg-amber-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
-            <Star className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4" />
-            <span className="text-xs font-semibold text-amber-700 sm:text-sm">
-              4.9/5 din 500+ reviews
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
+            <CheckCircle className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
+            <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+              Experiențe reale
             </span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Ce spun{" "}
-            <span className="bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               clienții noștri
             </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Peste 500 de utilizatori au folosit{" "}
-            <span className="font-semibold text-emerald-600">ofertemutare.ro</span> pentru a compara
-            oferte de mutare în siguranță.
+            Clienții care au folosit{" "}
+            <span className="font-semibold text-emerald-600">ofertemutare.ro</span> ne-au
+            împărtășit experiențele lor.
           </p>
         </motion.div>
 
@@ -106,7 +106,7 @@ export default function Testimonials() {
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star
                       key={i}
-                      className="h-3.5 w-3.5 fill-amber-400 text-amber-400 sm:h-4 sm:w-4"
+                      className="h-3.5 w-3.5 fill-emerald-500 text-emerald-500 sm:h-4 sm:w-4"
                     />
                   ))}
                 </div>
@@ -139,15 +139,12 @@ export default function Testimonials() {
                     </p>
                   </div>
                 </div>
-
-                {/* Decorative gradient on hover */}
-                <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-emerald-50/0 via-transparent to-sky-50/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:rounded-2xl" />
               </motion.div>
             </motion.div>
           ))}
         </div>
 
-        {/* Stats Bar */}
+        {/* Benefits Bar */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -157,9 +154,9 @@ export default function Testimonials() {
         >
           <div className="grid grid-cols-3 divide-x divide-slate-200 rounded-xl border border-slate-200/50 bg-white p-4 shadow-lg sm:rounded-2xl sm:p-6">
             {[
-              { value: "500+", label: "Clienți mulțumiți" },
-              { value: "100%", label: "Satisfacție clienți" },
-              { value: "4.9/5", label: "Rating mediu" },
+              { value: "100%", label: "Gratuit" },
+              { value: "24h", label: "Timp răspuns" },
+              { value: "5+", label: "Oferte pe cerere" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
                 <p className="text-lg font-bold text-emerald-600 sm:text-2xl lg:text-3xl">

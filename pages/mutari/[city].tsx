@@ -262,7 +262,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
               <p>
                 {city.articleIntro ||
                   `Te pregătești pentru o mutare în ${city.name}? Înțelegem cât de stresant
-                  poate fi procesul – de la găsirea firmei potrivite, la negocierea prețurilor și
+                  poate fi procesul, de la găsirea firmei potrivite, la negocierea prețurilor și
                   coordonarea logisticii. Cu o populație de ${city.population} de locuitori,
                   ${city.name} este unul dintre cele mai dinamice orașe din România, cu zeci de firme de
                   mutări active în zonă.`}
@@ -272,7 +272,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                   Vestea bună? Pe <strong>OferteMutare.ro</strong> simplifici tot procesul.
                   Completezi un singur formular în 3 minute și primești 3-5 oferte personalizate de
                   la firme verificate din {city.county}. Compari prețurile, citești recenziile și
-                  alegi varianta perfectă pentru tine –{" "}
+                  alegi varianta perfectă pentru tine:{" "}
                   <strong>100% gratuit, fără obligații</strong>.
                 </p>
               )}

@@ -14,10 +14,6 @@ const Steps = dynamic(() => import("@/components/home/Steps"), {
   loading: () => <div className="min-h-150" />,
   ssr: true,
 });
-const TrustSignals = dynamic(() => import("@/components/cro/TrustSignals"), {
-  loading: () => <div className="min-h-25" />,
-  ssr: false,
-});
 const LogoTicker = dynamic(() => import("@/components/home/LogoTicker"), {
   loading: () => <div className="min-h-25" />,
   ssr: false,
@@ -37,9 +33,6 @@ const PartnerSection = dynamic(() => import("@/components/home/PartnerSection"),
 });
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
   loading: () => <div className="min-h-125" />,
-});
-const GuaranteeSection = dynamic(() => import("@/components/home/GuaranteeSection"), {
-  loading: () => <div className="min-h-100" />,
 });
 import { SERVICE_FAQS } from "@/data/faqData";
 
@@ -362,19 +355,13 @@ export default function HomePage() {
 
       <Steps />
 
-      {/* Trust Signals */}
-      <div className="mx-auto max-w-7xl border-t border-b border-gray-100 bg-gray-50 px-4 py-4">
-        <TrustSignals className="justify-center" />
-      </div>
+      <Articles />
 
       <ClientAccount />
       <PartnerSection />
       <Services />
 
-      <GuaranteeSection />
-
       <Testimonials />
-      <Articles />
 
       {/* FAQ Section */}
       <div className="mx-auto max-w-4xl px-4 py-8">

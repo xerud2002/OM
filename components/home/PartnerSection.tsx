@@ -72,7 +72,10 @@ export default function PartnerSection() {
                       className="absolute -right-3 -bottom-3 rounded-xl border border-emerald-100 bg-white p-2.5 shadow-xl sm:-right-4 sm:-bottom-4 sm:rounded-2xl sm:p-4"
                     >
                       <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-600 shadow-lg sm:h-12 sm:w-12 sm:rounded-xl">
+                        <div
+                          className="flex h-10 w-10 items-center justify-center rounded-lg shadow-lg sm:h-12 sm:w-12 sm:rounded-xl"
+                          style={{ background: "linear-gradient(to bottom right, #10b981, #0d9488)" }}
+                        >
                           <TrendingUp className="h-5 w-5 text-white sm:h-6 sm:w-6" />
                         </div>
                         <div>

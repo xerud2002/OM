@@ -1372,7 +1372,7 @@ export default function HomeRequestForm() {
 
       {/* Trust badge */}
       <p className="mt-4 text-center text-xs text-gray-500">
-        🔒 100% gratuit • Fără obligații • Date securizate
+        ✓ 100% gratuit • Fără obligații
       </p>
 
       {/* Success Modal */}

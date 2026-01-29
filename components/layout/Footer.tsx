@@ -14,7 +14,7 @@ const USEFUL_LINKS = [
 ];
 
 const RESOURCES = [
-  { href: "/articles/tips", label: "Tips & Tricks mutare" },
+  { href: "/blog", label: "Blog" },
   { href: "/faq", label: "Întrebări frecvente" },
   { href: "/guides/mutare", label: "Ghid complet de mutare" },
 ];
