@@ -101,16 +101,16 @@ export default function Steps() {
             {steps.map((step, i) => (
               <li
                 key={i}
-                className="group relative flex flex-col rounded-2xl bg-white p-4 shadow-xl ring-1 shadow-slate-200/40 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-900/10 sm:rounded-3xl sm:p-8"
+                className="group relative flex flex-col rounded-2xl bg-white p-4 pt-6 shadow-xl ring-1 shadow-slate-200/40 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-900/10 sm:rounded-3xl sm:p-8 sm:pt-8"
               >
                 {/* Step Number Badge */}
-                <div className="absolute -top-3 left-6 flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-xs font-bold text-white shadow-lg">
+                <div className="absolute -top-3 left-4 flex items-center gap-1.5 rounded-full bg-slate-900 px-2.5 py-1 text-[10px] font-bold text-white shadow-lg sm:left-6 sm:px-3 sm:text-xs">
                   <span>Pasul {step.id}</span>
                 </div>
 
                 {/* Time Badge */}
-                <div className="absolute top-4 right-4 flex items-center gap-1 rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-600">
-                  <Clock className="h-3 w-3" />
+                <div className="absolute -top-3 right-4 flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-1 text-[10px] font-semibold text-emerald-700 shadow-lg sm:right-6 sm:px-2.5 sm:text-xs">
+                  <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
                   {step.time}
                 </div>
 
