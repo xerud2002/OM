@@ -8,6 +8,7 @@
 npm run dev      # http://localhost:3000
 npm run build    # TypeScript check – run before deploying
 npm run lint     # Zero warnings enforced (max-warnings=0)
+firebase deploy --only firestore:rules  # Deploy security rules
 ```
 
 **Stack**: Node.js 18+, TypeScript 5.9+, Next.js 14.2+, Firebase 12.8+, Tailwind v4
@@ -56,6 +57,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
 Or use `withAuth()` wrapper: `export default withAuth(async (req, res, uid) => { ... });`
 
+**API Endpoints** (in `pages/api/`):
+- `offers/accept.ts`, `offers/decline.ts`, `offers/message.ts` – Protected offer actions
+- `generateUploadLink.ts`, `validateUploadToken.ts` – Token-based media upload flow
+- `requests/` – Request management endpoints
+
 ## Data Model & Helpers
 
 **Flow**: Customer creates request → Companies submit offers → Customer accepts one → Others auto-declined
@@ -64,7 +70,9 @@ Or use `withAuth()` wrapper: `export default withAuth(async (req, res, uid) => {
 | ------------------------------- | ------------------------------------- | ------------------------------ |
 | `requests/{id}`                 | `customerId`, `requestCode`, `status` | Main document                  |
 | `requests/{id}/offers/{id}`     | `companyId`, `price`, `requestId`     | Must denormalize `requestCode` |
-| `companies/{id}/notifications/` | `type`, `requestId`, `read`           | Server-created                 |
+| `companies/{id}/notifications/` | `type`, `requestId`, `read`           | Server-created only            |
+| `companies/{id}/payments/`      | `companyId`, `requestId`, `status`    | Payment records                |
+| `meta/counters`                 | `requestSeq`                          | Sequential code generation     |
 
 **Required helpers** – never use raw Firestore SDK for these operations:
 
@@ -84,12 +92,14 @@ import {
   getUserRole,
   onAuthChange,
   loginWithGoogle,
+  logout,
 } from "@/utils/firebaseHelpers";
 ```
 
 - Always use `serverTimestamp()` from `firebase/firestore` – never `new Date()`
 - `updateRequest()` auto-notifies companies with existing offers
 - No hard deletes – use `archived: true` or status changes
+- Request codes generated via Firestore transactions in `generateRequestCode()`
 
 ## Romanian Localization (MANDATORY)
 
@@ -100,10 +110,10 @@ toast.success("Oferta a fost acceptată!"); // ✅ Correct
 toast.success("Offer accepted!"); // ❌ Wrong
 ```
 
-- Phone: `07xxxxxxxx` – use `validators.phone()` from `utils/validation.ts`
+- Phone: `07xxxxxxxx` or `+407xxxxxxxx` – use `validators.phone()` from `utils/validation.ts`
 - CIF/CUI: `RO12345678` or `12345678` – use `validators.cif()`
-- Address format: `Str. X, Nr. Y, Bl. Z, Sc. A, Ap. B` – handled by `buildAddressString()` in helpers
-- Geographic data: `cities.ts`, `counties.ts` – always show city + county
+- Address format: `Str. X, Nr. Y, Bl. Z, Sc. A, Ap. B` – handled by `buildAddressString()` in `firestoreHelpers.ts`
+- Geographic data: `cities.ts`, `counties.ts` – always show city + county pair
 
 ## Styling (Tailwind v4)
 

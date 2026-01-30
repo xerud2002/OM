@@ -110,13 +110,6 @@ export default function HomePage() {
                 availableLanguage: ["Romanian"],
               },
               sameAs: ["https://www.facebook.com/profile.php?id=61585990396718"],
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.8",
-                reviewCount: "247",
-                bestRating: "5",
-                worstRating: "1",
-              },
             }),
           }}
         />
@@ -157,11 +150,6 @@ export default function HomePage() {
                   closes: "14:00",
                 },
               ],
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.8",
-                reviewCount: "247",
-              },
             }),
           }}
         />

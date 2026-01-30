@@ -537,7 +537,6 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
               description: city.metaDescription,
               url: `https://ofertemutare.ro/mutari/${city.slug}`,
               image: "https://ofertemutare.ro/pics/index.webp",
-              telephone: "+40700000000",
               address: {
                 "@type": "PostalAddress",
                 addressLocality: city.name,
@@ -574,13 +573,6 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                   closes: "22:00",
                 },
               ],
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.9",
-                reviewCount: "85",
-                bestRating: "5",
-                worstRating: "1",
-              },
               serviceType: "Moving Services",
               priceRange: "250 RON - 3000 RON",
             }),

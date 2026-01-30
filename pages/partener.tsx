@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import { logger } from "@/utils/logger";
-import { CheckCircleIcon as CheckCircle, UsersIcon as Users, ArrowTrendingUpIcon as TrendingUp, ShieldCheckIcon as Shield, BellIcon as Bell, ChartBarIcon as BarChart3, ArrowRightIcon as ArrowRight, BuildingOfficeIcon as Building2, TruckIcon as Truck, StarIcon as Star, PhoneIcon as Phone, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
+import { CheckCircleIcon as CheckCircle, UsersIcon as Users, ArrowTrendingUpIcon as TrendingUp, ShieldCheckIcon as Shield, BellIcon as Bell, ChartBarIcon as BarChart3, ArrowRightIcon as ArrowRight, BuildingOfficeIcon as Building2, TruckIcon as Truck, StarIcon as Star, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
 import { GetServerSideProps } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 
@@ -410,13 +410,6 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
             Echipa noastră este aici să te ajute. Contactează-ne pentru orice nelămurire.
           </p>
           <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <a
-              href="tel:+40700000000"
-              className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
-            >
-              <Phone className="h-5 w-5 text-emerald-600" />
-              0700 000 000
-            </a>
             <a
               href="mailto:parteneri@ofertemutare.ro"
               className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-6 py-3 font-medium text-gray-700 transition hover:bg-gray-50"
