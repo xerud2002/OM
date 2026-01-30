@@ -46,11 +46,7 @@ export function LocalBusinessSchema({ city, serviceName }: { city?: string; serv
         },
       }),
     },
-    aggregateRating: {
-      "@type": "AggregateRating",
-      ratingValue: "4.8",
-      reviewCount: "127",
-    },
+    // Note: aggregateRating removed - requires real reviews to be valid
   };
 
   return (
