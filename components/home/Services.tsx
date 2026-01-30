@@ -62,7 +62,7 @@ export default function Services() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/50 to-white py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/50 to-white py-12 sm:py-20 lg:py-32">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-1/4 left-0 h-75 w-75 -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-125 sm:w-125 sm:blur-[100px]" />
@@ -97,7 +97,7 @@ export default function Services() {
         </motion.div>
 
         {/* Services Grid */}
-        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-5">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-5">
           {services.map((service, idx) => (
             <motion.div
               key={idx}
@@ -112,7 +112,7 @@ export default function Services() {
                 className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all duration-300 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
               >
                 {/* Image */}
-                <div className="relative h-24 overflow-visible bg-gradient-to-br from-slate-50 to-slate-100 sm:h-40">
+                <div className="relative h-20 overflow-visible bg-gradient-to-br from-slate-50 to-slate-100 sm:h-40">
                   <Image
                     src={service.img}
                     alt={service.title}
@@ -126,9 +126,9 @@ export default function Services() {
                 </div>
 
                 {/* Icon badge - positioned outside image container */}
-                <div className="relative z-10 -mt-5 flex justify-center sm:-mt-8">
+                <div className="relative z-10 -mt-4 flex justify-center sm:-mt-8">
                   <div
-                    className={`flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl bg-white shadow-lg ring-4 ring-white sm:h-14 sm:w-14 sm:rounded-2xl`}
+                    className={`flex h-8 w-8 items-center justify-center overflow-hidden rounded-lg bg-white shadow-lg ring-3 ring-white sm:h-14 sm:w-14 sm:rounded-2xl sm:ring-4`}
                   >
                     <Image
                       src={service.iconImg}
@@ -144,8 +144,8 @@ export default function Services() {
                 </div>
 
                 {/* Content */}
-                <div className="flex flex-1 flex-col p-3 pt-2 text-center sm:p-5 sm:pt-3">
-                  <h3 className="mb-1 text-sm font-bold text-slate-900 sm:mb-2 sm:text-lg">
+                <div className="flex flex-1 flex-col p-2 pt-1.5 text-center sm:p-5 sm:pt-3">
+                  <h3 className="mb-0.5 text-xs font-bold text-slate-900 sm:mb-2 sm:text-lg">
                     {service.title}
                   </h3>
                   <p className="hidden flex-1 text-sm leading-relaxed text-slate-600 sm:block">

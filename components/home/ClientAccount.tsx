@@ -33,7 +33,7 @@ export default function ClientAccount() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-0 right-0 h-[400px] w-[400px] translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-100/50 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />

@@ -17,7 +17,7 @@ export default function CTASection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-slate-900 py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-slate-900 py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         {/* Gradient orbs */}
@@ -68,12 +68,12 @@ export default function CTASection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
-            className="mx-auto mb-8 max-w-2xl text-base text-slate-300 sm:mb-10 sm:text-lg md:text-xl"
+            className="mx-auto mb-6 max-w-2xl text-sm text-slate-300 sm:mb-10 sm:text-lg md:text-xl"
           >
-            Peste <span className="font-bold text-white">500 de români</span> au economisit deja
-            prin Ofertemutare.ro. Completează cererea și primește{" "}
+            Completează cererea în{" "}
+            <span className="font-bold text-white">2 minute</span> și primește{" "}
             <span className="font-bold text-emerald-400">oferte gratuite</span> de la firme
-            verificate!
+            locale din orașul tău!
           </motion.p>
 
           {/* CTA Button */}
@@ -82,14 +82,14 @@ export default function CTASection() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-8 sm:mb-12"
+            className="mb-6 sm:mb-12"
           >
             <motion.div whileTap={{ scale: 0.98 }}>
               <Link
                 href="/customer/dashboard"
-                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-4 text-sm font-bold text-white shadow-2xl shadow-emerald-500/30 transition-all hover:shadow-emerald-500/40 sm:gap-3 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
+                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-3.5 text-sm font-bold text-white shadow-2xl shadow-emerald-500/30 transition-all hover:shadow-emerald-500/40 sm:gap-3 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
               >
-                <Sparkles className="h-5 w-5 sm:h-6 sm:w-6" />
+                <Sparkles className="h-4 w-4 sm:h-6 sm:w-6" />
                 <span className="hidden sm:inline">PRIMEȘTE OFERTE GRATUITE</span>
                 <span className="sm:hidden">OFERTE GRATUITE</span>
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 sm:h-6 sm:w-6" />
@@ -126,18 +126,18 @@ export default function CTASection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.6, duration: 0.5 }}
-            className="mt-10 grid grid-cols-3 divide-x divide-slate-700 rounded-xl border border-slate-700 bg-slate-800/50 p-4 backdrop-blur-sm sm:mt-16 sm:rounded-2xl sm:p-6"
+            className="mt-8 grid grid-cols-3 divide-x divide-slate-700 rounded-xl border border-slate-700 bg-slate-800/50 p-3 backdrop-blur-sm sm:mt-16 sm:rounded-2xl sm:p-6"
           >
             {[
-              { value: "500+", label: "Mutări realizate" },
-              { value: "24h", label: "Timp de răspuns" },
-              { value: "50+", label: "Firme partenere" },
+              { value: "100%", label: "Gratuit" },
+              { value: "24h", label: "Timp răspuns" },
+              { value: "5+", label: "Oferte/cerere" },
             ].map((stat, i) => (
               <div key={i} className="text-center">
-                <p className="text-lg font-bold text-emerald-400 sm:text-2xl lg:text-3xl">
+                <p className="text-base font-bold text-emerald-400 sm:text-2xl lg:text-3xl">
                   {stat.value}
                 </p>
-                <p className="text-[10px] text-slate-400 sm:text-xs lg:text-sm">{stat.label}</p>
+                <p className="text-[9px] text-slate-400 sm:text-xs lg:text-sm">{stat.label}</p>
               </div>
             ))}
           </motion.div>

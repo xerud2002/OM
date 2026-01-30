@@ -71,7 +71,7 @@ export default function Steps() {
     <section
       id="how-it-works"
       aria-labelledby="steps-heading"
-      className="relative overflow-hidden bg-slate-50/50 py-16 sm:py-20 lg:py-28"
+      className="relative overflow-hidden bg-slate-50/50 py-12 sm:py-20 lg:py-28"
     >
       <div className="container mx-auto px-4">
         {/* Section Header */}
@@ -101,7 +101,7 @@ export default function Steps() {
             {steps.map((step, i) => (
               <li
                 key={i}
-                className="group relative flex flex-col rounded-3xl bg-white p-6 shadow-xl ring-1 shadow-slate-200/40 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-900/10 sm:p-8"
+                className="group relative flex flex-col rounded-2xl bg-white p-4 shadow-xl ring-1 shadow-slate-200/40 ring-slate-100 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-900/10 sm:rounded-3xl sm:p-8"
               >
                 {/* Step Number Badge */}
                 <div className="absolute -top-3 left-6 flex items-center gap-1.5 rounded-full bg-slate-900 px-3 py-1 text-xs font-bold text-white shadow-lg">
@@ -115,7 +115,7 @@ export default function Steps() {
                 </div>
 
                 {/* Step Illustration */}
-                <div className="group/image relative mt-4 mb-5 h-28 w-full overflow-hidden rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 sm:h-36">
+                <div className="group/image relative mt-3 mb-4 h-24 w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 sm:mt-4 sm:mb-5 sm:h-36 sm:rounded-2xl">
                   {/* Base Image */}
                   <Image
                     src={step.image}
@@ -135,7 +135,7 @@ export default function Steps() {
                   <div className="absolute -inset-2 z-0 rounded-3xl bg-gradient-to-br from-emerald-200/50 via-sky-200/50 to-purple-200/50 opacity-0 blur-xl transition-opacity duration-500 group-hover:opacity-100" />
                 </div>
 
-                <h3 className="mb-3 text-xl font-bold text-slate-900 sm:text-2xl">{step.title}</h3>
+                <h3 className="mb-2 text-lg font-bold text-slate-900 sm:mb-3 sm:text-2xl">{step.title}</h3>
                 <p className="mb-4 text-sm leading-relaxed text-slate-600 sm:text-base">
                   {step.desc}
                 </p>
@@ -162,8 +162,8 @@ export default function Steps() {
         </div>
 
         {/* Bottom CTA */}
-        <div className="mx-auto mt-10 max-w-3xl text-center sm:mt-14">
-          <div className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-6 py-8 text-white shadow-2xl shadow-emerald-500/25 sm:px-12 sm:py-10">
+        <div className="mx-auto mt-8 max-w-3xl text-center sm:mt-14">
+          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-4 py-6 text-white shadow-2xl shadow-emerald-500/25 sm:rounded-3xl sm:px-12 sm:py-10">
             {/* Animated background pattern */}
             <div className="absolute inset-0 opacity-10">
               <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC40Ij48cGF0aCBkPSJNMzYgMzRoLTJ2LTRoMnY0em0wLTZ2LTRoLTJ2NGgyek0yNiAzNGgtMnYtNGgydjR6bTAtNnYtNGgtMnY0aDJ6Ii8+PC9nPjwvZz48L3N2Zz4=')]" />

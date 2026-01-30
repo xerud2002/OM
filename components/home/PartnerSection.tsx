@@ -21,7 +21,7 @@ export default function PartnerSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/4 rounded-full bg-emerald-100/40 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />

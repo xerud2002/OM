@@ -49,7 +49,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-emerald-50/30 to-white py-16 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-emerald-50/30 to-white py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
@@ -85,7 +85,7 @@ export default function Testimonials() {
         </motion.div>
 
         {/* Testimonials Grid */}
-        <div className="mx-auto grid max-w-6xl grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
+        <div className="mx-auto grid max-w-6xl grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4">
           {testimonials.map((t, idx) => (
             <motion.div
               key={idx}
@@ -96,45 +96,45 @@ export default function Testimonials() {
             >
               <motion.div
                 transition={{ type: "spring", stiffness: 300 }}
-                className="group relative flex h-full flex-col rounded-xl border border-slate-200/50 bg-white p-4 shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl sm:p-6"
+                className="group relative flex h-full flex-col rounded-xl border border-slate-200/50 bg-white p-3 shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl sm:p-6"
               >
                 {/* Quote icon */}
-                <Quote className="mb-3 h-6 w-6 text-emerald-200 sm:mb-4 sm:h-8 sm:w-8" />
+                <Quote className="mb-2 h-5 w-5 text-emerald-200 sm:mb-4 sm:h-8 sm:w-8" />
 
                 {/* Rating Stars */}
-                <div className="mb-3 flex gap-0.5 sm:mb-4 sm:gap-1">
+                <div className="mb-2 flex gap-0.5 sm:mb-4 sm:gap-1">
                   {Array.from({ length: t.rating }).map((_, i) => (
                     <Star
                       key={i}
-                      className="h-3.5 w-3.5 fill-emerald-500 text-emerald-500 sm:h-4 sm:w-4"
+                      className="h-3 w-3 fill-emerald-500 text-emerald-500 sm:h-4 sm:w-4"
                     />
                   ))}
                 </div>
 
                 {/* Text */}
-                <p className="mb-4 flex-1 text-xs leading-relaxed text-slate-600 sm:mb-6 sm:text-sm">
+                <p className="mb-3 flex-1 text-[11px] leading-relaxed text-slate-600 sm:mb-6 sm:text-sm">
                   &ldquo;{t.text}&rdquo;
                 </p>
 
                 {/* Badge */}
-                <div className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-2 py-1 sm:mb-4 sm:gap-2 sm:px-3 sm:py-1.5">
-                  <CheckCircle className="h-3 w-3 text-emerald-600 sm:h-4 sm:w-4" />
-                  <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
+                <div className="mb-2 inline-flex w-fit items-center gap-1 rounded-full bg-emerald-50 px-1.5 py-0.5 sm:mb-4 sm:gap-2 sm:px-3 sm:py-1.5">
+                  <CheckCircle className="h-2.5 w-2.5 text-emerald-600 sm:h-4 sm:w-4" />
+                  <span className="text-[10px] font-semibold text-emerald-700 sm:text-sm">
                     {t.badge}
                   </span>
                 </div>
 
                 {/* Author */}
-                <div className="flex items-center gap-2 border-t border-slate-100 pt-3 sm:gap-3 sm:pt-4">
+                <div className="flex items-center gap-1.5 border-t border-slate-100 pt-2 sm:gap-3 sm:pt-4">
                   <div
-                    className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient} text-xs font-bold text-white sm:h-10 sm:w-10`}
+                    className={`flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient} text-[10px] font-bold text-white sm:h-10 sm:w-10 sm:text-xs`}
                   >
                     {t.avatar}
                   </div>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">{t.name}</p>
-                    <p className="flex items-center gap-1 text-[10px] text-slate-500 sm:text-xs">
-                      <MapPin className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
+                    <p className="text-xs font-semibold text-slate-900 sm:text-sm">{t.name}</p>
+                    <p className="flex items-center gap-0.5 text-[9px] text-slate-500 sm:gap-1 sm:text-xs">
+                      <MapPin className="h-2 w-2 sm:h-3 sm:w-3" />
                       {t.location}
                     </p>
                   </div>
@@ -150,9 +150,9 @@ export default function Testimonials() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: 0.5, duration: 0.5 }}
-          className="mx-auto mt-10 max-w-3xl sm:mt-16"
+          className="mx-auto mt-8 max-w-3xl sm:mt-16"
         >
-          <div className="grid grid-cols-3 divide-x divide-slate-200 rounded-xl border border-slate-200/50 bg-white p-4 shadow-lg sm:rounded-2xl sm:p-6">
+          <div className="grid grid-cols-3 divide-x divide-slate-200 rounded-xl border border-slate-200/50 bg-white p-3 shadow-lg sm:rounded-2xl sm:p-6">
             {[
               { value: "100%", label: "Gratuit" },
               { value: "24h", label: "Timp răspuns" },
