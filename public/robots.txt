@@ -1,15 +1,8 @@
 # robots.txt for ofertemutare.ro
-# Updated: January 16, 2026
+# Updated: January 30, 2026
 
 User-agent: *
 Allow: /
-
-# Explicitly allow important sections for crawling
-Allow: /mutari/
-Allow: /servicii/
-Allow: /articles/
-Allow: /guides/
-Allow: /faq
 
 # Block private/authenticated pages
 Disallow: /customer/dashboard
@@ -20,6 +13,10 @@ Disallow: /upload/
 
 # Block API routes
 Disallow: /api/
+
+# Block Next.js internal routes
+Disallow: /_next/
+Disallow: /404
 
 # Crawl delay (polite crawling)
 Crawl-delay: 1
