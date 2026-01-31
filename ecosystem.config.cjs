@@ -8,6 +8,7 @@ module.exports = {
       cwd: "/var/www/om",
       instances: "max", // Use all CPU cores
       exec_mode: "cluster",
+      env_file: ".env", // Load environment variables from .env file
       env: {
         NODE_ENV: "production",
         PORT: 3000,
