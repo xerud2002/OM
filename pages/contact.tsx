@@ -67,15 +67,15 @@ export default function ContactPage() {
     {
       icon: Mail,
       title: "Email Clienți",
-      value: "contact@ofertemutare.ro",
-      href: "mailto:contact@ofertemutare.ro",
+      value: "info@ofertemutare.ro",
+      href: "mailto:info@ofertemutare.ro",
       gradient: "from-emerald-500 to-teal-600",
     },
     {
       icon: Mail,
       title: "Email Parteneri",
-      value: "partener@ofertemutare.ro",
-      href: "mailto:partener@ofertemutare.ro",
+      value: "info@ofertemutare.ro",
+      href: "mailto:info@ofertemutare.ro",
       gradient: "from-blue-500 to-indigo-600",
     },
     {
@@ -115,7 +115,7 @@ export default function ContactPage() {
         <title>Contact - OferteMutare.ro | Contactează Echipa Noastră</title>
         <meta
           name="description"
-          content="Ai întrebări despre mutările tale? Contactează echipa OferteMutare.ro pentru suport rapid. Email: contact@ofertemutare.ro | Răspundem în maxim 24h."
+          content="Ai întrebări despre mutările tale? Contactează echipa OferteMutare.ro pentru suport rapid. Email: info@ofertemutare.ro | Răspundem în maxim 24h."
         />
         <meta
           name="keywords"

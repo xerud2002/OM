@@ -457,14 +457,14 @@ export default function PrivacyPage() {
                   </li>
                   <li>
                     <strong>Email clienți:</strong>{" "}
-                    <a href="mailto:contact@ofertemutare.ro" className="text-blue-600 underline">
-                      contact@ofertemutare.ro
+                    <a href="mailto:info@ofertemutare.ro" className="text-blue-600 underline">
+                      info@ofertemutare.ro
                     </a>
                   </li>
                   <li>
                     <strong>Email companii partenere:</strong>{" "}
-                    <a href="mailto:partener@ofertemutare.ro" className="text-blue-600 underline">
-                      partener@ofertemutare.ro
+                    <a href="mailto:info@ofertemutare.ro" className="text-blue-600 underline">
+                      info@ofertemutare.ro
                     </a>
                   </li>
                 </ul>

@@ -190,7 +190,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 Acest email a fost trimis automat de platforma OferteMutare.ro
               </p>
               <p style="margin: 0; color: #9ca3af; font-size: 11px;">
-                Pentru suport: <a href="mailto:contact@ofertemutare.ro" style="color: #059669; text-decoration: none;">contact@ofertemutare.ro</a>
+                Pentru suport: <a href="mailto:info@ofertemutare.ro" style="color: #059669; text-decoration: none;">info@ofertemutare.ro</a>
               </p>
             </td>
           </tr>
@@ -228,7 +228,7 @@ contact@ofertemutare.ro
       // Send email via Resend API
       try {
         const RESEND_API_KEY = process.env.RESEND_API_KEY;
-        const fromAddress = process.env.NOTIFY_FROM_EMAIL || "noreply@ofertemutare.ro";
+        const fromAddress = process.env.NOTIFY_FROM_EMAIL || "info@ofertemutare.ro";
 
         if (RESEND_API_KEY) {
           await fetch("https://api.resend.com/emails", {

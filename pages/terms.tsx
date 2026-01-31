@@ -297,17 +297,17 @@ export default function TermsPage() {
                 <ul className="space-y-2 text-gray-600">
                   <li>
                     <strong>Email clienți:</strong>{" "}
-                    <a href="mailto:contact@ofertemutare.ro" className="text-emerald-600 underline">
-                      contact@ofertemutare.ro
+                    <a href="mailto:info@ofertemutare.ro" className="text-emerald-600 underline">
+                      info@ofertemutare.ro
                     </a>
                   </li>
                   <li>
                     <strong>Email companii partenere:</strong>{" "}
                     <a
-                      href="mailto:partener@ofertemutare.ro"
+                      href="mailto:info@ofertemutare.ro"
                       className="text-emerald-600 underline"
                     >
-                      partener@ofertemutare.ro
+                      info@ofertemutare.ro
                     </a>
                   </li>
                 </ul>

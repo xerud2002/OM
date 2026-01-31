@@ -602,7 +602,7 @@ Acest proiect este proprietate privată. All rights reserved.
 Pentru întrebări sau probleme:
 
 - **GitHub Issues**: [Create issue](https://github.com/xerud2002/OM/issues)
-- **Email**: contact@ofertemutare.ro
+- **Email**: info@ofertemutare.ro
 
 ---
 

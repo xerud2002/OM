@@ -90,8 +90,8 @@ export const ROMANIAN_MONTHS = {
  * Contact Information
  */
 export const CONTACT = {
-  EMAIL_CLIENTS: "contact@ofertemutare.ro",
-  EMAIL_PARTNERS: "partener@ofertemutare.ro",
+  EMAIL_CLIENTS: "info@ofertemutare.ro",
+  EMAIL_PARTNERS: "info@ofertemutare.ro",
   SUPPORT_HOURS: "Luni-Vineri: 9:00-18:00",
 } as const;
 

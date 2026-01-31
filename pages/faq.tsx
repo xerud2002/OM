@@ -189,13 +189,13 @@ export default function FAQPage() {
               <Link href="/contact" className="text-emerald-600 underline hover:text-emerald-700">
                 Contactează-ne
               </Link>{" "}
-              imediat la contact@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu
+              imediat la info@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu
               respectă standardele, este exclusă de pe platformă. De asemenea, poți lăsa o recenzie
               după mutare.
             </>
           ),
           aText:
-            "Contactează-ne imediat la contact@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu respectă standardele, este exclusă de pe platformă. De asemenea, poți lăsa o recenzie după mutare.",
+            "Contactează-ne imediat la info@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu respectă standardele, este exclusă de pe platformă. De asemenea, poți lăsa o recenzie după mutare.",
         },
         {
           q: "Pot vedea recenzii despre firme înainte să aleg?",

@@ -88,7 +88,7 @@ export const emailTemplates = {
           </div>
           <div class="footer">
             <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Răspunde la acest email sau contactează-ne la <a href="mailto:support@ofertemutare.ro">support@ofertemutare.ro</a></p>
+            <p>Ai întrebări? Răspunde la acest email sau contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
           </div>
         </div>
       </body>
@@ -127,7 +127,7 @@ export const emailTemplates = {
           </div>
           <div class="footer">
             <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Contactează-ne la <a href="mailto:support@ofertemutare.ro">support@ofertemutare.ro</a></p>
+            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
           </div>
         </div>
       </body>
@@ -176,7 +176,7 @@ export const emailTemplates = {
           </div>
           <div class="footer">
             <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Support: <a href="mailto:support@ofertemutare.ro">support@ofertemutare.ro</a></p>
+            <p>Support: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
           </div>
         </div>
       </body>
