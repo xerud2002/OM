@@ -1,6 +1,6 @@
 // PM2 Ecosystem Configuration for VPS Deployment
 // Load .env file to get Firebase credentials
-require("dotenv").config();
+require("./node_modules/dotenv").config();
 
 module.exports = {
   apps: [
