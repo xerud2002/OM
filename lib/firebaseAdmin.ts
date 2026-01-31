@@ -36,17 +36,17 @@ if (!admin.apps.length) {
   const storageBucket =
     process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || `${projectId}.appspot.com`;
 
+  const looksPlaceholderEmail = clientEmail.toLowerCase().includes("placeholder");
+  const missingEssentials = !projectId || !clientEmail || !privateKey;
+  const hasValidKeyFormat =
+    privateKey.includes("-----BEGIN") && privateKey.includes("PRIVATE KEY-----");
+
   console.log("[firebaseAdmin] Initialization check:");
   console.log("  - projectId:", projectId || "MISSING");
   console.log("  - clientEmail:", clientEmail ? `${clientEmail.substring(0, 30)}...` : "MISSING");
   console.log("  - privateKey length:", privateKey.length, "chars");
   console.log("  - hasValidKeyFormat:", hasValidKeyFormat);
   console.log("  - NODE_ENV:", process.env.NODE_ENV);
-
-  const looksPlaceholderEmail = clientEmail.toLowerCase().includes("placeholder");
-  const missingEssentials = !projectId || !clientEmail || !privateKey;
-  const hasValidKeyFormat =
-    privateKey.includes("-----BEGIN") && privateKey.includes("PRIVATE KEY-----");
 
   try {
     if (!missingEssentials && !looksPlaceholderEmail && hasValidKeyFormat) {
