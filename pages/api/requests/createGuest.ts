@@ -223,10 +223,29 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await batch.commit();
 
-    // Send email notifications to all companies (async, don't wait)
+    // Send email notifications (async, don't wait)
     // Run in background to avoid slowing down request creation
     setImmediate(async () => {
       try {
+        // 1. Send confirmation email to customer
+        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            type: 'guestRequestConfirmation',
+            data: {
+              email: email, // API expects 'email' not 'customerEmail'
+              requestCode,
+              name: data.contactFirstName,
+              from: `${clean.fromCity}, ${clean.fromCounty}`,
+              to: `${clean.toCity}, ${clean.toCounty}`,
+              movingDate: clean.moveDate || 'Nedefinită'
+            }
+          })
+        });
+        logger.log(`Sent confirmation email to customer ${email} for ${requestCode}`);
+
+        // 2. Send notifications to all companies
         const emailPromises = companiesSnapshot.docs.map(async (companyDoc) => {
           const companyData = companyDoc.data();
           if (!companyData.email) return; // Skip if no email
@@ -241,7 +260,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 requestCode,
                 from: `${clean.fromCity}, ${clean.fromCounty}`,
                 to: `${clean.toCity}, ${clean.toCounty}`,
-                movingDate: clean.movingDate || 'Nedefinită',
+                movingDate: clean.moveDate || 'Nedefinită',
                 furniture: clean.furniture || 'Nedefinit'
               }
             })
