@@ -1,12 +1,14 @@
 import admin from "firebase-admin";
 
-// Load .env file in production (PM2 doesn't automatically load it)
-if (process.env.NODE_ENV === "production" && !process.env.FIREBASE_ADMIN_PROJECT_ID) {
+// Load .env file explicitly (PM2 doesn't load it automatically)
+// This runs at module load time, before any Firebase operations
+if (typeof window === "undefined") {
+  // Server-side only
   try {
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     require("dotenv").config();
   } catch {
-    console.warn("dotenv not available, relying on PM2 env vars");
+    // dotenv not available or already loaded - continue
   }
 }
 
