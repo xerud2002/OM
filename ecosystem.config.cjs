@@ -1,6 +1,24 @@
 // PM2 Ecosystem Configuration for VPS Deployment
-// Load .env file to get Firebase credentials
-require("./node_modules/dotenv").config();
+// Load .env file manually (dotenv may not be available in PM2 context)
+const fs = require("fs");
+const path = require("path");
+
+const envPath = path.join(__dirname, ".env");
+if (fs.existsSync(envPath)) {
+  const envContent = fs.readFileSync(envPath, "utf8");
+  envContent.split("\n").forEach((line) => {
+    const match = line.match(/^([^=:#]+)=(.*)$/);
+    if (match) {
+      const key = match[1].trim();
+      let value = match[2].trim();
+      // Remove surrounding quotes if present
+      if ((value.startsWith('"') && value.endsWith('"')) || (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      process.env[key] = value;
+    }
+  });
+}
 
 module.exports = {
   apps: [
