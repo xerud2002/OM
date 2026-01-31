@@ -1,5 +1,14 @@
 import admin from "firebase-admin";
 
+// Load .env file in production (PM2 doesn't automatically load it)
+if (process.env.NODE_ENV === "production" && !process.env.FIREBASE_ADMIN_PROJECT_ID) {
+  try {
+    require("dotenv").config();
+  } catch (e) {
+    console.warn("dotenv not available, relying on PM2 env vars");
+  }
+}
+
 // Use global to persist state across hot-reloads in development
 declare global {
   // eslint-disable-next-line no-var
