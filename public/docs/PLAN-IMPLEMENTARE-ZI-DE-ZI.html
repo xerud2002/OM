@@ -1,0 +1,1115 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plan Implementare Zi-de-Zi SEO | OferteMutare.ro</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #fff;
+    }
+
+    @media print {
+      body {
+        padding: 0;
+        font-size: 10pt;
+      }
+      .page-break {
+        page-break-before: always;
+      }
+      h1, h2, h3 {
+        page-break-after: avoid;
+      }
+      .no-print {
+        display: none;
+      }
+    }
+
+    h1 {
+      color: #059669;
+      border-bottom: 3px solid #059669;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+      font-size: 32px;
+    }
+
+    h2 {
+      color: #0369a1;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      font-size: 24px;
+      border-left: 4px solid #0369a1;
+      padding-left: 15px;
+    }
+
+    h3 {
+      color: #7c3aed;
+      margin-top: 25px;
+      margin-bottom: 12px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    h4 {
+      color: #475569;
+      margin-top: 15px;
+      margin-bottom: 10px;
+      font-size: 15px;
+    }
+
+    .header-info {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border: 2px solid #059669;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 30px;
+    }
+
+    .header-info p {
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .header-info strong {
+      color: #059669;
+    }
+
+    .summary-box {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+      border: 2px solid #3b82f6;
+      border-radius: 12px;
+      padding: 25px;
+      margin: 25px 0;
+    }
+
+    .summary-box h3 {
+      color: #1e40af;
+      margin-top: 0;
+    }
+
+    .summary-box ul {
+      margin: 15px 0;
+      padding-left: 25px;
+    }
+
+    .summary-box li {
+      margin: 8px 0;
+      line-height: 1.8;
+    }
+
+    .week-box {
+      background: #f8fafc;
+      border-left: 4px solid #64748b;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 8px;
+    }
+
+    .day-box {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 15px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .day-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .day-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .day-meta {
+      font-size: 13px;
+      color: #64748b;
+    }
+
+    .task-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .task-list li {
+      margin: 12px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .task-list li:before {
+      content: "☐";
+      position: absolute;
+      left: 0;
+      font-size: 18px;
+      color: #94a3b8;
+    }
+
+    .task-time {
+      display: inline-block;
+      background: #fef3c7;
+      color: #92400e;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-right: 8px;
+    }
+
+    .output-box {
+      background: #f0fdf4;
+      border-left: 4px solid #10b981;
+      padding: 12px 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+      font-weight: 600;
+      color: #065f46;
+    }
+
+    .warning-box {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 4px;
+    }
+
+    .warning-box strong {
+      color: #92400e;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 15px;
+      margin: 20px 0;
+    }
+
+    .metric-card {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 28px;
+      font-weight: 700;
+      color: #059669;
+      margin: 10px 0;
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    code {
+      background: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: "Courier New", monospace;
+      font-size: 13px;
+      color: #be123c;
+    }
+
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 15px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 15px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .toc {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 25px 0;
+    }
+
+    .toc ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .toc li {
+      margin: 8px 0;
+    }
+
+    .toc a {
+      color: #0369a1;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .toc a:hover {
+      color: #059669;
+      text-decoration: underline;
+    }
+
+    .phase-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-left: 10px;
+    }
+
+    .phase-urgent {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .phase-critical {
+      background: #fef3c7;
+      color: #ea580c;
+    }
+
+    .phase-important {
+      background: #ecfdf5;
+      color: #10b981;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      padding: 8px 0;
+      padding-left: 30px;
+      position: relative;
+    }
+
+    .checklist li:before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #10b981;
+      font-weight: 700;
+      font-size: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+
+    th {
+      background: #f1f5f9;
+      color: #1e293b;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+    }
+
+    td {
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+    }
+
+    tr:hover {
+      background: #f8fafc;
+    }
+
+    .page-break {
+      margin: 40px 0;
+      border-top: 2px dashed #cbd5e1;
+    }
+  </style>
+</head>
+<body>
+
+<h1>📅 Plan Implementare Zi-de-Zi SEO OferteMutare.ro</h1>
+
+<div class="header-info">
+  <p><strong>Perioada:</strong> 1 Februarie - 30 Aprilie 2026 (Q1 2026)</p>
+  <p><strong>Obiectiv:</strong> Implementare 50% din tasks (61/120) pentru quick wins maxime</p>
+  <p><strong>Deadline Critic:</strong> 31 Martie 2026 pentru FAZA 1-3</p>
+  <p><strong>Document Bază:</strong> <a href="SEO-Analiza-Orase-Romania.html">SEO-Analiza-Orase-Romania.html</a> (26.129 linii, 120 tasks)</p>
+</div>
+
+<div class="toc">
+  <h3>📑 Cuprins</h3>
+  <ul>
+    <li><a href="#viziune">🎯 Viziune Generală Q1 2026</a></li>
+    <li><a href="#saptamana1">🔴 Săptămâna 1 (1-7 Februarie) - Local SEO Foundation</a></li>
+    <li><a href="#saptamana2">🟠 Săptămâna 2 (8-14 Februarie) - Video SEO Setup</a></li>
+    <li><a href="#saptamana3">🟡 Săptămâna 3 (15-21 Februarie) - Rute + Backlinks</a></li>
+    <li><a href="#saptamana4">🟢 Săptămâna 4 (22-28 Februarie) - Scale Content</a></li>
+    <li><a href="#martie">📅 Martie 2026 - Faza 2-3 Continuare</a></li>
+    <li><a href="#tracking">📊 Tracking & Metrics</a></li>
+    <li><a href="#success">🎯 Success Criteria Q1</a></li>
+  </ul>
+</div>
+
+<h2 id="viziune">🎯 VIZIUNE GENERALĂ Q1 2026</h2>
+
+<div class="summary-box">
+  <h3>Metrici Țintă După 90 Zile:</h3>
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">Local SEO Visibility</div>
+      <div class="metric-value">+50%</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">GBP + NAP consistency</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Video Views Lunare</div>
+      <div class="metric-value">+3.500</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">Din YouTube SEO</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Articole Publicate</div>
+      <div class="metric-value">30+</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">2/săptămână rhythm</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pagini Rute</div>
+      <div class="metric-value">40</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">City-to-city optimized</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Featured Snippets</div>
+      <div class="metric-value">20+</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">FAQ position zero</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Domain Authority</div>
+      <div class="metric-value">30+</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">Backlinks early wins</p>
+    </div>
+  </div>
+
+  <h4 style="margin-top: 20px;">Ritmul Săptămânal:</h4>
+  <ul>
+    <li><strong>Luni-Miercuri:</strong> Development + technical work</li>
+    <li><strong>Joi-Vineri:</strong> Content creation + video</li>
+    <li><strong>Weekend:</strong> Outreach + backlinks (optional, 2h max)</li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2 id="saptamana1">🔴 SĂPTĂMÂNA 1 (1-7 Februarie 2026) - LOCAL SEO FOUNDATION <span class="phase-badge phase-urgent">FAZA 1</span></h2>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 1 - Sâmbătă 1 Februarie ✅ Quick Wins Tehnice</div>
+    <div class="day-meta">Timp: 4h | Focus: Setup & Local SEO basics</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">9:00-10:30</span>
+      <strong>Task 1.3:</strong> Adaugă telefon în Navbar + Footer
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Format: <code>&lt;a href="tel:+40740123456"&gt;0740 123 456&lt;/a&gt;</code></li>
+        <li>File: <code>components/layout/Navbar.tsx</code>, <code>Footer.tsx</code></li>
+        <li>Test: Click-to-call pe mobile funcționează</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">10:30-12:00</span>
+      <strong>Task 1.4:</strong> Adresă completă în Footer
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Format: "Str. [Nume], Nr. [X], București, Sector [X], [Cod Poștal]"</li>
+        <li>Adaugă schema markup: <code>&lt;address itemprop="address"&gt;</code></li>
+        <li>Consistency check: EXACT același format pe /contact, /about</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">12:00-13:00</span>
+      <strong>Task 1.7:</strong> NAP Audit complet
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Verifică: Navbar, Footer, Contact page, About page, Metadata</li>
+        <li>Crează document: "NAP-consistency-checklist.md"</li>
+        <li><strong>REGULA:</strong> Același format ВЕЗДЕ, zero variații</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: 3 tasks complete, telefon + adresă live pe site
+  </div>
+</div>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 2 - Duminică 2 Februarie ✅ Google Business Profile</div>
+    <div class="day-meta">Timp: 3h | Focus: GBP setup pentru verificare</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">10:00-11:30</span>
+      <strong>Task 1.1:</strong> Creare Google Business Profile
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Go to: business.google.com</li>
+        <li>Categorie primară: "Moving Company"</li>
+        <li>Categorii secundare: "Storage Facility", "Furniture Store"</li>
+        <li>Completează: Ore, Website, Servicii (mutări, depozitare, etc)</li>
+      </ul>
+      <div class="warning-box" style="margin-top: 10px;">
+        <strong>⚠️ IMPORTANT:</strong> Solicită verificare prin cod poștal (5-7 zile)
+      </div>
+    </li>
+    
+    <li>
+      <span class="task-time">11:30-13:00</span>
+      <strong>Task 1.2 (Pregătire):</strong> Colectare 15 poze GBP
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>5 poze echipă la lucru (cu fețe, uniformă)</li>
+        <li>3 poze camion OferteMutare (lateral, față, spate)</li>
+        <li>3 poze obiective mutate (mobilă, cutii organizate)</li>
+        <li>2 poze spațiu depozitare (dacă ai)</li>
+        <li>2 poze birou/showroom (dacă ai)</li>
+        <li>Resize: 1200x900px, optimize WebP</li>
+        <li>Salvează în: <code>/public/pics/gbp/</code></li>
+        <li><strong>Upload aștepți verificare (Zi 12-14)</strong></li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: GBP creat, în așteptarea verificării (5-7 zile), poze ready
+  </div>
+</div>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 3 - Luni 3 Februarie 💻 Schema Markup + Maps</div>
+    <div class="day-meta">Timp: 5h | Focus: Rich results setup</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">9:00-11:00</span>
+      <strong>Task 1.6:</strong> LocalBusiness Schema pe homepage
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Crează component: <code>components/seo/LocalBusinessSchema.tsx</code></li>
+        <li>Include: telephone, address, geo, priceRange, openingHours</li>
+        <li>Adaugă aggregateRating (dacă ai reviews)</li>
+        <li>Test cu: schema.org validator</li>
+      </ul>
+      <pre>{
+  "@context": "https://schema.org",
+  "@type": "MovingCompany",
+  "name": "OferteMutare.ro",
+  "telephone": "+40740123456",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "Str. Exemplu, Nr. 10",
+    "addressLocality": "București",
+    "postalCode": "030167",
+    "addressRegion": "București",
+    "addressCountry": "RO"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": "44.4268",
+    "longitude": "26.1025"
+  },
+  "priceRange": "$$",
+  "openingHours": "Mo-Fr 08:00-18:00"
+}</pre>
+    </li>
+    
+    <li>
+      <span class="task-time">11:00-12:00</span>
+      <strong>Task 1.5:</strong> Google Maps embed pe /contact
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Obține: Google Maps embed iframe (maps.google.com)</li>
+        <li>Adaugă în: <code>pages/contact.tsx</code></li>
+        <li>Width: 100%, height: 400px, responsive</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">13:00-14:00</span>
+      <strong>Task 1.8 (Început):</strong> Setup Ahrefs tracking
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Crează project: ofertemutare.ro</li>
+        <li>Adaugă 50 keywords prioritare (din Sec 1-4)</li>
+        <li>Keywords: "mutari bucuresti", "firma mutari", "transport mobila", etc</li>
+        <li>Schedule: Weekly rank tracking report (Luni dimineață)</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: LocalBusiness schema live, Maps embedded, Ahrefs tracking started
+  </div>
+</div>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 4 - Marți 4 Februarie 📝 Content Planning + FAQ</div>
+    <div class="day-meta">Timp: 6h | Focus: Content strategy pentru luna 1</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">9:00-10:30</span>
+      <strong>Creare Editorial Calendar Februarie</strong>
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Target: 8 articole în Februarie (2/săptămână)</li>
+        <li>Alegere topics din Sec 11 (Content Audit)</li>
+        <li>Template: <code>data/editorial-calendar-feb.json</code></li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">10:30-12:00</span>
+      <strong>Task 3.1 (Start):</strong> Planificare 40 pagini rute
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Crează: <code>/docs/rute-plan.md</code></li>
+        <li>Lista: 40 rute din Sec 3 (București-Cluj, Cluj-Timișoara, etc)</li>
+        <li>Template URL: <code>/mutari/[from]-[to]</code></li>
+        <li>Prioritizare: TIER 1 (15) → feb-mar, TIER 2 (15) → apr-mai, TIER 3 (10) → iunie</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">13:00-15:00</span>
+      <strong>Task 3.5:</strong> Extindere faqData.ts (35 întrebări noi)
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>File: <code>data/faqData.ts</code></li>
+        <li>Secțiuni: Prețuri (10 FAQ), Timing (8), Siguranță (7), DIY (10)</li>
+        <li>Format consistency cu FAQ existente</li>
+        <li>Adaugă: <code>answerSchema</code> pentru featured snippets</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: Calendar editorial 8 articole, plan 40 rute, +35 FAQ în faqData.ts
+  </div>
+</div>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 5 - Miercuri 5 Februarie 📊 Analytics + Tracking</div>
+    <div class="day-meta">Timp: 4h | Focus: Setup monitoring tools</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">9:00-10:30</span>
+      <strong>Task 4.1:</strong> Google Search Console verificare
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Adaugă proprietate: ofertemutare.ro</li>
+        <li>Verificare prin: Google Analytics tag</li>
+        <li>Submit sitemap: https://ofertemutare.ro/sitemap.xml</li>
+        <li>Check: Coverage report pentru erori indexare</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">10:30-12:00</span>
+      <strong>Task 4.2:</strong> Google Analytics 4 audit
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Verifică: Enhanced measurement ON</li>
+        <li>Setup custom events: request_form_submit, offer_view, phone_click, whatsapp_click</li>
+        <li>Create conversion goals pentru fiecare</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">12:00-13:00</span>
+      <strong>Task 1.8 (Finalizare):</strong> Completare Ahrefs setup
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Configurare: Weekly ranking report (Luni 9 AM)</li>
+        <li>Export baseline: Current rankings pentru 50 keywords</li>
+        <li>Setup alerts: Rank drop >5 poziții</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: GSC + GA4 configured, tracking ready, baseline rankings exported
+  </div>
+</div>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 6 - Joi 6 Februarie ✍️ CONTENT DAY 1</div>
+    <div class="day-meta">Timp: 6h | Focus: Primul articol Februarie</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">9:00-12:00</span>
+      <strong>Scriere Articol #1:</strong> "Ghid Complet Mutare București 2026"
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Slug: <code>/articles/ghid-mutare-bucuresti-2026</code></li>
+        <li>Target: 2.500 cuvinte</li>
+        <li>Structură: Intro (300w) + Content (1.800w) + Concluzie (200w) + Related (200w)</li>
+        <li>Topics: Costuri, timing sezon, checklist, firme, FAQ</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">13:00-14:00</span>
+      <strong>Optimizare SEO articol</strong>
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Meta title: "Ghid Mutare București 2026: Costuri, Firme, Checklist | OferteMutare"</li>
+        <li>Meta description: 155 caractere cu CTA</li>
+        <li>Keywords density: "mutare bucuresti" 1-2%, natural</li>
+        <li>Alt text: Toate imaginile</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">14:00-15:00</span>
+      <strong>Featured image + internal linking</strong>
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Creare: Featured image 1200x630px (Canva)</li>
+        <li>Internal links: 3-5 către alte pagini relevante</li>
+        <li>External links: 1-2 către surse authoritative</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: Articol #1 draft complet 2.500w, optimizat SEO, ready publish
+  </div>
+</div>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 7 - Vineri 7 Februarie 🚀 Content Publish + Review</div>
+    <div class="day-meta">Timp: 3h | Focus: Publish + săptămână review</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">9:00-10:00</span>
+      <strong>Publicare Articol #1</strong>
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Final proofread</li>
+        <li>Publish la: ofertemutare.ro/articles/ghid-mutare-bucuresti-2026</li>
+        <li>Submit URL: Google Search Console (Request Indexing)</li>
+        <li>Share: LinkedIn, Facebook company page</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">10:00-11:30</span>
+      <strong>SĂPTĂMÂNĂ 1 REVIEW</strong>
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Checklist: 8/8 tasks FAZA 1 complete?</li>
+        <li>GBP creat și în verificare?</li>
+        <li>Schema markup validat?</li>
+        <li>Articol #1 publicat?</li>
+        <li>Update: Progress dashboard în SEO doc</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">11:30-12:30</span>
+      <strong>Planificare SĂPTĂMÂNA 2</strong>
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Review: Tasks programate (video setup, articol #2)</li>
+        <li>Calendar: Block time pentru fiecare task</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: Articol publicat, review S1 completă, plan S2 ready
+  </div>
+</div>
+
+<div class="page-break"></div>
+
+<h2 id="saptamana2">🟠 SĂPTĂMÂNA 2 (8-14 Februarie 2026) - VIDEO SEO SETUP <span class="phase-badge phase-critical">FAZA 2</span></h2>
+
+<div class="summary-box">
+  <h3>Obiective Săptămâna 2:</h3>
+  <ul class="checklist">
+    <li>YouTube channel complet setup (branding, playlists)</li>
+    <li>3 videos produse (Video #1-3)</li>
+    <li>Articole: 2 noi (ritm 2/săptămână)</li>
+    <li>GBP verification completă (dacă cod primit)</li>
+    <li>15/40 pagini rute create</li>
+    <li>Backlinks: 10 outreach emails sent</li>
+  </ul>
+</div>
+
+<div class="day-box">
+  <div class="day-header">
+    <div class="day-title">Zi 8 - Sâmbătă 8 Februarie 📹 YouTube Channel</div>
+    <div class="day-meta">Timp: 4h | Focus: Canal YouTube setup</div>
+  </div>
+  
+  <ul class="task-list">
+    <li>
+      <span class="task-time">10:00-11:30</span>
+      <strong>Task 2.1:</strong> Creare canal YouTube "OferteMutare.ro"
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Go to: youtube.com/create_channel</li>
+        <li>Brand account (nu personal!)</li>
+        <li>Channel name: "OferteMutare.ro - Mutări Profesionale"</li>
+        <li>Channel description: 500 caractere optimizat keywords</li>
+      </ul>
+    </li>
+    
+    <li>
+      <span class="task-time">11:30-13:30</span>
+      <strong>Task 2.2:</strong> Design + branding canal
+      <ul style="margin-top: 8px; font-size: 13px; color: #64748b;">
+        <li>Channel Art: 2560x1440px (Canva)</li>
+        <li>Profile Picture: Logo 800x800px</li>
+        <li>Watermark: Logo mic 150x150px</li>
+        <li>Playlists: "Ghiduri Mutare", "Tips & Tricks", "Mutări pe Orașe"</li>
+      </ul>
+    </li>
+  </ul>
+  
+  <div class="output-box">
+    ✅ Output EOD: Canal YouTube complet configurat, branding done, ready video upload
+  </div>
+</div>
+
+<div class="warning-box" style="margin: 20px 0;">
+  <strong>💡 PRO TIP Săptămâna 2-4:</strong> Pentru accelerare, poți face batch production videos - recording toate 3 videos într-o zi (6h), apoi 3 zile editing paralel. Economisești 20% timp vs one-by-one.
+</div>
+
+<div class="page-break"></div>
+
+<h2 id="martie">📅 MARTIE 2026 - FAZA 2-3 CONTINUARE <span class="phase-badge phase-important">SCALE</span></h2>
+
+<div class="summary-box">
+  <h3>Overview Martie (Săptămânile 5-9):</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Săptămână</th>
+        <th>Focus Principal</th>
+        <th>Deliverables</th>
+        <th>Status FAZA</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>S5 (1-7 Mar)</strong></td>
+        <td>Video Production Ramp</td>
+        <td>2 videos, 10 rute (→35 total), 2 articole</td>
+        <td>FAZA 2: 70%</td>
+      </tr>
+      <tr>
+        <td><strong>S6 (8-14 Mar)</strong></td>
+        <td>Content at Scale</td>
+        <td>2 videos, finish 40/40 rute ✅, 2 articole, +20 FAQ</td>
+        <td>FAZA 2: 90%</td>
+      </tr>
+      <tr>
+        <td><strong>S7 (15-21 Mar)</strong></td>
+        <td>FAZA 3 Start</td>
+        <td>2 videos, 3 city guides, 2 articole, schema expansion</td>
+        <td>FAZA 3: 30%</td>
+      </tr>
+      <tr>
+        <td><strong>S8 (22-28 Mar)</strong></td>
+        <td>Consolidare + Optimization</td>
+        <td>2 videos, 3 city guides, 2 articole, technical SEO</td>
+        <td>FAZA 3: 60%</td>
+      </tr>
+      <tr>
+        <td><strong>S9 (29 Mar-4 Apr)</strong></td>
+        <td>Q1 FINAL PUSH</td>
+        <td>Videos #12-13 ✅, 4 city guides (→10 total), 2 articole</td>
+        <td>FAZA 3: 90%</td>
+      </tr>
+    </tbody>
+  </table>
+  
+  <p style="margin-top: 15px; font-size: 13px; color: #64748b;">
+    <strong>Martie Output Total:</strong> 10 videos (→13 total Q1), 16 articole (→24 total), 10 city guides, 40 rute complete, 10-20 backlinks secured
+  </p>
+</div>
+
+<div class="page-break"></div>
+
+<h2 id="tracking">📊 TRACKING & METRICS</h2>
+
+<div class="summary-box">
+  <h3>Daily Tracking (EOD Checklist):</h3>
+  <pre style="background: #f8fafc; color: #1e293b; border: 1px solid #e2e8f0;">## [DATA] - Daily Report
+- ✅ Tasks complete astăzi: [X/Y]
+- ⏱️ Ore lucrate: [X]h
+- 📝 Content output: [articole/videos/pagini]
+- 🔗 Outreach: [emails sent / răspunsuri]
+- 📈 Metrics check:
+  - GA4 visitors today: [X]
+  - YouTube views 24h: [X]
+  - Ahrefs rank changes: [keywords]
+- 🚧 Blocaje: [issues]
+- 📅 Mâine: [top 3 priorities]</pre>
+</div>
+
+<div class="summary-box">
+  <h3>Weekly Tracking (EOD Vineri):</h3>
+  <pre style="background: #f8fafc; color: #1e293b; border: 1px solid #e2e8f0;">## SĂPTĂMÂNA [X] Review ([START] - [END])
+
+### Obiective Săptămână:
+- [ ] Obiectiv 1
+- [ ] Obiectiv 2
+- [ ] Obiectiv 3
+
+### Output Săptămână:
+- Articole: [X] published
+- Videos: [X] published
+- Pagini rute: [X] created
+- Backlinks: [X] secured
+
+### Metrics Săptămână:
+- Organic traffic: [X] (Δ [+/-]%)
+- YouTube views: [X] total
+- Average video CTR: [X]%
+- Backlinks total: [X] (DA average: [X])
+- Rankings: [X] keywords top 10
+
+### Lessons Learned:
+- Ce a mers bine: [...]
+- Ce trebuie îmbunătățit: [...]
+
+### Plan Săptămâna Următoare:
+- Priority #1: [...]
+- Priority #2: [...]
+- Priority #3: [...]</pre>
+</div>
+
+<div class="page-break"></div>
+
+<h2 id="success">🎯 SUCCESS CRITERIA Q1 2026</h2>
+
+<div class="summary-box">
+  <h3>End of March 2026 Targets:</h3>
+  <div class="metrics-grid">
+    <div class="metric-card">
+      <div class="metric-label">FAZA 1</div>
+      <div class="metric-value">100%</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">8/8 tasks complete</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">FAZA 2</div>
+      <div class="metric-value">80%+</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">15/18 tasks minimum</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">FAZA 3</div>
+      <div class="metric-value">50%+</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">7/13 tasks minimum</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Content Output</div>
+      <div class="metric-value">77</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">24 articole + 13 videos + 40 rute</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Backlinks</div>
+      <div class="metric-value">10-20</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">DA 20+ secured</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Rankings</div>
+      <div class="metric-value">10+</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">Keywords top 10 Google</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Organic Traffic</div>
+      <div class="metric-value">+150%</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">vs baseline</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">YouTube</div>
+      <div class="metric-value">500+</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">Subscribers, 5k+ views</p>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Revenue Q1</div>
+      <div class="metric-value">+50k RON</div>
+      <p style="font-size: 12px; color: #64748b; margin: 5px 0;">From SEO leads</p>
+    </div>
+  </div>
+</div>
+
+<div class="summary-box" style="background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%); border-color: #10b981;">
+  <h3 style="color: #065f46;">✅ If ALL Green - SUCCES!</h3>
+  <p style="font-size: 14px; color: #065f46; margin: 15px 0;">
+    <strong>🎉 Ești ON TRACK pentru +1.1M RON An 1!</strong>
+  </p>
+  <p style="font-size: 13px; color: #047857; line-height: 1.8;">
+    Continue cu FAZA 4 (Luna 4-12): Video ramp la 8/lună, content la 12/lună, seasonal campaigns, advanced schema expansion, international opportunities (An 2).
+  </p>
+</div>
+
+<div class="warning-box" style="margin-top: 20px;">
+  <strong>⚠️ If ANY Red - REVIEW & ADJUST:</strong>
+  <ul style="margin-top: 10px; padding-left: 20px;">
+    <li>Identify blockers: Ce te-a oprit? Resource constraints? Technical issues?</li>
+    <li>Re-prioritize: Focus pe tasks cu ROI maxim (Video + GBP > City guides)</li>
+    <li>Adjust timeline: Extinde Q1 cu 2-4 săptămâni sau reduce scope 20%</li>
+    <li>Consider outsource: Content writing, video editing pentru accelerare</li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<h2>📝 FINAL NOTES & ADJUSTMENTS</h2>
+
+<div class="summary-box">
+  <h3>⚠️ Ajustări Realiste Per Tip Echipă:</h3>
+  
+  <h4>Dacă ești SOLO (fără echipă):</h4>
+  <p style="color: #dc2626; font-weight: 600;">Realistic timeline: Double time estimates</p>
+  <ul style="margin: 10px 0; padding-left: 20px; font-size: 13px;">
+    <li>Fiecare zi devine 2 zile</li>
+    <li>FAZA 1: 4 săptămâni (nu 2)</li>
+    <li>FAZA 2: 8 săptămâni (nu 4)</li>
+    <li>Q1 target: 50% din tasks (nu 100%)</li>
+  </ul>
+  
+  <h4>Dacă ai ECHIPĂ (2-3 persoane):</h4>
+  <p style="color: #10b981; font-weight: 600;">Aggressive timeline: Keep plan as-is</p>
+  <ul style="margin: 10px 0; padding-left: 20px; font-size: 13px;">
+    <li>Content writer: Articole 2/săptămână</li>
+    <li>Video editor: Videos 2-3/săptămână</li>
+    <li>Developer: Rute + technical SEO</li>
+    <li><strong>ROI:</strong> x3 faster, finish Q1 în 6 săptămâni</li>
+  </ul>
+  
+  <h4>Dacă OUTSOURCE content:</h4>
+  <p style="color: #f59e0b; font-weight: 600;">Cost vs Time tradeoff</p>
+  <ul style="margin: 10px 0; padding-left: 20px; font-size: 13px;">
+    <li>Articole: 150-300 RON/articol (Upwork, Fiverr)</li>
+    <li>Videos: 500-1.000 RON/video editing</li>
+    <li>ROI: Salvezi 50% timp, investești ~15k RON/lună</li>
+    <li><strong>ATENȚIE:</strong> Quality control essential!</li>
+  </ul>
+</div>
+
+<div class="summary-box">
+  <h3>🛠️ Tools Necesare (Estimate Costuri):</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Tool</th>
+        <th>Cost/Lună</th>
+        <th>Essential?</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Ahrefs</strong></td>
+        <td>~$100 (~470 RON)</td>
+        <td style="color: #dc2626; font-weight: 600;">DA</td>
+        <td>Keyword tracking, backlink monitoring, competitor analysis</td>
+      </tr>
+      <tr>
+        <td><strong>Canva Pro</strong></td>
+        <td>~$13 (~60 RON)</td>
+        <td style="color: #f59e0b; font-weight: 600;">Recomandat</td>
+        <td>Featured images, thumbnails YouTube, social media graphics</td>
+      </tr>
+      <tr>
+        <td><strong>Google Workspace</strong></td>
+        <td>~$6 (~30 RON)</td>
+        <td style="color: #10b981;">Optional</td>
+        <td>Professional email, Drive storage, collaboration</td>
+      </tr>
+      <tr>
+        <td><strong>Epidemic Sound</strong></td>
+        <td>~$15 (~70 RON)</td>
+        <td style="color: #f59e0b; font-weight: 600;">Recomandat</td>
+        <td>Royalty-free music pentru YouTube videos</td>
+      </tr>
+      <tr>
+        <td><strong>DaVinci Resolve</strong></td>
+        <td>FREE</td>
+        <td style="color: #10b981;">FREE</td>
+        <td>Video editing (alternative: Adobe Premiere $21/lună)</td>
+      </tr>
+    </tbody>
+  </table>
+  <p style="margin-top: 15px; font-weight: 600; color: #059669;">
+    <strong>TOTAL MINIM:</strong> ~150 USD/lună (~700 RON) pentru solo operation<br>
+    <strong>TOTAL RECOMANDAT:</strong> ~200 USD/lună (~940 RON) cu toate tools
+  </p>
+</div>
+
+<div class="summary-box" style="background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); border-color: #f59e0b;">
+  <h3 style="color: #92400e;">⏱️ Time Commitment Realistic:</h3>
+  <ul style="color: #78350f; line-height: 1.8;">
+    <li><strong>Solo Full-Time:</strong> 30-40h/săptămână (equivalent full-time job)</li>
+    <li><strong>Part-Time:</strong> 15-20h/săptămână = double all timelines (Q1 devine 6 luni)</li>
+    <li><strong>Cu Echipă:</strong> 10-15h/săptămână management + review (delegation heavy)</li>
+  </ul>
+</div>
+
+<div class="page-break"></div>
+
+<div style="text-align: center; margin: 40px 0;">
+  <h2 style="color: #059669; font-size: 36px; margin-bottom: 20px;">🚀 GATA DE START?</h2>
+  <p style="font-size: 20px; color: #1e293b; font-weight: 600;">Prima zi: Sâmbătă 1 Februarie 2026!</p>
+  <p style="font-size: 16px; color: #64748b; margin-top: 15px;">Telefon în Navbar, adresă în Footer, NAP audit → QUICK WINS! 💪</p>
+  
+  <div style="background: #f0fdf4; border: 2px solid #10b981; border-radius: 12px; padding: 25px; margin: 30px auto; max-width: 600px;">
+    <p style="font-size: 14px; color: #065f46; margin: 0; line-height: 1.8;">
+      <strong>📧 Questions? Blocaje? Need clarifications?</strong><br>
+      Refer back to <a href="SEO-Analiza-Orase-Romania.html" style="color: #059669; font-weight: 600;">SEO-Analiza-Orase-Romania.html</a> (120 tasks detaliate)<br>
+      Track progress în acest document săptămânal<br>
+      Update metrics daily → Weekly → Monthly<br><br>
+      <strong style="font-size: 16px;">Succes! 🎯</strong>
+    </p>
+  </div>
+</div>
+
+<div class="header-info" style="margin-top: 40px; background: #f8fafc; border-color: #cbd5e1;">
+  <p style="font-size: 12px; color: #64748b; text-align: center;">
+    <strong>Document Creat:</strong> 31 Ianuarie 2026<br>
+    <strong>Ultima Actualizare:</strong> 31 Ianuarie 2026<br>
+    <strong>Versiune:</strong> 1.0 - Q1 2026 Implementation Plan<br>
+    <strong>Based On:</strong> SEO-Analiza-Orase-Romania.html (26.129 linii, 120 tasks totale)
+  </p>
+</div>
+
+</body>
+</html>
