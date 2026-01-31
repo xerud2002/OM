@@ -223,6 +223,39 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     await batch.commit();
 
+    // Send email notifications to all companies (async, don't wait)
+    // Run in background to avoid slowing down request creation
+    setImmediate(async () => {
+      try {
+        const emailPromises = companiesSnapshot.docs.map(async (companyDoc) => {
+          const companyData = companyDoc.data();
+          if (!companyData.email) return; // Skip if no email
+
+          await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'newRequestNotification',
+              data: {
+                companyEmail: companyData.email,
+                requestCode,
+                from: `${clean.fromCity}, ${clean.fromCounty}`,
+                to: `${clean.toCity}, ${clean.toCounty}`,
+                movingDate: clean.movingDate || 'Nedefinită',
+                furniture: clean.furniture || 'Nedefinit'
+              }
+            })
+          });
+        });
+
+        await Promise.allSettled(emailPromises);
+        logger.log(`Sent email notifications to ${companiesSnapshot.docs.length} companies for ${requestCode}`);
+      } catch (emailError) {
+        logger.error('Error sending email notifications:', emailError);
+        // Don't fail the request if emails fail
+      }
+    });
+
     return res.status(200).json(
       apiSuccess({
         requestId: requestRef.id,

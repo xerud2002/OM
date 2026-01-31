@@ -144,6 +144,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         break;
 
+      case 'newRequestNotification':
+        // Send to company about new request available
+        emailResult = await sendEmail({
+          to: data.companyEmail,
+          subject: `🚚 Cerere nouă de mutare disponibilă - ${data.requestCode}`,
+          html: emailTemplates.newRequestNotification(
+            data.requestCode,
+            data.from,
+            data.to,
+            data.movingDate,
+            data.furniture
+          ),
+        });
+        break;
+
       default:
         return res.status(400).json(apiError('Invalid email type', ErrorCodes.BAD_REQUEST));
     }

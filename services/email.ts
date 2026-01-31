@@ -224,4 +224,75 @@ export const emailTemplates = {
       </body>
     </html>
   `,
+
+  // NEW: Notification to companies about new moving request
+  newRequestNotification: (requestCode: string, from: string, to: string, movingDate: string, furniture: string) => `
+    <!DOCTYPE html>
+    <html lang="ro">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #059669, #0284c7); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
+          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
+          .badge { display: inline-block; background: #fef3c7; color: #92400e; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
+          .info-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 4px; }
+          .info-row { display: flex; padding: 8px 0; border-bottom: 1px solid #d1fae5; }
+          .info-label { font-weight: bold; color: #065f46; min-width: 120px; }
+          .cta { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
+          .cta:hover { background: linear-gradient(135deg, #059669, #047857); }
+          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>🚚 Cerere Nouă de Mutare!</h1>
+            <p style="margin: 10px 0 0 0; font-size: 18px;">O nouă oportunitate de business te așteaptă</p>
+          </div>
+          <div class="content">
+            <div class="badge">Cerere #${requestCode}</div>
+            
+            <p style="font-size: 18px; margin: 20px 0;">Ai o nouă cerere de mutare care așteaptă oferta ta!</p>
+            
+            <div class="info-box">
+              <div class="info-row">
+                <div class="info-label">📍 Din:</div>
+                <div><strong>${from}</strong></div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">📍 În:</div>
+                <div><strong>${to}</strong></div>
+              </div>
+              <div class="info-row">
+                <div class="info-label">📅 Data:</div>
+                <div><strong>${movingDate}</strong></div>
+              </div>
+              <div class="info-row" style="border-bottom: none;">
+                <div class="info-label">📦 Mobilier:</div>
+                <div>${furniture}</div>
+              </div>
+            </div>
+
+            <p style="color: #059669; font-weight: bold; font-size: 16px;">⚡ Acționează rapid! Primele oferte au șanse mai mari de a fi acceptate.</p>
+
+            <div style="text-align: center;">
+              <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" class="cta">
+                Trimite Oferta Acum →
+              </a>
+            </div>
+
+            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
+              💡 <strong>Sfat:</strong> Oferă un preț competitiv și răspunde profesionist pentru a crește șansele de câștig.
+            </p>
+          </div>
+          <div class="footer">
+            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
+            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `,
 };

@@ -338,3 +338,18 @@ export async function updateRequest(requestId: string, data: any) {
 
   await Promise.all(notificationPromises);
 }
+
+// Get all active companies for email notifications
+export async function getAllActiveCompanies() {
+  const q = query(
+    collection(db, "companies"),
+    where("status", "==", "active")
+  );
+  const snapshot = await getDocs(q);
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    email: doc.data().email,
+    companyName: doc.data().companyName,
+    ...doc.data()
+  }));
+}

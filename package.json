@@ -10,7 +10,6 @@
     "lint": "next lint --max-warnings=0"
   },
   "dependencies": {
-    "@emailjs/browser": "^4.4.1",
     "@heroicons/react": "^2.2.0",
     "@next/third-parties": "^14.2.35",
     "@tailwindcss/postcss": "^4.1.18",
