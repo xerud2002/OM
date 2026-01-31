@@ -45,7 +45,46 @@ OferteMutare.ro este o platformă all-in-one care simplifică procesul de mutare
 
 ---
 
-## 🛠️ Tech Stack
+## � Email System
+
+### ✅ Notificări Active (Trimise Automat)
+
+| Template | Destinatar | Trigger | Status |
+|----------|-----------|---------|--------|
+| `guestRequestConfirmation` | Client | După trimitere cerere | ✅ ACTIV |
+| `newRequestNotification` | Toate companiile active | După creare cerere nouă | ✅ ACTIV |
+| `newOffer` | Client | După ce companie trimite ofertă | ✅ ACTIV |
+| `offerAccepted` | Companie | După acceptare ofertă | ✅ ACTIV |
+| `contactForm` | Admin | După trimitere formular contact | ✅ ACTIV |
+
+### 🔒 Template-uri Pregătite (Funcționalități Inactive)
+
+| Template | Destinatar | Trigger | Status |
+|----------|-----------|---------|--------|
+| `offerDeclined` | Companiile respinse | Accept/decline UI | 🔒 Gata (feature-ul nu e live) |
+| `newMessageFromCompany` | Client | Chat message | 🔒 Gata (chat-ul nu e live) |
+| `newMessageFromCustomer` | Companie | Chat message | 🔒 Gata (chat-ul nu e live) |
+
+### 📅 TODO (Implementare Necesară)
+
+- **`offerReminder`**: Email reminder la 48h după prima ofertă primită (necesită CRON job)
+
+### Configurare Email
+
+**Provider**: Resend API (https://resend.com)
+**Domeniu**: ofertemutare.ro (verificat cu SPF/DKIM/DMARC)
+**From Address**: info@ofertemutare.ro
+**API Tier**: FREE (3,000 emails/lună)
+
+### Activare Funcționalități Dezactivate
+
+Când chat-ul sau accept/decline devin live, șterge comentariile TODO din:
+- `pages/api/offers/message.ts` - Pentru notificări chat
+- `pages/api/offers/accept.ts` - Pentru notificări decline
+
+---
+
+## �🛠️ Tech Stack
 
 ### Frontend
 

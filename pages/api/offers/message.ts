@@ -64,74 +64,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           seen: false,
         });
 
-        // Send email notification to company
-        setImmediate(async () => {
-          try {
-            const companyDoc = await adminDb.collection('companies').doc(offerData.companyId!).get();
-            if (companyDoc.exists) {
-              const companyData = companyDoc.data();
-              const companyEmail = companyData?.email;
-              const customerName = requestData.customerName || 'Clientul';
-              const requestCode = (requestSnap.data() as any)?.requestCode || requestId.substring(0, 8).toUpperCase();
-
-              if (companyEmail) {
-                await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    type: 'newMessageFromCustomer',
-                    data: {
-                      companyEmail,
-                      customerName,
-                      requestCode,
-                      messagePreview: String(text).trim().slice(0, 100),
-                      conversationLink: `${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard`
-                    }
-                  })
-                });
-              }
-            }
-          } catch (emailErr) {
-            logger.warn('[offers/message] Failed to send email to company:', emailErr);
-          }
-        });
+        // TODO: Send email notification when chat feature is enabled
+        // setImmediate(async () => { ... });
       } catch (e) {
         logger.warn("[offers/message] failed to create notification", e);
       }
     }
 
-    // Send email notification to customer when company sends a message
-    if (isCompany && requestData?.customerId) {
-      setImmediate(async () => {
-        try {
-          const customerDoc = await adminDb.collection('customers').doc(requestData.customerId!).get();
-          if (customerDoc.exists) {
-            const customerData = customerDoc.data();
-            const customerEmail = customerData?.email;
-            const companyDoc = await adminDb.collection('companies').doc(offerData.companyId!).get();
-            const companyName = companyDoc.exists ? companyDoc.data()?.companyName || 'Compania' : 'Compania';
-
-            if (customerEmail) {
-              await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  type: 'newMessageFromCompany',
-                  data: {
-                    customerEmail,
-                    companyName,
-                    messagePreview: String(text).trim().slice(0, 100),
-                    conversationLink: `${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/customer/dashboard`
-                  }
-                })
-              });
-            }
-          }
-        } catch (emailErr) {
-          logger.warn('[offers/message] Failed to send email to customer:', emailErr);
-        }
-      });
-    }
+    // TODO: Send email to customer when company sends message (feature disabled)
+    // if (isCompany && requestData?.customerId) { ... }
 
     return res.status(200).json(apiSuccess({ ok: true }));
   } catch (err) {
