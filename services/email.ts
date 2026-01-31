@@ -45,50 +45,179 @@ export async function sendEmail({
   }
 }
 
-// Email templates
+// Email templates - Premium Style
 export const emailTemplates = {
   guestRequestConfirmation: (requestCode: string, name: string, from: string, to: string, movingDate: string) => `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #10b981, #0ea5e9); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-          .button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-          .info-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { 
+            padding: 48px 40px 40px; 
+            background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+            border-bottom: 3px solid #10b981;
+          }
+          .header h1 { 
+            color: white; 
+            font-size: 24px; 
+            font-weight: 600; 
+            letter-spacing: -0.5px;
+            margin: 0;
+          }
+          .header .subtitle {
+            color: #d1fae5;
+            font-size: 15px;
+            margin-top: 8px;
+          }
+          .content { padding: 40px; }
+          .greeting { font-size: 16px; margin-bottom: 24px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+          .card { 
+            background: #f9fafb; 
+            border: 1px solid #e5e7eb; 
+            border-radius: 8px; 
+            padding: 24px; 
+            margin: 32px 0; 
+          }
+          .card-row { 
+            display: flex; 
+            padding: 10px 0; 
+            border-bottom: 1px solid #e5e7eb; 
+          }
+          .card-row:last-child { border-bottom: none; }
+          .card-label { 
+            font-size: 13px; 
+            font-weight: 600; 
+            color: #6b7280; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            min-width: 100px;
+          }
+          .card-value { font-size: 15px; color: #111827; font-weight: 500; }
+          .steps { margin: 32px 0; }
+          .steps-title { 
+            font-size: 14px; 
+            font-weight: 600; 
+            color: #065f46; 
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            margin-bottom: 16px;
+          }
+          .step { 
+            padding: 16px 0; 
+            color: #4b5563; 
+            font-size: 15px;
+            border-bottom: 1px solid #f3f4f6;
+          }
+          .step:last-child { border-bottom: none; }
+          .step-number { 
+            display: inline-block; 
+            width: 24px; 
+            height: 24px; 
+            background: #064e3b; 
+            color: white; 
+            border-radius: 50%; 
+            text-align: center; 
+            line-height: 24px; 
+            font-size: 13px;
+            font-weight: 600;
+            margin-right: 12px;
+          }
+          .highlight { 
+            background: #ecfdf5; 
+            border-left: 3px solid #10b981; 
+            padding: 20px; 
+            margin: 32px 0;
+            border-radius: 4px;
+          }
+          .highlight p { color: #065f46; font-size: 15px; font-weight: 500; margin: 0; }
+          .footer { 
+            padding: 32px 40px; 
+            background: #f9fafb; 
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+          }
+          .footer-brand { 
+            font-size: 15px; 
+            font-weight: 600; 
+            color: #111827; 
+            margin-bottom: 8px;
+          }
+          .footer-text { 
+            color: #6b7280; 
+            font-size: 13px; 
+            line-height: 1.6;
+          }
+          .footer a { color: #059669; text-decoration: none; }
+          .footer a:hover { text-decoration: underline; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>✅ Cererea ta a fost înregistrată!</h1>
-          </div>
-          <div class="content">
-            <p>Bună ${name},</p>
-            <p>Cererea ta de mutare a fost primită cu succes și este acum vizibilă pentru companiile partenere.</p>
-            
-            <div class="info-box">
-              <strong>Cod cerere:</strong> ${requestCode}<br>
-              <strong>Rută:</strong> ${from} → ${to}<br>
-              <strong>Data mutării:</strong> ${movingDate}
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Cerere Confirmată</h1>
+              <div class="subtitle">Ofertele sunt pe drum</div>
             </div>
-            
-            <h3>📞 Următorii pași:</h3>
-            <ol>
-              <li>3-5 companii de mutări vor vedea cererea ta în următoarele 24-48h</li>
-              <li>Vei primi oferte direct pe telefon sau email</li>
-              <li>Compară ofertele și alege compania care ți se potrivește cel mai bine</li>
-            </ol>
-            
-            <p><strong>✅ Nu trebuie să faci nimic altceva - așteaptă contactul companiilor!</strong></p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Răspunde la acest email sau contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+            <div class="content">
+              <div class="greeting">Bună ${name},</div>
+              <div class="message">
+                Cererea ta de mutare a fost înregistrată cu succes. Companiile noastre partenere au fost notificate și vor începe să pregătească oferte personalizate.
+              </div>
+              
+              <div class="card">
+                <div class="card-row">
+                  <div class="card-label">Referință</div>
+                  <div class="card-value">${requestCode}</div>
+                </div>
+                <div class="card-row">
+                  <div class="card-label">Traseu</div>
+                  <div class="card-value">${from} → ${to}</div>
+                </div>
+                <div class="card-row">
+                  <div class="card-label">Data mutării</div>
+                  <div class="card-value">${movingDate}</div>
+                </div>
+              </div>
+              
+              <div class="steps">
+                <div class="steps-title">Ce urmează</div>
+                <div class="step">
+                  <span class="step-number">1</span>
+                  Companiile verificate analizează cererea ta
+                </div>
+                <div class="step">
+                  <span class="step-number">2</span>
+                  Primești oferte personalizate în 24-48 ore
+                </div>
+                <div class="step">
+                  <span class="step-number">3</span>
+                  Compari prețurile și alegi oferta potrivită
+                </div>
+              </div>
+              
+              <div class="highlight">
+                <p>Nu mai trebuie să faci nimic. Companiile te vor contacta direct pentru a-ți prezenta ofertele.</p>
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
           </div>
         </div>
       </body>
@@ -100,34 +229,109 @@ export const emailTemplates = {
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #10b981, #0ea5e9); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-          .price { font-size: 32px; font-weight: bold; color: #10b981; text-align: center; margin: 20px 0; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { 
+            padding: 48px 40px 40px; 
+            background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+            border-bottom: 3px solid #10b981;
+          }
+          .header h1 { color: white; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #d1fae5; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+          .offer-card {
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 32px;
+            margin: 32px 0;
+            text-align: center;
+            background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
+          }
+          .company-name {
+            font-size: 16px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 600;
+            margin-bottom: 16px;
+          }
+          .price-display {
+            font-size: 48px;
+            font-weight: 700;
+            color: #064e3b;
+            letter-spacing: -2px;
+            margin: 16px 0;
+          }
+          .price-label {
+            font-size: 13px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+          }
+          .reference {
+            background: #f9fafb;
+            padding: 16px;
+            border-radius: 6px;
+            margin: 24px 0;
+            text-align: center;
+          }
+          .reference-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+          .reference-value { font-size: 15px; color: #111827; font-weight: 600; }
+          .footer { 
+            padding: 32px 40px; 
+            background: #f9fafb; 
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+          }
+          .footer-brand { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+          .footer-text { color: #6b7280; font-size: 13px; line-height: 1.6; }
+          .footer a { color: #059669; text-decoration: none; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>🎉 Ai primit o ofertă nouă!</h1>
-          </div>
-          <div class="content">
-            <p>Bună ziua,</p>
-            <p>Ai primit o ofertă nouă pentru cererea ta <strong>${requestCode}</strong>:</p>
-            
-            <p><strong>Companie:</strong> ${companyName}</p>
-            <div class="price">${price} RON</div>
-            
-            <p>Compania te va contacta în curând pentru detalii suplimentare.</p>
-            <p>Mult succes cu mutarea!</p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Ofertă Nouă Primită</h1>
+              <div class="subtitle">Un partener ți-a trimis o propunere</div>
+            </div>
+            <div class="content">
+              <div class="message">
+                Ai primit o ofertă competitivă de la una dintre companiile noastre verificate. Compania te va contacta în scurt timp pentru a discuta detaliile mutării.
+              </div>
+              
+              <div class="offer-card">
+                <div class="company-name">${companyName}</div>
+                <div class="price-display">${price.toLocaleString('ro-RO')}</div>
+                <div class="price-label">Lei RON</div>
+              </div>
+
+              <div class="reference">
+                <div class="reference-label">Referință cerere</div>
+                <div class="reference-value">${requestCode}</div>
+              </div>
+              
+              <div class="message" style="margin-top: 32px;">
+                Recomandăm să aștepți și alte oferte pentru a putea compara. În general, primele răspunsuri apar în primele 48 de ore de la postarea cererii.
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
           </div>
         </div>
       </body>
@@ -139,44 +343,101 @@ export const emailTemplates = {
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #10b981, #0ea5e9); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-          .contact-box { background: #f0fdf4; border: 2px solid #10b981; border-radius: 8px; padding: 20px; margin: 20px 0; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { 
+            padding: 48px 40px 40px; 
+            background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+            border-bottom: 3px solid #10b981;
+          }
+          .header h1 { color: white; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #d1fae5; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+          .contact-box { 
+            background: #f9fafb; 
+            border: 2px solid #e5e7eb; 
+            border-radius: 12px; 
+            padding: 32px; 
+            margin: 32px 0; 
+          }
+          .contact-title { font-size: 14px; font-weight: 600; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 20px; }
+          .contact-row { padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
+          .contact-row:last-child { border-bottom: none; }
+          .contact-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+          .contact-value { font-size: 15px; color: #111827; font-weight: 500; }
+          .contact-value a { color: #059669; text-decoration: none; }
+          .steps { margin: 32px 0; }
+          .steps-title { font-size: 14px; font-weight: 600; color: #065f46; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 16px; }
+          .step { padding: 16px 0; color: #4b5563; font-size: 15px; border-bottom: 1px solid #f3f4f6; }
+          .step:last-child { border-bottom: none; }
+          .step-number { display: inline-block; width: 24px; height: 24px; background: #064e3b; color: white; border-radius: 50%; text-align: center; line-height: 24px; font-size: 13px; font-weight: 600; margin-right: 12px; }
+          .footer { padding: 32px 40px; background: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; }
+          .footer-brand { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+          .footer-text { color: #6b7280; font-size: 13px; line-height: 1.6; }
+          .footer a { color: #059669; text-decoration: none; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>✅ Oferta ta a fost acceptată!</h1>
-          </div>
-          <div class="content">
-            <p>Felicitări!</p>
-            <p>Clientul <strong>${customerName}</strong> a acceptat oferta ta pentru cererea <strong>${requestCode}</strong>.</p>
-            
-            <div class="contact-box">
-              <h3>📞 Date de contact client:</h3>
-              <p><strong>Nume:</strong> ${customerName}</p>
-              <p><strong>Telefon:</strong> <a href="tel:${customerPhone}">${customerPhone}</a></p>
-              <p><strong>Email:</strong> <a href="mailto:${customerEmail}">${customerEmail}</a></p>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Ofertă Acceptată</h1>
+              <div class="subtitle">Clientul a ales serviciile tale</div>
             </div>
-            
-            <h3>Următorii pași:</h3>
-            <ol>
-              <li>Contactează clientul pentru confirmare și detalii finale</li>
-              <li>Stabilește detaliile mutării (oră, adrese exacte, servicii suplimentare)</li>
-              <li>Planifică logistica necesară</li>
-            </ol>
-            
-            <p>Mult succes cu această mutare!</p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Support: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+            <div class="content">
+              <div class="message">
+                Felicitări! Clientul <strong>${customerName}</strong> a acceptat oferta ta pentru cererea <strong>${requestCode}</strong>. Contactează-l cât mai curând pentru a finaliza detaliile.
+              </div>
+              
+              <div class="contact-box">
+                <div class="contact-title">Date de contact</div>
+                <div class="contact-row">
+                  <div class="contact-label">Client</div>
+                  <div class="contact-value">${customerName}</div>
+                </div>
+                <div class="contact-row">
+                  <div class="contact-label">Telefon</div>
+                  <div class="contact-value"><a href="tel:${customerPhone}">${customerPhone}</a></div>
+                </div>
+                <div class="contact-row">
+                  <div class="contact-label">Email</div>
+                  <div class="contact-value"><a href="mailto:${customerEmail}">${customerEmail}</a></div>
+                </div>
+              </div>
+              
+              <div class="steps">
+                <div class="steps-title">Pași următori</div>
+                <div class="step">
+                  <span class="step-number">1</span>
+                  Contactează clientul pentru confirmare
+                </div>
+                <div class="step">
+                  <span class="step-number">2</span>
+                  Stabilește detaliile finale ale mutării
+                </div>
+                <div class="step">
+                  <span class="step-number">3</span>
+                  Pregătește echipa și logistica necesară
+                </div>
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
           </div>
         </div>
       </body>
@@ -188,36 +449,52 @@ export const emailTemplates = {
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; background: #f9fafb; }
-          .header { background: #064e3b; padding: 20px; color: white; }
-          .content { background: white; padding: 30px; border: 1px solid #e5e7eb; }
-          .field { margin: 15px 0; padding: 15px; background: #f9fafb; border-left: 4px solid #10b981; }
-          .label { font-weight: bold; color: #064e3b; margin-bottom: 5px; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { padding: 32px 40px; background: #111827; border-bottom: 3px solid #374151; }
+          .header h1 { color: white; font-size: 20px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .content { padding: 40px; }
+          .field { margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid #e5e7eb; }
+          .field:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+          .label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
+          .value { font-size: 15px; color: #111827; line-height: 1.6; }
+          .value a { color: #059669; text-decoration: none; }
+          .message-box { background: #f9fafb; padding: 20px; border-radius: 8px; border: 1px solid #e5e7eb; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h2>📧 Mesaj nou din Contact Form</h2>
-          </div>
-          <div class="content">
-            <div class="field">
-              <div class="label">Nume:</div>
-              <div>${name}</div>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Mesaj nou din formular de contact</h1>
             </div>
-            <div class="field">
-              <div class="label">Email:</div>
-              <div><a href="mailto:${email}">${email}</a></div>
-            </div>
-            <div class="field">
-              <div class="label">Telefon:</div>
-              <div><a href="tel:${phone}">${phone || 'Nu a furnizat'}</a></div>
-            </div>
-            <div class="field">
-              <div class="label">Mesaj:</div>
-              <div>${message}</div>
+            <div class="content">
+              <div class="field">
+                <div class="label">Nume</div>
+                <div class="value">${name}</div>
+              </div>
+              <div class="field">
+                <div class="label">Email</div>
+                <div class="value"><a href="mailto:${email}">${email}</a></div>
+              </div>
+              <div class="field">
+                <div class="label">Telefon</div>
+                <div class="value"><a href="tel:${phone}">${phone || 'Nu a furnizat'}</a></div>
+              </div>
+              <div class="field">
+                <div class="label">Mesaj</div>
+                <div class="message-box">${message}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -225,115 +502,211 @@ export const emailTemplates = {
     </html>
   `,
 
-  // NEW: Notification to companies about new moving request
+  // Notification to companies about new moving request
   newRequestNotification: (requestCode: string, from: string, to: string, movingDate: string, furniture: string) => `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #059669, #0284c7); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .badge { display: inline-block; background: #fef3c7; color: #92400e; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
-          .info-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 4px; }
-          .info-row { display: flex; padding: 8px 0; border-bottom: 1px solid #d1fae5; }
-          .info-label { font-weight: bold; color: #065f46; min-width: 120px; }
-          .cta { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
-          .cta:hover { background: linear-gradient(135deg, #059669, #047857); }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { 
+            padding: 48px 40px 40px; 
+            background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+            border-bottom: 3px solid #10b981;
+          }
+          .header h1 { color: white; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #d1fae5; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .reference { 
+            background: #f9fafb; 
+            padding: 16px 24px; 
+            border-radius: 6px; 
+            margin-bottom: 32px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+          }
+          .reference-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+          .reference-value { font-size: 18px; color: #111827; font-weight: 700; letter-spacing: 0.5px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+          .details-grid { 
+            background: #f9fafb; 
+            border: 1px solid #e5e7eb; 
+            border-radius: 8px; 
+            padding: 24px; 
+            margin: 32px 0; 
+          }
+          .detail-row { padding: 12px 0; border-bottom: 1px solid #e5e7eb; }
+          .detail-row:last-child { border-bottom: none; }
+          .detail-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+          .detail-value { font-size: 15px; color: #111827; font-weight: 500; }
+          .cta-wrapper { text-align: center; margin: 32px 0; }
+          .cta { 
+            display: inline-block;
+            background: #064e3b;
+            color: white;
+            padding: 16px 40px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+          }
+          .note { 
+            background: #ecfdf5; 
+            border-left: 3px solid #10b981; 
+            padding: 16px 20px; 
+            margin-top: 32px;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #065f46;
+          }
+          .footer { padding: 32px 40px; background: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; }
+          .footer-brand { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+          .footer-text { color: #6b7280; font-size: 13px; line-height: 1.6; }
+          .footer a { color: #059669; text-decoration: none; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>🚚 Cerere Nouă de Mutare!</h1>
-            <p style="margin: 10px 0 0 0; font-size: 18px;">O nouă oportunitate de business te așteaptă</p>
-          </div>
-          <div class="content">
-            <div class="badge">Cerere #${requestCode}</div>
-            
-            <p style="font-size: 18px; margin: 20px 0;">Ai o nouă cerere de mutare care așteaptă oferta ta!</p>
-            
-            <div class="info-box">
-              <div class="info-row">
-                <div class="info-label">📍 Din:</div>
-                <div><strong>${from}</strong></div>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Cerere Nouă Disponibilă</h1>
+              <div class="subtitle">O nouă oportunitate de business</div>
+            </div>
+            <div class="content">
+              <div class="reference">
+                <div class="reference-label">Cod cerere</div>
+                <div class="reference-value">${requestCode}</div>
               </div>
-              <div class="info-row">
-                <div class="info-label">📍 În:</div>
-                <div><strong>${to}</strong></div>
+              
+              <div class="message">
+                O nouă cerere de mutare a fost publicată pe platformă. Verifică detaliile și trimite-ți oferta pentru a intra în competiție.
               </div>
-              <div class="info-row">
-                <div class="info-label">📅 Data:</div>
-                <div><strong>${movingDate}</strong></div>
+              
+              <div class="details-grid">
+                <div class="detail-row">
+                  <div class="detail-label">Plecare</div>
+                  <div class="detail-value">${from}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Destinație</div>
+                  <div class="detail-value">${to}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Data mutării</div>
+                  <div class="detail-value">${movingDate}</div>
+                </div>
+                <div class="detail-row">
+                  <div class="detail-label">Volum mobilier</div>
+                  <div class="detail-value">${furniture}</div>
+                </div>
               </div>
-              <div class="info-row" style="border-bottom: none;">
-                <div class="info-label">📦 Mobilier:</div>
-                <div>${furniture}</div>
+
+              <div class="cta-wrapper">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" class="cta">
+                  Trimite Oferta
+                </a>
+              </div>
+
+              <div class="note">
+                Primele oferte primite au de obicei șansele cele mai mari de acceptare. Răspunde rapid și profesionist pentru rezultate optime.
               </div>
             </div>
-
-            <p style="color: #059669; font-weight: bold; font-size: 16px;">⚡ Acționează rapid! Primele oferte au șanse mai mari de a fi acceptate.</p>
-
-            <div style="text-align: center;">
-              <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" class="cta">
-                Trimite Oferta Acum →
-              </a>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
             </div>
-
-            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
-              💡 <strong>Sfat:</strong> Oferă un preț competitiv și răspunde profesionist pentru a crește șansele de câștig.
-            </p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
           </div>
         </div>
       </body>
     </html>
   `,
 
-  // Notify company that their offer was declined (customer accepted another offer)
+  // Notify company that their offer was declined
   offerDeclined: (requestCode: string, companyName: string, customerName: string) => `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #6b7280, #4b5563); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .badge { display: inline-block; background: #fee2e2; color: #991b1b; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
-          .info-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0; border-radius: 4px; }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { padding: 48px 40px 40px; background: #6b7280; border-bottom: 3px solid #9ca3af; }
+          .header h1 { color: white; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #e5e7eb; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .reference { background: #f9fafb; padding: 16px 24px; border-radius: 6px; margin-bottom: 32px; text-align: center; border: 1px solid #e5e7eb; }
+          .reference-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+          .reference-value { font-size: 18px; color: #111827; font-weight: 700; letter-spacing: 0.5px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
+          .note { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 20px; margin: 32px 0; border-radius: 4px; font-size: 14px; color: #92400e; }
+          .cta-wrapper { text-align: center; margin: 32px 0; }
+          .cta { display: inline-block; background: #064e3b; color: white; padding: 14px 32px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 14px; }
+          .footer { padding: 32px 40px; background: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; }
+          .footer-brand { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+          .footer-text { color: #6b7280; font-size: 13px; line-height: 1.6; }
+          .footer a { color: #059669; text-decoration: none; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>📋 Update Ofertă</h1>
-          </div>
-          <div class="content">
-            <div class="badge">Cerere #${requestCode}</div>
-            
-            <p style="font-size: 18px; margin: 20px 0;">Bună ${companyName},</p>
-            
-            <p>Clientul <strong>${customerName}</strong> a acceptat o altă ofertă pentru cererea <strong>${requestCode}</strong>.</p>
-            
-            <div class="info-box">
-              <p style="margin: 0;"><strong>💡 Nu te descuraja!</strong></p>
-              <p style="margin: 10px 0 0 0;">Fiecare cerere e o oportunitate de învățare. Continuă să oferi prețuri competitive și servicii de calitate - următoarea poate fi a ta!</p>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Actualizare Ofertă</h1>
+              <div class="subtitle">Clientul a ales o altă opțiune</div>
             </div>
+            <div class="content">
+              <div class="reference">
+                <div class="reference-label">Referință cerere</div>
+                <div class="reference-value">${requestCode}</div>
+              </div>
+              
+              <div class="message">
+                Bună ${companyName},
+              </div>
+              
+              <div class="message">
+                Clientul <strong>${customerName}</strong> a acceptat o altă ofertă pentru această cerere. Mulțumim pentru timpul acordat și pentru interesul arătat.
+              </div>
+              
+              <div class="note">
+                Fiecare cerere este o oportunitate de învățare. Menține-ți standardele înalte și continuă să oferi servicii de calitate — următoarea poate fi a ta.
+              </div>
 
-            <p style="color: #059669; font-weight: bold;">🚀 Află despre cereri noi pe <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" style="color: #059669;">dashboard</a>.</p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+              <div class="cta-wrapper">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" class="cta">
+                  Vezi Cereri Noi
+                </a>
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
           </div>
         </div>
       </body>
@@ -346,56 +719,104 @@ export const emailTemplates = {
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #f59e0b, #d97706); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .badge { display: inline-block; background: #fef3c7; color: #92400e; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
-          .offer-count { font-size: 48px; font-weight: bold; color: #f59e0b; text-align: center; margin: 20px 0; }
-          .cta { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
-          .cta:hover { background: linear-gradient(135deg, #d97706, #b45309); }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { padding: 48px 40px 40px; background: linear-gradient(180deg, #d97706 0%, #f59e0b 100%); border-bottom: 3px solid #fbbf24; }
+          .header h1 { color: white; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #fef3c7; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .reference { background: #f9fafb; padding: 16px 24px; border-radius: 6px; margin-bottom: 32px; text-align: center; border: 1px solid #e5e7eb; }
+          .reference-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+          .reference-value { font-size: 18px; color: #111827; font-weight: 700; letter-spacing: 0.5px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
+          .offer-badge {
+            text-align: center;
+            margin: 40px 0;
+          }
+          .offer-count {
+            font-size: 72px;
+            font-weight: 700;
+            color: #d97706;
+            letter-spacing: -3px;
+            line-height: 1;
+          }
+          .offer-label {
+            font-size: 14px;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+          }
+          .benefits { margin: 32px 0; }
+          .benefit-item { padding: 12px 0; color: #4b5563; font-size: 15px; border-bottom: 1px solid #f3f4f6; }
+          .benefit-item:last-child { border-bottom: none; }
+          .cta-wrapper { text-align: center; margin: 32px 0; }
+          .cta { display: inline-block; background: #d97706; color: white; padding: 16px 40px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 15px; }
+          .note { background: #fef3c7; border-left: 3px solid #f59e0b; padding: 16px 20px; margin-top: 32px; border-radius: 4px; font-size: 14px; color: #92400e; text-align: center; }
+          .footer { padding: 32px 40px; background: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; }
+          .footer-brand { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+          .footer-text { color: #6b7280; font-size: 13px; line-height: 1.6; }
+          .footer a { color: #059669; text-decoration: none; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>⏰ Ai Oferte în Așteptare!</h1>
-          </div>
-          <div class="content">
-            <div class="badge">Cerere #${requestCode}</div>
-            
-            <p style="font-size: 18px; margin: 20px 0;">Bună ${customerName},</p>
-            
-            <p>Ai primit <strong>${offerCount} ${offerCount === 1 ? 'ofertă' : 'oferte'}</strong> pentru mutarea ta!</p>
-            
-            <div class="offer-count">${offerCount}</div>
-            
-            <p style="text-align: center; font-size: 16px; color: #6b7280;">
-              ${offerCount === 1 ? 'ofertă disponibilă' : 'oferte disponibile'}
-            </p>
-
-            <p style="margin-top: 30px;">📊 <strong>Compară ofertele</strong> și alege pe cea mai bună pentru nevoile tale:</p>
-            <ul style="color: #6b7280;">
-              <li>Vezi detaliile fiecărei oferte</li>
-              <li>Verifică review-urile companiilor</li>
-              <li>Contactează companiile pentru detalii</li>
-            </ul>
-
-            <div style="text-align: center;">
-              <a href="${dashboardLink}" class="cta">
-                Vezi Ofertele Acum →
-              </a>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Oferte în Așteptare</h1>
+              <div class="subtitle">Companiile așteaptă răspunsul tău</div>
             </div>
+            <div class="content">
+              <div class="reference">
+                <div class="reference-label">Referință cerere</div>
+                <div class="reference-value">${requestCode}</div>
+              </div>
+              
+              <div class="message">
+                Bună ${customerName},
+              </div>
+              
+              <div class="offer-badge">
+                <div class="offer-count">${offerCount}</div>
+                <div class="offer-label">${offerCount === 1 ? 'ofertă disponibilă' : 'oferte disponibile'}</div>
+              </div>
 
-            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; text-align: center;">
-              ⚡ <strong>Sfat:</strong> Companiile așteaptă răspunsul tău. Cu cât accep ți mai repede, cu atât îți asiguri disponibilitatea la data dorită.
-            </p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+              <div class="message">
+                Ai primit ${offerCount === 1 ? 'o ofertă' : 'multiple oferte'} pentru mutarea ta. Compară opțiunile și alege-o pe cea care se potrivește cel mai bine nevoilor tale.
+              </div>
+              
+              <div class="benefits">
+                <div class="benefit-item">Vezi detaliile fiecărei oferte</div>
+                <div class="benefit-item">Verifică reputația companiilor</div>
+                <div class="benefit-item">Contactează companiile pentru clarificări</div>
+              </div>
+
+              <div class="cta-wrapper">
+                <a href="${dashboardLink}" class="cta">
+                  Vezi Ofertele
+                </a>
+              </div>
+
+              <div class="note">
+                Răspunde cât mai curând pentru a-ți asigura disponibilitatea la data dorită.
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
           </div>
         </div>
       </body>
@@ -408,41 +829,75 @@ export const emailTemplates = {
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #3b82f6, #2563eb); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .message-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px; margin: 20px 0; border-radius: 4px; font-style: italic; }
-          .cta { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { padding: 48px 40px 40px; background: #1e40af; border-bottom: 3px solid #3b82f6; }
+          .header h1 { color: white; font-size: 22px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #bfdbfe; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
+          .message-preview {
+            background: #eff6ff;
+            border-left: 3px solid #3b82f6;
+            padding: 24px;
+            margin: 32px 0;
+            border-radius: 4px;
+            font-size: 15px;
+            color: #1e40af;
+            font-style: italic;
+            line-height: 1.6;
+          }
+          .cta-wrapper { text-align: center; margin: 32px 0; }
+          .cta { display: inline-block; background: #1e40af; color: white; padding: 16px 40px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 15px; }
+          .note { background: #f0f9ff; border-left: 3px solid #3b82f6; padding: 16px 20px; margin-top: 32px; border-radius: 4px; font-size: 14px; color: #1e40af; text-align: center; }
+          .footer { padding: 32px 40px; background: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; }
+          .footer-brand { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+          .footer-text { color: #6b7280; font-size: 13px; line-height: 1.6; }
+          .footer a { color: #059669; text-decoration: none; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>💬 Mesaj Nou de la ${companyName}</h1>
-          </div>
-          <div class="content">
-            <p style="font-size: 18px; margin: 20px 0;">Ai primit un mesaj nou!</p>
-            
-            <div class="message-box">
-              "${messagePreview}"
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Mesaj Nou de la ${companyName}</h1>
+              <div class="subtitle">Răspunde pentru a discuta detaliile</div>
             </div>
+            <div class="content">
+              <div class="message">
+                ${companyName} ți-a trimis un mesaj legat de cererea ta de mutare.
+              </div>
+              
+              <div class="message-preview">
+                „${messagePreview}"
+              </div>
 
-            <div style="text-align: center;">
-              <a href="${conversationLink}" class="cta">
-                Răspunde Acum →
-              </a>
+              <div class="cta-wrapper">
+                <a href="${conversationLink}" class="cta">
+                  Răspunde Mesajului
+                </a>
+              </div>
+
+              <div class="note">
+                Răspunde rapid pentru a finaliza detaliile mutării tale.
+              </div>
             </div>
-
-            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
-              💡 Răspunde rapid pentru a finaliza detaliile mutării tale.
-            </p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
           </div>
         </div>
       </body>
@@ -455,44 +910,94 @@ export const emailTemplates = {
     <html lang="ro">
       <head>
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <style>
-          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background: linear-gradient(135deg, #10b981, #059669); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-          .badge { display: inline-block; background: #d1fae5; color: #065f46; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
-          .message-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 4px; font-style: italic; }
-          .cta { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
-          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { 
+            padding: 48px 40px 40px; 
+            background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+            border-bottom: 3px solid #10b981;
+          }
+          .header h1 { color: white; font-size: 22px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #d1fae5; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .reference { 
+            background: #f9fafb; 
+            padding: 16px 24px; 
+            border-radius: 6px; 
+            margin-bottom: 32px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+          }
+          .reference-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+          .reference-value { font-size: 18px; color: #111827; font-weight: 700; letter-spacing: 0.5px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
+          .message-preview {
+            background: #ecfdf5;
+            border-left: 3px solid #10b981;
+            padding: 24px;
+            margin: 32px 0;
+            border-radius: 4px;
+            font-size: 15px;
+            color: #065f46;
+            font-style: italic;
+            line-height: 1.6;
+          }
+          .cta-wrapper { text-align: center; margin: 32px 0; }
+          .cta { display: inline-block; background: #064e3b; color: white; padding: 16px 40px; text-decoration: none; border-radius: 6px; font-weight: 600; font-size: 15px; }
+          .note { background: #ecfdf5; border-left: 3px solid #10b981; padding: 16px 20px; margin-top: 32px; border-radius: 4px; font-size: 14px; color: #065f46; text-align: center; }
+          .footer { padding: 32px 40px; background: #f9fafb; border-top: 1px solid #e5e7eb; text-align: center; }
+          .footer-brand { font-size: 15px; font-weight: 600; color: #111827; margin-bottom: 8px; }
+          .footer-text { color: #6b7280; font-size: 13px; line-height: 1.6; }
+          .footer a { color: #059669; text-decoration: none; }
         </style>
       </head>
       <body>
-        <div class="container">
-          <div class="header">
-            <h1>💬 Mesaj Nou de la Client</h1>
-          </div>
-          <div class="content">
-            <div class="badge">Cerere #${requestCode}</div>
-            
-            <p style="font-size: 18px; margin: 20px 0;">Clientul <strong>${customerName}</strong> ți-a trimis un mesaj!</p>
-            
-            <div class="message-box">
-              "${messagePreview}"
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Mesaj Nou de la Client</h1>
+              <div class="subtitle">Răspunde pentru a confirma detaliile</div>
             </div>
+            <div class="content">
+              <div class="reference">
+                <div class="reference-label">Referință cerere</div>
+                <div class="reference-value">${requestCode}</div>
+              </div>
+              
+              <div class="message">
+                Clientul <strong>${customerName}</strong> ți-a trimis un mesaj.
+              </div>
+              
+              <div class="message-preview">
+                „${messagePreview}"
+              </div>
 
-            <div style="text-align: center;">
-              <a href="${conversationLink}" class="cta">
-                Răspunde Clientului →
-              </a>
+              <div class="cta-wrapper">
+                <a href="${conversationLink}" class="cta">
+                  Răspunde Clientului
+                </a>
+              </div>
+
+              <div class="note">
+                Răspunde rapid și profesionist pentru a asigura această mutare.
+              </div>
             </div>
-
-            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
-              ⚡ Răspunde rapid și profesionist pentru a asigura această mutare!
-            </p>
-          </div>
-          <div class="footer">
-            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
           </div>
         </div>
       </body>
