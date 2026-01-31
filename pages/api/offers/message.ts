@@ -26,7 +26,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const requestRef = adminDb.doc(`requests/${requestId}`);
     const requestSnap = await requestRef.get();
     if (!requestSnap.exists) return res.status(404).json(apiError("Request not found"));
-    const requestData = requestSnap.data() as { customerId?: string };
+    const requestData = requestSnap.data() as { customerId?: string; customerName?: string; requestCode?: string };
 
     const offerRef = adminDb.doc(`requests/${requestId}/offers/${offerId}`);
     const offerSnap = await offerRef.get();
@@ -63,9 +63,74 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           createdAt: admin.firestore.FieldValue.serverTimestamp(),
           seen: false,
         });
+
+        // Send email notification to company
+        setImmediate(async () => {
+          try {
+            const companyDoc = await adminDb.collection('companies').doc(offerData.companyId!).get();
+            if (companyDoc.exists) {
+              const companyData = companyDoc.data();
+              const companyEmail = companyData?.email;
+              const customerName = requestData.customerName || 'Clientul';
+              const requestCode = (requestSnap.data() as any)?.requestCode || requestId.substring(0, 8).toUpperCase();
+
+              if (companyEmail) {
+                await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    type: 'newMessageFromCustomer',
+                    data: {
+                      companyEmail,
+                      customerName,
+                      requestCode,
+                      messagePreview: String(text).trim().slice(0, 100),
+                      conversationLink: `${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard`
+                    }
+                  })
+                });
+              }
+            }
+          } catch (emailErr) {
+            logger.warn('[offers/message] Failed to send email to company:', emailErr);
+          }
+        });
       } catch (e) {
         logger.warn("[offers/message] failed to create notification", e);
       }
+    }
+
+    // Send email notification to customer when company sends a message
+    if (isCompany && requestData?.customerId) {
+      setImmediate(async () => {
+        try {
+          const customerDoc = await adminDb.collection('customers').doc(requestData.customerId!).get();
+          if (customerDoc.exists) {
+            const customerData = customerDoc.data();
+            const customerEmail = customerData?.email;
+            const companyDoc = await adminDb.collection('companies').doc(offerData.companyId!).get();
+            const companyName = companyDoc.exists ? companyDoc.data()?.companyName || 'Compania' : 'Compania';
+
+            if (customerEmail) {
+              await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  type: 'newMessageFromCompany',
+                  data: {
+                    customerEmail,
+                    companyName,
+                    messagePreview: String(text).trim().slice(0, 100),
+                    conversationLink: `${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/customer/dashboard`
+                  }
+                })
+              });
+            }
+          }
+        } catch (emailErr) {
+          logger.warn('[offers/message] Failed to send email to customer:', emailErr);
+        }
+      });
     }
 
     return res.status(200).json(apiSuccess({ ok: true }));

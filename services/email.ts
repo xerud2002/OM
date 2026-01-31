@@ -295,4 +295,207 @@ export const emailTemplates = {
       </body>
     </html>
   `,
+
+  // Notify company that their offer was declined (customer accepted another offer)
+  offerDeclined: (requestCode: string, companyName: string, customerName: string) => `
+    <!DOCTYPE html>
+    <html lang="ro">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #6b7280, #4b5563); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
+          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
+          .badge { display: inline-block; background: #fee2e2; color: #991b1b; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
+          .info-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 20px; margin: 20px 0; border-radius: 4px; }
+          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>📋 Update Ofertă</h1>
+          </div>
+          <div class="content">
+            <div class="badge">Cerere #${requestCode}</div>
+            
+            <p style="font-size: 18px; margin: 20px 0;">Bună ${companyName},</p>
+            
+            <p>Clientul <strong>${customerName}</strong> a acceptat o altă ofertă pentru cererea <strong>${requestCode}</strong>.</p>
+            
+            <div class="info-box">
+              <p style="margin: 0;"><strong>💡 Nu te descuraja!</strong></p>
+              <p style="margin: 10px 0 0 0;">Fiecare cerere e o oportunitate de învățare. Continuă să oferi prețuri competitive și servicii de calitate - următoarea poate fi a ta!</p>
+            </div>
+
+            <p style="color: #059669; font-weight: bold;">🚀 Află despre cereri noi pe <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" style="color: #059669;">dashboard</a>.</p>
+          </div>
+          <div class="footer">
+            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
+            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `,
+
+  // Remind customer about pending offers
+  offerReminder: (requestCode: string, customerName: string, offerCount: number, dashboardLink: string) => `
+    <!DOCTYPE html>
+    <html lang="ro">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #f59e0b, #d97706); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
+          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
+          .badge { display: inline-block; background: #fef3c7; color: #92400e; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
+          .offer-count { font-size: 48px; font-weight: bold; color: #f59e0b; text-align: center; margin: 20px 0; }
+          .cta { background: linear-gradient(135deg, #f59e0b, #d97706); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
+          .cta:hover { background: linear-gradient(135deg, #d97706, #b45309); }
+          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>⏰ Ai Oferte în Așteptare!</h1>
+          </div>
+          <div class="content">
+            <div class="badge">Cerere #${requestCode}</div>
+            
+            <p style="font-size: 18px; margin: 20px 0;">Bună ${customerName},</p>
+            
+            <p>Ai primit <strong>${offerCount} ${offerCount === 1 ? 'ofertă' : 'oferte'}</strong> pentru mutarea ta!</p>
+            
+            <div class="offer-count">${offerCount}</div>
+            
+            <p style="text-align: center; font-size: 16px; color: #6b7280;">
+              ${offerCount === 1 ? 'ofertă disponibilă' : 'oferte disponibile'}
+            </p>
+
+            <p style="margin-top: 30px;">📊 <strong>Compară ofertele</strong> și alege pe cea mai bună pentru nevoile tale:</p>
+            <ul style="color: #6b7280;">
+              <li>Vezi detaliile fiecărei oferte</li>
+              <li>Verifică review-urile companiilor</li>
+              <li>Contactează companiile pentru detalii</li>
+            </ul>
+
+            <div style="text-align: center;">
+              <a href="${dashboardLink}" class="cta">
+                Vezi Ofertele Acum →
+              </a>
+            </div>
+
+            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px; text-align: center;">
+              ⚡ <strong>Sfat:</strong> Companiile așteaptă răspunsul tău. Cu cât accep ți mai repede, cu atât îți asiguri disponibilitatea la data dorită.
+            </p>
+          </div>
+          <div class="footer">
+            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
+            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `,
+
+  // Notify customer about new message from company
+  newMessageFromCompany: (companyName: string, messagePreview: string, conversationLink: string) => `
+    <!DOCTYPE html>
+    <html lang="ro">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #3b82f6, #2563eb); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
+          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
+          .message-box { background: #eff6ff; border-left: 4px solid #3b82f6; padding: 20px; margin: 20px 0; border-radius: 4px; font-style: italic; }
+          .cta { background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
+          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>💬 Mesaj Nou de la ${companyName}</h1>
+          </div>
+          <div class="content">
+            <p style="font-size: 18px; margin: 20px 0;">Ai primit un mesaj nou!</p>
+            
+            <div class="message-box">
+              "${messagePreview}"
+            </div>
+
+            <div style="text-align: center;">
+              <a href="${conversationLink}" class="cta">
+                Răspunde Acum →
+              </a>
+            </div>
+
+            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
+              💡 Răspunde rapid pentru a finaliza detaliile mutării tale.
+            </p>
+          </div>
+          <div class="footer">
+            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
+            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `,
+
+  // Notify company about new message from customer
+  newMessageFromCustomer: (customerName: string, requestCode: string, messagePreview: string, conversationLink: string) => `
+    <!DOCTYPE html>
+    <html lang="ro">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #10b981, #059669); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
+          .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
+          .badge { display: inline-block; background: #d1fae5; color: #065f46; padding: 8px 16px; border-radius: 20px; font-weight: bold; font-size: 14px; margin: 10px 0; }
+          .message-box { background: #f0fdf4; border-left: 4px solid #10b981; padding: 20px; margin: 20px 0; border-radius: 4px; font-style: italic; }
+          .cta { background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; display: inline-block; font-weight: bold; margin: 20px 0; }
+          .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>💬 Mesaj Nou de la Client</h1>
+          </div>
+          <div class="content">
+            <div class="badge">Cerere #${requestCode}</div>
+            
+            <p style="font-size: 18px; margin: 20px 0;">Clientul <strong>${customerName}</strong> ți-a trimis un mesaj!</p>
+            
+            <div class="message-box">
+              "${messagePreview}"
+            </div>
+
+            <div style="text-align: center;">
+              <a href="${conversationLink}" class="cta">
+                Răspunde Clientului →
+              </a>
+            </div>
+
+            <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #6b7280; font-size: 14px;">
+              ⚡ Răspunde rapid și profesionist pentru a asigura această mutare!
+            </p>
+          </div>
+          <div class="footer">
+            <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
+            <p>Ai întrebări? Contactează-ne la <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a></p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `,
 };

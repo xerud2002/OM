@@ -159,6 +159,60 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         break;
 
+      case 'offerDeclined':
+        // Notify company that their offer was declined
+        emailResult = await sendEmail({
+          to: data.companyEmail,
+          subject: `Ofertă respinsă - ${data.requestCode}`,
+          html: emailTemplates.offerDeclined(
+            data.requestCode,
+            data.companyName,
+            data.customerName
+          ),
+        });
+        break;
+
+      case 'offerReminder':
+        // Remind customer about pending offers
+        emailResult = await sendEmail({
+          to: data.customerEmail,
+          subject: `⏰ Ai ${data.offerCount} ${data.offerCount === 1 ? 'ofertă' : 'oferte'} în așteptare - ${data.requestCode}`,
+          html: emailTemplates.offerReminder(
+            data.requestCode,
+            data.customerName,
+            data.offerCount,
+            data.dashboardLink
+          ),
+        });
+        break;
+
+      case 'newMessageFromCompany':
+        // Notify customer about new message from company
+        emailResult = await sendEmail({
+          to: data.customerEmail,
+          subject: `💬 Mesaj nou de la ${data.companyName}`,
+          html: emailTemplates.newMessageFromCompany(
+            data.companyName,
+            data.messagePreview,
+            data.conversationLink
+          ),
+        });
+        break;
+
+      case 'newMessageFromCustomer':
+        // Notify company about new message from customer
+        emailResult = await sendEmail({
+          to: data.companyEmail,
+          subject: `💬 Mesaj nou de la ${data.customerName} - ${data.requestCode}`,
+          html: emailTemplates.newMessageFromCustomer(
+            data.customerName,
+            data.requestCode,
+            data.messagePreview,
+            data.conversationLink
+          ),
+        });
+        break;
+
       default:
         return res.status(400).json(apiError('Invalid email type', ErrorCodes.BAD_REQUEST));
     }

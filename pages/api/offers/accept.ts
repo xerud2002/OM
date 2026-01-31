@@ -86,6 +86,57 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     batch.set(requestRef, { status: "accepted" }, { merge: true });
     await batch.commit();
 
+    // Send emails to declined companies (async, don't wait)
+    setImmediate(async () => {
+      try {
+        const declinedPromises = snap.docs
+          .filter(doc => doc.id !== offerId)
+          .map(async (doc) => {
+            const declinedOfferData = doc.data();
+            const declinedCompanyId = declinedOfferData.companyId;
+            
+            if (!declinedCompanyId) return;
+
+            // Get declined company email
+            let declinedCompanyEmail = '';
+            let declinedCompanyName = declinedOfferData.companyName || 'Compania';
+            try {
+              const companyDoc = await adminDb.collection('companies').doc(declinedCompanyId).get();
+              if (companyDoc.exists) {
+                const companyData = companyDoc.data();
+                declinedCompanyEmail = companyData?.email || '';
+                declinedCompanyName = companyData?.companyName || declinedCompanyName;
+              }
+            } catch (err) {
+              logger.warn(`Could not fetch declined company ${declinedCompanyId} email:`, err);
+              return;
+            }
+
+            if (!declinedCompanyEmail) return;
+
+            // Send offerDeclined email
+            await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                type: 'offerDeclined',
+                data: {
+                  companyEmail: declinedCompanyEmail,
+                  requestCode: requestData.requestCode || requestId.substring(0, 8).toUpperCase(),
+                  companyName: declinedCompanyName,
+                  customerName: requestData.customerName || 'Clientul'
+                }
+              })
+            });
+          });
+
+        await Promise.allSettled(declinedPromises);
+        logger.log(`Sent decline notifications for request ${requestId}`);
+      } catch (emailError) {
+        logger.error('Error sending decline emails:', emailError);
+      }
+    });
+
     // Send personalized email to company
     if (companyEmail) {
       const customerName = requestData.customerName || "Clientul";
