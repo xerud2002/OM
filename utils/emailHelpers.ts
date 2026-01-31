@@ -1,23 +1,56 @@
-// Centralized EmailJS helper
-// Uses dynamic import to avoid server-side bundling where not needed
+// Email helper using Resend API (server-side)
+// Sends emails via /api/send-email endpoint
 
 export type EmailParams = Record<string, any> & {
   to_email: string;
   to_name?: string;
 };
 
-const SERVICE_ID = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID;
-const DEFAULT_TEMPLATE_ID = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID;
-const PUBLIC_KEY = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY;
+// Legacy function signature for backward compatibility
+export async function sendEmail(params: EmailParams, templateId?: string): Promise<void> {
+  // Map old EmailJS template IDs to new email types
+  let emailType = 'contactForm';
+  
+  if (templateId === 'template_review_request' || templateId === process.env.NEXT_PUBLIC_EMAILJS_REMINDER_TEMPLATE_ID) {
+    emailType = 'reviewRequest';
+  }
 
-function assertEnv() {
-  if (!SERVICE_ID || !PUBLIC_KEY) {
-    throw new Error("EmailJS environment variables are missing: SERVICE_ID or PUBLIC_KEY");
+  const response = await fetch('/api/send-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      type: emailType,
+      data: {
+        email: params.to_email,
+        name: params.to_name || params.customer_name || '',
+        ...params,
+      },
+    }),
+  });
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Email sending failed');
   }
 }
 
-export async function sendEmail(params: EmailParams, templateId?: string): Promise<void> {
-  assertEnv();
-  const emailjs = await import("@emailjs/browser");
-  await emailjs.send(SERVICE_ID!, templateId || DEFAULT_TEMPLATE_ID!, params, PUBLIC_KEY!);
+// New helper function with better API
+export async function sendEmailViaAPI(type: string, data: Record<string, any>): Promise<{ success: boolean; emailId?: string; error?: string }> {
+  try {
+    const response = await fetch('/api/send-email', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type, data }),
+    });
+
+    const result = await response.json();
+
+    if (!response.ok) {
+      return { success: false, error: result.error };
+    }
+
+    return { success: true, emailId: result.data?.emailId };
+  } catch (error) {
+    return { success: false, error: String(error) };
+  }
 }

@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb } from "@/lib/firebaseAdmin";
-import { sendEmail } from "@/utils/emailHelpers";
 import { logger } from "@/utils/logger";
 
 /**
@@ -51,15 +50,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         };
         reminders.push(reminderInfo);
 
-        // Send reminder email
+        // Send reminder email via new API
         try {
-          await sendEmail({
-            to_email: tokenData.customerEmail,
-            to_name: tokenData.customerName,
-            customer_name: tokenData.customerName,
-            upload_link: tokenData.uploadLink,
-            request_code: tokenData.requestId || "cererea ta",
+          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'uploadReminder',
+              data: {
+                email: tokenData.customerEmail,
+                name: tokenData.customerName,
+                requestCode: tokenData.requestId || "cererea ta",
+                uploadUrl: tokenData.uploadLink,
+              },
+            }),
           });
+
+          if (!response.ok) {
+            throw new Error('Email API returned error');
+          }
 
           // Mark reminder as sent
           await adminDb.collection("uploadTokens").doc(tokenDoc.id).update({
