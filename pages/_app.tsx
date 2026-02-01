@@ -42,11 +42,6 @@ const Footer = dynamic(() => import("@/components/layout/Footer"), {
   loading: () => <footer className="mt-10 border-t border-gray-200 bg-white py-14" />,
 });
 
-const CityLinksSection = dynamic(() => import("@/components/layout/CityLinksSection"), {
-  ssr: true,
-  loading: () => <section className="border-t border-gray-200 bg-slate-50 py-16" />,
-});
-
 // Lazy load non-critical components
 const FloatingCTA = dynamic(() => import("@/components/FloatingCTA"), {
   ssr: false,
@@ -131,12 +126,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <div className={`${inter.variable} font-sans`}>
         <Navbar />
 
-        {/* Offset content for the fixed navbar once, globally */}
         <main id="main-content" className="min-h-[60vh] pt-20">
           <Component {...pageProps} />
         </main>
 
-        <CityLinksSection />
         <Footer />
       </div>
 

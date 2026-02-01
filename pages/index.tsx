@@ -43,6 +43,11 @@ const FAQSection = dynamic(() => import("@/components/content/FAQSection"), {
   loading: () => <div className="min-h-100" />,
 });
 
+const CityLinksSection = dynamic(() => import("@/components/layout/CityLinksSection"), {
+  loading: () => <section className="py-16" />,
+  ssr: true,
+});
+
 export default function HomePage() {
   return (
     <>
@@ -357,6 +362,8 @@ export default function HomePage() {
       </div>
 
 
+
+      <CityLinksSection />
 
       <CTASection />
     </>
