@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import RequireRole from "@/components/auth/RequireRole";
-import RequestsView from "@/components/company/RequestsView";
-import NotificationBell from "@/components/company/NotificationBell";
-import ConfirmModal from "@/components/ConfirmModal";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { logger } from "@/utils/logger";
@@ -19,7 +17,6 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { motion } from "framer-motion";
 import {
   BuildingOfficeIcon as Building2,
   DocumentTextIcon as FileText,
@@ -38,6 +35,28 @@ import {
   ChevronRightIcon as ChevronRight,
   ChartBarIcon as BarChart3,
 } from "@heroicons/react/24/outline";
+
+// Lazy load heavy components to reduce initial bundle
+const RequestsView = dynamic(() => import("@/components/company/RequestsView"), {
+  loading: () => <div className="h-96 animate-pulse rounded-xl bg-gray-100" />,
+  ssr: false,
+});
+
+const NotificationBell = dynamic(() => import("@/components/company/NotificationBell"), {
+  loading: () => <div className="h-10 w-10 animate-pulse rounded-full bg-slate-700" />,
+  ssr: false,
+});
+
+const ConfirmModal = dynamic(() => import("@/components/ConfirmModal"), {
+  ssr: false,
+});
+
+// Lazy load framer-motion for animations
+const MotionDiv = dynamic(
+  () => import("framer-motion").then((mod) => mod.motion.div),
+  { ssr: false }
+);
+
 
 export default function CompanyDashboard() {
   const router = useRouter();
@@ -145,7 +164,7 @@ export default function CompanyDashboard() {
 
           <div className="relative z-10 container mx-auto px-4">
             <div className="flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-center">
-              <motion.div
+              <MotionDiv
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5 }}
@@ -163,9 +182,9 @@ export default function CompanyDashboard() {
                 <p className="max-w-xl text-slate-400">
                   Gestionează cererile clienților și ofertele tale într-un singur loc
                 </p>
-              </motion.div>
+              </MotionDiv>
 
-              <motion.div
+              <MotionDiv
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
@@ -179,14 +198,14 @@ export default function CompanyDashboard() {
                   <Settings className="h-5 w-5 text-slate-400 transition-colors group-hover:text-emerald-400" />
                   <span>Setări profil</span>
                 </button>
-              </motion.div>
+              </MotionDiv>
             </div>
           </div>
         </section>
 
         <div className="container mx-auto px-4 py-8">
           {/* Tab Navigation */}
-          <motion.div
+          <MotionDiv
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.1 }}
@@ -195,12 +214,11 @@ export default function CompanyDashboard() {
             <div className="inline-flex rounded-2xl border border-slate-200 bg-white p-1.5 shadow-lg">
               <button
                 onClick={() => setActiveTab("requests")}
-                className={`relative flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all ${
-                  activeTab === "requests" ? "text-white" : "text-slate-600 hover:text-slate-900"
-                }`}
+                className={`relative flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all ${activeTab === "requests" ? "text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
               >
                 {activeTab === "requests" && (
-                  <motion.div
+                  <MotionDiv
                     layoutId="activeCompanyTab"
                     className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
@@ -211,12 +229,11 @@ export default function CompanyDashboard() {
               </button>
               <button
                 onClick={() => setActiveTab("offers")}
-                className={`relative flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all ${
-                  activeTab === "offers" ? "text-white" : "text-slate-600 hover:text-slate-900"
-                }`}
+                className={`relative flex items-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all ${activeTab === "offers" ? "text-white" : "text-slate-600 hover:text-slate-900"
+                  }`}
               >
                 {activeTab === "offers" && (
-                  <motion.div
+                  <MotionDiv
                     layoutId="activeCompanyTab"
                     className="absolute inset-0 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 shadow-lg"
                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
@@ -231,10 +248,10 @@ export default function CompanyDashboard() {
                 )}
               </button>
             </div>
-          </motion.div>
+          </MotionDiv>
 
           {activeTab === "requests" && (
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
@@ -249,11 +266,11 @@ export default function CompanyDashboard() {
                   </p>
                 </div>
               )}
-            </motion.div>
+            </MotionDiv>
           )}
 
           {activeTab === "offers" && (
-            <motion.div
+            <MotionDiv
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
@@ -294,7 +311,7 @@ export default function CompanyDashboard() {
                     iconColor: "text-rose-300",
                   },
                 ].map((stat, i) => (
-                  <motion.div
+                  <MotionDiv
                     key={stat.label}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -317,12 +334,12 @@ export default function CompanyDashboard() {
                         </div>
                       </div>
                     </div>
-                  </motion.div>
+                  </MotionDiv>
                 ))}
               </div>
 
               {/* Filters */}
-              <motion.div
+              <MotionDiv
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.4 }}
@@ -363,7 +380,7 @@ export default function CompanyDashboard() {
                     </select>
                   </div>
                 </div>
-              </motion.div>
+              </MotionDiv>
 
               {/* Offers List */}
               {loading ? (
@@ -374,7 +391,7 @@ export default function CompanyDashboard() {
               ) : Array.isArray(filteredOffers) && filteredOffers.length > 0 ? (
                 <div className="space-y-4">
                   {filteredOffers.map((offer, i) => (
-                    <motion.div
+                    <MotionDiv
                       key={offer.id}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -384,13 +401,12 @@ export default function CompanyDashboard() {
                       <div className="flex">
                         {/* Color accent bar */}
                         <div
-                          className={`w-1.5 ${
-                            offer.status === "accepted"
+                          className={`w-1.5 ${offer.status === "accepted"
                               ? "bg-gradient-to-b from-emerald-500 to-teal-500"
                               : offer.status === "rejected" || offer.status === "declined"
                                 ? "bg-gradient-to-b from-rose-500 to-pink-500"
                                 : "bg-gradient-to-b from-amber-500 to-orange-500"
-                          }`}
+                            }`}
                         />
 
                         <div className="flex-1 p-5">
@@ -406,13 +422,12 @@ export default function CompanyDashboard() {
                                       : "—"}
                                 </span>
                                 <span
-                                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold ${
-                                    offer.status === "accepted"
+                                  className={`inline-flex items-center gap-1.5 rounded-lg px-3 py-1 text-xs font-semibold ${offer.status === "accepted"
                                       ? "bg-emerald-100 text-emerald-700"
                                       : offer.status === "rejected" || offer.status === "declined"
                                         ? "bg-rose-100 text-rose-700"
                                         : "bg-amber-100 text-amber-700"
-                                  }`}
+                                    }`}
                                 >
                                   {offer.status === "accepted" && (
                                     <CheckCircle2 className="h-3.5 w-3.5" />
@@ -549,11 +564,11 @@ export default function CompanyDashboard() {
                           )}
                         </div>
                       </div>
-                    </motion.div>
+                    </MotionDiv>
                   ))}
                 </div>
               ) : (
-                <motion.div
+                <MotionDiv
                   initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className="rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50/50 py-16 text-center"
@@ -573,9 +588,9 @@ export default function CompanyDashboard() {
                     Vezi cererile disponibile
                     <ChevronRight className="h-4 w-4" />
                   </button>
-                </motion.div>
+                </MotionDiv>
               )}
-            </motion.div>
+            </MotionDiv>
           )}
         </div>
 
@@ -598,3 +613,4 @@ export default function CompanyDashboard() {
     </RequireRole>
   );
 }
+

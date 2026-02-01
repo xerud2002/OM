@@ -50,7 +50,7 @@ export const cityData: CityData[] = [
       "Servicii de mutări în București ✓ Compară 3-5 oferte gratuite de la firme verificate ✓ Economisește până la 40% ✓ Transport mobilă în toate sectoarele",
     heroSubtitle:
       "Capitala României merită firme de mutări de top. Primește oferte personalizate pentru mutarea ta în București.",
-    heroImage: "/images/cities/bucuresti.png",
+    heroImage: "/images/cities/bucuresti.webp",
     articleIntro:
       "Cu peste 2,1 milioane de locuitori și 6 sectoare distincte, București este cel mai mare oraș din România și hub-ul principal pentru servicii de mutări. Datorită traficului intens, accesului dificil în cartiere precum Drumul Taberei sau Militari și  complexității blocurilor fără lift, alegerea firmei potrivite face diferența între o mutare fără stres și o experiență dificilă. Pe OferteMutare.ro, compari instantaneu firme experimentate din fiecare sector, care cunosc perfect provocările Capitalei - de la parcarea camionului pe șosele aglomerate la navigarea în cartiere cu străzi înguste.",
     whyChooseUs: [
@@ -79,7 +79,7 @@ export const cityData: CityData[] = [
       "Mutări în Cluj-Napoca ✓ 3-5 oferte GRATUITE în 24h ✓ Firme verificate ✓ Transport mobilă, împachetare, depozitare ✓ Economisește 40%",
     heroSubtitle:
       "Inima Transilvaniei, centru universitar și IT. Mutări profesionale pentru clujeni exigenți.",
-    heroImage: "/images/cities/cluj-napoca.png",
+    heroImage: "/images/cities/cluj-napoca.webp",
     articleIntro:
       "Cluj-Napoca este capitala neoficială a Transilvaniei și cel mai dinamic oraș universitar din România, cu peste 100.000 de studenți și o piață imobiliară în continuă expansiune. Datorită prețurilor ridicate, clujenii se mută frecvent între cartiere - din Mănăștur accesibil către Zorilor sau din Gheorgheni către complexele noi din Bună Ziua. Terenul accidentat (dealuri, străzi în pantă) și blocurile vechi din Mărăști necesită firme cu experiență locală. OferteMutare.ro conectează cu companii care cunosc perfect provocările Clujului și oferă servicii adaptate cerințelor tale specifice.",
     whyChooseUs: [
@@ -108,7 +108,7 @@ export const cityData: CityData[] = [
       "Firme de mutări Timișoara ✓ Compară oferte gratuite ✓ Transport mobilă în tot Banatul ✓ Servicii complete: împachetare, demontare, depozitare",
     heroSubtitle:
       "Capitala Banatului, Capitală Culturală Europeană. Servicii de mutări la standarde europene.",
-    heroImage: "/images/cities/timisoara.png",
+    heroImage: "/images/cities/timisoara.webp",
     articleIntro:
       "Timișoara, prima Capitală Culturală Europeană din România, combină arhitectura austro-ungară impunătoare din centru cu cartiere modernizate precum Dâmbovița și Girocului. Cu peste 319.000 de locuitori și o piață imobiliară în creștere, timișorenii se mută des între cartierele istorice (Fabric, Iosefin) și zonele noi de dezvoltare (Dumbrăvița, Braytim). Firmele locale cunosc perfect specificul clădirilor vechi cu tavan înalt din centru, accesul îngust în Fabric și provocările parcării în Piața Unirii. OferteMutare.ro te conectează cu companii experimentate care oferă standarde europene de servicii.",
     whyChooseUs: [
@@ -136,7 +136,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Iași ✓ 3-5 oferte în 24h de la firme locale verificate ✓ 100% gratuit ✓ Transport mobilă în Moldova ✓ Economii până la 40%",
     heroSubtitle: "Capitala Moldovei, oraș universitar. Mutări rapide și sigure pentru ieșeni.",
-    heroImage: "/images/cities/iasi.png",
+    heroImage: "/images/cities/iasi.webp",
     articleIntro:
       "Iașiul, capitala istorică a Moldovei cu 382.000 de locuitori, este cel mai mare oraș din estul României și un important centru universitar cu peste 60.000 de studenți. Topografia muntoasă (7 coline), traficul aglomerat pe șoselele principale și blocurile vechi din Tătărași și Păcurari fac din alegerea firmei de mutări o decizie crucială. Ieșenii se mută frecvent între zona centrală (Copou, Centru) și cartierele-dormitor (Galata, Nicolae, Alexandru cel Bun). Pe OferteMutare.ro găsești firme locale care navighează perfect dealurile Iașului și cunosc fiecare cartier în detaliu.",
     whyChooseUs: [
@@ -163,7 +163,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Servicii mutări Constanța ✓ Transport mobilă pe litoral ✓ Oferte gratuite de la firme verificate ✓ Mutări apartamente și case",
     heroSubtitle: "Perlă la Marea Neagră. Mutări profesionale pentru locuitorii litoralului.",
-    heroImage: "/images/cities/constanta.png",
+    heroImage: "/images/cities/constanta.webp",
     articleIntro:
       "Constanța, principalul port la Marea Neagră și cel mai mare oraș de pe litoral, atrage anual mii de noi locuitori cu job-uri în turism, shipping și industrie. Cu 283.000 de locuitori și cartiere extinse de la Mamaia Nord până la Palazu Mare, constănțenii se confruntă cu provocări unice: traficul de vară cu turiști, saltul marin care afectează mobilierul și necesitatea mutărilor rapide între sezoane. Fie că te muți într-un apartament în Tomis, o vilă în Mamaia sau un bloc în Km 4-5, firmele de pe OferteMutare.ro cunosc perfect specificul litoralului și oferă servicii adaptate climei maritime.",
     whyChooseUs: [
@@ -190,7 +190,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Brașov ✓ Firme verificate pentru transport mobilă ✓ Compară 3-5 oferte GRATUIT ✓ Servicii în tot județul și stațiuni",
     heroSubtitle: "La poalele Tâmpei, în inima munților. Mutări sigure pentru brașoveni.",
-    heroImage: "/images/cities/brasov.png",
+    heroImage: "/images/cities/brasov.webp",
     articleIntro:
       "Brașovul, orașul înconjurat de munți Carpați și cunoscut pentru ambianța medievală din Centrul Vechi, atrage anual mii de noi locuitori atrași de calitatea vieții și oportunitățile în turism și IT. Cu 253.000 de locuitori și terenul accidentat specific zonei montane, brașovenii se confruntă cu provocări unice: străzi în pantă abruptă în Tractorul și Răcădău, accesul dificil către casele din Tâmpa și traficul intens pe axele principale spre Poiană Brașov. Firmele locale de pe OferteMutare.ro cunosc perfect specificul mutărilor în Brașov - de la navigarea străzilor înguste din Centrul Vechi la transportul mobilierului în zone greu accesibile din Schei sau Stupini.",
     whyChooseUs: [
@@ -219,7 +219,7 @@ export const cityData: CityData[] = [
       "Firme mutări Craiova ✓ Transport mobilă în Oltenia ✓ Oferte gratuite în 24h ✓ Servicii complete pentru apartamente și case",
     heroSubtitle:
       "Capitala Olteniei, centru economic în sud. Mutări de încredere pentru craioveni.",
-    heroImage: "/images/cities/craiova.png",
+    heroImage: "/images/cities/craiova.webp",
     articleIntro:
       "Craiova, capitala Olteniei cu 269.000 de locuitori, este cel mai important centru economic, universitar și cultural din sud-vestul României. Cu cartiere extinse precum Craiovița Nouă, Brazda lui Novac și 1 Mai, craioveii se mută frecvent atât în interiorul orașului cât și între localitățile din Dolj. Complexitatea mutărilor vine din combinația de blocuri vechi comuniste fără lift în Craiovița Nouă, vila modernizate în Romanești și ansambluri rezidențiale noi în zona Universității. Firmele de pe OferteMutare.ro cunosc perfect specificul Craiovei - de la navigarea în cartierele cu străzi largi la mutările în blocurile tip construite în anii '70-'80.",
     whyChooseUs: [
@@ -247,7 +247,7 @@ export const cityData: CityData[] = [
       "Mutări Galați ✓ Transport mobilă pe Dunăre ✓ Compară oferte gratuite de la firme locale ✓ Economisește până la 40%",
     heroSubtitle:
       "Oraș portuar pe Dunăre, inimă industrială. Mutări rapide în Galați și împrejurimi.",
-    heroImage: "/images/cities/galati.png",
+    heroImage: "/images/cities/galati.webp",
     articleIntro:
       "Galațiul, cel mai mare port fluvial din România pe malul Dunării, este un oraș industrial cu 249.000 de locuitori și cartiere extinse construite în epoca comunistă pentru muncitorii de la Combinatul Siderurgic. Gălățenii se mută frecvent între cartierele-dormitor (Micro 13-21, Țiglina, Mazepa) și zona centrală modernizată. Provocările specifice includ blocurile înalte fără lift din Micro 19 și 20, accesul dificil în cartierul Siderurgiștilor și umezeala cauzată de proximitatea Dunării care afectează mobilierul. Firmele de pe OferteMutare.ro înțeleg perfect nevoile gălățenilor și oferă servicii adaptate specificului urban-industrial al orașului.",
     whyChooseUs: [
@@ -275,7 +275,7 @@ export const cityData: CityData[] = [
       "Servicii mutări Oradea ✓ Firme verificate în Bihor ✓ Transport mobilă către Ungaria și Europa ✓ Oferte gratuite",
     heroSubtitle:
       "Poartă spre Europa, bijuterie Art Nouveau. Mutări la nivel european pentru orădeni.",
-    heroImage: "/images/cities/oradea.png",
+    heroImage: "/images/cities/oradea.webp",
     articleIntro:
       "Oradea, bijuteria Art Nouveau de la granița cu Ungaria, este un oraș în plină renaștere urbană cu 196.000 de locuitori și o comunitate dinamică de tineri profesioniști. Arhitectura splendidă din centru, cartierele modernizate precum Rogerius și Nufărul și dezvoltarea imobiliară accelerată în Ioșia Nord fac din Oradea unul dintre cele mai atractive orașe pentru relocare. Orădenii se mută frecvent între apartamentele renovate din clădiri istorice în centru și ansamblurile rezidențiale noi din Ioșia sau Nufărul. Firmele de pe OferteMutare.ro oferă standarde europene de servicii - de la mutări delicate în clădiri clasiciste cu 100+ ani vechime la transporturi internaționale către Ungaria și Austria.",
     whyChooseUs: [
@@ -303,7 +303,7 @@ export const cityData: CityData[] = [
       "Mutări Ploiești ✓ Transport mobilă în Prahova ✓ Compară 3-5 oferte GRATUIT ✓ Firme verificate pentru mutări sigure",
     heroSubtitle:
       "Capitala aurului negru, la porțile munților. Mutări profesionale pentru ploieșteni.",
-    heroImage: "/images/cities/ploiesti.png",
+    heroImage: "/images/cities/ploiesti.webp",
     articleIntro:
       "Ploieștiul, istoric oraș petrolier cu 209.000 de locuitori, este poarta către Valea Prahovei și un important centru industrial la doar 60 km de București. Datorită proximității de Capitală, mulți ploieșteni lucrează în București dar locuiesc în Ploiești pentru costuri mai mici, generând flux constant de mutări. Cartierele Nord, Sud și Vest sunt dominante de blocuri comuniste, în timp ce zona Malu Roșu și Bereasca oferă case și vile. Provocările includ traficul intens pe DN1 către București, blocurile vechi fără lift din Vest și 9 Mai, și necesitatea mutărilor rapide pentru comuterii zilnici. Firmele de pe OferteMutare.ro oferă servicii flexibile adaptate ritmului alert al ploieștenilor.",
     whyChooseUs: [
@@ -332,7 +332,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Alba Iulia ✓ Transport mobilă în județul Alba ✓ Oferte gratuite de la firme locale verificate",
     heroSubtitle: "Cetate istorică, capitală a Marii Uniri. Mutări de încredere în Alba.",
-    heroImage: "/images/cities/alba-iulia.png",
+    heroImage: "/images/cities/alba-iulia.webp",
     articleIntro:
       "Alba Iulia, capitala spirituală a României și locul Marii Uniri din 1918, este un oraș compact cu 74.000 de locuitori și o cetate medievală impresionantă. Locuitorii se mută frecvent între apartamentele din cartierul Ampoi și casele din zona Pâclișa sau Micești, sau către locuințe renovate în apropierea Cetății Alba Carolina. Provocările specifice includ accesul restricționat în zonele protejate ale Cetății, străzile înguste din centrul istoric și necesitatea protejării mobilierului în clădirile vechi.",
     whyChooseUs: [
@@ -359,7 +359,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Firme mutări Arad ✓ Transport mobilă în Vest ✓ Compară oferte gratuite ✓ Mutări către Ungaria și Europa",
     heroSubtitle: "Poartă vestică a României. Mutări profesionale pentru arădeni.",
-    heroImage: "/images/cities/arad.png",
+    heroImage: "/images/cities/arad.webp",
     articleIntro:
       "Aradul, orașul martirilor din 1848 cu 159.000 de locuitori, este poarta vestică a României la doar 60 km de Ungaria. Arhitectura austro-ungară impresionantă din centru, cartierele modernizate precum Micalaca și Aurel Vlaicu, și proximitatea graniței fac din Arad un hub pentru mutări atât naționale cât și internaționale. Arădenii se mută frecvent între blocurile din Micalaca și Grădiste și casele din zona Subcetate, sau emigrează către țările occidentale. Firmele locale oferă servicii la standarde europene, de la mutări delicate în clădiri istorice la transporturi internaționale.",
     whyChooseUs: [
@@ -386,7 +386,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Pitești ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în tot județul Argeș ✓ Firme verificate ✓ Economisești 40%",
     heroSubtitle: "Capitală auto a României, la poalele Carpaților. Mutări rapide în Pitești.",
-    heroImage: "/images/cities/pitesti.png",
+    heroImage: "/images/cities/pitesti.webp",
     articleIntro:
       "Piteștiul, capitala auto a României și gazda uzinei Dacia-Renault, este un oraș industrial dinamic cu 155.000 de locuitori și economie în creștere. Piteștenii lucrează în mare parte la Dacia sau companiile furnizoare, ceea ce generează flux constant de mutări între cartierele Nord, Sud și Găvana. Provocările specifice includ traficul intens pe DN7 către București și către Curtea de Argeș, blocurile înalte fără lift din zona Exercițiu și necesitatea mutărilor rapide pentru angajații mobilizați de Dacia. Firmele de pe OferteMutare.ro oferă servicii flexibile adaptate ritmului alert al industriei auto.",
     whyChooseUs: [
@@ -413,7 +413,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Bacău ✓ Compară 3-5 oferte GRATUITE în 24h de la firme locale verificate ✓ Transport mobilă în Moldova ✓ Economisești 40%",
     heroSubtitle: "În inima Moldovei, oraș în dezvoltare. Mutări de calitate pentru băcăuani.",
-    heroImage: "/images/cities/bacau.png",
+    heroImage: "/images/cities/bacau.webp",
     articleIntro:
       "Bacăul, important nod feroviar și rutier în inima Moldovei cu 144.000 de locuitori, este un oraș dinamic cu economie în diversificare. Băcăuanii se mută frecvent între blocurile din cartierele Ștefan cel Mare și Sud și casele din zona Cornișa, sau către apartamente renovate în Centrul Vechi. Provocările specifice includ blocurile înalte fără lift din era comunistă, străzile înguste în zona Cornișa cu vedere la Bârlad, și traficul pe drumurile europene E85 și E574. Firmele locale oferă servicii adaptate nevoilor moldovenilor.",
     whyChooseUs: [
@@ -440,7 +440,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Bistrița ✓ Transport mobilă în nord-vestul Transilvaniei ✓ Oferte gratuite de la firme verificate",
     heroSubtitle: "Ținutul lui Dracula, frumusețe transilvăneană. Mutări sigure în Bistrița.",
-    heroImage: "/images/cities/bistrita.png",
+    heroImage: "/images/cities/bistrita.webp",
     articleIntro:
       "Bistrița, renumit oraș medieval din nord-vestul Transilvaniei cu 75.000 de locuitori și legături cu legenda lui Dracula, este un centru urban liniștit înconjurat de munți. Bistrițenii se mută între apartamentele din cartierele Viișoara și Unirea și casele din zona Subcetate sau către locuințe renovate în Centrul Istoric. Provocările specifice includ accesul limitat în Centrul Vechi cu străzi înguste din epoca medievală, terenul accidentat în zona Codrișor și necesitatea protejării mobilierului de temperatura rece specifică climatului montan.",
     whyChooseUs: [
@@ -467,7 +467,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Botoșani ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în nordul Moldovei ✓ Firme verificate ✓ Prețuri accesibile",
     heroSubtitle: "Plaiuri eminesciene, tradiție și cultură. Mutări profesionale în Botoșani.",
-    heroImage: "/images/cities/botosani.png",
+    heroImage: "/images/cities/botosani.webp",
     articleIntro:
       "Botoșaniul, orașul lui Mihai Eminescu și Nicolae Iorga cu 106.000 de locuitori, este cel mai nordic oraș important din Moldova și un centru cultural tradițional. Botoșănenii se mută între apartamentele din cartierele Imparat Traian și Plevna și casele din zona Bucovina, sau emigrează către orașe mai mari (Iași, București). Provocările specifice includ blocurile vechi fără lift din era comunistă, infrastructura deficitară în cartierele periferice și necesitatea mutărilor rapide pentru tinerii care pleacă la studii.",
     whyChooseUs: [
@@ -494,7 +494,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Brăila ✓ Transport mobilă pe Dunăre ✓ Oferte gratuite în 24h ✓ Firme locale verificate ✓ Economisește până la 40% la servicii de mutare",
     heroSubtitle: "Port dunărean, spirit pescaresc. Mutări de încredere în Brăila.",
-    heroImage: "/images/cities/braila.png",
+    heroImage: "/images/cities/braila.webp",
     articleIntro:
       "Brăila, istoric oraș portuar pe malul Dunării cu 168.000 de locuitori, este un centru economic important cu arhitectură impresionantă din secolul al XIX-lea. Brăilenii se mută frecvent între blocurile din cartierele Viziru, Radu Negru și Chercea și apartamentele renovate în Centru sau case în zona Apollo. Provocările specifice includ umezeala de la Dunăre care afectează mobilierul, blocurile foarte înalte fără lift din era comunistă, și accesul dificil în zona portului. Firmele locale cunosc perfect aceste specificități și oferă soluții adaptate.",
     whyChooseUs: [
@@ -521,7 +521,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Servicii mutări Buzău ✓ Transport mobilă în Muntenia ✓ Compară oferte gratuite de la firme verificate ✓ Economisește până la 40% la mutarea ta",
     heroSubtitle: "La răscruce de drumuri, tradiție și modernitate. Mutări sigure în Buzău.",
-    heroImage: "/images/cities/buzau.png",
+    heroImage: "/images/cities/buzau.webp",
     articleIntro:
       "Buzăul, oraș la răscruce între Moldova și Muntenia cu 115.000 de locuitori, este un centru urban dinamic la 100 km de București. Buzăuanii se mută frecvent între apartamentele din Micro 14 și Dorobanți și casele din zona Broșteni, sau către București pentru job-uri. Provocările specifice includ traficul intens pe DN2 către București, blocurile vechi fără lift din Micro 14, și necesitatea mutărilor rapide pentru comuterii zilnici. Firmele locale oferă servicii flexibile adaptate nevoilor comunității.",
     whyChooseUs: [
@@ -548,7 +548,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Reșița ✓ Transport mobilă în Banat ✓ Oferte gratuite de la firme locale verificate ✓ Servicii profesionale pentru teren montan dificil",
     heroSubtitle: "Capitala fierului, în inima munților. Mutări profesionale în Reșița.",
-    heroImage: "/images/cities/resita.png",
+    heroImage: "/images/cities/resita.webp",
     articleIntro:
       "Reșița, istoric oraș industrial în Munții Banatului cu 73.000 de locuitori, este cunoscut pentru tradiția siderurgică și terenul extrem de accidentat. Reșițenii se mută între apartamentele din cartierele Govândari și Mociur construite pe dealuri abrupte și casele din zona Stavila. Provocările specifice sunt unice: străzi în pantă extremă (unele peste 20%), blocuri construite pe niveluri diferite datorită terenului, și accesul dificil în cartierele miniere izolate. Firmele locale au echipamente speciale și expertiză necesară pentru aceste condiții extreme.",
     whyChooseUs: [
@@ -575,7 +575,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Firme mutări Călărași ✓ Transport mobilă în sudul României ✓ Compară oferte gratuite ✓ Servicii de mutare accesibile și profesionale în Bărăgan",
     heroSubtitle: "Pe malul Dunării, la granița cu Bulgaria. Mutări rapide în Călărași.",
-    heroImage: "/images/cities/calarasi.png",
+    heroImage: "/images/cities/calarasi.webp",
     articleIntro:
       "Călărașiul, oraș portuar pe malul Dunării cu 65.000 de locuitori la granița cu Bulgaria, este un centru agricol și comercial în Bărăgan. Călărășenii se mută între blocurile din cartierele Măgureni și Orizont și casele din zona Mircea Vodă, sau către București (120 km). Provocările specifice includ umezeala de la Dunăre, infrastructura învăchită în cartierele vechi, și traficul pe DN3 către București. Firmele locale oferă servicii accesibile adaptate economiei agricole.",
     whyChooseUs: [
@@ -602,7 +602,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Sfântu Gheorghe ✓ Transport mobilă în Covasna ✓ Oferte gratuite în 24h ✓ Servicii bilingve română-maghiară ✓ Firme locale verificate",
     heroSubtitle: "Capitala Secuimii, tradiție și armonie. Mutări sigure în Sfântu Gheorghe.",
-    heroImage: "/images/cities/sfantu-gheorghe.png",
+    heroImage: "/images/cities/sfantu-gheorghe.webp",
     articleIntro:
       "Sfântu Gheorghe, capitala județului Covasna cu 56.000 de locuitori și majoritate maghiară, este un oraș liniștit înconjurat de munți la poalele Carpaților. Locuitorii se mută între apartamentele din cartierele Câmpul Frumos și Simeria și casele din zonele rezidențiale noi. Provocările specifice includ terenul accidentat, străzile înguste în Centrul Istoric, și necesitatea serviciilor bilingve (română-maghiară). Firmele locale oferă servicii culturally-adapted la standardele comunității secuiești.",
     whyChooseUs: [
@@ -629,7 +629,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Servicii mutări Târgoviște ✓ Transport mobilă în Dâmbovița ✓ Compară oferte gratuite ✓ Rute către București ✓ Economisești până la 40%",
     heroSubtitle: "Vechea capitală a Țării Românești. Mutări de încredere în Târgoviște.",
-    heroImage: "/images/cities/targoviste.png",
+    heroImage: "/images/cities/targoviste.webp",
     articleIntro:
       "Târgoviștea, vechea capitală a Țării Românești și reședință domnească istorică cu 79.000 de locuitori, este un oraș la 80 km de București cu patrimoniu cultural bogat. Târgoviștenii se mută între apartamentele din cartierul Micro și Priseaca și casele din zona Matei Voievod, sau către Capitală pentru job-uri. Provocările specifice includ accesul restricționat în zona Curții Domnești (zonă protejată), blocurile vechi fără lift din Micro, și traficul pe DN72 către București. Firmele locale oferă servicii adaptate specificului urban-istoric.",
     whyChooseUs: [
@@ -656,7 +656,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Slobozia ✓ Transport mobilă în Ialomița ✓ Oferte gratuite de la firme verificate ✓ Rute către București și Constanța ✓ Prețuri accesibile",
     heroSubtitle: "În Bărăgan, între București și Constanța. Mutări profesionale în Slobozia.",
-    heroImage: "/images/cities/slobozia.png",
+    heroImage: "/images/cities/slobozia.webp",
     articleIntro:
       "Slobozia, capitală a județului Ialomița cu 45.000 de locuitori, este un oraș agricol în inima Bărăganului la jumătatea drumului între București și Constanța. Slobozenii se mută între blocurile din Centru și zona Bora, sau către orașe mai mari pentru job-uri (București la 120 km, Constanța la 130 km). Provocările specifice includ infrastructura învăchită, lipsa de alternative de locuințe moderne, și traficul agricol pe DN2 care traversează orașul. Firmele locale oferă servicii simple și accesibile adaptate economiei rurale.",
     whyChooseUs: [
@@ -683,7 +683,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Firme mutări Baia Mare ✓ Transport mobilă în Maramureș ✓ Compară oferte gratuite în 24h ✓ Expertiză teren montan ✓ Economisești până la 40%",
     heroSubtitle: "Poartă către Maramureșul tradițional. Mutări de calitate în Baia Mare.",
-    heroImage: "/images/cities/baia-mare.png",
+    heroImage: "/images/cities/baia-mare.webp",
     articleIntro:
       "Baia Mare, capitala Maramureșului cu 123.000 de locuitori, este un oraș minero-industrial înconjurat de munți și poarta către zona etno-culturală Maramureș. Băimărenii se mută frecvent între blocurile din cartierele Vasile Alecsandri și Săsar și casele din zona Ferneziu sau Firiza. Provocările specifice includ terenul accidentat cu străzi în pantă, traficul intens pe DN1C către Satu Mare, și iernile geroase care necesită protecție specială a mobilierului. Firmele locale oferă servicii robuste adaptate climatului montan dur.",
     whyChooseUs: [
@@ -710,7 +710,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Drobeta-Turnu Severin ✓ Transport mobilă în Mehedinți ✓ Oferte gratuite ✓ Servicii transfrontaliere Serbia ✓ Firme locale verificate",
     heroSubtitle: "Unde Dunărea își face drum prin munți. Mutări sigure în Drobeta.",
-    heroImage: "/images/cities/drobeta-turnu-severin.png",
+    heroImage: "/images/cities/drobeta-turnu-severin.webp",
     articleIntro:
       "Drobeta-Turnu Severin, oraș istoric pe malul Dunării în Cazanele Dunării cu 92.000 de locuitori, este poarta către Oltenia de nord și Serbia. Severienii se mută între blocurile din cartierele Crihala și Kiseleff și casele din zona Aluniș, sau emigrează către orașe mai mari sau Serbia (15 km). Provocările specifice includ umezeala extrema de la Dunăre, terenul accidentat în zona Cazanelor, și infrastructura învăchită post-industrială. Firmele locale oferă servicii adaptate specificului dunărean și montan.",
     whyChooseUs: [
@@ -737,7 +737,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Servicii mutări Târgu Mureș ✓ Transport mobilă în Transilvania ✓ Compară oferte gratuite ✓ Servicii bilingve ✓ Economisești până la 40%",
     heroSubtitle: "Capitală culturală în inima țării. Mutări profesionale în Târgu Mureș.",
-    heroImage: "/images/cities/targu-mures.png",
+    heroImage: "/images/cities/targu-mures.webp",
     articleIntro:
       "Târgu Mureșul, important centru cultural și universitar în inima Transilvaniei cu 134.000 de locuitori și o comunitate mixtă româno-maghiară, este un oraș dinamic cu arhitectură Art Nouveau impresionantă. Mureșenii se mută frecvent între apartamentele din cartierele Tudor și 7 Noiembrie și casele din zona Cornișa sau locuințe renovate în Centru. Provocările specifice includ accesul limitat în Centrul Istoric, râul Mureș care traversează orașul (necesită coordonare poduri), și necesitatea serviciilor bilingve. Firmele locale oferă standarde ridicate la prețuri competitive.",
     whyChooseUs: [
@@ -764,7 +764,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Piatra Neamț ✓ Transport mobilă în Neamț ✓ Oferte gratuite de la firme verificate ✓ Expertiză teren montan ✓ Servicii către stațiuni",
     heroSubtitle: "La poalele munților, în inima naturii. Mutări de încredere în Piatra Neamț.",
-    heroImage: "/images/cities/piatra-neamt.png",
+    heroImage: "/images/cities/piatra-neamt.webp",
     articleIntro:
       "Piatra Neamțul, orașul înconjurat de munți cu 85.000 de locuitori și renumit pentru frumusețea naturală, este un centru turistic și cultural în nordul Moldovei. Pietrenii se mută între apartamentele din cartierele Precista și Dărmănești și casele din zona Speranța, sau către locuințe de vacanță în stațiunile montane. Provocările specifice includ terenul extrem de accidentat (orașul este construit pe dealuri abrupte), străzile în serpentine în zonele rezidențiale, și accesul dificil iarna cu zăpadă abunedentă. Firmele locale au echipamente speciale pentru condiții montane.",
     whyChooseUs: [
@@ -791,7 +791,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Firme mutări Slatina ✓ Transport mobilă în județul Olt ✓ Compară oferte gratuite ✓ Rute către Craiova ✓ Prețuri accesibile și servicii de calitate",
     heroSubtitle: "Pe malul Oltului, centru industrial. Mutări rapide în Slatina.",
-    heroImage: "/images/cities/slatina.png",
+    heroImage: "/images/cities/slatina.webp",
     articleIntro:
       "Slatina, capitală a județului Olt cu 70.000 de locuitori, este un oraș industrial pe malul râului Olt în vestul Munteniei. Slătinenii se mută între blocurile din cartierele Steaua și Crișan și casele din zona Primăverii, sau către orașe mai mari (Craiova, Pitești). Provocările specifice includ blocurile comuniste vechi fără lift, infrastructura învăchită post-industrială, și traficul pe DN65 către Craiova. Firmele locale oferă servicii simple și accesibile adaptate economiei industriale în tranziție.",
     whyChooseUs: [
@@ -818,7 +818,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Satu Mare ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în nord-vest ✓ Firme verificate ✓ Economisești 40%",
     heroSubtitle: "În țara Oașului, la granița cu Ungaria. Mutări profesionale în Satu Mare.",
-    heroImage: "/images/cities/satu-mare.png",
+    heroImage: "/images/cities/satu-mare.webp",
     articleIntro:
       "Satu Mare, orașul de la granița cu Ungaria cu 102.000 de locuitori și o comunitate multietnică româno-maghiară, este poarta către Ținutul Oașului și nordul Transilvaniei. Sătmărenii se mută frecvent între blocurile din cartierele Carpați și Micro 17 și casele din zona Solidarității, sau emigrează către Ungaria (15 km). Provocările specifice includ necesitatea serviciilor bilingve, traficul pe DN19 către Ungaria, și infrastructura învăchită în cartierele comuniste. Firmele locale oferă servicii la standarde europene datorită proximității graniței.",
     whyChooseUs: [
@@ -845,7 +845,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Servicii mutări Zalău ✓ Transport mobilă în Sălaj ✓ Compară oferte gratuite ✓ Rute către Cluj-Napoca ✓ Prețuri accesibile în Transilvania",
     heroSubtitle: "Capitala Sălajului, istorie și natură. Mutări sigure în Zalău.",
-    heroImage: "/images/cities/zalau.png",
+    heroImage: "/images/cities/zalau.webp",
     articleIntro:
       "Zalăul, capitală a județului Sălaj cu 56.000 de locuitori, este un oraș liniștit în nord-vestul Transilvaniei la poalele Munților Meseș. Zalăuanii se mută între apartamentele din cartierele Dumbrava și Ortelec și casele din zonele rezidențiale noi. Provocările specifice includ infrastructura limitată specific orașelor mici, terenul ușor accidentat, și distanța față de orașele mari (Cluj la 100 km). Firmele locale oferă servicii personalizate și tarife foarte accesibile.",
     whyChooseUs: [
@@ -872,7 +872,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Sibiu ✓ Transport mobilă în Transilvania ✓ Oferte gratuite de la firme verificate ✓ Economisește 40%",
     heroSubtitle: "Bijuterie medievală, Capitală Culturală Europeană. Mutări premium în Sibiu.",
-    heroImage: "/images/cities/sibiu.png",
+    heroImage: "/images/cities/sibiu.webp",
     articleIntro:
       "Sibiul, fostă Capitală Culturală Europeană cu 147.000 de locuitori, este cel mai prezerval oraș medieval din România și un magnet pentru tinerii profesioniști și expat. Sibienii se mută frecvent între apartamentele renovate în Centrul Istoric și ansamblurile rezidențiale noi din Hipodrom, Cibin sau Turnișor. Provocările specifice sunt unique: accesul strict restricționat în Centrul Medieval (zonă UNESCO), clădiri istorice cu scări înguste și plafoane boltite, și standarde ridicate de servire așteptate de comunitatea internațională. Firmele locale oferă servicii premium la standarde europene.",
     whyChooseUs: [
@@ -899,7 +899,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Firme mutări Suceava ✓ Transport mobilă în Bucovina ✓ Compară oferte gratuite în 24h ✓ Acoperire mănăstiri UNESCO ✓ Firme locale verificate",
     heroSubtitle: "Poartă către Bucovina, țara mănăstirilor. Mutări de încredere în Suceava.",
-    heroImage: "/images/cities/suceava.png",
+    heroImage: "/images/cities/suceava.webp",
     articleIntro:
       "Suceava, vechea capitală a Moldovei cu 92.000 de locuitori și poarta către mănăstirile pictate din Bucovina (UNESCO), este un centru turistic și economic în nordul țării. Sucevenii se mută frecvent între blocurile din cartierele George Enescu și Obcini și casele din zona Burdujeni, sau către locuințe de vacanță în zonele montane. Provocările specifice includ terenul accidentat, iernile extrem de geroase cu zăpadă abunedentă, și accesul restricționat în zona Cetății de Scaun. Firmele locale oferă servicii robuste adaptate climatului dur bucovinean.",
     whyChooseUs: [
@@ -926,7 +926,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Alexandria ✓ Transport mobilă în Teleorman ✓ Oferte gratuite de la firme locale ✓ Rute către București ✓ Cele mai accesibile prețuri din țară",
     heroSubtitle: "În câmpia Teleormanului, spirit agrar. Mutări profesionale în Alexandria.",
-    heroImage: "/images/cities/alexandria.png",
+    heroImage: "/images/cities/alexandria.webp",
     articleIntro:
       "Alexandria, capitală a județului Teleorman cu 45.000 de locuitori, este un oraș agricol în câmpia Teleormanului la sud de București. Alexandrinii se mută între blocurile din Centru și zona Vedea, sau către orașe mai mari pentru job-uri (București la 90 km). Provocările specifice includ infrastructura minimală specific orașelor mici agricole, lipsa firmelor specializate, și traficul agricol pe DN6 care traversează orașul. Firmele locale oferă servicii simple și foarte accesibile adaptate economiei rurale.",
     whyChooseUs: [
@@ -953,7 +953,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Servicii mutări Tulcea ✓ Transport mobilă în Dobrogea ✓ Compară oferte gratuite ✓ Acces Delta Dunării ✓ Protecție specială umezeală extremă",
     heroSubtitle: "Poarta Deltei, paradis natural. Mutări sigure în Tulcea.",
-    heroImage: "/images/cities/tulcea.png",
+    heroImage: "/images/cities/tulcea.webp",
     articleIntro:
       "Tulcea, orașul-portă către Delta Dunării (UNESCO) cu 73.000 de locuitori, este un centru turistic și de pescuit la sud-estul țării. Tulcenii se mută între blocurile din cartierele Piața Nouă și Vest și casele din zona Cima, sau către Constanța (130 km). Provocările specifice sunt unice: umezeala extremă de la Dunăre și Delta, traficul sezonier cu turiști vara, și necesitatea transportului special către localitățile din Deltă (acces naval/terestru limitat). Firmele locale oferă servicii adaptate specificului deltaic.",
     whyChooseUs: [
@@ -980,7 +980,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Vaslui ✓ Transport mobilă în Moldova ✓ Oferte gratuite de la firme verificate ✓ Rute către Iași și Bacău ✓ Prețuri foarte accesibile",
     heroSubtitle: "Locul victoriei lui Ștefan cel Mare. Mutări de încredere în Vaslui.",
-    heroImage: "/images/cities/vaslui.png",
+    heroImage: "/images/cities/vaslui.webp",
     articleIntro:
       "Vasluiul, oraș istoric cu 55.000 de locuitori și locul victoriei lui Ștefan cel Mare în 1475, este un centru urban modest în estul Moldovei. Vasluienii se mută între blocurile din cartierele Traian și Republicii și casele din zona Olteni, sau emigrează către orașe mai mari (Iași, Bacău). Provocările specifice includ infrastructura limitată și învăchită, economia locală slabă, și lipsa firmelor specializate de mutări. Firmele locale oferă servicii simple la prețuri foarte accesibile.",
     whyChooseUs: [
@@ -1007,7 +1007,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Firme mutări Râmnicu Vâlcea ✓ Transport mobilă în Vâlcea ✓ Compară oferte gratuite ✓ Servicii către stațiuni montane ✓ Expertiză Valea Oltului",
     heroSubtitle: "La poalele Carpaților, pe Valea Oltului. Mutări profesionale în Râmnicu Vâlcea.",
-    heroImage: "/images/cities/ramnicu-valcea.png",
+    heroImage: "/images/cities/ramnicu-valcea.webp",
     articleIntro:
       "Râmnicu Vâlcea, orașul de pe Valea Oltului cu 98.000 de locuitori și poarta către stațiunile Oltenia (Călimănești, Căciulata), este un centru urban la poalele Carpaților. Vâlcenii se mută frecvent între blocurile din cartierele Traian și Nord și casele din zona Ostroveni, sau către stațiunile montane pentru locuințe de vacanță. Provocările specifice includ terenul accidentat cu dealuri și văi, traficul pe DN7 către Sibiu, și necesitatea mutărilor speciale către zonele montane. Firmele locale oferă servicii adaptate reliefului variat.",
     whyChooseUs: [
@@ -1034,7 +1034,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Focșani ✓ Transport mobilă în Vrancea ✓ Oferte gratuite în 24h ✓ Rute către Brașov, Bacău, Galați ✓ Firme locale verificate",
     heroSubtitle: "Orașul Unirii, la confluența istoriei. Mutări sigure în Focșani.",
-    heroImage: "/images/cities/focsani.png",
+    heroImage: "/images/cities/focsani.webp",
     articleIntro:
       "Focșaniul, orașul Unirii Principatelor din 1859 cu 79.000 de locuitori, este un centru urban la răscruce între Moldova și Muntenia, renumit pentru vinurile de Cotești și Odobești. Focșănenii se mută între blocurile din cartierele Sud, Nord și Vest și casele din zonele rezidențiale, sau către Brașov/Bacău (ambele la ~100 km). Provocările specifice includ infrastructura învăchită, blocurile vechi fără lift, și traficul pe DN2 care traversează orașul. Firmele locale oferă servicii accesibile adaptate economiei locale.",
     whyChooseUs: [
@@ -1061,7 +1061,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Servicii mutări Deva ✓ Transport mobilă în Hunedoara ✓ Compară oferte gratuite ✓ Rute către Timișoara și Cluj ✓ Prețuri accesibile Transilvania",
     heroSubtitle: "Sub cetatea medievală, capitală a aurului. Mutări de încredere în Deva.",
-    heroImage: "/images/cities/deva.png",
+    heroImage: "/images/cities/deva.webp",
     articleIntro:
       "Deva, capitală a județului Hunedoara cu 61.000 de locuitori, este un oraș istoric dominat de Cetatea medievală pe deal și fost centru minier. Devenii se mută între blocurile din cartierele Micro și Progresul și casele din zona Bejan, sau către orașe mai mari (Timișoara, Cluj). Provocările specifice includ terenul accidentat (Cetatea pe deal, orașul pe văi), infrastructura post-industrială, și economia în tranziție după închiderea minelor. Firmele locale oferă servicii accesibile adaptate nevoilor comunității.",
     whyChooseUs: [
@@ -1088,7 +1088,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Miercurea Ciuc ✓ Transport mobilă în Harghita ✓ Oferte gratuite de la firme verificate ✓ Servicii bilingve ✓ Expertiză climat montan",
     heroSubtitle: "În țara secuiască, la poalele Harghitei. Mutări profesionale în Miercurea Ciuc.",
-    heroImage: "/images/cities/miercurea-ciuc.png",
+    heroImage: "/images/cities/miercurea-ciuc.webp",
     articleIntro:
       "Miercurea Ciuc, capitală a Ținutului Secuiesc cu 38.000 de locuitori și majoritate maghiară, este cel mai înalt oraș din România (661m altitudine) în depresiunea Ciuc. Locuitorii se mută între blocurile din cartierele Centru și Topliței și casele din zonele rezidențiale, sau către Brașov/Cluj. Provocările specifice sunt extreme: ierni foarte geroase (temperaturi de -30°C), zăpadă abunedentă octombrie-aprilie, terenul montan, și necesitatea serviciilor bilingve. Firmele locale oferă servicii adaptate climatului extrem.",
     whyChooseUs: [
@@ -1115,7 +1115,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Firme mutări Târgu Jiu ✓ Transport mobilă în Gorj ✓ Compară oferte gratuite în 24h ✓ Rute către Craiova ✓ Prețuri accesibile în Oltenia",
     heroSubtitle: "Orașul lui Brâncuși, artă și tradiție. Mutări sigure în Târgu Jiu.",
-    heroImage: "/images/cities/targu-jiu.png",
+    heroImage: "/images/cities/targu-jiu.webp",
     articleIntro:
       "Târgu Jiul, orașul lui Constantin Brâncuși cu 82.000 de locuitori și renumit pentru ansamblul sculptural Calea Eroilor, este capitală a județului Gorj și centru minier în sud-vestul țării. Gorjenii se mută frecvent între blocurile din cartierele Drăgoeni și Tudor Vladimirescu și casele din zona Primăverii, sau către Craiova (90 km). Provocările specifice includ infrastructura post-industrială, blocurile vechi comuniste, și economia în tranziție după declinul industriei cărbunelui. Firmele locale oferă servicii accesibile adaptate nevoilor comunității miniere.",
     whyChooseUs: [
@@ -1142,7 +1142,7 @@ export const cityData: CityData[] = [
     metaDescription:
       "Mutări Giurgiu ✓ Transport mobilă la Dunăre ✓ Oferte gratuite ✓ Mutări către Bulgaria ✓ Rute București ✓ Servicii transfrontaliere profesionale",
     heroSubtitle: "La poarta spre Bulgaria, port dunărean. Mutări rapide în Giurgiu.",
-    heroImage: "/images/cities/giurgiu.png",
+    heroImage: "/images/cities/giurgiu.webp",
     articleIntro:
       "Giurgiul, oraș -portă la granița cu Bulgaria cu 54.000 de locuitori, este legăt de orașul bulgăresc Ruse prin Podul Prieteniei peste Dunăre. Giurgiuvenii se mută între blocurile din cartierele Centru și Slobozia și casele din zona Dunării, sau către București (60 km). Provocările specifice includ umezeala extremă de la Dunăre, infrastructura limitată, traficul cu TIR-uri către Bulgaria, și economia modestă dependentă de traficul transfrontalier. Firmele locale oferă servicii simple și accesibile, inclusiv transporturi către Bulgaria.",
     whyChooseUs: [
@@ -1174,3 +1174,4 @@ export function getCityBySlug(slug: string): CityData | undefined {
 export function getTopCities(limit: number = 10): CityData[] {
   return cityData.filter((city) => city.tier === 1).slice(0, limit);
 }
+
