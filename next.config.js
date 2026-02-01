@@ -107,6 +107,29 @@ const nextConfig = {
         destination: "/servicii/montaj/mobila",
         permanent: true,
       },
+      // Article URL path consolidation (Feb 2026)
+      // All articles now under /articole/
+      {
+        source: "/articles/:slug",
+        destination: "/articole/:slug",
+        permanent: true,
+      },
+      {
+        source: "/guides/:slug",
+        destination: "/articole/:slug",
+        permanent: true,
+      },
+      // Legacy URL renames
+      {
+        source: "/articole/survey",
+        destination: "/articole/evaluare-mutare",
+        permanent: true,
+      },
+      {
+        source: "/articole/tips",
+        destination: "/articole/sfaturi-mutari",
+        permanent: true,
+      },
     ];
   },
 

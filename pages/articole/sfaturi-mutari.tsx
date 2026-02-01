@@ -23,19 +23,19 @@ export default function ArticleTips() {
           content="Ghid complet cu trucuri și sfaturi de la profesioniști: economisește bani, timp și stres la mutare."
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ofertemutare.ro/articles/tips" />
+        <meta property="og:url" content="https://ofertemutare.ro/articole/sfaturi-mutari" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://ofertemutare.ro/articles/tips" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/articole/sfaturi-mutari" />
         <meta name="twitter:title" content="50+ Sfaturi Expert Pentru Mutări în România" />
         <meta
           name="twitter:description"
           content="Ghid complet cu trucuri și sfaturi de la profesioniști: economisește bani, timp și stres la mutare."
         />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
-        <link rel="canonical" href="https://ofertemutare.ro/articles/tips" />
+        <link rel="canonical" href="https://ofertemutare.ro/articole/sfaturi-mutari" />
       </Head>
 
       <LayoutWrapper>
@@ -329,7 +329,7 @@ export default function ArticleTips() {
                 <p className="mt-3 text-sm">
                   💡 Vezi{" "}
                   <Link
-                    href="/articles/impachetare"
+                    href="/articole/impachetare"
                     className="font-semibold text-blue-600 underline"
                   >
                     ghidul nostru complet de împachetare
@@ -604,7 +604,7 @@ export default function ArticleTips() {
                   <p>
                     <span className="font-semibold text-green-600">Soluția:</span> Citește{" "}
                     <Link
-                      href="/articles/impachetare"
+                      href="/articole/impachetare"
                       className="font-semibold text-emerald-600 underline"
                     >
                       ghidul nostru de împachetare
@@ -858,7 +858,7 @@ export default function ArticleTips() {
               experți. 100% gratuit, fără obligații.
             </p>
             <Link
-              href="/customer/dashboard"
+              href="/#request-form"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg"
             >
               <Truck className="h-5 w-5" />
@@ -876,21 +876,21 @@ export default function ArticleTips() {
             </h3>
             <div className="grid gap-4 md:grid-cols-3">
               <Link
-                href="/articles/pregatire"
+                href="/articole/pregatire"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Pregătirea Pentru Mutare</h4>
                 <p className="text-sm text-gray-600">Planificare pas cu pas în 8 săptămâni</p>
               </Link>
               <Link
-                href="/articles/impachetare"
+                href="/articole/impachetare"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Ghid Împachetare</h4>
                 <p className="text-sm text-gray-600">Tehnici profesionale și materiale</p>
               </Link>
               <Link
-                href="/articles/survey"
+                href="/articole/evaluare-mutare"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Tipuri de Survey</h4>

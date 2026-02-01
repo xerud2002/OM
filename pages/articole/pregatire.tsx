@@ -5,6 +5,47 @@ import LayoutWrapper from "@/components/layout/Layout";
 import { CalendarIcon as Calendar, CheckCircleIcon as CheckCircle, ClockIcon as Clock, HomeIcon as Home, CubeIcon as Package, TruckIcon as Truck, UsersIcon as Users, ExclamationTriangleIcon as AlertTriangle, DocumentTextIcon as FileText, PhoneIcon as Phone } from "@heroicons/react/24/outline";
 
 export default function ArticlePregatire() {
+  // FAQ Schema for SEO - optimized for high-volume Romanian keywords
+  const faqData = [
+    {
+      question: "Cu cât timp înainte trebuie să mă pregătesc pentru mutare?",
+      answer: "Pregătirea ideală începe cu 6-8 săptămâni înainte. Aceasta include sortarea obiectelor, colectarea cutiilor, și rezervarea firmei de mutări cu minim 2-3 săptămâni în avans."
+    },
+    {
+      question: "Când ar trebui să rezerv o firmă de mutări?",
+      answer: "Rezervă firma cu 2-4 săptămâni înainte pentru date normale. Pentru weekend-uri sau sfârșitul lunii, rezervă cu 4-6 săptămâni în avans pentru a asigura disponibilitatea."
+    },
+    {
+      question: "Ce trebuie să fac în ziua mutării?",
+      answer: "În ziua mutării: verifică că totul e împachetat, pregătește o cutie 'prima noapte' cu esențiale, asigură-te că utilitățile sunt active la noua adresă, și fă poze la contoare."
+    },
+    {
+      question: "Cum pot economisi bani la mutare?",
+      answer: "Economisești dacă: te muți în mijlocul lunii (prețuri mai mici), colectezi cutii gratuite de la magazine, reduci volumul de obiecte, și compari cel puțin 3 oferte."
+    },
+    {
+      question: "Ce documente am nevoie pentru mutare în România?",
+      answer: "Documente esențiale: contracte utilități (pentru transfer), acte locuință nouă (pentru schimbare domiciliu), inventar bunuri (pentru asigurare), și contactele firmei de mutări."
+    },
+    {
+      question: "Cum anunț furnizorii de utilități că mă mut?",
+      answer: "Anunță Enel/Electrica, Engie, operatorul apă și internet cu 2 săptămâni înainte. Completează formularele de transfer online sau la sediu. Fă poze la indexul contoarelor în ambele locuințe."
+    }
+  ];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqData.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
   return (
     <>
       <Head>
@@ -26,19 +67,23 @@ export default function ArticlePregatire() {
           content="Tot ce trebuie să știi pentru o mutare bine organizată: planificare pas cu pas, liste complete și sfaturi pentru economisire."
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ofertemutare.ro/articles/pregatire" />
+        <meta property="og:url" content="https://ofertemutare.ro/articole/pregatire" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://ofertemutare.ro/articles/pregatire" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/articole/pregatire" />
         <meta name="twitter:title" content="Ghid Complet: Cum să Te Pregătești pentru Mutare" />
         <meta
           name="twitter:description"
           content="Tot ce trebuie să știi pentru o mutare bine organizată: planificare pas cu pas, liste complete."
         />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
-        <link rel="canonical" href="https://ofertemutare.ro/articles/pregatire" />
+        <link rel="canonical" href="https://ofertemutare.ro/articole/pregatire" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </Head>
 
       <LayoutWrapper>
@@ -208,7 +253,7 @@ export default function ArticlePregatire() {
                   <span>
                     <strong>Cumpără materiale de ambalare</strong> &ndash; Vezi{" "}
                     <Link
-                      href="/articles/impachetare"
+                      href="/articole/impachetare"
                       className="text-emerald-600 underline hover:text-emerald-700"
                     >
                       ghidul nostru complet despre împachetare
@@ -614,7 +659,7 @@ export default function ArticlePregatire() {
               Gratuit, fără obligații, răspuns în 24h.
             </p>
             <Link
-              href="/customer/dashboard"
+              href="/#request-form"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg"
             >
               <Truck className="h-5 w-5" />
@@ -627,21 +672,21 @@ export default function ArticlePregatire() {
             <h3 className="mb-4 text-2xl font-bold text-gray-800">Alte Articole Utile</h3>
             <div className="grid gap-4 md:grid-cols-3">
               <Link
-                href="/articles/impachetare"
+                href="/articole/impachetare"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Ghid Împachetare</h4>
                 <p className="text-sm text-gray-600">Tehnici profesionale și materiale necesare</p>
               </Link>
               <Link
-                href="/articles/survey"
+                href="/articole/evaluare-mutare"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Tipuri de Survey</h4>
                 <p className="text-sm text-gray-600">Fizic, video sau estimare rapidă?</p>
               </Link>
               <Link
-                href="/articles/tips"
+                href="/articole/sfaturi-mutari"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Sfaturi Generale</h4>

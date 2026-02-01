@@ -33,6 +33,14 @@ export default function ArticleCostMutare() {
             question: "Cât costă mutarea mobilei grele (pian, seif)?",
             answer: "Obiectele speciale precum piane, seifuri sau echipamente grele au tarife speciale, începând de la 300-500 RON/obiect, în funcție de greutate și dificultatea manipulării pe scări.",
         },
+        {
+            question: "Cât costă o mutare București-Cluj sau București-Timișoara?",
+            answer: "Mutările interurbane: București-Cluj (450km) costă 2.500-4.500 RON, București-Timișoara (550km) 3.000-5.000 RON, în funcție de volum. Include transport, manipulare, dar exclude împachetarea.",
+        },
+        {
+            question: "Ce servicii extra măresc prețul mutării?",
+            answer: "Servicii extra: împachetare profesională (+30-50%), demontare/remontare mobilă (+200-500 RON), depozitare temporară (+100-300 RON/zi), asigurare bunuri (+5-10% din valoare).",
+        },
     ];
 
     const jsonLd = {
@@ -71,9 +79,18 @@ export default function ArticleCostMutare() {
                 <meta property="og:type" content="article" />
                 <meta
                     property="og:url"
-                    content="https://ofertemutare.ro/articles/cat-costa-mutarea-2026"
+                    content="https://ofertemutare.ro/articole/cat-costa-mutarea-2026"
                 />
-                <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/moving-cost-2026.png" />
+                <link rel="canonical" href="https://ofertemutare.ro/articole/cat-costa-mutarea-2026" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content="https://ofertemutare.ro/articole/cat-costa-mutarea-2026" />
+                <meta name="twitter:title" content={`Cât Costă o Mutare în România ${currentYear}`} />
+                <meta
+                    name="twitter:description"
+                    content="Ghid transparent de prețuri pentru mutări locale și interurbane. Află costurile reale și cum să eviți taxele ascunse."
+                />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/moving-cost-2026.png" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

@@ -5,6 +5,47 @@ import Link from "next/link";
 import { CubeIcon as Package, ShieldCheckIcon as Shield, ClockIcon as Clock, CheckCircleIcon as CheckCircle } from "@heroicons/react/24/outline";
 
 export default function ArticleImpachetare() {
+  // FAQ Schema for SEO - optimized for high-volume Romanian keywords
+  const faqData = [
+    {
+      question: "Cu cât timp înainte trebuie să încep împachetarea pentru mutare?",
+      answer: "Ideal este să începi împachetarea cu 2-3 săptămâni înainte de mutare. Aceasta îți permite să împachetezi treptat, începând cu obiectele folosite rar."
+    },
+    {
+      question: "Cum protejez obiectele fragile la mutare?",
+      answer: "Folosește folie cu bule, hârtie ziar și carton pentru protecție. Învelește fiecare obiect individual și umple golurile din cutii cu hârtie. Marchează cutiile cu 'FRAGIL'."
+    },
+    {
+      question: "Ce materiale am nevoie pentru împachetare mutare?",
+      answer: "Materiale esențiale: cutii carton (diverse dimensiuni), bandă adezivă lată, bubble wrap, hârtie ziar/kraft, markere permanente, etichete colorate, saci pentru haine și folie stretch pentru mobilă."
+    },
+    {
+      question: "Cât costă materialele de împachetare pentru o mutare?",
+      answer: "Pentru un apartament de 2 camere, materialele costă 150-300 lei (20-30 cutii, bandă, folie). Firmele de mutări pot oferi pachete complete cu discount."
+    },
+    {
+      question: "De unde cumpăr cutii pentru mutare ieftine în România?",
+      answer: "Cutii gratuite poți obține de la supermarketuri (Kaufland, Lidl, Carrefour) sau depozite. Cutii noi găsești la Dedeman, Leroy Merlin, sau direct de la firmele de mutări care oferă pachete complete."
+    },
+    {
+      question: "Cum împachetez hainele pentru mutare fără să se șifoneze?",
+      answer: "Folosește cutii garderobă (cu bară de umerașe) sau saci speciali de vid. Pentru haine pliate, pune hârtie de mătase între straturi. Evită cutiile prea mari unde hainele se pot mișca."
+    }
+  ];
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqData.map(faq => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
   return (
     <>
       <Head>
@@ -17,25 +58,29 @@ export default function ArticleImpachetare() {
           name="keywords"
           content="împachetare mutare, cutii mutare, materiale ambalare, protejare obiecte fragile, organizare mutare"
         />
-        <link rel="canonical" href="https://ofertemutare.ro/articles/impachetare" />
+        <link rel="canonical" href="https://ofertemutare.ro/articole/impachetare" />
         <meta property="og:title" content="Ghid Complet de Împachetare pentru Mutare" />
         <meta
           property="og:description"
           content="Tehnici profesionale de împachetare pentru o mutare organizată și fără stres."
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ofertemutare.ro/articles/impachetare" />
+        <meta property="og:url" content="https://ofertemutare.ro/articole/impachetare" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/packing1.webp" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://ofertemutare.ro/articles/impachetare" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/articole/impachetare" />
         <meta name="twitter:title" content="Ghid Complet de Împachetare pentru Mutare" />
         <meta
           name="twitter:description"
           content="Tehnici profesionale de împachetare pentru o mutare organizată și fără stres."
         />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/packing1.webp" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </Head>
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-6 py-12">
@@ -279,7 +324,7 @@ export default function ArticleImpachetare() {
               demontare mobilier.
             </p>
             <Link
-              href="/customer/dashboard"
+              href="/#request-form"
               className="inline-block rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition hover:bg-gray-100"
             >
               Cere Oferte Gratuite

@@ -68,9 +68,18 @@ export default function GuideCluj() {
                 <meta property="og:type" content="article" />
                 <meta
                     property="og:url"
-                    content="https://ofertemutare.ro/guides/mutare-cluj-napoca"
+                    content="https://ofertemutare.ro/articole/mutare-cluj-napoca"
                 />
                 <meta property="og:image" content="https://ofertemutare.ro/pics/blog/cluj-guide-2026.png" />
+                <link rel="canonical" href="https://ofertemutare.ro/articole/mutare-cluj-napoca" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content="https://ofertemutare.ro/articole/mutare-cluj-napoca" />
+                <meta name="twitter:title" content={`Ghid Mutare Cluj-Napoca ${currentYear}`} />
+                <meta
+                    name="twitter:description"
+                    content="Tot ce trebuie să știi despre viața și mutarea în 'Silicon Valley' de România. Prețuri, zone și logistică."
+                />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/cluj-guide-2026.png" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}

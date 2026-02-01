@@ -23,19 +23,19 @@ export default function ArticleSurvey() {
           content="Compară cele 3 tipuri de survey la mutări și alege cel mai potrivit pentru tine: vizită fizică, video call sau estimare rapidă."
         />
         <meta property="og:type" content="article" />
-        <meta property="og:url" content="https://ofertemutare.ro/articles/survey" />
+        <meta property="og:url" content="https://ofertemutare.ro/articole/evaluare-mutare" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://ofertemutare.ro/articles/survey" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/articole/evaluare-mutare" />
         <meta name="twitter:title" content="Tipuri de Survey Pentru Mutări: Ghid Complet 2025" />
         <meta
           name="twitter:description"
           content="Compară cele 3 tipuri de survey la mutări și alege cel mai potrivit pentru tine."
         />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
-        <link rel="canonical" href="https://ofertemutare.ro/articles/survey" />
+        <link rel="canonical" href="https://ofertemutare.ro/articole/evaluare-mutare" />
       </Head>
 
       <LayoutWrapper>
@@ -734,7 +734,7 @@ export default function ArticleSurvey() {
               firme de mutări. Survey video sau fizic inclus, fără costuri!
             </p>
             <Link
-              href="/customer/dashboard"
+              href="/#request-form"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-3 font-semibold text-emerald-600 transition-transform hover:scale-105 hover:shadow-lg"
             >
               <Home className="h-5 w-5" />
@@ -750,21 +750,21 @@ export default function ArticleSurvey() {
             <h3 className="mb-4 text-2xl font-bold text-gray-800">Citește și:</h3>
             <div className="grid gap-4 md:grid-cols-3">
               <Link
-                href="/articles/pregatire"
+                href="/articole/pregatire"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Pregătirea Mutării</h4>
                 <p className="text-sm text-gray-600">Planificare în 8 săptămâni, pas cu pas</p>
               </Link>
               <Link
-                href="/articles/impachetare"
+                href="/articole/impachetare"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Ghid Împachetare</h4>
                 <p className="text-sm text-gray-600">Tehnici profesionale pentru ambalare</p>
               </Link>
               <Link
-                href="/articles/tips"
+                href="/articole/sfaturi-mutari"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Sfaturi Generale</h4>

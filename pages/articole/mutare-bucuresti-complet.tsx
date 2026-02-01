@@ -68,9 +68,18 @@ export default function GuideBucuresti() {
                 <meta property="og:type" content="article" />
                 <meta
                     property="og:url"
-                    content="https://ofertemutare.ro/guides/mutare-bucuresti-complet"
+                    content="https://ofertemutare.ro/articole/mutare-bucuresti-complet"
                 />
                 <meta property="og:image" content="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.png" />
+                <link rel="canonical" href="https://ofertemutare.ro/articole/mutare-bucuresti-complet" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content="https://ofertemutare.ro/articole/mutare-bucuresti-complet" />
+                <meta name="twitter:title" content={`Ghid Complet Mutare București ${currentYear}`} />
+                <meta
+                    name="twitter:description"
+                    content="Ghidul complet pentru o mutare fără stres în Capitală. Prețuri, zone, logistică și sfaturi utile."
+                />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.png" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -248,7 +257,7 @@ export default function GuideBucuresti() {
                             </table>
                         </div>
                         <div className="mt-6 text-center">
-                            <Link href="/articles/cat-costa-mutarea-2026" className="text-emerald-600 font-semibold hover:text-emerald-700 underline">
+                            <Link href="/articole/cat-costa-mutarea-2026" className="text-emerald-600 font-semibold hover:text-emerald-700 underline">
                                 Vezi analiza detaliată a costurilor de mutare →
                             </Link>
                         </div>

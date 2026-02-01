@@ -19,19 +19,19 @@ export default function GuideMutare() {
           name="description"
           content="Ghidul complet pentru o mutare fără stres - pregătire, împachetare, evaluare și sfaturi practice de la experți."
         />
-        <link rel="canonical" href="https://ofertemutare.ro/guides/mutare" />
+        <link rel="canonical" href="https://ofertemutare.ro/articole/mutare" />
         <meta property="og:title" content="Ghid Complet Mutare Locuință" />
         <meta
           property="og:description"
           content="Tot ce trebuie să știi pentru o mutare organizată și fără stres."
         />
-        <meta property="og:url" content="https://ofertemutare.ro/guides/mutare" />
+        <meta property="og:url" content="https://ofertemutare.ro/articole/mutare" />
         <meta property="og:type" content="article" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://ofertemutare.ro/guides/mutare" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/articole/mutare" />
         <meta name="twitter:title" content="Ghid Complet Mutare Locuință" />
         <meta
           name="twitter:description"
@@ -99,7 +99,7 @@ export default function GuideMutare() {
           <div className="mb-12 grid gap-8 md:grid-cols-2">
             {/* Article 1 - Pregatire */}
             <Link
-              href="/articles/pregatire"
+              href="/articole/pregatire"
               className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300 hover:shadow-xl"
             >
               <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 text-white">
@@ -137,7 +137,7 @@ export default function GuideMutare() {
 
             {/* Article 2 - Impachetare */}
             <Link
-              href="/articles/impachetare"
+              href="/articole/impachetare"
               className="group overflow-hidden rounded-xl border-2 border-blue-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
@@ -175,7 +175,7 @@ export default function GuideMutare() {
 
             {/* Article 3 - Survey */}
             <Link
-              href="/articles/survey"
+              href="/articole/evaluare-mutare"
               className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-white">
@@ -213,7 +213,7 @@ export default function GuideMutare() {
 
             {/* Article 4 - Tips */}
             <Link
-              href="/articles/tips"
+              href="/articole/sfaturi-mutari"
               className="group overflow-hidden rounded-xl border-2 border-amber-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white">
@@ -314,7 +314,7 @@ export default function GuideMutare() {
               Solicită oferte personalizate de la firmele de mutări verificate din zona ta
             </p>
             <Link
-              href="/customer/dashboard"
+              href="/#request-form"
               className="inline-flex items-center gap-2 rounded-lg bg-white px-8 py-4 font-bold text-emerald-600 shadow-lg transition-transform"
             >
               Solicită Oferte Gratuite

@@ -19,7 +19,7 @@ const blogPosts = [
     date: "22 Ian 2026",
     image: "/pics/blog/guide-banner-v2.png",
     gradient: "linear-gradient(to right, #f59e0b, #d97706)",
-    link: "/guides/schimbare-adresa-documente",
+    link: "/articole/schimbare-adresa-documente",
   },
   {
     slug: "cele-mai-bune-cartiere-bucuresti",
@@ -30,7 +30,7 @@ const blogPosts = [
     date: "20 Ian 2026",
     image: "/pics/blog/bucharest-neighborhoods-map.png",
     gradient: "linear-gradient(to right, #10b981, #059669)",
-    link: "/articles/cele-mai-bune-cartiere-bucuresti",
+    link: "/articole/cele-mai-bune-cartiere-bucuresti",
   },
   {
     slug: "mutare-cluj-napoca",
@@ -41,7 +41,7 @@ const blogPosts = [
     date: "18 Ian 2026",
     image: "/pics/blog/cluj-guide-2026.png",
     gradient: "linear-gradient(to right, #2563eb, #60a5fa)",
-    link: "/guides/mutare-cluj-napoca",
+    link: "/articole/mutare-cluj-napoca",
   },
   {
     slug: "mutare-bucuresti-complet",
@@ -52,7 +52,7 @@ const blogPosts = [
     date: "16 Ian 2026",
     image: "/pics/blog/bucharest-guide-2026.png",
     gradient: "linear-gradient(to right, #2563eb, #3b82f6)",
-    link: "/guides/mutare-bucuresti-complet",
+    link: "/articole/mutare-bucuresti-complet",
   },
   {
     slug: "cat-costa-mutarea-2026",
@@ -88,7 +88,7 @@ const blogPosts = [
     gradient: "linear-gradient(to right, #10b981, #0d9488)",
   },
   {
-    slug: "survey",
+    slug: "evaluare-mutare",
     title: "De ce o vizită virtuală te ajută să primești oferta corectă",
     excerpt:
       "Un video call rapid îți oferă o evaluare precisă și te ajută să economisești timp și bani. Află cum funcționează.",
@@ -99,7 +99,7 @@ const blogPosts = [
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
   },
   {
-    slug: "tips",
+    slug: "sfaturi-mutari",
     title: "50+ Sfaturi Expert Pentru Mutări în România",
     excerpt:
       "Ghid complet cu trucuri și sfaturi de la profesioniști: economisește până la 40% la mutare, alege perioada potrivită și evită greșelile comune.",

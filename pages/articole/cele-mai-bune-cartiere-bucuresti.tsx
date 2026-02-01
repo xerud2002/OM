@@ -11,6 +11,48 @@ import {
 export default function ArticleCartiereBucuresti() {
     const currentYear = new Date().getFullYear();
 
+    // FAQ Schema for SEO - optimized for high-volume Romanian keywords
+    const faqData = [
+        {
+            question: "Care este cel mai bun cartier din București pentru familii?",
+            answer: "Drumul Taberei și Titan sunt cele mai bune opțiuni pentru familii, oferind parcuri mari, metrou, și chirii accesibile (350-600€/lună pentru 2 camere)."
+        },
+        {
+            question: "Unde să locuiesc în București dacă lucrez în Pipera?",
+            answer: "Zonele ideale sunt Aviației, Pipera Nouă sau Băneasa. Alternativ, orice zonă cu metrou M2 (Berceni, Tineretului) oferă acces direct."
+        },
+        {
+            question: "Care sunt cele mai ieftine cartiere din București?",
+            answer: "Militari Residence și Berceni oferă cele mai mici chirii (300-500€ pentru 2 camere), cu acces la metrou și mall-uri."
+        },
+        {
+            question: "Ce cartiere din București au metrou?",
+            answer: "Titan (M1/M3), Drumul Taberei (M5), Berceni/Tineretului (M2), Dristor (M1/M3), și Pipera (M2) sunt toate pe linii de metrou."
+        },
+        {
+            question: "Cât costă chiria în București pe zone în 2026?",
+            answer: "Chirii medii 2026: Militari 300-450€, Berceni/Titan 400-600€, Tineretului 500-750€, Aviației 600-900€, Floreasca/Dorobanți 700-1200€ pentru 2 camere."
+        },
+        {
+            question: "Care sunt cele mai sigure cartiere din București?",
+            answer: "Zonele considerate cele mai sigure sunt Aviației, Băneasa, Floreasca și Primăverii. Acestea au rate scăzute ale criminalității, străzi iluminate și pază privată în multe complexuri."
+        }
+    ];
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqData.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+            }
+        }))
+    };
+
+
     const cartiere = [
         {
             name: "Aviației",
@@ -105,6 +147,27 @@ export default function ArticleCartiereBucuresti() {
                 <meta
                     name="keywords"
                     content="cele mai bune cartiere bucuresti, unde sa locuiesti bucuresti, chirie bucuresti, zone bune bucuresti, top cartiere"
+                />
+                <link rel="canonical" href="https://ofertemutare.ro/articole/cele-mai-bune-cartiere-bucuresti" />
+                <meta property="og:title" content={`Top 10 Cartiere București ${currentYear} | Ghid Relocare`} />
+                <meta
+                    property="og:description"
+                    content="Analiză detaliată a zonelor de locuit în București: prețuri, transport, avantaje și dezavantaje pentru fiecare cartier."
+                />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://ofertemutare.ro/articole/cele-mai-bune-cartiere-bucuresti" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content="https://ofertemutare.ro/articole/cele-mai-bune-cartiere-bucuresti" />
+                <meta name="twitter:title" content={`Top 10 Cartiere București ${currentYear}`} />
+                <meta
+                    name="twitter:description"
+                    content="Unde să locuiești în București? Ghid complet cu prețuri, transport și avantaje pentru fiecare zonă."
+                />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.png" />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </Head>
 

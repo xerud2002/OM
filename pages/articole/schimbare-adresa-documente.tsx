@@ -15,6 +15,47 @@ import {
 export default function GhidSchimbareAdresa() {
     const currentYear = new Date().getFullYear();
 
+    // FAQ Schema for SEO - optimized for high-volume Romanian keywords
+    const faqData = [
+        {
+            question: "În cât timp trebuie să îmi schimb adresa în buletin după mutare?",
+            answer: "Termenul legal este de 15 zile de la mutare. Nerespectarea poate duce la amendă de 40-80 lei conform legii nr. 677/2001."
+        },
+        {
+            question: "Ce acte am nevoie pentru schimbarea adresei în buletin?",
+            answer: "Ai nevoie de: buletin vechi, certificat naștere, act proprietate/contract închiriere, acordul proprietarului (dacă stai în chirie), și taxă de 7 lei."
+        },
+        {
+            question: "Unde mă duc să schimb adresa în buletin?",
+            answer: "Te prezinți la Serviciul Public Comunitar de Evidență a Persoanelor (SPCLEP) din sectorul/localitatea noii adrese. Poți face programare online."
+        },
+        {
+            question: "Trebuie să declar mutarea la taxe și impozite?",
+            answer: "Da, dacă ai cumpărat imobil, ai 30 de zile să îl declari la Direcția de Taxe și Impozite Locale (DITL) pentru stabilirea impozitului."
+        },
+        {
+            question: "Cât durează să primesc noul buletin cu adresa schimbată?",
+            answer: "Buletinul se eliberează în termen de 30 de zile de la depunerea cererii. Pentru urgențe, există taxa de urgență care reduce termenul la 3-5 zile lucrătoare."
+        },
+        {
+            question: "Pot sta cu flotant în loc să îmi schimb domiciliul?",
+            answer: "Da, viza de flotant este valabilă 12 luni și se poate reînnoi. Este o soluție pentru chiriași care nu vor să schimbe domiciliul permanent. Taxa este de 7 lei."
+        }
+    ];
+
+    const jsonLd = {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": faqData.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+                "@type": "Answer",
+                "text": faq.answer
+            }
+        }))
+    };
+
     const checklist = [
         {
             title: "Cartea de Identitate (Buletin)",
@@ -64,6 +105,27 @@ export default function GhidSchimbareAdresa() {
                 <meta
                     name="keywords"
                     content="schimbare adresa buletin, acte necesare buletin, schimbare domiciliu, flotant, declarare taxe locale"
+                />
+                <link rel="canonical" href="https://ofertemutare.ro/articole/schimbare-adresa-documente" />
+                <meta property="og:title" content={`Ghid Acte Schimbare Adresă ${currentYear} | Lista Completă`} />
+                <meta
+                    property="og:description"
+                    content="Tot ce trebuie să faci după mutare: schimbare buletin, declarare taxe, utilități. Termenul legal e de doar 15 zile!"
+                />
+                <meta property="og:type" content="article" />
+                <meta property="og:url" content="https://ofertemutare.ro/articole/schimbare-adresa-documente" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.png" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content="https://ofertemutare.ro/articole/schimbare-adresa-documente" />
+                <meta name="twitter:title" content={`Ghid Schimbare Adresă ${currentYear}`} />
+                <meta
+                    name="twitter:description"
+                    content="Lista completă de documente pentru schimbarea buletinului și a adresei după mutare."
+                />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.png" />
+                <script
+                    type="application/ld+json"
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </Head>
 
