@@ -1,17 +1,5 @@
 import admin from "firebase-admin";
 
-// Load .env file explicitly (PM2 doesn't load it automatically)
-// This runs at module load time, before any Firebase operations
-if (typeof window === "undefined") {
-  // Server-side only
-  try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    require("dotenv").config();
-  } catch {
-    // dotenv not available or already loaded - continue
-  }
-}
-
 // Use global to persist state across hot-reloads in development
 declare global {
   // eslint-disable-next-line no-var
