@@ -1,4 +1,5 @@
 import admin from "firebase-admin";
+import "dotenv/config"; // Load .env file
 
 // Use global to persist state across hot-reloads in development
 declare global {
