@@ -3,12 +3,8 @@ import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
 import {
-    MapPinIcon as Map,
-    BuildingOffice2Icon as Building,
     TruckIcon as Truck,
     AcademicCapIcon as Student,
-    ClockIcon as Clock,
-    BanknotesIcon as Money, // Assuming this exists or using CurrencyEuro
     QuestionMarkCircleIcon as Question,
     CheckCircleIcon as CheckCircle,
     ExclamationTriangleIcon as Warning,
@@ -179,7 +175,7 @@ export default function GuideBucuresti() {
                             <h3 className="text-xl font-bold mt-4 mb-2">Strategia de parcare:</h3>
                             <ol className="list-decimal pl-5 space-y-2">
                                 <li><strong>Blochează locul:</strong> Dacă te muți la bloc, roagă un vecin sau folosește mașina proprie pentru a bloca 2 locuri în fața scării cu 24h înainte.</li>
-                                <li><strong>Lasă un bilet:</strong> Pune un afiș vizibil: <em>"Mă mut mâine între 10-14. Vă rog nu parcați. Mulțumesc pentru înțelegere!"</em></li>
+                                <li><strong>Lasă un bilet:</strong> Pune un afiș vizibil: <em>&ldquo;Mă mut mâine între 10-14. Vă rog nu parcați. Mulțumesc pentru înțelegere!&rdquo;</em></li>
                                 <li><strong>Atenție la Trotuare:</strong> Nu bloca trotuarul complet. Poliția Locală (Sector 1-6) este foarte activă și amenzile sunt mari.</li>
                             </ol>
                             <h3 className="text-xl font-bold mt-4 mb-2">Accesul în Centru (Zonă A/B):</h3>
@@ -204,13 +200,13 @@ export default function GuideBucuresti() {
                                 <strong>Perioada critică:</strong> Final de septembrie și început de octombrie este haos. Rezervă firma cu 3 săptămâni înainte.
                             </li>
                             <li className="bg-white p-4 rounded-lg shadow-sm">
-                                <strong>Accesul în campus:</strong> Portarii pot fi stricți. Ai nevoie de legitimație și uneori de o "atenție" pentru a băga mașina până la scară.
+                                <strong>Accesul în campus:</strong> Portarii pot fi stricți. Ai nevoie de legitimație și uneori de o &ldquo;atenție&rdquo; pentru a băga mașina până la scară.
                             </li>
                             <li className="bg-white p-4 rounded-lg shadow-sm">
                                 <strong>Shared Transport:</strong> Dacă ai puține lucruri, combină-te cu un coleg pentru a împărți costul dubei.
                             </li>
                             <li className="bg-white p-4 rounded-lg shadow-sm">
-                                <strong>Depozitare vară:</strong> Există servicii de "Boxă temporară" dacă trebuie să eliberezi camera pe vară.
+                                <strong>Depozitare vară:</strong> Există servicii de &ldquo;Boxă temporară&rdquo; dacă trebuie să eliberezi camera pe vară.
                             </li>
                         </ul>
                     </section>
