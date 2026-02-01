@@ -52,7 +52,7 @@ export default function Steps() {
     {
       id: "03",
       icon: CheckCircle2,
-      image: "/pics/step3-choose.png",
+      image: "/pics/step3-relax.png",
       title: "Alegi și te muți relaxat",
       desc: "Compari ofertele primite și alegi firma care ți se potrivește cel mai bine:",
       bullets: [
@@ -115,7 +115,7 @@ export default function Steps() {
                 </div>
 
                 {/* Step Illustration */}
-                <div className="group/image relative mt-3 mb-4 h-24 w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 sm:mt-4 sm:mb-5 sm:h-36 sm:rounded-2xl">
+                <div className="group/image relative mt-3 mb-4 h-40 w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 sm:mt-4 sm:mb-5 sm:h-44 sm:rounded-2xl">
                   {/* Base Image */}
                   <Image
                     src={step.image}
