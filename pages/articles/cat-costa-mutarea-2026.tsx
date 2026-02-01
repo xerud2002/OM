@@ -87,12 +87,23 @@ export default function ArticleCostMutare() {
                         <span className="mb-4 inline-block rounded-full bg-emerald-100 px-4 py-1 text-sm font-semibold text-emerald-800">
                             Actualizat Ianuarie {currentYear}
                         </span>
-                        <h1 className="mb-6 text-3xl font-bold text-slate-900 md:text-5xl">
+                        <h1 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
                             Cât Costă o Mutare în România:{" "}
-                            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                                 Ghid de Prețuri {currentYear}
                             </span>
                         </h1>
+                        <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
+                            <Image
+                                src="/pics/blog/moving-cost-2026.png"
+                                alt="Costuri Mutare 2026"
+                                width={1200}
+                                height={675}
+                                className="h-auto w-full"
+                                priority
+                                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"
+                            />
+                        </div>
                         <p className="mx-auto max-w-2xl text-lg text-gray-600">
                             Analiză detaliată a costurilor pentru mutări locale și naționale.
                             Află la ce să te aștepți și cum să obții cel mai bun preț.

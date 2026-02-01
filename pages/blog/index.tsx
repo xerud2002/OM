@@ -16,7 +16,7 @@ const blogPosts = [
     excerpt: "Lista completă de documente pentru schimbarea buletinului, rolului fiscal și contractelor de utilități. Nu rata termenul legal de 15 zile!",
     category: "Ghid Birocrație",
     readTime: "5 min",
-    date: "10 Feb 2026",
+    date: "22 Ian 2026",
     image: "/pics/blog/guide-banner-v2.png",
     gradient: "linear-gradient(to right, #f59e0b, #d97706)",
     link: "/guides/schimbare-adresa-documente",
@@ -27,7 +27,7 @@ const blogPosts = [
     excerpt: "Analiză detaliată a celor mai bune zone de locuit: Aviației, Titan, Drumul Taberei. Prețuri chirii, avantaje și dezavantaje pentru fiecare.",
     category: "Ghid Oraș",
     readTime: "6 min",
-    date: "8 Feb 2026",
+    date: "20 Ian 2026",
     image: "/pics/blog/bucharest-neighborhoods-map.png",
     gradient: "linear-gradient(to right, #10b981, #059669)",
     link: "/articles/cele-mai-bune-cartiere-bucuresti",
@@ -38,7 +38,7 @@ const blogPosts = [
     excerpt: "Ghid complet pentru studenți și IT-iști. Tot ce trebuie să știi despre viața în 'Silicon Valley' de România, prețuri și relief.",
     category: "Ghid Oraș",
     readTime: "7 min",
-    date: "6 Feb 2026",
+    date: "18 Ian 2026",
     image: "/pics/blog/cluj-guide-2026.png",
     gradient: "linear-gradient(to right, #2563eb, #60a5fa)",
     link: "/guides/mutare-cluj-napoca",
@@ -49,7 +49,7 @@ const blogPosts = [
     excerpt: "Cartiere, prețuri și sfaturi practice pentru o mutare fără stres în Capitală. Tot ce trebuie să știi despre logistică, parcare și zone.",
     category: "Ghid Oraș",
     readTime: "8 min",
-    date: "4 Feb 2026",
+    date: "16 Ian 2026",
     image: "/pics/blog/bucharest-guide-2026.png",
     gradient: "linear-gradient(to right, #2563eb, #3b82f6)",
     link: "/guides/mutare-bucuresti-complet",
@@ -61,7 +61,7 @@ const blogPosts = [
       "Analiză completă a costurilor pentru mutări locale și naționale. Vezi prețurile medii pentru garsoniere, apartamente și case, plus taxele ascunse de evitat.",
     category: "Costuri & Buget",
     readTime: "6 min",
-    date: "2 Feb 2026",
+    date: "14 Ian 2026",
     image: "/pics/blog/moving-cost-2026.png",
     gradient: "linear-gradient(to right, #059669, #34d399)",
   },
@@ -72,7 +72,7 @@ const blogPosts = [
       "Află cum să eviți deteriorarea obiectelor tale preferate prin tehnici folosite de profesioniști. De la pahare la electronice, totul despre protecție.",
     category: "Împachetare",
     readTime: "5 min",
-    date: "15 Ian 2026",
+    date: "12 Ian 2026",
     image: "/pics/blog/packing-fragile.png",
     gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",
   },
@@ -94,7 +94,7 @@ const blogPosts = [
       "Un video call rapid îți oferă o evaluare precisă și te ajută să economisești timp și bani. Află cum funcționează.",
     category: "Sfaturi",
     readTime: "4 min",
-    date: "5 Ian 2026",
+    date: "08 Ian 2026",
     image: "/pics/blog/video-survey-v2.png",
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
   },
@@ -105,7 +105,7 @@ const blogPosts = [
       "Ghid complet cu trucuri și sfaturi de la profesioniști: economisește până la 40% la mutare, alege perioada potrivită și evită greșelile comune.",
     category: "Ghid Complet",
     readTime: "15 min",
-    date: "1 Ian 2026",
+    date: "06 Ian 2026",
     image: "/pics/blog/guide-banner-v2.png",
     gradient: "linear-gradient(to right, #f97316, #ef4444)",
     featured: true,
@@ -153,9 +153,9 @@ export default function BlogPage() {
                   <BookOpen className="h-4 w-4 text-emerald-600" />
                   <span className="text-sm font-semibold text-emerald-700">Blog</span>
                 </div>
-                <h1 className="mb-5 text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">
+                <h1 className="mb-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
                   Sfaturi pentru o{" "}
-                  <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                     mutare reușită
                   </span>
                 </h1>
@@ -241,7 +241,19 @@ export default function BlogPage() {
                   <Link key={idx} href={href} className="group block">
                     <article className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl sm:rounded-2xl">
                       {/* Top gradient bar */}
-                      <div className="h-2 w-full" style={{ background: post.gradient }} />
+                      <div className="h-1 w-full" style={{ background: post.gradient }} />
+
+                      {/* Image Thumbnail */}
+                      <div className="relative aspect-video w-full overflow-hidden bg-white">
+                        <Image
+                          src={post.image}
+                          alt={post.title}
+                          fill
+                          className="object-contain transition-transform duration-500 group-hover:scale-105"
+                          priority={idx < 3}
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
 
                       {/* Content */}
                       <div className="flex flex-1 flex-col p-5 sm:p-6">

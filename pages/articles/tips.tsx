@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import { CurrencyDollarIcon as DollarSign, ClockIcon as Clock, ShieldCheckIcon as Shield, LightBulbIcon as Lightbulb, CheckCircleIcon as CheckCircle, ExclamationTriangleIcon as AlertTriangle, ArrowTrendingDownIcon as TrendingDown, CalendarIcon as Calendar, UsersIcon as Users, CubeIcon as Package, TruckIcon as Truck, HomeIcon as Home, StarIcon as Star, ChatBubbleLeftRightIcon as MessageCircle } from "@heroicons/react/24/outline";
@@ -41,12 +42,23 @@ export default function ArticleTips() {
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+            <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
               50+ Sfaturi Expert Pentru{" "}
               <span className="bg-gradient-to-r from-emerald-600 to-blue-600 bg-clip-text text-transparent">
                 Mutări în România
               </span>
             </h1>
+            <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
+              <Image
+                src="/pics/blog/guide-banner-v2.png"
+                alt="Sfaturi Mutare Expert"
+                width={1200}
+                height={675}
+                className="h-auto w-full"
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"
+              />
+            </div>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Trucuri, economii și best practices de la profesioniști cu zeci de ani de experiență.
               Tot ce trebuie să știi pentru o mutare perfectă în 2025.

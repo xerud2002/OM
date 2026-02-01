@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import { CalendarIcon as Calendar, CheckCircleIcon as CheckCircle, ClockIcon as Clock, HomeIcon as Home, CubeIcon as Package, TruckIcon as Truck, UsersIcon as Users, ExclamationTriangleIcon as AlertTriangle, DocumentTextIcon as FileText, PhoneIcon as Phone } from "@heroicons/react/24/outline";
@@ -44,12 +45,23 @@ export default function ArticlePregatire() {
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+            <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
               Cum să Te Pregătești pentru Mutare:{" "}
               <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Ghid Complet
               </span>
             </h1>
+            <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
+              <Image
+                src="/pics/blog/moving-prep.png"
+                alt="Pregatire Mutare"
+                width={1200}
+                height={675}
+                className="h-auto w-full"
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"
+              />
+            </div>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Planifică-ți mutarea pas cu pas cu acest ghid complet. De la 8 săptămâni înainte până
               în ziua mutării &ndash; totul organizat și simplu.

@@ -81,15 +81,19 @@ export default function GuideCluj() {
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
-                        <h1 className="mb-8 text-3xl font-bold text-slate-900 md:text-5xl px-4">
-                            Ghid Mutare în Cluj-Napoca {currentYear}
+                        <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl px-4">
+                            Ghid Mutare în{" "}
+                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                                Cluj-Napoca {currentYear}
+                            </span>
                         </h1>
-                        <div className="mb-6 relative aspect-video w-full overflow-hidden rounded-2xl shadow-xl bg-slate-100">
+                        <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
                                 src="/pics/blog/cluj-guide-2026.png"
                                 alt="Panorama Cluj Napoca Mutari"
-                                fill
-                                className="object-contain"
+                                width={1200}
+                                height={675}
+                                className="h-auto w-full"
                                 priority
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"
                             />

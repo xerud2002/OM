@@ -1,5 +1,6 @@
 import LayoutWrapper from "@/components/layout/Layout";
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import { CubeIcon as Package, ShieldCheckIcon as Shield, ClockIcon as Clock, CheckCircleIcon as CheckCircle } from "@heroicons/react/24/outline";
 
@@ -40,13 +41,24 @@ export default function ArticleImpachetare() {
         <article className="mx-auto max-w-4xl px-6 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+            <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
               Ghid Complet de Împachetare pentru{" "}
               <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
                 Mutare
               </span>
             </h1>
-            <p className="text-lg text-gray-600">
+            <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
+              <Image
+                src="/pics/blog/packing-fragile.png"
+                alt="Impachetare Mutare"
+                width={1200}
+                height={675}
+                className="h-auto w-full"
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"
+              />
+            </div>
+            <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Tehnici profesionale și sfaturi practice pentru o mutare organizată și fără stres
             </p>
           </header>

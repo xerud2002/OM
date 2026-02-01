@@ -1,4 +1,5 @@
 import Head from "next/head";
+import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
 import { VideoCameraIcon as Video, HomeIcon as Home, BoltIcon as Zap, ShieldCheckIcon as Shield, CheckCircleIcon as CheckCircle, XCircleIcon as XCircle, ExclamationCircleIcon as AlertCircle, CameraIcon as Camera, PhoneIcon as Phone, DocumentTextIcon as FileText } from "@heroicons/react/24/outline";
@@ -41,12 +42,23 @@ export default function ArticleSurvey() {
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">
-            <h1 className="mb-4 text-4xl font-bold text-slate-900 md:text-5xl">
+            <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
               Tipuri de Survey Pentru Mutări:{" "}
               <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Ce Să Alegi?
               </span>
             </h1>
+            <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
+              <Image
+                src="/pics/blog/video-survey-v2.png"
+                alt="Survey Mutare Video vs Fizic"
+                width={1200}
+                height={675}
+                className="h-auto w-full"
+                priority
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"
+              />
+            </div>
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Un survey corect = preț exact = zero surprize în ziua mutării. Descoperă cele 3 metode
               principale și când să le folosești.

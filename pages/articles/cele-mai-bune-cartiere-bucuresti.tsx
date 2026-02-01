@@ -112,15 +112,19 @@ export default function ArticleCartiereBucuresti() {
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
-                        <h1 className="mb-8 text-3xl font-bold text-slate-900 md:text-5xl px-4">
-                            Top 10 Cartiere din București în {currentYear}
+                        <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl px-4">
+                            Top 10 Cartiere din{" "}
+                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                                București în {currentYear}
+                            </span>
                         </h1>
-                        <div className="mb-6 relative aspect-video w-full overflow-hidden rounded-2xl shadow-xl bg-slate-100">
+                        <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
                                 src="/pics/blog/bucharest-neighborhoods-map.png"
                                 alt="Harta Cartiere Bucuresti"
-                                fill
-                                className="object-contain"
+                                width={1200}
+                                height={675}
+                                className="h-auto w-full"
                                 priority
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"
                             />
