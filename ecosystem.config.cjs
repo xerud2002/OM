@@ -10,18 +10,26 @@ function loadEnvFile(envPath) {
     const content = fs.readFileSync(envPath, "utf8");
     content.split("\n").forEach((line) => {
       // Skip comments and empty lines
+      line = line.trim();
       if (!line || line.startsWith("#")) return;
-      const match = line.match(/^([^=]+)=(.*)$/);
-      if (match) {
-        let key = match[1].trim();
-        let value = match[2].trim();
-        // Remove surrounding quotes if present
-        if ((value.startsWith('"') && value.endsWith('"')) || 
-            (value.startsWith("'") && value.endsWith("'"))) {
-          value = value.slice(1, -1);
-        }
-        env[key] = value;
+
+      // Find the first = sign (key=value)
+      const eqIndex = line.indexOf("=");
+      if (eqIndex === -1) return;
+
+      const key = line.substring(0, eqIndex).trim();
+      let value = line.substring(eqIndex + 1).trim();
+
+      // Remove surrounding quotes if present
+      if ((value.startsWith('"') && value.endsWith('"')) ||
+        (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
       }
+
+      // Convert escaped newlines to actual newlines (important for private keys)
+      value = value.replace(/\\n/g, "\n");
+
+      env[key] = value;
     });
   }
   return env;
