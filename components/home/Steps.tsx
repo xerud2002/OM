@@ -21,12 +21,12 @@ export default function Steps() {
       id: "01",
       icon: FileText,
       image: "/pics/step1-form.png",
-      title: "Completezi cererea online",
-      desc: "Formularul nostru simplu îți ia mai puțin de 2 minute. Ne spui detaliile mutării tale:",
+      title: "Completezi cererea de mutare online",
+      desc: "Formular simplu și rapid pentru cererea ta de mutare. În doar 2 minute ne spui toate detaliile:",
       bullets: [
-        "De unde și unde te muți",
-        "Ce obiecte ai de transportat",
-        "Data dorită pentru mutare",
+        "Adresa de ridicare și destinație",
+        "Lista obiectelor de transportat",
+        "Data și ora preferată pentru mutare",
       ],
       time: "~2 min",
       gradient: "from-blue-500 to-indigo-600",
@@ -37,12 +37,12 @@ export default function Steps() {
       id: "02",
       icon: Users,
       image: "/pics/step2-offers.png",
-      title: "Primești oferte personalizate",
-      desc: "Firmele de mutări verificate din rețeaua noastră îți trimit oferte în maxim 24 de ore:",
+      title: "Primești oferte de la firme de mutări verificate",
+      desc: "Rețeaua noastră de firme de mutări din România îți trimite oferte personalizate în maxim 24h:",
       bullets: [
-        "Până la 5 oferte competitive",
-        "Prețuri transparente detaliate",
-        "Recenzii și rating-uri reale",
+        "Până la 5 oferte de preț competitive",
+        "Prețuri transparente, fără costuri ascunse",
+        "Recenzii verificate și rating-uri reale",
       ],
       time: "24h",
       gradient: "from-emerald-500 to-teal-600",
@@ -53,12 +53,12 @@ export default function Steps() {
       id: "03",
       icon: CheckCircle2,
       image: "/pics/step3-relax.png",
-      title: "Alegi și te muți relaxat",
-      desc: "Compari ofertele primite și alegi firma care ți se potrivește cel mai bine:",
+      title: "Alegi oferta perfectă și te muți fără stres",
+      desc: "Compari serviciile de mutări și alegi firma care se potrivește bugetului și nevoilor tale:",
       bullets: [
-        "Fără obligații sau costuri ascunse",
-        "Contactezi direct firma aleasă",
-        "Suport gratuit pe tot parcursul",
+        "Zero obligații - serviciu 100% gratuit",
+        "Contact direct cu firma de mutări aleasă",
+        "Asistență gratuită în ziua mutării",
       ],
       time: "Tu decizi",
       gradient: "from-purple-500 to-pink-600",
@@ -78,20 +78,20 @@ export default function Steps() {
         <header className="mx-auto mb-12 max-w-3xl text-center sm:mb-16">
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 shadow-sm sm:mb-4 sm:px-4 sm:py-2">
             <Zap className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
-            <span className="text-xs font-bold text-emerald-700 sm:text-sm">Simplu & Rapid</span>
+            <span className="text-xs font-bold text-emerald-700 sm:text-sm">100% Gratuit</span>
           </div>
           <h2
             id="steps-heading"
             className="mb-4 text-3xl font-extrabold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl"
           >
-            Cum{" "}
+            Cum găsești{" "}
             <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-              funcționează?
+              firma de mutări perfectă?
             </span>
           </h2>
           <p className="mx-auto max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
-            Găsește cea mai bună firmă de mutări în <strong>3 pași simpli</strong>. Fără zeci de
-            telefoane, fără negocieri interminabile. Noi facem munca grea pentru tine.
+            Obține oferte gratuite de la cele mai bune <strong>firme de mutări din România</strong> în doar{" "}
+            <strong>3 pași simpli</strong>. Alege doar ce ți se potrivește și primește oferte numai de la companiile care te interesează.
           </p>
         </header>
 
@@ -115,7 +115,7 @@ export default function Steps() {
                 </div>
 
                 {/* Step Illustration */}
-                <div className="group/image relative mt-3 mb-4 h-40 w-full overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 sm:mt-4 sm:mb-5 sm:h-44 sm:rounded-2xl">
+                <div className="group/image relative mt-3 mb-4 h-48 w-full overflow-hidden rounded-xl bg-white sm:mt-4 sm:mb-5 sm:h-52 sm:rounded-2xl">
                   {/* Base Image */}
                   <Image
                     src={step.image}
@@ -181,9 +181,9 @@ export default function Steps() {
                   </span>
                 </div>
                 <div className="text-left">
-                  <p className="text-xl font-bold sm:text-2xl">Gata să începi?</p>
+                  <p className="text-xl font-bold sm:text-2xl">Ești la un click distanță</p>
                   <p className="text-sm text-emerald-100 sm:text-base">
-                    Primești oferte gratuite în mai puțin de 2 minute
+                    Compară și alege în ritmul tău
                   </p>
                 </div>
               </div>
@@ -191,7 +191,7 @@ export default function Steps() {
                 href="/customer/auth"
                 className="group flex w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-emerald-700 shadow-lg transition-all hover:shadow-xl sm:w-auto"
               >
-                Obține oferte acum
+                Vezi ofertele
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1" />
               </Link>
             </div>

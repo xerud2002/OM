@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowRightIcon as ArrowRight,
   BookOpenIcon as BookOpen,
@@ -11,12 +12,40 @@ import {
 
 const articles = [
   {
+    title: "Cât Costă o Mutare în România 2026 | Prețuri Reale",
+    desc: "Analiză detaliată a costurilor: prețuri pe cameră, distanță și servicii extra. Află cum să obții cel mai bun preț.",
+    link: "/articles/cat-costa-mutarea-2026",
+    readTime: "6 min",
+    category: "Costuri",
+    gradient: "linear-gradient(to right, #059669, #34d399)",
+    image: "/pics/blog/moving-cost-2026.png",
+  },
+  {
+    title: "Ghid Mutare în Cluj-Napoca 2026",
+    desc: "Tot ce trebuie să știi despre viața și mutarea în 'Silicon Valley' de România. Prețuri, zone și logistică pentru IT-iști și studenți.",
+    link: "/guides/mutare-cluj-napoca",
+    readTime: "7 min",
+    category: "Ghid Oraș",
+    gradient: "linear-gradient(to right, #2563eb, #60a5fa)",
+    image: "/pics/blog/cluj-guide-2026.png",
+  },
+  {
+    title: "Ghid Complet Mutare în București 2026",
+    desc: "Cartiere, prețuri și sfaturi practice pentru o mutare fără stres în Capitală. Tot ce trebuie să știi despre logistică și parcare.",
+    link: "/guides/mutare-bucuresti-complet",
+    readTime: "8 min",
+    category: "Ghid Oraș",
+    gradient: "linear-gradient(to right, #2563eb, #3b82f6)",
+    image: "/pics/blog/bucharest-guide-2026.png",
+  },
+  {
     title: "Top 5 trucuri pentru împachetarea obiectelor fragile",
     desc: "Află cum să eviți deteriorarea obiectelor tale preferate prin tehnici folosite de profesioniști.",
     link: "/articles/impachetare",
     readTime: "5 min",
     category: "Împachetare",
     gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",
+    image: "/pics/blog/packing-fragile.png",
   },
   {
     title: "Cum îți pregătești locuința pentru ziua mutării",
@@ -25,6 +54,7 @@ const articles = [
     readTime: "7 min",
     category: "Pregătire",
     gradient: "linear-gradient(to right, #10b981, #0d9488)",
+    image: "/pics/blog/moving-prep.png",
   },
   {
     title: "De ce o vizită virtuală te ajută să primești oferta corectă",
@@ -33,6 +63,7 @@ const articles = [
     readTime: "4 min",
     category: "Sfaturi",
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
+    image: "/pics/blog/video-survey-v2.png",
   },
 ];
 
@@ -57,17 +88,17 @@ export default function Articles() {
           <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3 py-1.5 sm:mb-4 sm:px-4 sm:py-2">
             <BookOpen className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
             <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
-              Ghid de Mutare
+              Ghiduri Gratuite
             </span>
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
-            Sfaturi pentru o{" "}
+            Totul pentru o{" "}
             <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               mutare reușită
             </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Ghidul tău complet pentru o mutare fără stres, de la împachetare până la instalare.
+            Articole practice, sfaturi de la experți și tot ce trebuie să știi pentru a economisi timp și bani.
           </p>
         </motion.div>
 
@@ -86,25 +117,32 @@ export default function Articles() {
                   transition={{ type: "spring", stiffness: 300 }}
                   className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
                 >
-                  {/* Top gradient bar */}
-                  <div
-                    className="h-1.5 w-full sm:h-2"
-                    style={{ background: article.gradient }}
-                  />
-
-                  <div className="flex flex-1 flex-col p-4 sm:p-6">
-                    {/* Meta info */}
-                    <div className="mb-3 flex items-center justify-between sm:mb-4">
+                  {/* Image Container */}
+                  <div className="relative h-64 w-full overflow-hidden border-b border-slate-100 bg-white p-4">
+                    <Image
+                      src={article.image}
+                      alt={article.title}
+                      fill
+                      className="object-contain transition-transform duration-500 group-hover:scale-105"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                    {/* Category Badge overlay on image */}
+                    <div className="absolute left-4 top-4 z-10">
                       <span
-                        className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold text-white sm:px-3 sm:py-1 sm:text-xs"
+                        className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold text-white shadow-sm sm:px-3 sm:py-1 sm:text-xs"
                         style={{ background: article.gradient }}
                       >
                         {article.category}
                       </span>
-                      <span className="flex items-center gap-1 text-[10px] text-slate-500 sm:text-xs">
-                        <Clock className="h-2.5 w-2.5 sm:h-3 sm:w-3" />
-                        {article.readTime}
-                      </span>
+                    </div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="flex flex-1 flex-col p-4 sm:p-6">
+                    {/* Meta info - simplified */}
+                    <div className="mb-3 flex items-center gap-2 text-[10px] text-slate-500 sm:mb-4 sm:text-xs">
+                      <Clock className="h-3.5 w-3.5" />
+                      <span>{article.readTime} lectură</span>
                     </div>
 
                     {/* Title */}

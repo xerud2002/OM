@@ -25,7 +25,7 @@ const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
 const Services = dynamic(() => import("@/components/home/Services"), {
   loading: () => <div className="min-h-150" />,
 });
-const Articles = dynamic(() => import("@/components/home/Articles"), {
+const Articles = dynamic(() => import("@/components/blog/Articles"), {
   loading: () => <div className="min-h-100" />,
 });
 const PartnerSection = dynamic(() => import("@/components/home/PartnerSection"), {

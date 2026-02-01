@@ -74,7 +74,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative hidden min-h-[70vh] items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-12 pb-6 sm:pt-16 sm:pb-10 md:flex lg:pt-20 lg:pb-12">
+    <section id="request-form" className="relative hidden min-h-[70vh] items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-12 pb-6 sm:pt-16 sm:pb-10 md:flex lg:pt-20 lg:pb-12">
       {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-75 w-75 rounded-full bg-emerald-200/40 blur-[80px] sm:h-100 sm:w-100 lg:h-125 lg:w-125 lg:blur-[100px]" />
