@@ -1,4 +1,6 @@
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
 import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
@@ -82,6 +84,20 @@ export default function ArticleImpachetare() {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </Head>
+      
+      <ArticleSchema
+        title="Ghid Împachetare pentru Mutare"
+        description="Tehnici profesionale de împachetare pentru mutare. Sfaturi pentru protejarea obiectelor fragile și organizare eficientă."
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/packing1.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Ghid Împachetare pentru Mutare" },
+        ]}
+      />
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-6 py-12">
           {/* Header */}
@@ -92,9 +108,10 @@ export default function ArticleImpachetare() {
                 Mutare
               </span>
             </h1>
+            <ArticleMetadata />
             <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
               <Image
-                src="/pics/blog/packing-fragile.png"
+                src="/pics/blog/packing-fragile.webp"
                 alt="Impachetare Mutare"
                 width={1200}
                 height={675}
@@ -197,7 +214,7 @@ export default function ArticleImpachetare() {
             <h3 className="mt-6 mb-3 text-xl font-semibold text-gray-800">Haine și Textile</h3>
             <p className="mb-4 text-gray-700">
               Hainele pot fi păstrate pe umerașe și acoperite cu folii de protecție, sau împăturite
-              în cutii mari. Pentru economie de spațiu, folosește saci de vidat pentru lenjerie și
+              în <Link href="/servicii/impachetare/materiale" className="text-indigo-600 hover:underline font-medium">cutii</Link> mari. Pentru economie de spațiu, folosește saci de vidat pentru lenjerie și
               pături. Textilele delicate (rochii de seară, costume) necesită cutii speciale cu
               umerașe.
             </p>
@@ -276,7 +293,7 @@ export default function ArticleImpachetare() {
               </h3>
               <p className="mb-4 text-gray-700">
                 Dacă timpul este limitat sau ai obiecte de valoare (tablouri, antichități,
-                instrumente muzicale), serviciile profesionale de împachetare merită investiția.
+                instrumente muzicale), serviciile profesionale de <Link href="/servicii/impachetare/profesionala" className="text-indigo-600 hover:underline font-medium">împachetare</Link> merită investiția.
                 Firmele specializate folosesc materiale premium și tehnici dovedite pentru protecție
                 maximă.
               </p>

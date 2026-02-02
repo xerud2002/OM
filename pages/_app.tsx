@@ -96,7 +96,7 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* Preconnect moved to _document.tsx */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-        <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+        <link rel="icon" href="/favicon-32x32.webp" type="image/png" sizes="32x32" />
         <link rel="icon" href="/logo.webp" type="image/webp" sizes="any" />
         <title>Ofertemutare.ro | Oferte reale de la firme de mutări verificate</title>
         <meta

@@ -18,7 +18,7 @@ const articles = [
     readTime: "6 min",
     category: "Costuri",
     gradient: "linear-gradient(to right, #059669, #34d399)",
-    image: "/pics/blog/moving-cost-2026.png",
+    image: "/pics/blog/moving-cost-2026.webp",
   },
   {
     title: "Ghid Mutare în Cluj-Napoca 2026",
@@ -27,7 +27,7 @@ const articles = [
     readTime: "7 min",
     category: "Ghid Oraș",
     gradient: "linear-gradient(to right, #2563eb, #60a5fa)",
-    image: "/pics/blog/cluj-guide-2026.png",
+    image: "/pics/blog/cluj-guide-2026.webp",
   },
   {
     title: "Ghid Complet Mutare în București 2026",
@@ -36,7 +36,7 @@ const articles = [
     readTime: "8 min",
     category: "Ghid Oraș",
     gradient: "linear-gradient(to right, #2563eb, #3b82f6)",
-    image: "/pics/blog/bucharest-guide-2026.png",
+    image: "/pics/blog/bucharest-guide-2026.webp",
   },
   {
     title: "Top 5 trucuri pentru împachetarea obiectelor fragile",
@@ -45,7 +45,7 @@ const articles = [
     readTime: "5 min",
     category: "Împachetare",
     gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",
-    image: "/pics/blog/packing-fragile.png",
+    image: "/pics/blog/packing-fragile.webp",
   },
   {
     title: "Cum îți pregătești locuința pentru ziua mutării",
@@ -54,7 +54,7 @@ const articles = [
     readTime: "7 min",
     category: "Pregătire",
     gradient: "linear-gradient(to right, #10b981, #0d9488)",
-    image: "/pics/blog/moving-prep.png",
+    image: "/pics/blog/moving-prep.webp",
   },
   {
     title: "De ce o vizită virtuală te ajută să primești oferta corectă",
@@ -63,7 +63,7 @@ const articles = [
     readTime: "4 min",
     category: "Sfaturi",
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
-    image: "/pics/blog/video-survey-v2.png",
+    image: "/pics/blog/video-survey-v2.webp",
   },
 ];
 

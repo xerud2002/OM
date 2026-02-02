@@ -20,7 +20,7 @@ export default function Steps() {
     {
       id: "01",
       icon: FileText,
-      image: "/pics/step1-form.png",
+      image: "/pics/step1-form.webp",
       title: "Completezi cererea de mutare online",
       desc: "Formular simplu și rapid pentru cererea ta de mutare. În doar 2 minute ne spui toate detaliile:",
       bullets: [
@@ -36,7 +36,7 @@ export default function Steps() {
     {
       id: "02",
       icon: Users,
-      image: "/pics/step2-offers.png",
+      image: "/pics/step2-offers.webp",
       title: "Primești oferte de la firme de mutări verificate",
       desc: "Rețeaua noastră de firme de mutări din România îți trimite oferte personalizate în maxim 24h:",
       bullets: [
@@ -52,7 +52,7 @@ export default function Steps() {
     {
       id: "03",
       icon: CheckCircle2,
-      image: "/pics/step3-relax.png",
+      image: "/pics/step3-relax.webp",
       title: "Alegi oferta perfectă și te muți fără stres",
       desc: "Compari serviciile de mutări și alegi firma care se potrivește bugetului și nevoilor tale:",
       bullets: [

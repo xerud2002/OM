@@ -1,6 +1,9 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import {
   BookOpenIcon as BookOpen,
   CubeIcon as Package,
@@ -40,6 +43,20 @@ export default function GuideMutare() {
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
+      
+      <ArticleSchema
+        title="Ghid Complet Mutare Locuință"
+        description="Ghidul complet pentru o mutare fără stres - pregătire, împachetare, evaluare și sfaturi practice de la experți."
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/index.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Ghid Complet Mutare Locuință" },
+        ]}
+      />
       <LayoutWrapper>
         <div className="mx-auto max-w-6xl px-4 py-12">
           {/* Header */}
@@ -47,15 +64,23 @@ export default function GuideMutare() {
             <div className="mb-4 inline-flex rounded-full bg-gradient-to-br from-emerald-100 to-blue-100 p-4">
               <BookOpen className="h-10 w-10 text-emerald-600" />
             </div>
-            <h1 className="mb-4 text-4xl font-bold text-slate-900">
+            <h1 className="mb-4 text-2xl md:text-4xl font-bold text-slate-900">
               Ghidul Complet pentru{" "}
               <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Mutarea Ta
               </span>
             </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              { id: "pas-1-pregtirea-mutrii", text: "Pas 1: Pregătirea Mutării" },
+              { id: "pas-2-mpachetarea-corect", text: "Pas 2: Împachetarea Corectă" },
+              { id: "pas-3-evaluarea-mutrii", text: "Pas 3: Evaluarea Mutării" },
+              { id: "pas-4-sfaturi-expert", text: "Pas 4: Sfaturi Expert" },
+              { id: "gata-s-ncepi-mutarea", text: "Gata să Începi Mutarea?" } 
+            ]} />
             <p className="mx-auto max-w-2xl text-lg text-gray-600">
               Tot ce trebuie să știi pentru o mutare organizată și fără stres. De la pregătire și
-              împachetare până la evaluare și sfaturi practice.
+              <Link href="/servicii/impachetare/profesionala" className="text-indigo-600 hover:underline font-medium">împachetare</Link> până la evaluare și sfaturi practice.
             </p>
           </div>
 
@@ -100,13 +125,13 @@ export default function GuideMutare() {
             {/* Article 1 - Pregatire */}
             <Link
               href="/articole/pregatire"
-              className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300 hover:shadow-xl"
+              className="group overflow-x-auto rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300 hover:shadow-xl"
             >
               <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Clipboard className="h-8 w-8" />
                 </div>
-                <h2 className="mb-2 text-2xl font-bold">Pas 1: Pregătirea Mutării</h2>
+                <h2 id="pas-1-pregtirea-mutrii" className="mb-2 text-2xl font-bold">Pas 1: Pregătirea Mutării</h2>
                 <p className="text-emerald-50">Planificare detaliată și organizare pre-mutare</p>
               </div>
               <div className="p-6">
@@ -138,13 +163,13 @@ export default function GuideMutare() {
             {/* Article 2 - Impachetare */}
             <Link
               href="/articole/impachetare"
-              className="group overflow-hidden rounded-xl border-2 border-blue-200 bg-white shadow-md transition-all duration-300"
+              className="group overflow-x-auto rounded-xl border-2 border-blue-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Package className="h-8 w-8" />
                 </div>
-                <h2 className="mb-2 text-2xl font-bold">Pas 2: Împachetarea Corectă</h2>
+                <h2 id="pas-2-mpachetarea-corect" className="mb-2 text-2xl font-bold">Pas 2: Împachetarea Corectă</h2>
                 <p className="text-blue-50">Tehnici profesionale pentru fiecare tip de obiect</p>
               </div>
               <div className="p-6">
@@ -176,13 +201,13 @@ export default function GuideMutare() {
             {/* Article 3 - Survey */}
             <Link
               href="/articole/evaluare-mutare"
-              className="group overflow-hidden rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300"
+              className="group overflow-x-auto rounded-xl border-2 border-emerald-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Clipboard className="h-8 w-8" />
                 </div>
-                <h2 className="mb-2 text-2xl font-bold">Pas 3: Evaluarea Mutării</h2>
+                <h2 id="pas-3-evaluarea-mutrii" className="mb-2 text-2xl font-bold">Pas 3: Evaluarea Mutării</h2>
                 <p className="text-purple-50">Alege metoda potrivită pentru situația ta</p>
               </div>
               <div className="p-6">
@@ -214,13 +239,13 @@ export default function GuideMutare() {
             {/* Article 4 - Tips */}
             <Link
               href="/articole/sfaturi-mutari"
-              className="group overflow-hidden rounded-xl border-2 border-amber-200 bg-white shadow-md transition-all duration-300"
+              className="group overflow-x-auto rounded-xl border-2 border-amber-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-amber-500 to-amber-600 p-6 text-white">
                 <div className="mb-3 inline-flex rounded-full bg-white/20 p-3">
                   <Lightbulb className="h-8 w-8" />
                 </div>
-                <h2 className="mb-2 text-2xl font-bold">Pas 4: Sfaturi Expert</h2>
+                <h2 id="pas-4-sfaturi-expert" className="mb-2 text-2xl font-bold">Pas 4: Sfaturi Expert</h2>
                 <p className="text-amber-50">Trucuri și sfaturi de la profesioniști</p>
               </div>
               <div className="p-6">
@@ -309,7 +334,7 @@ export default function GuideMutare() {
 
           {/* CTA Section */}
           <div className="rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white shadow-xl">
-            <h2 className="mb-4 text-3xl font-bold">Gata să Începi Mutarea?</h2>
+            <h2 id="gata-s-ncepi-mutarea" className="mb-4 text-3xl font-bold">Gata să Începi Mutarea?</h2>
             <p className="mb-6 text-lg text-emerald-50">
               Solicită oferte personalizate de la firmele de mutări verificate din zona ta
             </p>

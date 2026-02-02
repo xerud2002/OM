@@ -2,6 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import {
     TruckIcon as Truck,
     AcademicCapIcon as Student,
@@ -70,7 +73,7 @@ export default function GuideCluj() {
                     property="og:url"
                     content="https://ofertemutare.ro/articole/mutare-cluj-napoca"
                 />
-                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/cluj-guide-2026.png" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/cluj-guide-2026.webp" />
                 <link rel="canonical" href="https://ofertemutare.ro/articole/mutare-cluj-napoca" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://ofertemutare.ro/articole/mutare-cluj-napoca" />
@@ -79,14 +82,28 @@ export default function GuideCluj() {
                     name="twitter:description"
                     content="Tot ce trebuie să știi despre viața și mutarea în 'Silicon Valley' de România. Prețuri, zone și logistică."
                 />
-                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/cluj-guide-2026.png" />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/cluj-guide-2026.webp" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </Head>
 
-            <LayoutWrapper>
+            
+      <ArticleSchema
+        title="Ghid Mutare Cluj-Napoca {currentYear}: Cartiere, Prețuri și Sfaturi"
+        description="Articol despre mutări"
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/blog/cluj-guide-2026.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Ghid Mutare Cluj-Napoca {currentYear}: Cartiere, Prețuri și Sfaturi" },
+        ]}
+      />
+      <LayoutWrapper>
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
@@ -96,9 +113,17 @@ export default function GuideCluj() {
                                 Cluj-Napoca {currentYear}
                             </span>
                         </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              { id: "logistic-dealuri-i-strzi-nguste", text: "Logistică: Dealuri și Străzi Înguste" },
+              { id: "preuri-mutri-cluj-2026", text: "Prețuri Mutări Cluj 2026" },
+              { id: "studeni-ubb-utcn", text: "Studenți UBB & UTCN" },
+              { id: "ntrebri-frecvente-cluj", text: "Întrebări Frecvente Cluj" },
+              { id: "te-mui-la-cluj", text: "Te muți la Cluj?" } 
+            ]} />
                         <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
-                                src="/pics/blog/cluj-guide-2026.png"
+                                src="/pics/blog/cluj-guide-2026.webp"
                                 alt="Panorama Cluj Napoca Mutari"
                                 width={1200}
                                 height={675}
@@ -181,7 +206,7 @@ export default function GuideCluj() {
                     <section className="mb-16">
                         <div className="flex items-center gap-3 mb-6">
                             <Truck className="h-8 w-8 text-indigo-600" />
-                            <h2 className="text-3xl font-bold text-slate-900">Logistică: Dealuri și Străzi Înguste</h2>
+                            <h2 id="logistic-dealuri-i-strzi-nguste" className="text-3xl font-bold text-slate-900">Logistică: Dealuri și Străzi Înguste</h2>
                         </div>
                         <div className="prose prose-slate max-w-none text-gray-700">
                             <p>
@@ -199,36 +224,36 @@ export default function GuideCluj() {
 
                     {/* Price Table */}
                     <section className="mb-16">
-                        <h2 className="mb-6 text-3xl font-bold text-slate-900">Prețuri Mutări Cluj {currentYear}</h2>
-                        <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+                        <h2 id="preuri-mutri-cluj-currentyear" className="mb-6 text-3xl font-bold text-slate-900">Prețuri Mutări Cluj {currentYear}</h2>
+                        <div className="overflow-x-auto rounded-xl border border-gray-200 bg-white shadow-sm">
                             <table className="w-full text-left">
                                 <thead className="bg-emerald-600 text-white">
                                     <tr>
-                                        <th className="px-6 py-4 font-semibold">Tip Locuință</th>
-                                        <th className="px-6 py-4 font-semibold">Interval Preț</th>
-                                        <th className="px-6 py-4 font-semibold hidden md:table-cell">Durată Medie</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold">Tip Locuință</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold">Interval Preț</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold hidden md:table-cell">Durată Medie</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     <tr>
-                                        <td className="px-6 py-4 font-medium">Garsonieră (Mărăști/Mănăștur)</td>
-                                        <td className="px-6 py-4 font-bold text-emerald-700">500 - 750 RON</td>
-                                        <td className="px-6 py-4 text-gray-600 hidden md:table-cell">3 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium">Garsonieră (Mărăști/Mănăștur)</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-emerald-700">500 - 750 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600 hidden md:table-cell">3 ore</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-6 py-4 font-medium">Apartament 2 Camere</td>
-                                        <td className="px-6 py-4 font-bold text-emerald-700">900 - 1.400 RON</td>
-                                        <td className="px-6 py-4 text-gray-600 hidden md:table-cell">4-5 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium">Apartament 2 Camere</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-emerald-700">900 - 1.400 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600 hidden md:table-cell">4-5 ore</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-6 py-4 font-medium">Casă/Vilă (Bună Ziua/Făget)</td>
-                                        <td className="px-6 py-4 font-bold text-emerald-700">2.500 - 4.500 RON</td>
-                                        <td className="px-6 py-4 text-gray-600 hidden md:table-cell">1 zi</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium">Casă/Vilă (Bună Ziua/Făget)</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-emerald-700">2.500 - 4.500 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600 hidden md:table-cell">1 zi</td>
                                     </tr>
                                     <tr className="bg-amber-50">
-                                        <td className="px-6 py-4 font-medium text-amber-900">Supliment Manipulare Pantă</td>
-                                        <td className="px-6 py-4 font-bold text-amber-700">+15-20%</td>
-                                        <td className="px-6 py-4 text-amber-800 hidden md:table-cell">Dacă camionul nu ajunge la scară</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium text-amber-900">Supliment Manipulare Pantă</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-amber-700">+15-20%</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-amber-800 hidden md:table-cell">Dacă camionul nu ajunge la scară</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -239,7 +264,7 @@ export default function GuideCluj() {
                     <section className="mb-16 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-8">
                         <div className="flex items-center gap-3 mb-4">
                             <Student className="h-8 w-8 text-blue-600" />
-                            <h2 className="text-2xl font-bold text-slate-900">Studenți UBB & UTCN</h2>
+                            <h2 id="studeni-ubb-utcn" className="text-2xl font-bold text-slate-900">Studenți UBB & UTCN</h2>
                         </div>
                         <p className="mb-4 text-gray-700">
                             Clujul găzduiește peste 100.000 de studenți. &quot;Marea Migrație&quot; are loc în <strong>sfârșit de Septembrie</strong> și <strong>final de Iunie</strong>.
@@ -258,7 +283,7 @@ export default function GuideCluj() {
                     <section className="mb-16">
                         <div className="flex items-center gap-3 mb-8">
                             <Question className="h-8 w-8 text-emerald-600" />
-                            <h2 className="text-3xl font-bold text-slate-900">Întrebări Frecvente Cluj</h2>
+                            <h2 id="ntrebri-frecvente-cluj" className="text-3xl font-bold text-slate-900">Întrebări Frecvente Cluj</h2>
                         </div>
                         <div className="space-y-6">
                             {faqs.map((faq, index) => (
@@ -274,7 +299,7 @@ export default function GuideCluj() {
                     <section className="rounded-2xl bg-slate-900 px-6 py-12 text-center md:px-12 relative overflow-hidden">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500 rounded-full blur-3xl opacity-20 transform translate-x-1/2 -translate-y-1/2"></div>
 
-                        <h2 className="mb-4 text-3xl font-bold text-white relative z-10">Te muți la Cluj?</h2>
+                        <h2 id="te-mui-la-cluj" className="mb-4 text-3xl font-bold text-white relative z-10">Te muți la Cluj?</h2>
                         <p className="mb-8 text-lg text-slate-300 relative z-10 max-w-2xl mx-auto">
                             Firmele noastre partenere din Cluj sunt obișnuite cu pantele din Zorilor și traficul din Mărăști.
                             Primește oferte corecte, fără costuri ascunse.

@@ -6,8 +6,8 @@ export default function Document() {
       <Head>
         {/* Favicon - REQUIRED for Google search results */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-        <link rel="apple-touch-icon" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.webp" />
+        <link rel="apple-touch-icon" href="/favicon-32x32.webp" />
 
         {/* Critical preconnects for Firebase auth chain (reduces network dependency ~500ms) */}
         <link rel="preconnect" href="https://omro-e5a88.firebaseapp.com" crossOrigin="anonymous" />

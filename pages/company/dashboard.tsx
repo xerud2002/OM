@@ -345,7 +345,7 @@ export default function CompanyDashboard() {
                 transition={{ duration: 0.4, delay: 0.4 }}
                 className="mb-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
               >
-                <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-6 py-4">
+                <div className="border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white px-3 py-2 md:px-6 md:py-4">
                   <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
                     <Send className="h-5 w-5 text-emerald-600" />
                     Ofertele mele

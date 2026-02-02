@@ -1,5 +1,5 @@
 # robots.txt for ofertemutare.ro
-# Updated: January 30, 2026
+# Updated: February 1, 2026
 
 User-agent: *
 Allow: /

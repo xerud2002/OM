@@ -40,7 +40,7 @@ export default function TermsPage() {
             <div className="mb-4 inline-flex rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
               <FileText className="h-8 w-8 text-emerald-600" />
             </div>
-            <h1 className="mb-4 text-4xl font-bold text-slate-900">
+            <h1 className="mb-4 text-2xl md:text-4xl font-bold text-slate-900">
               Termeni și{" "}
               <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Condiții

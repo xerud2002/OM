@@ -2,6 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import {
     CurrencyEuroIcon as Currency,
     TruckIcon as Truck,
@@ -81,7 +84,7 @@ export default function ArticleCostMutare() {
                     property="og:url"
                     content="https://ofertemutare.ro/articole/cat-costa-mutarea-2026"
                 />
-                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/moving-cost-2026.png" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/moving-cost-2026.webp" />
                 <link rel="canonical" href="https://ofertemutare.ro/articole/cat-costa-mutarea-2026" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://ofertemutare.ro/articole/cat-costa-mutarea-2026" />
@@ -90,14 +93,28 @@ export default function ArticleCostMutare() {
                     name="twitter:description"
                     content="Ghid transparent de prețuri pentru mutări locale și interurbane. Află costurile reale și cum să eviți taxele ascunse."
                 />
-                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/moving-cost-2026.png" />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/moving-cost-2026.webp" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </Head>
 
-            <LayoutWrapper>
+            
+      <ArticleSchema
+        title="Cât Costă o Mutare în România {currentYear} | Prețuri Reale"
+        description="Articol despre mutări"
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/blog/moving-cost-2026.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Cât Costă o Mutare în România {currentYear} | Prețuri Reale" },
+        ]}
+      />
+      <LayoutWrapper>
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
@@ -110,9 +127,15 @@ export default function ArticleCostMutare() {
                                 Ghid de Prețuri {currentYear}
                             </span>
                         </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              { id: "atenie-la-costurile-ascunse", text: "Atenție la Costurile Ascunse!" },
+              { id: "ntrebri-frecvente", text: "Întrebări Frecvente" },
+              { id: "vrei-s-afli-preul-exact", text: "Vrei să afli prețul exact?" } 
+            ]} />
                         <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
-                                src="/pics/blog/moving-cost-2026.png"
+                                src="/pics/blog/moving-cost-2026.webp"
                                 alt="Costuri Mutare 2026"
                                 width={1200}
                                 height={675}
@@ -207,7 +230,7 @@ export default function ArticleCostMutare() {
                                 <div>
                                     <h3 className="text-xl font-semibold text-slate-900">5. Servicii Extra</h3>
                                     <p className="text-gray-600">
-                                        Demontarea mobilei, împachetarea în cutii sau manipularea obiectelor speciale (pian)
+                                        Demontarea mobilei, împachetarea în <Link href="/servicii/impachetare/materiale" className="text-indigo-600 hover:underline font-medium">cutii</Link> sau manipularea obiectelor speciale (pian)
                                         se tarifează separat.
                                     </p>
                                 </div>
@@ -220,40 +243,40 @@ export default function ArticleCostMutare() {
                         <h2 className="mb-6 text-3xl font-bold text-slate-900">
                             Tabel Detaliat: Prețuri Estimative {currentYear}
                         </h2>
-                        <div className="overflow-hidden rounded-xl border border-gray-200 shadow-sm">
-                            <table className="w-full text-left text-sm md:text-base">
+                        <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+                            <table className="w-full text-left text-xs md:text-base">
                                 <thead className="bg-slate-50 text-slate-900">
                                     <tr>
-                                        <th className="px-6 py-4 font-semibold">Tip Locuință</th>
-                                        <th className="px-6 py-4 font-semibold">Timp Estimat</th>
-                                        <th className="px-6 py-4 font-semibold">Echipă</th>
-                                        <th className="px-6 py-4 font-semibold">Preț Mediu (Local)</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold">Tip Locuință</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold">Timp Estimat</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold">Echipă</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold">Preț Mediu (Local)</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     <tr>
-                                        <td className="px-6 py-4 font-medium text-slate-900">Garsonieră</td>
-                                        <td className="px-6 py-4 text-gray-600">3-4 ore</td>
-                                        <td className="px-6 py-4 text-gray-600">2 oameni</td>
-                                        <td className="px-6 py-4 font-bold text-emerald-600">600 - 900 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium text-slate-900">Garsonieră</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">3-4 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">2 oameni</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-emerald-600">600 - 900 RON</td>
                                     </tr>
                                     <tr className="bg-slate-50/50">
-                                        <td className="px-6 py-4 font-medium text-slate-900">2 Camere</td>
-                                        <td className="px-6 py-4 text-gray-600">4-6 ore</td>
-                                        <td className="px-6 py-4 text-gray-600">3 oameni</td>
-                                        <td className="px-6 py-4 font-bold text-emerald-600">1.200 - 1.800 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium text-slate-900">2 Camere</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">4-6 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">3 oameni</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-emerald-600">1.200 - 1.800 RON</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-6 py-4 font-medium text-slate-900">3 Camere</td>
-                                        <td className="px-6 py-4 text-gray-600">6-8 ore</td>
-                                        <td className="px-6 py-4 text-gray-600">3-4 oameni</td>
-                                        <td className="px-6 py-4 font-bold text-emerald-600">1.800 - 2.500 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium text-slate-900">3 Camere</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">6-8 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">3-4 oameni</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-emerald-600">1.800 - 2.500 RON</td>
                                     </tr>
                                     <tr className="bg-slate-50/50">
-                                        <td className="px-6 py-4 font-medium text-slate-900">Casă (4+ Camere)</td>
-                                        <td className="px-6 py-4 text-gray-600">8-12 ore</td>
-                                        <td className="px-6 py-4 text-gray-600">4-6 oameni</td>
-                                        <td className="px-6 py-4 font-bold text-emerald-600">3.000+ RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium text-slate-900">Casă (4+ Camere)</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">8-12 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-gray-600">4-6 oameni</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-bold text-emerald-600">3.000+ RON</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -267,7 +290,7 @@ export default function ArticleCostMutare() {
                     <section className="mb-16 rounded-xl bg-amber-50 p-8 border border-amber-100">
                         <div className="flex items-center gap-3 mb-6">
                             <Warning className="h-8 w-8 text-amber-600" />
-                            <h2 className="text-2xl font-bold text-slate-900">Atenție la Costurile Ascunse!</h2>
+                            <h2 id="atenie-la-costurile-ascunse" className="text-2xl font-bold text-slate-900">Atenție la Costurile Ascunse!</h2>
                         </div>
                         <p className="mb-4 text-gray-700">
                             Nu te lăsa păcălit de ofertele telefonice suspect de mici. Iată ce poate umfla factura finală:
@@ -363,7 +386,7 @@ export default function ArticleCostMutare() {
                     <section className="mb-16">
                         <div className="flex items-center gap-3 mb-8">
                             <Question className="h-8 w-8 text-emerald-600" />
-                            <h2 className="text-3xl font-bold text-slate-900">Întrebări Frecvente</h2>
+                            <h2 id="ntrebri-frecvente" className="text-3xl font-bold text-slate-900">Întrebări Frecvente</h2>
                         </div>
                         <div className="space-y-6">
                             {faqs.map((faq, index) => (
@@ -377,7 +400,7 @@ export default function ArticleCostMutare() {
 
                     {/* CTA Calculator */}
                     <section className="rounded-2xl bg-slate-900 px-6 py-12 text-center md:px-12">
-                        <h2 className="mb-4 text-3xl font-bold text-white">Vrei să afli prețul exact?</h2>
+                        <h2 id="vrei-s-afli-preul-exact" className="mb-4 text-3xl font-bold text-white">Vrei să afli prețul exact?</h2>
                         <p className="mb-8 text-lg text-slate-300">
                             Completează formularul nostru și primești oferte personalizate de la firme verificate,
                             în funcție de inventarul tău specific.

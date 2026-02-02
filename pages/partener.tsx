@@ -206,7 +206,7 @@ export default function PartenerPage({ latestRequest: ssrLatestRequest }: Props)
                 <Truck className="h-4 w-4" />
                 Pentru Firme de Mutări
               </div>
-              <h1 className="mb-6 text-4xl font-bold text-white md:text-5xl lg:text-6xl">
+              <h1 className="mb-6 text-2xl md:text-4xl font-bold text-white md:text-5xl lg:text-6xl">
                 Crește-ți Afacerea cu <span className="text-yellow-300">Clienți Noi</span>
               </h1>
               <p className="mb-8 text-lg text-emerald-100 md:text-xl">

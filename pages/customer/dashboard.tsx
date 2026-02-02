@@ -720,7 +720,7 @@ export default function CustomerDashboard() {
               animate={{ opacity: 1, y: 0 }}
               className="text-center"
             >
-              <h1 className="text-4xl font-bold text-white sm:text-5xl">
+              <h1 className="text-2xl md:text-4xl font-bold text-white sm:text-5xl">
                 Bună,{" "}
                 <span className="bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
                   {user?.displayName?.split(" ")[0] || "Client"}

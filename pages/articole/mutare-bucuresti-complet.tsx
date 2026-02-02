@@ -2,6 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import {
     TruckIcon as Truck,
     AcademicCapIcon as Student,
@@ -70,7 +73,7 @@ export default function GuideBucuresti() {
                     property="og:url"
                     content="https://ofertemutare.ro/articole/mutare-bucuresti-complet"
                 />
-                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.png" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.webp" />
                 <link rel="canonical" href="https://ofertemutare.ro/articole/mutare-bucuresti-complet" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://ofertemutare.ro/articole/mutare-bucuresti-complet" />
@@ -79,14 +82,28 @@ export default function GuideBucuresti() {
                     name="twitter:description"
                     content="Ghidul complet pentru o mutare fără stres în Capitală. Prețuri, zone, logistică și sfaturi utile."
                 />
-                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.png" />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.webp" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </Head>
 
-            <LayoutWrapper>
+            
+      <ArticleSchema
+        title="Ghid Complet Mutare București {currentYear}: Cartiere, Prețuri și Sfaturi"
+        description="Articol despre mutări"
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Ghid Complet Mutare București {currentYear}: Cartiere, Prețuri și Sfaturi" },
+        ]}
+      />
+      <LayoutWrapper>
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
@@ -96,9 +113,17 @@ export default function GuideBucuresti() {
                                 București {currentYear}
                             </span>
                         </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              { id: "logistic-parcare-reguli", text: "Logistică: Parcare & Reguli" },
+              { id: "ghid-special-pentru-studeni", text: "Ghid Special pentru Studenți" },
+              { id: "preuri-mutri-bucureti-2026", text: "Prețuri Mutări București 2026" },
+              { id: "ntrebri-frecvente-despre-bucureti", text: "Întrebări Frecvente despre București" },
+              { id: "te-mui-n-bucureti", text: "Te muți în București?" } 
+            ]} />
                         <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
-                                src="/pics/blog/bucharest-guide-2026.png"
+                                src="/pics/blog/bucharest-guide-2026.webp"
                                 alt="Harta Bucuresti Mutari"
                                 width={1200}
                                 height={675}
@@ -174,7 +199,7 @@ export default function GuideBucuresti() {
                     <section className="mb-16">
                         <div className="flex items-center gap-3 mb-6">
                             <Warning className="h-8 w-8 text-amber-500" />
-                            <h2 className="text-3xl font-bold text-slate-900">Logistică: Parcare & Reguli</h2>
+                            <h2 id="logistic-parcare-reguli" className="text-3xl font-bold text-slate-900">Logistică: Parcare & Reguli</h2>
                         </div>
                         <div className="prose prose-slate max-w-none text-gray-700">
                             <p>
@@ -199,7 +224,7 @@ export default function GuideBucuresti() {
                     <section className="mb-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 p-8">
                         <div className="flex items-center gap-3 mb-4">
                             <Student className="h-8 w-8 text-indigo-600" />
-                            <h2 className="text-2xl font-bold text-slate-900">Ghid Special pentru Studenți</h2>
+                            <h2 id="ghid-special-pentru-studeni" className="text-2xl font-bold text-slate-900">Ghid Special pentru Studenți</h2>
                         </div>
                         <p className="mb-4 text-gray-700">
                             Te muți în <strong>Regie, Grozăvești sau Complex Leu</strong>? Iată ce trebuie să știi:
@@ -222,36 +247,36 @@ export default function GuideBucuresti() {
 
                     {/* Pricing Details */}
                     <section className="mb-16">
-                        <h2 className="mb-6 text-3xl font-bold text-slate-900">Prețuri Mutări București {currentYear}</h2>
-                        <div className="overflow-hidden rounded-xl border border-gray-200">
+                        <h2 id="preuri-mutri-bucureti-currentyear" className="mb-6 text-3xl font-bold text-slate-900">Prețuri Mutări București {currentYear}</h2>
+                        <div className="overflow-x-auto rounded-xl border border-gray-200">
                             <table className="w-full text-left">
                                 <thead className="bg-slate-100">
                                     <tr>
-                                        <th className="px-6 py-4 font-semibold text-slate-700">Serviciu</th>
-                                        <th className="px-6 py-4 font-semibold text-slate-700">Preț Mediu</th>
-                                        <th className="px-6 py-4 font-semibold text-slate-700">Detalii</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold text-slate-700">Serviciu</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold text-slate-700">Preț Mediu</th>
+                                        <th className="px-3 py-3 md:px-6 md:py-4 font-semibold text-slate-700">Detalii</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-gray-200">
                                     <tr>
-                                        <td className="px-6 py-4 font-medium">Mutare Garsonieră</td>
-                                        <td className="px-6 py-4 text-emerald-600 font-bold">600 - 900 RON</td>
-                                        <td className="px-6 py-4 text-sm text-gray-600">Volum mic, 2-3 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium">Mutare Garsonieră</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-emerald-600 font-bold">600 - 900 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-sm text-gray-600">Volum mic, 2-3 ore</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-6 py-4 font-medium">Mutare 2 Camere</td>
-                                        <td className="px-6 py-4 text-emerald-600 font-bold">1.200 - 1.600 RON</td>
-                                        <td className="px-6 py-4 text-sm text-gray-600">Standard, etaje inferioare</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium">Mutare 2 Camere</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-emerald-600 font-bold">1.200 - 1.600 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-sm text-gray-600">Standard, etaje inferioare</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-6 py-4 font-medium">Taxi Mobilă (Doar transport)</td>
-                                        <td className="px-6 py-4 text-emerald-600 font-bold">150 - 250 RON</td>
-                                        <td className="px-6 py-4 text-sm text-gray-600">Per cursă, fără manipulare</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium">Taxi Mobilă (Doar transport)</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-emerald-600 font-bold">150 - 250 RON</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-sm text-gray-600">Per cursă, fără manipulare</td>
                                     </tr>
                                     <tr>
-                                        <td className="px-6 py-4 font-medium">Manipulare (Per om)</td>
-                                        <td className="px-6 py-4 text-emerald-600 font-bold">50 - 80 RON/oră</td>
-                                        <td className="px-6 py-4 text-sm text-gray-600">Minim 2 ore</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 font-medium">Manipulare (Per om)</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-emerald-600 font-bold">50 - 80 RON/oră</td>
+                                        <td className="px-3 py-3 md:px-6 md:py-4 text-sm text-gray-600">Minim 2 ore</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -267,7 +292,7 @@ export default function GuideBucuresti() {
                     <section className="mb-16">
                         <div className="flex items-center gap-3 mb-8">
                             <Question className="h-8 w-8 text-emerald-600" />
-                            <h2 className="text-3xl font-bold text-slate-900">Întrebări Frecvente despre București</h2>
+                            <h2 id="ntrebri-frecvente-despre-bucureti" className="text-3xl font-bold text-slate-900">Întrebări Frecvente despre București</h2>
                         </div>
                         <div className="space-y-6">
                             {faqs.map((faq, index) => (
@@ -287,7 +312,7 @@ export default function GuideBucuresti() {
                             <div className="absolute left-0 bottom-0 w-64 h-64 bg-blue-500 rounded-full blur-3xl transform -translate-x-1/2 translate-y-1/2"></div>
                         </div>
 
-                        <h2 className="mb-4 text-3xl font-bold text-white relative z-10">Te muți în București?</h2>
+                        <h2 id="te-mui-n-bucureti" className="mb-4 text-3xl font-bold text-white relative z-10">Te muți în București?</h2>
                         <p className="mb-8 text-lg text-slate-300 relative z-10 max-w-2xl mx-auto">
                             Nu pierde timpul sunând la zeci de firme. Completează formularul și primești
                             oferte de la firme verificate din Sectorul tău.

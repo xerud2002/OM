@@ -43,7 +43,7 @@ export default function MutariApartamentePage({ currentYear }: MutariApartamente
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
 
         {/* SEO Title - optimized for CTR */}
-        <title>Mutări Apartamente {currentYear} → Economisești 40%</title>
+        <title>{`Mutări Apartamente ${currentYear} → Economisești 40%`}</title>
         <meta
           name="description"
           content="✓ 3-5 oferte GRATUITE în 24h de la firme verificate ✓ Compară prețuri și economisești până la 40% ✓ Garsoniere până la 4+ camere → Găsește oferta perfectă!"
@@ -112,7 +112,7 @@ export default function MutariApartamentePage({ currentYear }: MutariApartamente
               </span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
               <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Apartamente
@@ -120,7 +120,7 @@ export default function MutariApartamentePage({ currentYear }: MutariApartamente
             </h1>
 
             <p className="mb-8 max-w-2xl text-lg text-purple-100 md:text-xl">
-              De la garsoniere la apartamente cu 4+ camere. Echipe experimentate pentru 
+              De la garsoniere la apartamente cu 4+ camere. Echipe experimentate pentru
               blocuri cu sau fără lift, etaj înalt sau parter.
             </p>
 
@@ -146,7 +146,7 @@ export default function MutariApartamentePage({ currentYear }: MutariApartamente
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-purple-700 shadow-xl transition-all hover:bg-purple-50 hover:shadow-2xl hover:-translate-y-0.5"
               >
                 Cere Oferte Gratuite
@@ -165,13 +165,13 @@ export default function MutariApartamentePage({ currentYear }: MutariApartamente
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                Mutarea unui <strong>apartament</strong> este cel mai frecvent tip de mutare în România. 
-                Fie că te muți dintr-o garsonieră într-un apartament mai mare, sau schimbi cartierul, 
+                Mutarea unui <strong>apartament</strong> este cel mai frecvent tip de mutare în România.
+                Fie că te muți dintr-o garsonieră într-un apartament mai mare, sau schimbi cartierul,
                 procesul poate fi stresant fără ajutorul potrivit.
               </p>
               <p>
-                Pe <strong>OferteMutare.ro</strong> simplifici totul: completezi un formular în 3 minute 
-                și primești 3-5 oferte personalizate de la firme verificate. Compari prețurile, verifici 
+                Pe <strong>OferteMutare.ro</strong> simplifici totul: completezi un formular în 3 minute
+                și primești 3-5 oferte personalizate de la firme verificate. Compari prețurile, verifici
                 recenziile și alegi firma potrivită &ndash; <strong>100% gratuit, fără obligații</strong>.
               </p>
             </div>
@@ -299,14 +299,14 @@ export default function MutariApartamentePage({ currentYear }: MutariApartamente
               <li className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
                 <span>
-                  <strong>Măsoară mobilierul mare</strong> (canapele, dulapuri) și compară cu 
+                  <strong>Măsoară mobilierul mare</strong> (canapele, dulapuri) și compară cu
                   dimensiunile liftului și ușilor.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
                 <span>
-                  <strong>Anunță administrația blocului</strong> dacă ai nevoie de rezevare 
+                  <strong>Anunță administrația blocului</strong> dacă ai nevoie de rezevare
                   lift sau parcare.
                 </span>
               </li>
@@ -331,7 +331,7 @@ export default function MutariApartamentePage({ currentYear }: MutariApartamente
               Primește 3-5 oferte gratuite în 24h și economisește până la 40%.
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-purple-700 shadow-xl transition-all hover:bg-purple-50"
             >
               Cere Oferte Gratuite Acum
@@ -351,3 +351,4 @@ export const getStaticProps: GetStaticProps<MutariApartamentePageProps> = async 
     },
   };
 };
+

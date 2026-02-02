@@ -172,7 +172,7 @@ export default function CompanyAuthPage() {
                   Pentru Firme
                 </motion.div>
 
-                <h2 className="mb-4 text-4xl font-bold text-white">
+                <h2 className="mb-4 text-2xl md:text-4xl font-bold text-white">
                   Dezvoltă-ți
                   <br />
                   <span className="text-blue-100">business-ul.</span>
@@ -349,7 +349,7 @@ export default function CompanyAuthPage() {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
+                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-3 py-2 md:px-6 md:py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {loading ? (
@@ -397,7 +397,7 @@ export default function CompanyAuthPage() {
                 whileTap={{ scale: 0.98 }}
                 onClick={handleGoogleLogin}
                 disabled={loading}
-                className="group flex w-full items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-6 py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
+                className="group flex w-full items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-3 py-2 md:px-6 md:py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
               >
                 <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
                 Google

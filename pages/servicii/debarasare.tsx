@@ -17,7 +17,7 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
   return (
     <>
       <Head>
-        <title>Debarasare Mobilă și Gunoi {currentYear} | Evacuare Rapidă</title>
+        <title>{`Debarasare Mobilă și Gunoi ${currentYear} | Evacuare Rapidă`}</title>
         <meta
           name="description"
           content="Servicii debarasare mobilă veche, gunoi, moloz. Evacuare rapidă apartamente, case, pivnițe, mansarde. Transport și reciclare responsabilă. De la 150 lei!"
@@ -54,7 +54,7 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
               <span className="text-green-100 text-sm font-medium">Servicii Debarasare • Eco-Friendly</span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Debarasare{" "}
               <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Mobilă & Gunoi
@@ -62,7 +62,7 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
             </h1>
 
             <p className="mb-8 max-w-2xl text-lg text-green-100 md:text-xl">
-              Conectăm-te cu firme de debarasare pentru evacuare rapidă apartamente, case, 
+              Conectăm-te cu firme de debarasare pentru evacuare rapidă apartamente, case,
               pivnițe. Transport și reciclare responsabilă!
             </p>
 
@@ -87,7 +87,7 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-green-700 shadow-xl transition-all hover:bg-green-50 hover:shadow-2xl hover:-translate-y-0.5"
               >
                 Cere Ofertă Debarasare
@@ -105,8 +105,8 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                <strong>Debarasarea</strong> este soluția perfectă când ai mobilă veche, gunoi voluminos, 
-                sau pur și simplu vrei să scapi de lucruri inutile rapid. Firmele partenere oferă evacuare 
+                <strong>Debarasarea</strong> este soluția perfectă când ai mobilă veche, gunoi voluminos,
+                sau pur și simplu vrei să scapi de lucruri inutile rapid. Firmele partenere oferă evacuare
                 completă pentru apartamente, case, pivnițe, mansarde, sau garaje.
               </p>
             </div>
@@ -207,7 +207,7 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
               Compară oferte pentru debarasare de la firme din zona ta în 24h!
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-green-700 shadow-xl transition-all hover:bg-green-50"
             >
               Cere Oferte Acum
@@ -227,3 +227,4 @@ export const getStaticProps: GetStaticProps<DebarasarePageProps> = async () => {
     },
   };
 };
+

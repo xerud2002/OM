@@ -2,6 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
 import { CalendarIcon as Calendar, CheckCircleIcon as CheckCircle, ClockIcon as Clock, HomeIcon as Home, CubeIcon as Package, TruckIcon as Truck, UsersIcon as Users, ExclamationTriangleIcon as AlertTriangle, DocumentTextIcon as FileText, PhoneIcon as Phone } from "@heroicons/react/24/outline";
 
 export default function ArticlePregatire() {
@@ -86,6 +88,20 @@ export default function ArticlePregatire() {
         />
       </Head>
 
+      
+      <ArticleSchema
+        title="Cum să Te Pregătești pentru Mutare"
+        description="Ghid pregătire mutare: planificare în 8 săptămâni, liste complete, când să rezervi firma și cum să economisești."
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/index.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Cum să Te Pregătești pentru Mutare" },
+        ]}
+      />
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
@@ -96,9 +112,10 @@ export default function ArticlePregatire() {
                 Ghid Complet
               </span>
             </h1>
+            <ArticleMetadata />
             <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
               <Image
-                src="/pics/blog/moving-prep.png"
+                src="/pics/blog/moving-prep.webp"
                 alt="Pregatire Mutare"
                 width={1200}
                 height={675}
@@ -538,7 +555,7 @@ export default function ArticlePregatire() {
             <h2 className="mb-8 text-3xl font-bold text-gray-800">
               Bugetul Pentru Mutare: Estimări Realiste (2025)
             </h2>
-            <div className="overflow-hidden rounded-lg border border-gray-200">
+            <div className="overflow-x-auto rounded-lg border border-gray-200">
               <table className="w-full">
                 <thead className="bg-emerald-600 text-white">
                   <tr>

@@ -15,8 +15,8 @@ import {
 export default function Services() {
   const services = [
     {
-      img: "/pics/service-packing.png",
-      iconImg: "/pics/icon-packing.png",
+      img: "/pics/service-packing.webp",
+      iconImg: "/pics/icon-packing.webp",
       icon: Package,
       title: "Împachetare profesională",
       desc: "Obiectele fragile și mobilierul sunt împachetate cu materiale de protecție de calitate.",
@@ -24,8 +24,8 @@ export default function Services() {
       bgColor: "bg-blue-50",
     },
     {
-      img: "/pics/service-furniture.png",
-      iconImg: "/pics/icon-furniture.png",
+      img: "/pics/service-furniture.webp",
+      iconImg: "/pics/icon-furniture.webp",
       icon: Wrench,
       title: "Demontare mobilier",
       desc: "Dezasamblare și reasamblare a mobilierului mare, rapid și fără daune.",
@@ -33,8 +33,8 @@ export default function Services() {
       bgColor: "bg-emerald-50",
     },
     {
-      img: "/pics/service-transport.png",
-      iconImg: "/pics/icon-transport.png",
+      img: "/pics/service-transport.webp",
+      iconImg: "/pics/icon-transport.webp",
       icon: Truck,
       title: "Transport sigur",
       desc: "De la garsoniere la case întregi, transport cu autoutilitare curate și echipate.",
@@ -42,8 +42,8 @@ export default function Services() {
       bgColor: "bg-purple-50",
     },
     {
-      img: "/pics/service-storage.png",
-      iconImg: "/pics/icon-storage.png",
+      img: "/pics/service-storage.webp",
+      iconImg: "/pics/icon-storage.webp",
       icon: Warehouse,
       title: "Depozitare temporară",
       desc: "Spații sigure, ventilate și monitorizate 24/7 pentru obiectele tale.",
@@ -51,8 +51,8 @@ export default function Services() {
       bgColor: "bg-orange-50",
     },
     {
-      img: "/pics/service-disposal.png",
-      iconImg: "/pics/icon-disposal.png",
+      img: "/pics/service-disposal.webp",
+      iconImg: "/pics/icon-disposal.webp",
       icon: Trash2,
       title: "Debarasare",
       desc: "Colectare și eliminare ecologică a mobilierului vechi sau obiectelor inutile.",

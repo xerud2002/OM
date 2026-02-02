@@ -53,24 +53,24 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
       <Head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        
-        <title>Servicii Mutare {currentYear} | Împachetare, Montaj, Depozitare</title>
+
+        <title>{`Servicii Mutare ${currentYear} | Împachetare, Montaj, Depozitare`}</title>
         <meta
           name="description"
           content="✓ Servicii complete pentru mutare ✓ Împachetare, montaj mobilă, materiale, depozitare ✓ Oferte de la firme verificate → Compară gratuit!"
         />
         <meta name="keywords" content="servicii mutare, împachetare, montaj mobilă, depozitare, materiale ambalare" />
         <link rel="canonical" href="https://ofertemutare.ro/servicii" />
-        
+
         <meta name="robots" content="index, follow, max-image-preview:large" />
-        
+
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro/servicii" />
         <meta property="og:title" content={`Servicii Mutare ${currentYear}`} />
         <meta property="og:description" content="Servicii complete: împachetare, montaj, depozitare. Oferte gratuite!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
         <meta property="og:locale" content="ro_RO" />
-        
+
         <meta name="twitter:card" content="summary_large_image" />
       </Head>
 
@@ -83,7 +83,7 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
           </div>
 
           <div className="relative mx-auto max-w-6xl px-4 text-center">
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Servicii Complete{" "}
               <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 de Mutare
@@ -156,7 +156,7 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
               Primește oferte personalizate pentru orice serviciu legat de mutare.
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-purple-700 shadow-xl transition-all hover:bg-purple-50"
             >
               Cere Oferte Gratuite
@@ -176,3 +176,4 @@ export const getStaticProps: GetStaticProps<ServiciiIndexPageProps> = async () =
     },
   };
 };
+

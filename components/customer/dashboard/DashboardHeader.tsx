@@ -69,7 +69,7 @@ export default function DashboardHeader({
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-emerald-400">Cereri active</p>
-                <p className="mt-2 text-4xl font-bold text-white">{activeRequestsCount}</p>
+                <p className="mt-2 text-2xl md:text-4xl font-bold text-white">{activeRequestsCount}</p>
                 <p className="mt-1 text-xs text-slate-400">În așteptarea ofertelor</p>
               </div>
               <div className="rounded-xl bg-gradient-to-br from-emerald-500/20 to-emerald-600/20 p-3 ring-1 ring-emerald-500/30">
@@ -88,7 +88,7 @@ export default function DashboardHeader({
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-sky-400">Oferte primite</p>
-                <p className="mt-2 text-4xl font-bold text-white">{totalOffersCount}</p>
+                <p className="mt-2 text-2xl md:text-4xl font-bold text-white">{totalOffersCount}</p>
                 <p className="mt-1 text-xs text-slate-400">De la firme verificate</p>
               </div>
               <div className="rounded-xl bg-gradient-to-br from-sky-500/20 to-sky-600/20 p-3 ring-1 ring-sky-500/30">
@@ -107,7 +107,7 @@ export default function DashboardHeader({
             <div className="flex items-start justify-between">
               <div>
                 <p className="text-sm font-medium text-amber-400">Arhivate</p>
-                <p className="mt-2 text-4xl font-bold text-white">{archivedCount}</p>
+                <p className="mt-2 text-2xl md:text-4xl font-bold text-white">{archivedCount}</p>
                 <p className="mt-1 text-xs text-slate-400">Cereri finalizate</p>
               </div>
               <div className="rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/20 p-3 ring-1 ring-amber-500/30">

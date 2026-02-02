@@ -2,6 +2,9 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import { VideoCameraIcon as Video, HomeIcon as Home, BoltIcon as Zap, ShieldCheckIcon as Shield, CheckCircleIcon as CheckCircle, XCircleIcon as XCircle, ExclamationCircleIcon as AlertCircle, CameraIcon as Camera, PhoneIcon as Phone, DocumentTextIcon as FileText } from "@heroicons/react/24/outline";
 
 export default function ArticleSurvey() {
@@ -38,6 +41,20 @@ export default function ArticleSurvey() {
         <link rel="canonical" href="https://ofertemutare.ro/articole/evaluare-mutare" />
       </Head>
 
+      
+      <ArticleSchema
+        title="Survey Mutări: Fizic vs. Video vs. Estimare"
+        description="Cele 3 tipuri de survey la mutări: vizită fizică, survey video și estimare rapidă. Află care se potrivește și cum obții cel mai bun preț."
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/index.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Survey Mutări: Fizic vs. Video vs. Estimare" },
+        ]}
+      />
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
@@ -48,9 +65,14 @@ export default function ArticleSurvey() {
                 Ce Să Alegi?
               </span>
             </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              { id: "2-survey-video-virtual-survey", text: "2. Survey Video (Virtual Survey)" },
+              { id: "primete-3-5-oferte-cu-survey-gratuit", text: "Primește 3-5 Oferte Cu Survey Gratuit" } 
+            ]} />
             <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
               <Image
-                src="/pics/blog/video-survey-v2.png"
+                src="/pics/blog/video-survey-v2.webp"
                 alt="Survey Mutare Video vs Fizic"
                 width={1200}
                 height={675}
@@ -106,7 +128,7 @@ export default function ArticleSurvey() {
               Comparație: Cele 3 Tipuri de Survey
             </h2>
             <div className="overflow-x-auto">
-              <table className="w-full border-collapse overflow-hidden rounded-lg border border-gray-200">
+              <table className="w-full border-collapse overflow-x-auto rounded-lg border border-gray-200">
                 <thead className="bg-emerald-600 text-white">
                   <tr>
                     <th className="px-4 py-3 text-left">Tip Survey</th>
@@ -302,7 +324,7 @@ export default function ArticleSurvey() {
           <section className="mb-16">
             <div className="mb-6 flex items-center gap-3">
               <Video className="h-8 w-8 text-blue-600" />
-              <h2 className="text-3xl font-bold text-gray-800">2. Survey Video (Virtual Survey)</h2>
+              <h2 id="2-survey-video-virtual-survey" className="text-3xl font-bold text-gray-800">2. Survey Video (Virtual Survey)</h2>
             </div>
 
             <div className="mb-6 rounded-lg border-2 border-blue-200 bg-blue-50 p-6">
@@ -728,7 +750,7 @@ export default function ArticleSurvey() {
 
           {/* CTA Section */}
           <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
-            <h2 className="mb-4 text-3xl font-bold">Primește 3-5 Oferte Cu Survey Gratuit</h2>
+            <h2 id="primete-3-5-oferte-cu-survey-gratuit" className="mb-4 text-3xl font-bold">Primește 3-5 Oferte Cu Survey Gratuit</h2>
             <p className="mb-6 text-lg">
               Completează un singur formular și primește oferte personalizate de la cele mai bune
               firme de mutări. Survey video sau fizic inclus, fără costuri!

@@ -2,6 +2,9 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import { CurrencyDollarIcon as DollarSign, ClockIcon as Clock, ShieldCheckIcon as Shield, LightBulbIcon as Lightbulb, CheckCircleIcon as CheckCircle, ExclamationTriangleIcon as AlertTriangle, ArrowTrendingDownIcon as TrendingDown, CalendarIcon as Calendar, UsersIcon as Users, CubeIcon as Package, TruckIcon as Truck, HomeIcon as Home, StarIcon as Star, ChatBubbleLeftRightIcon as MessageCircle } from "@heroicons/react/24/outline";
 
 export default function ArticleTips() {
@@ -38,6 +41,20 @@ export default function ArticleTips() {
         <link rel="canonical" href="https://ofertemutare.ro/articole/sfaturi-mutari" />
       </Head>
 
+      
+      <ArticleSchema
+        title="50+ Sfaturi Expert Pentru Mutări | Trucuri & Economii"
+        description="Sfaturi pentru mutări 2026: economisești 40%, când e cel mai ieftin, cum eviți greșelile comune. Trucuri de la profesioniști."
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/index.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "50+ Sfaturi Expert Pentru Mutări | Trucuri & Economii" },
+        ]}
+      />
       <LayoutWrapper>
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
@@ -48,9 +65,14 @@ export default function ArticleTips() {
                 Mutări în România
               </span>
             </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              { id: "cum-economiseti-bani-la-mutare", text: "Cum Economisești Bani La Mutare" },
+              { id: "economisete-timp-i-stres", text: "Economisește Timp și Stres" } 
+            ]} />
             <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
               <Image
-                src="/pics/blog/guide-banner-v2.png"
+                src="/pics/blog/guide-banner-v2.webp"
                 alt="Sfaturi Mutare Expert"
                 width={1200}
                 height={675}
@@ -69,15 +91,15 @@ export default function ArticleTips() {
           <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-6 text-white">
             <div className="grid gap-6 md:grid-cols-3">
               <div className="text-center">
-                <div className="mb-2 text-4xl font-bold">40%</div>
+                <div className="mb-2 text-2xl md:text-4xl font-bold">40%</div>
                 <div className="text-sm opacity-90">Clienți mulțumiți cu sfaturile noastre</div>
               </div>
               <div className="text-center">
-                <div className="mb-2 text-4xl font-bold">6h</div>
+                <div className="mb-2 text-2xl md:text-4xl font-bold">6h</div>
                 <div className="text-sm opacity-90">Timp economisit prin planificare corectă</div>
               </div>
               <div className="text-center">
-                <div className="mb-2 text-4xl font-bold">95%</div>
+                <div className="mb-2 text-2xl md:text-4xl font-bold">95%</div>
                 <div className="text-sm opacity-90">
                   Clienți mulțumiți care aplică aceste sfaturi
                 </div>
@@ -89,7 +111,7 @@ export default function ArticleTips() {
           <section className="mb-16">
             <div className="mb-8 flex items-center gap-3">
               <DollarSign className="h-8 w-8 text-green-600" />
-              <h2 className="text-3xl font-bold text-gray-800">Cum Economisești Bani La Mutare</h2>
+              <h2 id="cum-economiseti-bani-la-mutare" className="text-3xl font-bold text-gray-800">Cum Economisești Bani La Mutare</h2>
             </div>
 
             <div className="space-y-6">
@@ -264,7 +286,7 @@ export default function ArticleTips() {
           <section className="mb-16">
             <div className="mb-8 flex items-center gap-3">
               <Clock className="h-8 w-8 text-blue-600" />
-              <h2 className="text-3xl font-bold text-gray-800">Economisește Timp și Stres</h2>
+              <h2 id="economisete-timp-i-stres" className="text-3xl font-bold text-gray-800">Economisește Timp și Stres</h2>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2">
@@ -554,7 +576,7 @@ export default function ArticleTips() {
                   </p>
                   <p>
                     <span className="font-semibold text-green-600">Soluția:</span> Fă ÎNTOTDEAUNA un
-                    survey (video sau fizic). Lista scrisă cu mobilier mare + număr cutii.
+                    survey (video sau fizic). Lista scrisă cu mobilier mare + număr <Link href="/servicii/impachetare/materiale" className="text-indigo-600 hover:underline font-medium">cutii</Link>.
                   </p>
                 </div>
               </details>

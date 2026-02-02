@@ -191,7 +191,7 @@ export default function Navbar() {
           isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="flex flex-col space-y-1 px-6 py-4">
+        <div className="flex flex-col space-y-1 px-3 py-2 md:px-6 md:py-4">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}

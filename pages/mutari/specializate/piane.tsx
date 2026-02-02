@@ -3,6 +3,7 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
+import { BreadcrumbSchema, FAQPageSchema } from "@/components/seo/SchemaMarkup";
 import { SERVICE_FAQS } from "@/data/faqData";
 import { MusicalNoteIcon as Music, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CurrencyDollarIcon as DollarSign, StarIcon as Star, ExclamationTriangleIcon as AlertTriangle, CubeIcon as Package, HeartIcon as Heart, TrophyIcon as Award } from "@heroicons/react/24/outline";
 
@@ -104,6 +105,16 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
         />
       </Head>
 
+      <FAQPageSchema faqs={faqItems} />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Mutări", url: "/mutari" },
+          { name: "Specializate", url: "/mutari/specializate" },
+          { name: "Piane" },
+        ]}
+      />
+
       <LayoutWrapper>
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-slate py-20">
@@ -120,7 +131,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
               </span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
               <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
                 Piane
@@ -153,7 +164,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
 
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-amber-500 px-8 py-4 font-bold text-slate-900 shadow-xl transition-all hover:-translate-y-0.5 hover:bg-amber-400 hover:shadow-2xl"
               >
                 Cere Ofertă Transport Pian
@@ -368,3 +379,4 @@ export const getStaticProps: GetStaticProps<MutariPianePageProps> = async () => 
     },
   };
 };
+

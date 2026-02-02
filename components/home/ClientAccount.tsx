@@ -167,7 +167,7 @@ export default function ClientAccount() {
                   >
                     <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-emerald-500/20 to-sky-500/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover/image:opacity-100" />
                     <Image
-                      src="/pics/client-dashboard.png"
+                      src="/pics/client-dashboard.webp"
                       alt="Dashboard client ofertemutare.ro"
                       width={400}
                       height={400}

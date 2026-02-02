@@ -214,7 +214,7 @@ export default function ContactPage() {
                 </span>
               </motion.div>
 
-              <h1 className="mb-8 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 className="mb-8 text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl">
                 Contactează
                 <br />
                 <span className="relative">
@@ -465,7 +465,7 @@ export default function ContactPage() {
                             <button
                               type="submit"
                               disabled={sending}
-                              className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-4 font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-70"
+                              className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-3 py-2 md:px-6 md:py-4 font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-70"
                             >
                               {sending ? (
                                 <>

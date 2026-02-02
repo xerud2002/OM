@@ -56,7 +56,7 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
               </span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Demontare &{" "}
               <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Montare Mobilă
@@ -89,7 +89,7 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-cyan-700 shadow-xl transition-all hover:bg-cyan-50 hover:shadow-2xl hover:-translate-y-0.5"
               >
                 Cere Oferte Gratuite
@@ -335,7 +335,7 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
               Primește oferte gratuite pentru demontare și montare mobilier în 24h.
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-cyan-700 shadow-xl transition-all hover:bg-cyan-50"
             >
               Cere Oferte Gratuite
@@ -355,3 +355,4 @@ export const getStaticProps: GetStaticProps<DemontareMontareMobilaPageProps> = a
     },
   };
 };
+

@@ -16,7 +16,10 @@ const USEFUL_LINKS = [
 const RESOURCES = [
   { href: "/blog", label: "Blog" },
   { href: "/faq", label: "Întrebări frecvente" },
-  { href: "/guides/mutare", label: "Ghid complet de mutare" },
+  { href: "/articole/mutare", label: "Ghid complet de mutare" },
+  { href: "/articole/cat-costa-mutarea-2026", label: "Cât costă o mutare 2026" },
+  { href: "/articole/sfaturi-mutari", label: "50+ Sfaturi pentru mutări" },
+  { href: "/articole/schimbare-adresa-documente", label: "Acte schimbare adresă" },
 ];
 
 const SERVICE_LINKS = [
@@ -30,6 +33,15 @@ const SERVICE_LINKS = [
   { href: "/servicii/depozitare", label: "Depozitare" },
   { href: "/mutari/specializate/piane", label: "Mutări Piane" },
   { href: "/servicii/debarasare", label: "Debarasare" },
+];
+
+const CITIES = [
+  { href: "/mutari/bucuresti", label: "Mutări București" },
+  { href: "/mutari/cluj-napoca", label: "Mutări Cluj-Napoca" },
+  { href: "/mutari/timisoara", label: "Mutări Timișoara" },
+  { href: "/mutari/iasi", label: "Mutări Iași" },
+  { href: "/mutari/brasov", label: "Mutări Brașov" },
+  { href: "/mutari/constanta", label: "Mutări Constanța" },
 ];
 
 const LEGAL = [
@@ -49,7 +61,7 @@ export default function Footer() {
   return (
     <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
       {/* Main content - using CSS animations instead of framer-motion */}
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-10 sm:grid-cols-2 sm:gap-10 sm:px-6 sm:py-14 lg:grid-cols-4">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-10 sm:grid-cols-2 sm:gap-10 sm:px-6 sm:py-14 md:grid-cols-3 lg:grid-cols-6">
         {/* Logo & about */}
         <div className="text-center sm:text-left">
           <div className="mb-4 flex items-center justify-center sm:mb-5 sm:justify-start">
@@ -89,7 +101,12 @@ export default function Footer() {
 
         {/* Service Links for SEO */}
         <div>
-          <FooterColumn title="Tipuri Servicii" links={SERVICE_LINKS} />
+          <FooterColumn title="Servicii" links={SERVICE_LINKS} />
+        </div>
+
+        {/* City Links for SEO */}
+        <div>
+          <FooterColumn title="Orașe populare" links={CITIES} />
         </div>
 
         {/* Legal & social */}

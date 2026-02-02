@@ -219,7 +219,7 @@ export default function CustomerAuthPage() {
                   Pentru Clienți
                 </motion.div>
 
-                <h2 className="mb-4 text-4xl font-bold text-emerald-950">
+                <h2 className="mb-4 text-2xl md:text-4xl font-bold text-emerald-950">
                   Mutări simple,
                   <br />
                   <span className="text-emerald-600">prețuri corecte.</span>
@@ -395,7 +395,7 @@ export default function CustomerAuthPage() {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-6 py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
+                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-3 py-2 md:px-6 md:py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {loading ? (

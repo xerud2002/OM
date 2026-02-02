@@ -2,6 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import {
     DocumentTextIcon as Document,
     HomeIcon as Home,
@@ -114,7 +117,7 @@ export default function GhidSchimbareAdresa() {
                 />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://ofertemutare.ro/articole/schimbare-adresa-documente" />
-                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.png" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.webp" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://ofertemutare.ro/articole/schimbare-adresa-documente" />
                 <meta name="twitter:title" content={`Ghid Schimbare Adresă ${currentYear}`} />
@@ -122,14 +125,28 @@ export default function GhidSchimbareAdresa() {
                     name="twitter:description"
                     content="Lista completă de documente pentru schimbarea buletinului și a adresei după mutare."
                 />
-                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.png" />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.webp" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </Head>
 
-            <LayoutWrapper>
+            
+      <ArticleSchema
+        title="Acte Necesare Schimbare Adresă/Domiciliu {currentYear} | Ghid Complet"
+        description="Articol despre mutări"
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/blog/guide-banner-v2.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Acte Necesare Schimbare Adresă/Domiciliu {currentYear} | Ghid Complet" },
+        ]}
+      />
+      <LayoutWrapper>
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
@@ -139,9 +156,14 @@ export default function GhidSchimbareAdresa() {
                                 Schimbare Adresă {currentYear}
                             </span>
                         </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              { id: "1-cum-schimbi-buletinul-pas-cu-pas", text: "1. Cum schimbi buletinul (Pas cu Pas)" },
+              { id: "te-ai-ncurcat-n-hrtii", text: "Te-ai încurcat în hârtii?" } 
+            ]} />
                         <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
-                                src="/pics/blog/guide-banner-v2.png"
+                                src="/pics/blog/guide-banner-v2.webp"
                                 alt="Acte Schimbare Adresa"
                                 width={1200}
                                 height={675}
@@ -202,7 +224,7 @@ export default function GhidSchimbareAdresa() {
 
                     {/* Detailed Steps for ID */}
                     <section className="mb-16 prose prose-slate max-w-none">
-                        <h2 className="text-3xl font-bold text-slate-900">1. Cum schimbi buletinul (Pas cu Pas)</h2>
+                        <h2 id="1-cum-schimbi-buletinul-pas-cu-pas" className="text-3xl font-bold text-slate-900">1. Cum schimbi buletinul (Pas cu Pas)</h2>
                         <p>
                             Trebuie să te prezinți la <strong>SPCLEP (Evidența Populației)</strong> de care aparține noua stradă.
                         </p>
@@ -222,7 +244,7 @@ export default function GhidSchimbareAdresa() {
 
                     {/* CTA */}
                     <section className="mt-16 rounded-2xl bg-slate-900 px-6 py-12 text-center text-white">
-                        <h2 className="mb-4 text-3xl font-bold">Te-ai încurcat în hârtii?</h2>
+                        <h2 id="te-ai-ncurcat-n-hrtii" className="mb-4 text-3xl font-bold">Te-ai încurcat în hârtii?</h2>
                         <p className="mb-8 text-slate-300">
                             Măcar mutarea fizică să fie simplă. Lasă greul în seama noastră.
                         </p>

@@ -21,7 +21,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
   return (
     <>
       <Head>
-        <title>Mutări Birouri {currentYear} → Relocare Firme</title>
+        <title>{`Mutări Birouri ${currentYear} → Relocare Firme`}</title>
         <meta
           name="description"
           content="Mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier, arhivă. Zero downtime! Primești 3-5 oferte GRATUITE în 24h."
@@ -70,7 +70,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
               <span className="text-sm font-medium text-slate-300">Servicii B2B • Corporativ</span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
               <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 Birouri & Companii
@@ -104,7 +104,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
 
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 font-bold text-white shadow-xl transition-all hover:-translate-y-0.5 hover:bg-emerald-600 hover:shadow-2xl"
               >
                 Solicită Ofertă B2B
@@ -353,7 +353,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
               Solicită o ofertă personalizată pentru compania ta. Răspundem în maxim 24h.
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="group inline-flex items-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 font-bold text-white shadow-xl transition-all hover:bg-emerald-600"
             >
               Solicită Ofertă B2B
@@ -373,3 +373,4 @@ export const getStaticProps: GetStaticProps<MutariCompaniiPageProps> = async () 
     },
   };
 };
+

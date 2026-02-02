@@ -34,7 +34,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
   return (
     <>
       <Head>
-        <title>Mutări Case și Vile {currentYear} | Transport Mobilă Complet</title>
+        <title>{`Mutări Case și Vile ${currentYear} | Transport Mobilă Complet`}</title>
         <meta
           name="description"
           content="Servicii complete de mutări case și vile în România. Transport mobilă voluminos, grădină, obiecte delicate. Primește 3-5 oferte GRATUITE în 24h!"
@@ -92,7 +92,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
               </span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
               <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Case și Vile
@@ -100,7 +100,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
             </h1>
 
             <p className="mb-8 max-w-2xl text-lg text-blue-100 md:text-xl">
-              Transport profesional pentru case mari, vile și proprietăți cu grădină. 
+              Transport profesional pentru case mari, vile și proprietăți cu grădină.
               Echipe experimentate pentru mobilier voluminos și obiecte delicate.
             </p>
 
@@ -126,7 +126,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-blue-700 shadow-xl transition-all hover:bg-blue-50 hover:shadow-2xl hover:-translate-y-0.5"
               >
                 Cere Oferte Gratuite
@@ -145,14 +145,14 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                Mutarea unei <strong>case sau vile</strong> implică provocări unice față de mutarea 
-                unui apartament. Volumul mai mare de bunuri, mobilierul masiv, obiectele de grădină, 
+                Mutarea unei <strong>case sau vile</strong> implică provocări unice față de mutarea
+                unui apartament. Volumul mai mare de bunuri, mobilierul masiv, obiectele de grădină,
                 și adesea distanțele mai mari fac această experiență mai complexă.
               </p>
               <p>
-                La <strong>OferteMutare.ro</strong>, conectăm proprietarii de case cu firme specializate 
-                care au experiență în gestionarea mutărilor de mari dimensiuni. De la demontarea 
-                mobilierului de terasă până la transportul sigur al obiectelor de artă și antichităților, 
+                La <strong>OferteMutare.ro</strong>, conectăm proprietarii de case cu firme specializate
+                care au experiență în gestionarea mutărilor de mari dimensiuni. De la demontarea
+                mobilierului de terasă până la transportul sigur al obiectelor de artă și antichităților,
                 partenerii noștri știu exact ce presupune mutarea unei case.
               </p>
             </div>
@@ -170,7 +170,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
                 <div>
                   <h3 className="font-bold text-gray-900">Transport mobilier masiv</h3>
                   <p className="text-gray-600">
-                    Canapele colțar, dulapuri mari, paturi king-size, biblioteci și piese de mobilier 
+                    Canapele colțar, dulapuri mari, paturi king-size, biblioteci și piese de mobilier
                     personalizat.
                   </p>
                 </div>
@@ -189,7 +189,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
                 <div>
                   <h3 className="font-bold text-gray-900">Electrocasnice mari</h3>
                   <p className="text-gray-600">
-                    Frigidere side-by-side, mașini de spălat, uscătoare, cuptoare și aparate de aer 
+                    Frigidere side-by-side, mașini de spălat, uscătoare, cuptoare și aparate de aer
                     condiționat.
                   </p>
                 </div>
@@ -231,7 +231,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
               </div>
             </div>
             <p className="mt-4 text-sm text-gray-600 text-center">
-              💡 Prețurile variază în funcție de distanță, volum și servicii suplimentare (împachetare, 
+              💡 Prețurile variază în funcție de distanță, volum și servicii suplimentare (împachetare,
               depozitare).
             </p>
           </section>
@@ -251,7 +251,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
                   <div>
                     <h3 className="font-bold text-gray-900">Vehicule potrivite pentru case</h3>
                     <p className="text-gray-600">
-                      Camioane de 3.5t, 7.5t și TIR pentru volume mari. Platforme pentru obiecte 
+                      Camioane de 3.5t, 7.5t și TIR pentru volume mari. Platforme pentru obiecte
                       foarte grele sau voluminoase.
                     </p>
                   </div>
@@ -265,7 +265,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
                   <div>
                     <h3 className="font-bold text-gray-900">Echipe mai mari, experiență dovedită</h3>
                     <p className="text-gray-600">
-                      Mutările de case necesită 4-6 persoane. Firmele noastre au echipe pregătite 
+                      Mutările de case necesită 4-6 persoane. Firmele noastre au echipe pregătite
                       pentru a gestiona volume mari eficient.
                     </p>
                   </div>
@@ -279,7 +279,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
                   <div>
                     <h3 className="font-bold text-gray-900">Grijă pentru obiectele tale valoroase</h3>
                     <p className="text-gray-600">
-                      Ambalare profesională pentru antichități, tablouri și obiecte fragile. 
+                      Ambalare profesională pentru antichități, tablouri și obiecte fragile.
                       Asigurare extinsă disponibilă.
                     </p>
                   </div>
@@ -298,28 +298,28 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
               <li className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
                 <span>
-                  <strong>Programează un survey:</strong> Pentru case, o evaluare la fața locului 
+                  <strong>Programează un survey:</strong> Pentru case, o evaluare la fața locului
                   este esențială pentru o ofertă corectă.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
                 <span>
-                  <strong>Verifică accesul:</strong> Asigură-te că există loc de parcare pentru 
+                  <strong>Verifică accesul:</strong> Asigură-te că există loc de parcare pentru
                   camionul mare la ambele adrese.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
                 <span>
-                  <strong>Declară obiectele valoroase:</strong> Antichități, tablouri sau mobilier 
+                  <strong>Declară obiectele valoroase:</strong> Antichități, tablouri sau mobilier
                   făcut la comandă necesită atenție specială.
                 </span>
               </li>
               <li className="flex items-start gap-3">
                 <CheckCircle className="h-5 w-5 shrink-0 text-amber-500 mt-1" />
                 <span>
-                  <strong>Rezervă din timp:</strong> Mutările de case durează mai mult - rezervă 
+                  <strong>Rezervă din timp:</strong> Mutările de case durează mai mult - rezervă
                   cu 4-6 săptămâni înainte.
                 </span>
               </li>
@@ -338,7 +338,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
               Primește 3-5 oferte gratuite în 24h de la firme specializate în mutări case și vile.
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-blue-700 shadow-xl transition-all hover:bg-blue-50"
             >
               Cere Oferte Gratuite Acum
@@ -358,3 +358,4 @@ export const getStaticProps: GetStaticProps<MutariCasePageProps> = async () => {
     },
   };
 };
+

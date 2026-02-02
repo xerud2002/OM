@@ -51,7 +51,7 @@ export default function PartnerSection() {
                   <div className="relative">
                     <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
                     <Image
-                      src="/pics/partner-section.png"
+                      src="/pics/partner-section.webp"
                       alt="Firme de mutări partenere ofertemutare.ro"
                       width={450}
                       height={350}

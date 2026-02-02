@@ -21,7 +21,7 @@ export default function MutariStudentiPage({ currentYear }: MutariStudentiPagePr
   return (
     <>
       <Head>
-        <title>Mutări Studenți {currentYear} → Prețuri de la 250 lei</title>
+        <title>{`Mutări Studenți ${currentYear} → Prețuri de la 250 lei`}</title>
         <meta
           name="description"
           content="Mutări studenți în România de la 250 lei! Transport cămine și garsoniere. Primești 3-5 oferte GRATUITE în 24h. Tarife speciale grupe!"
@@ -70,7 +70,7 @@ export default function MutariStudentiPage({ currentYear }: MutariStudentiPagePr
               </span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări pentru{" "}
               <span className="bg-gradient-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">
                 Studenți
@@ -104,7 +104,7 @@ export default function MutariStudentiPage({ currentYear }: MutariStudentiPagePr
 
             <div className="flex flex-col gap-4 sm:flex-row">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-orange-600 shadow-xl transition-all hover:-translate-y-0.5 hover:bg-orange-50 hover:shadow-2xl"
               >
                 Cere Oferte Gratuite
@@ -304,7 +304,7 @@ export default function MutariStudentiPage({ currentYear }: MutariStudentiPagePr
               Primește oferte gratuite în 24h și vezi cât economisești!
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-orange-600 shadow-xl transition-all hover:bg-orange-50"
             >
               Cere Oferte Gratuite Acum
@@ -324,3 +324,4 @@ export const getStaticProps: GetStaticProps<MutariStudentiPageProps> = async () 
     },
   };
 };
+

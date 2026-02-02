@@ -2,6 +2,9 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
+import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import ArticleMetadata from "@/components/content/ArticleMetadata";
+import TableOfContents from "@/components/content/TableOfContents";
 import {
     CurrencyEuroIcon as Currency,
     CheckCircleIcon as CheckCircle,
@@ -156,7 +159,7 @@ export default function ArticleCartiereBucuresti() {
                 />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://ofertemutare.ro/articole/cele-mai-bune-cartiere-bucuresti" />
-                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.png" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.webp" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://ofertemutare.ro/articole/cele-mai-bune-cartiere-bucuresti" />
                 <meta name="twitter:title" content={`Top 10 Cartiere București ${currentYear}`} />
@@ -164,14 +167,28 @@ export default function ArticleCartiereBucuresti() {
                     name="twitter:description"
                     content="Unde să locuiești în București? Ghid complet cu prețuri, transport și avantaje pentru fiecare zonă."
                 />
-                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.png" />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.webp" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
                 />
             </Head>
 
-            <LayoutWrapper>
+            
+      <ArticleSchema
+        title="Top 10 Cartiere București pentru Relocare {currentYear}"
+        description="Articol despre mutări"
+        datePublished="2026-02-02"
+        image="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.webp"
+      />
+      <BreadcrumbSchema
+        items={[
+          { name: "Acasă", url: "/" },
+          { name: "Articole", url: "/articole" },
+          { name: "Top 10 Cartiere București pentru Relocare {currentYear}" },
+        ]}
+      />
+      <LayoutWrapper>
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
@@ -181,9 +198,14 @@ export default function ArticleCartiereBucuresti() {
                                 București în {currentYear}
                             </span>
                         </h1>
+            <ArticleMetadata />
+            <TableOfContents items={[
+              
+              { id: "te-ai-hotrt-unde-te-mui", text: "Te-ai hotărât unde te muți?" } 
+            ]} />
                         <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
-                                src="/pics/blog/bucharest-neighborhoods-map.png"
+                                src="/pics/blog/bucharest-neighborhoods-map.webp"
                                 alt="Harta Cartiere Bucuresti"
                                 width={1200}
                                 height={675}
@@ -255,7 +277,7 @@ export default function ArticleCartiereBucuresti() {
 
                     {/* CTA */}
                     <section className="mt-16 rounded-2xl bg-indigo-900 px-6 py-12 text-center text-white">
-                        <h2 className="mb-4 text-3xl font-bold">Te-ai hotărât unde te muți?</h2>
+                        <h2 id="te-ai-hotrt-unde-te-mui" className="mb-4 text-3xl font-bold">Te-ai hotărât unde te muți?</h2>
                         <p className="mb-8 text-indigo-200">
                             Indiferent de cartierul ales, noi te ajutăm să ajungi acolo rapid și sigur.
                             Cere o ofertă de mutare personalizată.

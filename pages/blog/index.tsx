@@ -17,7 +17,7 @@ const blogPosts = [
     category: "Ghid Birocrație",
     readTime: "5 min",
     date: "22 Ian 2026",
-    image: "/pics/blog/guide-banner-v2.png",
+    image: "/pics/blog/guide-banner-v2.webp",
     gradient: "linear-gradient(to right, #f59e0b, #d97706)",
     link: "/articole/schimbare-adresa-documente",
   },
@@ -28,7 +28,7 @@ const blogPosts = [
     category: "Ghid Oraș",
     readTime: "6 min",
     date: "20 Ian 2026",
-    image: "/pics/blog/bucharest-neighborhoods-map.png",
+    image: "/pics/blog/bucharest-neighborhoods-map.webp",
     gradient: "linear-gradient(to right, #10b981, #059669)",
     link: "/articole/cele-mai-bune-cartiere-bucuresti",
   },
@@ -39,7 +39,7 @@ const blogPosts = [
     category: "Ghid Oraș",
     readTime: "7 min",
     date: "18 Ian 2026",
-    image: "/pics/blog/cluj-guide-2026.png",
+    image: "/pics/blog/cluj-guide-2026.webp",
     gradient: "linear-gradient(to right, #2563eb, #60a5fa)",
     link: "/articole/mutare-cluj-napoca",
   },
@@ -50,7 +50,7 @@ const blogPosts = [
     category: "Ghid Oraș",
     readTime: "8 min",
     date: "16 Ian 2026",
-    image: "/pics/blog/bucharest-guide-2026.png",
+    image: "/pics/blog/bucharest-guide-2026.webp",
     gradient: "linear-gradient(to right, #2563eb, #3b82f6)",
     link: "/articole/mutare-bucuresti-complet",
   },
@@ -62,7 +62,7 @@ const blogPosts = [
     category: "Costuri & Buget",
     readTime: "6 min",
     date: "14 Ian 2026",
-    image: "/pics/blog/moving-cost-2026.png",
+    image: "/pics/blog/moving-cost-2026.webp",
     gradient: "linear-gradient(to right, #059669, #34d399)",
   },
   {
@@ -73,7 +73,7 @@ const blogPosts = [
     category: "Împachetare",
     readTime: "5 min",
     date: "12 Ian 2026",
-    image: "/pics/blog/packing-fragile.png",
+    image: "/pics/blog/packing-fragile.webp",
     gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",
   },
   {
@@ -84,7 +84,7 @@ const blogPosts = [
     category: "Pregătire",
     readTime: "7 min",
     date: "10 Ian 2026",
-    image: "/pics/blog/moving-prep.png",
+    image: "/pics/blog/moving-prep.webp",
     gradient: "linear-gradient(to right, #10b981, #0d9488)",
   },
   {
@@ -95,7 +95,7 @@ const blogPosts = [
     category: "Sfaturi",
     readTime: "4 min",
     date: "08 Ian 2026",
-    image: "/pics/blog/video-survey-v2.png",
+    image: "/pics/blog/video-survey-v2.webp",
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
   },
   {
@@ -106,7 +106,7 @@ const blogPosts = [
     category: "Ghid Complet",
     readTime: "15 min",
     date: "06 Ian 2026",
-    image: "/pics/blog/guide-banner-v2.png",
+    image: "/pics/blog/guide-banner-v2.webp",
     gradient: "linear-gradient(to right, #f97316, #ef4444)",
     featured: true,
   },
@@ -153,7 +153,7 @@ export default function BlogPage() {
                   <BookOpen className="h-4 w-4 text-emerald-600" />
                   <span className="text-sm font-semibold text-emerald-700">Blog</span>
                 </div>
-                <h1 className="mb-5 text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
+                <h1 className="mb-5 text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
                   Sfaturi pentru o{" "}
                   <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                     mutare reușită

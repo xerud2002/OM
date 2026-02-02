@@ -171,7 +171,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                                     </span>
                                 </div>
 
-                                <h1 className="mb-6 text-center text-4xl font-extrabold text-white drop-shadow-lg md:text-left md:text-5xl lg:text-6xl">
+                                <h1 className="mb-6 text-center text-2xl md:text-4xl font-extrabold text-white drop-shadow-lg md:text-left md:text-5xl lg:text-6xl">
                                     <span className="text-white">Mutări în </span>
                                     <span className="relative inline-block">
                                         <span

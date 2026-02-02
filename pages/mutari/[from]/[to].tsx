@@ -121,22 +121,22 @@ export default function RoutePage({ routeData, formattedDate }: RoutePageProps) 
                                     <table className="w-full text-left">
                                         <thead className="bg-slate-100 text-sm font-semibold uppercase text-slate-500">
                                             <tr>
-                                                <th className="px-6 py-4">Tip Locuință</th>
-                                                <th className="px-6 py-4">Preț Estimat</th>
+                                                <th className="px-3 py-2 md:px-6 md:py-4">Tip Locuință</th>
+                                                <th className="px-3 py-2 md:px-6 md:py-4">Preț Estimat</th>
                                             </tr>
                                         </thead>
                                         <tbody className="divide-y divide-slate-100 text-slate-700">
                                             <tr>
-                                                <td className="px-6 py-4 font-medium">Garsonieră</td>
-                                                <td className="px-6 py-4 text-emerald-700 font-bold">{priceEstimate.studio}</td>
+                                                <td className="px-3 py-2 md:px-6 md:py-4 font-medium">Garsonieră</td>
+                                                <td className="px-3 py-2 md:px-6 md:py-4 text-emerald-700 font-bold">{priceEstimate.studio}</td>
                                             </tr>
                                             <tr>
-                                                <td className="px-6 py-4 font-medium">Apartament 2 Camere</td>
-                                                <td className="px-6 py-4 text-emerald-700 font-bold">{priceEstimate.twoRoom}</td>
+                                                <td className="px-3 py-2 md:px-6 md:py-4 font-medium">Apartament 2 Camere</td>
+                                                <td className="px-3 py-2 md:px-6 md:py-4 text-emerald-700 font-bold">{priceEstimate.twoRoom}</td>
                                             </tr>
                                             <tr>
-                                                <td className="px-6 py-4 font-medium">Casă / Vilă</td>
-                                                <td className="px-6 py-4 text-emerald-700 font-bold">{priceEstimate.house}</td>
+                                                <td className="px-3 py-2 md:px-6 md:py-4 font-medium">Casă / Vilă</td>
+                                                <td className="px-3 py-2 md:px-6 md:py-4 text-emerald-700 font-bold">{priceEstimate.house}</td>
                                             </tr>
                                         </tbody>
                                     </table>

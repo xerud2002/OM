@@ -2,6 +2,7 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
+import { BreadcrumbSchema, LocalBusinessSchema } from "@/components/seo/SchemaMarkup";
 import { ShoppingCartIcon as ShoppingCart, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ArchiveBoxIcon as Box, StopIcon as Circle, CurrencyDollarIcon as DollarSign, StarIcon as Star, CubeIcon as Package, Squares2X2Icon as Layers, ShieldCheckIcon as Shield, SparklesIcon as Sparkles, TruckIcon as Truck } from "@heroicons/react/24/outline";
 
 interface MaterialeImpachetarePageProps {
@@ -31,6 +32,9 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
+      <LocalBusinessSchema serviceName="Materiale Împachetare" />
+      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Împachetare", url: "/servicii/impachetare" }, { name: "Materiale" }]} />
+
       <LayoutWrapper>
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-brand py-20">
@@ -47,7 +51,7 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
               </span>
             </div>
 
-            <h1 className="mb-6 text-4xl font-extrabold text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Materiale{" "}
               <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Împachetare
@@ -55,7 +59,7 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
             </h1>
 
             <p className="mb-8 max-w-2xl text-lg text-indigo-100 md:text-xl">
-              Tot ce ai nevoie pentru o mutare perfectă: cutii rezistente, bubble wrap, 
+              Tot ce ai nevoie pentru o mutare perfectă: cutii rezistente, bubble wrap,
               folie stretch, hârtie protecție. Calitate profesională, preț accesibil!
             </p>
 
@@ -80,7 +84,7 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
 
             <div className="flex flex-col sm:flex-row gap-4">
               <Link
-                href="/customer/auth"
+                href="/#request-form"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-indigo-700 shadow-xl transition-all hover:bg-indigo-50 hover:shadow-2xl hover:-translate-y-0.5"
               >
                 Cere Ofertă
@@ -99,15 +103,15 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                Calitatea materialelor de împachetare poate face diferența între bunuri 
-                intacte și obiecte sparte. <strong>Cutii slabe se rup</strong>, bubble 
-                wrap-ul ieftin nu protejează, iar lipsa de folie stretch înseamnă mobilier 
+                Calitatea materialelor de împachetare poate face diferența între bunuri
+                intacte și obiecte sparte. <strong>Cutii slabe se rup</strong>, bubble
+                wrap-ul ieftin nu protejează, iar lipsa de folie stretch înseamnă mobilier
                 zgâriat.
               </p>
               <p>
-                Oferim <strong>materiale de calitate profesională</strong> - aceleași pe 
-                care le folosesc firmele de mutări. De la cutii cu pereți dubli și tripli, 
-                până la bubble wrap gros și folie industrială, ai tot ce îți trebuie pentru 
+                Oferim <strong>materiale de calitate profesională</strong> - aceleași pe
+                care le folosesc firmele de mutări. De la cutii cu pereți dubli și tripli,
+                până la bubble wrap gros și folie industrială, ai tot ce îți trebuie pentru
                 o mutare fără griji.
               </p>
             </div>
@@ -334,7 +338,7 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
                 <li>• <strong>Casă 4+ camere:</strong> 40-60 cutii, 20m bubble, 5 role folie</li>
               </ul>
               <p className="text-sm italic mt-4">
-                👉 Sfat: Mai bine să ai materiale în plus decât să descoperi că nu ai 
+                👉 Sfat: Mai bine să ai materiale în plus decât să descoperi că nu ai
                 destule în ziua mutării!
               </p>
             </div>
@@ -349,7 +353,7 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
               Primește oferte de la firme care furnizează materiale profesionale de împachetare!
             </p>
             <Link
-              href="/customer/auth"
+              href="/#request-form"
               className="group inline-flex items-center gap-2 rounded-xl bg-white px-8 py-4 font-bold text-indigo-700 shadow-xl transition-all hover:bg-indigo-50"
             >
               Cere Ofertă Acum
@@ -369,3 +373,4 @@ export const getStaticProps: GetStaticProps<MaterialeImpachetarePageProps> = asy
     },
   };
 };
+
