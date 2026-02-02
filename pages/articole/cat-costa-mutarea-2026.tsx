@@ -281,8 +281,8 @@ export default function ArticleCostMutare() {
                                 </tbody>
                             </table>
                         </div>
-                        <p className="mt-4 text-sm text-gray-500">
-                            *Prețurile sunt estimative pentru o mutare locală (sub 50km) și includ transport + manipulare standard.
+                        <p className="mt-4 text-xs md:text-sm text-gray-500">
+                            *Sursă date: <strong>OferteMutare.ro - Analiză Piață {currentYear}</strong>. Prețurile sunt estimative pentru o mutare locală (sub 50km) și includ transport + manipulare standard.
                         </p>
                     </section>
 

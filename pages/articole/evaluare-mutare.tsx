@@ -195,6 +195,9 @@ export default function ArticleSurvey() {
                   </tr>
                 </tbody>
               </table>
+                        <p className="mt-4 text-xs md:text-sm text-gray-500 px-2 pb-2">
+                            *Sursă date: <strong>OferteMutare.ro - Analiză Piață 2026</strong>. Datele sunt estimative și includ transport + manipulare standard.
+                        </p>
             </div>
             <p className="mt-4 text-sm text-gray-600">
               * Vizita fizică este gratuită pentru majoritatea firmelor, dar unele pot percepe taxă

@@ -4,6 +4,16 @@
 User-agent: *
 Allow: /
 
+# Explicitly allow AI Bots (GEO Strategy)
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
 # Block private/authenticated pages
 Disallow: /customer/dashboard
 Disallow: /customer/settings

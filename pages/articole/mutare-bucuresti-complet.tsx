@@ -280,6 +280,9 @@ export default function GuideBucuresti() {
                                     </tr>
                                 </tbody>
                             </table>
+                        <p className="mt-4 text-xs md:text-sm text-gray-500 px-2 pb-2">
+                            *Sursă date: <strong>OferteMutare.ro - Analiză Piață 2026</strong>. Datele sunt estimative și includ transport + manipulare standard.
+                        </p>
                         </div>
                         <div className="mt-6 text-center">
                             <Link href="/articole/cat-costa-mutarea-2026" className="text-emerald-600 font-semibold hover:text-emerald-700 underline">
