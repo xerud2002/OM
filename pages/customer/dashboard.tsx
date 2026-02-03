@@ -9,7 +9,6 @@ import {
   PlusCircleIcon as PlusSquare,
   ListBulletIcon as List,
   InboxIcon as Inbox,
-  ArchiveBoxIcon as ArchiveIcon,
   CheckCircleIcon as CheckCircle2,
   ChatBubbleBottomCenterTextIcon as MessageSquare,
 } from "@heroicons/react/24/outline";
@@ -23,8 +22,6 @@ import { sendEmail } from "@/utils/emailHelpers";
 import {
   createRequest as createRequestHelper,
   updateRequestStatus,
-  archiveRequest,
-  unarchiveRequest,
 } from "@/utils/firestoreHelpers";
 import { trackRequestCreated } from "@/utils/analytics";
 
@@ -66,7 +63,6 @@ type Request = {
   specialItems?: string;
   customerName?: string | null;
   customerEmail?: string | null;
-  archived?: boolean;
 };
 
 type Offer = {
@@ -81,7 +77,6 @@ export default function CustomerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
   const [requests, setRequests] = useState<Request[]>([]); // active (non-archived)
-  const [archivedRequests, setArchivedRequests] = useState<Request[]>([]);
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
   const autoSubmitTriggeredRef = useRef(false);
 
@@ -160,13 +155,13 @@ export default function CustomerDashboard() {
     };
   });
 
-  const [activeTab, setActiveTab] = useState<"new" | "requests" | "offers" | "archive">(() => {
+  const [activeTab, setActiveTab] = useState<"moves" | "new">(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("customerActiveTab");
-      if (saved === "new" || saved === "requests" || saved === "offers" || saved === "archive")
+      if (saved === "moves" || saved === "new")
         return saved as any;
     }
-    return "new";
+    return "moves";
   });
   // Two-column layout: we render selected content on the right; no modal needed
   const [loading, setLoading] = useState<boolean>(true);
@@ -286,7 +281,6 @@ export default function CustomerDashboard() {
       if (!u) {
         // Clear all data when user logs out
         setRequests([]);
-        setArchivedRequests([]);
         setOffersByRequest({});
         return;
       }
@@ -297,10 +291,7 @@ export default function CustomerDashboard() {
       );
       const unsub = onSnapshot(q, (snap) => {
         const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
-        const activeDocs = docs.filter((doc: any) => !doc.archived);
-        const archivedDocs = docs.filter((doc: any) => !!doc.archived);
-        setRequests(activeDocs);
-        setArchivedRequests(archivedDocs);
+        setRequests(docs);
         setLoading(false);
       });
       return () => unsub();
@@ -739,155 +730,115 @@ export default function CustomerDashboard() {
         </div>
 
         <section className="mx-auto max-w-350 px-4 py-6 sm:px-6 sm:py-10">
-          {/* Navigation Tabs - Modern pill style */}
-          <div className="mb-6 sm:mb-10">
-            <div className="flex flex-wrap justify-center gap-2 rounded-2xl bg-white p-2 shadow-xl shadow-gray-900/5 sm:inline-flex">
-              {/* Cerere Nouă */}
-              <button
-                onClick={() => setActiveTab("new")}
-                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
-                  activeTab === "new"
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
-              >
-                <PlusSquare className="h-4 w-4" />
-                <span className="hidden sm:inline">Cerere Nouă</span>
-                <span className="sm:hidden">Nouă</span>
-              </button>
+          {/* Navigation Tabs - Modern Segmented Control */}
+          <div className="mb-8 flex justify-center">
+            <div className="inline-flex rounded-2xl bg-white p-1.5 shadow-lg shadow-gray-900/5 ring-1 ring-gray-100">
+              {/* Dashboard */}
 
-              {/* Oferte */}
+
+              {/* My Moves (Unified) */}
               <button
-                onClick={() => setActiveTab("offers")}
-                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
-                  activeTab === "offers"
-                    ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-lg shadow-sky-500/30"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setActiveTab("moves")}
+                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
+                  activeTab === "moves"
+                    ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-md shadow-sky-500/20"
+                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <Inbox className="h-4 w-4" />
-                <span>Oferte</span>
+                <div className={`flex h-5 w-5 items-center justify-center rounded-full ${activeTab === 'moves' ? 'bg-white/20' : 'bg-gray-100'}`}>
+                   <List className="h-3 w-3" />
+                </div>
+                <span>Cererile Mele</span>
                 {totalOffers > 0 && (
-                  <span
-                    className={`rounded-full px-2.5 py-0.5 text-xs font-bold shadow-sm ${
-                      activeTab === "offers"
-                        ? "bg-white/20 text-white ring-1 ring-white/30"
-                        : "bg-emerald-500 text-white"
-                    }`}
-                  >
+                  <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold ${activeTab === 'moves' ? 'bg-white/20 text-white' : 'bg-emerald-500 text-white'}`}>
                     {totalOffers}
                   </span>
                 )}
               </button>
 
-              {/* Cererile mele */}
+              {/* Create New */}
               <button
-                onClick={() => setActiveTab("requests")}
-                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
-                  activeTab === "requests"
-                    ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg shadow-purple-500/30"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                onClick={() => setActiveTab("new")}
+                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
+                  activeTab === "new"
+                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/20"
+                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
-                <List className="h-4 w-4" />
-                <span className="hidden sm:inline">Cererile mele</span>
-                <span className="sm:hidden">Cereri</span>
-              </button>
-
-              {/* Arhivă */}
-              <button
-                onClick={() => setActiveTab("archive")}
-                className={`relative flex items-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition-all duration-300 sm:px-6 ${
-                  activeTab === "archive"
-                    ? "bg-gradient-to-r from-amber-500 to-orange-500 text-white shadow-lg shadow-amber-500/30"
-                    : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                }`}
-              >
-                <ArchiveIcon className="h-4 w-4" />
-                <span>Arhivă</span>
+                <div className={`flex h-5 w-5 items-center justify-center rounded-full ${activeTab === 'new' ? 'bg-white/20' : 'bg-gray-100'}`}>
+                  <PlusSquare className="h-3 w-3" />
+                </div>
+                <span>Cerere Nouă</span>
               </button>
             </div>
           </div>
 
-          {activeTab === "requests" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-100/50 sm:p-8"
-            >
-              {loading ? (
-                <div className="flex items-center justify-center py-16">
-                  <div className="text-center">
-                    <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-                    <p className="mt-5 text-gray-500">Se încarcă cererile...</p>
-                  </div>
+          {activeTab === "dashboard" && (
+            <div className="space-y-6">
+              {/* Stats Overview */}
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition-all hover:shadow-md">
+                   <div className="absolute top-0 right-0 p-4 opacity-5">
+                      <List className="h-24 w-24 -rotate-12" />
+                   </div>
+                   <p className="text-sm font-semibold text-gray-500">Cereri Active</p>
+                   <p className="mt-2 text-3xl font-bold text-gray-900">{requests.length}</p>
                 </div>
-              ) : sortedRequests.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-3xl bg-gradient-to-br from-emerald-50 via-teal-50 to-sky-50 p-12 text-center sm:p-16"
+                <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition-all hover:shadow-md">
+                   <div className="absolute top-0 right-0 p-4 opacity-5">
+                      <Inbox className="h-24 w-24 rotate-12" />
+                   </div>
+                   <p className="text-sm font-semibold text-gray-500">Oferte Primite</p>
+                   <p className="mt-2 text-3xl font-bold text-sky-600">{totalOffers}</p>
+                </div>
+                {/* CTA Card */}
+                <button 
+                  onClick={() => setActiveTab('new')}
+                  className="col-span-1 flex flex-col items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 p-6 text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 sm:col-span-2"
                 >
-                  <div className="relative">
-                    <div className="absolute inset-0 animate-ping rounded-full bg-emerald-400 opacity-20" />
-                    <div className="relative flex h-24 w-24 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-2xl shadow-emerald-500/40">
-                      <List className="h-10 w-10 text-white" />
-                    </div>
+                  <PlusSquare className="h-8 w-8" />
+                  <span className="text-lg font-bold">Creează o nouă cerere</span>
+                </button>
+              </div>
+
+               {/* Recent Requests Preview */}
+               <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
+                  <div className="mb-6 flex items-center justify-between">
+                    <h3 className="text-lg font-bold text-gray-900">Activitate Recentă</h3>
+                    <button onClick={() => setActiveTab('moves')} className="text-sm font-medium text-emerald-600 hover:text-emerald-700">
+                      Vezi tot
+                    </button>
                   </div>
-                  <h3 className="mt-8 text-2xl font-bold text-gray-900">Nicio cerere încă</h3>
-                  <p className="mt-4 max-w-md text-base text-gray-600">
-                    Începe acum și primește oferte personalizate de la firme de mutări verificate
-                  </p>
-                  <button
-                    onClick={() => setActiveTab("new")}
-                    className="group mt-8 inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-500 px-10 py-5 text-lg font-bold text-white shadow-2xl shadow-emerald-500/40 transition-all duration-300 hover:shadow-emerald-500/50"
-                  >
-                    <PlusSquare className="h-6 w-6 transition-transform group-hover:rotate-90" />
-                    Creează prima cerere
-                  </button>
-                </motion.div>
-              ) : (
-                <div className="grid grid-cols-1 gap-6">
-                  {sortedRequests.map((r, index) => (
-                    <motion.div
-                      key={r.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                    >
-                      <MyRequestCard
-                        request={r as any}
-                        offersCount={(offersByRequest[r.id] || []).length}
-                        onStatusChange={async (requestId, newStatus) => {
-                          try {
-                            await updateRequestStatus(requestId, newStatus);
-                            toast.success(
-                              newStatus === "closed"
-                                ? "Cererea a fost marcată ca închisă"
-                                : newStatus === "paused"
-                                  ? "Cererea a fost pusă în așteptare"
-                                  : "Cererea a fost reactivată"
-                            );
-                          } catch (error) {
-                            logger.error("Error updating status:", error);
-                            toast.error("Nu s-a putut actualiza statusul cererii");
-                          }
-                        }}
-                        onArchive={async (requestId) => {
-                          try {
-                            await archiveRequest(requestId);
-                            toast.success("Cererea a fost arhivată");
-                          } catch (error) {
-                            logger.error("Error archiving request:", error);
-                            toast.error("Nu s-a putut arhiva cererea");
-                          }
-                        }}
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </motion.div>
+                  
+                  {requests.length === 0 ? (
+                    <div className="text-center py-10 opacity-60">
+                      <Inbox className="mx-auto h-12 w-12 text-gray-300" />
+                      <p className="mt-2 text-sm text-gray-500">Nicio activitate recentă</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                       {requests.slice(0, 4).map(r => (
+                          <div key={r.id} onClick={() => { setSelectedRequestId(r.id); setActiveTab('moves'); }} className="cursor-pointer rounded-xl border border-gray-100 bg-gray-50/50 p-4 transition-all hover:border-emerald-200 hover:bg-emerald-50">
+                             <div className="flex justify-between">
+                                <span className="font-bold text-gray-800">{r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}</span>
+                                <span className="text-xs font-semibold text-gray-500">{formatMoveDateDisplay(r as any, { month: 'short' })}</span>
+                             </div>
+                             <div className="mt-2 flex items-center gap-2">
+                                <span className="rounded-lg bg-white px-2 py-1 text-xs font-medium text-gray-600 shadow-sm">
+                                   {(Number(r.rooms) || 0) + (Number((r as any).toRooms) || 0) || r.rooms} camere
+                                </span>
+                                {(offersByRequest[r.id] || []).length > 0 && (
+                                   <span className="rounded-lg bg-sky-100 px-2 py-1 text-xs font-bold text-sky-700">
+                                     {(offersByRequest[r.id] || []).length} oferte
+                                   </span>
+                                )}
+                             </div>
+                          </div>
+                       ))}
+                    </div>
+                  )}
+               </div>
+            </div>
           )}
 
           {activeTab === "new" && (
@@ -905,7 +856,7 @@ export default function CustomerDashboard() {
             </motion.div>
           )}
 
-          {activeTab === "offers" && (
+          {activeTab === "moves" && (
             <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/50">
               {requests.length === 0 ? (
                 <div className="p-12 text-center">
@@ -927,13 +878,12 @@ export default function CustomerDashboard() {
               ) : (
                 <div className="grid grid-cols-1 gap-0 lg:grid-cols-[320px,1fr]">
                   {/* Sidebar: requests list */}
-                  <aside className="border-b border-gray-100 bg-gradient-to-br from-gray-50 to-white lg:border-r lg:border-b-0">
-                    <div className="sticky top-20 max-h-[calc(100vh-120px)] overflow-auto p-5">
-                      <h3 className="mb-4 flex items-center gap-2 text-sm font-bold text-gray-900">
-                        <List className="h-4 w-4 text-emerald-600" />
-                        Selectează o cerere
+                  <aside className="border-b border-gray-100 bg-slate-50 lg:border-r lg:border-b-0">
+                    <div className="sticky top-20 max-h-[calc(100vh-120px)] overflow-auto p-4">
+                      <h3 className="mb-4 flex items-center gap-2 px-1 text-xs font-extrabold uppercase tracking-wider text-gray-400">
+                        Lista Cereri
                       </h3>
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {requests.map((r) => {
                           const cnt = (offersByRequest[r.id] || []).length;
                           const active = selectedRequestId === r.id;
@@ -941,18 +891,18 @@ export default function CustomerDashboard() {
                             <button
                               key={r.id}
                               onClick={() => setSelectedRequestId(r.id)}
-                              className={`w-full rounded-xl border-2 px-4 py-4 text-left transition-all duration-300 ${
+                              className={`w-full rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
                                 active
-                                  ? "border-emerald-400 bg-gradient-to-r from-emerald-50 to-teal-50 shadow-lg shadow-emerald-500/10"
-                                  : "border-transparent bg-white shadow-sm hover:border-gray-200 hover:shadow-md"
+                                  ? "border-sky-500 bg-white shadow-md shadow-sky-100 ring-1 ring-sky-500"
+                                  : "border-transparent hover:bg-white hover:shadow-sm"
                               }`}
                             >
-                              <div className="flex items-center justify-between gap-3">
+                              <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
                                   <p
-                                    className={`truncate font-bold ${active ? "text-emerald-700" : "text-gray-900"}`}
+                                    className={`truncate text-sm font-bold ${active ? "text-gray-900" : "text-gray-700"}`}
                                   >
-                                    {r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}
+                                    {r.fromCity || r.fromCounty} <span className="text-gray-400">→</span> {r.toCity || r.toCounty}
                                   </p>
                                   <p className="mt-1 text-xs text-gray-500">
                                     {(() => {
@@ -961,15 +911,17 @@ export default function CustomerDashboard() {
                                     })()}
                                   </p>
                                 </div>
-                                <span
-                                  className={`shrink-0 rounded-xl px-3 py-1 text-sm font-bold ${
-                                    active
-                                      ? "bg-emerald-500 text-white shadow-lg shadow-emerald-500/30"
-                                      : "bg-gray-100 text-gray-700"
-                                  }`}
-                                >
-                                  {cnt}
-                                </span>
+                                {cnt > 0 && (
+                                  <span
+                                    className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                                      active
+                                        ? "bg-sky-100 text-sky-700"
+                                        : "bg-gray-200 text-gray-600"
+                                    }`}
+                                  >
+                                    {cnt}
+                                  </span>
+                                )}
                               </div>
                             </button>
                           );
@@ -978,45 +930,55 @@ export default function CustomerDashboard() {
                     </div>
                   </aside>
 
-                  {/* Main: offers for selected request */}
-                  <main className="p-5 lg:p-8">
+                  {/* Main content for selected request */}
+                  <main className="bg-white p-5 lg:p-8">
                     {!selectedRequestId ? (
-                      <div className="flex flex-col items-center justify-center py-16 text-center">
-                        <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-                          <Inbox className="h-7 w-7 text-gray-400" />
-                        </div>
-                        <p className="text-gray-500">
-                          Selectează o cerere din stânga pentru a vedea ofertele.
-                        </p>
+                      <div className="flex flex-col items-center justify-center py-20 text-center opacity-50">
+                        <List className="h-16 w-16 text-gray-300" />
+                        <p className="mt-4 text-gray-500">Selectează o cerere din listă</p>
                       </div>
                     ) : (
                       <>
-                        <div className="mb-6 flex items-center justify-between">
+                        {/* Selected Request Header/Card */}
+                        {(() => {
+                           const r = requests.find(req => req.id === selectedRequestId);
+                           if (!r) return null;
+                           return (
+                             <div className="mb-8">
+                                <MyRequestCard
+                                  request={r as any}
+                                  offersCount={(offersByRequest[r.id] || []).length}
+                                  onStatusChange={async (requestId, newStatus) => {
+                                    try {
+                                      await updateRequestStatus(requestId, newStatus);
+                                      toast.success("Status actualizat!");
+                                    } catch (error) {
+                                      logger.error("Error updating status:", error);
+                                      toast.error("Eroare la actualizare");
+                                    }
+                                  }}
+                                />
+                             </div>
+                           )
+                        })()}
+
+                        {/* Offers Section */}
+                        <div className="mb-6 flex items-center justify-between border-t border-gray-100 pt-8">
                           <div>
-                            <h3 className="text-xl font-bold text-gray-900">Oferte primite</h3>
-                            <p className="mt-1 text-sm text-gray-500">
-                              Compară și selectează cea mai bună ofertă
-                            </p>
+                            <h3 className="text-xl font-bold text-gray-900">Oferte pentru această cerere</h3>
                           </div>
-                          <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-2">
-                            <span className="text-sm font-medium text-emerald-700">Total:</span>
-                            <span className="text-lg font-bold text-emerald-600">
+                          <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-1.5 ring-1 ring-gray-100">
+                            <span className="text-xs font-semibold text-gray-500">Total:</span>
+                            <span className="text-sm font-bold text-gray-900">
                               {(offersByRequest[selectedRequestId] || []).length}
                             </span>
                           </div>
                         </div>
 
                         {!(offersByRequest[selectedRequestId] || []).length ? (
-                          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-12 text-center">
-                            <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
-                              <Inbox className="h-9 w-9 text-white" />
-                            </div>
-                            <h4 className="mt-5 text-lg font-bold text-gray-900">
-                              Nicio ofertă încă
-                            </h4>
-                            <p className="mt-2 max-w-sm text-gray-500">
-                              Firmele verificate vor trimite oferte aici în curând. Te vom notifica!
-                            </p>
+                          <div className="rounded-2xl border-2 border-dashed border-gray-100 bg-gray-50/50 p-10 text-center">
+                             <p className="text-sm font-medium text-gray-500">Încă nu ai primit oferte pentru această cerere.</p>
+                             <p className="text-xs text-gray-400 mt-1">Vei fi notificat prin email când apar primele oferte.</p>
                           </div>
                         ) : (
                           <div className="space-y-4">
@@ -1036,14 +998,11 @@ export default function CustomerDashboard() {
                           </div>
                         )}
 
-                        {/* Comparison for selected request only */}
+                        {/* Comparison Table */}
                         {(offersByRequest[selectedRequestId] || []).length > 1 && (
-                          <div className="mt-8 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-gray-50/50 p-6 shadow-lg">
-                            <h3 className="mb-4 flex items-center gap-2 text-lg font-bold text-gray-900">
-                              <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-500 to-teal-500 text-white shadow-lg shadow-emerald-500/30">
-                                ⚖️
-                              </span>
-                              Compară oferte
+                          <div className="mt-8 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-slate-50 p-6 shadow-sm">
+                            <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-500">
+                               Compară Ofertele
                             </h3>
                             <OfferComparison
                               offers={(offersByRequest[selectedRequestId] as any[]).map((o) => ({
@@ -1070,72 +1029,7 @@ export default function CustomerDashboard() {
             </div>
           )}
 
-          {activeTab === "archive" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-xl shadow-gray-100/50 sm:p-8"
-            >
-              {loading ? (
-                <div className="flex items-center justify-center py-16">
-                  <div className="text-center">
-                    <div className="mx-auto h-14 w-14 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-                    <p className="mt-5 text-gray-500">Se încarcă arhiva...</p>
-                  </div>
-                </div>
-              ) : archivedRequests.length === 0 ? (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gradient-to-br from-gray-50 to-white p-14 text-center"
-                >
-                  <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-gray-400 to-gray-500 shadow-xl shadow-gray-500/20">
-                    <ArchiveIcon className="h-9 w-9 text-white" />
-                  </div>
-                  <h3 className="mt-6 text-xl font-bold text-gray-900">Arhivă goală</h3>
-                  <p className="mt-3 max-w-md text-gray-500">
-                    Cererile finalizate și arhivate vor apărea aici pentru referință.
-                  </p>
-                </motion.div>
-              ) : (
-                <div className="grid grid-cols-1 gap-6">
-                  {archivedRequests.map((r: any, index: number) => (
-                    <motion.div
-                      key={r.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: index * 0.05 }}
-                      className="space-y-3"
-                    >
-                      <MyRequestCard
-                        request={r as any}
-                        offersCount={0}
-                        readOnly
-                        onStatusChange={() => {}}
-                        onArchive={() => {}}
-                      />
-                      <div className="flex justify-end px-6">
-                        <button
-                          onClick={async () => {
-                            try {
-                              await unarchiveRequest(r.id);
-                              toast.success("Cererea a fost reactivată");
-                            } catch (error) {
-                              logger.error("Error unarchiving request:", error);
-                              toast.error("Nu s-a putut reactiva cererea");
-                            }
-                          }}
-                          className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all"
-                        >
-                          Reactivează
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              )}
-            </motion.div>
-          )}
+
         </section>
 
         {chatOffer && (

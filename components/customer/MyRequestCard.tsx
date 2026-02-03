@@ -1,29 +1,28 @@
 import { useState, memo } from "react";
-import { motion } from "framer-motion";
+// Remove motion import if not used elsewhere or keep for internal animations if desired
+// For reliability, we remove the root motion.div
 import {
   CalendarIcon as Calendar,
   MapPinIcon as MapPin,
   CubeIcon as Package,
   CheckCircleIcon as CheckCircle2,
   PauseCircleIcon as PauseCircle,
-  ArchiveBoxIcon as Archive,
   XCircleIcon as XCircle,
   EyeIcon as Eye,
   ArrowPathIcon as RotateCcw,
+  DocumentTextIcon as FileText,
+  UserIcon as User,
+  PhoneIcon as Phone,
 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import RequestDetailsModal from "./RequestDetailsModal";
-import ConfirmModal from "@/components/ConfirmModal";
 
 type MyRequestCardProps = {
   request: MovingRequest;
   offersCount: number;
   readOnly?: boolean;
-  // eslint-disable-next-line no-unused-vars
   onStatusChange: (requestId: string, newStatus: "active" | "closed" | "paused") => void;
-  // eslint-disable-next-line no-unused-vars
-  onArchive: (requestId: string) => void;
 };
 
 const MyRequestCard = memo(function MyRequestCard({
@@ -31,10 +30,8 @@ const MyRequestCard = memo(function MyRequestCard({
   offersCount,
   readOnly = false,
   onStatusChange,
-  onArchive,
 }: MyRequestCardProps) {
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-  const [showArchiveModal, setShowArchiveModal] = useState(false);
 
   // Normalize status to valid values
   const getStatus = (): "active" | "closed" | "paused" | "cancelled" => {
@@ -85,11 +82,7 @@ const MyRequestCard = memo(function MyRequestCard({
   };
 
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
+    <div
       className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-lg shadow-gray-100/50 transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
     >
       {/* Gradient accent bar */}
@@ -97,210 +90,140 @@ const MyRequestCard = memo(function MyRequestCard({
 
       <div className="p-4 sm:p-6">
         {/* Mobile: Stack vertically, Desktop: Side by side */}
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
-          {/* Main content */}
-          <div className="min-w-0 flex-1">
-            {/* Route - smaller on mobile */}
-            <div className="mb-3 flex items-center gap-2 sm:mb-4 sm:gap-3">
-              <div
-                style={
-                  status === "active"
-                    ? { background: "linear-gradient(135deg, #22c55e 0%, #3b82f6 100%)" }
-                    : status === "closed"
-                      ? { background: "linear-gradient(135deg, #9ca3af 0%, #6b7280 100%)" }
-                      : status === "paused"
-                        ? { background: "linear-gradient(135deg, #f59e0b 0%, #f97316 100%)" }
-                        : { background: "linear-gradient(135deg, #ef4444 0%, #f43f5e 100%)" }
-                }
-                className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow-lg sm:h-10 sm:w-10 sm:rounded-xl ${
-                  status === "active"
-                    ? "shadow-green-500/30"
-                    : status === "closed"
-                      ? "shadow-gray-500/20"
-                      : status === "paused"
-                        ? "shadow-amber-500/30"
-                        : "shadow-red-500/30"
-                }`}
-              >
-                <MapPin className="h-4 w-4 text-white sm:hidden" />
-                <MapPin className="h-5 w-5 hidden text-white sm:block" />
-              </div>
-              <h3 className="truncate text-base font-bold text-gray-900 sm:text-xl">
-                {request.fromCity || request.fromCounty}
-                <span className="mx-1.5 text-gray-300 sm:mx-2">→</span>
-                {request.toCity || request.toCounty}
-              </h3>
-            </div>
+        <div className="flex flex-col gap-4">
+          
+          {/* Header Row: Route + Status */}
+          <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
+             <div className="flex-1">
+                 {/* Route */}
+                 <div className="mb-2 flex items-center gap-2 sm:mb-3 sm:gap-3">
+                    <div
+                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-lg ${
+                            status === "active" ? "bg-gradient-to-br from-emerald-500 to-blue-500 shadow-emerald-500/30" :
+                            status === "closed" ? "bg-gradient-to-br from-gray-400 to-gray-500 shadow-gray-500/20" :
+                            status === "paused" ? "bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-500/30" :
+                            "bg-gradient-to-br from-red-500 to-rose-600 shadow-red-500/30"
+                        }`}
+                    >
+                        <MapPin className="h-5 w-5 text-white" />
+                    </div>
+                    <div>
+                        <h3 className="text-xl font-bold text-gray-900 leading-tight">
+                            {request.fromCity || "Oraș Plecare"}
+                            <span className="mx-2 text-gray-300">→</span>
+                            {request.toCity || "Oraș Destinație"}
+                        </h3>
+                        <p className="text-sm text-gray-500">
+                             {request.fromCounty === request.toCounty ? `Județul ${request.fromCounty}` : `${request.fromCounty} -> ${request.toCounty}`}
+                        </p>
+                    </div>
+                 </div>
 
-            {/* Request Code */}
-            {(request as any).requestCode && (
-              <div className="mb-3 sm:mb-4">
-                <span className="inline-flex items-center gap-1.5 rounded-lg bg-gray-100 px-2.5 py-1 font-mono text-xs font-semibold text-gray-700">
-                  <svg
-                    className="h-3.5 w-3.5 text-gray-500"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"
-                    />
-                  </svg>
-                  {(request as any).requestCode}
-                </span>
-              </div>
-            )}
+                 {/* Badges Row */}
+                 <div className="flex flex-wrap gap-2">
+                     {/* Status */}
+                     <span className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-bold uppercase tracking-wide ${
+                         status === "active" ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-200" :
+                         status === "closed" ? "bg-gray-100 text-gray-600 ring-1 ring-gray-200" :
+                         status === "paused" ? "bg-amber-50 text-amber-700 ring-1 ring-amber-200" :
+                         "bg-red-50 text-red-700 ring-1 ring-red-200"
+                     }`}>
+                         {getStatusLabel()}
+                     </span>
 
-            {/* Metadata badges - horizontal scroll on mobile */}
-            <div className="mb-3 flex flex-nowrap gap-2 overflow-x-auto pb-1 sm:mb-4 sm:flex-wrap sm:overflow-visible sm:pb-0">
-              {/* Status badge */}
-              <span
-                className={`shrink-0 ${
-                  status === "active"
-                    ? "inline-flex items-center gap-1 rounded-lg border border-green-200 bg-green-50 px-2 py-1 text-xs font-semibold text-green-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                    : status === "closed"
-                      ? "inline-flex items-center gap-1 rounded-lg border border-gray-200 bg-gray-50 px-2 py-1 text-xs font-semibold text-gray-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                      : status === "paused"
-                        ? "inline-flex items-center gap-1 rounded-lg border border-amber-200 bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                        : "inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 px-2 py-1 text-xs font-semibold text-red-700 shadow-sm sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm"
-                }`}
-              >
-                {status === "active" && <CheckCircle2 className="h-3 w-3 sm:hidden" />}
-                {status === "active" && <CheckCircle2 className="h-3.5 w-3.5 hidden sm:block" />}
-                {status === "closed" && <XCircle className="h-3 w-3 sm:hidden" />}
-                {status === "closed" && <XCircle className="h-3.5 w-3.5 hidden sm:block" />}
-                {status === "paused" && <PauseCircle className="h-3 w-3 sm:hidden" />}
-                {status === "paused" && <PauseCircle className="h-3.5 w-3.5 hidden sm:block" />}
-                {status === "cancelled" && <XCircle className="h-3 w-3 sm:hidden" />}
-                {status === "cancelled" && <XCircle className="h-3.5 w-3.5 hidden sm:block" />}
-                {getStatusLabel()}
-              </span>
+                     {/* Date */}
+                     {(() => {
+                        const d = formatMoveDateDisplay(request as any);
+                        return d && d !== '-' ? (
+                            <span className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-2.5 py-1 text-xs font-semibold text-blue-700 ring-1 ring-blue-100">
+                                <Calendar className="h-3.5 w-3.5" />
+                                {d}
+                            </span>
+                        ) : null;
+                     })()}
+                     
+                      {/* Rooms */}
+                      {request.rooms && (
+                        <span className="inline-flex items-center gap-1.5 rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700 ring-1 ring-indigo-100">
+                            <Package className="h-3.5 w-3.5" />
+                            {request.rooms} camere
+                        </span>
+                      )}
+                 </div>
+             </div>
 
-              {/* Date badge */}
-              {(() => {
-                const display = formatMoveDateDisplay(request as any, { month: "short" });
-                return display && display !== "-" ? (
-                  <span className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm">
-                    <Calendar className="h-3 w-3 text-gray-500 sm:hidden" />
-                    <Calendar className="h-3.5 w-3.5 hidden text-gray-500 sm:block" />
-                    {display}
-                  </span>
-                ) : null;
-              })()}
+             {/* Right: Offers & Actions */}
+             <div className="flex items-center justify-between gap-4 border-t border-gray-100 pt-4 sm:flex-col sm:items-end sm:border-0 sm:pt-0">
+                  <div className="flex items-center gap-3">
+                      <div className="text-right hidden sm:block">
+                          <p className="text-2xl font-bold text-gray-900 leading-none">{offersCount}</p>
+                          <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Oferte</p>
+                      </div>
+                      
+                      {/* Mobile Offer Badge */}
+                       <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900 text-white shadow-lg sm:hidden">
+                           <span className="font-bold">{offersCount}</span>
+                       </div>
 
-              {/* Rooms badge */}
-              {request.rooms && (
-                <span className="inline-flex shrink-0 items-center gap-1 rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700 sm:gap-1.5 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-sm">
-                  <Package className="h-3 w-3 text-gray-500 sm:hidden" />
-                  <Package className="h-3.5 w-3.5 hidden text-gray-500 sm:block" />
-                  {request.rooms} cam.
-                </span>
-              )}
-            </div>
-
-            {/* Services - horizontal scroll on mobile */}
-            {(request.serviceMoving ||
-              request.servicePacking ||
-              request.serviceDisassembly ||
-              request.serviceCleanout ||
-              request.serviceStorage) && (
-              <div className="mt-3 flex flex-nowrap gap-1.5 overflow-x-auto pb-1 sm:mt-4 sm:flex-wrap sm:gap-2 sm:overflow-visible sm:pb-0">
-                {request.serviceMoving && (
-                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                    Transport
-                  </span>
-                )}
-                {request.servicePacking && (
-                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                    Ambalare
-                  </span>
-                )}
-                {request.serviceDisassembly && (
-                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                    Demontare
-                  </span>
-                )}
-                {request.serviceCleanout && (
-                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                    Debarasare
-                  </span>
-                )}
-                {request.serviceStorage && (
-                  <span className="shrink-0 rounded-full bg-gradient-to-r from-purple-50 to-purple-100 px-2 py-0.5 text-[10px] font-semibold text-purple-700 ring-1 ring-purple-200 sm:px-3 sm:py-1 sm:text-xs">
-                    Depozitare
-                  </span>
-                )}
-              </div>
-            )}
+                      {!readOnly && (
+                         <div className="flex gap-1">
+                             <button
+                                onClick={() => setShowDetailsModal(true)}
+                                className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-all hover:border-emerald-500 hover:text-emerald-600 hover:shadow-md"
+                                title="Vezi Detalii"
+                             >
+                                 <Eye className="h-5 w-5" />
+                             </button>
+                             {status === 'active' && (
+                                 <button
+                                     onClick={() => onStatusChange(request.id, 'closed')}
+                                     className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-all hover:border-emerald-500 hover:text-emerald-600 hover:shadow-md"
+                                     title="Închide Cererea"
+                                 >
+                                     <CheckCircle2 className="h-5 w-5" />
+                                 </button>
+                             )}
+                         </div>
+                      )}
+                  </div>
+             </div>
+          </div>
+          
+          {/* Content Body: Details & Contact (NEW) */}
+          <div className="mt-2 rounded-xl border border-gray-100 bg-gray-50/50 p-4">
+               <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                   {/* Description */}
+                   <div>
+                       <h4 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400">
+                           <FileText className="h-3 w-3" />
+                           Detalii Mobilă
+                       </h4>
+                       <p className="text-sm leading-relaxed text-gray-700 line-clamp-3">
+                           {request.details || <span className="italic text-gray-400">Nu ai furnizat o listă detaliată de obiecte.</span>}
+                       </p>
+                   </div>
+                   
+                   {/* Contact Info Preview */}
+                   <div>
+                       <h4 className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-gray-400">
+                           <User className="h-3 w-3" />
+                           Date Contact
+                       </h4>
+                       <div className="space-y-1">
+                           <p className="text-sm font-semibold text-gray-900">
+                               {request.customerName || "Nume nespecificat"}
+                           </p>
+                           {request.phone && (
+                               <p className="flex items-center gap-1.5 text-sm text-gray-600">
+                                   <Phone className="h-3.5 w-3.5 text-emerald-500" />
+                                   {request.phone}
+                               </p>
+                           )}
+                       </div>
+                   </div>
+               </div>
           </div>
 
-          {/* Right side: Offers count + Menu - row on mobile, column on desktop */}
-          <div className="flex shrink-0 items-center justify-between gap-3 border-t border-gray-100 pt-3 sm:flex-col sm:items-end sm:border-0 sm:pt-0">
-            {/* Offers badge - smaller on mobile */}
-            <div
-              style={{
-                background: "linear-gradient(135deg, #22c55e 0%, #3b82f6 50%, #2563eb 100%)",
-              }}
-              className="relative flex h-14 w-14 items-center justify-center overflow-hidden rounded-xl shadow-lg shadow-green-500/30 sm:h-20 sm:w-20 sm:rounded-2xl sm:shadow-xl"
-            >
-              <div className="absolute inset-0 bg-white/10" />
-              <div className="text-center">
-                <div className="text-xl font-bold text-white sm:text-3xl">{offersCount}</div>
-                <div className="text-[10px] font-semibold text-white/90 sm:text-xs">oferte</div>
-              </div>
-            </div>
-
-            {/* Action buttons - horizontal row */}
-            {!readOnly && (
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                {/* View Details */}
-                <button
-                  onClick={() => setShowDetailsModal(true)}
-                  className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
-                  title="Vezi detalii cerere"
-                >
-                  <Eye className="h-4 w-4 sm:hidden" />
-                  <Eye className="h-4 w-4 hidden sm:block" />
-                </button>
-
-                {/* Status actions */}
-                {status === "active" && (
-                  <button
-                    onClick={() => onStatusChange(request.id, "closed")}
-                    className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
-                    title="Am găsit companie"
-                  >
-                    <CheckCircle2 className="h-4 w-4 sm:hidden" />
-                    <CheckCircle2 className="h-4 w-4 hidden sm:block" />
-                  </button>
-                )}
-
-                {/* Reopen for closed or paused */}
-                {(status === "closed" || status === "paused") && (
-                  <button
-                    onClick={() => onStatusChange(request.id, "active")}
-                    className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-600 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
-                    title="Redeschide cererea"
-                  >
-                    <RotateCcw className="h-4 w-4 sm:hidden" />
-                    <RotateCcw className="h-4 w-4 hidden sm:block" />
-                  </button>
-                )}
-
-                {/* Archive */}
-                <button
-                  onClick={() => setShowArchiveModal(true)}
-                  className="group flex h-9 w-9 items-center justify-center rounded-lg border border-gray-200 bg-white text-gray-600 shadow-sm transition-all hover:border-gray-300 hover:bg-gray-100 hover:text-gray-700 hover:shadow-md sm:h-10 sm:w-10 sm:rounded-xl"
-                  title="Arhivează cererea"
-                >
-                  <Archive className="h-4 w-4 sm:hidden" />
-                  <Archive className="h-4 w-4 hidden sm:block" />
-                </button>
-              </div>
-            )}
-          </div>
         </div>
       </div>
 
@@ -310,20 +233,7 @@ const MyRequestCard = memo(function MyRequestCard({
         isOpen={showDetailsModal}
         onClose={() => setShowDetailsModal(false)}
       />
-
-      {/* Archive Confirm Modal */}
-      <ConfirmModal
-        isOpen={showArchiveModal}
-        onClose={() => setShowArchiveModal(false)}
-        onConfirm={() => onArchive(request.id)}
-        title="Arhivează cererea"
-        message="Sigur vrei să arhivezi această cerere? O vei putea vedea în secțiunea Arhivă."
-        confirmText="Arhivează"
-        cancelText="Anulează"
-        variant="warning"
-        icon="archive"
-      />
-    </motion.div>
+    </div>
   );
 });
 

@@ -120,8 +120,13 @@ export async function ensureUserProfile(u: User, role: UserRole) {
 
 export async function getUserRole(u: User): Promise<UserRole | "admin" | null> {
   // Check admin first
-  const admin = await getDoc(doc(db, COLLECTIONS.admin, u.uid));
-  if (admin.exists()) return "admin";
+  try {
+    const admin = await getDoc(doc(db, COLLECTIONS.admin, u.uid));
+    if (admin.exists()) return "admin";
+  } catch (err) {
+    // If permission denied (e.g. rules not updated yet), ignore and proceed
+    // This prevents the app from crashing/showing error toast just for checking admin
+  }
 
   // Try in customers first, then companies
   const customer = await getDoc(doc(db, COLLECTIONS.customer, u.uid));

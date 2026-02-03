@@ -3,7 +3,7 @@ import { ListBulletIcon as List, PlusCircleIcon as PlusSquare } from "@heroicons
 import { toast } from "sonner";
 import { logger } from "@/utils/logger";
 import MyRequestCard from "@/components/customer/MyRequestCard";
-import { updateRequestStatus, archiveRequest } from "@/utils/firestoreHelpers";
+import { updateRequestStatus } from "@/utils/firestoreHelpers";
 
 type Request = {
   id: string;
@@ -22,7 +22,6 @@ type Request = {
   specialItems?: string;
   customerName?: string | null;
   customerEmail?: string | null;
-  archived?: boolean;
 };
 
 interface RequestsListProps {
@@ -54,16 +53,6 @@ export default function RequestsList({
     } catch (error) {
       logger.error("Error updating status:", error);
       toast.error("Nu s-a putut actualiza statusul cererii");
-    }
-  };
-
-  const handleArchive = async (requestId: string) => {
-    try {
-      await archiveRequest(requestId);
-      toast.success("Cererea a fost arhivată");
-    } catch (error) {
-      logger.error("Error archiving request:", error);
-      toast.error("Nu s-a putut arhiva cererea");
     }
   };
 
@@ -119,7 +108,6 @@ export default function RequestsList({
             request={r as any}
             offersCount={(offersByRequest[r.id] || []).length}
             onStatusChange={handleStatusChange}
-            onArchive={handleArchive}
           />
         </motion.div>
       ))}

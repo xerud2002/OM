@@ -11,6 +11,12 @@ service cloud.firestore {
     function canCreateCustomer() { return !isCompany(); }
     function canCreateCompany() { return !isCustomer(); }
 
+    // === ADMINS COLLECTION ===
+    match /admins/{adminId} {
+      allow read: if isSignedIn() && request.auth.uid == adminId;
+      allow write: if false;
+    }
+
     // === CUSTOMERS COLLECTION ===
     match /customers/{customerId} {
       allow read: if isSignedIn() && request.auth.uid == customerId;
