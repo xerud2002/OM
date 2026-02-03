@@ -1,6 +1,5 @@
 import { useState, memo } from "react";
-// Remove motion import if not used elsewhere or keep for internal animations if desired
-// For reliability, we remove the root motion.div
+
 import {
   CalendarIcon as Calendar,
   MapPinIcon as MapPin,

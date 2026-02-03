@@ -12,6 +12,7 @@ import {
   CheckCircleIcon as CheckCircle2,
   ChatBubbleBottomCenterTextIcon as MessageSquare,
 } from "@heroicons/react/24/outline";
+import { MovingRequest, Offer } from "@/types";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
@@ -46,37 +47,12 @@ const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
   ssr: false,
 });
 
-type Request = {
-  id: string;
-  fromCity?: string;
-  toCity?: string;
-  moveDate?: string;
-  details?: string;
-  fromCounty?: string;
-  toCounty?: string;
-  rooms?: number | string;
-  volumeM3?: number;
-  phone?: string;
-  budgetEstimate?: number;
-  needPacking?: boolean;
-  hasElevator?: boolean;
-  specialItems?: string;
-  customerName?: string | null;
-  customerEmail?: string | null;
-};
 
-type Offer = {
-  id: string;
-  companyName?: string;
-  price?: number;
-  message?: string;
-  status?: "pending" | "accepted" | "declined";
-};
 
 export default function CustomerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any>(null);
-  const [requests, setRequests] = useState<Request[]>([]); // active (non-archived)
+  const [requests, setRequests] = useState<MovingRequest[]>([]); // active (non-archived)
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
   const autoSubmitTriggeredRef = useRef(false);
 
@@ -290,7 +266,7 @@ export default function CustomerDashboard() {
         orderBy("createdAt", "desc")
       );
       const unsub = onSnapshot(q, (snap) => {
-        const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) }));
+        const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as MovingRequest[];
         setRequests(docs);
         setLoading(false);
       });
@@ -348,7 +324,7 @@ export default function CustomerDashboard() {
             id: d.id,
             requestId: r.id,
             ...(d.data() as any),
-          }));
+          })) as Offer[];
           setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
         },
         (error) => {
@@ -773,73 +749,7 @@ export default function CustomerDashboard() {
             </div>
           </div>
 
-          {activeTab === "dashboard" && (
-            <div className="space-y-6">
-              {/* Stats Overview */}
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition-all hover:shadow-md">
-                   <div className="absolute top-0 right-0 p-4 opacity-5">
-                      <List className="h-24 w-24 -rotate-12" />
-                   </div>
-                   <p className="text-sm font-semibold text-gray-500">Cereri Active</p>
-                   <p className="mt-2 text-3xl font-bold text-gray-900">{requests.length}</p>
-                </div>
-                <div className="relative overflow-hidden rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100 transition-all hover:shadow-md">
-                   <div className="absolute top-0 right-0 p-4 opacity-5">
-                      <Inbox className="h-24 w-24 rotate-12" />
-                   </div>
-                   <p className="text-sm font-semibold text-gray-500">Oferte Primite</p>
-                   <p className="mt-2 text-3xl font-bold text-sky-600">{totalOffers}</p>
-                </div>
-                {/* CTA Card */}
-                <button 
-                  onClick={() => setActiveTab('new')}
-                  className="col-span-1 flex flex-col items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 p-6 text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-emerald-500/30 sm:col-span-2"
-                >
-                  <PlusSquare className="h-8 w-8" />
-                  <span className="text-lg font-bold">Creează o nouă cerere</span>
-                </button>
-              </div>
 
-               {/* Recent Requests Preview */}
-               <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-                  <div className="mb-6 flex items-center justify-between">
-                    <h3 className="text-lg font-bold text-gray-900">Activitate Recentă</h3>
-                    <button onClick={() => setActiveTab('moves')} className="text-sm font-medium text-emerald-600 hover:text-emerald-700">
-                      Vezi tot
-                    </button>
-                  </div>
-                  
-                  {requests.length === 0 ? (
-                    <div className="text-center py-10 opacity-60">
-                      <Inbox className="mx-auto h-12 w-12 text-gray-300" />
-                      <p className="mt-2 text-sm text-gray-500">Nicio activitate recentă</p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                       {requests.slice(0, 4).map(r => (
-                          <div key={r.id} onClick={() => { setSelectedRequestId(r.id); setActiveTab('moves'); }} className="cursor-pointer rounded-xl border border-gray-100 bg-gray-50/50 p-4 transition-all hover:border-emerald-200 hover:bg-emerald-50">
-                             <div className="flex justify-between">
-                                <span className="font-bold text-gray-800">{r.fromCity || r.fromCounty} → {r.toCity || r.toCounty}</span>
-                                <span className="text-xs font-semibold text-gray-500">{formatMoveDateDisplay(r as any, { month: 'short' })}</span>
-                             </div>
-                             <div className="mt-2 flex items-center gap-2">
-                                <span className="rounded-lg bg-white px-2 py-1 text-xs font-medium text-gray-600 shadow-sm">
-                                   {(Number(r.rooms) || 0) + (Number((r as any).toRooms) || 0) || r.rooms} camere
-                                </span>
-                                {(offersByRequest[r.id] || []).length > 0 && (
-                                   <span className="rounded-lg bg-sky-100 px-2 py-1 text-xs font-bold text-sky-700">
-                                     {(offersByRequest[r.id] || []).length} oferte
-                                   </span>
-                                )}
-                             </div>
-                          </div>
-                       ))}
-                    </div>
-                  )}
-               </div>
-            </div>
-          )}
 
           {activeTab === "new" && (
             <motion.div
