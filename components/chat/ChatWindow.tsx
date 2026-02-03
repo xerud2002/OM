@@ -1,15 +1,13 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { 
-  collection, 
-  query, 
-  orderBy, 
-  onSnapshot, 
-  addDoc, 
-  serverTimestamp, 
-  doc, 
-  updateDoc 
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  addDoc,
+  serverTimestamp
 } from "firebase/firestore";
 import { db, auth } from "@/services/firebase";
 import { PaperAirplaneIcon, XMarkIcon } from "@heroicons/react/24/solid";
@@ -49,7 +47,7 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
     const unsub = onSnapshot(q, (snapshot) => {
       const msgs = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Message));
       setMessages(msgs);
-      
+
       // Auto-scroll to bottom
       setTimeout(() => {
         if (scrollRef.current) {
@@ -64,7 +62,7 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
   const handleSend = async (e?: React.FormEvent) => {
     e?.preventDefault();
     if (!newMessage.trim() || !auth.currentUser) return;
-    
+
     const text = newMessage.trim();
     setNewMessage("");
     setSending(true);
@@ -97,7 +95,7 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
             Chat cu {otherPartyName}
           </h3>
           <p className="text-xs text-slate-500">
-             Discută detaliile ofertei
+            Discută detaliile ofertei
           </p>
         </div>
         <button
@@ -109,15 +107,15 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
       </div>
 
       {/* Messages */}
-      <div 
+      <div
         ref={scrollRef}
         className="flex-1 overflow-y-auto bg-slate-50 px-4 py-6 sm:px-6"
       >
         <div className="space-y-4">
           {messages.length === 0 && (
-             <div className="py-10 text-center text-sm text-slate-400">
-               Începe conversația...
-             </div>
+            <div className="py-10 text-center text-sm text-slate-400">
+              Începe conversația...
+            </div>
           )}
           {messages.map((msg) => {
             const isMe = msg.senderRole === currentUserRole;
@@ -127,11 +125,10 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
                 className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm shadow-sm ${
-                    isMe
+                  className={`max-w-[80%] rounded-2xl px-4 py-2 text-sm shadow-sm ${isMe
                       ? "bg-emerald-600 text-white rounded-br-none"
                       : "bg-white text-slate-900 rounded-bl-none ring-1 ring-slate-200"
-                  }`}
+                    }`}
                 >
                   <p>{msg.text}</p>
                   <p className={`mt-1 text-[10px] ${isMe ? "text-emerald-100" : "text-slate-400"}`}>
@@ -146,7 +143,7 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
 
       {/* Input */}
       <div className="border-t bg-white p-4 sm:px-6">
-        <form 
+        <form
           onSubmit={handleSend}
           className="flex items-center gap-2"
         >

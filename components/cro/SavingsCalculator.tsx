@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { trackCalculatorUsage } from "@/utils/analytics";
 import { motion } from "framer-motion";
 import Link from "next/link";
@@ -18,19 +18,19 @@ export default function SavingsCalculator() {
     if (selectedCounty === "București") {
       return ["Sector 1", "Sector 2", "Sector 3", "Sector 4", "Sector 5", "Sector 6"];
     }
-    return selectedCounty && (cities as Record<string, string[]>)[selectedCounty] 
-      ? (cities as Record<string, string[]>)[selectedCounty] 
+    return selectedCounty && (cities as Record<string, string[]>)[selectedCounty]
+      ? (cities as Record<string, string[]>)[selectedCounty]
       : [];
   };
 
   // Build serviceType key from property + rooms
-  const getServiceKey = () => {
+  const getServiceKey = useCallback(() => {
     if (propertyType === "birou") {
       return parseInt(rooms) <= 2 ? "birou-mic" : "birou-mare";
     }
     return `${propertyType}-${rooms}`;
-  };
-  
+  }, [propertyType, rooms]);
+
   // Track usage
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -39,8 +39,8 @@ export default function SavingsCalculator() {
     }, 600);
 
     return () => clearTimeout(timer);
-  }, [propertyType, rooms, county]);
-  
+  }, [propertyType, rooms, county, getServiceKey]);
+
   const calculatePrices = (type: string, selectedCounty: string) => {
     const basePrices: Record<string, number> = {
       // Apartament
@@ -99,7 +99,7 @@ export default function SavingsCalculator() {
 
     const basePrice = basePrices[type] || 900;
     const multiplier = countyMultiplier[selectedCounty] || 1.0;
-    
+
     const estimatedAvg = Math.round(basePrice * multiplier);
     const minPrice = Math.round(estimatedAvg * 0.85);
     const maxPrice = Math.round(estimatedAvg * 1.25);
@@ -114,7 +114,7 @@ export default function SavingsCalculator() {
       {/* Decorative background elements */}
       <div className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-orange-50 blur-3xl"></div>
       <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-blue-50 blur-3xl"></div>
-      
+
       <div className="relative p-6 md:p-10">
         <div className="mb-10 flex flex-col items-center text-center">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-600 shadow-lg shadow-orange-500/20 text-white">
@@ -269,16 +269,16 @@ export default function SavingsCalculator() {
             <div className="mb-8 text-center">
               <p className="mb-2 text-sm font-medium uppercase tracking-wider text-gray-500">Buget Estimat</p>
               <div className="flex items-center justify-center gap-2 md:gap-4">
-                <motion.div 
+                <motion.div
                   key={`min-${minPrice}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   className="text-3xl font-extrabold text-gray-900 md:text-5xl"
                 >
-                  {minPrice} 
+                  {minPrice}
                 </motion.div>
                 <span className="text-2xl font-light text-gray-300 md:text-4xl">—</span>
-                <motion.div 
+                <motion.div
                   key={`max-${maxPrice}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}

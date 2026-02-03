@@ -58,6 +58,9 @@ export type MovingRequest = {
   customerId: string;
   customerName?: string;
   customerEmail?: string;
+  contactName?: string; // Explicit contact name from form
+  contactFirstName?: string;
+  contactLastName?: string;
   fromCity: string;
   fromCounty?: string;
   fromAddress?: string; // Deprecated: folosit pentru compatibilitate backward

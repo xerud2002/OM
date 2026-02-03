@@ -1,7 +1,5 @@
 import React, { useMemo, useState } from "react";
 import {
-  CheckIcon as Check,
-  XMarkIcon as X,
   ArrowsUpDownIcon as ArrowUpDown,
   StarIcon as Star,
   ChatBubbleLeftEllipsisIcon as ChatIcon
@@ -103,13 +101,12 @@ export default function OfferComparison({ offers, onAccept, onDecline, onChat }:
                 <p className="text-lg font-bold text-emerald-600">{o.price ?? "-"} <span className="text-xs font-normal text-gray-500">RON</span></p>
                 {o.status && (
                   <span
-                    className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
-                      o.status === "accepted"
+                    className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${o.status === "accepted"
                         ? "bg-emerald-100 text-emerald-700"
                         : o.status === "declined"
                           ? "bg-rose-100 text-rose-700"
                           : "bg-amber-100 text-amber-700"
-                    }`}
+                      }`}
                   >
                     {o.status}
                   </span>
@@ -119,9 +116,9 @@ export default function OfferComparison({ offers, onAccept, onDecline, onChat }:
 
             <div className="mt-auto flex gap-2 pt-2">
               <button
-                 onClick={() => onChat(o)}
-                 className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-blue-50 hover:text-blue-600"
-                 title="Chat cu compania"
+                onClick={() => onChat(o)}
+                className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-blue-50 hover:text-blue-600"
+                title="Chat cu compania"
               >
                 <ChatIcon className="h-5 w-5" />
               </button>

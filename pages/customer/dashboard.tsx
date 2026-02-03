@@ -14,9 +14,9 @@ import {
 } from "@heroicons/react/24/outline";
 import { MovingRequest, Offer } from "@/types";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
-import { toast } from "sonner";
+
 import { motion } from "framer-motion";
-import { db, auth } from "@/services/firebase";
+import { db } from "@/services/firebase";
 import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { sendEmail } from "@/utils/emailHelpers";
@@ -56,7 +56,7 @@ const RequestFullDetails = dynamic(() => import("@/components/customer/RequestFu
 
 export default function CustomerDashboard() {
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [requests, setRequests] = useState<MovingRequest[]>([]); // active (non-archived)
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
   const autoSubmitTriggeredRef = useRef(false);
@@ -144,8 +144,7 @@ export default function CustomerDashboard() {
     }
     return "moves";
   });
-  // Two-column layout: we render selected content on the right; no modal needed
-  const [loading, setLoading] = useState<boolean>(true);
+
 
   const totalOffers = useMemo(() => {
     const allOffers = Object.values(offersByRequest).flat();
@@ -248,13 +247,7 @@ export default function CustomerDashboard() {
     }
   };
 
-  // Sort requests by creation date (newest first)
-  const sortedRequests = useMemo(() => {
-    const list = [...requests];
-    const getCreated = (r: any) =>
-      r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
-    return list.sort((a: any, b: any) => getCreated(b) - getCreated(a));
-  }, [requests]);
+
 
   useEffect(() => {
     const unsubAuth = onAuthChange((u: any) => {
@@ -273,7 +266,7 @@ export default function CustomerDashboard() {
       const unsub = onSnapshot(q, (snap) => {
         const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as MovingRequest[];
         setRequests(docs);
-        setLoading(false);
+
       });
       return () => unsub();
     });
@@ -619,7 +612,7 @@ export default function CustomerDashboard() {
         localStorage.removeItem("customerDashboardForm");
         localStorage.removeItem("homeRequestForm"); // Also clear home page form
       }
-      setActiveTab("requests");
+      setActiveTab("moves");
     } catch (err) {
       logger.error("Failed to submit request", err);
       toast.error("Eroare la trimiterea cererii. Te rugăm să încerci din nou.");
@@ -720,14 +713,13 @@ export default function CustomerDashboard() {
               {/* My Moves (Unified) */}
               <button
                 onClick={() => setActiveTab("moves")}
-                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
-                  activeTab === "moves"
-                    ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-md shadow-sky-500/20"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${activeTab === "moves"
+                  ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-md shadow-sky-500/20"
+                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
               >
                 <div className={`flex h-5 w-5 items-center justify-center rounded-full ${activeTab === 'moves' ? 'bg-white/20' : 'bg-gray-100'}`}>
-                   <List className="h-3 w-3" />
+                  <List className="h-3 w-3" />
                 </div>
                 <span>Cererile Mele</span>
                 {totalOffers > 0 && (
@@ -740,11 +732,10 @@ export default function CustomerDashboard() {
               {/* Create New */}
               <button
                 onClick={() => setActiveTab("new")}
-                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${
-                  activeTab === "new"
-                    ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/20"
-                    : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                }`}
+                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${activeTab === "new"
+                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/20"
+                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
+                  }`}
               >
                 <div className={`flex h-5 w-5 items-center justify-center rounded-full ${activeTab === 'new' ? 'bg-white/20' : 'bg-gray-100'}`}>
                   <PlusSquare className="h-3 w-3" />
@@ -806,11 +797,10 @@ export default function CustomerDashboard() {
                             <button
                               key={r.id}
                               onClick={() => setSelectedRequestId(r.id)}
-                              className={`w-full rounded-xl border px-4 py-3 text-left transition-all duration-200 ${
-                                active
-                                  ? "border-sky-500 bg-white shadow-md shadow-sky-100 ring-1 ring-sky-500"
-                                  : "border-transparent hover:bg-white hover:shadow-sm"
-                              }`}
+                              className={`w-full rounded-xl border px-4 py-3 text-left transition-all duration-200 ${active
+                                ? "border-sky-500 bg-white shadow-md shadow-sky-100 ring-1 ring-sky-500"
+                                : "border-transparent hover:bg-white hover:shadow-sm"
+                                }`}
                             >
                               <div className="flex items-start justify-between gap-3">
                                 <div className="min-w-0">
@@ -828,11 +818,10 @@ export default function CustomerDashboard() {
                                 </div>
                                 {cnt > 0 && (
                                   <span
-                                    className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                                      active
-                                        ? "bg-sky-100 text-sky-700"
-                                        : "bg-gray-200 text-gray-600"
-                                    }`}
+                                    className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${active
+                                      ? "bg-sky-100 text-sky-700"
+                                      : "bg-gray-200 text-gray-600"
+                                      }`}
                                   >
                                     {cnt}
                                   </span>
@@ -856,31 +845,31 @@ export default function CustomerDashboard() {
                       <>
                         {/* Selected Request Header/Card */}
                         {(() => {
-                           const r = requests.find(req => req.id === selectedRequestId);
-                           if (!r) return null;
-                           return (
-                             <div className="mb-8 space-y-8">
-                                <MyRequestCard
-                                  request={r as any}
-                                  offersCount={(offersByRequest[r.id] || []).length}
-                                  onStatusChange={async (requestId, newStatus) => {
-                                    try {
-                                      await updateRequestStatus(requestId, newStatus);
-                                      const { toast } = await import("sonner");
-                                      toast.success("Status actualizat!");
-                                    } catch (error) {
-                                      logger.error("Error updating status:", error);
-                                      const { toast } = await import("sonner");
-                                      toast.error("Eroare la actualizare");
-                                    }
-                                  }}
-                                />
-                                <RequestFullDetails 
-                                  request={r} 
-                                  isOwner={user?.uid === r.customerId}
-                                />
-                             </div>
-                           )
+                          const r = requests.find(req => req.id === selectedRequestId);
+                          if (!r) return null;
+                          return (
+                            <div className="mb-8 space-y-8">
+                              <MyRequestCard
+                                request={r as any}
+                                offersCount={(offersByRequest[r.id] || []).length}
+                                onStatusChange={async (requestId, newStatus) => {
+                                  try {
+                                    await updateRequestStatus(requestId, newStatus);
+                                    const { toast } = await import("sonner");
+                                    toast.success("Status actualizat!");
+                                  } catch (error) {
+                                    logger.error("Error updating status:", error);
+                                    const { toast } = await import("sonner");
+                                    toast.error("Eroare la actualizare");
+                                  }
+                                }}
+                              />
+                              <RequestFullDetails
+                                request={r}
+                                isOwner={user?.uid === r.customerId}
+                              />
+                            </div>
+                          )
                         })()}
 
                         {/* Offers Section */}
@@ -898,8 +887,8 @@ export default function CustomerDashboard() {
 
                         {!(offersByRequest[selectedRequestId] || []).length ? (
                           <div className="rounded-2xl border-2 border-dashed border-gray-100 bg-gray-50/50 p-10 text-center">
-                             <p className="text-sm font-medium text-gray-500">Încă nu ai primit oferte pentru această cerere.</p>
-                             <p className="text-xs text-gray-400 mt-1">Vei fi notificat prin email când apar primele oferte.</p>
+                            <p className="text-sm font-medium text-gray-500">Încă nu ai primit oferte pentru această cerere.</p>
+                            <p className="text-xs text-gray-400 mt-1">Vei fi notificat prin email când apar primele oferte.</p>
                           </div>
                         ) : (
                           <div className="space-y-4">
@@ -923,7 +912,7 @@ export default function CustomerDashboard() {
                         {(offersByRequest[selectedRequestId] || []).length > 1 && (
                           <div className="mt-8 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-slate-50 p-6 shadow-sm">
                             <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-500">
-                               Compară Ofertele
+                              Compară Ofertele
                             </h3>
                             <OfferComparison
                               offers={(offersByRequest[selectedRequestId] as any[]).map((o) => ({

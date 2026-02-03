@@ -54,7 +54,7 @@ export function onAuthChange(cb: (user: User | null) => void) {
       setUserId(user.uid);
       const role = await getUserRole(user);
       if (role) {
-        setUserProperties({ user_role: role });
+        setUserProperties({ user_role: role as any });
       }
     }
     cb(user);
@@ -106,7 +106,7 @@ export async function ensureUserProfile(u: User, role: UserRole) {
       updatedAt: serverTimestamp(),
       role,
       // Initialize with 200 credits for companies
-      ...(role === "company" ? { 
+      ...(role === "company" ? {
         credits: 200,
         verificationStatus: 'pending' // pending | verified | rejected
       } : {}),
@@ -146,8 +146,8 @@ export async function loginWithGoogle(role: UserRole) {
     await ensureUserProfile(cred.user, role);
 
     setUserId(cred.user.uid);
-    setUserProperties({ user_role: role });
-    trackLogin("google", role);
+    setUserProperties({ user_role: role as any });
+    trackLogin("google", role as any);
 
     return cred.user;
   } catch (error: any) {

@@ -5,7 +5,7 @@ import Link from "next/link";
 import counties from "@/counties";
 import cities from "@/cities";
 import { ArrowRightIcon as ArrowRight, MapPinIcon as MapPin, HomeIcon as Home, SparklesIcon as Sparkles, CalendarIcon as Calendar, UserIcon as User, CubeIcon as Package, ChevronLeftIcon as ChevronLeft, ChevronRightIcon as ChevronRight, CheckCircleIcon as CheckCircle, XMarkIcon as X, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
-import type { FormShape } from "@/components/customer/requestForm/types";
+import type { FormShape } from "@/components/customer/RequestForm";
 
 // Special-case: București sectors
 const bucharestSectors = ["Sector 1", "Sector 2", "Sector 3", "Sector 4", "Sector 5", "Sector 6"];
@@ -160,15 +160,14 @@ function InlineCalendar({
               type="button"
               onClick={() => handleSelect(day)}
               disabled={disabled}
-              className={`h-8 w-full rounded-lg text-sm font-medium transition ${
-                disabled
+              className={`h-8 w-full rounded-lg text-sm font-medium transition ${disabled
                   ? "cursor-not-allowed text-gray-300"
                   : selected
                     ? "bg-emerald-500 text-white shadow-sm"
                     : todayClass
                       ? "border border-emerald-300 text-emerald-600 hover:bg-emerald-50"
                       : "text-gray-700 hover:bg-gray-100"
-              }`}
+                }`}
             >
               {day}
             </button>
@@ -599,22 +598,20 @@ export default function HomeRequestForm() {
                   <button
                     type="button"
                     onClick={() => setForm((s) => ({ ...s, fromElevator: true }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.fromElevator === true
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.fromElevator === true
                         ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
-                    }`}
+                      }`}
                   >
                     Da
                   </button>
                   <button
                     type="button"
                     onClick={() => setForm((s) => ({ ...s, fromElevator: false }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.fromElevator === false
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.fromElevator === false
                         ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
-                    }`}
+                      }`}
                   >
                     Nu
                   </button>
@@ -781,22 +778,20 @@ export default function HomeRequestForm() {
                   <button
                     type="button"
                     onClick={() => setForm((s) => ({ ...s, toElevator: true }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.toElevator === true
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.toElevator === true
                         ? "border-sky-500 bg-sky-50 text-sky-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
-                    }`}
+                      }`}
                   >
                     Da
                   </button>
                   <button
                     type="button"
                     onClick={() => setForm((s) => ({ ...s, toElevator: false }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.toElevator === false
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.toElevator === false
                         ? "border-sky-500 bg-sky-50 text-sky-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
-                    }`}
+                      }`}
                   >
                     Nu
                   </button>
@@ -834,11 +829,10 @@ export default function HomeRequestForm() {
                 moveDateMode: opt.value as "exact" | "flexible" | "none",
               }))
             }
-            className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${
-              form.moveDateMode === opt.value
+            className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${form.moveDateMode === opt.value
                 ? "bg-emerald-500 text-white shadow-sm"
                 : "border border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-emerald-50"
-            }`}
+              }`}
           >
             {opt.label}
           </button>
@@ -927,11 +921,10 @@ export default function HomeRequestForm() {
           ].map((svc) => (
             <label
               key={svc.key}
-              className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition ${
-                (form as Record<string, boolean>)[svc.key]
+              className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition ${(form as Record<string, boolean>)[svc.key]
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
-              }`}
+                }`}
             >
               <input
                 type="checkbox"
@@ -975,7 +968,7 @@ export default function HomeRequestForm() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-             
+
               d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
             />
           </svg>
@@ -999,11 +992,10 @@ export default function HomeRequestForm() {
           ].map((opt) => (
             <label
               key={opt.value}
-              className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
-                form.surveyType === opt.value
+              className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${form.surveyType === opt.value
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
-              }`}
+                }`}
             >
               <input
                 type="radio"
@@ -1055,13 +1047,13 @@ export default function HomeRequestForm() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-               
+
                 d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
               />
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-               
+
                 d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
@@ -1085,11 +1077,10 @@ export default function HomeRequestForm() {
             ].map((opt) => (
               <label
                 key={opt.value}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
-                  form.mediaUpload === opt.value
+                className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${form.mediaUpload === opt.value
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 hover:border-emerald-200"
-                }`}
+                  }`}
               >
                 <input
                   type="radio"
@@ -1131,7 +1122,7 @@ export default function HomeRequestForm() {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                   
+
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                   />
                 </svg>
@@ -1291,13 +1282,12 @@ export default function HomeRequestForm() {
               <button
                 type="button"
                 onClick={() => setCurrentStep(step)}
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition ${
-                  currentStep === step
+                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition ${currentStep === step
                     ? "bg-emerald-500 text-white shadow-lg"
                     : currentStep > step
                       ? "bg-emerald-200 text-emerald-700"
                       : "bg-gray-200 text-gray-500"
-                }`}
+                  }`}
               >
                 {step}
               </button>

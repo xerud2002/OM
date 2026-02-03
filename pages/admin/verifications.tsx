@@ -7,12 +7,12 @@ import RequireRole from "@/components/auth/RequireRole";
 import LayoutWrapper from "@/components/layout/Layout";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
-import { 
-  CheckCircleIcon, 
-  XCircleIcon, 
-  DocumentTextIcon, 
-  BuildingOfficeIcon,
-  MagnifyingGlassIcon 
+import {
+  CheckCircleIcon,
+  XCircleIcon,
+  DocumentTextIcon,
+
+  MagnifyingGlassIcon
 } from "@heroicons/react/24/outline";
 
 export default function AdminVerifications() {
@@ -97,7 +97,7 @@ export default function AdminVerifications() {
 
             {loading ? (
               <div className="flex h-64 items-center justify-center">
-                 <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                <div className="h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
               </div>
             ) : pendingCompanies.length === 0 ? (
               <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white py-20">
@@ -111,29 +111,29 @@ export default function AdminVerifications() {
                   <div key={company.id} className="overflow-hidden rounded-2xl bg-white shadow-sm ring-1 ring-slate-200">
                     <div className="flex flex-col border-b border-slate-100 bg-slate-50/50 p-6 sm:flex-row sm:items-center sm:justify-between">
                       <div className="flex items-center gap-4">
-                         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-xl font-bold text-emerald-600 shadow-sm ring-1 ring-slate-100">
-                           {(company.companyName || company.displayName || "C").substring(0, 1).toUpperCase()}
-                         </div>
-                         <div>
-                           <h3 className="text-lg font-bold text-slate-900">{company.companyName || company.displayName || "Companie Fără Nume"}</h3>
-                           <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
-                             <a href={`mailto:${company.email}`} className="hover:text-emerald-600 hover:underline">{company.email}</a>
-                             <span>•</span>
-                             <span>{company.phone || "Fără telefon"}</span>
-                             {company.cif && (
-                               <>
-                                 <span>•</span>
-                                 <span className="font-mono font-medium text-slate-700">{company.cif}</span>
-                               </>
-                             )}
-                           </div>
-                         </div>
+                        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white text-xl font-bold text-emerald-600 shadow-sm ring-1 ring-slate-100">
+                          {(company.companyName || company.displayName || "C").substring(0, 1).toUpperCase()}
+                        </div>
+                        <div>
+                          <h3 className="text-lg font-bold text-slate-900">{company.companyName || company.displayName || "Companie Fără Nume"}</h3>
+                          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-slate-500">
+                            <a href={`mailto:${company.email}`} className="hover:text-emerald-600 hover:underline">{company.email}</a>
+                            <span>•</span>
+                            <span>{company.phone || "Fără telefon"}</span>
+                            {company.cif && (
+                              <>
+                                <span>•</span>
+                                <span className="font-mono font-medium text-slate-700">{company.cif}</span>
+                              </>
+                            )}
+                          </div>
+                        </div>
                       </div>
                       <div className="mt-4 text-sm text-slate-500 sm:mt-0 sm:text-right">
                         <p>Trimis pe:</p>
                         <p className="font-medium text-slate-700">
-                          {company.verificationSubmittedAt?.toDate 
-                            ? format(company.verificationSubmittedAt.toDate(), "d MMM yyyy, HH:mm", { locale: ro }) 
+                          {company.verificationSubmittedAt?.toDate
+                            ? format(company.verificationSubmittedAt.toDate(), "d MMM yyyy, HH:mm", { locale: ro })
                             : "N/A"}
                         </p>
                       </div>
@@ -146,9 +146,9 @@ export default function AdminVerifications() {
                           <p className="font-semibold text-blue-900">Document Atașat</p>
                           <p className="text-sm text-blue-700">{company.verificationDocName || "Document.pdf"}</p>
                         </div>
-                        <a 
-                          href={company.verificationDocUrl} 
-                          target="_blank" 
+                        <a
+                          href={company.verificationDocUrl}
+                          target="_blank"
                           rel="noopener noreferrer"
                           className="flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-blue-600 shadow-sm transition hover:bg-blue-50 hover:text-blue-700"
                         >

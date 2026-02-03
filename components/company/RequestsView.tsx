@@ -20,13 +20,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import PlaceOfferForm from "@/components/company/PlaceOfferForm";
-import dynamic from "next/dynamic";
+
 import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
 
-const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
-  loading: () => <div className="h-96 animate-pulse bg-gray-100" />,
-  ssr: false,
-});
+
 
 // Types
 export type MovingRequest = {
@@ -88,20 +85,18 @@ function RequestCardCompact({
       }
 
       try {
-        // 1. Check for existing offer first
-        const offersRef = collection(db, "requests", r.id, "offers");
-        // We can't query subcollections across all requests easily without index, 
+
         // but here we know the request path: requests/{r.id}/offers
         // We need to find if *we* made an offer. 
         // We should query where("companyId", "==", company.uid)
         // This requires composite index usually? specific subcollection queries might not.
         // Actually for specific path (requests/ID/offers), no index needed for simple filter.
-        
+
         // However, standard querying requires "companyId" field in the offer doc.
         // Let's assume we store it.
         const q = query(collection(db, "requests", r.id, "offers"), where("companyId", "==", company.uid));
         const offerSnap = await getDocs(q);
-        
+
         if (!offerSnap.empty) {
           const oid = offerSnap.docs[0].id;
           setPaidAccess(true);
@@ -209,11 +204,10 @@ function RequestCardCompact({
                 e.stopPropagation();
                 setIsExpanded(!isExpanded);
               }}
-              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 print:hidden ${
-                isExpanded
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200"
-                  : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200 group-hover:from-emerald-50 group-hover:to-teal-50 group-hover:text-emerald-600 group-hover:ring-emerald-200"
-              }`}
+              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 print:hidden ${isExpanded
+                ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200"
+                : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200 group-hover:from-emerald-50 group-hover:to-teal-50 group-hover:text-emerald-600 group-hover:ring-emerald-200"
+                }`}
             >
               <motion.svg
                 animate={{ rotate: isExpanded ? 180 : 0 }}
@@ -410,23 +404,23 @@ function RequestCardCompact({
                   </p>
                   {paidAccess || hasMine
                     ? ((r as any).fromStreet || (r as any).fromAddress) && (
-                        <p className="mt-0.5 text-xs text-slate-500">
-                          {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
-                          {!(r as any).fromStreet &&
-                            (r as any).fromAddress &&
-                            (r as any).fromAddress}
-                          {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
-                          {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
-                          {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
-                          {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
-                        </p>
-                      )
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                        {!(r as any).fromStreet &&
+                          (r as any).fromAddress &&
+                          (r as any).fromAddress}
+                        {(r as any).fromNumber && ` nr. ${(r as any).fromNumber}`}
+                        {(r as any).fromBloc && `, Bl. ${(r as any).fromBloc}`}
+                        {(r as any).fromStaircase && `, Sc. ${(r as any).fromStaircase}`}
+                        {(r as any).fromApartment && `, Ap. ${(r as any).fromApartment}`}
+                      </p>
+                    )
                     : ((r as any).fromStreet || (r as any).fromAddress) && (
-                        <p className="mt-0.5 text-xs text-slate-500">
-                          {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
-                          {!(r as any).fromStreet && (r as any).fromAddress}
-                        </p>
-                      )}
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {(r as any).fromStreet && `Str. ${(r as any).fromStreet}`}
+                        {!(r as any).fromStreet && (r as any).fromAddress}
+                      </p>
+                    )}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {(r as any).fromRooms && (
                       <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
@@ -445,11 +439,10 @@ function RequestCardCompact({
                     )}
                     {(r as any).fromElevator !== undefined && (
                       <span
-                        className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
-                          (r as any).fromElevator
-                            ? "bg-emerald-50 text-emerald-600 ring-emerald-200"
-                            : "bg-red-50 text-red-500 ring-red-200"
-                        }`}
+                        className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${(r as any).fromElevator
+                          ? "bg-emerald-50 text-emerald-600 ring-emerald-200"
+                          : "bg-red-50 text-red-500 ring-red-200"
+                          }`}
                       >
                         {(r as any).fromElevator ? "Cu lift" : "Fără lift"}
                       </span>
@@ -491,21 +484,21 @@ function RequestCardCompact({
                   </p>
                   {paidAccess || hasMine
                     ? ((r as any).toStreet || (r as any).toAddress) && (
-                        <p className="mt-0.5 text-xs text-slate-500">
-                          {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
-                          {!(r as any).toStreet && (r as any).toAddress && (r as any).toAddress}
-                          {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
-                          {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
-                          {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
-                          {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
-                        </p>
-                      )
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                        {!(r as any).toStreet && (r as any).toAddress && (r as any).toAddress}
+                        {(r as any).toNumber && ` nr. ${(r as any).toNumber}`}
+                        {(r as any).toBloc && `, Bl. ${(r as any).toBloc}`}
+                        {(r as any).toStaircase && `, Sc. ${(r as any).toStaircase}`}
+                        {(r as any).toApartment && `, Ap. ${(r as any).toApartment}`}
+                      </p>
+                    )
                     : ((r as any).toStreet || (r as any).toAddress) && (
-                        <p className="mt-0.5 text-xs text-slate-500">
-                          {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
-                          {!(r as any).toStreet && (r as any).toAddress}
-                        </p>
-                      )}
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {(r as any).toStreet && `Str. ${(r as any).toStreet}`}
+                        {!(r as any).toStreet && (r as any).toAddress}
+                      </p>
+                    )}
                   <div className="mt-2 flex flex-wrap gap-1.5">
                     {(r as any).toRooms && (
                       <span className="rounded-md bg-white px-2 py-0.5 text-[10px] font-medium text-slate-600 ring-1 ring-slate-200">
@@ -524,11 +517,10 @@ function RequestCardCompact({
                     )}
                     {(r as any).toElevator !== undefined && (
                       <span
-                        className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${
-                          (r as any).toElevator
-                            ? "bg-emerald-50 text-emerald-600 ring-emerald-200"
-                            : "bg-red-50 text-red-500 ring-red-200"
-                        }`}
+                        className={`rounded-md px-2 py-0.5 text-[10px] font-medium ring-1 ${(r as any).toElevator
+                          ? "bg-emerald-50 text-emerald-600 ring-emerald-200"
+                          : "bg-red-50 text-red-500 ring-red-200"
+                          }`}
                       >
                         {(r as any).toElevator ? "Cu lift" : "Fără lift"}
                       </span>
@@ -631,105 +623,105 @@ function RequestCardCompact({
                 (r as any).serviceDisassembly ||
                 (r as any).serviceCleanout ||
                 (r as any).serviceStorage) && (
-                <div className="flex flex-wrap gap-2">
-                  {(r as any).serviceMoving && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
-                        />
-                      </svg>
-                      Transport
-                    </span>
-                  )}
-                  {(r as any).servicePacking && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                        />
-                      </svg>
-                      Ambalare
-                    </span>
-                  )}
-                  {(r as any).serviceDisassembly && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                      </svg>
-                      Demontare/Montare
-                    </span>
-                  )}
-                  {(r as any).serviceCleanout && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                      Debarasare
-                    </span>
-                  )}
-                  {(r as any).serviceStorage && (
-                    <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
-                      <svg
-                        className="h-3.5 w-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
-                        />
-                      </svg>
-                      Depozitare
-                    </span>
-                  )}
-                </div>
-              )}
+                  <div className="flex flex-wrap gap-2">
+                    {(r as any).serviceMoving && (
+                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path d="M9 17a2 2 0 11-4 0 2 2 0 014 0zM19 17a2 2 0 11-4 0 2 2 0 014 0z" />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M13 16V6a1 1 0 00-1-1H4a1 1 0 00-1 1v10a1 1 0 001 1h1m8-1a1 1 0 01-1 1H9m4-1V8a1 1 0 011-1h2.586a1 1 0 01.707.293l3.414 3.414a1 1 0 01.293.707V16a1 1 0 01-1 1h-1m-6-1a1 1 0 001 1h1M5 17a2 2 0 104 0m-4 0a2 2 0 114 0m6 0a2 2 0 104 0m-4 0a2 2 0 114 0"
+                          />
+                        </svg>
+                        Transport
+                      </span>
+                    )}
+                    {(r as any).servicePacking && (
+                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                          />
+                        </svg>
+                        Ambalare
+                      </span>
+                    )}
+                    {(r as any).serviceDisassembly && (
+                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                          />
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                          />
+                        </svg>
+                        Demontare/Montare
+                      </span>
+                    )}
+                    {(r as any).serviceCleanout && (
+                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                          />
+                        </svg>
+                        Debarasare
+                      </span>
+                    )}
+                    {(r as any).serviceStorage && (
+                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                        <svg
+                          className="h-3.5 w-3.5"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          strokeWidth={2}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M8 14v3m4-3v3m4-3v3M3 21h18M3 10h18M3 7l9-4 9 4M4 10h16v11H4V10z"
+                          />
+                        </svg>
+                        Depozitare
+                      </span>
+                    )}
+                  </div>
+                )}
 
               {/* Details/notes */}
               {r.details && (
@@ -798,7 +790,7 @@ function RequestCardCompact({
                           Ai trimis o ofertă pentru această cerere
                         </span>
                       </div>
-                      
+
                       {myOfferId && onChat && (
                         <button
                           onClick={() => onChat(r.id, myOfferId)}
@@ -834,8 +826,8 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   const [hasMineMap, setHasMineMap] = useState<Record<string, boolean | string>>({});
-  const [chatRequest, setChatRequest] = useState<{ requestId: string; offerId: string; customerName: string } | null>(null);
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
+
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const sentinelRef = useRef<HTMLDivElement | null>(null);
 
@@ -1036,11 +1028,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 {r.createdAt && (
                   <div className="mb-3 flex items-center">
                     <span
-                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold tracking-wider uppercase shadow-sm ${
-                        getTimeAgo(r.createdAt) === "Nou!"
-                          ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white"
-                          : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200"
-                      }`}
+                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold tracking-wider uppercase shadow-sm ${getTimeAgo(r.createdAt) === "Nou!"
+                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white"
+                        : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200"
+                        }`}
                     >
                       <svg
                         className="h-3 w-3"
@@ -1067,7 +1058,6 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   onUpdateHasMine={(has: boolean | string) =>
                     setHasMineMap((prev) => ({ ...prev, [r.id]: has }))
                   }
-                  onChat={(rid, oid) => setChatRequest({ requestId: rid, offerId: oid, customerName: r.customerName || "Client" })}
                 />
               </motion.div>
             ))}

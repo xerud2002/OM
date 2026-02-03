@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
+import type { UserRole } from "@/types";
 import dynamic from "next/dynamic";
 import { trackCTAClick } from "@/utils/analytics";
 
@@ -24,7 +25,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [user, setUser] = useState<FirebaseUser | null>(null);
-  const [userRole, setUserRole] = useState<"customer" | "company" | null>(null);
+  const [userRole, setUserRole] = useState<UserRole | null>(null);
   const router = useRouter();
   const pathname = router.pathname;
 
@@ -97,11 +98,10 @@ export default function Navbar() {
 
   return (
     <header
-      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 ${
-        scrolled
-          ? "border-b border-emerald-100 bg-white/90 shadow-md backdrop-blur-xl"
-          : "bg-white/60 backdrop-blur-sm"
-      }`}
+      className={`fixed top-0 left-0 z-50 w-full transition-all duration-500 ${scrolled
+        ? "border-b border-emerald-100 bg-white/90 shadow-md backdrop-blur-xl"
+        : "bg-white/60 backdrop-blur-sm"
+        }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
         {/* === LOGO === */}
@@ -131,11 +131,10 @@ export default function Navbar() {
             <Link
               key={href}
               href={href}
-              className={`flex min-h-12 min-w-12 items-center justify-center rounded-full px-5 py-3 font-medium transition-all duration-300 ${
-                pathname === href
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
-              }`}
+              className={`flex min-h-12 min-w-12 items-center justify-center rounded-full px-5 py-3 font-medium transition-all duration-300 ${pathname === href
+                ? "bg-emerald-50 text-emerald-700"
+                : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+                }`}
             >
               {label}
             </Link>
@@ -187,9 +186,8 @@ export default function Navbar() {
 
       {/* === MOBILE MENU - CSS animation instead of framer-motion === */}
       <div
-        className={`transform overflow-hidden border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 md:hidden ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
-        }`}
+        className={`transform overflow-hidden border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 md:hidden ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+          }`}
       >
         <div className="flex flex-col space-y-1 px-3 py-2 md:px-6 md:py-4">
           {navLinks.map(({ href, label }) => (
@@ -197,11 +195,10 @@ export default function Navbar() {
               key={href}
               href={href}
               onClick={() => setIsOpen(false)}
-              className={`flex min-h-12 items-center rounded-lg px-4 py-3 font-medium transition-all ${
-                pathname === href
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
-              }`}
+              className={`flex min-h-12 items-center rounded-lg px-4 py-3 font-medium transition-all ${pathname === href
+                ? "bg-emerald-50 text-emerald-700"
+                : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+                }`}
             >
               {label}
             </Link>
