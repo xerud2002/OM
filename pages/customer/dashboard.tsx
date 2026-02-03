@@ -44,6 +44,11 @@ const MyRequestCard = dynamic(() => import("@/components/customer/MyRequestCard"
   ssr: false,
 });
 
+const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
+  loading: () => <div className="h-96 animate-pulse bg-gray-100" />,
+  ssr: false,
+});
+
 type Request = {
   id: string;
   fromCity?: string;
@@ -174,7 +179,9 @@ export default function CustomerDashboard() {
   }, [offersByRequest]);
   // Aggregated no longer needed for UI; keep if future export requires it
   // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
+  // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+  const [chatOffer, setChatOffer] = useState<any>(null);
 
   // Choose a default selected request for the Oferte tab (the first with offers, else first request)
   useEffect(() => {
@@ -1022,6 +1029,7 @@ export default function CustomerDashboard() {
                                   offer={o}
                                   onAccept={acceptFromAggregated}
                                   onDecline={declineFromAggregated}
+                                  onChat={(o: any) => setChatOffer(o)}
                                 />
                               )
                             )}
@@ -1050,6 +1058,7 @@ export default function CustomerDashboard() {
                               }))}
                               onAccept={acceptFromAggregated}
                               onDecline={declineFromAggregated}
+                              onChat={(o) => setChatOffer(o)}
                             />
                           </div>
                         )}
@@ -1128,6 +1137,20 @@ export default function CustomerDashboard() {
             </motion.div>
           )}
         </section>
+
+        {chatOffer && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+            <div className="h-[600px] w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+              <ChatWindow
+                requestId={chatOffer.requestId || selectedRequestId}
+                offerId={chatOffer.id}
+                otherPartyName={chatOffer.companyName}
+                currentUserRole="customer"
+                onClose={() => setChatOffer(null)}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </RequireRole>
   );
@@ -1139,6 +1162,7 @@ function OfferRow({
   offer,
   onAccept,
   onDecline,
+  onChat,
 }: {
   index: number;
   requestId: string;
@@ -1147,42 +1171,9 @@ function OfferRow({
   onAccept: (requestId: string, offerId: string) => Promise<void> | void;
   // eslint-disable-next-line no-unused-vars
   onDecline: (requestId: string, offerId: string) => Promise<void> | void;
+  // eslint-disable-next-line no-unused-vars
+  onChat: (offer: any) => void;
 }) {
-  const [showMessage, setShowMessage] = useState(false);
-  const [text, setText] = useState("");
-
-  const sendMessage = async () => {
-    const t = text.trim();
-    if (!t) {
-      toast.error("Scrie un mesaj înainte de a trimite.");
-      return;
-    }
-    try {
-      const user = auth.currentUser;
-      if (!user) {
-        toast.error("Trebuie să fii autentificat pentru a trimite mesajul.");
-        return;
-      }
-      const token = await user.getIdToken();
-      const resp = await fetch("/api/offers/message", {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-        body: JSON.stringify({ requestId, offerId: offer.id, text: t }),
-      });
-      if (!resp.ok) {
-        const data = await resp.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${resp.status}`);
-      }
-      toast.success("Mesaj trimis");
-      setText("");
-      setShowMessage(false);
-    } catch (err) {
-      logger.error("sendMessage failed", err);
-      const msg = err instanceof Error ? err.message : "Eroare necunoscută";
-      toast.error(`Eroare la trimiterea mesajului: ${msg}`);
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -1237,45 +1228,15 @@ function OfferRow({
               Refuză
             </button>
             <button
-              onClick={() => setShowMessage((s) => !s)}
+              onClick={() => onChat(offer)}
               className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600"
             >
               <MessageSquare className="h-4 w-4" />
-              Mesaj
+              Chat
             </button>
           </div>
         </div>
       </div>
-
-      {showMessage && (
-        <motion.div
-          initial={{ opacity: 0, height: 0 }}
-          animate={{ opacity: 1, height: "auto" }}
-          className="mt-4 overflow-hidden rounded-xl border border-gray-200 bg-gray-50 p-4"
-        >
-          <textarea
-            value={text}
-            onChange={(e) => setText(e.target.value)}
-            rows={3}
-            placeholder="Scrie un mesaj către firmă..."
-            className="w-full resize-y rounded-xl border border-gray-200 bg-white p-3 text-sm transition-all outline-none focus:border-emerald-400 focus:ring-2 focus:ring-emerald-100"
-          />
-          <div className="mt-3 flex justify-end gap-2">
-            <button
-              onClick={() => setShowMessage(false)}
-              className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
-            >
-              Anulează
-            </button>
-            <button
-              onClick={sendMessage}
-              className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2 text-sm font-bold text-white shadow-lg shadow-emerald-500/20 transition-all hover:shadow-xl"
-            >
-              Trimite
-            </button>
-          </div>
-        </motion.div>
-      )}
     </motion.div>
   );
 }

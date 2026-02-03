@@ -4,6 +4,7 @@ import {
   XMarkIcon as X,
   ArrowsUpDownIcon as ArrowUpDown,
   StarIcon as Star,
+  ChatBubbleLeftEllipsisIcon as ChatIcon
 } from "@heroicons/react/24/outline";
 
 export type ComparableOffer = {
@@ -19,15 +20,16 @@ export type ComparableOffer = {
 
 interface OfferComparisonProps {
   offers: ComparableOffer[];
-  onAccept: any;
-  onDecline: any;
+  onAccept: (requestId: string, offerId: string) => void;
+  onDecline: (requestId: string, offerId: string) => void;
+  onChat: (offer: ComparableOffer) => void;
 }
 
-export default function OfferComparison({ offers, onAccept, onDecline }: OfferComparisonProps) {
+export default function OfferComparison({ offers, onAccept, onDecline, onChat }: OfferComparisonProps) {
   const [sort, setSort] = useState<"price-asc" | "price-desc" | "date-desc" | "date-asc">(
     "price-asc"
   );
-  const [onlyFavorites, setOnlyFavorites] = useState<boolean>(true);
+  const [onlyFavorites, setOnlyFavorites] = useState<boolean>(false); // Changed default to false for visibility
 
   const sorted = useMemo(() => {
     const list = offers.filter((o) => (onlyFavorites ? o.favorite : true));
@@ -61,10 +63,11 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
               type="checkbox"
               checked={onlyFavorites}
               onChange={(e) => setOnlyFavorites(e.target.checked)}
+              className="rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
             />
             <span className="flex items-center gap-1">
               <Star
-                className={`h-3.5 w-3.5 ${onlyFavorites ? "text-amber-500" : "text-gray-400"}`}
+                className={`h-3.5 w-3.5 ${onlyFavorites ? "fill-amber-400 text-amber-400" : "text-gray-400"}`}
               />
               Doar favorite
             </span>
@@ -73,14 +76,14 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
         <div className="flex items-center gap-2">
           <button
             onClick={() => setSort(sort === "price-asc" ? "price-desc" : "price-asc")}
-            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs"
+            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs hover:bg-gray-50"
             title="Sortează după preț"
           >
             <ArrowUpDown className="h-3.5 w-3.5" /> Preț
           </button>
           <button
             onClick={() => setSort(sort === "date-asc" ? "date-desc" : "date-asc")}
-            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs"
+            className="inline-flex items-center gap-1 rounded-md border px-2 py-1 text-xs hover:bg-gray-50"
             title="Sortează după dată"
           >
             <ArrowUpDown className="h-3.5 w-3.5" /> Dată
@@ -88,19 +91,19 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
         {sorted.map((o) => (
-          <div key={o.id} className="flex flex-col gap-3 rounded-md border bg-gray-50 p-3">
+          <div key={o.id} className="flex flex-col gap-3 rounded-xl border border-gray-200 bg-white p-4 shadow-sm transition hover:shadow-md">
             <div className="flex items-start justify-between">
               <div>
-                <p className="font-semibold text-gray-800">{o.companyName || "Companie"}</p>
-                {o.message && <p className="text-xs text-gray-500">{o.message}</p>}
+                <h4 className="font-bold text-gray-900">{o.companyName || "Companie"}</h4>
+                {o.message && <p className="mt-1 line-clamp-2 text-xs text-gray-500">{o.message}</p>}
               </div>
               <div className="text-right">
-                <p className="text-lg font-bold text-emerald-700">{o.price ?? "-"} lei</p>
+                <p className="text-lg font-bold text-emerald-600">{o.price ?? "-"} <span className="text-xs font-normal text-gray-500">RON</span></p>
                 {o.status && (
                   <span
-                    className={`mt-1 inline-block rounded-full px-2 py-0.5 text-xs ${
+                    className={`mt-1 inline-block rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${
                       o.status === "accepted"
                         ? "bg-emerald-100 text-emerald-700"
                         : o.status === "declined"
@@ -114,22 +117,32 @@ export default function OfferComparison({ offers, onAccept, onDecline }: OfferCo
               </div>
             </div>
 
-            {(!o.status || o.status === "pending") && (
-              <div className="flex items-center gap-2">
-                <button
-                  onClick={() => onAccept(o.requestId, o.id)}
-                  className="flex flex-1 items-center justify-center gap-1 rounded-md bg-emerald-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-emerald-700"
-                >
-                  <Check className="h-3.5 w-3.5" /> Acceptă
-                </button>
-                <button
-                  onClick={() => onDecline(o.requestId, o.id)}
-                  className="flex flex-1 items-center justify-center gap-1 rounded-md border border-rose-200 bg-white px-3 py-1.5 text-sm font-medium text-rose-600 hover:bg-rose-50"
-                >
-                  <X className="h-3.5 w-3.5" /> Refuză
-                </button>
-              </div>
-            )}
+            <div className="mt-auto flex gap-2 pt-2">
+              <button
+                 onClick={() => onChat(o)}
+                 className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100 text-gray-600 transition hover:bg-blue-50 hover:text-blue-600"
+                 title="Chat cu compania"
+              >
+                <ChatIcon className="h-5 w-5" />
+              </button>
+
+              {(!o.status || o.status === "pending") && (
+                <>
+                  <button
+                    onClick={() => onDecline(o.requestId, o.id)}
+                    className="flex flex-1 items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
+                  >
+                    Refuză
+                  </button>
+                  <button
+                    onClick={() => onAccept(o.requestId, o.id)}
+                    className="flex flex-1 items-center justify-center rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-emerald-700"
+                  >
+                    Acceptă
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         ))}
       </div>

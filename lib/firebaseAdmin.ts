@@ -1,5 +1,5 @@
 import admin from "firebase-admin";
-import "dotenv/config"; // Load .env file
+// import "dotenv/config"; // Load .env file (handled by Next.js automatically)
 
 // Use global to persist state across hot-reloads in development
 declare global {

@@ -47,6 +47,11 @@ const NotificationBell = dynamic(() => import("@/components/company/Notification
   ssr: false,
 });
 
+const CreditBalance = dynamic(() => import("@/components/company/CreditBalance"), {
+  loading: () => <div className="h-10 w-24 animate-pulse rounded-full bg-slate-700" />,
+  ssr: false,
+});
+
 const ConfirmModal = dynamic(() => import("@/components/ConfirmModal"), {
   ssr: false,
 });
@@ -190,6 +195,7 @@ export default function CompanyDashboard() {
                 transition={{ duration: 0.5, delay: 0.2 }}
                 className="flex items-center gap-3"
               >
+                {company && <CreditBalance companyId={company.uid} />}
                 {company && <NotificationBell companyId={company.uid} />}
                 <button
                   onClick={() => router.push("/company/profile")}

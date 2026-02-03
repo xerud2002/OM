@@ -39,6 +39,7 @@ export type BaseProfile = {
 const COLLECTIONS = {
   customer: "customers",
   company: "companies",
+  admin: "admins",
 } as const;
 
 // ---- Auth state
@@ -104,6 +105,11 @@ export async function ensureUserProfile(u: User, role: UserRole) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       role,
+      // Initialize with 200 credits for companies
+      ...(role === "company" ? { 
+        credits: 200,
+        verificationStatus: 'pending' // pending | verified | rejected
+      } : {}),
     });
   } else {
     // Keep updatedAt fresh
@@ -112,7 +118,11 @@ export async function ensureUserProfile(u: User, role: UserRole) {
   return profileRef;
 }
 
-export async function getUserRole(u: User): Promise<UserRole | null> {
+export async function getUserRole(u: User): Promise<UserRole | "admin" | null> {
+  // Check admin first
+  const admin = await getDoc(doc(db, COLLECTIONS.admin, u.uid));
+  if (admin.exists()) return "admin";
+
   // Try in customers first, then companies
   const customer = await getDoc(doc(db, COLLECTIONS.customer, u.uid));
   if (customer.exists()) return "customer";
@@ -172,8 +182,8 @@ export async function registerWithEmail(
 
   // Track new user in GA4
   setUserId(user.uid);
-  setUserProperties({ user_role: role });
-  trackSignUp("email", role);
+  setUserProperties({ user_role: role as any });
+  trackSignUp("email", role as any);
 
   return user;
 }
@@ -188,8 +198,8 @@ export async function loginWithEmail(
   setUserId(user.uid);
   const detectedRole = role || (await getUserRole(user));
   if (detectedRole) {
-    setUserProperties({ user_role: detectedRole });
-    trackLogin("email", detectedRole);
+    setUserProperties({ user_role: detectedRole as any });
+    trackLogin("email", detectedRole as any);
   }
 
   return user;

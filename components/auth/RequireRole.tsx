@@ -6,7 +6,7 @@ import { onAuthChange, getUserRole, isLogoutInProgress } from "@/utils/firebaseH
 import { toast } from "sonner";
 
 type Props = {
-  allowedRole: "company" | "customer";
+  allowedRole: "company" | "customer" | "admin";
   children: React.ReactNode;
 };
 
@@ -62,6 +62,7 @@ export default function RequireRole({ allowedRole, children }: Props) {
             // If role is mismatched, redirect to the appropriate place
             if (role === "company") router.push("/company/dashboard");
             else if (role === "customer") router.push("/customer/dashboard");
+            else if (role === "admin") router.push("/admin/verifications");
             else router.push("/");
           } else {
             setChecking(false);

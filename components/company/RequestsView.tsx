@@ -14,11 +14,19 @@ import {
   DocumentData,
   doc,
   getDoc,
+  where,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
 import { onAuthChange } from "@/utils/firebaseHelpers";
-import PaymentForm from "@/components/company/requestsView/PaymentForm";
+import PlaceOfferForm from "@/components/company/PlaceOfferForm";
+import dynamic from "next/dynamic";
+import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
+
+const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
+  loading: () => <div className="h-96 animate-pulse bg-gray-100" />,
+  ssr: false,
+});
 
 // Types
 export type MovingRequest = {
@@ -55,50 +63,79 @@ function RequestCardCompact({
   company,
   hasMine,
   onUpdateHasMine,
+  onChat,
 }: {
   request: MovingRequest;
   company: CompanyUser;
-  hasMine?: boolean;
+  hasMine?: boolean | string;
   // eslint-disable-next-line no-unused-vars
-  onUpdateHasMine?: (arg: boolean) => void;
+  onUpdateHasMine?: (arg: boolean | string) => void;
+  // eslint-disable-next-line no-unused-vars
+  onChat?: (requestId: string, offerId: string) => void;
 }) {
   const [paidAccess, setPaidAccess] = useState(false);
   const [checkingPayment, setCheckingPayment] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [myOfferId, setMyOfferId] = useState<string | null>(null);
   const r = request;
 
-  // Check if company has already paid for this request
+  // Check if company has already paid for this request or placed an offer
   useEffect(() => {
-    const checkPayment = async () => {
+    const checkStatus = async () => {
       if (!company?.uid || !r.id) {
         setCheckingPayment(false);
         return;
       }
 
       try {
+        // 1. Check for existing offer first
+        const offersRef = collection(db, "requests", r.id, "offers");
+        // We can't query subcollections across all requests easily without index, 
+        // but here we know the request path: requests/{r.id}/offers
+        // We need to find if *we* made an offer. 
+        // We should query where("companyId", "==", company.uid)
+        // This requires composite index usually? specific subcollection queries might not.
+        // Actually for specific path (requests/ID/offers), no index needed for simple filter.
+        
+        // However, standard querying requires "companyId" field in the offer doc.
+        // Let's assume we store it.
+        const q = query(collection(db, "requests", r.id, "offers"), where("companyId", "==", company.uid));
+        const offerSnap = await getDocs(q);
+        
+        if (!offerSnap.empty) {
+          const oid = offerSnap.docs[0].id;
+          setPaidAccess(true);
+          setMyOfferId(oid);
+          if (onUpdateHasMine) onUpdateHasMine(oid);
+          return; // Done
+        }
+
+        // 2. Fallback: check legacy payments (if any)
         const paymentRef = doc(db, `companies/${company.uid}/payments/${r.id}`);
         const paymentSnap = await getDoc(paymentRef);
 
         if (paymentSnap.exists() && paymentSnap.data()?.status === "completed") {
           setPaidAccess(true);
+          // Payment exists but maybe no offer yet? Or offer in process?
           if (onUpdateHasMine) {
             onUpdateHasMine(true);
           }
         }
       } catch (err) {
-        console.error("Error checking payment:", err);
+        console.error("Error checking payment/offer:", err);
       } finally {
         setCheckingPayment(false);
       }
     };
 
-    checkPayment();
+    checkStatus();
   }, [company?.uid, r.id, onUpdateHasMine]);
 
-  const handlePaymentSuccess = () => {
+  const handleOfferPlaced = (offerId?: string) => {
     setPaidAccess(true);
+    if (offerId) setMyOfferId(offerId);
     if (onUpdateHasMine) {
-      onUpdateHasMine(true);
+      onUpdateHasMine(offerId || true);
     }
   };
 
@@ -733,32 +770,44 @@ function RequestCardCompact({
                     </div>
                   ) : !hasMine && !paidAccess ? (
                     <div className="print:hidden">
-                      <PaymentForm
-                        requestId={r.id}
+                      <PlaceOfferForm
+                        request={r}
                         company={company}
-                        onPaymentSuccess={handlePaymentSuccess}
+                        onOfferPlaced={handleOfferPlaced}
                       />
                     </div>
                   ) : (
-                    <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-3 ring-1 ring-emerald-200 print:hidden">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
-                        <svg
-                          className="h-4 w-4 text-white"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          strokeWidth={2.5}
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                          />
-                        </svg>
+                    <div className="flex flex-col gap-3 print:hidden">
+                      <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-3 ring-1 ring-emerald-200">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
+                          <svg
+                            className="h-4 w-4 text-white"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2.5}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="text-sm font-bold text-emerald-700">
+                          Ai trimis o ofertă pentru această cerere
+                        </span>
                       </div>
-                      <span className="text-sm font-bold text-emerald-700">
-                        Ai acces complet la toate detaliile acestei cereri
-                      </span>
+                      
+                      {myOfferId && onChat && (
+                        <button
+                          onClick={() => onChat(r.id, myOfferId)}
+                          className="flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-3 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all hover:bg-emerald-700"
+                        >
+                          <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
+                          Chat cu clientul
+                        </button>
+                      )}
                     </div>
                   )}
                 </>
@@ -784,7 +833,8 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const [hasMineMap, setHasMineMap] = useState<Record<string, boolean>>({});
+  const [hasMineMap, setHasMineMap] = useState<Record<string, boolean | string>>({});
+  const [chatRequest, setChatRequest] = useState<{ requestId: string; offerId: string; customerName: string } | null>(null);
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
   const [currentTime, setCurrentTime] = useState(() => Date.now());
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -1014,9 +1064,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   request={r}
                   company={company}
                   hasMine={hasMineMap[r.id]}
-                  onUpdateHasMine={(has: boolean) =>
+                  onUpdateHasMine={(has: boolean | string) =>
                     setHasMineMap((prev) => ({ ...prev, [r.id]: has }))
                   }
+                  onChat={(rid, oid) => setChatRequest({ requestId: rid, offerId: oid, customerName: r.customerName || "Client" })}
                 />
               </motion.div>
             ))}

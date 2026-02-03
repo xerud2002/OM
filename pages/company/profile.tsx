@@ -11,6 +11,7 @@ import StarRating from "@/components/reviews/StarRating";
 import { sendEmail } from "@/utils/emailHelpers";
 import { toast } from "sonner";
 import { logger } from "@/utils/logger";
+import VerificationSection from "@/components/company/VerificationSection";
 
 export default function CompanyProfile() {
   const [company, setCompany] = useState<any>(null);
@@ -330,6 +331,28 @@ export default function CompanyProfile() {
                 </div>
               )}
             </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="mt-8"
+          >
+            {profile && (
+              <VerificationSection 
+                company={profile} 
+                onUpdate={async () => {
+                   // Refresh profile logic
+                   if (!company?.uid) return;
+                   import("firebase/firestore").then(async ({ getDoc, doc }) => {
+                      const snap = await getDoc(doc(db, "companies", company.uid));
+                      if (snap.exists()) setProfile(snap.data());
+                   });
+                   toast.success("Document trimis cu succes!");
+                }} 
+              />
+            )}
           </motion.div>
 
           {/* Reviews Section */}
