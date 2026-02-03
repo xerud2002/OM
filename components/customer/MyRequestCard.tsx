@@ -5,17 +5,12 @@ import {
   MapPinIcon as MapPin,
   CubeIcon as Package,
   CheckCircleIcon as CheckCircle2,
-  PauseCircleIcon as PauseCircle,
-  XCircleIcon as XCircle,
-  EyeIcon as Eye,
-  ArrowPathIcon as RotateCcw,
   DocumentTextIcon as FileText,
   UserIcon as User,
   PhoneIcon as Phone,
 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
-import RequestDetailsModal from "./RequestDetailsModal";
 
 type MyRequestCardProps = {
   request: MovingRequest;
@@ -30,7 +25,6 @@ const MyRequestCard = memo(function MyRequestCard({
   readOnly = false,
   onStatusChange,
 }: MyRequestCardProps) {
-  const [showDetailsModal, setShowDetailsModal] = useState(false);
 
   // Normalize status to valid values
   const getStatus = (): "active" | "closed" | "paused" | "cancelled" => {
@@ -164,15 +158,7 @@ const MyRequestCard = memo(function MyRequestCard({
                            <span className="font-bold">{offersCount}</span>
                        </div>
 
-                      {!readOnly && (
-                         <div className="flex gap-1">
-                             <button
-                                onClick={() => setShowDetailsModal(true)}
-                                className="group flex h-10 w-10 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 transition-all hover:border-emerald-500 hover:text-emerald-600 hover:shadow-md"
-                                title="Vezi Detalii"
-                             >
-                                 <Eye className="h-5 w-5" />
-                             </button>
+                          <div className="flex gap-1">
                              {status === 'active' && (
                                  <button
                                      onClick={() => onStatusChange(request.id, 'closed')}
@@ -183,7 +169,7 @@ const MyRequestCard = memo(function MyRequestCard({
                                  </button>
                              )}
                          </div>
-                      )}
+
                   </div>
              </div>
           </div>
@@ -225,13 +211,6 @@ const MyRequestCard = memo(function MyRequestCard({
 
         </div>
       </div>
-
-      {/* Details Modal */}
-      <RequestDetailsModal
-        request={request}
-        isOpen={showDetailsModal}
-        onClose={() => setShowDetailsModal(false)}
-      />
     </div>
   );
 });

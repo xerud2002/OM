@@ -47,6 +47,11 @@ const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
   ssr: false,
 });
 
+const RequestFullDetails = dynamic(() => import("@/components/customer/RequestFullDetails"), {
+  loading: () => <div className="h-48 animate-pulse rounded-2xl bg-gray-50" />,
+  ssr: false,
+});
+
 
 
 export default function CustomerDashboard() {
@@ -854,19 +859,25 @@ export default function CustomerDashboard() {
                            const r = requests.find(req => req.id === selectedRequestId);
                            if (!r) return null;
                            return (
-                             <div className="mb-8">
+                             <div className="mb-8 space-y-8">
                                 <MyRequestCard
                                   request={r as any}
                                   offersCount={(offersByRequest[r.id] || []).length}
                                   onStatusChange={async (requestId, newStatus) => {
                                     try {
                                       await updateRequestStatus(requestId, newStatus);
+                                      const { toast } = await import("sonner");
                                       toast.success("Status actualizat!");
                                     } catch (error) {
                                       logger.error("Error updating status:", error);
+                                      const { toast } = await import("sonner");
                                       toast.error("Eroare la actualizare");
                                     }
                                   }}
+                                />
+                                <RequestFullDetails 
+                                  request={r} 
+                                  isOwner={user?.uid === r.customerId}
                                 />
                              </div>
                            )

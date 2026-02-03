@@ -4,12 +4,17 @@ import {
   HomeIcon,
   TruckIcon,
   CalendarIcon,
-  PhotoIcon,
   ChevronRightIcon,
   CheckCircleIcon,
   CubeIcon,
   UserIcon,
   LockClosedIcon,
+  VideoCameraIcon,
+  BoltIcon,
+  CloudArrowUpIcon,
+  EnvelopeIcon,
+  XMarkIcon,
+  PhoneIcon
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { toast } from "sonner";
@@ -56,6 +61,7 @@ type FormShape = {
   contactFirstName?: string;
   contactLastName?: string;
   acceptedTerms?: boolean;
+  surveyType?: "in-person" | "video" | "quick-estimate";
 };
 
 type Props = {
@@ -295,24 +301,186 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
 
   // Step 3: Services
   const renderServices = () => (
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
-         {[
-             { id: 'serviceMoving', label: 'Mutare', icon: TruckIcon },
-             { id: 'servicePacking', label: 'Împachetare', icon: CubeIcon },
-             { id: 'serviceDisassembly', label: 'Demontare', icon: CubeIcon },
-             { id: 'serviceStorage', label: 'Depozitare', icon: HomeIcon },
-         ].map(s => (
-             <label key={s.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all ${
-                 (form as any)[s.id] ? 'border-purple-500 bg-purple-50 ring-1 ring-purple-500' : 'border-gray-200 bg-white hover:bg-gray-50'
-             }`}>
-                 <input type="checkbox" className="sr-only" checked={!!(form as any)[s.id]} onChange={e => setForm(prev => ({...prev, [s.id]: e.target.checked}))} />
-                 <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${ (form as any)[s.id] ? 'bg-purple-200 text-purple-700' : 'bg-gray-100 text-gray-500'}`}>
-                     <s.icon className="h-4 w-4" />
-                 </div>
-                 <span className={`text-sm font-medium ${ (form as any)[s.id] ? 'text-purple-900' : 'text-gray-700'}`}>{s.label}</span>
-             </label>
-         ))}
-      </div>
+      <div className="space-y-6">
+          <div className="rounded-xl border border-purple-100 bg-purple-50/50 p-4">
+              <label className="mb-3 block text-sm font-semibold text-gray-900">Servicii căutate <span className="text-red-500">*</span></label>
+              <p className="mb-3 text-xs text-gray-500">Selectează serviciile de care ai nevoie</p>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                 {[
+                     { id: 'serviceMoving', label: 'Mutare', icon: TruckIcon },
+                     { id: 'servicePacking', label: 'Împachetare', icon: CubeIcon },
+                     { id: 'serviceDisassembly', label: 'Demontare', icon: CubeIcon },
+                     { id: 'serviceCleanout', label: 'Debarasare', icon: CheckCircleIcon }, // Added Cleanout
+                     { id: 'serviceStorage', label: 'Depozitare', icon: HomeIcon },
+                     { id: 'serviceTransportOnly', label: 'Doar Transport', icon: TruckIcon },
+                 ].map(s => (
+                     <label key={s.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all ${
+                         (form as any)[s.id] ? 'border-purple-500 bg-purple-50 ring-1 ring-purple-500' : 'border-gray-200 bg-white hover:bg-gray-50'
+                     }`}>
+                         <input type="checkbox" className="sr-only" checked={!!(form as any)[s.id]} onChange={e => setForm(prev => ({...prev, [s.id]: e.target.checked}))} />
+                         <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${ (form as any)[s.id] ? 'bg-purple-200 text-purple-700' : 'bg-gray-100 text-gray-500'}`}>
+                             <s.icon className="h-4 w-4" />
+                         </div>
+                         <span className={`text-sm font-medium ${ (form as any)[s.id] ? 'text-purple-900' : 'text-gray-700'}`}>{s.label}</span>
+                     </label>
+                 ))}
+              </div>
+          </div>
+          
+          {/* Survey Type */}
+          <div className="rounded-xl border border-yellow-100 bg-yellow-50/50 p-4">
+              <label className="mb-3 block text-sm font-semibold text-gray-900">Survey și estimare <span className="text-red-500">*</span></label>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <button
+                    type="button"
+                    onClick={() => setForm(s => ({...s, surveyType: 'in-person'}))}
+                    className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${
+                        form.surveyType === 'in-person' 
+                        ? 'border-yellow-500 bg-yellow-50 ring-1 ring-yellow-500' 
+                        : 'border-gray-200 bg-white hover:border-yellow-300'
+                    }`}
+                  >
+                     <div className={`rounded-lg p-2 ${ form.surveyType === 'in-person' ? 'bg-yellow-200 text-yellow-800' : 'bg-gray-100 text-gray-500'}`}>
+                         <UserIcon className="h-6 w-6" />
+                     </div>
+                     <div className="text-left">
+                         <p className="font-bold text-gray-900">Survey la fața locului</p>
+                         <p className="text-xs text-gray-500">Un reprezentant va veni să evalueze bunurile</p>
+                     </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setForm(s => ({...s, surveyType: 'video'}))}
+                    className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${
+                        form.surveyType === 'video' 
+                        ? 'border-yellow-500 bg-yellow-50 ring-1 ring-yellow-500' 
+                        : 'border-gray-200 bg-white hover:border-yellow-300'
+                    }`}
+                  >
+                     <div className={`rounded-lg p-2 ${ form.surveyType === 'video' ? 'bg-yellow-200 text-yellow-800' : 'bg-gray-100 text-gray-500'}`}>
+                         <VideoCameraIcon className="h-6 w-6" />
+                     </div>
+                     <div className="text-left">
+                         <p className="font-bold text-gray-900">Survey video</p>
+                         <p className="text-xs text-gray-500">Evaluare online rapidă</p>
+                     </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setForm(s => ({...s, surveyType: 'quick-estimate'}))}
+                    className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${
+                        form.surveyType === 'quick-estimate' 
+                        ? 'border-yellow-500 bg-yellow-50 ring-1 ring-yellow-500' 
+                        : 'border-gray-200 bg-white hover:border-yellow-300'
+                    }`}
+                  >
+                     <div className={`rounded-lg p-2 ${ form.surveyType === 'quick-estimate' ? 'bg-yellow-200 text-yellow-800' : 'bg-gray-100 text-gray-500'}`}>
+                         <BoltIcon className="h-6 w-6" />
+                     </div>
+                     <div className="text-left">
+                         <p className="font-bold text-gray-900">Estimare rapidă</p>
+                         <p className="text-xs text-gray-500">Ofertă estimativă pe baza informațiilor</p>
+                     </div>
+                  </button>
+              </div>
+              <div className="mt-3 flex items-start gap-2 rounded-lg bg-yellow-100 p-3 text-xs text-yellow-800">
+                   <CheckCircleSolid className="h-5 w-5 shrink-0 text-yellow-600" />
+                   <p>Recomandăm un survey pentru o ofertă precisă. Un survey ne ajută să determinăm mărimea vehiculului necesar și numărul de oameni pentru mutare.</p>
+              </div>
+          </div>
+
+           {/* Media Upload */}
+          <div className="rounded-xl border border-sky-100 bg-sky-50/50 p-4">
+              <label className="mb-3 block text-sm font-semibold text-gray-900">Poze și video <span className="text-red-500">*</span></label>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+                  <button
+                    type="button"
+                    onClick={() => setForm(s => ({...s, mediaUpload: 'now'}))}
+                    className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${
+                        form.mediaUpload === 'now' 
+                        ? 'border-sky-500 bg-sky-50 ring-1 ring-sky-500' 
+                        : 'border-gray-200 bg-white hover:border-sky-300'
+                    }`}
+                  >
+                     <div className={`rounded-lg p-2 ${ form.mediaUpload === 'now' ? 'bg-sky-200 text-sky-800' : 'bg-gray-100 text-gray-500'}`}>
+                         <CloudArrowUpIcon className="h-6 w-6" />
+                     </div>
+                     <div className="text-left">
+                         <p className="font-bold text-gray-900">Upload acum</p>
+                         <p className="text-xs text-gray-500">Încarcă fotografii/video imediat</p>
+                     </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setForm(s => ({...s, mediaUpload: 'later'}))}
+                    className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${
+                        form.mediaUpload === 'later' 
+                        ? 'border-sky-500 bg-sky-50 ring-1 ring-sky-500' 
+                        : 'border-gray-200 bg-white hover:border-sky-300'
+                    }`}
+                  >
+                     <div className={`rounded-lg p-2 ${ form.mediaUpload === 'later' ? 'bg-sky-200 text-sky-800' : 'bg-gray-100 text-gray-500'}`}>
+                         <EnvelopeIcon className="h-6 w-6" />
+                     </div>
+                     <div className="text-left">
+                         <p className="font-bold text-gray-900">Primesc link pe email</p>
+                         <p className="text-xs text-gray-500">Voi primi un link pentru upload ulterior</p>
+                     </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => setForm(s => ({...s, mediaUpload: 'none'}))}
+                    className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${
+                        form.mediaUpload === 'none' 
+                        ? 'border-sky-500 bg-sky-50 ring-1 ring-sky-500' 
+                        : 'border-gray-200 bg-white hover:border-sky-300'
+                    }`}
+                  >
+                     <div className={`rounded-lg p-2 ${ form.mediaUpload === 'none' ? 'bg-sky-200 text-sky-800' : 'bg-gray-100 text-gray-500'}`}>
+                         <XMarkIcon className="h-6 w-6" />
+                     </div>
+                     <div className="text-left">
+                         <p className="font-bold text-gray-900">Nu doresc să adaug poze</p>
+                         <p className="text-xs text-gray-500">Continui fără a trimite fotografii/video</p>
+                     </div>
+                  </button>
+              </div>
+              
+               {form.mediaUpload === 'now' && (
+                  <div className="mt-4 rounded-xl border border-dashed border-sky-300 bg-white p-6 text-center">
+                      <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-sky-50 text-sky-500">
+                          <CloudArrowUpIcon className="h-6 w-6" />
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900">Click pentru a încărca fișiere</p>
+                      <p className="text-xs text-gray-500">Poze sau video (max 50MB per fișier)</p>
+                      <input 
+                        type="file" 
+                        multiple 
+                        accept="image/*,video/*"
+                        className="absolute inset-0 cursor-pointer opacity-0"
+                        onChange={(e) => {
+                            const files = Array.from(e.target.files || []);
+                            setForm(s => ({...s, mediaFiles: files}));
+                            toast.success(`${files.length} fișiere selectate`);
+                        }}
+                      />
+                      {form.mediaFiles && form.mediaFiles.length > 0 && (
+                          <div className="mt-3 flex flex-wrap justify-center gap-2">
+                              {form.mediaFiles.map((f, i) => (
+                                  <span key={i} className="inline-flex items-center rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-medium text-sky-800">
+                                      {f.name}
+                                  </span>
+                              ))}
+                          </div>
+                      )}
+                  </div>
+               )}
+          </div>
+     </div>
   );
 
   // Step 4: Date & Details
