@@ -78,13 +78,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   .highlight { background: #f0fdf4; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
                   .button { display: inline-block; background: #10b981; color: white; padding: 14px 35px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: bold; }
                   .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-                  .stars { font-size: 28px; margin: 10px 0; }
+                  .stars { margin: 15px 0; }
+                  .star { display: inline-block; width: 28px; height: 28px; margin: 0 3px; }
                 </style>
               </head>
               <body>
                 <div class="container">
                   <div class="header">
-                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <div class="stars">
+                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    </div>
                     <h1 style="margin: 0;">Părerea ta contează!</h1>
                   </div>
                   <div class="content">
