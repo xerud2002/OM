@@ -64,7 +64,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'reviewRequest':
         emailResult = await sendEmail({
           to: data.customerEmail,
-          subject: `Spune-ne părerea ta despre mutarea cu ${data.companyName}`,
+          subject: `Cum a fost experiența ta cu ${data.companyName}? Lasă o recenzie!`,
           html: `
             <!DOCTYPE html>
             <html lang="ro">
@@ -75,25 +75,38 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                   .container { max-width: 600px; margin: 0 auto; padding: 20px; }
                   .header { background: linear-gradient(135deg, #10b981, #0ea5e9); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
                   .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-                  .button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
+                  .highlight { background: #f0fdf4; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
+                  .button { display: inline-block; background: #10b981; color: white; padding: 14px 35px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: bold; }
                   .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
+                  .stars { font-size: 28px; margin: 10px 0; }
                 </style>
               </head>
               <body>
                 <div class="container">
                   <div class="header">
-                    <h1>⭐ Cum a fost mutarea?</h1>
+                    <div class="stars">⭐⭐⭐⭐⭐</div>
+                    <h1 style="margin: 0;">Părerea ta contează!</h1>
                   </div>
                   <div class="content">
                     <p>Bună ${data.customerName},</p>
-                    <p>Sperăm că mutarea cu <strong>${data.companyName}</strong> a decurs bine!</p>
-                    <p>Ne-ar ajuta enorm dacă ne-ai putea spune părerea ta. Feedback-ul tău îi ajută pe alți utilizatori să ia cele mai bune decizii.</p>
+                    
+                    <p>Ai ales oferta de la <strong>${data.companyName}</strong> pentru mutarea ta. Sperăm că totul a decurs conform așteptărilor!</p>
+                    
+                    <div class="highlight">
+                      <p style="margin: 0;"><strong>🎯 Te rugăm să lași o recenzie pentru ${data.companyName}</strong></p>
+                      <p style="margin: 10px 0 0 0; font-size: 14px;">Feedback-ul tău ajută alți clienți să ia decizii informate și ajută companiile să își îmbunătățească serviciile.</p>
+                    </div>
+                    
+                    <p>Durează doar 1-2 minute și înseamnă foarte mult pentru comunitatea noastră!</p>
+                    
                     <p style="text-align: center;">
-                      <a href="${data.reviewUrl}" class="button">Lasă un review</a>
+                      <a href="${data.reviewUrl}" class="button">✍️ Lasă o Recenzie Acum</a>
                     </p>
-                    <p>Îți mulțumim pentru timpul acordat!</p>
+                    
+                    <p style="color: #6b7280; font-size: 14px;">Poți evalua: profesionalismul echipei, punctualitatea, grija față de obiectele tale și raportul calitate-preț.</p>
                   </div>
                   <div class="footer">
+                    <p>Îți mulțumim pentru încredere!</p>
                     <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
                   </div>
                 </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import LayoutWrapper from "@/components/layout/Layout";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import RequireRole from "@/components/auth/RequireRole";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { db } from "@/services/firebase";
@@ -54,7 +54,7 @@ export default function CustomerSettings() {
 
   return (
     <RequireRole allowedRole="customer">
-      <LayoutWrapper>
+      <DashboardLayout role="customer">
         <section className="mx-auto max-w-3xl px-4 py-10">
           <h1 className="mb-6 text-2xl font-bold text-slate-900">
             Setări{" "}
@@ -105,7 +105,7 @@ export default function CustomerSettings() {
             </form>
           )}
         </section>
-      </LayoutWrapper>
+      </DashboardLayout>
     </RequireRole>
   );
 }

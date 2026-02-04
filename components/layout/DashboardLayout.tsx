@@ -38,6 +38,7 @@ interface DashboardLayoutProps {
     email?: string;
     photoURL?: string;
   } | null;
+  companyName?: string;
   navigation?: NavItem[];
   activeTab?: string;
   stats?: {
@@ -80,8 +81,8 @@ const roleColors: Record<DashboardRole, { primary: string; accent: string; bg: s
     bg: "bg-white border-r border-gray-200",
   },
   company: {
-    primary: "blue",
-    accent: "from-blue-500 to-indigo-500",
+    primary: "emerald",
+    accent: "from-emerald-500 to-teal-500",
     bg: "bg-white border-r border-gray-200",
   },
   admin: {
@@ -101,6 +102,7 @@ export default function DashboardLayout({
   children,
   role,
   user,
+  companyName,
   navigation,
   activeTab,
   stats,
@@ -125,7 +127,10 @@ export default function DashboardLayout({
     router.push("/");
   };
 
-  const userName = user?.displayName?.split(" ")[0] || user?.email?.split("@")[0] || roleLabels[role];
+  // For companies, use companyName if available, otherwise use displayName
+  const userName = role === "company" && companyName 
+    ? companyName 
+    : user?.displayName || user?.email?.split("@")[0] || roleLabels[role];
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -203,12 +208,12 @@ export default function DashboardLayout({
                           {navWithCurrent.map((item) => {
                             const mobileActiveStyles = {
                               customer: "bg-emerald-50 text-emerald-700",
-                              company: "bg-blue-50 text-blue-700",
+                              company: "bg-emerald-50 text-emerald-700",
                               admin: "bg-purple-50 text-purple-700",
                             };
                             const mobileActiveIconStyles = {
                               customer: "text-emerald-600",
-                              company: "text-blue-600",
+                              company: "text-emerald-600",
                               admin: "text-purple-600",
                             };
                             return (
@@ -290,12 +295,12 @@ export default function DashboardLayout({
                     // Active styles based on role
                     const activeStyles = {
                       customer: "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
-                      company: "bg-blue-50 text-blue-700 border-l-2 border-blue-500",
+                      company: "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
                       admin: "bg-purple-50 text-purple-700 border-l-2 border-purple-500",
                     };
                     const activeIconStyles = {
                       customer: "text-emerald-600",
-                      company: "text-blue-600",
+                      company: "text-emerald-600",
                       admin: "text-purple-600",
                     };
 

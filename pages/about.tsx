@@ -158,7 +158,7 @@ export default function AboutPage() {
                 <span className="text-sm font-semibold text-emerald-700">Povestea noastră</span>
               </motion.div>
 
-              <h1 className="mb-8 text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl md:text-6xl lg:text-7xl">
+              <h1 className="mb-8 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
                 Facem mutările
                 <br />
                 <span className="relative">

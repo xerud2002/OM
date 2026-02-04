@@ -15,16 +15,27 @@ export async function sendEmail(params: EmailParams, templateId?: string): Promi
     emailType = 'reviewRequest';
   }
 
+  // Build proper data object based on email type
+  const data: Record<string, any> = {
+    email: params.to_email,
+    name: params.to_name || params.customer_name || '',
+    ...params,
+  };
+
+  // For reviewRequest, map fields correctly
+  if (emailType === 'reviewRequest') {
+    data.customerEmail = params.to_email;
+    data.customerName = params.to_name || params.customer_name || '';
+    data.companyName = params.company_name || '';
+    data.reviewUrl = params.review_link || '';
+  }
+
   const response = await fetch('/api/send-email', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
       type: emailType,
-      data: {
-        email: params.to_email,
-        name: params.to_name || params.customer_name || '',
-        ...params,
-      },
+      data,
     }),
   });
 

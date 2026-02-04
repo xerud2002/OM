@@ -12,6 +12,7 @@ import {
   EnvelopeIcon,
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
 
 interface PlatformSettings {
   creditPrice: number;
@@ -160,15 +161,11 @@ export default function AdminSettings() {
                       <p className="font-medium text-gray-900">Notificări email</p>
                       <p className="text-sm text-gray-500">Trimite email-uri pentru evenimente importante</p>
                     </div>
-                    <label className="relative inline-flex cursor-pointer items-center">
-                      <input
-                        type="checkbox"
-                        checked={settings.emailNotifications}
-                        onChange={(e) => handleChange("emailNotifications", e.target.checked)}
-                        className="peer sr-only"
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-purple-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
-                    </label>
+                    <ToggleSwitch
+                      checked={settings.emailNotifications}
+                      onChange={(checked) => handleChange("emailNotifications", checked)}
+                      color="purple"
+                    />
                   </div>
                   <div>
                     <label className="mb-2 block text-sm font-medium text-gray-700">
@@ -204,15 +201,11 @@ export default function AdminSettings() {
                       Când este activ, utilizatorii văd o pagină de mentenanță
                     </p>
                   </div>
-                  <label className="relative inline-flex cursor-pointer items-center">
-                    <input
-                      type="checkbox"
-                      checked={settings.maintenanceMode}
-                      onChange={(e) => handleChange("maintenanceMode", e.target.checked)}
-                      className="peer sr-only"
-                    />
-                    <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-red-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
-                  </label>
+                  <ToggleSwitch
+                    checked={settings.maintenanceMode}
+                    onChange={(checked) => handleChange("maintenanceMode", checked)}
+                    color="red"
+                  />
                 </div>
               </div>
 

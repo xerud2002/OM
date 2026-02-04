@@ -26,6 +26,7 @@ service cloud.firestore {
       allow read: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
       allow create: if isSignedIn() && request.auth.uid == companyId && canCreateCompany();
       // Admin can update any company (for verification), company can update own
+      // Company credits updates are allowed for offer placements
       allow update: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
       allow delete: if false; // Prevent deletion
 
@@ -45,6 +46,18 @@ service cloud.firestore {
           request.resource.data.companyId == companyId &&
           request.resource.data.requestId == requestId &&
           request.resource.data.status == 'completed';
+        // No updates or deletes allowed
+        allow update, delete: if false;
+      }
+
+      // Company transactions subcollection (for credit audit trail)
+      match /transactions/{transactionId} {
+        // Company can read their own transactions
+        allow read: if isSignedIn() && request.auth.uid == companyId;
+        // Company can create transaction records (offer placements, credit purchases)
+        allow create: if isSignedIn() && 
+          request.auth.uid == companyId &&
+          request.resource.data.keys().hasAll(['type', 'amount', 'createdAt']);
         // No updates or deletes allowed
         allow update, delete: if false;
       }
@@ -181,9 +194,8 @@ service cloud.firestore {
       allow read: if resource.data.status == 'published' && 
                      resource.data.archived != true;
       
-      // Admin write access (authenticated users can create/update articles)
-      // In production, add additional role check for admin users
-      allow create, update: if isSignedIn();
+      // Admin write access only - secured for production
+      allow create, update: if isSignedIn() && isAdmin();
       
       // No deletion - use archived flag instead
       allow delete: if false;

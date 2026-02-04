@@ -10,6 +10,9 @@ import { sendEmail } from "@/utils/emailHelpers";
 import { toast } from "sonner";
 import { logger } from "@/utils/logger";
 import VerificationSection from "@/components/company/VerificationSection";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment } from "react";
+import { XMarkIcon, EnvelopeIcon, UserIcon, StarIcon } from "@heroicons/react/24/outline";
 
 export default function CompanyProfile() {
   const [company, setCompany] = useState<any>(null);
@@ -102,7 +105,7 @@ export default function CompanyProfile() {
         <DashboardLayout role="company" user={company}>
           <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
+              <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600"></div>
               <p className="mt-4 text-sm font-medium text-gray-600">Se încarcă profilul...</p>
             </div>
           </div>
@@ -125,27 +128,29 @@ export default function CompanyProfile() {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border border-gray-200 bg-white shadow-sm"
+            className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
           >
             {/* Header Section with Avatar */}
-            <div className="border-b border-gray-200 bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white rounded-t-xl">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-2xl font-bold backdrop-blur-sm">
+            <div className="relative bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 p-4 sm:p-6">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex items-center gap-3 sm:gap-4">
+                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-xl font-bold text-white backdrop-blur-sm sm:h-16 sm:w-16 sm:text-2xl">
                     {(profile?.companyName || company?.displayName || "C").charAt(0).toUpperCase()}
                   </div>
-                  <div>
-                    <h2 className="text-xl font-bold">
+                  <div className="min-w-0 flex-1">
+                    <h2 className="truncate text-lg font-bold text-white sm:text-xl">
                       {profile?.companyName || company?.displayName || "Companie"}
                     </h2>
-                    <p className="text-blue-100">{profile?.email || company?.email}</p>
+                    <p className="truncate text-sm text-emerald-100 sm:text-base">
+                      {profile?.email || company?.email}
+                    </p>
                   </div>
                 </div>
 
                 {!editing && (
                   <button
                     onClick={() => setEditing(true)}
-                    className="rounded-lg bg-white/20 px-4 py-2 font-semibold text-white backdrop-blur-sm transition hover:bg-white/30"
+                    className="w-full rounded-lg bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm transition hover:bg-white/30 sm:w-auto sm:text-base"
                   >
                     ✏️ Editează
                   </button>
@@ -154,20 +159,20 @@ export default function CompanyProfile() {
             </div>
 
             {/* Rating Section */}
-            <div className="border-b border-gray-200 bg-gray-50 p-6">
-              <div className="flex items-center justify-between">
+            <div className="border-b border-gray-200 bg-gray-50 p-4 sm:p-6">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <h3 className="text-lg font-semibold text-gray-900">Rating Companie</h3>
-                  <p className="text-sm text-gray-600">Evaluările clienților tăi</p>
+                  <h3 className="text-base font-semibold text-gray-900 sm:text-lg">Rating Companie</h3>
+                  <p className="text-xs text-gray-600 sm:text-sm">Evaluările clienților tăi</p>
                 </div>
-                <div className="text-right">
+                <div className="flex items-center gap-2 sm:flex-col sm:items-end sm:gap-0">
                   <div className="flex items-center gap-2">
-                    <StarRating rating={profile?.averageRating || 0} size="lg" />
-                    <span className="text-3xl font-bold text-gray-900">
+                    <StarRating rating={profile?.averageRating || 0} size="md" />
+                    <span className="text-2xl font-bold text-gray-900 sm:text-3xl">
                       {profile?.averageRating ? profile.averageRating.toFixed(1) : "0.0"}
                     </span>
                   </div>
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="text-xs text-gray-500 sm:mt-1 sm:text-sm">
                     {profile?.totalReviews || 0}{" "}
                     {(profile?.totalReviews || 0) === 1 ? "recenzie" : "recenzii"}
                   </p>
@@ -176,7 +181,7 @@ export default function CompanyProfile() {
             </div>
 
             {/* Details Section */}
-            <div className="p-6">
+            <div className="p-4 sm:p-6">
               {editing ? (
                 <div className="space-y-4">
                   <div>
@@ -403,122 +408,176 @@ export default function CompanyProfile() {
           </motion.div>
 
           {/* Request Review Modal */}
-          {showRequestReview && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm"
-              onClick={() => setShowRequestReview(false)}
+          <Transition appear show={showRequestReview} as={Fragment}>
+            <Dialog
+              as="div"
+              className="relative z-50"
+              onClose={() => !sendingReview && setShowRequestReview(false)}
             >
-              <motion.div
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                exit={{ scale: 0.9 }}
-                onClick={(e) => e.stopPropagation()}
-                className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0"
+                enterTo="opacity-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
               >
-                <h3 className="mb-4 text-xl font-bold text-gray-900">
-                  📧 Cere Review de la Client
-                </h3>
-                <p className="mb-4 text-sm text-gray-600">
-                  Trimite un email unui client pentru a te evalua serviciile tale
-                </p>
+                <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
+              </Transition.Child>
 
-                <div className="space-y-4">
-                  <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                      Nume Client
-                    </label>
-                    <input
-                      type="text"
-                      value={reviewCustomerName}
-                      onChange={(e) => setReviewCustomerName(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 p-3 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                      placeholder="Ex: Ion Popescu"
-                    />
-                  </div>
+              <div className="fixed inset-0 overflow-y-auto">
+                <div className="flex min-h-full items-center justify-center p-4">
+                  <Transition.Child
+                    as={Fragment}
+                    enter="ease-out duration-300"
+                    enterFrom="opacity-0 scale-95"
+                    enterTo="opacity-100 scale-100"
+                    leave="ease-in duration-200"
+                    leaveFrom="opacity-100 scale-100"
+                    leaveTo="opacity-0 scale-95"
+                  >
+                    <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
+                      {/* Header */}
+                      <div className="relative bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-5">
+                        <button
+                          onClick={() => setShowRequestReview(false)}
+                          disabled={sendingReview}
+                          className="absolute right-4 top-4 rounded-full p-1 text-white/80 transition hover:bg-white/20 hover:text-white disabled:opacity-50"
+                        >
+                          <XMarkIcon className="h-5 w-5" />
+                        </button>
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white/20">
+                            <StarIcon className="h-6 w-6 text-white" />
+                          </div>
+                          <div>
+                            <Dialog.Title className="text-lg font-bold text-white">
+                              Cere Review de la Client
+                            </Dialog.Title>
+                            <p className="text-sm text-emerald-100">
+                              Crește-ți reputația cu recenzii autentice
+                            </p>
+                          </div>
+                        </div>
+                      </div>
 
-                  <div>
-                    <label className="mb-1 block text-sm font-medium text-gray-700">
-                      Email Client
-                    </label>
-                    <input
-                      type="email"
-                      value={reviewEmail}
-                      onChange={(e) => setReviewEmail(e.target.value)}
-                      className="w-full rounded-lg border border-gray-300 p-3 transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-                      placeholder="Ex: client@email.com"
-                    />
-                  </div>
+                      {/* Content */}
+                      <div className="p-6">
+                        <div className="space-y-4">
+                          <div>
+                            <label className="mb-1.5 flex items-center gap-2 text-sm font-medium text-gray-700">
+                              <UserIcon className="h-4 w-4 text-gray-400" />
+                              Nume Client
+                            </label>
+                            <input
+                              type="text"
+                              value={reviewCustomerName}
+                              onChange={(e) => setReviewCustomerName(e.target.value)}
+                              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition placeholder:text-gray-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                              placeholder="Ex: Ion Popescu"
+                            />
+                          </div>
 
-                  <div className="rounded-lg bg-blue-50 p-3">
-                    <p className="text-xs text-blue-800">
-                      💡 Clientul va primi un email cu un link pentru a lăsa un review despre
-                      serviciile tale
-                    </p>
-                  </div>
+                          <div>
+                            <label className="mb-1.5 flex items-center gap-2 text-sm font-medium text-gray-700">
+                              <EnvelopeIcon className="h-4 w-4 text-gray-400" />
+                              Email Client
+                            </label>
+                            <input
+                              type="email"
+                              value={reviewEmail}
+                              onChange={(e) => setReviewEmail(e.target.value)}
+                              className="w-full rounded-xl border border-gray-200 bg-gray-50 px-4 py-3 text-gray-900 transition placeholder:text-gray-400 focus:border-emerald-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500/20"
+                              placeholder="Ex: client@email.com"
+                            />
+                          </div>
 
-                  <div className="flex gap-3 pt-2">
-                    <button
-                      onClick={async () => {
-                        if (!reviewEmail || !reviewCustomerName) {
-                          toast.error("Te rugăm să completezi toate câmpurile");
-                          return;
-                        }
+                          <div className="flex items-start gap-3 rounded-xl bg-emerald-50 p-4">
+                            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-emerald-100">
+                              <EnvelopeIcon className="h-4 w-4 text-emerald-600" />
+                            </div>
+                            <p className="text-sm text-emerald-800">
+                              Clientul va primi un email personalizat cu un link pentru a lăsa o recenzie despre serviciile tale.
+                            </p>
+                          </div>
+                        </div>
 
-                        // Validate email format
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        if (!emailRegex.test(reviewEmail)) {
-                          toast.error("Adresa de email nu este validă");
-                          return;
-                        }
+                        {/* Actions */}
+                        <div className="mt-6 flex gap-3">
+                          <button
+                            onClick={async () => {
+                              if (!reviewEmail || !reviewCustomerName) {
+                                toast.error("Te rugăm să completezi toate câmpurile");
+                                return;
+                              }
 
-                        setSendingReview(true);
-                        try {
-                          // Send review request email via EmailJS
-                          await sendEmail(
-                            {
-                              to_email: reviewEmail,
-                              to_name: reviewCustomerName,
-                              company_name: profile?.name || "Compania noastră",
-                              review_link: `${window.location.origin}/company/profile?id=${auth.currentUser?.uid}`,
-                            },
-                            "template_review_request" // You'll need to create this template in EmailJS
-                          );
+                              const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                              if (!emailRegex.test(reviewEmail)) {
+                                toast.error("Adresa de email nu este validă");
+                                return;
+                              }
 
-                          toast.success(`✅ Email trimis către ${reviewCustomerName}`);
-                          setShowRequestReview(false);
-                          setReviewEmail("");
-                          setReviewCustomerName("");
-                        } catch (error) {
-                          logger.error("Error sending review request:", error);
-                          toast.error("A apărut o eroare. Te rugăm să încerci din nou.");
-                        } finally {
-                          setSendingReview(false);
-                        }
-                      }}
-                      disabled={sendingReview}
-                      className="flex-1 rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
-                    >
-                      {sendingReview ? "Se trimite..." : "📤 Trimite Cerere"}
-                    </button>
-                    <button
-                      onClick={() => {
-                        setShowRequestReview(false);
-                        setReviewEmail("");
-                        setReviewCustomerName("");
-                      }}
-                      disabled={sendingReview}
-                      className="rounded-lg border border-gray-300 bg-white px-6 py-3 font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
-                    >
-                      Anulează
-                    </button>
-                  </div>
+                              setSendingReview(true);
+                              try {
+                                await sendEmail(
+                                  {
+                                    to_email: reviewEmail,
+                                    to_name: reviewCustomerName,
+                                    company_name: profile?.companyName || "Compania noastră",
+                                    review_link: `${window.location.origin}/reviews/new?company=${auth.currentUser?.uid}`,
+                                  },
+                                  "template_review_request"
+                                );
+
+                                toast.success(`✅ Email trimis către ${reviewCustomerName}`);
+                                setShowRequestReview(false);
+                                setReviewEmail("");
+                                setReviewCustomerName("");
+                              } catch (error) {
+                                logger.error("Error sending review request:", error);
+                                toast.error("A apărut o eroare. Te rugăm să încerci din nou.");
+                              } finally {
+                                setSendingReview(false);
+                              }
+                            }}
+                            disabled={sendingReview || !reviewEmail || !reviewCustomerName}
+                            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-emerald-500/40 disabled:cursor-not-allowed disabled:opacity-50"
+                          >
+                            {sendingReview ? (
+                              <>
+                                <svg className="h-5 w-5 animate-spin" viewBox="0 0 24 24">
+                                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                                </svg>
+                                Se trimite...
+                              </>
+                            ) : (
+                              <>
+                                <EnvelopeIcon className="h-5 w-5" />
+                                Trimite Cerere
+                              </>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => {
+                              setShowRequestReview(false);
+                              setReviewEmail("");
+                              setReviewCustomerName("");
+                            }}
+                            disabled={sendingReview}
+                            className="rounded-xl border border-gray-200 bg-white px-5 py-3 font-semibold text-gray-700 transition hover:bg-gray-50 disabled:opacity-50"
+                          >
+                            Anulează
+                          </button>
+                        </div>
+                      </div>
+                    </Dialog.Panel>
+                  </Transition.Child>
                 </div>
-              </motion.div>
-            </motion.div>
-          )}
+              </div>
+            </Dialog>
+          </Transition>
         </div>
       </DashboardLayout>
     </RequireRole>

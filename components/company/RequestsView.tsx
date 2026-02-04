@@ -139,60 +139,59 @@ function RequestCardCompact({
       {/* Header - always visible */}
       <div onClick={() => setIsExpanded(!isExpanded)} className="group cursor-pointer">
         {/* Main header row */}
-        <div className="flex items-center justify-between gap-4">
-          {/* Left: Code + Route */}
-          <div className="flex min-w-0 flex-1 items-center gap-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+          {/* Left: Code + Client */}
+          <div className="flex items-center gap-2 sm:gap-3">
             <div className="flex flex-col">
-              <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-base font-bold text-transparent">
+              <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-sm font-bold text-transparent sm:text-base">
                 {(r as any).requestCode || r.id.substring(0, 8)}
-              </span>
-              <span className="text-xs font-medium text-emerald-600">
-                {r.customerName?.split(" ")[0] || "Client"}
               </span>
             </div>
 
-            {/* Route indicator */}
-            <div className="hidden items-center gap-2.5 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100/80 px-4 py-2 text-xs ring-1 ring-slate-200/50 sm:flex">
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 shadow-sm" />
-                <span className="font-semibold text-slate-700">
-                  {(r as any).fromCounty || r.fromCity}
-                </span>
-              </div>
-              <svg
-                className="h-4 w-4 text-emerald-500"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2.5}
-              >
+            {/* Route indicator - desktop */}
+            <div className="hidden items-center gap-1.5 text-xs sm:flex">
+              <span className="font-semibold text-slate-600">
+                {(r as any).fromCounty || r.fromCity}
+              </span>
+              <svg className="h-3.5 w-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-              <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm" />
-                <span className="font-semibold text-slate-700">
-                  {(r as any).toCounty || r.toCity}
+              <span className="font-semibold text-slate-600">
+                {(r as any).toCounty || r.toCity}
+              </span>
+            </div>
+
+            {/* Property badges - inline after route */}
+            <div className="hidden flex-wrap items-center gap-1 sm:flex">
+              {(r as any).fromRooms && (
+                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600">
+                  {(r as any).fromRooms} camere
                 </span>
-              </div>
+              )}
+              {(r as any).fromType && (
+                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600">
+                  {(r as any).fromType === "house" ? "Casă" : "Apartament"}
+                </span>
+              )}
+              {(r as any).fromFloor !== undefined && (
+                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600">
+                  Etaj {(r as any).fromFloor}
+                </span>
+              )}
+              {(r as any).fromElevator !== undefined && (
+                <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-medium ${(r as any).fromElevator ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-500"}`}>
+                  {(r as any).fromElevator ? "Cu lift" : "Fără lift"}
+                </span>
+              )}
             </div>
           </div>
 
-          {/* Right: Badges + Actions */}
-          <div className="flex shrink-0 items-center gap-2.5">
+          {/* Right: Rooms badge + Actions */}
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             {(r as any).rooms && (
-              <span className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm shadow-indigo-200">
-                <svg
-                  className="h-3.5 w-3.5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
+              <span className="flex items-center gap-1 rounded-lg bg-gradient-to-r from-indigo-500 to-purple-500 px-2 py-1 text-[10px] font-bold text-white shadow-sm shadow-indigo-200 sm:rounded-xl sm:px-3 sm:py-1.5 sm:text-xs">
+                <svg className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                 </svg>
                 {(r as any).rooms} cam
               </span>
@@ -204,7 +203,7 @@ function RequestCardCompact({
                 e.stopPropagation();
                 setIsExpanded(!isExpanded);
               }}
-              className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 print:hidden ${isExpanded
+              className={`flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-[10px] font-bold transition-all duration-200 print:hidden sm:gap-1.5 sm:rounded-xl sm:px-4 sm:py-2 sm:text-xs ${isExpanded
                 ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200"
                 : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200 group-hover:from-emerald-50 group-hover:to-teal-50 group-hover:text-emerald-600 group-hover:ring-emerald-200"
                 }`}
@@ -217,39 +216,42 @@ function RequestCardCompact({
                 viewBox="0 0 24 24"
                 stroke="currentColor"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2.5}
-                  d="M19 9l-7 7-7-7"
-                />
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M19 9l-7 7-7-7" />
               </motion.svg>
               {isExpanded ? "Închide" : "Vezi"}
             </button>
           </div>
         </div>
 
-        {/* Mobile route - visible only on small screens */}
-        <div className="mt-3 flex items-center gap-2 text-xs sm:hidden">
-          <div className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-gradient-to-br from-orange-400 to-amber-500" />
-            <span className="font-medium text-slate-600">
-              {(r as any).fromCounty || r.fromCity}
-            </span>
-          </div>
-          <svg
-            className="h-3.5 w-3.5 text-emerald-500"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2.5}
-          >
+        {/* Mobile: Route + badges on second line */}
+        <div className="mt-2 flex flex-wrap items-center gap-1.5 text-xs sm:hidden">
+          <span className="font-medium text-slate-600">{(r as any).fromCounty || r.fromCity}</span>
+          <svg className="h-3 w-3 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
-          <div className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500" />
-            <span className="font-medium text-slate-600">{(r as any).toCounty || r.toCity}</span>
-          </div>
+          <span className="font-medium text-slate-600">{(r as any).toCounty || r.toCity}</span>
+          
+          {/* Property badges on mobile */}
+          {(r as any).fromRooms && (
+            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[9px] font-medium text-slate-500">
+              {(r as any).fromRooms} cam
+            </span>
+          )}
+          {(r as any).fromType && (
+            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[9px] font-medium text-slate-500">
+              {(r as any).fromType === "house" ? "Casă" : "Apt"}
+            </span>
+          )}
+          {(r as any).fromFloor !== undefined && (
+            <span className="rounded bg-slate-100 px-1.5 py-0.5 text-[9px] font-medium text-slate-500">
+              Et.{(r as any).fromFloor}
+            </span>
+          )}
+          {(r as any).fromElevator !== undefined && (
+            <span className={`rounded px-1.5 py-0.5 text-[9px] font-medium ${(r as any).fromElevator ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-500"}`}>
+              {(r as any).fromElevator ? "Lift" : "Fără lift"}
+            </span>
+          )}
         </div>
       </div>
 
@@ -986,14 +988,14 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
   return (
     <div>
-      <div className="mb-4 flex items-center justify-between">
-        <p className="text-sm text-gray-600">
+      <div className="mb-3 flex flex-col gap-2 sm:mb-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-xs text-gray-600 sm:text-sm">
           Total cereri: <span className="font-semibold">{sortedRequests.length}</span>
         </p>
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as any)}
-          className="rounded-lg border px-3 py-2 text-sm"
+          className="w-full rounded-lg border px-3 py-1.5 text-xs sm:w-auto sm:py-2 sm:text-sm"
         >
           <option value="date-desc">Cele mai noi</option>
           <option value="date-asc">Cele mai vechi</option>
@@ -1020,21 +1022,21 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.15, delay: index * 0.02 }}
-                className="group/card relative overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-br from-white via-white to-slate-50/80 px-5 py-4 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100/50"
+                className="group/card relative overflow-hidden rounded-xl border border-slate-200/60 bg-gradient-to-br from-white via-white to-slate-50/80 px-3 py-3 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100/50 sm:rounded-2xl sm:px-5 sm:py-4"
               >
                 {/* Decorative gradient bar */}
                 <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 opacity-80" />
 
                 {r.createdAt && (
-                  <div className="mb-3 flex items-center">
+                  <div className="mb-2 flex items-center sm:mb-3">
                     <span
-                      className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold tracking-wider uppercase shadow-sm ${getTimeAgo(r.createdAt) === "Nou!"
+                      className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold tracking-wide uppercase shadow-sm sm:gap-1.5 sm:px-3 sm:py-1 sm:text-[10px] sm:tracking-wider ${getTimeAgo(r.createdAt) === "Nou!"
                         ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white"
                         : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200"
                         }`}
                     >
                       <svg
-                        className="h-3 w-3"
+                        className="h-2.5 w-2.5 sm:h-3 sm:w-3"
                         fill="none"
                         viewBox="0 0 24 24"
                         stroke="currentColor"

@@ -11,6 +11,7 @@ import {
   MapPinIcon,
   TruckIcon,
 } from "@heroicons/react/24/outline";
+import ToggleSwitch from "@/components/ui/ToggleSwitch";
 
 interface CompanySettings {
   emailNotifications: boolean;
@@ -121,15 +122,15 @@ export default function CompanySettings() {
 
           {loading ? (
             <div className="flex items-center justify-center py-20">
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
+              <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
             </div>
           ) : (
             <div className="space-y-6">
               {/* Notifications Section */}
               <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100">
-                    <BellIcon className="h-5 w-5 text-blue-600" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-100">
+                    <BellIcon className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div>
                     <h2 className="font-bold text-gray-900">Notificări</h2>
@@ -143,15 +144,11 @@ export default function CompanySettings() {
                       <p className="font-medium text-gray-900">Notificări email</p>
                       <p className="text-sm text-gray-500">Primește email-uri pentru cereri noi</p>
                     </div>
-                    <label className="relative inline-flex cursor-pointer items-center">
-                      <input
-                        type="checkbox"
-                        checked={settings.emailNotifications}
-                        onChange={(e) => handleChange("emailNotifications", e.target.checked)}
-                        className="peer sr-only"
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
-                    </label>
+                    <ToggleSwitch
+                      checked={settings.emailNotifications}
+                      onChange={(checked) => handleChange("emailNotifications", checked)}
+                      color="emerald"
+                    />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -159,15 +156,11 @@ export default function CompanySettings() {
                       <p className="font-medium text-gray-900">Notificări SMS</p>
                       <p className="text-sm text-gray-500">Primește SMS-uri pentru cereri urgente</p>
                     </div>
-                    <label className="relative inline-flex cursor-pointer items-center">
-                      <input
-                        type="checkbox"
-                        checked={settings.smsNotifications}
-                        onChange={(e) => handleChange("smsNotifications", e.target.checked)}
-                        className="peer sr-only"
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
-                    </label>
+                    <ToggleSwitch
+                      checked={settings.smsNotifications}
+                      onChange={(checked) => handleChange("smsNotifications", checked)}
+                      color="emerald"
+                    />
                   </div>
 
                   <div className="flex items-center justify-between">
@@ -175,15 +168,11 @@ export default function CompanySettings() {
                       <p className="font-medium text-gray-900">Cereri noi</p>
                       <p className="text-sm text-gray-500">Notificare instantă când apare o cerere nouă</p>
                     </div>
-                    <label className="relative inline-flex cursor-pointer items-center">
-                      <input
-                        type="checkbox"
-                        checked={settings.newRequestNotifications}
-                        onChange={(e) => handleChange("newRequestNotifications", e.target.checked)}
-                        className="peer sr-only"
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
-                    </label>
+                    <ToggleSwitch
+                      checked={settings.newRequestNotifications}
+                      onChange={(checked) => handleChange("newRequestNotifications", checked)}
+                      color="emerald"
+                    />
                   </div>
                 </div>
               </div>
@@ -226,7 +215,7 @@ export default function CompanySettings() {
                     onChange={(e) => handleChange("maxDistance", Number(e.target.value))}
                     min={10}
                     max={500}
-                    className="w-32 rounded-lg border border-gray-200 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                    className="w-32 rounded-lg border border-gray-200 px-4 py-2 focus:border-emerald-500 focus:outline-none"
                   />
                 </div>
               </div>
@@ -234,8 +223,8 @@ export default function CompanySettings() {
               {/* Auto-Reply Section */}
               <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
                 <div className="mb-6 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-purple-100">
-                    <TruckIcon className="h-5 w-5 text-purple-600" />
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100">
+                    <TruckIcon className="h-5 w-5 text-teal-600" />
                   </div>
                   <div>
                     <h2 className="font-bold text-gray-900">Răspuns automat</h2>
@@ -249,15 +238,11 @@ export default function CompanySettings() {
                       <p className="font-medium text-gray-900">Activează răspuns automat</p>
                       <p className="text-sm text-gray-500">Trimite un mesaj când primești o cerere nouă</p>
                     </div>
-                    <label className="relative inline-flex cursor-pointer items-center">
-                      <input
-                        type="checkbox"
-                        checked={settings.autoReply}
-                        onChange={(e) => handleChange("autoReply", e.target.checked)}
-                        className="peer sr-only"
-                      />
-                      <div className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:h-5 after:w-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-blue-600 peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none"></div>
-                    </label>
+                    <ToggleSwitch
+                      checked={settings.autoReply}
+                      onChange={(checked) => handleChange("autoReply", checked)}
+                      color="emerald"
+                    />
                   </div>
 
                   {settings.autoReply && (
@@ -270,7 +255,7 @@ export default function CompanySettings() {
                         onChange={(e) => handleChange("autoReplyMessage", e.target.value)}
                         rows={3}
                         placeholder="Ex: Mulțumim pentru cerere! Vă vom contacta în cel mai scurt timp."
-                        className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-blue-500 focus:outline-none"
+                        className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-emerald-500 focus:outline-none"
                       />
                     </div>
                   )}
@@ -282,7 +267,7 @@ export default function CompanySettings() {
                 <button
                   onClick={handleSave}
                   disabled={saving}
-                  className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-6 py-3 font-semibold text-white shadow-lg shadow-blue-600/30 transition hover:bg-blue-700 disabled:opacity-50"
+                  className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-600/30 transition hover:bg-emerald-700 disabled:opacity-50"
                 >
                   <Cog6ToothIcon className="h-5 w-5" />
                   {saving ? "Se salvează..." : "Salvează setările"}

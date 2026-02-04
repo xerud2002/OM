@@ -32,10 +32,10 @@ export default function CreditBalance({ companyId }: { companyId: string }) {
   }
 
   return (
-    <div className="flex items-center gap-2 rounded-full border border-blue-500/30 bg-blue-500/10 px-4 py-2 backdrop-blur-md transition-all hover:bg-blue-500/20">
-      <Ticket className="h-5 w-5 text-blue-500" />
+    <div className="flex items-center gap-2 rounded-full border border-emerald-500/30 bg-emerald-500/10 px-4 py-2 backdrop-blur-md transition-all hover:bg-emerald-500/20">
+      <Ticket className="h-5 w-5 text-emerald-500" />
       <div className="flex flex-col leading-none">
-        <span className="text-sm font-bold text-blue-600">{credits ?? 0} Credite</span>
+        <span className="text-sm font-bold text-emerald-600">{credits ?? 0} Credite</span>
       </div>
     </div>
   );

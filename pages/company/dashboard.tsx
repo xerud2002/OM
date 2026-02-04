@@ -16,6 +16,7 @@ import {
   doc,
   updateDoc,
   deleteDoc,
+  getDoc,
 } from "firebase/firestore";
 import {
   InboxIcon,
@@ -56,6 +57,7 @@ const ConfirmModal = dynamic(() => import("@/components/ConfirmModal"), {
 export default function CompanyDashboard() {
   const router = useRouter();
   const [company, setCompany] = useState<any>(null);
+  const [companyName, setCompanyName] = useState<string>("");
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState<"all" | "accepted" | "pending" | "rejected" | "declined">("all");
@@ -80,6 +82,24 @@ export default function CompanyDashboard() {
     const unsub = onAuthChange((user) => setCompany(user));
     return () => unsub();
   }, []);
+
+  // Fetch company name from Firestore
+  useEffect(() => {
+    if (!company?.uid) return;
+    
+    const fetchCompanyName = async () => {
+      try {
+        const companyDoc = await getDoc(doc(db, "companies", company.uid));
+        if (companyDoc.exists()) {
+          setCompanyName(companyDoc.data()?.companyName || "");
+        }
+      } catch (err) {
+        logger.error("Error fetching company name:", err);
+      }
+    };
+    
+    fetchCompanyName();
+  }, [company?.uid]);
 
   // Offers listener
   useEffect(() => {
@@ -181,9 +201,10 @@ export default function CompanyDashboard() {
       <DashboardLayout
         role="company"
         user={company}
+        companyName={companyName}
         navigation={navigation}
         activeTab={activeTab}
-        showStats={activeTab === "offers"}
+        showStats={false}
         stats={stats}
         headerActions={headerActions}
       >
