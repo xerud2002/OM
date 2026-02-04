@@ -115,7 +115,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
               className="absolute top-full right-0 z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-emerald-50 to-white px-4 py-3">
+              <div className="flex items-center justify-between border-b border-gray-200 bg-linear-to-r from-blue-50 to-white px-4 py-3">
                 <div>
                   <h3 className="font-semibold text-gray-900">Notificări</h3>
                   {unreadCount > 0 && (
@@ -129,7 +129,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                         e.stopPropagation();
                         markAllAsRead();
                       }}
-                      className="rounded-lg px-2 py-1 text-xs font-medium text-emerald-600 transition-colors hover:bg-emerald-100"
+                      className="rounded-lg px-2 py-1 text-xs font-medium text-blue-600 transition-colors hover:bg-blue-100"
                     >
                       Marchează toate
                     </button>
@@ -143,11 +143,10 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                 </div>
               </div>
 
-              {/* Notifications List */}
               <div className="max-h-96 overflow-y-auto">
                 {loading ? (
                   <div className="flex items-center justify-center py-8">
-                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
+                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
                   </div>
                 ) : notifications.length === 0 ? (
                   <div className="py-8 text-center">
@@ -160,7 +159,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                       <div
                         key={notification.id}
                         className={`group relative px-4 py-3 transition-colors hover:bg-gray-50 ${
-                          !notification.read ? "bg-emerald-50/50" : ""
+                          !notification.read ? "bg-blue-50/50" : ""
                         }`}
                       >
                         <div className="flex items-start gap-3">
@@ -170,7 +169,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                                 {notification.title || "Notificare nouă"}
                               </h4>
                               {!notification.read && (
-                                <div className="h-2 w-2 shrink-0 rounded-full bg-emerald-500" />
+                                <div className="h-2 w-2 shrink-0 rounded-full bg-blue-500" />
                               )}
                             </div>
                             <p className="text-sm text-gray-600">
@@ -186,7 +185,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                                     e.stopPropagation();
                                     markAsRead(notification.id);
                                   }}
-                                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-emerald-600 opacity-0 transition-all group-hover:opacity-100 hover:bg-emerald-100"
+                                  className="flex items-center gap-1 rounded-md px-2 py-1 text-xs font-medium text-blue-600 opacity-0 transition-all group-hover:opacity-100 hover:bg-blue-100"
                                 >
                                   <Check className="h-3.5 w-3.5" />
                                   Marchează ca citit
@@ -207,3 +206,4 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
     </div>
   );
 }
+

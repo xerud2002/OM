@@ -90,7 +90,7 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
           <div className="relative mx-auto max-w-6xl px-4 text-center">
             <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Servicii Complete de{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Mutări
               </span>
             </h1>
@@ -178,7 +178,7 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
           </section>
 
           {/* CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Gata să începi?</h2>
             <p className="mb-8 text-lg text-purple-100">
               Primește 3-5 oferte gratuite în 24h și economisește până la 40%.
@@ -204,4 +204,5 @@ export const getStaticProps: GetStaticProps<MutariIndexPageProps> = async () => 
     },
   };
 };
+
 

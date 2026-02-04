@@ -132,7 +132,8 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
     }
   };
 
-  // Jump to step (only if unlocked)
+  // Jump to step (only if unlocked) - disabled, kept for future use
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const handleJumpToStep = (stepId: number) => {
     if (stepId <= currentStep) {
       const target = stepRefs.current[stepId - 1];
@@ -145,6 +146,7 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
 
   // --- RENDER HELPERS ---
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const renderStepStatus = (stepId: number) => {
     if (stepId < currentStep) return "completed";
     if (stepId === currentStep) return "current";
@@ -551,43 +553,9 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
   );
 
   return (
-    <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-      {/* --- SIDEBAR --- */}
-      <div className="w-full shrink-0 lg:sticky lg:top-4 lg:w-64">
-        <div className="rounded-2xl border border-gray-100 bg-white p-2 shadow-sm">
-          <nav className="space-y-1">
-            {STEPS.map((step) => {
-              const status = renderStepStatus(step.id);
-              return (
-                <button
-                  key={step.id}
-                  onClick={() => handleJumpToStep(step.id)}
-                  disabled={status === 'locked'}
-                  className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition-all ${status === 'current'
-                    ? 'bg-emerald-50 text-emerald-900 ring-1 ring-emerald-200'
-                    : status === 'completed'
-                      ? 'text-gray-900 hover:bg-gray-50'
-                      : 'cursor-not-allowed opacity-50'
-                    }`}
-                >
-                  <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors ${status === 'current' ? 'bg-emerald-100 text-emerald-600' :
-                    status === 'completed' ? 'bg-emerald-500 text-white' : 'bg-gray-100 text-gray-400'
-                    }`}>
-                    {status === 'completed' ? <CheckCircleSolid className="h-5 w-5" /> : <step.icon className="h-4 w-4" />}
-                  </div>
-                  <div>
-                    <p className={`text-sm font-bold ${status === 'current' ? 'text-emerald-950' : 'text-gray-900'}`}>{step.title}</p>
-                    <p className="text-xs text-gray-500">{step.desc}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </nav>
-        </div>
-      </div>
-
+    <div className="flex flex-col gap-6">
       {/* --- CONTENT STACK --- */}
-      <div className="min-w-0 flex-1 space-y-6">
+      <div className="min-w-0 w-full space-y-6">
         {STEPS.map((step, index) => {
           // Status for this specific card
           const isCompleted = step.id < currentStep;
@@ -644,7 +612,7 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
                     <button
                       type="button"
                       onClick={(e) => { e.preventDefault(); onSubmit(e); }}
-                      className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-8 py-3 text-sm font-bold text-white shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
+                      className="group flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-8 py-3 text-sm font-bold text-white shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
                     >
                       Trimite Cererea
                       <CheckCircleSolid className="h-4 w-4" />
@@ -659,3 +627,4 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
     </div>
   );
 }
+

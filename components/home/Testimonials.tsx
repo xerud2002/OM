@@ -49,7 +49,7 @@ const testimonials = [
 
 export default function Testimonials() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-emerald-50/30 to-white py-12 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-linear-to-b from-white via-emerald-50/30 to-white py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
@@ -73,7 +73,7 @@ export default function Testimonials() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Ce spun{" "}
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               clienții noștri
             </span>
           </h2>
@@ -127,7 +127,7 @@ export default function Testimonials() {
                 {/* Author */}
                 <div className="flex items-center gap-1.5 border-t border-slate-100 pt-2 sm:gap-3 sm:pt-4">
                   <div
-                    className={`flex h-6 w-6 items-center justify-center rounded-full bg-gradient-to-br ${t.gradient} text-[10px] font-bold text-white sm:h-10 sm:w-10 sm:text-xs`}
+                    className={`flex h-6 w-6 items-center justify-center rounded-full bg-linear-to-br ${t.gradient} text-[10px] font-bold text-white sm:h-10 sm:w-10 sm:text-xs`}
                   >
                     {t.avatar}
                   </div>
@@ -171,3 +171,5 @@ export default function Testimonials() {
     </section>
   );
 }
+
+

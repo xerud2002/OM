@@ -194,7 +194,7 @@ export default function ArticleCartiereBucuresti() {
                     <header className="mb-12 text-center">
                         <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl px-4">
                             Top 10 Cartiere din{" "}
-                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                            <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                                 București în {currentYear}
                             </span>
                         </h1>
@@ -294,3 +294,4 @@ export default function ArticleCartiereBucuresti() {
         </>
     );
 }
+

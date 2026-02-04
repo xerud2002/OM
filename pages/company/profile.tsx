@@ -1,7 +1,5 @@
-"use client";
-
 import { useEffect, useState } from "react";
-import LayoutWrapper from "@/components/layout/Layout";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import RequireRole from "@/components/auth/RequireRole";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { db, auth } from "@/services/firebase";
@@ -101,51 +99,46 @@ export default function CompanyProfile() {
   if (loading) {
     return (
       <RequireRole allowedRole="company">
-        <LayoutWrapper>
-          <div className="flex min-h-screen items-center justify-center">
+        <DashboardLayout role="company" user={company}>
+          <div className="flex items-center justify-center py-20">
             <div className="text-center">
-              <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600"></div>
+              <div className="mx-auto h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600"></div>
               <p className="mt-4 text-sm font-medium text-gray-600">Se încarcă profilul...</p>
             </div>
           </div>
-        </LayoutWrapper>
+        </DashboardLayout>
       </RequireRole>
     );
   }
 
   return (
     <RequireRole allowedRole="company">
-      <LayoutWrapper>
-        <section className="mx-auto max-w-4xl px-4 py-10">
+      <DashboardLayout role="company" user={company}>
+        <div className="space-y-6">
           {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-3xl font-bold text-slate-900">
-              Profil{" "}
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
-                Companie
-              </span>
-            </h1>
-            <p className="mt-2 text-gray-600">Gestionează informațiile companiei tale</p>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">Profil Companie</h1>
+            <p className="text-gray-500">Gestionează informațiile companiei tale</p>
           </div>
 
           {/* Profile Card */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-2xl border border-gray-200 bg-white shadow-lg"
+            className="rounded-xl border border-gray-200 bg-white shadow-sm"
           >
             {/* Header Section with Avatar */}
-            <div className="border-b border-gray-200 bg-gradient-to-br from-emerald-500 to-sky-600 p-8 text-white">
+            <div className="border-b border-gray-200 bg-linear-to-br from-blue-500 to-blue-600 p-6 text-white rounded-t-xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
-                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-white/20 text-3xl font-bold backdrop-blur-sm">
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-2xl font-bold backdrop-blur-sm">
                     {(profile?.companyName || company?.displayName || "C").charAt(0).toUpperCase()}
                   </div>
                   <div>
-                    <h2 className="text-2xl font-bold">
+                    <h2 className="text-xl font-bold">
                       {profile?.companyName || company?.displayName || "Companie"}
                     </h2>
-                    <p className="text-emerald-100">{profile?.email || company?.email}</p>
+                    <p className="text-blue-100">{profile?.email || company?.email}</p>
                   </div>
                 </div>
 
@@ -526,8 +519,9 @@ export default function CompanyProfile() {
               </motion.div>
             </motion.div>
           )}
-        </section>
-      </LayoutWrapper>
+        </div>
+      </DashboardLayout>
     </RequireRole>
   );
 }
+

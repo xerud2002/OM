@@ -74,7 +74,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section id="request-form" className="relative hidden min-h-[70vh] items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-12 pb-6 sm:pt-16 sm:pb-10 md:flex lg:pt-20 lg:pb-12">
+    <section id="request-form" className="relative hidden min-h-[70vh] items-center overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-12 pb-6 sm:pt-16 sm:pb-10 md:flex lg:pt-20 lg:pb-12">
       {/* Animated Background Elements - simplified for performance */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-20 left-[10%] h-75 w-75 rounded-full bg-emerald-200/40 blur-[80px] sm:h-100 sm:w-100 lg:h-125 lg:w-125 lg:blur-[100px]" />
@@ -88,7 +88,7 @@ export default function Hero() {
             className={`max-w-xl flex-1 text-center transition-all duration-500 lg:text-left ${animationsReady ? "translate-y-0 opacity-100" : "opacity-100"}`}
           >
             {/* Badge */}
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-gradient-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-2 shadow-sm sm:mb-8 sm:gap-3 sm:px-5 sm:py-2.5">
               <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500 sm:h-2.5 sm:w-2.5"></span>
@@ -103,7 +103,7 @@ export default function Hero() {
               Compară oferte pentru
               <br />
               <span className="relative inline-block">
-                <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                   mutarea ta
                 </span>
                 {/* Underline decoration - CSS only, no JS animation */}
@@ -169,3 +169,4 @@ export default function Hero() {
     </section>
   );
 }
+

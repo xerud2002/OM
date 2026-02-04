@@ -66,6 +66,11 @@ const WhatsAppWidget = dynamic(() => import("@/components/cro/WhatsAppWidget"), 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
+  // Check if current route is a dashboard route (no header/footer)
+  const isDashboardRoute = router.pathname.startsWith("/customer") || 
+                           router.pathname.startsWith("/company") || 
+                           router.pathname.startsWith("/admin");
+
   // Track page views on route change (GA4 handles initial page view automatically)
   useEffect(() => {
     const handleRouteChange = (url: string) => {
@@ -124,19 +129,23 @@ export default function App({ Component, pageProps }: AppProps) {
 
       {/* Font wrapper for self-hosted Inter */}
       <div className={`${inter.variable} font-sans`}>
-        <Navbar />
+        {!isDashboardRoute && <Navbar />}
 
-        <main id="main-content" className="min-h-[60vh] pt-20">
+        <main id="main-content" className={isDashboardRoute ? "min-h-screen" : "min-h-[60vh] pt-20"}>
           <Component {...pageProps} />
         </main>
 
-        <Footer />
+        {!isDashboardRoute && <Footer />}
       </div>
 
-      {/* Conversion optimization widgets */}
-      <FloatingCTA />
-      <ExitIntentPopup />
-      <WhatsAppWidget />
+      {/* Conversion optimization widgets - only show on public pages */}
+      {!isDashboardRoute && (
+        <>
+          <FloatingCTA />
+          <ExitIntentPopup />
+          <WhatsAppWidget />
+        </>
+      )}
 
       {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
       <Toaster richColors position="top-right" closeButton />
@@ -145,3 +154,4 @@ export default function App({ Component, pageProps }: AppProps) {
     </ErrorBoundary>
   );
 }
+

@@ -21,7 +21,7 @@ export default function PartnerSection() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white to-slate-50 py-12 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-linear-to-b from-white to-slate-50 py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute bottom-0 left-0 h-[300px] w-[300px] -translate-x-1/2 translate-y-1/4 rounded-full bg-emerald-100/40 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
@@ -46,10 +46,10 @@ export default function PartnerSection() {
                 transition={{ delay: 0.2, duration: 0.6 }}
                 className="relative order-2 lg:order-1"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-sky-50 to-purple-50" />
+                <div className="absolute inset-0 bg-linear-to-br from-emerald-50 via-sky-50 to-purple-50" />
                 <div className="relative flex h-full min-h-[280px] items-center justify-center p-6 sm:min-h-[400px] sm:p-8 lg:p-12">
                   <div className="relative">
-                    <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
+                    <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
                     <Image
                       src="/pics/partner-section.webp"
                       alt="Firme de mutări partenere ofertemutare.ro"
@@ -96,7 +96,7 @@ export default function PartnerSection() {
                   viewport={{ once: true }}
                   transition={{ delay: 0.3, duration: 0.5 }}
                 >
-                  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-50 to-sky-50 px-3 py-1.5 sm:mb-6 sm:px-4 sm:py-2">
+                  <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-50 to-sky-50 px-3 py-1.5 sm:mb-6 sm:px-4 sm:py-2">
                     <Building2 className="h-3.5 w-3.5 text-emerald-600 sm:h-4 sm:w-4" />
                     <span className="text-xs font-semibold text-emerald-700 sm:text-sm">
                       Pentru Companii
@@ -106,7 +106,7 @@ export default function PartnerSection() {
                   <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-3xl lg:text-4xl">
                     Devino Partener
                     <br />
-                    <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                       ofertemutare.ro
                     </span>
                   </h2>
@@ -142,7 +142,7 @@ export default function PartnerSection() {
                   <motion.div>
                     <Link
                       href="/partener"
-                      className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:px-8 sm:py-4 sm:text-base"
+                      className="group inline-flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:gap-3 sm:px-8 sm:py-4 sm:text-base"
                     >
                       Înregistrează-ți firma
                       <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1 sm:h-5 sm:w-5" />
@@ -157,3 +157,5 @@ export default function PartnerSection() {
     </section>
   );
 }
+
+

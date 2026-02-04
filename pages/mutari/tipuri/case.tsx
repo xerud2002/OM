@@ -94,7 +94,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
 
             <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
-              <span className="bg-gradient-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Case și Vile
               </span>
             </h1>
@@ -159,7 +159,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
           </section>
 
           {/* What's Included */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-blue-50 to-indigo-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-blue-50 to-indigo-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Package className="h-7 w-7 text-blue-600" />
               Ce include serviciul de mutare casă?
@@ -289,7 +289,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
           </section>
 
           {/* Tips */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-amber-50 to-orange-50 p-8">
             <h2 className="mb-6 text-2xl font-bold text-gray-900 flex items-center gap-3">
               <Star className="h-7 w-7 text-amber-600" />
               Sfaturi pentru mutarea casei
@@ -330,7 +330,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
           <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Case" />
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-600 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-blue-600 to-indigo-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">
               Gata să îți muți casa?
             </h2>
@@ -358,4 +358,5 @@ export const getStaticProps: GetStaticProps<MutariCasePageProps> = async () => {
     },
   };
 };
+
 

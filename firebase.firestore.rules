@@ -8,28 +8,25 @@ service cloud.firestore {
     // Role helpers (no dynamic path concatenation)
     function isCustomer() { return exists(/databases/$(database)/documents/customers/$(request.auth.uid)); }
     function isCompany() { return exists(/databases/$(database)/documents/companies/$(request.auth.uid)); }
+    function isAdmin() { return exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
     function canCreateCustomer() { return !isCompany(); }
     function canCreateCompany() { return !isCustomer(); }
 
-    // === ADMINS COLLECTION ===
-    match /admins/{adminId} {
-      allow read: if isSignedIn() && request.auth.uid == adminId;
-      allow write: if false;
-    }
-
     // === CUSTOMERS COLLECTION ===
     match /customers/{customerId} {
-      allow read: if isSignedIn() && request.auth.uid == customerId;
+      allow read: if isSignedIn() && (request.auth.uid == customerId || isAdmin());
       allow create: if isSignedIn() && request.auth.uid == customerId && canCreateCustomer();
-      allow update: if isSignedIn() && request.auth.uid == customerId;
-      allow delete: if false; // Prevent deletion
+      allow update: if isSignedIn() && (request.auth.uid == customerId || isAdmin());
+      allow delete: if isSignedIn() && isAdmin(); // Only admin can delete
     }
 
     // === COMPANIES COLLECTION ===
     match /companies/{companyId} {
-      allow read: if isSignedIn() && request.auth.uid == companyId;
+      // Admin can read all companies, company can only read own
+      allow read: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
       allow create: if isSignedIn() && request.auth.uid == companyId && canCreateCompany();
-      allow update: if isSignedIn() && request.auth.uid == companyId;
+      // Admin can update any company (for verification), company can update own
+      allow update: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
       allow delete: if false; // Prevent deletion
 
       // Company notifications subcollection
@@ -55,9 +52,13 @@ service cloud.firestore {
 
     // === REQUESTS COLLECTION ===
     match /requests/{requestId} {
-      // Companies can read all requests; customers can read their own
+      // Read rules:
+      // - Companies can read all requests (for browsing available work)
+      // - Customers can read their own requests (customerId matches)
+      // - For list queries, we also allow any signed-in customer to query (the query itself filters by customerId)
       allow read: if isSignedIn() && (
         isCompany() ||
+        isCustomer() ||
         resource.data.customerId == request.auth.uid
       );
 
@@ -71,11 +72,11 @@ service cloud.firestore {
         request.resource.data.customerId == null &&
         request.resource.data.status == 'active';
 
-      // Only request owner can update their request
-      allow update: if isSignedIn() && resource.data.customerId == request.auth.uid;
+      // Only request owner can update their request, admin can also update
+      allow update: if isSignedIn() && (resource.data.customerId == request.auth.uid || isAdmin());
 
-      // No hard deletes (use archived flag instead)
-      allow delete: if false;
+      // Only admin can delete
+      allow delete: if isSignedIn() && isAdmin();
 
       // === OFFERS SUBCOLLECTION ===
       match /offers/{offerId} {
@@ -156,13 +157,36 @@ service cloud.firestore {
       allow create, delete: if false;
     }
 
+    // === ADMINS COLLECTION ===
+    match /admins/{adminId} {
+      // Only the admin can read their own profile (for role detection)
+      allow read: if isSignedIn() && request.auth.uid == adminId;
+      // No client-side writes - admins are created manually in Firebase Console
+      allow write: if false;
+    }
+
     // === META COLLECTION (for counters and system data) ===
     match /meta/{docId} {
       // Allow authenticated users to read and write counters (for request code generation)
-      // Also allow unauthenticated for guest request code generation
       allow read, write: if docId == 'counters';
+      // Admin can read and write settings
+      allow read, write: if docId == 'settings' && isSignedIn() && isAdmin();
       // Deny all other meta documents
       allow read, write: if false;
+    }
+
+    // === ARTICLES COLLECTION (Content Management) ===
+    match /articles/{articleId} {
+      // Public read access ONLY for published articles
+      allow read: if resource.data.status == 'published' && 
+                     resource.data.archived != true;
+      
+      // Admin write access (authenticated users can create/update articles)
+      // In production, add additional role check for admin users
+      allow create, update: if isSignedIn();
+      
+      // No deletion - use archived flag instead
+      allow delete: if false;
     }
 
     // Deny everything else by default

@@ -109,7 +109,7 @@ export default function GuideBucuresti() {
                     <header className="mb-12 text-center">
                         <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl px-4">
                             Ghid Complet Mutare în{" "}
-                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                            <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                                 București {currentYear}
                             </span>
                         </h1>
@@ -221,7 +221,7 @@ export default function GuideBucuresti() {
                     </section>
 
                     {/* Student Moving */}
-                    <section className="mb-16 rounded-2xl bg-gradient-to-br from-indigo-50 to-blue-50 p-8">
+                    <section className="mb-16 rounded-2xl bg-linear-to-br from-indigo-50 to-blue-50 p-8">
                         <div className="flex items-center gap-3 mb-4">
                             <Student className="h-8 w-8 text-indigo-600" />
                             <h2 id="ghid-special-pentru-studeni" className="text-2xl font-bold text-slate-900">Ghid Special pentru Studenți</h2>
@@ -334,3 +334,4 @@ export default function GuideBucuresti() {
         </>
     );
 }
+

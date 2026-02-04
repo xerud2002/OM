@@ -477,3 +477,4 @@ export const getServerSideProps: GetServerSideProps<Props> = async () => {
     return { props: { latestRequest: null } };
   }
 };
+

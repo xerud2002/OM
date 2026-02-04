@@ -1,1046 +1,626 @@
-"use client";
-
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { logger } from "@/utils/logger";
 import RequireRole from "@/components/auth/RequireRole";
+import DashboardLayout from "@/components/layout/DashboardLayout";
 import {
-  PlusCircleIcon as PlusSquare,
-  ListBulletIcon as List,
-  InboxIcon as Inbox,
-  CheckCircleIcon as CheckCircle2,
+  InboxIcon,
+  CheckCircleIcon,
   ChatBubbleBottomCenterTextIcon as MessageSquare,
+  ClockIcon,
+  CalendarIcon,
+  TruckIcon,
+  XMarkIcon,
+  ChevronRightIcon,
 } from "@heroicons/react/24/outline";
+import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { MovingRequest, Offer } from "@/types";
 import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
 
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/services/firebase";
-import { collection, query, where, orderBy, onSnapshot, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
 import { onAuthChange } from "@/utils/firebaseHelpers";
-import { sendEmail } from "@/utils/emailHelpers";
-import {
-  createRequest as createRequestHelper,
-  updateRequestStatus,
-} from "@/utils/firestoreHelpers";
-import { trackRequestCreated } from "@/utils/analytics";
 
-// Lazy load heavy components to reduce initial bundle
-const RequestForm = dynamic(() => import("@/components/customer/RequestForm"), {
-  loading: () => <div className="h-96 animate-pulse rounded-xl bg-gray-100" />,
-  ssr: false,
-});
-
-const OfferComparison = dynamic(() => import("@/components/customer/OfferComparison"), {
-  loading: () => <div className="h-48 animate-pulse rounded-xl bg-gray-100" />,
-  ssr: false,
-});
-
-const MyRequestCard = dynamic(() => import("@/components/customer/MyRequestCard"), {
-  loading: () => <div className="mb-4 h-32 animate-pulse rounded-xl bg-gray-100" />,
-  ssr: false,
-});
-
+// Lazy load heavy components
 const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
-  loading: () => <div className="h-96 animate-pulse bg-gray-100" />,
+  loading: () => <div className="h-96 animate-pulse bg-gray-100 rounded-xl" />,
   ssr: false,
 });
 
 const RequestFullDetails = dynamic(() => import("@/components/customer/RequestFullDetails"), {
-  loading: () => <div className="h-48 animate-pulse rounded-2xl bg-gray-50" />,
+  loading: () => <div className="h-48 animate-pulse rounded-xl bg-gray-50" />,
   ssr: false,
 });
-
-
 
 export default function CustomerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any | null>(null);
-  const [requests, setRequests] = useState<MovingRequest[]>([]); // active (non-archived)
+  const [requests, setRequests] = useState<MovingRequest[]>([]);
   const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
-  const autoSubmitTriggeredRef = useRef(false);
-
-  const [form, setForm] = useState<any>(() => {
-    // Try to restore form from localStorage on mount
-    if (typeof window !== "undefined") {
-      // First check if there's a home page form (takes priority for auto-submit flow)
-      const homeForm = localStorage.getItem("homeRequestForm");
-      if (homeForm) {
-        try {
-          const parsed = JSON.parse(homeForm);
-          return { ...parsed, mediaFiles: [] };
-        } catch (err) {
-          logger.warn("Failed to parse home form", err);
-        }
-      }
-
-      // Otherwise use dashboard form
-      const saved = localStorage.getItem("customerDashboardForm");
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved);
-          // mediaFiles can't be serialized, so always reset to empty array
-          return { ...parsed, mediaFiles: [] };
-        } catch (err) {
-          logger.warn("Failed to parse saved form", err);
-        }
-      }
-    }
-    // Default form state
-    return {
-      fromCity: "",
-      fromCounty: "",
-      fromStreet: "",
-      fromNumber: "",
-      toCity: "",
-      toCounty: "",
-      toStreet: "",
-      toNumber: "",
-      moveDate: "",
-      moveDateMode: "exact",
-      moveDateStart: "",
-      moveDateEnd: "",
-      moveDateFlexDays: 3,
-      details: "",
-      fromType: "house",
-      toType: "house",
-      fromFloor: "",
-      toFloor: "",
-      fromElevator: false,
-      toElevator: false,
-      fromRooms: "",
-      toRooms: "",
-      rooms: "", // legacy aggregation for UI
-      volumeM3: "",
-      phone: "",
-      contactName: "",
-      contactFirstName: "",
-      contactLastName: "",
-      needPacking: false,
-      hasElevator: false,
-      budgetEstimate: 0,
-      specialItems: "",
-      serviceMoving: false,
-      servicePacking: false,
-      serviceDisassembly: false,
-      serviceCleanout: false,
-      serviceStorage: false,
-      serviceTransportOnly: false,
-      servicePiano: false,
-      serviceFewItems: false,
-      surveyType: "quick-estimate",
-      mediaUpload: "later",
-      mediaFiles: [],
-      acceptedTerms: false,
-    };
-  });
-
-  const [activeTab, setActiveTab] = useState<"moves" | "new">(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("customerActiveTab");
-      if (saved === "moves" || saved === "new")
-        return saved as any;
-    }
-    return "moves";
-  });
-
-
-  const totalOffers = useMemo(() => {
-    const allOffers = Object.values(offersByRequest).flat();
-    // Filter out any invalid/empty offers
-    const validOffers = allOffers.filter((offer) => offer && offer.id && offer.companyName);
-    return validOffers.length;
-  }, [offersByRequest]);
-  // Aggregated no longer needed for UI; keep if future export requires it
-  // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
-  // const aggregatedOffers = useMemo(() => Object.values(offersByRequest).flat(), [offersByRequest]);
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
   const [chatOffer, setChatOffer] = useState<any>(null);
+  const [showDetails, setShowDetails] = useState(false);
 
-  // Choose a default selected request for the Oferte tab (the first with offers, else first request)
+  // Helper: check if a request has an accepted offer
+  const hasAcceptedOffer = (requestId: string) => {
+    return (offersByRequest[requestId] || []).some(o => o?.status === "accepted");
+  };
+
+  // Stats for header
+  const stats = useMemo(() => {
+    const totalOffers = Object.values(offersByRequest).flat().filter(o => o && o.id).length;
+    const pendingOffers = Object.values(offersByRequest).flat().filter(o => o?.status === "pending").length;
+    const acceptedOffers = Object.values(offersByRequest).flat().filter(o => o?.status === "accepted").length;
+    
+    return [
+      { label: "Cereri Active", value: requests.length },
+      { label: "Oferte Primite", value: totalOffers },
+      { label: "În Așteptare", value: pendingOffers },
+      { label: "Acceptate", value: acceptedOffers, changeType: "positive" as const },
+    ];
+  }, [requests, offersByRequest]);
+
+  // Auth & data loading
+  useEffect(() => {
+    const unsubAuth = onAuthChange(async (u: any) => {
+      setUser(u);
+      if (!u) {
+        setRequests([]);
+        setOffersByRequest({});
+        return;
+      }
+
+      // Ensure customer profile exists
+      const { doc, getDoc, setDoc, serverTimestamp } = await import("firebase/firestore");
+      const customerRef = doc(db, "customers", u.uid);
+      const customerSnap = await getDoc(customerRef);
+      
+      if (!customerSnap.exists()) {
+        try {
+          await setDoc(customerRef, {
+            uid: u.uid,
+            email: u.email,
+            displayName: u.displayName || null,
+            photoURL: u.photoURL || null,
+            createdAt: serverTimestamp(),
+            updatedAt: serverTimestamp(),
+          });
+          logger.info("Created customer profile for", u.uid);
+        } catch (err) {
+          logger.error("Failed to create customer profile", err);
+        }
+      }
+
+      const q = query(
+        collection(db, "requests"),
+        where("customerId", "==", u.uid),
+        where("status", "in", ["active", "paused", "closed"]),
+        orderBy("createdAt", "desc")
+      );
+
+      const unsubRequests = onSnapshot(q, (snap) => {
+        const reqs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as MovingRequest));
+        setRequests(reqs);
+
+        // Subscribe to offers for each request
+        reqs.forEach((req) => {
+          const offersQ = query(
+            collection(db, "requests", req.id, "offers"),
+            orderBy("createdAt", "desc")
+          );
+          onSnapshot(offersQ, (offersSnap) => {
+            const offers = offersSnap.docs.map((od) => ({ id: od.id, ...od.data() } as Offer));
+            setOffersByRequest((prev) => ({ ...prev, [req.id]: offers }));
+          }, (err) => {
+            logger.error("Error loading offers for request", req.id, err);
+          });
+        });
+      }, (err) => {
+        logger.error("Error loading requests", err);
+        // Clear requests on error to show empty state
+        setRequests([]);
+      });
+
+      return () => unsubRequests();
+    });
+
+    return () => unsubAuth();
+  }, []);
+
+  // Select first request with offers by default
   useEffect(() => {
     if (requests.length === 0) {
       setSelectedRequestId(null);
       return;
     }
-    // prefer a request that has offers
     const withOffers = requests.find((r) => (offersByRequest[r.id] || []).length > 0)?.id;
     setSelectedRequestId((prev) => prev || withOffers || requests[0].id);
   }, [requests, offersByRequest]);
 
-  // Handlers to accept/decline from aggregated view
-  const acceptFromAggregated = async (requestId: string, offerId: string) => {
+  const selectedRequest = requests.find((r) => r.id === selectedRequestId);
+  const selectedOffers = selectedRequestId ? (offersByRequest[selectedRequestId] || []) : [];
+
+  // Accept/Decline handlers
+  const handleAccept = async (requestId: string, offerId: string): Promise<void> => {
     const { toast } = await import("sonner");
     try {
       if (!user) {
         toast.error("Trebuie să fii autentificat");
         return;
       }
+      
       const token = await user.getIdToken();
       const resp = await fetch("/api/offers/accept", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ requestId, offerId }),
       });
-      if (!resp.ok) {
-        // Fallback in dev when Admin isn't configured: perform client-side updates
-        if (resp.status === 503) {
-          const { writeBatch, doc } = await import("firebase/firestore");
-          const batch = writeBatch(db);
-          // Accept selected offer
-          batch.update(doc(db, "requests", requestId, "offers", offerId), { status: "accepted" });
-          // Decline the rest (based on local state we already hold)
-          const others = (offersByRequest[requestId] || []).filter((o) => o.id !== offerId);
-          for (const o of others) {
-            batch.update(doc(db, "requests", requestId, "offers", o.id), { status: "declined" });
-          }
-          // Mark request as accepted
-          batch.update(doc(db, "requests", requestId), { status: "accepted" });
-          await batch.commit();
-        } else {
-          const data = await resp.json().catch(() => ({}));
-          throw new Error(data.error || `HTTP ${resp.status}`);
+
+      if (!resp.ok && resp.status === 503) {
+        // Fallback for dev
+        const { writeBatch, doc } = await import("firebase/firestore");
+        const batch = writeBatch(db);
+        batch.update(doc(db, "requests", requestId, "offers", offerId), { status: "accepted" });
+        const others = (offersByRequest[requestId] || []).filter((o) => o.id !== offerId);
+        for (const o of others) {
+          batch.update(doc(db, "requests", requestId, "offers", o.id), { status: "declined" });
         }
+        batch.update(doc(db, "requests", requestId), { status: "closed" });
+        await batch.commit();
+      } else if (!resp.ok) {
+        throw new Error("Failed");
       }
+      
       toast.success("Oferta a fost acceptată!");
     } catch (err) {
-      logger.error("Failed to accept offer", err);
-      toast.error("Eroare la acceptarea ofertei");
+      logger.error("Failed to accept", err);
+      toast.error("Eroare la acceptare");
     }
   };
 
-  const declineFromAggregated = async (requestId: string, offerId: string) => {
+  const handleDecline = async (requestId: string, offerId: string): Promise<void> => {
     const { toast } = await import("sonner");
     try {
       if (!user) {
         toast.error("Trebuie să fii autentificat");
         return;
       }
+      
       const token = await user.getIdToken();
       const resp = await fetch("/api/offers/decline", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({ requestId, offerId }),
       });
-      if (!resp.ok) {
-        if (resp.status === 503) {
-          const { doc, updateDoc } = await import("firebase/firestore");
-          await updateDoc(doc(db, "requests", requestId, "offers", offerId), {
-            status: "declined",
-          });
-        } else {
-          const data = await resp.json().catch(() => ({}));
-          throw new Error(data.error || `HTTP ${resp.status}`);
-        }
+
+      if (!resp.ok && resp.status === 503) {
+        const { doc, updateDoc } = await import("firebase/firestore");
+        await updateDoc(doc(db, "requests", requestId, "offers", offerId), { status: "declined" });
+      } else if (!resp.ok) {
+        throw new Error("Failed");
       }
+      
       toast.success("Oferta a fost refuzată");
     } catch (err) {
-      logger.error("Failed to decline offer", err);
-      toast.error("Eroare la refuzarea ofertei");
+      logger.error("Failed to decline", err);
+      toast.error("Eroare la refuzare");
     }
   };
 
-
-
-  useEffect(() => {
-    const unsubAuth = onAuthChange((u: any) => {
-      setUser(u);
-      if (!u) {
-        // Clear all data when user logs out
-        setRequests([]);
-        setOffersByRequest({});
-        return;
-      }
-      const q = query(
-        collection(db, "requests"),
-        where("customerId", "==", u.uid),
-        orderBy("createdAt", "desc")
-      );
-      const unsub = onSnapshot(q, (snap) => {
-        const docs = snap.docs.map((d) => ({ id: d.id, ...(d.data() as any) })) as MovingRequest[];
-        setRequests(docs);
-
-      });
-      return () => unsub();
-    });
-    return () => unsubAuth();
-  }, []);
-
-  // Auto-submit form if coming from home page with pending request
-  useEffect(() => {
-    const shouldAutoSubmit = router.query.autoSubmit === "true";
-    const hasHomeForm = typeof window !== "undefined" && localStorage.getItem("homeRequestForm");
-
-    if (shouldAutoSubmit && hasHomeForm && user && !autoSubmitTriggeredRef.current) {
-      autoSubmitTriggeredRef.current = true;
-
-      // Trigger form submission after a short delay to ensure everything is loaded
-      const timer = setTimeout(() => {
-        // Get submit button and simulate click
-        const submitBtn = document.querySelector("[data-auto-submit]");
-        if (submitBtn instanceof HTMLButtonElement) {
-          submitBtn.click();
-        }
-
-        // Clean up home form from localStorage after submission attempt
-        localStorage.removeItem("homeRequestForm");
-
-        // Remove autoSubmit from URL without reload
-        router.replace("/customer/dashboard", undefined, { shallow: true });
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
-  }, [router.query.autoSubmit, user, router]);
-
-  // Real-time offers listener for all user requests
-  useEffect(() => {
-    if (requests.length === 0) {
-      // Clear offers when no requests
-      setOffersByRequest({});
-      return;
-    }
-
-    const unsubscribers: Array<() => void> = [];
-
-    requests.forEach((r) => {
-      const offersQuery = query(
-        collection(db, "requests", r.id, "offers"),
-        orderBy("createdAt", "desc")
-      );
-      const unsub = onSnapshot(
-        offersQuery,
-        (snap) => {
-          const offersList = snap.docs.map((d) => ({
-            id: d.id,
-            requestId: r.id,
-            ...(d.data() as any),
-          })) as Offer[];
-          setOffersByRequest((prev) => ({ ...prev, [r.id]: offersList }));
-        },
-        (error) => {
-          logger.warn(`Error listening to offers for request ${r.id}:`, error);
-          // Set empty array for this request if there's an error
-          setOffersByRequest((prev) => ({ ...prev, [r.id]: [] }));
-        }
-      );
-      unsubscribers.push(unsub);
-    });
-
-    return () => {
-      unsubscribers.forEach((u) => u());
-    };
-  }, [requests]);
-
-  // Persist activeTab across sessions
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      localStorage.setItem("customerActiveTab", activeTab);
-    }
-  }, [activeTab]);
-
-  // Persist form state to localStorage on every change
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      try {
-        // Exclude mediaFiles (not serializable) from localStorage
-        const formToSave = { ...form };
-        delete formToSave.mediaFiles;
-        localStorage.setItem("customerDashboardForm", JSON.stringify(formToSave));
-      } catch (err) {
-        logger.warn("Failed to save form to localStorage", err);
-      }
-    }
-  }, [form]);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!user) return;
-
+  // Reactivate a closed request
+  const handleReactivate = async (requestId: string): Promise<void> => {
     const { toast } = await import("sonner");
-
-    // Check terms acceptance first
-    if (!form.acceptedTerms) {
-      toast.error("Trebuie să accepți termenii și condițiile pentru a continua.");
-      return;
-    }
-
     try {
-      // Client-side validation for mandatory fields
-      const errors: string[] = [];
-
-      const hasAtLeastOneService =
-        !!form.serviceMoving ||
-        !!form.servicePacking ||
-        !!form.serviceDisassembly ||
-        !!form.serviceCleanout ||
-        !!form.serviceStorage ||
-        !!(form as any).serviceTransportOnly ||
-        !!(form as any).servicePiano ||
-        !!(form as any).serviceFewItems;
-
-      const digitsOnly = (v: any) =>
-        typeof v === "number" ? Number.isInteger(v) : /^\d+$/.test((v || "").toString());
-
-      // Property details (both ends)
-      if (!form.fromType) errors.push("Tip proprietate (plecare)");
-      if (!form.toType) errors.push("Tip proprietate (destinație)");
-      if (!form.fromRooms || !digitsOnly(form.fromRooms))
-        errors.push("Număr camere (plecare, doar cifre)");
-      if (!form.toRooms || !digitsOnly(form.toRooms))
-        errors.push("Număr camere (destinație, doar cifre)");
-
-      // Address essentials
-      if (!form.fromCounty) errors.push("Județ (plecare)");
-      if (!form.fromCity) errors.push("Localitate (plecare)");
-      // Strada/Număr nu mai sunt obligatorii
-      if (!form.toCounty) errors.push("Județ (destinație)");
-      if (!form.toCity) errors.push("Localitate (destinație)");
-      // Strada/Număr nu mai sunt obligatorii
-
-      // Contact - validare se face doar la submit, nu mai afișăm notificare prematură
-      // if (!(form as any).contactFirstName?.trim()) errors.push("Prenume");
-      // if (!(form as any).contactLastName?.trim()) errors.push("Nume");
-      // if (!form.phone?.trim()) errors.push("Număr de telefon");
-
-      // Services at least one
-      if (!hasAtLeastOneService) errors.push("Alege cel puțin un serviciu");
-
-      // Survey type chosen (defensive)
-      if (!form.surveyType) errors.push("Survey / estimare");
-
-      if (errors.length) {
-        toast.error(`Te rugăm să completezi corect câmpurile obligatorii: ${errors.join(", ")}`);
+      if (!user) {
+        toast.error("Trebuie să fii autentificat");
         return;
       }
-
-      // Compute legacy rooms for cards (prefer destination, then pickup)
-      const aggregatedRooms = (form.toRooms ?? form.fromRooms ?? form.rooms) || "";
-
-      // Create request in Firestore
-      const requestId = await createRequestHelper({
-        ...form,
-        rooms: aggregatedRooms,
-        customerId: user.uid,
-        customerName: user.displayName || user.email,
-        customerEmail: user.email,
-        createdAt: serverTimestamp(),
-      } as any);
-
-      trackRequestCreated(
-        form.fromCity || form.fromCounty || "unknown",
-        form.toCity || form.toCounty || "unknown",
-        Number(aggregatedRooms) || 0
-      );
-
-      // If user chose "now" for media upload, upload files immediately
-      if (form.mediaUpload === "now" && form.mediaFiles && form.mediaFiles.length > 0) {
-        try {
-          logger.log(
-            `Auth UID: ${user.uid}, uploading ${form.mediaFiles.length} file(s) via API route`
-          );
-
-          const { ref, uploadBytesResumable, getDownloadURL } = await import("firebase/storage");
-          const { storage } = await import("@/services/firebase");
-          const { doc, updateDoc, arrayUnion } = await import("firebase/firestore");
-
-          const uploadedUrls: string[] = [];
-
-          for (let i = 0; i < form.mediaFiles.length; i++) {
-            const file = form.mediaFiles[i];
-
-            logger.log(`Uploading ${file.name} (${i + 1}/${form.mediaFiles.length})`);
-
-            try {
-              const fileName = `${Date.now()}_${file.name}`;
-              const storagePath = `requests/${requestId}/customers/${user.uid}/${fileName}`;
-              const storageRef = ref(storage, storagePath);
-
-              // Upload file
-              const uploadTask = uploadBytesResumable(storageRef, file);
-
-              // Wait for upload to complete
-              const downloadURL = await new Promise<string>((resolve, reject) => {
-                uploadTask.on(
-                  "state_changed",
-                  null,
-                  (error) => reject(error),
-                  async () => {
-                    try {
-                      const url = await getDownloadURL(uploadTask.snapshot.ref);
-                      resolve(url);
-                    } catch (error) {
-                      reject(error);
-                    }
-                  }
-                );
-              });
-
-              uploadedUrls.push(downloadURL);
-              logger.log(`Upload success: ${downloadURL}`);
-            } catch (err) {
-              logger.error(`Failed to upload ${file.name}:`, err);
-              throw err;
-            }
-          }
-
-          // Update request document with media URLs
-          const requestRef = doc(db, "requests", requestId);
-          await updateDoc(requestRef, {
-            mediaUrls: arrayUnion(...uploadedUrls),
-          });
-
-          toast.success(`Cererea și ${uploadedUrls.length} fișier(e) au fost încărcate cu succes!`);
-        } catch (uploadError) {
-          logger.error("Media upload error:", uploadError);
-          logger.error("Upload error details:", {
-            code: (uploadError as any)?.code,
-            message: (uploadError as any)?.message,
-            serverResponse: (uploadError as any)?.serverResponse,
-          });
-          toast.warning("Cererea a fost creată, dar fișierele nu au putut fi încărcate.");
-        }
-      }
-      // If user chose "later" for media upload, generate upload link and send email
-      else if (form.mediaUpload === "later") {
-        try {
-          const resp = await fetch("/api/generateUploadLink", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              requestId,
-              customerEmail: user.email,
-              customerName: user.displayName || user.email,
-            }),
-          });
-          const result = await resp.json();
-
-          if (result.ok && result.uploadLink) {
-            // Helpful UX: copy link to clipboard so user can access it immediately
-            try {
-              if (typeof window !== "undefined" && navigator?.clipboard) {
-                await navigator.clipboard.writeText(result.uploadLink);
-                toast.info("Link-ul pentru upload a fost copiat în clipboard.");
-              }
-            } catch (copyErr) {
-              logger.warn("Could not copy upload link to clipboard", copyErr);
-            }
-
-            const emailParams = {
-              to_email: result.customerEmail,
-              to_name: result.customerName || "Client",
-              upload_link: result.uploadLink,
-            };
-            try {
-              await sendEmail(emailParams);
-              toast.success(
-                "Cererea a fost trimisă! Vei primi un email cu link pentru upload poze."
-              );
-            } catch (emailError) {
-              logger.error("Email send error:", emailError);
-              toast.warning(
-                "Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis. Link-ul este în clipboard."
-              );
-            }
-          } else {
-            toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
-          }
-        } catch (err) {
-          logger.warn("Failed to generate upload link", err);
-          toast.warning("Cererea a fost trimisă, dar emailul cu link nu a putut fi trimis.");
-        }
-      } else {
-        toast.success("Cererea a fost trimisă cu succes!");
-      }
-
-      // Clear form after successful submission
-      const emptyForm = {
-        fromCity: "",
-        fromCounty: "",
-        fromStreet: "",
-        fromNumber: "",
-        toCity: "",
-        toCounty: "",
-        toStreet: "",
-        toNumber: "",
-        moveDate: "",
-        moveDateMode: "exact",
-        moveDateStart: "",
-        moveDateEnd: "",
-        moveDateFlexDays: 3,
-        details: "",
-        fromType: "house",
-        toType: "house",
-        fromFloor: "",
-        toFloor: "",
-        fromElevator: false,
-        toElevator: false,
-        fromRooms: "",
-        toRooms: "",
-        rooms: "",
-        volumeM3: "",
-        phone: "",
-        contactName: "",
-        contactFirstName: "",
-        contactLastName: "",
-        needPacking: false,
-        hasElevator: false,
-        budgetEstimate: 0,
-        specialItems: "",
-        serviceMoving: false,
-        servicePacking: false,
-        serviceDisassembly: false,
-        serviceCleanout: false,
-        serviceStorage: false,
-        serviceTransportOnly: false,
-        servicePiano: false,
-        serviceFewItems: false,
-        surveyType: "quick-estimate",
-        mediaUpload: "later",
-        mediaFiles: [],
-      };
-      setForm(emptyForm);
-      // Clear localStorage
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("customerDashboardForm");
-        localStorage.removeItem("homeRequestForm"); // Also clear home page form
-      }
-      setActiveTab("moves");
+      
+      const { doc, updateDoc, serverTimestamp } = await import("firebase/firestore");
+      await updateDoc(doc(db, "requests", requestId), { 
+        status: "active",
+        updatedAt: serverTimestamp()
+      });
+      
+      toast.success("Cererea a fost reactivată!");
     } catch (err) {
-      logger.error("Failed to submit request", err);
-      toast.error("Eroare la trimiterea cererii. Te rugăm să încerci din nou.");
+      logger.error("Failed to reactivate request", err);
+      toast.error("Eroare la reactivare");
     }
   };
 
-  const resetForm = () => {
-    const emptyForm = {
-      fromCity: "",
-      fromCounty: "",
-      fromStreet: "",
-      fromNumber: "",
-      toCity: "",
-      toCounty: "",
-      toStreet: "",
-      toNumber: "",
-      moveDate: "",
-      moveDateMode: "exact",
-      moveDateStart: "",
-      moveDateEnd: "",
-      moveDateFlexDays: 3,
-      details: "",
-      fromType: "house",
-      toType: "house",
-      fromFloor: "",
-      toFloor: "",
-      fromElevator: false,
-      toElevator: false,
-      fromRooms: "",
-      toRooms: "",
-      rooms: "",
-      volumeM3: "",
-      phone: "",
-      contactName: "",
-      contactFirstName: "",
-      contactLastName: "",
-      needPacking: false,
-      hasElevator: false,
-      budgetEstimate: 0,
-      specialItems: "",
-      serviceMoving: false,
-      servicePacking: false,
-      serviceDisassembly: false,
-      serviceCleanout: false,
-      serviceStorage: false,
-      serviceTransportOnly: false,
-      servicePiano: false,
-      serviceFewItems: false,
-      surveyType: "quick-estimate",
-      mediaUpload: "later",
-      mediaFiles: [],
-      acceptedTerms: false,
-    };
-    setForm(emptyForm);
-    // Also clear from localStorage
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("customerDashboardForm");
-    }
-  };
+  const navigation = [
+    { name: "Cererile Mele", href: "/customer/dashboard", icon: InboxIcon, badge: requests.length },
+  ];
 
   return (
     <RequireRole allowedRole="customer">
-      <div className="min-h-screen bg-gradient-to-b from-white to-emerald-50">
-        {/* Hero background with gradient */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900">
-          {/* Animated gradient orbs */}
-          <div className="pointer-events-none absolute inset-0">
-            <div className="absolute top-10 -left-20 h-72 w-72 rounded-full bg-emerald-500/20 blur-3xl" />
-            <div className="absolute top-20 -right-20 h-96 w-96 rounded-full bg-sky-500/15 blur-3xl" />
-            <div className="absolute bottom-0 left-1/2 h-48 w-48 -translate-x-1/2 rounded-full bg-teal-400/10 blur-2xl" />
-          </div>
-
-          <div className="relative mx-auto max-w-350 px-4 pt-20 pb-8 sm:px-6 sm:pt-24 lg:pb-10">
-            {/* Header */}
-            <motion.div
-              initial={{ opacity: 0, y: -20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-center"
-            >
-              <h1 className="text-2xl md:text-4xl font-bold text-white sm:text-5xl">
-                Bună,{" "}
-                <span className="bg-gradient-to-r from-emerald-400 to-sky-400 bg-clip-text text-transparent">
-                  {user?.displayName?.split(" ")[0] || "Client"}
-                </span>
-                ! 👋
-              </h1>
-            </motion.div>
-          </div>
-        </div>
-
-        <section className="mx-auto max-w-350 px-4 py-6 sm:px-6 sm:py-10">
-          {/* Navigation Tabs - Modern Segmented Control */}
-          <div className="mb-8 flex justify-center">
-            <div className="inline-flex rounded-2xl bg-white p-1.5 shadow-lg shadow-gray-900/5 ring-1 ring-gray-100">
-              {/* Dashboard */}
-
-
-              {/* My Moves (Unified) */}
-              <button
-                onClick={() => setActiveTab("moves")}
-                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${activeTab === "moves"
-                  ? "bg-gradient-to-r from-sky-500 to-blue-500 text-white shadow-md shadow-sky-500/20"
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
-              >
-                <div className={`flex h-5 w-5 items-center justify-center rounded-full ${activeTab === 'moves' ? 'bg-white/20' : 'bg-gray-100'}`}>
-                  <List className="h-3 w-3" />
-                </div>
-                <span>Cererile Mele</span>
-                {totalOffers > 0 && (
-                  <span className={`ml-1 rounded-full px-2 py-0.5 text-[10px] font-extrabold ${activeTab === 'moves' ? 'bg-white/20 text-white' : 'bg-emerald-500 text-white'}`}>
-                    {totalOffers}
-                  </span>
-                )}
-              </button>
-
-              {/* Create New */}
-              <button
-                onClick={() => setActiveTab("new")}
-                className={`flex items-center gap-2.5 rounded-xl px-5 py-2.5 text-sm font-bold transition-all duration-300 ${activeTab === "new"
-                  ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-500/20"
-                  : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
-                  }`}
-              >
-                <div className={`flex h-5 w-5 items-center justify-center rounded-full ${activeTab === 'new' ? 'bg-white/20' : 'bg-gray-100'}`}>
-                  <PlusSquare className="h-3 w-3" />
-                </div>
-                <span>Cerere Nouă</span>
-              </button>
+      <DashboardLayout 
+        role="customer" 
+        user={user} 
+        navigation={navigation}
+        showStats={true}
+        stats={stats}
+      >
+        {requests.length === 0 ? (
+          // Empty state
+          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
+              <InboxIcon className="h-10 w-10 text-white" />
             </div>
-          </div>
-
-
-
-          {activeTab === "new" && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="overflow-hidden rounded-2xl border border-gray-100 bg-white p-0 shadow-xl shadow-gray-100/50 sm:p-8"
+            <h3 className="mt-6 text-xl font-bold text-gray-900">Nu ai încă cereri</h3>
+            <p className="mt-2 max-w-sm text-gray-500">
+              Creează o cerere de pe pagina principală pentru a primi oferte de la firme de mutări verificate.
+            </p>
+            <button
+              onClick={() => router.push("/")}
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
             >
-              <RequestForm
-                form={form}
-                setForm={setForm}
-                onSubmit={handleSubmit}
-                onReset={resetForm}
-              />
-            </motion.div>
-          )}
-
-          {activeTab === "moves" && (
-            <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-xl shadow-gray-100/50">
-              {requests.length === 0 ? (
-                <div className="p-12 text-center">
-                  <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-sky-500 to-blue-500 shadow-xl shadow-sky-500/30">
-                    <Inbox className="h-9 w-9 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900">Nu ai încă cereri</h3>
-                  <p className="mt-2 text-gray-500">
-                    Creează o cerere pentru a primi oferte de la firme verificate.
-                  </p>
-                  <button
-                    onClick={() => setActiveTab("new")}
-                    className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition-all"
-                  >
-                    <PlusSquare className="h-4 w-4" />
-                    Creează prima cerere
-                  </button>
+              Creează cerere
+              <ChevronRightIcon className="h-4 w-4" />
+            </button>
+          </div>
+        ) : (
+          // Main content grid
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+            {/* Requests sidebar */}
+            <aside className="lg:col-span-4 xl:col-span-3">
+              <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+                <div className="border-b border-gray-100 px-4 py-3">
+                  <h3 className="text-sm font-semibold text-gray-900">Cererile tale</h3>
                 </div>
-              ) : (
-                <div className="grid grid-cols-1 gap-0 lg:grid-cols-[320px,1fr]">
-                  {/* Sidebar: requests list */}
-                  <aside className="border-b border-gray-100 bg-slate-50 lg:border-r lg:border-b-0">
-                    <div className="sticky top-20 max-h-[calc(100vh-120px)] overflow-auto p-4">
-                      <h3 className="mb-4 flex items-center gap-2 px-1 text-xs font-extrabold uppercase tracking-wider text-gray-400">
-                        Lista Cereri
-                      </h3>
-                      <div className="space-y-2">
-                        {requests.map((r) => {
-                          const cnt = (offersByRequest[r.id] || []).length;
-                          const active = selectedRequestId === r.id;
-                          return (
-                            <button
-                              key={r.id}
-                              onClick={() => setSelectedRequestId(r.id)}
-                              className={`w-full rounded-xl border px-4 py-3 text-left transition-all duration-200 ${active
-                                ? "border-sky-500 bg-white shadow-md shadow-sky-100 ring-1 ring-sky-500"
-                                : "border-transparent hover:bg-white hover:shadow-sm"
-                                }`}
-                            >
-                              <div className="flex items-start justify-between gap-3">
-                                <div className="min-w-0">
-                                  <p
-                                    className={`truncate text-sm font-bold ${active ? "text-gray-900" : "text-gray-700"}`}
-                                  >
-                                    {r.fromCity || r.fromCounty} <span className="text-gray-400">→</span> {r.toCity || r.toCounty}
-                                  </p>
-                                  <p className="mt-1 text-xs text-gray-500">
-                                    {(() => {
-                                      const d = formatMoveDateDisplay(r as any, { month: "short" });
-                                      return d && d !== "-" ? d : "fără dată";
-                                    })()}
-                                  </p>
+                <nav className="max-h-[calc(100vh-280px)] overflow-y-auto p-2">
+                  <ul className="space-y-1">
+                    {requests.map((req) => {
+                      const offers = offersByRequest[req.id] || [];
+                      const isSelected = selectedRequestId === req.id;
+                      const hasNewOffers = offers.some(o => o.status === "pending");
+
+                      return (
+                        <li key={req.id}>
+                          <button
+                            onClick={() => setSelectedRequestId(req.id)}
+                            className={`w-full rounded-lg p-3 text-left transition-all ${
+                              isSelected
+                                ? "bg-emerald-50 ring-1 ring-emerald-200"
+                                : "hover:bg-gray-50"
+                            }`}
+                          >
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="min-w-0 flex-1">
+                                <p className={`truncate text-sm font-semibold ${isSelected ? "text-emerald-900" : "text-gray-900"}`}>
+                                  {req.fromCity} → {req.toCity}
+                                </p>
+                                <div className="mt-1 flex items-center gap-2 text-xs text-gray-500">
+                                  <CalendarIcon className="h-3.5 w-3.5" />
+                                  <span>{formatMoveDateDisplay(req as any, { month: "short" }) || "Flexibil"}</span>
                                 </div>
-                                {cnt > 0 && (
-                                  <span
-                                    className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold ${active
-                                      ? "bg-sky-100 text-sky-700"
-                                      : "bg-gray-200 text-gray-600"
-                                      }`}
-                                  >
-                                    {cnt}
+                              </div>
+                              <div className="flex flex-col items-end gap-1">
+                                {offers.length > 0 && (
+                                  <span className={`rounded-full px-2 py-0.5 text-xs font-bold ${
+                                    hasNewOffers 
+                                      ? "bg-emerald-100 text-emerald-700" 
+                                      : "bg-gray-100 text-gray-600"
+                                  }`}>
+                                    {offers.length} {offers.length === 1 ? "ofertă" : "oferte"}
                                   </span>
                                 )}
+                                <span className={`text-[10px] uppercase tracking-wide ${
+                                  req.status === "closed" ? "text-emerald-600" :
+                                  req.status === "active" ? "text-blue-600" : "text-gray-500"
+                                }`}>
+                                  {req.status === "closed" ? "Finalizată" : 
+                                   req.status === "active" ? "Activă" : 
+                                   req.status === "paused" ? "Pauză" :
+                                   req.status === "cancelled" ? "Anulată" : req.status}
+                                </span>
                               </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </aside>
-
-                  {/* Main content for selected request */}
-                  <main className="bg-white p-5 lg:p-8">
-                    {!selectedRequestId ? (
-                      <div className="flex flex-col items-center justify-center py-20 text-center opacity-50">
-                        <List className="h-16 w-16 text-gray-300" />
-                        <p className="mt-4 text-gray-500">Selectează o cerere din listă</p>
-                      </div>
-                    ) : (
-                      <>
-                        {/* Selected Request Header/Card */}
-                        {(() => {
-                          const r = requests.find(req => req.id === selectedRequestId);
-                          if (!r) return null;
-                          return (
-                            <div className="mb-8 space-y-8">
-                              <MyRequestCard
-                                request={r as any}
-                                offersCount={(offersByRequest[r.id] || []).length}
-                                onStatusChange={async (requestId, newStatus) => {
-                                  try {
-                                    await updateRequestStatus(requestId, newStatus);
-                                    const { toast } = await import("sonner");
-                                    toast.success("Status actualizat!");
-                                  } catch (error) {
-                                    logger.error("Error updating status:", error);
-                                    const { toast } = await import("sonner");
-                                    toast.error("Eroare la actualizare");
-                                  }
-                                }}
-                              />
-                              <RequestFullDetails
-                                request={r}
-                                isOwner={user?.uid === r.customerId}
-                              />
                             </div>
-                          )
-                        })()}
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </nav>
+              </div>
+            </aside>
 
-                        {/* Offers Section */}
-                        <div className="mb-6 flex items-center justify-between border-t border-gray-100 pt-8">
-                          <div>
-                            <h3 className="text-xl font-bold text-gray-900">Oferte pentru această cerere</h3>
+            {/* Main content */}
+            <main className="lg:col-span-8 xl:col-span-9">
+              {selectedRequest ? (
+                <div className="space-y-6">
+                  {/* Request summary card */}
+                  <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                    <div className="flex flex-wrap items-start justify-between gap-4">
+                      <div>
+                        <div className="flex items-center gap-3">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/20">
+                            <TruckIcon className="h-6 w-6 text-white" />
                           </div>
-                          <div className="flex items-center gap-2 rounded-xl bg-gray-50 px-3 py-1.5 ring-1 ring-gray-100">
-                            <span className="text-xs font-semibold text-gray-500">Total:</span>
-                            <span className="text-sm font-bold text-gray-900">
-                              {(offersByRequest[selectedRequestId] || []).length}
-                            </span>
+                          <div>
+                            <h2 className="text-xl font-bold text-gray-900">
+                              {selectedRequest.fromCity} → {selectedRequest.toCity}
+                            </h2>
+                            <p className="text-sm text-gray-500">
+                              {selectedRequest.requestCode || `#${selectedRequest.id.slice(0, 8)}`}
+                            </p>
                           </div>
                         </div>
+                      </div>
 
-                        {!(offersByRequest[selectedRequestId] || []).length ? (
-                          <div className="rounded-2xl border-2 border-dashed border-gray-100 bg-gray-50/50 p-10 text-center">
-                            <p className="text-sm font-medium text-gray-500">Încă nu ai primit oferte pentru această cerere.</p>
-                            <p className="text-xs text-gray-400 mt-1">Vei fi notificat prin email când apar primele oferte.</p>
-                          </div>
-                        ) : (
-                          <div className="space-y-4">
-                            {(offersByRequest[selectedRequestId] || []).map(
-                              (o: any, index: number) => (
-                                <OfferRow
-                                  key={o.id}
-                                  index={index}
-                                  requestId={selectedRequestId}
-                                  offer={o}
-                                  onAccept={acceptFromAggregated}
-                                  onDecline={declineFromAggregated}
-                                  onChat={(o: any) => setChatOffer(o)}
-                                />
-                              )
-                            )}
-                          </div>
+                      <div className="flex items-center gap-3">
+                        <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-sm font-medium ${
+                          hasAcceptedOffer(selectedRequest.id) 
+                            ? "bg-emerald-100 text-emerald-700"
+                            : selectedRequest.status === "active"
+                            ? "bg-blue-100 text-blue-700"
+                            : "bg-gray-100 text-gray-700"
+                        }`}>
+                          {hasAcceptedOffer(selectedRequest.id) && <CheckCircleSolid className="h-4 w-4" />}
+                          {selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id) && <ClockIcon className="h-4 w-4" />}
+                          {hasAcceptedOffer(selectedRequest.id) ? "Ofertă Acceptată" : 
+                           selectedRequest.status === "active" ? "În Așteptare" : 
+                           selectedRequest.status === "closed" ? "Finalizată" :
+                           selectedRequest.status === "paused" ? "Pauză" : 
+                           selectedRequest.status === "cancelled" ? "Anulată" : selectedRequest.status}
+                        </span>
+                        
+                        {/* Reactivate button for closed requests */}
+                        {selectedRequest.status === "closed" && (
+                          <button
+                            onClick={() => handleReactivate(selectedRequest.id)}
+                            className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                          >
+                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            </svg>
+                            Reactivează
+                          </button>
                         )}
+                        
+                        <button
+                          onClick={() => setShowDetails(!showDetails)}
+                          className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                        >
+                          {showDetails ? "Ascunde detalii" : "Vezi detalii"}
+                        </button>
+                      </div>
+                    </div>
 
-                        {/* Comparison Table */}
-                        {(offersByRequest[selectedRequestId] || []).length > 1 && (
-                          <div className="mt-8 rounded-2xl border border-gray-100 bg-gradient-to-br from-white to-slate-50 p-6 shadow-sm">
-                            <h3 className="mb-4 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-gray-500">
-                              Compară Ofertele
-                            </h3>
-                            <OfferComparison
-                              offers={(offersByRequest[selectedRequestId] as any[]).map((o) => ({
-                                id: o.id,
-                                requestId: selectedRequestId,
-                                companyName: (o as any).companyName,
-                                price: (o as any).price,
-                                message: (o as any).message,
-                                status: (o as any).status,
-                                createdAt: (o as any).createdAt,
-                                favorite: false,
-                              }))}
-                              onAccept={acceptFromAggregated}
-                              onDecline={declineFromAggregated}
-                              onChat={(o) => setChatOffer(o)}
-                            />
-                          </div>
+                    {/* Quick info */}
+                    <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
+                      <div className="rounded-lg bg-gray-50 p-3">
+                        <p className="text-xs font-medium text-gray-500">De la</p>
+                        <p className="mt-1 text-sm font-semibold text-gray-900">
+                          {selectedRequest.fromCity}, {selectedRequest.fromCounty}
+                        </p>
+                      </div>
+                      <div className="rounded-lg bg-gray-50 p-3">
+                        <p className="text-xs font-medium text-gray-500">La</p>
+                        <p className="mt-1 text-sm font-semibold text-gray-900">
+                          {selectedRequest.toCity}, {selectedRequest.toCounty}
+                        </p>
+                      </div>
+                      <div className="rounded-lg bg-gray-50 p-3">
+                        <p className="text-xs font-medium text-gray-500">Data</p>
+                        <p className="mt-1 text-sm font-semibold text-gray-900">
+                          {formatMoveDateDisplay(selectedRequest as any, { month: "short" }) || "Flexibil"}
+                        </p>
+                      </div>
+                      <div className="rounded-lg bg-gray-50 p-3">
+                        <p className="text-xs font-medium text-gray-500">Camere</p>
+                        <p className="mt-1 text-sm font-semibold text-gray-900">
+                          {selectedRequest.fromRooms || "-"} → {selectedRequest.toRooms || "-"}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Expandable details */}
+                    <AnimatePresence>
+                      {showDetails && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="mt-4 overflow-hidden"
+                        >
+                          <RequestFullDetails request={selectedRequest} isOwner={true} />
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+
+                  {/* Offers section */}
+                  <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+                    <div className="border-b border-gray-100 px-6 py-4">
+                      <h3 className="text-lg font-semibold text-gray-900">
+                        Oferte primite 
+                        {selectedOffers.length > 0 && (
+                          <span className="ml-2 rounded-full bg-emerald-100 px-2.5 py-0.5 text-sm font-bold text-emerald-700">
+                            {selectedOffers.length}
+                          </span>
                         )}
-                      </>
+                      </h3>
+                    </div>
+
+                    {selectedOffers.length === 0 ? (
+                      <div className="p-8 text-center">
+                        <ClockIcon className="mx-auto h-12 w-12 text-gray-300" />
+                        <p className="mt-3 text-sm font-medium text-gray-900">Încă nu ai oferte</p>
+                        <p className="mt-1 text-sm text-gray-500">
+                          Firmele verificate îți vor trimite oferte în curând.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-gray-100">
+                        {selectedOffers.map((offer, idx) => (
+                          <OfferCard
+                            key={offer.id}
+                            offer={offer}
+                            requestId={selectedRequestId!}
+                            index={idx}
+                            onAccept={handleAccept}
+                            onDecline={handleDecline}
+                            onChat={() => setChatOffer(offer)}
+                          />
+                        ))}
+                      </div>
                     )}
-                  </main>
+                  </div>
+                </div>
+              ) : (
+                <div className="flex h-64 items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-white">
+                  <p className="text-gray-500">Selectează o cerere din listă</p>
                 </div>
               )}
-            </div>
-          )}
-
-
-        </section>
-
-        {chatOffer && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
-            <div className="h-[600px] w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
-              <ChatWindow
-                requestId={chatOffer.requestId || selectedRequestId}
-                offerId={chatOffer.id}
-                otherPartyName={chatOffer.companyName}
-                currentUserRole="customer"
-                onClose={() => setChatOffer(null)}
-              />
-            </div>
+            </main>
           </div>
         )}
-      </div>
+
+        {/* Chat Modal */}
+        <AnimatePresence>
+          {chatOffer && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.95, opacity: 0 }}
+                className="relative h-[600px] w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+              >
+                <button
+                  onClick={() => setChatOffer(null)}
+                  className="absolute right-4 top-4 z-10 rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+                <ChatWindow
+                  requestId={selectedRequestId!}
+                  offerId={chatOffer.id}
+                  otherPartyName={chatOffer.companyName || "Companie"}
+                  currentUserRole="customer"
+                  onClose={() => setChatOffer(null)}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </DashboardLayout>
     </RequireRole>
   );
 }
 
-function OfferRow({
-  index,
-  requestId,
+// Offer card component
+function OfferCard({
   offer,
+  requestId,
+  index,
   onAccept,
   onDecline,
   onChat,
 }: {
-  index: number;
+  offer: Offer;
   requestId: string;
-  offer: any;
-  // eslint-disable-next-line no-unused-vars
-  onAccept: (requestId: string, offerId: string) => Promise<void> | void;
-  // eslint-disable-next-line no-unused-vars
-  onDecline: (requestId: string, offerId: string) => Promise<void> | void;
-  // eslint-disable-next-line no-unused-vars
-  onChat: (offer: any) => void;
+  index: number;
+  onAccept: (reqId: string, offerId: string) => Promise<void>;
+  onDecline: (reqId: string, offerId: string) => Promise<void>;
+  onChat: () => void;
 }) {
+  const isAccepted = offer.status === "accepted";
+  const isDeclined = offer.status === "declined";
+  const isPending = offer.status === "pending" || !offer.status;
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.04 }}
-      className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all duration-300 hover:shadow-xl hover:shadow-emerald-500/5"
+      transition={{ delay: index * 0.05 }}
+      className={`p-6 ${isDeclined ? "bg-gray-50 opacity-60" : ""}`}
     >
-      {/* Gradient accent */}
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-emerald-500 to-sky-500" />
-
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         {/* Company info */}
-        <div className="flex-1">
-          <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 text-lg font-bold text-white shadow-lg shadow-emerald-500/30">
-              {offer.companyName?.charAt(0)?.toUpperCase() || "F"}
-            </div>
-            <div>
+        <div className="flex items-start gap-4">
+          <div className={`flex h-14 w-14 items-center justify-center rounded-xl text-xl font-bold text-white shadow-lg ${
+            isAccepted 
+              ? "bg-linear-to-br from-emerald-500 to-green-500 shadow-emerald-500/30"
+              : "bg-linear-to-br from-blue-500 to-indigo-500 shadow-blue-500/30"
+          }`}>
+            {offer.companyName?.charAt(0)?.toUpperCase() || "F"}
+          </div>
+          <div className="flex-1">
+            <div className="flex items-center gap-2">
               <p className="text-lg font-bold text-gray-900">{offer.companyName}</p>
-              {offer.createdAt?.toDate && (
-                <p className="text-xs text-gray-500">
-                  {formatDateRO(offer.createdAt, { month: "short" })}
-                </p>
+              {isAccepted && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                  <CheckCircleSolid className="h-3 w-3" />
+                  Acceptată
+                </span>
               )}
             </div>
+            {offer.createdAt?.toDate?.() && (
+              <p className="text-sm text-gray-500">
+                Primită pe {formatDateRO(offer.createdAt, { month: "short" })}
+              </p>
+            )}
+            {offer.message && (
+              <p className="mt-2 rounded-lg bg-gray-50 p-3 text-sm text-gray-600">{offer.message}</p>
+            )}
           </div>
-          {offer.message && (
-            <p className="mt-3 rounded-xl bg-gray-50 p-3 text-sm text-gray-600">{offer.message}</p>
-          )}
         </div>
 
         {/* Price and actions */}
-        <div className="flex flex-col items-end gap-3 sm:ml-6">
+        <div className="flex flex-col items-end gap-3">
           <div className="text-right">
-            <p className="text-sm font-medium text-gray-500">Preț ofertat</p>
-            <p className="text-3xl font-bold text-emerald-600">
-              {offer.price} <span className="text-lg">lei</span>
+            <p className="text-sm text-gray-500">Preț ofertat</p>
+            <p className={`text-3xl font-bold ${isAccepted ? "text-emerald-600" : "text-gray-900"}`}>
+              {offer.price} <span className="text-base font-medium text-gray-500">lei</span>
             </p>
           </div>
-          <div className="flex flex-wrap gap-2">
+
+          {isPending && (
+            <div className="flex flex-wrap gap-2">
+              <button
+                onClick={() => onAccept(requestId, offer.id)}
+                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+              >
+                <CheckCircleIcon className="h-4 w-4" />
+                Acceptă
+              </button>
+              <button
+                onClick={() => onDecline(requestId, offer.id)}
+                className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+              >
+                Refuză
+              </button>
+              <button
+                onClick={onChat}
+                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-blue-50 hover:border-blue-300 hover:text-blue-700"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Chat
+              </button>
+            </div>
+          )}
+
+          {isAccepted && (
             <button
-              onClick={() => onAccept(requestId, offer.id)}
-              className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-emerald-500/30 transition-all duration-300"
-            >
-              <CheckCircle2 className="h-4 w-4" />
-              Acceptă
-            </button>
-            <button
-              onClick={() => onDecline(requestId, offer.id)}
-              className="inline-flex items-center justify-center rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-red-300 hover:bg-red-50 hover:text-red-600"
-            >
-              Refuză
-            </button>
-            <button
-              onClick={() => onChat(offer)}
-              className="inline-flex items-center justify-center gap-1.5 rounded-xl border-2 border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition-all hover:border-sky-300 hover:bg-sky-50 hover:text-sky-600"
+              onClick={onChat}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
             >
               <MessageSquare className="h-4 w-4" />
-              Chat
+              Contactează
             </button>
-          </div>
+          )}
         </div>
       </div>
     </motion.div>
   );
 }
+

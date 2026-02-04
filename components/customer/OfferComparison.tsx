@@ -146,3 +146,4 @@ export default function OfferComparison({ offers, onAccept, onDecline, onChat }:
     </div>
   );
 }
+

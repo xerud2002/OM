@@ -33,7 +33,7 @@ export default function ClientAccount() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-12 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 to-white py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-0 right-0 h-[400px] w-[400px] translate-x-1/2 -translate-y-1/2 rounded-full bg-emerald-100/50 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
@@ -68,7 +68,7 @@ export default function ClientAccount() {
                   <h2 className="mb-3 text-2xl font-bold tracking-tight text-slate-900 sm:mb-4 sm:text-3xl lg:text-4xl">
                     Gestionează totul
                     <br />
-                    <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+                    <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                       dintr-un singur loc
                     </span>
                   </h2>
@@ -105,7 +105,7 @@ export default function ClientAccount() {
                       <motion.div>
                         <Link
                           href="/customer/auth"
-                          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
+                          className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 sm:w-auto sm:px-8 sm:py-4 sm:text-base"
                         >
                           <LogIn className="h-4 w-4 sm:h-5 sm:w-5" />
                           Autentificare
@@ -129,7 +129,7 @@ export default function ClientAccount() {
                         <motion.div>
                           <Link
                             href="/customer/dashboard"
-                            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl sm:w-auto sm:px-6 sm:py-3"
+                            className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl sm:w-auto sm:px-6 sm:py-3"
                           >
                             <LayoutDashboard className="h-4 w-4 sm:h-5 sm:w-5" />
                             Panou Client
@@ -159,13 +159,13 @@ export default function ClientAccount() {
                 transition={{ delay: 0.3, duration: 0.6 }}
                 className="relative hidden lg:block"
               >
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-sky-50 to-purple-50" />
+                <div className="absolute inset-0 bg-linear-to-br from-emerald-50 via-sky-50 to-purple-50" />
                 <div className="relative flex h-full items-center justify-center p-8 lg:p-12">
                   <motion.div
                     transition={{ type: "spring", stiffness: 200 }}
                     className="group/image relative"
                   >
-                    <div className="absolute -inset-4 rounded-3xl bg-gradient-to-r from-emerald-500/20 to-sky-500/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover/image:opacity-100" />
+                    <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-emerald-500/20 to-sky-500/20 opacity-0 blur-2xl transition-opacity duration-500 group-hover/image:opacity-100" />
                     <Image
                       src="/pics/client-dashboard.webp"
                       alt="Dashboard client ofertemutare.ro"
@@ -179,7 +179,7 @@ export default function ClientAccount() {
                     />
                     {/* Tint and ring for consistency */}
                     <div className="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5" />
-                    <div className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-emerald-50/25 via-white/10 to-sky-50/25 mix-blend-multiply" />
+                    <div className="pointer-events-none absolute inset-0 rounded-2xl bg-linear-to-br from-emerald-50/25 via-white/10 to-sky-50/25 mix-blend-multiply" />
 
                     {/* Floating notification card */}
                     <motion.div
@@ -211,3 +211,5 @@ export default function ClientAccount() {
     </section>
   );
 }
+
+

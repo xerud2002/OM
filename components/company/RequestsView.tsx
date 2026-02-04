@@ -143,7 +143,7 @@ function RequestCardCompact({
           {/* Left: Code + Route */}
           <div className="flex min-w-0 flex-1 items-center gap-4">
             <div className="flex flex-col">
-              <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-base font-bold text-transparent">
+              <span className="bg-linear-to-r from-slate-800 to-slate-600 bg-clip-text text-base font-bold text-transparent">
                 {(r as any).requestCode || r.id.substring(0, 8)}
               </span>
               <span className="text-xs font-medium text-emerald-600">
@@ -152,9 +152,9 @@ function RequestCardCompact({
             </div>
 
             {/* Route indicator */}
-            <div className="hidden items-center gap-2.5 rounded-xl bg-gradient-to-r from-slate-50 to-slate-100/80 px-4 py-2 text-xs ring-1 ring-slate-200/50 sm:flex">
+            <div className="hidden items-center gap-2.5 rounded-xl bg-linear-to-r from-slate-50 to-slate-100/80 px-4 py-2 text-xs ring-1 ring-slate-200/50 sm:flex">
               <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-gradient-to-br from-orange-400 to-amber-500 shadow-sm" />
+                <div className="h-2 w-2 rounded-full bg-linear-to-br from-orange-400 to-amber-500 shadow-sm" />
                 <span className="font-semibold text-slate-700">
                   {(r as any).fromCounty || r.fromCity}
                 </span>
@@ -169,7 +169,7 @@ function RequestCardCompact({
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
               <div className="flex items-center gap-1.5">
-                <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm" />
+                <div className="h-2 w-2 rounded-full bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm" />
                 <span className="font-semibold text-slate-700">
                   {(r as any).toCounty || r.toCity}
                 </span>
@@ -180,7 +180,7 @@ function RequestCardCompact({
           {/* Right: Badges + Actions */}
           <div className="flex shrink-0 items-center gap-2.5">
             {(r as any).rooms && (
-              <span className="flex items-center gap-1 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm shadow-indigo-200">
+              <span className="flex items-center gap-1 rounded-xl bg-linear-to-r from-indigo-500 to-purple-500 px-3 py-1.5 text-xs font-bold text-white shadow-sm shadow-indigo-200">
                 <svg
                   className="h-3.5 w-3.5"
                   fill="none"
@@ -205,8 +205,8 @@ function RequestCardCompact({
                 setIsExpanded(!isExpanded);
               }}
               className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-xs font-bold transition-all duration-200 print:hidden ${isExpanded
-                ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200"
-                : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200 group-hover:from-emerald-50 group-hover:to-teal-50 group-hover:text-emerald-600 group-hover:ring-emerald-200"
+                ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white shadow-md shadow-emerald-200"
+                : "bg-linear-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200 group-hover:from-emerald-50 group-hover:to-teal-50 group-hover:text-emerald-600 group-hover:ring-emerald-200"
                 }`}
             >
               <motion.svg
@@ -232,7 +232,7 @@ function RequestCardCompact({
         {/* Mobile route - visible only on small screens */}
         <div className="mt-3 flex items-center gap-2 text-xs sm:hidden">
           <div className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-gradient-to-br from-orange-400 to-amber-500" />
+            <div className="h-2 w-2 rounded-full bg-linear-to-br from-orange-400 to-amber-500" />
             <span className="font-medium text-slate-600">
               {(r as any).fromCounty || r.fromCity}
             </span>
@@ -247,7 +247,7 @@ function RequestCardCompact({
             <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
           </svg>
           <div className="flex items-center gap-1.5">
-            <div className="h-2 w-2 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500" />
+            <div className="h-2 w-2 rounded-full bg-linear-to-br from-emerald-400 to-teal-500" />
             <span className="font-medium text-slate-600">{(r as any).toCounty || r.toCity}</span>
           </div>
         </div>
@@ -266,9 +266,9 @@ function RequestCardCompact({
             <div className="mt-4 space-y-4 print:space-y-2">
               {/* Contact Info - Only show if paid/has access */}
               {(paidAccess || hasMine) && (
-                <div className="rounded-2xl border border-emerald-200/60 bg-gradient-to-br from-emerald-50 via-white to-teal-50/30 p-4 shadow-sm">
+                <div className="rounded-2xl border border-emerald-200/60 bg-linear-to-br from-emerald-50 via-white to-teal-50/30 p-4 shadow-sm">
                   <div className="mb-3 flex items-center gap-2.5">
-                    <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
+                    <div className="flex h-7 w-7 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
                       <svg
                         className="h-4 w-4 text-white"
                         fill="none"
@@ -289,7 +289,7 @@ function RequestCardCompact({
                   <div className="grid gap-4 sm:grid-cols-3">
                     {(r.customerName || (r as any).contactFirstName) && (
                       <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-sm">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-amber-400 to-orange-500 shadow-sm">
                           <svg
                             className="h-5 w-5 text-white"
                             fill="none"
@@ -318,7 +318,7 @@ function RequestCardCompact({
 
                     {r.customerEmail && (
                       <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-purple-500 shadow-sm">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-violet-400 to-purple-500 shadow-sm">
                           <svg
                             className="h-5 w-5 text-white"
                             fill="none"
@@ -346,7 +346,7 @@ function RequestCardCompact({
 
                     {(r as any).phone && (
                       <div className="flex items-center gap-3 rounded-xl bg-white/60 p-2.5 ring-1 ring-slate-100">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-blue-400 to-indigo-500 shadow-sm">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-linear-to-br from-blue-400 to-indigo-500 shadow-sm">
                           <svg
                             className="h-5 w-5 text-white"
                             fill="none"
@@ -376,9 +376,9 @@ function RequestCardCompact({
               {/* Location details - Two column layout */}
               <div className="grid gap-3 sm:grid-cols-2">
                 {/* From Location */}
-                <div className="rounded-2xl border border-orange-100 bg-gradient-to-br from-orange-50/80 to-amber-50/30 p-4">
+                <div className="rounded-2xl border border-orange-100 bg-linear-to-br from-orange-50/80 to-amber-50/30 p-4">
                   <div className="mb-2.5 flex items-center gap-2">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-orange-400 to-amber-500 shadow-sm">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-orange-400 to-amber-500 shadow-sm">
                       <svg
                         className="h-3.5 w-3.5 text-white"
                         fill="none"
@@ -451,9 +451,9 @@ function RequestCardCompact({
                 </div>
 
                 {/* To Location */}
-                <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50/80 to-teal-50/30 p-4">
+                <div className="rounded-2xl border border-emerald-100 bg-linear-to-br from-emerald-50/80 to-teal-50/30 p-4">
                   <div className="mb-2.5 flex items-center gap-2">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
                       <svg
                         className="h-3.5 w-3.5 text-white"
                         fill="none"
@@ -532,8 +532,8 @@ function RequestCardCompact({
               {/* Bottom info row: Date + Services + Survey */}
               <div className="flex flex-wrap items-center gap-2">
                 {/* Move date */}
-                <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-amber-50 to-yellow-50 px-3 py-2 ring-1 ring-amber-100">
-                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-amber-400 to-yellow-500 shadow-sm">
+                <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-amber-50 to-yellow-50 px-3 py-2 ring-1 ring-amber-100">
+                  <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-amber-400 to-yellow-500 shadow-sm">
                     <svg
                       className="h-3.5 w-3.5 text-white"
                       fill="none"
@@ -563,8 +563,8 @@ function RequestCardCompact({
 
                 {/* Survey type */}
                 {(r as any).surveyType && (
-                  <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-rose-50 to-pink-50 px-3 py-2 ring-1 ring-rose-100">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-rose-400 to-pink-500 shadow-sm">
+                  <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-rose-50 to-pink-50 px-3 py-2 ring-1 ring-rose-100">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-rose-400 to-pink-500 shadow-sm">
                       <svg
                         className="h-3.5 w-3.5 text-white"
                         fill="none"
@@ -594,8 +594,8 @@ function RequestCardCompact({
 
                 {/* Media indicator */}
                 {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
-                  <div className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 px-3 py-2 ring-1 ring-blue-100">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-blue-400 to-cyan-500 shadow-sm">
+                  <div className="flex items-center gap-2 rounded-xl bg-linear-to-r from-blue-50 to-cyan-50 px-3 py-2 ring-1 ring-blue-100">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-blue-400 to-cyan-500 shadow-sm">
                       <svg
                         className="h-3.5 w-3.5 text-white"
                         fill="none"
@@ -625,7 +625,7 @@ function RequestCardCompact({
                 (r as any).serviceStorage) && (
                   <div className="flex flex-wrap gap-2">
                     {(r as any).serviceMoving && (
-                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
                         <svg
                           className="h-3.5 w-3.5"
                           fill="none"
@@ -644,7 +644,7 @@ function RequestCardCompact({
                       </span>
                     )}
                     {(r as any).servicePacking && (
-                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
                         <svg
                           className="h-3.5 w-3.5"
                           fill="none"
@@ -662,7 +662,7 @@ function RequestCardCompact({
                       </span>
                     )}
                     {(r as any).serviceDisassembly && (
-                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
                         <svg
                           className="h-3.5 w-3.5"
                           fill="none"
@@ -685,7 +685,7 @@ function RequestCardCompact({
                       </span>
                     )}
                     {(r as any).serviceCleanout && (
-                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
                         <svg
                           className="h-3.5 w-3.5"
                           fill="none"
@@ -703,7 +703,7 @@ function RequestCardCompact({
                       </span>
                     )}
                     {(r as any).serviceStorage && (
-                      <span className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
+                      <span className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-violet-100 to-purple-100 px-3 py-1.5 text-[11px] font-bold text-violet-700 ring-1 ring-violet-200">
                         <svg
                           className="h-3.5 w-3.5"
                           fill="none"
@@ -725,9 +725,9 @@ function RequestCardCompact({
 
               {/* Details/notes */}
               {r.details && (
-                <div className="rounded-2xl border border-slate-200/60 bg-gradient-to-br from-slate-50 to-gray-50/50 p-4">
+                <div className="rounded-2xl border border-slate-200/60 bg-linear-to-br from-slate-50 to-gray-50/50 p-4">
                   <div className="mb-2 flex items-center gap-2">
-                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-gradient-to-br from-slate-400 to-gray-500 shadow-sm">
+                    <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-linear-to-br from-slate-400 to-gray-500 shadow-sm">
                       <svg
                         className="h-3.5 w-3.5 text-white"
                         fill="none"
@@ -770,8 +770,8 @@ function RequestCardCompact({
                     </div>
                   ) : (
                     <div className="flex flex-col gap-3 print:hidden">
-                      <div className="flex items-center gap-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-3 ring-1 ring-emerald-200">
-                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-400 to-teal-500 shadow-sm">
+                      <div className="flex items-center gap-3 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 px-4 py-3 ring-1 ring-emerald-200">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-linear-to-br from-emerald-400 to-teal-500 shadow-sm">
                           <svg
                             className="h-4 w-4 text-white"
                             fill="none"
@@ -1020,17 +1020,17 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }}
                 transition={{ duration: 0.15, delay: index * 0.02 }}
-                className="group/card relative overflow-hidden rounded-2xl border border-slate-200/60 bg-gradient-to-br from-white via-white to-slate-50/80 px-5 py-4 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100/50"
+                className="group/card relative overflow-hidden rounded-2xl border border-slate-200/60 bg-linear-to-br from-white via-white to-slate-50/80 px-5 py-4 shadow-sm transition-all duration-300 hover:border-emerald-200 hover:shadow-lg hover:shadow-emerald-100/50"
               >
                 {/* Decorative gradient bar */}
-                <div className="absolute top-0 left-0 h-1 w-full bg-gradient-to-r from-emerald-400 via-teal-400 to-cyan-400 opacity-80" />
+                <div className="absolute top-0 left-0 h-1 w-full bg-linear-to-r from-emerald-400 via-teal-400 to-cyan-400 opacity-80" />
 
                 {r.createdAt && (
                   <div className="mb-3 flex items-center">
                     <span
                       className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-[10px] font-bold tracking-wider uppercase shadow-sm ${getTimeAgo(r.createdAt) === "Nou!"
-                        ? "bg-gradient-to-r from-emerald-500 to-teal-500 text-white"
-                        : "bg-gradient-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200"
+                        ? "bg-linear-to-r from-emerald-500 to-teal-500 text-white"
+                        : "bg-linear-to-r from-slate-100 to-slate-50 text-slate-600 ring-1 ring-slate-200"
                         }`}
                     >
                       <svg
@@ -1079,3 +1079,4 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     </div>
   );
 }
+

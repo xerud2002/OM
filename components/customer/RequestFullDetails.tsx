@@ -1,12 +1,22 @@
 import { useState, useEffect } from "react";
 import {
-  MapPinIcon as MapPin,
-  CalendarIcon as Calendar,
-  CubeIcon as Package,
-  UserIcon as User,
-  DocumentTextIcon as FileText,
-  WrenchScrewdriverIcon as Wrench,
-  TrashIcon as Trash2
+  MapPinIcon,
+  CalendarIcon,
+  CubeIcon,
+  UserIcon,
+  DocumentTextIcon,
+  WrenchScrewdriverIcon,
+  TrashIcon,
+  HomeIcon,
+  BuildingOfficeIcon,
+  ArrowUpIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  TruckIcon,
+  ArchiveBoxIcon,
+  Cog6ToothIcon,
+  SparklesIcon,
+  BuildingStorefrontIcon,
 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
@@ -64,12 +74,12 @@ export default function RequestFullDetails({
       </div>
 
       {/* Route Section */}
-      <div className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50/50 to-white p-6 shadow-sm">
+      <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
         <div className="mb-6 flex items-center gap-2">
-          <div className="p-2 bg-emerald-100 rounded-lg">
-            <MapPin className="h-5 w-5 text-emerald-600" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-emerald-100">
+            <MapPinIcon className="h-5 w-5 text-emerald-600" />
           </div>
-          <h3 className="text-lg font-bold text-gray-900">Traseu & Logistică</h3>
+          <h3 className="text-lg font-semibold text-gray-900">Traseu & Logistică</h3>
         </div>
 
         <div className="grid gap-8 md:grid-cols-[1fr_auto_1fr]">
@@ -93,21 +103,24 @@ export default function RequestFullDetails({
 
               <div className="mt-3 flex flex-wrap gap-2 text-xs">
                 {request.fromType && (
-                  <span className="inline-flex items-center rounded-md border border-emerald-100 bg-emerald-50 px-2.5 py-1 font-medium text-emerald-700">
-                    {request.fromType === "house" ? "🏠 Casă" : "🏢 Apartament"}
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-sm font-medium text-gray-700">
+                    {request.fromType === "house" ? <HomeIcon className="h-4 w-4 text-gray-500" /> : <BuildingOfficeIcon className="h-4 w-4 text-gray-500" />}
+                    {request.fromType === "house" ? "Casă" : "Apartament"}
                   </span>
                 )}
                 {request.fromFloor !== undefined && request.fromFloor !== null && request.fromFloor !== "" && (
-                  <span className="inline-flex items-center rounded-md border border-gray-100 bg-white px-2.5 py-1 font-medium text-gray-600 shadow-sm">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700">
+                    <ArrowUpIcon className="h-4 w-4 text-gray-500" />
                     Etaj {request.fromFloor}
                   </span>
                 )}
                 {request.fromElevator !== undefined && (
-                  <span className={`inline-flex items-center rounded-md border px-2.5 py-1 font-medium shadow-sm ${request.fromElevator
-                      ? "border-green-100 bg-green-50 text-green-700"
-                      : "border-gray-100 bg-gray-50 text-gray-500"
+                  <span className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-medium ${request.fromElevator
+                      ? "border-green-200 bg-green-50 text-green-700"
+                      : "border-red-200 bg-red-50 text-red-600"
                     }`}>
-                    {request.fromElevator ? "✅ Cu lift" : "❌ Fără lift"}
+                    {request.fromElevator ? <CheckCircleIcon className="h-4 w-4" /> : <XCircleIcon className="h-4 w-4" />}
+                    {request.fromElevator ? "Cu lift" : "Fără lift"}
                   </span>
                 )}
               </div>
@@ -142,21 +155,24 @@ export default function RequestFullDetails({
 
               <div className="mt-3 flex flex-wrap gap-2 text-xs">
                 {request.toType && (
-                  <span className="inline-flex items-center rounded-md border border-emerald-100 bg-emerald-50 px-2.5 py-1 font-medium text-emerald-700">
-                    {request.toType === "house" ? "🏠 Casă" : "🏢 Apartament"}
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-2.5 py-1.5 text-sm font-medium text-gray-700">
+                    {request.toType === "house" ? <HomeIcon className="h-4 w-4 text-gray-500" /> : <BuildingOfficeIcon className="h-4 w-4 text-gray-500" />}
+                    {request.toType === "house" ? "Casă" : "Apartament"}
                   </span>
                 )}
                 {request.toFloor !== undefined && request.toFloor !== null && request.toFloor !== "" && (
-                  <span className="inline-flex items-center rounded-md border border-gray-100 bg-white px-2.5 py-1 font-medium text-gray-600 shadow-sm">
+                  <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-2.5 py-1.5 text-sm font-medium text-gray-700">
+                    <ArrowUpIcon className="h-4 w-4 text-gray-500" />
                     Etaj {request.toFloor}
                   </span>
                 )}
                 {request.toElevator !== undefined && (
-                  <span className={`inline-flex items-center rounded-md border px-2.5 py-1 font-medium shadow-sm ${request.toElevator
-                      ? "border-green-100 bg-green-50 text-green-700"
-                      : "border-gray-100 bg-gray-50 text-gray-500"
+                  <span className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1.5 text-sm font-medium ${request.toElevator
+                      ? "border-green-200 bg-green-50 text-green-700"
+                      : "border-red-200 bg-red-50 text-red-600"
                     }`}>
-                    {request.toElevator ? "✅ Cu lift" : "❌ Fără lift"}
+                    {request.toElevator ? <CheckCircleIcon className="h-4 w-4" /> : <XCircleIcon className="h-4 w-4" />}
+                    {request.toElevator ? "Cu lift" : "Fără lift"}
                   </span>
                 )}
               </div>
@@ -171,9 +187,9 @@ export default function RequestFullDetails({
         {(() => {
           const display = formatMoveDateDisplay(request as any, { month: "short" });
           return display && display !== "-" ? (
-            <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-                <Calendar className="h-5 w-5" />
+            <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-blue-50">
+                <CalendarIcon className="h-5 w-5 text-blue-600" />
               </div>
               <div>
                 <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Data mutării</h4>
@@ -185,9 +201,9 @@ export default function RequestFullDetails({
 
         {/* Rooms / Volume */}
         {(request.rooms || request.volumeM3) && (
-          <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-50 text-purple-600">
-              <Package className="h-5 w-5" />
+          <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-purple-50">
+              <CubeIcon className="h-5 w-5 text-purple-600" />
             </div>
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Volum / Camere</h4>
@@ -202,9 +218,9 @@ export default function RequestFullDetails({
 
         {/* Contact */}
         {request.contactName && (
-          <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600">
-              <User className="h-5 w-5" />
+          <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-indigo-50">
+              <UserIcon className="h-5 w-5 text-indigo-600" />
             </div>
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Persoană Contact</h4>
@@ -216,9 +232,9 @@ export default function RequestFullDetails({
 
         {/* Survey */}
         {request.surveyType && (
-          <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm transition-shadow hover:shadow-md">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50 text-sky-600">
-              <FileText className="h-5 w-5" />
+          <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50">
+              <DocumentTextIcon className="h-5 w-5 text-sky-600" />
             </div>
             <div>
               <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Evaluare</h4>
@@ -242,35 +258,40 @@ export default function RequestFullDetails({
         request.serviceStorage) && (
           <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
-              <div className="p-2 bg-orange-50 rounded-lg">
-                <Wrench className="h-5 w-5 text-orange-600" />
+              <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50">
+                <WrenchScrewdriverIcon className="h-5 w-5 text-orange-600" />
               </div>
-              <h3 className="text-lg font-bold text-gray-900">Servicii Solicitate</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Servicii Solicitate</h3>
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
               {request.serviceMoving && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-100 bg-purple-50 px-4 py-2 text-sm font-semibold text-purple-700">
-                  🚛 Transport
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700">
+                  <TruckIcon className="h-4 w-4" />
+                  Transport
                 </span>
               )}
               {request.servicePacking && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-100 bg-purple-50 px-4 py-2 text-sm font-semibold text-purple-700">
-                  📦 Ambalare
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700">
+                  <ArchiveBoxIcon className="h-4 w-4" />
+                  Ambalare
                 </span>
               )}
               {request.serviceDisassembly && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-100 bg-purple-50 px-4 py-2 text-sm font-semibold text-purple-700">
-                  🔧 Demontare/Montare
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-1.5 text-sm font-medium text-purple-700">
+                  <Cog6ToothIcon className="h-4 w-4" />
+                  Demontare/Montare
                 </span>
               )}
               {request.serviceCleanout && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-100 bg-purple-50 px-4 py-2 text-sm font-semibold text-purple-700">
-                  🧹 Debarasare
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700">
+                  <SparklesIcon className="h-4 w-4" />
+                  Debarasare
                 </span>
               )}
               {request.serviceStorage && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-100 bg-purple-50 px-4 py-2 text-sm font-semibold text-purple-700">
-                  🏭 Depozitare
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700">
+                  <BuildingStorefrontIcon className="h-4 w-4" />
+                  Depozitare
                 </span>
               )}
             </div>
@@ -281,12 +302,12 @@ export default function RequestFullDetails({
       {request.details && (
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <div className="mb-3 flex items-center gap-2">
-            <div className="p-2 bg-gray-50 rounded-lg">
-              <FileText className="h-5 w-5 text-gray-600" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gray-100">
+              <DocumentTextIcon className="h-5 w-5 text-gray-600" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900">Alte detalii</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Alte detalii</h3>
           </div>
-          <p className="whitespace-pre-wrap text-gray-700 leading-relaxed bg-gray-50/50 p-4 rounded-xl border border-gray-100">
+          <p className="whitespace-pre-wrap text-gray-700 leading-relaxed bg-gray-50 p-4 rounded-xl">
             {request.details}
           </p>
         </div>
@@ -296,10 +317,10 @@ export default function RequestFullDetails({
       {localMediaUrls && localMediaUrls.length > 0 && (
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
-            <div className="p-2 bg-yellow-50 rounded-lg">
-              <Package className="h-5 w-5 text-yellow-600" />
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50">
+              <CubeIcon className="h-5 w-5 text-amber-600" />
             </div>
-            <h3 className="text-lg font-bold text-gray-900">Poze & Video ({localMediaUrls.length})</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Poze & Video ({localMediaUrls.length})</h3>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
@@ -344,7 +365,7 @@ export default function RequestFullDetails({
                     {deletingUrl === url ? (
                       <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
                     ) : (
-                      <Trash2 className="h-4 w-4" />
+                      <TrashIcon className="h-4 w-4" />
                     )}
                   </button>
                 )}
@@ -369,3 +390,4 @@ export default function RequestFullDetails({
     </div>
   );
 }
+

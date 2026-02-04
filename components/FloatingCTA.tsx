@@ -72,7 +72,7 @@ export default function FloatingCTA() {
       exit={{ opacity: 0, scale: 0.8, y: 20 }}
       whileTap={{ scale: 0.95 }}
       onClick={handleClick}
-      className="fixed right-6 bottom-6 z-40 flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-3 font-bold text-white shadow-2xl transition-all hover:shadow-emerald-400/50 md:hidden"
+      className="fixed right-6 bottom-6 z-40 flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-5 py-3 font-bold text-white shadow-2xl transition-all hover:shadow-emerald-400/50 md:hidden"
       aria-label="Primește oferte gratuite"
     >
       🎁 Primește Oferte
@@ -80,3 +80,4 @@ export default function FloatingCTA() {
     </motion.button>
   );
 }
+

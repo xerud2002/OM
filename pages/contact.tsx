@@ -1,5 +1,3 @@
-"use client";
-
 import Head from "next/head";
 import { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -179,14 +177,14 @@ export default function ContactPage() {
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
-      <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">
+      <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">
         {/* Hero Section */}
         <section ref={heroRef} className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
           {/* Animated Background Elements */}
           <motion.div className="pointer-events-none absolute inset-0" style={{ y: heroY }}>
-            <div className="absolute top-0 left-1/4 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-gradient-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
-            <div className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-y-1/2 rounded-full bg-gradient-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
-            <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
+            <div className="absolute top-0 left-1/4 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-linear-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
+            <div className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-y-1/2 rounded-full bg-linear-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
+            <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
           </motion.div>
 
           {/* Grid Pattern */}
@@ -204,7 +202,7 @@ export default function ContactPage() {
                 initial={{ scale: 0.9, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-gradient-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm"
+                className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm"
               >
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
                   <MessageCircle className="h-3.5 w-3.5 text-white" />
@@ -218,7 +216,7 @@ export default function ContactPage() {
                 Contactează
                 <br />
                 <span className="relative">
-                  <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                     echipa noastră
                   </span>
                   <motion.svg
@@ -271,10 +269,10 @@ export default function ContactPage() {
                     transition={{ delay: i * 0.1 }}
                     className="group relative overflow-hidden rounded-2xl border border-slate-100 bg-white p-6 shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl"
                   >
-                    <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-gradient-to-br from-emerald-100/50 to-teal-100/50 blur-2xl" />
+                    <div className="absolute -top-8 -right-8 h-24 w-24 rounded-full bg-linear-to-br from-emerald-100/50 to-teal-100/50 blur-2xl" />
                     <div className="relative">
                       <div
-                        className={`mb-4 inline-flex rounded-xl bg-gradient-to-br ${item.gradient} p-3 shadow-lg`}
+                        className={`mb-4 inline-flex rounded-xl bg-linear-to-br ${item.gradient} p-3 shadow-lg`}
                       >
                         <item.icon className="h-6 w-6 text-white" />
                       </div>
@@ -300,7 +298,7 @@ export default function ContactPage() {
         {/* Main Content */}
         <section className="relative py-16 sm:py-24">
           {/* Background accent */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-50/30 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-b from-transparent via-emerald-50/30 to-transparent" />
 
           <div className="relative z-10 container mx-auto px-4">
             <div className="mx-auto max-w-6xl">
@@ -314,7 +312,7 @@ export default function ContactPage() {
                 >
                   <div className="relative">
                     {/* Decorative frame */}
-                    <div className="absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
+                    <div className="absolute -inset-4 rounded-[2rem] bg-linear-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
 
                     <div className="relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 shadow-2xl sm:p-10">
                       {/* Decorative orbs */}
@@ -322,7 +320,7 @@ export default function ContactPage() {
                       <div className="absolute -bottom-12 -left-12 h-48 w-48 rounded-full bg-sky-100/40 blur-3xl" />
 
                       <div className="relative">
-                        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-50 to-teal-50 px-4 py-2">
+                        <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-50 to-teal-50 px-4 py-2">
                           <Send className="h-4 w-4 text-emerald-600" />
                           <span className="text-sm font-semibold text-emerald-700">
                             Formular contact
@@ -342,7 +340,7 @@ export default function ContactPage() {
                             animate={{ opacity: 1, scale: 1 }}
                             className="py-12 text-center"
                           >
-                            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-200">
+                            <div className="mx-auto mb-4 flex h-20 w-20 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 shadow-lg shadow-emerald-200">
                               <CheckCircle className="h-10 w-10 text-white" />
                             </div>
                             <h3 className="mb-2 text-2xl font-bold text-slate-900">
@@ -465,7 +463,7 @@ export default function ContactPage() {
                             <button
                               type="submit"
                               disabled={sending}
-                              className="group flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-3 py-2 md:px-6 md:py-4 font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-70"
+                              className="group flex w-full items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-3 py-2 md:px-6 md:py-4 font-bold text-white shadow-lg shadow-emerald-500/25 transition-all hover:shadow-xl hover:shadow-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-70"
                             >
                               {sending ? (
                                 <>
@@ -504,7 +502,7 @@ export default function ContactPage() {
                     <div className="absolute -top-12 -right-12 h-48 w-48 rounded-full bg-violet-100/50 blur-3xl" />
 
                     <div className="relative">
-                      <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-violet-50 to-purple-50 px-4 py-2">
+                      <div className="mb-6 inline-flex items-center gap-2 rounded-full bg-linear-to-r from-violet-50 to-purple-50 px-4 py-2">
                         <HelpCircle className="h-4 w-4 text-violet-600" />
                         <span className="text-sm font-semibold text-violet-700">
                           Întrebări frecvente
@@ -540,7 +538,7 @@ export default function ContactPage() {
                   </div>
 
                   {/* Support Card */}
-                  <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-emerald-600 via-teal-600 to-emerald-700 p-8 text-white shadow-xl">
+                  <div className="relative overflow-hidden rounded-3xl bg-linear-to-br from-emerald-600 via-teal-600 to-emerald-700 p-8 text-white shadow-xl">
                     <div className="absolute -right-12 -bottom-12 h-48 w-48 rounded-full bg-white/10 blur-3xl" />
                     <div className="absolute -top-12 -left-12 h-48 w-48 rounded-full bg-teal-400/20 blur-3xl" />
 
@@ -581,7 +579,7 @@ export default function ContactPage() {
                     initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    className="rounded-3xl border border-slate-100 bg-gradient-to-br from-slate-50 to-white p-8 shadow-lg"
+                    className="rounded-3xl border border-slate-100 bg-linear-to-br from-slate-50 to-white p-8 shadow-lg"
                   >
                     <div className="mb-4 inline-flex items-center gap-2">
                       <Sparkles className="h-5 w-5 text-emerald-600" />
@@ -611,3 +609,5 @@ export default function ContactPage() {
     </>
   );
 }
+
+

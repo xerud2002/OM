@@ -41,7 +41,7 @@ function TrustIndicators() {
 
 export default function MobileHero() {
   return (
-    <section id="request-form" className="relative overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-8 md:hidden">
+    <section id="request-form" className="relative overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-8 md:hidden">
       <div className="relative z-10 mx-auto max-w-lg">
         {/* Badge - pure HTML, no JS */}
         <div className="mb-3 flex justify-center">
@@ -80,3 +80,4 @@ export default function MobileHero() {
     </section>
   );
 }
+

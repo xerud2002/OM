@@ -62,7 +62,7 @@ export default function RequireRole({ allowedRole, children }: Props) {
             // If role is mismatched, redirect to the appropriate place
             if (role === "company") router.push("/company/dashboard");
             else if (role === "customer") router.push("/customer/dashboard");
-            else if (role === "admin") router.push("/admin/verifications");
+            else if (role === "admin") router.push("/admin");
             else router.push("/");
           } else {
             setChecking(false);

@@ -162,3 +162,4 @@ export default function VerificationSection({ company, onUpdate }: Props) {
     </div>
   );
 }
+

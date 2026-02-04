@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
 
   // Target modern browsers only - removes legacy polyfills (~13KB savings)
   // Supports browsers with ES2020+ features
