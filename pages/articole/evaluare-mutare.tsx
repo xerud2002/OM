@@ -61,7 +61,7 @@ export default function ArticleSurvey() {
           <header className="mb-12 text-center">
             <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
               Tipuri de Survey Pentru Mutări:{" "}
-              <span className="bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
                 Ce Să Alegi?
               </span>
             </h1>
@@ -752,7 +752,7 @@ export default function ArticleSurvey() {
           </section>
 
           {/* CTA Section */}
-          <section className="mb-12 rounded-lg bg-linear-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
+          <section className="mb-12 rounded-lg bg-gradient-to-r from-emerald-600 to-blue-600 p-8 text-center text-white">
             <h2 id="primete-3-5-oferte-cu-survey-gratuit" className="mb-4 text-3xl font-bold">Primește 3-5 Oferte Cu Survey Gratuit</h2>
             <p className="mb-6 text-lg">
               Completează un singur formular și primește oferte personalizate de la cele mai bune
@@ -802,4 +802,5 @@ export default function ArticleSurvey() {
     </>
   );
 }
+
 

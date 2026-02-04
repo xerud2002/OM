@@ -37,12 +37,12 @@ export default function TermsPage() {
         <div className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex rounded-full bg-linear-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
+            <div className="mb-4 inline-flex rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
               <FileText className="h-8 w-8 text-emerald-600" />
             </div>
             <h1 className="mb-4 text-2xl md:text-4xl font-bold text-slate-900">
               Termeni și{" "}
-              <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Condiții
               </span>
             </h1>
@@ -319,4 +319,5 @@ export default function TermsPage() {
     </>
   );
 }
+
 

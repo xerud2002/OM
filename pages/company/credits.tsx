@@ -19,7 +19,7 @@ export default function BuyCredits() {
           {/* Header */}
           <div className="text-center">
             <div className="mb-4 flex justify-center">
-              <div className="rounded-2xl bg-linear-to-br from-amber-400 to-orange-500 p-4 shadow-lg shadow-amber-500/30">
+              <div className="rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 p-4 shadow-lg shadow-amber-500/30">
                 <TicketIcon className="h-10 w-10 text-white" />
               </div>
             </div>
@@ -59,7 +59,7 @@ export default function BuyCredits() {
 
             {/* Pro Pack - Popular */}
             <div className="relative flex flex-col rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-xl">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-linear-to-r from-blue-500 to-blue-600 px-4 py-1 text-sm font-bold text-white shadow-lg">
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-1 text-sm font-bold text-white shadow-lg">
                 Cel mai popular
               </div>
               <h3 className="text-xl font-bold text-gray-900">Pachet Pro</h3>
@@ -84,7 +84,7 @@ export default function BuyCredits() {
               </ul>
               <button 
                 onClick={() => window.open("mailto:contact@ofertemutare.ro?subject=Achizitie Pachet Pro 500 RON", "_blank")}
-                className="mt-auto block w-full rounded-xl bg-linear-to-r from-blue-500 to-blue-600 py-3 text-center font-bold text-white shadow-lg shadow-blue-500/25 transition hover:shadow-blue-500/40"
+                className="mt-auto block w-full rounded-xl bg-gradient-to-r from-blue-500 to-blue-600 py-3 text-center font-bold text-white shadow-lg shadow-blue-500/25 transition hover:shadow-blue-500/40"
               >
                 Comandă Acum
               </button>
@@ -142,4 +142,5 @@ export default function BuyCredits() {
     </RequireRole>
   );
 }
+
 

@@ -61,15 +61,15 @@ const MyRequestCard = memo(function MyRequestCard({
   const getGradientClass = () => {
     switch (status) {
       case "active":
-        return "bg-linear-to-r from-green-500 via-blue-500 to-blue-600";
+        return "bg-gradient-to-r from-green-500 via-blue-500 to-blue-600";
       case "closed":
-        return "bg-linear-to-r from-gray-400 to-gray-500";
+        return "bg-gradient-to-r from-gray-400 to-gray-500";
       case "paused":
-        return "bg-linear-to-r from-amber-500 to-orange-500";
+        return "bg-gradient-to-r from-amber-500 to-orange-500";
       case "cancelled":
-        return "bg-linear-to-r from-red-500 to-rose-500";
+        return "bg-gradient-to-r from-red-500 to-rose-500";
       default:
-        return "bg-linear-to-r from-green-500 via-blue-500 to-blue-600";
+        return "bg-gradient-to-r from-green-500 via-blue-500 to-blue-600";
     }
   };
 
@@ -90,10 +90,10 @@ const MyRequestCard = memo(function MyRequestCard({
               {/* Route */}
               <div className="mb-2 flex items-center gap-2 sm:mb-3 sm:gap-3">
                 <div
-                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-lg ${status === "active" ? "bg-linear-to-br from-emerald-500 to-blue-500 shadow-emerald-500/30" :
-                    status === "closed" ? "bg-linear-to-br from-gray-400 to-gray-500 shadow-gray-500/20" :
-                      status === "paused" ? "bg-linear-to-br from-amber-400 to-orange-500 shadow-amber-500/30" :
-                        "bg-linear-to-br from-red-500 to-rose-600 shadow-red-500/30"
+                  className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl shadow-lg ${status === "active" ? "bg-gradient-to-br from-emerald-500 to-blue-500 shadow-emerald-500/30" :
+                    status === "closed" ? "bg-gradient-to-br from-gray-400 to-gray-500 shadow-gray-500/20" :
+                      status === "paused" ? "bg-gradient-to-br from-amber-400 to-orange-500 shadow-amber-500/30" :
+                        "bg-gradient-to-br from-red-500 to-rose-600 shadow-red-500/30"
                     }`}
                 >
                   <MapPin className="h-5 w-5 text-white" />
@@ -213,4 +213,5 @@ const MyRequestCard = memo(function MyRequestCard({
 });
 
 export default MyRequestCard;
+
 

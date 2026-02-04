@@ -24,23 +24,40 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!companyId) return;
-
-    const q = query(
-      collection(db, "companies", companyId, "notifications"),
-      orderBy("createdAt", "desc")
-    );
-
-    const unsub = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...doc.data(),
-      })) as Notification[];
-      setNotifications(data);
+    if (!companyId) {
       setLoading(false);
-    });
+      return;
+    }
 
-    return () => unsub();
+    try {
+      const q = query(
+        collection(db, "companies", companyId, "notifications"),
+        orderBy("createdAt", "desc")
+      );
+
+      const unsub = onSnapshot(
+        q,
+        (snapshot) => {
+          const data = snapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })) as Notification[];
+          setNotifications(data);
+          setLoading(false);
+        },
+        (error) => {
+          // Collection might not exist yet or index missing, that's OK
+          console.log("Notifications error:", error.message);
+          setNotifications([]);
+          setLoading(false);
+        }
+      );
+
+      return () => unsub();
+    } catch (error) {
+      console.log("Notifications setup error:", error);
+      setLoading(false);
+    }
   }, [companyId]);
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -90,11 +107,11 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
       {/* Bell Button */}
       <button
         onClick={() => setShowDropdown(!showDropdown)}
-        className="relative rounded-full p-2 text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-900"
+        className="relative flex h-10 w-10 items-center justify-center rounded-full bg-gray-100 text-gray-700 transition-colors hover:bg-gray-200 hover:text-gray-900"
       >
-        <Bell className="h-6 w-6" />
+        <Bell className="h-5 w-5" />
         {unreadCount > 0 && (
-          <span className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
+          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-xs font-bold text-white">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
@@ -115,7 +132,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
               className="absolute top-full right-0 z-50 mt-2 w-96 max-w-[calc(100vw-2rem)] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xl"
             >
               {/* Header */}
-              <div className="flex items-center justify-between border-b border-gray-200 bg-linear-to-r from-blue-50 to-white px-4 py-3">
+              <div className="flex items-center justify-between border-b border-gray-200 bg-gradient-to-r from-blue-50 to-white px-4 py-3">
                 <div>
                   <h3 className="font-semibold text-gray-900">Notificări</h3>
                   {unreadCount > 0 && (
@@ -206,4 +223,5 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
     </div>
   );
 }
+
 

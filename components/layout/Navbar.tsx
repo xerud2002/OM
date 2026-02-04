@@ -108,7 +108,7 @@ export default function Navbar() {
         <Link href="/" aria-label="Acasă" className="-ml-2 flex items-center select-none">
           {/* Desktop Logo */}
           <div className="hidden sm:block">
-            <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
+            <div className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
               <span className="tracking-tight">Oferte</span>
               <span className="text-emerald-500">mutare</span>
               <span className="align-top text-xs text-emerald-600">.ro</span>
@@ -117,7 +117,7 @@ export default function Navbar() {
 
           {/* Mobile Logo */}
           <div className="block sm:hidden">
-            <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent">
+            <div className="bg-gradient-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent">
               <span className="tracking-tight">Oferte</span>
               <span className="text-emerald-500">mutare</span>
               <span className="align-top text-xs text-emerald-600">.ro</span>
@@ -144,7 +144,7 @@ export default function Navbar() {
             <button
               onClick={handleGetOffers}
               aria-label="Contul Meu"
-              className="ml-3 inline-flex min-h-12 items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-3 font-bold text-white shadow-lg transition-all hover:shadow-xl"
+              className="ml-3 inline-flex min-h-12 items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-3 font-bold text-white shadow-lg transition-all hover:shadow-xl"
             >
               <User className="h-4 w-4" /> Contul Meu
             </button>
@@ -156,7 +156,7 @@ export default function Navbar() {
               {/* Smart Dashboard Link */}
               <Link
                 href={userRole === "company" ? "/company/dashboard" : "/customer/dashboard"}
-                className="flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-4 py-2 font-semibold text-white shadow-md transition-all"
+                className="flex items-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-4 py-2 font-semibold text-white shadow-md transition-all"
               >
                 <User className="h-4 w-4" />
                 <span className="max-w-35 truncate">Contul Meu</span>
@@ -206,7 +206,7 @@ export default function Navbar() {
 
           <button
             onClick={handleGetOffers}
-            className="mt-3 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-3 font-semibold text-white shadow-md transition-all hover:shadow-lg"
+            className="mt-3 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-3 font-semibold text-white shadow-md transition-all hover:shadow-lg"
           >
             <PhoneCall className="h-4 w-4" /> Obține Oferte
           </button>
@@ -224,4 +224,5 @@ export default function Navbar() {
     </header>
   );
 }
+
 

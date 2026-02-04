@@ -132,9 +132,9 @@ export default function PlaceOfferForm({ request, company, onOfferPlaced }: Prop
         onClick={() => setIsOpen(true)}
         className="group relative w-full overflow-hidden rounded-2xl bg-white p-1 shadow-md ring-1 shadow-slate-200/50 ring-slate-100 transition-all hover:scale-[1.01] hover:shadow-lg hover:ring-emerald-200"
       >
-        <div className="relative overflow-hidden rounded-xl bg-linear-to-br from-slate-900 via-slate-800 to-slate-900 p-5">
+        <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-5">
           <div className="flex items-center gap-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/30">
+            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/30">
               <Lock className="h-6 w-6 text-white" />
             </div>
             <div className="flex-1 text-left">
@@ -214,7 +214,7 @@ export default function PlaceOfferForm({ request, company, onOfferPlaced }: Prop
           <button
             type="submit"
             disabled={loading}
-            className="flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-2.5 font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-xl hover:shadow-emerald-500/30 disabled:opacity-70"
+            className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-2.5 font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-xl hover:shadow-emerald-500/30 disabled:opacity-70"
           >
             {loading ? (
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/30 border-t-white" />
@@ -228,4 +228,5 @@ export default function PlaceOfferForm({ request, company, onOfferPlaced }: Prop
     </motion.div>
   );
 }
+
 

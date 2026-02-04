@@ -123,7 +123,7 @@ export default function ArticleCostMutare() {
                         </span>
                         <h1 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
                             Cât Costă o Mutare în România:{" "}
-                            <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                                 Ghid de Prețuri {currentYear}
                             </span>
                         </h1>
@@ -426,4 +426,5 @@ export default function ArticleCostMutare() {
         </>
     );
 }
+
 

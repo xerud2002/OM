@@ -27,7 +27,7 @@ body {
 }
 
 .btn-primary {
-  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-2 font-medium text-white shadow-md transition-all hover:opacity-95 hover:shadow-lg;
+  @apply inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-6 py-2 font-medium text-white shadow-md transition-all hover:opacity-95 hover:shadow-lg;
 }
 
 .btn-outline {
@@ -81,7 +81,7 @@ select:focus {
 }
 
 .rdp-day_selected {
-  @apply scale-105 bg-linear-to-r from-emerald-500 to-sky-500 text-white shadow-md;
+  @apply scale-105 bg-gradient-to-r from-emerald-500 to-sky-500 text-white shadow-md;
 }
 
 .rdp-day_today {
@@ -176,8 +176,8 @@ select:focus {
     transition: none !important;
   }
 
-  .bg-linear-to-br,
-  .bg-linear-to-r {
+  .bg-gradient-to-br,
+  .bg-gradient-to-r {
     background: white !important;
   }
 
@@ -229,33 +229,33 @@ img {
 
 /* Custom Hero Gradients */
 .bg-gradient-brand {
-  @apply bg-linear-to-br from-indigo-900 via-purple-900 to-indigo-900;
+  @apply bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900;
 }
 
 .bg-gradient-mutari {
-  @apply bg-linear-to-br from-slate-900 via-purple-900 to-slate-900;
+  @apply bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900;
 }
 
 .bg-gradient-company {
-  @apply bg-linear-to-br from-slate-900 via-blue-900 to-slate-900;
+  @apply bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900;
 }
 
 .bg-gradient-orange {
-  @apply bg-linear-to-br from-orange-900 via-amber-900 to-orange-950;
+  @apply bg-gradient-to-br from-orange-900 via-amber-900 to-orange-950;
 }
 
 .bg-gradient-green {
-  @apply bg-linear-to-br from-emerald-900 via-green-900 to-emerald-950;
+  @apply bg-gradient-to-br from-emerald-900 via-green-900 to-emerald-950;
 }
 
 .bg-gradient-cyan {
-  @apply bg-linear-to-br from-cyan-900 via-blue-900 to-cyan-950;
+  @apply bg-gradient-to-br from-cyan-900 via-blue-900 to-cyan-950;
 }
 
 .bg-gradient-rose {
-  @apply bg-linear-to-br from-rose-900 via-pink-900 to-rose-950;
+  @apply bg-gradient-to-br from-rose-900 via-pink-900 to-rose-950;
 }
 
 .bg-gradient-slate {
-  @apply bg-linear-to-br from-slate-900 via-gray-800 to-slate-900;
+  @apply bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900;
 }

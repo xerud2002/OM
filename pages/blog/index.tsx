@@ -139,7 +139,7 @@ export default function BlogPage() {
       </Head>
 
       <LayoutWrapper>
-        <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
+        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
           {/* Hero Section */}
           <section className="relative overflow-hidden py-16 sm:py-20">
             <div className="pointer-events-none absolute inset-0">
@@ -155,7 +155,7 @@ export default function BlogPage() {
                 </div>
                 <h1 className="mb-5 text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
                   Sfaturi pentru o{" "}
-                  <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                  <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                     mutare reușită
                   </span>
                 </h1>
@@ -302,7 +302,7 @@ export default function BlogPage() {
 
           {/* CTA Section */}
           <section className="container mx-auto px-4 pb-20">
-            <div className="rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 p-8 text-center text-white sm:rounded-3xl sm:p-12">
+            <div className="rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-center text-white sm:rounded-3xl sm:p-12">
               <h2 className="mb-4 text-2xl font-bold sm:text-3xl">Pregătit pentru mutare?</h2>
               <p className="mx-auto mb-6 max-w-xl opacity-90">
                 Completează formularul și primește oferte personalizate de la firme locale. 100%
@@ -322,4 +322,5 @@ export default function BlogPage() {
     </>
   );
 }
+
 

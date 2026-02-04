@@ -332,7 +332,7 @@ export default function CustomerAuthPage() {
                   >
                     Adresa ta de email
                   </label>
-                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-linear-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
+                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
                     <motion.div
                       animate={{
                         scale: email ? 1.1 : 1,
@@ -366,7 +366,7 @@ export default function CustomerAuthPage() {
                   >
                     Parola ta
                   </label>
-                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-linear-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
+                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
                     <motion.div
                       animate={{
                         scale: password ? 1.1 : 1,
@@ -393,7 +393,7 @@ export default function CustomerAuthPage() {
                   whileTap={{ scale: 0.98 }}
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full overflow-hidden rounded-xl bg-linear-to-r from-emerald-600 via-teal-600 to-cyan-600 px-3 py-2 md:px-6 md:py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
+                  className="group relative w-full overflow-hidden rounded-xl bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 px-3 py-2 md:px-6 md:py-4 font-semibold text-white shadow-lg transition-all hover:shadow-xl disabled:opacity-50"
                 >
                   <span className="relative z-10 flex items-center justify-center gap-2">
                     {loading ? (
@@ -412,7 +412,7 @@ export default function CustomerAuthPage() {
                       </>
                     )}
                   </span>
-                  <div className="absolute inset-0 -z-0 bg-linear-to-r from-emerald-700 via-teal-700 to-cyan-700 opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="absolute inset-0 -z-0 bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 opacity-0 transition-opacity group-hover:opacity-100" />
                 </motion.button>
 
                 {isLogin && (
@@ -492,4 +492,5 @@ export default function CustomerAuthPage() {
     </>
   );
 }
+
 

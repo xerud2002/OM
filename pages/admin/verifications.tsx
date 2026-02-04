@@ -116,7 +116,7 @@ export default function AdminVerifications() {
                 <div key={company.id} className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
                   <div className="flex flex-col border-b border-gray-100 bg-gray-50/50 p-6 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-purple-500 to-pink-500 text-xl font-bold text-white shadow">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-xl font-bold text-white shadow">
                         {(company.companyName || company.displayName || "C").substring(0, 1).toUpperCase()}
                       </div>
                       <div>
@@ -221,4 +221,5 @@ export default function AdminVerifications() {
     </RequireRole>
   );
 }
+
 

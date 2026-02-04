@@ -184,7 +184,7 @@ export default function DashboardLayout({
                   {/* User info mobile */}
                   <div className="py-4">
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br ${colors.accent}`}>
+                      <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${colors.accent}`}>
                         {role === "customer" && <UserCircleIcon className="h-5 w-5 text-white" />}
                         {role === "company" && <BuildingOfficeIcon className="h-5 w-5 text-white" />}
                         {role === "admin" && <ShieldCheckIcon className="h-5 w-5 text-white" />}
@@ -269,8 +269,8 @@ export default function DashboardLayout({
 
           {/* User info */}
           <div className="px-4 py-4">
-            <div className="flex items-center gap-3 rounded-xl bg-linear-to-r from-gray-50 to-gray-100/50 p-3">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-linear-to-br ${colors.accent} shadow-sm`}>
+            <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 p-3">
+              <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${colors.accent} shadow-sm`}>
                 {role === "customer" && <UserCircleIcon className="h-5 w-5 text-white" />}
                 {role === "company" && <BuildingOfficeIcon className="h-5 w-5 text-white" />}
                 {role === "admin" && <ShieldCheckIcon className="h-5 w-5 text-white" />}
@@ -373,7 +373,7 @@ export default function DashboardLayout({
 
               {/* Profile dropdown mobile */}
               <div className="flex items-center gap-3 lg:hidden">
-                <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r ${colors.accent} text-sm font-bold text-white`}>
+                <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r ${colors.accent} text-sm font-bold text-white`}>
                   {userName.charAt(0).toUpperCase()}
                 </div>
               </div>
@@ -420,4 +420,5 @@ export default function DashboardLayout({
     </div>
   );
 }
+
 

@@ -133,7 +133,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
 
             <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
-              <span className="bg-linear-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
                 Piane
               </span>
             </h1>
@@ -230,7 +230,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
           </section>
 
           {/* Challenges */}
-          <section className="mb-12 rounded-2xl bg-linear-to-r from-slate-50 to-gray-50 p-8">
+          <section className="mb-12 rounded-2xl bg-gradient-to-r from-slate-50 to-gray-50 p-8">
             <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <AlertTriangle className="h-7 w-7 text-orange-600" />
               Provocări în mutarea pianelor
@@ -319,7 +319,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
           </section>
 
           {/* Tips */}
-          <section className="mb-12 rounded-2xl bg-linear-to-r from-blue-50 to-cyan-50 p-8">
+          <section className="mb-12 rounded-2xl bg-gradient-to-r from-blue-50 to-cyan-50 p-8">
             <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Star className="h-7 w-7 text-blue-600" />
               Sfaturi pentru mutarea pianului
@@ -353,7 +353,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
           <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Piane" />
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-linear-to-r from-slate-800 to-zinc-900 p-8 text-center text-white">
+          <section className="rounded-2xl bg-gradient-to-r from-slate-800 to-zinc-900 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Găsește specialiști pentru mutarea pianului</h2>
             <p className="mb-8 text-lg text-slate-300">
               Compară oferte de la firme specializate în mutări piane în 24h!
@@ -379,5 +379,6 @@ export const getStaticProps: GetStaticProps<MutariPianePageProps> = async () => 
     },
   };
 };
+
 
 

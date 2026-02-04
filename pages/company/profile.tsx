@@ -128,7 +128,7 @@ export default function CompanyProfile() {
             className="rounded-xl border border-gray-200 bg-white shadow-sm"
           >
             {/* Header Section with Avatar */}
-            <div className="border-b border-gray-200 bg-linear-to-br from-blue-500 to-blue-600 p-6 text-white rounded-t-xl">
+            <div className="border-b border-gray-200 bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white rounded-t-xl">
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-4">
                   <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 text-2xl font-bold backdrop-blur-sm">
@@ -524,4 +524,5 @@ export default function CompanyProfile() {
     </RequireRole>
   );
 }
+
 

@@ -247,7 +247,7 @@ export default function CustomerDashboard() {
         {requests.length === 0 ? (
           // Empty state
           <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
+            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
               <InboxIcon className="h-10 w-10 text-white" />
             </div>
             <h3 className="mt-6 text-xl font-bold text-gray-900">Nu ai încă cereri</h3>
@@ -256,7 +256,7 @@ export default function CustomerDashboard() {
             </p>
             <button
               onClick={() => router.push("/")}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
+              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
             >
               Creează cerere
               <ChevronRightIcon className="h-4 w-4" />
@@ -337,7 +337,7 @@ export default function CustomerDashboard() {
                     <div className="flex flex-wrap items-start justify-between gap-4">
                       <div>
                         <div className="flex items-center gap-3">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/20">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-lg shadow-emerald-500/20">
                             <TruckIcon className="h-6 w-6 text-white" />
                           </div>
                           <div>
@@ -549,8 +549,8 @@ function OfferCard({
         <div className="flex items-start gap-4">
           <div className={`flex h-14 w-14 items-center justify-center rounded-xl text-xl font-bold text-white shadow-lg ${
             isAccepted 
-              ? "bg-linear-to-br from-emerald-500 to-green-500 shadow-emerald-500/30"
-              : "bg-linear-to-br from-blue-500 to-indigo-500 shadow-blue-500/30"
+              ? "bg-gradient-to-br from-emerald-500 to-green-500 shadow-emerald-500/30"
+              : "bg-gradient-to-br from-blue-500 to-indigo-500 shadow-blue-500/30"
           }`}>
             {offer.companyName?.charAt(0)?.toUpperCase() || "F"}
           </div>
@@ -623,4 +623,5 @@ function OfferCard({
     </motion.div>
   );
 }
+
 

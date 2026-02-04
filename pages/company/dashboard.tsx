@@ -3,6 +3,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import NotificationBell from "@/components/company/NotificationBell";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { logger } from "@/utils/logger";
@@ -40,11 +41,6 @@ import { motion } from "framer-motion";
 // Lazy load components
 const RequestsView = dynamic(() => import("@/components/company/RequestsView"), {
   loading: () => <div className="h-96 animate-pulse rounded-xl bg-gray-100" />,
-  ssr: false,
-});
-
-const NotificationBell = dynamic(() => import("@/components/company/NotificationBell"), {
-  loading: () => <div className="h-8 w-8 animate-pulse rounded-full bg-gray-200" />,
   ssr: false,
 });
 

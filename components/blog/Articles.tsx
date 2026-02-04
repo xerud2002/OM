@@ -69,7 +69,7 @@ const articles = [
 
 export default function Articles() {
   return (
-    <section className="relative overflow-hidden bg-linear-to-b from-slate-50 to-white py-12 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-b from-slate-50 to-white py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute right-0 top-1/4 h-[300px] w-[300px] translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-[500px] sm:w-[500px] sm:blur-[100px]" />
@@ -93,7 +93,7 @@ export default function Articles() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Totul pentru o{" "}
-            <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               mutare reușită
             </span>
           </h2>
@@ -187,4 +187,5 @@ export default function Articles() {
     </section>
   );
 }
+
 

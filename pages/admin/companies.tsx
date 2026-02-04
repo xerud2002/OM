@@ -190,7 +190,7 @@ export default function AdminCompanies() {
                   {/* Header */}
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-purple-500 to-pink-500 text-lg font-bold text-white">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-lg font-bold text-white">
                         {(company.companyName || company.displayName || "C").charAt(0).toUpperCase()}
                       </div>
                       <div>
@@ -265,4 +265,5 @@ export default function AdminCompanies() {
     </RequireRole>
   );
 }
+
 

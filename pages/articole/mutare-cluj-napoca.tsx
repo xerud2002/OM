@@ -109,7 +109,7 @@ export default function GuideCluj() {
                     <header className="mb-12 text-center">
                         <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl px-4">
                             Ghid Mutare în{" "}
-                            <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                                 Cluj-Napoca {currentYear}
                             </span>
                         </h1>
@@ -264,7 +264,7 @@ export default function GuideCluj() {
                     </section>
 
                     {/* Student Info */}
-                    <section className="mb-16 rounded-2xl bg-linear-to-br from-blue-50 to-indigo-50 p-8">
+                    <section className="mb-16 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50 p-8">
                         <div className="flex items-center gap-3 mb-4">
                             <Student className="h-8 w-8 text-blue-600" />
                             <h2 id="studeni-ubb-utcn" className="text-2xl font-bold text-slate-900">Studenți UBB & UTCN</h2>
@@ -321,4 +321,5 @@ export default function GuideCluj() {
         </>
     );
 }
+
 

@@ -34,8 +34,8 @@ export default function LogoTicker() {
 
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
           {/* Gradient Masks */}
-          <div className="pointer-events-none absolute left-0 z-10 h-full w-20 bg-linear-to-r from-white to-transparent md:w-40" />
-          <div className="pointer-events-none absolute right-0 z-10 h-full w-20 bg-linear-to-l from-white to-transparent md:w-40" />
+          <div className="pointer-events-none absolute left-0 z-10 h-full w-20 bg-gradient-to-r from-white to-transparent md:w-40" />
+          <div className="pointer-events-none absolute right-0 z-10 h-full w-20 bg-gradient-to-l from-white to-transparent md:w-40" />
 
           {/* Marquee Container - CSS Animation */}
           <div className="flex w-full overflow-hidden">
@@ -79,5 +79,6 @@ export default function LogoTicker() {
     </div>
   );
 }
+
 
 

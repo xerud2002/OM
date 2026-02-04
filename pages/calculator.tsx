@@ -131,7 +131,7 @@ export default function CalculatorPage() {
               </span>
               <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
                 Calculator Cost Mutare:{" "}
-                <span className="bg-linear-to-r from-orange-600 via-red-500 to-pink-600 bg-clip-text text-transparent">
+                <span className="bg-gradient-to-r from-orange-600 via-red-500 to-pink-600 bg-clip-text text-transparent">
                   Estimare Instantanee
                 </span>
               </h1>
@@ -249,7 +249,7 @@ export default function CalculatorPage() {
               </div>
 
               {/* Pricing Table */}
-              <div className="rounded-2xl bg-linear-to-br from-orange-50 to-amber-50 p-8 border border-orange-100">
+              <div className="rounded-2xl bg-gradient-to-br from-orange-50 to-amber-50 p-8 border border-orange-100">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
                   Prețuri Orientative {currentYear}
                 </h3>
@@ -295,4 +295,5 @@ export default function CalculatorPage() {
     </>
   );
 }
+
 
