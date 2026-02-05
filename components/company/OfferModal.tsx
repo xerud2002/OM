@@ -92,17 +92,13 @@ export default function OfferModal({
 
                   <div>
                     <label className="mb-1.5 block text-sm font-semibold text-gray-700">Mesaj pentru client (Opțional)</label>
-                    <div className="relative">
-                      <div className="pointer-events-none absolute top-3 left-3">
-                        <ChatBubbleBottomCenterTextIcon className="h-5 w-5 text-gray-400" />
-                      </div>
-                      <textarea
-                        value={message}
-                        onChange={(e) => setMessage(e.target.value)}
-                        rows={3}
-                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-10 pr-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                      />
-                    </div>
+                    <textarea
+                      value={message}
+                      onChange={(e) => setMessage(e.target.value)}
+                      rows={3}
+                      placeholder="Ex: Avem disponibilitate pentru data dorită..."
+                      className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                    />
                   </div>
                 </div>
 

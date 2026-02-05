@@ -1,22 +1,167 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import counties from "@/counties";
-import cities from "@/cities";
 import { ArrowRightIcon as ArrowRight, MapPinIcon as MapPin, HomeIcon as Home, SparklesIcon as Sparkles, CalendarIcon as Calendar, UserIcon as User, CubeIcon as Package, ChevronLeftIcon as ChevronLeft, ChevronRightIcon as ChevronRight, CheckCircleIcon as CheckCircle, XMarkIcon as X, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
 import type { FormShape } from "@/components/customer/RequestForm";
 
-// Special-case: București sectors
-const bucharestSectors = ["Sector 1", "Sector 2", "Sector 3", "Sector 4", "Sector 5", "Sector 6"];
-
-const getCityOptions = (county?: string) => {
-  if (county === "București") return bucharestSectors;
-  return county && (cities as Record<string, string[]>)[county]
-    ? (cities as Record<string, string[]>)[county]
-    : [];
+// Location Autocomplete Component using localapi.ro
+type LocalApiResult = {
+  id: string;
+  name: string;
+  county: string;
+  full: string;
 };
+
+function LocationAutocomplete({
+  value,
+  onChange,
+  placeholder,
+  label,
+}: {
+  value: { city: string; county: string };
+  onChange: (city: string, county: string) => void;
+  placeholder?: string;
+  label?: string;
+}) {
+  const [inputValue, setInputValue] = useState(
+    value.city && value.county ? `${value.city}, ${value.county}` : ""
+  );
+  const [suggestions, setSuggestions] = useState<LocalApiResult[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const debounceRef = useRef<NodeJS.Timeout>();
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, []);
+
+  // Sync input value when external value changes
+  useEffect(() => {
+    if (value.city && value.county) {
+      setInputValue(`${value.city}, ${value.county}`);
+    } else {
+      setInputValue("");
+    }
+  }, [value.city, value.county]);
+
+  const fetchSuggestions = async (query: string) => {
+    if (query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      const res = await fetch(
+        `/api/locations/search?q=${encodeURIComponent(query)}`
+      );
+      const data = await res.json();
+      
+      // API already returns normalized format
+      if (Array.isArray(data)) {
+        setSuggestions(data);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (err) {
+      console.error("LocalAPI error:", err);
+      setSuggestions([]);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const val = e.target.value;
+    setInputValue(val);
+    setShowDropdown(true);
+    
+    // Clear previous selection
+    if (value.city || value.county) {
+      onChange("", "");
+    }
+
+    // Debounce API calls
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      fetchSuggestions(val);
+    }, 300);
+  };
+
+  const handleSelect = (item: LocalApiResult) => {
+    setInputValue(item.full);
+    onChange(item.name, item.county);
+    setSuggestions([]);
+    setShowDropdown(false);
+  };
+
+  const handleClear = () => {
+    setInputValue("");
+    onChange("", "");
+    setSuggestions([]);
+  };
+
+  return (
+    <div ref={containerRef} className="relative">
+      {label && (
+        <label className="mb-1 block text-xs font-medium text-gray-600">{label}</label>
+      )}
+      <div className="relative">
+        <input
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onFocus={() => inputValue.length >= 2 && setShowDropdown(true)}
+          placeholder={placeholder || "Caută oraș sau localitate..."}
+          className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-2 pr-8 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none ${
+            value.city && value.county ? "text-gray-900" : "text-gray-700"
+          }`}
+        />
+        {inputValue && (
+          <button
+            type="button"
+            onClick={handleClear}
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        )}
+      </div>
+
+      {/* Dropdown */}
+      {showDropdown && (suggestions.length > 0 || isLoading) && (
+        <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg">
+          {isLoading ? (
+            <div className="px-3 py-2 text-sm text-gray-500">Se caută...</div>
+          ) : (
+            <ul className="max-h-48 overflow-auto py-1">
+              {suggestions.map((item) => (
+                <li
+                  key={item.id}
+                  onClick={() => handleSelect(item)}
+                  className="cursor-pointer px-3 py-2 text-sm hover:bg-emerald-50 flex items-center justify-between"
+                >
+                  <span className="font-medium text-gray-800">{item.name}</span>
+                  <span className="text-xs text-gray-500 ml-2">jud. {item.county}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
 
 // Format date as YYYY-MM-DD
 const formatYMD = (d: Date) => {
@@ -175,6 +320,202 @@ function InlineCalendar({
           );
         })}
       </div>
+    </div>
+  );
+}
+
+// Inline Range Calendar Component for flexible date selection
+function InlineRangeCalendar({
+  startDate,
+  endDate,
+  onChangeStart,
+  onChangeEnd,
+  minDate,
+}: {
+  startDate: string;
+  endDate: string;
+  onChangeStart: (date: string) => void;
+  onChangeEnd: (date: string) => void;
+  minDate: string;
+}) {
+  const today = new Date();
+  const [viewDate, setViewDate] = useState(() => {
+    if (startDate) return new Date(`${startDate}T00:00:00`);
+    return today;
+  });
+  const [selectingEnd, setSelectingEnd] = useState(false);
+
+  const roMonthsFull = [
+    "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
+    "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie",
+  ];
+  const roWeekdaysShort = ["Lu", "Ma", "Mi", "Jo", "Vi", "Sâ", "Du"];
+
+  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const getFirstDayOfMonth = (year: number, month: number) => {
+    const day = new Date(year, month, 1).getDay();
+    return day === 0 ? 6 : day - 1;
+  };
+
+  const formatDateYMD = (d: Date) => {
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return `${y}-${m}-${day}`;
+  };
+
+  const year = viewDate.getFullYear();
+  const month = viewDate.getMonth();
+  const daysInMonth = getDaysInMonth(year, month);
+  const firstDay = getFirstDayOfMonth(year, month);
+
+  const prevMonth = () => setViewDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setViewDate(new Date(year, month + 1, 1));
+
+  const isDateDisabled = (day: number) => {
+    const date = new Date(year, month, day);
+    const minD = new Date(`${minDate}T00:00:00`);
+    minD.setHours(0, 0, 0, 0);
+    date.setHours(0, 0, 0, 0);
+    if (date < minD) return true;
+    // If selecting end date, disable dates before start
+    if (selectingEnd && startDate) {
+      const startD = new Date(`${startDate}T00:00:00`);
+      startD.setHours(0, 0, 0, 0);
+      if (date < startD) return true;
+    }
+    return false;
+  };
+
+  const isStartDate = (day: number) => {
+    if (!startDate) return false;
+    const selected = new Date(`${startDate}T00:00:00`);
+    return selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day;
+  };
+
+  const isEndDate = (day: number) => {
+    if (!endDate) return false;
+    const selected = new Date(`${endDate}T00:00:00`);
+    return selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day;
+  };
+
+  const isInRange = (day: number) => {
+    if (!startDate || !endDate) return false;
+    const date = new Date(year, month, day);
+    const startD = new Date(`${startDate}T00:00:00`);
+    const endD = new Date(`${endDate}T00:00:00`);
+    date.setHours(0, 0, 0, 0);
+    startD.setHours(0, 0, 0, 0);
+    endD.setHours(0, 0, 0, 0);
+    return date > startD && date < endD;
+  };
+
+  const isToday = (day: number) => {
+    return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+  };
+
+  const handleSelect = (day: number) => {
+    if (isDateDisabled(day)) return;
+    const date = new Date(year, month, day);
+    const dateStr = formatDateYMD(date);
+    
+    if (!selectingEnd) {
+      // Selecting start date
+      onChangeStart(dateStr);
+      onChangeEnd(""); // Clear end date
+      setSelectingEnd(true);
+    } else {
+      // Selecting end date
+      onChangeEnd(dateStr);
+      setSelectingEnd(false);
+    }
+  };
+
+  const handleReset = () => {
+    onChangeStart("");
+    onChangeEnd("");
+    setSelectingEnd(false);
+  };
+
+  const days: (number | null)[] = [];
+  for (let i = 0; i < firstDay; i++) days.push(null);
+  for (let d = 1; d <= daysInMonth; d++) days.push(d);
+
+  return (
+    <div className="rounded-xl border border-gray-200 bg-white p-3">
+      {/* Instruction */}
+      <div className="mb-3 rounded-lg bg-emerald-50 px-3 py-2 text-center text-xs text-emerald-700">
+        {!startDate ? "📅 Selectează data de început" : !endDate ? "📅 Acum selectează data de final" : "✓ Interval selectat"}
+      </div>
+
+      {/* Header */}
+      <div className="mb-3 flex items-center justify-between">
+        <button type="button" onClick={prevMonth} className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100">
+          <ChevronLeft className="h-5 w-5" />
+        </button>
+        <span className="text-sm font-semibold text-gray-800">
+          {roMonthsFull[month]} {year}
+        </span>
+        <button type="button" onClick={nextMonth} className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100">
+          <ChevronRight className="h-5 w-5" />
+        </button>
+      </div>
+
+      {/* Weekday headers */}
+      <div className="mb-2 grid grid-cols-7 gap-1">
+        {roWeekdaysShort.map((wd) => (
+          <div key={wd} className="text-center text-xs font-medium text-gray-400">{wd}</div>
+        ))}
+      </div>
+
+      {/* Days grid */}
+      <div className="grid grid-cols-7 gap-1">
+        {days.map((day, idx) => {
+          if (day === null) {
+            return <div key={`empty-${idx}`} className="h-8" />;
+          }
+          const disabled = isDateDisabled(day);
+          const isStart = isStartDate(day);
+          const isEnd = isEndDate(day);
+          const inRange = isInRange(day);
+          const todayMark = isToday(day) && !isStart && !isEnd;
+
+          return (
+            <button
+              key={day}
+              type="button"
+              onClick={() => handleSelect(day)}
+              disabled={disabled}
+              className={`h-8 w-full rounded-lg text-sm font-medium transition ${
+                disabled
+                  ? "cursor-not-allowed text-gray-300"
+                  : isStart
+                    ? "bg-emerald-500 text-white shadow-sm rounded-r-none"
+                    : isEnd
+                      ? "bg-emerald-500 text-white shadow-sm rounded-l-none"
+                      : inRange
+                        ? "bg-emerald-100 text-emerald-700 rounded-none"
+                        : todayMark
+                          ? "border border-emerald-300 text-emerald-600 hover:bg-emerald-50"
+                          : "text-gray-700 hover:bg-gray-100"
+              }`}
+            >
+              {day}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Reset button */}
+      {(startDate || endDate) && (
+        <button
+          type="button"
+          onClick={handleReset}
+          className="mt-3 w-full rounded-lg border border-gray-200 py-2 text-sm text-gray-600 hover:bg-gray-50"
+        >
+          Resetează selecția
+        </button>
+      )}
     </div>
   );
 }
@@ -451,78 +792,15 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-2">
-        {/* County */}
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
-          <select
-            value={form.fromCounty || ""}
-            onChange={(e) =>
-              setForm((s) => ({
-                ...s,
-                fromCounty: e.target.value,
-                fromCity: "",
-                fromCityManual: false,
-              }))
-            }
-            className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none ${form.fromCounty ? "text-gray-900" : "text-gray-500"}`}
-          >
-            <option value="" className="text-gray-500">
-              Selectează județ
-            </option>
-            {counties.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* City */}
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
-          {!form.fromCityManual ? (
-            <select
-              value={form.fromCity || ""}
-              disabled={!form.fromCounty}
-              onChange={(e) => {
-                if (e.target.value === "__manual__") {
-                  setForm((s) => ({ ...s, fromCity: "", fromCityManual: true }));
-                } else {
-                  setForm((s) => ({ ...s, fromCity: e.target.value }));
-                }
-              }}
-              className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none ${!form.fromCounty ? "cursor-not-allowed opacity-50" : ""} ${form.fromCity ? "text-gray-900" : "text-gray-500"}`}
-            >
-              <option value="" className="text-gray-500">
-                {form.fromCounty ? "Selectează localitate" : "Selectează mai întâi județul"}
-              </option>
-              {getCityOptions(form.fromCounty).map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-              <option value="__manual__">--- Altă localitate ---</option>
-            </select>
-          ) : (
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={form.fromCity || ""}
-                onChange={(e) => setForm((s) => ({ ...s, fromCity: e.target.value }))}
-                placeholder="Scrie numele localității"
-                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                autoFocus
-              />
-              <button
-                type="button"
-                onClick={() => setForm((s) => ({ ...s, fromCity: "", fromCityManual: false }))}
-                className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs text-gray-600 hover:bg-gray-100"
-              >
-                Listă
-              </button>
-            </div>
-          )}
-        </div>
+        {/* Location Autocomplete */}
+        <LocationAutocomplete
+          value={{ city: form.fromCity || "", county: form.fromCounty || "" }}
+          onChange={(city, county) =>
+            setForm((s) => ({ ...s, fromCity: city, fromCounty: county }))
+          }
+          label="Localitate *"
+          placeholder="Caută oraș sau localitate..."
+        />
 
         {/* Details - appear after city is selected */}
         {form.fromCity && (
@@ -646,73 +924,15 @@ export default function HomeRequestForm() {
       </div>
 
       <div className="space-y-2">
-        {/* County */}
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Județ *</label>
-          <select
-            value={form.toCounty || ""}
-            onChange={(e) =>
-              setForm((s) => ({ ...s, toCounty: e.target.value, toCity: "", toCityManual: false }))
-            }
-            className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none ${form.toCounty ? "text-gray-900" : "text-gray-500"}`}
-          >
-            <option value="" className="text-gray-500">
-              Selectează județ
-            </option>
-            {counties.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        {/* City */}
-        <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600">Localitate *</label>
-          {!form.toCityManual ? (
-            <select
-              value={form.toCity || ""}
-              disabled={!form.toCounty}
-              onChange={(e) => {
-                if (e.target.value === "__manual__") {
-                  setForm((s) => ({ ...s, toCity: "", toCityManual: true }));
-                } else {
-                  setForm((s) => ({ ...s, toCity: e.target.value }));
-                }
-              }}
-              className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none ${!form.toCounty ? "cursor-not-allowed opacity-50" : ""} ${form.toCity ? "text-gray-900" : "text-gray-500"}`}
-            >
-              <option value="" className="text-gray-500">
-                {form.toCounty ? "Selectează localitate" : "Selectează mai întâi județul"}
-              </option>
-              {getCityOptions(form.toCounty).map((c) => (
-                <option key={c} value={c}>
-                  {c}
-                </option>
-              ))}
-              <option value="__manual__">--- Altă localitate ---</option>
-            </select>
-          ) : (
-            <div className="flex gap-2">
-              <input
-                type="text"
-                value={form.toCity || ""}
-                onChange={(e) => setForm((s) => ({ ...s, toCity: e.target.value }))}
-                placeholder="Scrie numele localității"
-                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-1 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-                autoFocus
-              />
-              <button
-                type="button"
-                onClick={() => setForm((s) => ({ ...s, toCity: "", toCityManual: false }))}
-                className="h-8 rounded-lg border border-gray-200 bg-gray-50 px-3 text-xs text-gray-600 hover:bg-gray-100"
-              >
-                Listă
-              </button>
-            </div>
-          )}
-        </div>
+        {/* Location Autocomplete */}
+        <LocationAutocomplete
+          value={{ city: form.toCity || "", county: form.toCounty || "" }}
+          onChange={(city, county) =>
+            setForm((s) => ({ ...s, toCity: city, toCounty: county }))
+          }
+          label="Localitate *"
+          placeholder="Caută oraș sau localitate..."
+        />
 
         {/* Details - appear after city is selected */}
         {form.toCity && (
@@ -886,32 +1106,18 @@ export default function HomeRequestForm() {
       )}
       {form.moveDateMode === "flexible" && (
         <div className="space-y-3">
-          <InlineCalendar
-            value={form.moveDate || ""}
-            onChange={(date) => setForm((s) => ({ ...s, moveDate: date }))}
+          <InlineRangeCalendar
+            startDate={form.moveDateStart || ""}
+            endDate={form.moveDateEnd || ""}
+            onChangeStart={(date) => setForm((s) => ({ ...s, moveDateStart: date }))}
+            onChangeEnd={(date) => setForm((s) => ({ ...s, moveDateEnd: date }))}
             minDate={minDate}
           />
-          {form.moveDate && (
+          {form.moveDateStart && form.moveDateEnd && (
             <p className="text-center text-sm font-medium text-emerald-600">
-              📅 {formatWeekdayPreview(form.moveDate)}
+              📅 {formatWeekdayPreview(form.moveDateStart)} → {formatWeekdayPreview(form.moveDateEnd)}
             </p>
           )}
-          <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Flexibilitate</label>
-            <select
-              value={String(form.moveDateFlexDays ?? 7)}
-              onChange={(e) => setForm((s) => ({ ...s, moveDateFlexDays: Number(e.target.value) }))}
-              className="w-full rounded-lg border border-gray-200 bg-white px-4 py-3 text-base focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-            >
-              <option value={3}>± 3 zile</option>
-              <option value={7}>± 7 zile</option>
-              <option value={14}>± 14 zile</option>
-              <option value={30}>± 30 zile</option>
-            </select>
-          </div>
-          <p className="rounded-lg bg-emerald-50 p-3 text-center text-xs text-emerald-700">
-            💡 Companiile pot propune date în jurul perioadei selectate.
-          </p>
         </div>
       )}
     </div>
@@ -920,50 +1126,103 @@ export default function HomeRequestForm() {
   // Step 4: Services
   const renderStep4 = () => (
     <div className="space-y-4">
+      {/* Main service type */}
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
           <Package className="h-5 w-5 text-emerald-600" />
-          <span className="font-semibold text-gray-800">Ce servicii ai nevoie?</span>
+          <span className="font-semibold text-gray-800">Tip serviciu</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2">
           {[
             {
-              key: "serviceMoving",
-              label: "Mutare Completă",
-              desc: "Transport mobilier și obiecte",
+              value: "full",
+              label: "Mutare completă",
+              desc: "Cu ajutor pentru încărcare/descărcare",
             },
-            { key: "servicePacking", label: "Ambalare", desc: "Împachetare profesională" },
-            { key: "serviceDisassembly", label: "Montaj", desc: "Demontare/montare mobilier" },
-            { key: "serviceCleanout", label: "Debarasare", desc: "Aruncare lucruri" },
-            { key: "serviceStorage", label: "Depozitare", desc: "Stocare temporară" },
             {
-              key: "serviceTransportOnly",
-              label: "Doar Transport",
-              desc: "Fără încărcare/descărcare",
+              value: "transport",
+              label: "Doar transport",
+              desc: "Fără muncitori, doar vehicul",
             },
-          ].map((svc) => (
+          ].map((opt) => (
             <label
-              key={svc.key}
-              className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition ${(form as Record<string, boolean>)[svc.key]
+              key={opt.value}
+              className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
+                (opt.value === "full" && form.serviceMoving && !form.serviceTransportOnly) ||
+                (opt.value === "transport" && form.serviceTransportOnly)
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
-                }`}
+              }`}
             >
               <input
-                type="checkbox"
-                checked={!!(form as Record<string, boolean>)[svc.key]}
-                onChange={(e) => setForm((s) => ({ ...s, [svc.key]: e.target.checked }))}
-                className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                type="radio"
+                name="serviceType"
+                checked={
+                  (opt.value === "full" && form.serviceMoving && !form.serviceTransportOnly) ||
+                  (opt.value === "transport" && form.serviceTransportOnly)
+                }
+                onChange={() => {
+                  if (opt.value === "full") {
+                    setForm((s) => ({ ...s, serviceMoving: true, serviceTransportOnly: false }));
+                  } else {
+                    setForm((s) => ({
+                      ...s,
+                      serviceMoving: false,
+                      serviceTransportOnly: true,
+                      servicePacking: false,
+                      serviceDisassembly: false,
+                    }));
+                  }
+                }}
+                className="h-4 w-4 shrink-0 border-gray-300 text-emerald-600 focus:ring-emerald-500"
               />
               <span className="text-sm leading-tight text-gray-700">
-                {svc.label}
-                <span className="block text-xs text-gray-500">{svc.desc}</span>
+                <span className="font-medium">{opt.label}</span>
+                <span className="block text-xs text-gray-500">{opt.desc}</span>
               </span>
             </label>
           ))}
         </div>
       </div>
+
+      {/* Extra services - only for full move */}
+      {form.serviceMoving && !form.serviceTransportOnly && (
+        <div className="rounded-xl border border-gray-200 bg-white p-4">
+          <div className="mb-3">
+            <span className="font-semibold text-gray-800">Servicii extra</span>
+            <span className="ml-2 text-xs text-gray-500">(opțional)</span>
+          </div>
+
+          <div className="grid grid-cols-1 gap-2">
+            {[
+              { key: "servicePacking", label: "Ambalare profesională", desc: "Noi împachetăm tot" },
+              { key: "serviceDisassembly", label: "Montaj mobilier", desc: "Demontare și remontare" },
+              { key: "serviceStorage", label: "Depozitare", desc: "Stocare temporară" },
+            ].map((svc) => (
+              <label
+                key={svc.key}
+                className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition ${
+                  (form as Record<string, boolean>)[svc.key]
+                    ? "border-emerald-500 bg-emerald-50"
+                    : "border-gray-200 hover:border-emerald-200"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={!!(form as Record<string, boolean>)[svc.key]}
+                  onChange={(e) => setForm((s) => ({ ...s, [svc.key]: e.target.checked }))}
+                  className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                />
+                <span className="text-sm leading-tight text-gray-700">
+                  {svc.label}
+                  <span className="block text-xs text-gray-500">{svc.desc}</span>
+                </span>
+              </label>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div>
         <label className="mb-1 block text-sm font-medium text-gray-700">Detalii (opțional)</label>
@@ -1306,7 +1565,7 @@ export default function HomeRequestForm() {
         }}
       >
         {/* Form Steps */}
-        <div className="min-h-64">
+        <div>
           {currentStep === 1 && renderStep1()}
           {currentStep === 2 && renderStep2()}
           {currentStep === 3 && renderStep3()}
@@ -1317,7 +1576,7 @@ export default function HomeRequestForm() {
         </div>
 
         {/* Navigation */}
-        <div className="mt-1 flex gap-3">
+        <div className="mt-3 flex gap-3">
           {currentStep > 1 && (
             <button
               type="button"
