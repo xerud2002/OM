@@ -114,7 +114,7 @@ function JobCard({
           
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1.5 text-xs text-gray-600">
              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold uppercase text-gray-400">DE:</span>
+                <span className="text-xs font-bold uppercase text-gray-400">DE:</span>
                 <span>{(r as any).fromType === "house" ? "Casă" : "Apt"}</span>
                 {(r as any).fromRooms && <span>• {(r as any).fromRooms} cam</span>}
                 <span className={(r as any).fromElevator ? "text-emerald-600 font-medium" : "text-rose-500 font-medium"}>
@@ -123,7 +123,7 @@ function JobCard({
              </div>
              <div className="hidden h-3 w-px bg-gray-200 sm:block" />
              <div className="flex items-center gap-1.5">
-                <span className="text-[10px] font-bold uppercase text-gray-400">LA:</span>
+                <span className="text-xs font-bold uppercase text-gray-400">LA:</span>
                 <span>{(r as any).toType === "house" ? "Casă" : "Apt"}</span>
                 {(r as any).toFloor !== undefined && <span>• Et. {(r as any).toFloor}</span>}
                 <span className={(r as any).toElevator ? "text-emerald-600 font-medium" : "text-rose-500 font-medium"}>

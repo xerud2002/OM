@@ -76,8 +76,8 @@ export default function OfferModal({
                   <div>
                     <label className="mb-1.5 block text-sm font-semibold text-gray-700">Preț Ofertă (RON)</label>
                     <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                         <span className="text-gray-500 font-bold">RON</span>
+                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                         <span className="text-gray-500 font-medium text-sm">RON</span>
                       </div>
                       <input
                         type="number"
@@ -86,7 +86,7 @@ export default function OfferModal({
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
                         placeholder="Ex: 500"
-                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-16 pr-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-14 pr-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                       />
                     </div>
                   </div>
