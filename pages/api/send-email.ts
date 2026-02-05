@@ -34,8 +34,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       case 'newOffer':
         emailResult = await sendEmail({
           to: data.customerEmail,
-          subject: `🎉 Ofertă nouă pentru ${data.requestCode} - ${data.companyName}`,
-          html: emailTemplates.newOffer(data.requestCode, data.companyName, data.price),
+          subject: `🎉 Ofertă nouă pentru mutarea ${data.fromCity} → ${data.toCity} - ${data.companyName}`,
+          html: emailTemplates.newOffer({
+            requestCode: data.requestCode,
+            requestId: data.requestId,
+            companyName: data.companyName,
+            companyMessage: data.companyMessage,
+            price: data.price,
+            fromCity: data.fromCity,
+            toCity: data.toCity,
+            moveDate: data.moveDate,
+            dashboardUrl: data.dashboardUrl || `https://ofertemutare.ro/customer/dashboard?requestId=${data.requestId}`,
+          }),
         });
         break;
 

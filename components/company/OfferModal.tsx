@@ -76,29 +76,37 @@ export default function OfferModal({
                   <div>
                     <label className="mb-1.5 block text-sm font-semibold text-gray-700">Preț Ofertă (RON)</label>
                     <div className="relative">
-                      <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                         <span className="text-gray-400 font-medium text-sm select-none">RON</span>
-                      </div>
+                      {!price && (
+                        <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+                          <span className="text-gray-400 font-medium text-sm select-none">Ex: 1500</span>
+                        </div>
+                      )}
                       <input
                         type="number"
                         required
                         min="1"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
-                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-16 pr-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                       />
                     </div>
                   </div>
 
                   <div>
                     <label className="mb-1.5 block text-sm font-semibold text-gray-700">Mesaj pentru client (Opțional)</label>
-                    <textarea
-                      value={message}
-                      onChange={(e) => setMessage(e.target.value)}
-                      rows={3}
-                      placeholder="Ex: Avem disponibilitate pentru data dorită..."
-                      className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                    />
+                    <div className="relative">
+                      {!message && (
+                        <div className="pointer-events-none absolute top-3 left-4 flex items-start">
+                          <span className="text-gray-400 text-sm select-none">Ex: Avem disponibilitate pentru data dorită...</span>
+                        </div>
+                      )}
+                      <textarea
+                        value={message}
+                        onChange={(e) => setMessage(e.target.value)}
+                        rows={3}
+                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 px-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
+                      />
+                    </div>
                   </div>
                 </div>
 

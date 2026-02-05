@@ -224,7 +224,17 @@ export const emailTemplates = {
     </html>
   `,
 
-  newOffer: (requestCode: string, companyName: string, price: number) => `
+  newOffer: (data: {
+    requestCode: string;
+    requestId: string;
+    companyName: string;
+    companyMessage?: string;
+    price: number;
+    fromCity: string;
+    toCity: string;
+    moveDate?: string;
+    dashboardUrl: string;
+  }) => `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -249,12 +259,31 @@ export const emailTemplates = {
           .header h1 { color: white; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
           .header .subtitle { color: #d1fae5; font-size: 15px; margin-top: 8px; }
           .content { padding: 40px; }
-          .message { color: #4b5563; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 24px; line-height: 1.6; }
+          .route-card {
+            background: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+          }
+          .route-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #065f46;
+            text-align: center;
+          }
+          .route-date {
+            font-size: 14px;
+            color: #6b7280;
+            text-align: center;
+            margin-top: 8px;
+          }
           .offer-card {
             border: 2px solid #e5e7eb;
             border-radius: 12px;
             padding: 32px;
-            margin: 32px 0;
+            margin: 24px 0;
             text-align: center;
             background: linear-gradient(180deg, #ffffff 0%, #f9fafb 100%);
           }
@@ -279,6 +308,16 @@ export const emailTemplates = {
             text-transform: uppercase;
             letter-spacing: 0.5px;
           }
+          .company-message {
+            background: #f9fafb;
+            border-left: 3px solid #10b981;
+            padding: 16px;
+            margin: 16px 0;
+            text-align: left;
+            font-style: italic;
+            color: #4b5563;
+            font-size: 14px;
+          }
           .reference {
             background: #f9fafb;
             padding: 16px;
@@ -288,6 +327,29 @@ export const emailTemplates = {
           }
           .reference-label { font-size: 12px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
           .reference-value { font-size: 15px; color: #111827; font-weight: 600; }
+          .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white !important;
+            padding: 16px 40px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 16px;
+            margin: 24px 0;
+            text-align: center;
+          }
+          .cta-container { text-align: center; }
+          .tip {
+            background: #fef3c7;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 24px 0;
+            font-size: 14px;
+            color: #92400e;
+          }
+          .tip strong { color: #78350f; }
           .footer { 
             padding: 32px 40px; 
             background: #f9fafb; 
@@ -303,27 +365,37 @@ export const emailTemplates = {
         <div class="wrapper">
           <div class="container">
             <div class="header">
-              <h1>Ofertă Nouă Primită</h1>
-              <div class="subtitle">Un partener ți-a trimis o propunere</div>
+              <h1>🎉 Ofertă Nouă Primită!</h1>
+              <div class="subtitle">O companie verificată ți-a trimis o propunere</div>
             </div>
             <div class="content">
+              <div class="route-card">
+                <div class="route-text">${data.fromCity} → ${data.toCity}</div>
+                ${data.moveDate ? `<div class="route-date">📅 ${data.moveDate}</div>` : ''}
+              </div>
+              
               <div class="message">
-                Ai primit o ofertă competitivă de la una dintre companiile noastre verificate. Compania te va contacta în scurt timp pentru a discuta detaliile mutării.
+                Vești bune! Ai primit o ofertă de la o companie de mutări verificată. Vezi detaliile și răspunde direct din contul tău.
               </div>
               
               <div class="offer-card">
-                <div class="company-name">${companyName}</div>
-                <div class="price-display">${price.toLocaleString('ro-RO')}</div>
+                <div class="company-name">${data.companyName}</div>
+                <div class="price-display">${data.price.toLocaleString('ro-RO')}</div>
                 <div class="price-label">Lei RON</div>
+                ${data.companyMessage ? `<div class="company-message">"${data.companyMessage}"</div>` : ''}
               </div>
 
               <div class="reference">
                 <div class="reference-label">Referință cerere</div>
-                <div class="reference-value">${requestCode}</div>
+                <div class="reference-value">${data.requestCode}</div>
+              </div>
+
+              <div class="cta-container">
+                <a href="${data.dashboardUrl}" class="cta-button">📋 Vezi Oferta în Cont</a>
               </div>
               
-              <div class="message" style="margin-top: 32px;">
-                Recomandăm să aștepți și alte oferte pentru a putea compara. În general, primele răspunsuri apar în primele 48 de ore de la postarea cererii.
+              <div class="tip">
+                <strong>💡 Sfat:</strong> Recomandăm să aștepți și alte oferte pentru a putea compara. În general, primele răspunsuri apar în primele 48 de ore.
               </div>
             </div>
             <div class="footer">

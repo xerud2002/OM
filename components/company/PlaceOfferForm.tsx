@@ -104,6 +104,28 @@ export default function PlaceOfferForm({ request, company, onOfferPlaced }: Prop
         });
       });
 
+      // 6. Send email notification to customer
+      const customerEmail = request.customerEmail || request.guestEmail;
+      if (customerEmail) {
+        try {
+          const { sendEmailViaAPI } = await import("@/utils/emailHelpers");
+          await sendEmailViaAPI("newOffer", {
+            customerEmail,
+            requestCode: request.requestCode || request.id,
+            requestId: request.id,
+            companyName: company.displayName || "Companie",
+            companyMessage: message,
+            price: Number(price),
+            fromCity: request.fromCity,
+            toCity: request.toCity,
+            moveDate: request.moveDate || request.moveDateStart,
+          });
+        } catch (emailErr) {
+          console.error("Failed to send offer notification email:", emailErr);
+          // Don't fail the whole operation just because email failed
+        }
+      }
+
       setSuccess(true);
       setTimeout(() => {
         setIsOpen(false);

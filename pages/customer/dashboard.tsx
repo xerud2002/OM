@@ -162,15 +162,28 @@ export default function CustomerDashboard() {
     return () => unsubAuth();
   }, []);
 
-  // Select first request with offers by default
+  // Select request from URL query parameter or first request with offers
   useEffect(() => {
     if (requests.length === 0) {
       setSelectedRequestId(null);
       return;
     }
+    
+    // Check for requestId in URL query
+    const queryRequestId = router.query.requestId as string;
+    if (queryRequestId) {
+      const requestFromQuery = requests.find((r) => r.id === queryRequestId);
+      if (requestFromQuery) {
+        setSelectedRequestId(queryRequestId);
+        // Clear the query parameter from URL without refresh
+        router.replace('/customer/dashboard', undefined, { shallow: true });
+        return;
+      }
+    }
+    
     const withOffers = requests.find((r) => (offersByRequest[r.id] || []).length > 0)?.id;
     setSelectedRequestId((prev) => prev || withOffers || requests[0].id);
-  }, [requests, offersByRequest]);
+  }, [requests, offersByRequest, router.query.requestId]);
 
   const selectedRequest = requests.find((r) => r.id === selectedRequestId);
   const selectedOffers = selectedRequestId ? (offersByRequest[selectedRequestId] || []) : [];

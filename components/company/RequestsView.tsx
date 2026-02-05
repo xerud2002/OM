@@ -79,7 +79,7 @@ function JobCard({
   onChatClick,
 }: {
   request: MovingRequest;
-  hasMine: boolean | string;
+  hasMine: false | { offerId: string; status: string };
   // eslint-disable-next-line no-unused-vars
   onOfferClick: (r: MovingRequest) => void;
   // eslint-disable-next-line no-unused-vars
@@ -258,13 +258,25 @@ function JobCard({
        <div className="px-4 pb-4 pt-2">
           {hasMine ? (
              <div className="flex items-center justify-center gap-2">
-                <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
-                  <CheckBadgeIcon className="h-4 w-4" />
-                  OFERTAT
-                </span>
-                {typeof hasMine === 'string' && onChatClick && (
+                {hasMine.status === 'accepted' ? (
+                  <span className="flex items-center gap-1 rounded-lg bg-green-100 px-3 py-2 text-xs font-bold text-green-700 ring-1 ring-green-200">
+                    <CheckBadgeIcon className="h-4 w-4" />
+                    ACCEPTAT
+                  </span>
+                ) : hasMine.status === 'declined' || hasMine.status === 'rejected' ? (
+                  <span className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600">
+                    <XMarkIcon className="h-4 w-4" />
+                    REFUZAT
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
+                    <CheckBadgeIcon className="h-4 w-4" />
+                    OFERTAT
+                  </span>
+                )}
+                {hasMine.offerId && onChatClick && (
                    <button 
-                     onClick={() => onChatClick(r.id, hasMine)}
+                     onClick={() => onChatClick(r.id, hasMine.offerId)}
                      className="rounded-lg bg-emerald-600 p-2 text-white shadow-sm hover:bg-emerald-700 transition"
                      title="Chat"
                    >
@@ -302,7 +314,8 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
-  const [hasMineMap, setHasMineMap] = useState<Record<string, boolean | string>>({});
+  // Map of request ID to offer info: false = no offer, or { offerId, status }
+  const [hasMineMap, setHasMineMap] = useState<Record<string, false | { offerId: string; status: string }>>({});
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
 
   // Filter State
@@ -334,7 +347,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
        const toCheck = requests.filter(r => !checkedOffersRef.current.has(r.id));
        if (toCheck.length === 0) return;
 
-       const updates: Record<string, boolean | string> = {};
+       const updates: Record<string, false | { offerId: string; status: string }> = {};
 
        // Mark as checked immediately
        toCheck.forEach(r => checkedOffersRef.current.add(r.id));
@@ -345,13 +358,18 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
              const q = query(collection(db, "requests", r.id, "offers"), where("companyId", "==", companyId));
              const snap = await getDocs(q);
              if (!snap.empty) {
-                updates[r.id] = snap.docs[0].id; // Store Offer ID
+                const offerDoc = snap.docs[0];
+                const offerData = offerDoc.data();
+                updates[r.id] = { 
+                  offerId: offerDoc.id, 
+                  status: offerData.status || 'pending' 
+                };
              } else {
                 // Also check legacy payments
                 const paymentRef = doc(db, `companies/${companyId}/payments/${r.id}`);
                 const paymentSnap = await getDoc(paymentRef);
                 if (paymentSnap.exists() && paymentSnap.data()?.status === "completed") {
-                   updates[r.id] = true;
+                   updates[r.id] = { offerId: r.id, status: 'pending' };
                 } else {
                    updates[r.id] = false;
                 }
@@ -634,8 +652,30 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
          return newOfferId;
        });
 
+       // Send email notification to customer
+       const customerEmail = (activeOfferRequest as any).customerEmail || (activeOfferRequest as any).guestEmail;
+       if (customerEmail) {
+         try {
+           const { sendEmailViaAPI } = await import("@/utils/emailHelpers");
+           await sendEmailViaAPI("newOffer", {
+             customerEmail,
+             requestCode: (activeOfferRequest as any).requestCode || activeOfferRequest.id,
+             requestId: activeOfferRequest.id,
+             companyName: company.displayName || "Companie",
+             companyMessage: message,
+             price: price,
+             fromCity: (activeOfferRequest as any).fromCity,
+             toCity: (activeOfferRequest as any).toCity,
+             moveDate: (activeOfferRequest as any).moveDate || (activeOfferRequest as any).moveDateStart,
+           });
+         } catch (emailErr) {
+           logger.error("Failed to send offer notification email:", emailErr);
+           // Don't fail the whole operation just because email failed
+         }
+       }
+
        // Success
-       setHasMineMap(prev => ({ ...prev, [activeOfferRequest.id]: true })); // Optimistic update
+       setHasMineMap(prev => ({ ...prev, [activeOfferRequest.id]: { offerId: 'temp', status: 'pending' } })); // Optimistic update
        // Refresh actual ID via quick check or just use true for now
        checkMyOffers([activeOfferRequest], company.uid);
        
