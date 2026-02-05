@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useCallback, useEffect } from "react";
+import { createPortal } from "react-dom";
 import Link from "next/link";
 import counties from "@/counties";
 import cities from "@/cities";
@@ -1270,42 +1271,8 @@ export default function HomeRequestForm() {
     </div>
   );
 
-  const stepLabels = ["Plecare", "Destinație", "Când", "Servicii", "Evaluare", "Media", "Contact"];
-
   return (
     <div className="mx-auto w-full max-w-md">
-      {/* Progress Steps with Labels */}
-      <div className="mb-4 flex items-start justify-center gap-1">
-        {Array.from({ length: TOTAL_STEPS }, (_, i) => i + 1).map((step) => (
-          <React.Fragment key={step}>
-            <div className="flex flex-col items-center">
-              <button
-                type="button"
-                onClick={() => setCurrentStep(step)}
-                className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-semibold transition ${currentStep === step
-                    ? "bg-emerald-500 text-white shadow-lg"
-                    : currentStep > step
-                      ? "bg-emerald-200 text-emerald-700"
-                      : "bg-gray-200 text-gray-500"
-                  }`}
-              >
-                {step}
-              </button>
-              <span
-                className={`mt-1 text-[10px] ${currentStep === step ? "font-semibold text-emerald-600" : "text-gray-500"}`}
-              >
-                {stepLabels[step - 1]}
-              </span>
-            </div>
-            {step < TOTAL_STEPS && (
-              <div
-                className={`mt-3.5 h-0.5 w-4 rounded ${currentStep > step ? "bg-emerald-300" : "bg-gray-200"}`}
-              />
-            )}
-          </React.Fragment>
-        ))}
-      </div>
-
       <form
         onSubmit={handleSubmit}
         onKeyDown={(e) => {
@@ -1365,9 +1332,9 @@ export default function HomeRequestForm() {
         ✓ 100% gratuit • Fără obligații
       </p>
 
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      {/* Success Modal - rendered via portal to escape container */}
+      {showSuccessModal && typeof document !== 'undefined' && createPortal(
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
           <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
             {/* Close button */}
             <button
@@ -1431,7 +1398,8 @@ export default function HomeRequestForm() {
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
