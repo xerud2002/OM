@@ -27,7 +27,6 @@ import {
   TruckIcon,
   ArchiveBoxIcon,
   WrenchScrewdriverIcon,
-  TrashIcon,
   HomeModernIcon // For detailed view
 } from "@heroicons/react/24/outline";
 
