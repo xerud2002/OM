@@ -85,8 +85,8 @@ export default function OfferModal({
                         min="1"
                         value={price}
                         onChange={(e) => setPrice(e.target.value)}
-                        placeholder="Ex: 1500"
-                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-12 pr-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                        placeholder="Ex: 500"
+                        className="block w-full rounded-xl border border-gray-300 bg-gray-50 py-3 pl-16 pr-4 text-gray-900 transition-colors focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
                       />
                     </div>
                   </div>
