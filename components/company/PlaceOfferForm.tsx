@@ -85,6 +85,8 @@ export default function PlaceOfferForm({ request, company, onOfferPlaced }: Prop
           requestId: request.id,
           companyId: company.uid,
           companyName: company.displayName || "Companie",
+          companyPhone: companyData.phone || null,
+          companyEmail: companyData.email || company.email || null,
           price: Number(price),
           message: message,
           status: "pending", // Pending acceptance by customer

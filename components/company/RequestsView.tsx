@@ -612,6 +612,8 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
            requestCode: (activeOfferRequest as any).requestCode || activeOfferRequest.id,
            companyId: company.uid,
            companyName: company.displayName || "Companie",
+           companyPhone: companyData.phone || null,
+           companyEmail: companyData.email || company.email || null,
            price: price,
            message: message,
            status: "pending",

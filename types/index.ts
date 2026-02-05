@@ -130,6 +130,8 @@ export type Offer = {
   requestCode?: string;
   companyId: string;
   companyName: string;
+  companyPhone?: string;
+  companyEmail?: string;
   price: number;
   message: string;
   status?: "pending" | "accepted" | "declined" | "rejected";

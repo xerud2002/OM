@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon, PaperAirplaneIcon, ChatBubbleBottomCenterTextIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 type OfferModalProps = {
