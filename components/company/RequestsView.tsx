@@ -21,7 +21,15 @@ import { formatMoveDateDisplay } from "@/utils/date";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import PlaceOfferForm from "@/components/company/PlaceOfferForm";
 
-import { ChatBubbleLeftEllipsisIcon } from "@heroicons/react/24/outline";
+import {
+  ChatBubbleLeftEllipsisIcon,
+  CalendarIcon,
+  TruckIcon,
+  ArchiveBoxIcon,
+  WrenchScrewdriverIcon,
+  TrashIcon,
+  HomeModernIcon // For detailed view
+} from "@heroicons/react/24/outline";
 
 
 
@@ -146,41 +154,78 @@ function RequestCardCompact({
               <span className="bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-sm font-bold text-transparent sm:text-base">
                 {(r as any).requestCode || r.id.substring(0, 8)}
               </span>
+
+               {/* Date Badge - Visible in Header */}
+               <div className="flex items-center gap-1.5 rounded-md bg-amber-50 px-2.5 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200/60">
+                <CalendarIcon className="h-3.5 w-3.5" />
+                <span>
+                  {(() => {
+                    const d = formatMoveDateDisplay(r as any, { month: "short" });
+                     return d && d !== "-" ? d : "Flexibil";
+                  })()}
+                </span>
+               </div>
             </div>
 
             {/* Route indicator - desktop */}
             <div className="hidden items-center gap-1.5 text-xs sm:flex">
-              <span className="font-semibold text-slate-600">
+              <span className="font-semibold text-slate-700">
                 {(r as any).fromCounty || r.fromCity}
               </span>
-              <svg className="h-3.5 w-3.5 text-emerald-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+              <svg className="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
-              <span className="font-semibold text-slate-600">
+              <span className="font-semibold text-slate-700">
                 {(r as any).toCounty || r.toCity}
               </span>
             </div>
 
+            </div>
+
+            {/* Services Icons - Header */}
+            <div className="hidden items-center gap-2 lg:flex">
+               {(r as any).serviceMoving && (
+                  <div className="rounded-full bg-indigo-50 p-1 text-indigo-600 ring-1 ring-indigo-100" title="Transport">
+                    <TruckIcon className="h-3.5 w-3.5" />
+                  </div>
+               )}
+               {(r as any).servicePacking && (
+                  <div className="rounded-full bg-indigo-50 p-1 text-indigo-600 ring-1 ring-indigo-100" title="Ambalare">
+                    <ArchiveBoxIcon className="h-3.5 w-3.5" />
+                  </div>
+               )}
+               {(r as any).serviceDisassembly && (
+                  <div className="rounded-full bg-indigo-50 p-1 text-indigo-600 ring-1 ring-indigo-100" title="Demontare/Montare">
+                    <WrenchScrewdriverIcon className="h-3.5 w-3.5" />
+                  </div>
+               )}
+                {((r as any).serviceCleanout || (r as any).serviceStorage) && (
+                  <div className="rounded-full bg-indigo-50 p-1 text-indigo-600 ring-1 ring-indigo-100" title="Alte servicii">
+                    <HomeModernIcon className="h-3.5 w-3.5" />
+                  </div>
+               )}
+            </div>
+
             {/* Property badges - inline after route */}
-            <div className="hidden flex-wrap items-center gap-1 sm:flex">
+            <div className="hidden flex-wrap items-center gap-1.5 xl:flex">
               {(r as any).fromRooms && (
-                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600">
-                  {(r as any).fromRooms} camere
+                <span className="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-600">
+                  {(r as any).fromRooms} cam
                 </span>
               )}
               {(r as any).fromType && (
-                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600">
-                  {(r as any).fromType === "house" ? "Casă" : "Apartament"}
+                <span className="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-600">
+                  {(r as any).fromType === "house" ? "Casă" : "Apt"}
                 </span>
               )}
-              {(r as any).fromFloor !== undefined && (
-                <span className="rounded-md bg-slate-100 px-1.5 py-0.5 text-[10px] font-medium text-slate-600">
-                  Etaj {(r as any).fromFloor}
+               {(r as any).fromFloor !== undefined && (r as any).fromType !== "house" && (
+                <span className="rounded-md bg-slate-100 px-2 py-1 text-[11px] font-medium text-slate-600">
+                  Et. {(r as any).fromFloor}
                 </span>
               )}
-              {(r as any).fromElevator !== undefined && (
-                <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-medium ${(r as any).fromElevator ? "bg-emerald-100 text-emerald-600" : "bg-red-100 text-red-500"}`}>
-                  {(r as any).fromElevator ? "Cu lift" : "Fără lift"}
+              {(r as any).fromElevator !== undefined && (r as any).fromType !== "house" && (
+                <span className={`rounded-md px-2 py-1 text-[11px] font-medium ${(r as any).fromElevator ? "bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100" : "bg-red-50 text-red-700 ring-1 ring-red-100"}`}>
+                  {(r as any).fromElevator ? "Lift" : "Fără lift"}
                 </span>
               )}
             </div>
