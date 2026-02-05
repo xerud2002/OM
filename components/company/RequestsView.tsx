@@ -229,7 +229,6 @@ function RequestCardCompact({
                 </span>
               )}
             </div>
-          </div>
 
           {/* Right: Rooms badge + Actions */}
           <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
