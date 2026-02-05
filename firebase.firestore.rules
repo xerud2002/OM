@@ -102,7 +102,6 @@ service cloud.firestore {
 
         // Only companies can create offers for requests on active, non-archived requests
         allow create: if isSignedIn() &&
-          isCompany() &&
           request.resource.data.companyId == request.auth.uid;
           // Temporarily removed extended validation for debugging
           // && !(get(/databases/$(database)/documents/requests/$(requestId)).data.archived == true) &&

@@ -32,9 +32,6 @@ import {
   ArchiveBoxIcon,
   WrenchScrewdriverIcon,
   HomeModernIcon,
-  MapPinIcon,
-  BuildingOffice2Icon,
-  CubeIcon,
   PaperAirplaneIcon,
   CheckBadgeIcon
 } from "@heroicons/react/24/outline";
@@ -70,18 +67,13 @@ export type Offer = {
   createdAt?: any;
 };
 
-// --- JobCard Component ---
-// --- JobCard Component ---
-// --- JobCard Component ---
 function JobCard({
   request,
-  company,
   hasMine,
   onOfferClick,
   onChatClick,
 }: {
   request: MovingRequest;
-  company: CompanyUser;
   hasMine: boolean | string;
   // eslint-disable-next-line no-unused-vars
   onOfferClick: (r: MovingRequest) => void;
@@ -183,14 +175,7 @@ function JobCard({
   );
 }
 
-// Icons needed for JobCard
-function CheckCircleIcon({className}: {className?: string}) {
-   return (
-      <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-         <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-   );
-}
+
 
 
 // --- Main RequestsView Component ---
@@ -211,6 +196,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   const [submittingOffer, setSubmittingOffer] = useState(false);
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  const checkedOffersRef = useRef<Set<string>>(new Set());
 
   // Auth (if not provided by parent)
   useEffect(() => {
@@ -218,6 +204,46 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     const unsubAuth = onAuthChange((u) => setCompany(u));
     return () => unsubAuth();
   }, [companyFromParent]);
+
+  const checkMyOffers = useCallback(async (requests: MovingRequest[], companyId: string) => {
+     try {
+       const toCheck = requests.filter(r => !checkedOffersRef.current.has(r.id));
+       if (toCheck.length === 0) return;
+
+       const updates: Record<string, boolean | string> = {};
+
+       // Mark as checked immediately
+       toCheck.forEach(r => checkedOffersRef.current.add(r.id));
+
+       await Promise.all(toCheck.map(async (r) => {
+          try {
+             // Check offers subcollection
+             const q = query(collection(db, "requests", r.id, "offers"), where("companyId", "==", companyId));
+             const snap = await getDocs(q);
+             if (!snap.empty) {
+                updates[r.id] = snap.docs[0].id; // Store Offer ID
+             } else {
+                // Also check legacy payments
+                const paymentRef = doc(db, `companies/${companyId}/payments/${r.id}`);
+                const paymentSnap = await getDoc(paymentRef);
+                if (paymentSnap.exists() && paymentSnap.data()?.status === "completed") {
+                   updates[r.id] = true;
+                } else {
+                   updates[r.id] = false;
+                }
+             }
+          } catch (err) {
+             console.error("Error checking offer:", err);
+          }
+       }));
+
+       if (Object.keys(updates).length > 0) {
+          setHasMineMap(prev => ({ ...prev, ...updates }));
+       }
+     } catch (e) {
+       console.error("Error batch checking offers", e);
+     }
+  }, []);
 
   // Initial Load
   useEffect(() => {
@@ -256,48 +282,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       }
     );
     return () => unsub();
-  }, [company?.uid]);
-
-  const checkMyOffers = async (requests: MovingRequest[], companyId: string) => {
-     try {
-       // Batch check isn't easy in Firestore without complex queries or reading all my offers.
-       // For now, simpler approach: For the visible requests, check if I have an offer.
-       // We can iterate and run parallel checks or use a collectionGroup query for my offers?
-       // CollectionGroup "offers" where companyId == myId would give ALL my offers. We can map them.
-       // It's efficient enough if not too many offers total.
-
-       // Better: loop visible ID's and check. Ideally we'd have a 'participants' array on the request but we have subcollections.
-       // Let's stick to per-request check or read all my recent offers.
-       const newMap = { ...hasMineMap };
-       
-       // Optimization: CollectionGroup Query for my offers created recently?
-       // Let's just do parallel checks for the current page items for simplicity.
-       await Promise.all(requests.map(async (r) => {
-          // If we already know we have it, skip
-          if (newMap[r.id]) return;
-
-          // Check offers subcollection
-          const q = query(collection(db, "requests", r.id, "offers"), where("companyId", "==", companyId));
-          const snap = await getDocs(q);
-          if (!snap.empty) {
-             newMap[r.id] = snap.docs[0].id; // Store Offer ID
-          } else {
-             // Also check legacy payments
-             const paymentRef = doc(db, `companies/${companyId}/payments/${r.id}`);
-             const paymentSnap = await getDoc(paymentRef);
-             if (paymentSnap.exists() && paymentSnap.data()?.status === "completed") {
-                newMap[r.id] = true;
-             } else {
-                newMap[r.id] = false;
-             }
-          }
-       }));
-
-       setHasMineMap(newMap);
-     } catch (e) {
-       console.error("Error checking offers", e);
-     }
-  };
+  }, [company?.uid, checkMyOffers]);
 
   const loadMore = useCallback(async () => {
     if (!lastDoc) return;
@@ -341,7 +326,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     } finally {
       setLoadingMore(false);
     }
-  }, [lastDoc, firstPage, company?.uid]);
+  }, [lastDoc, firstPage, company?.uid, checkMyOffers]);
 
   useEffect(() => {
     if (!hasMore || loadingMore) return;
@@ -489,7 +474,6 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
               >
                  <JobCard 
                    request={r}
-                   company={company}
                    hasMine={hasMineMap[r.id] ?? false}
                    onOfferClick={(req) => setActiveOfferRequest(req)}
                    onChatClick={(reqId, offerId) => {
