@@ -3,20 +3,20 @@ import { collection, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import {
-  MagnifyingGlassIcon,
   CheckCircleIcon,
-  XCircleIcon,
-  ClockIcon,
   BuildingOfficeIcon,
   EnvelopeIcon,
   PhoneIcon,
   MapPinIcon,
 } from "@heroicons/react/24/outline";
-import { CheckBadgeIcon } from "@heroicons/react/24/solid";
+import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import SearchInput from "@/components/ui/SearchInput";
+import { getVerificationStatusBadge } from "@/components/ui/StatusBadge";
+import EmptyState from "@/components/ui/EmptyState";
 
 interface Company {
   id: string;
@@ -32,16 +32,11 @@ interface Company {
 }
 
 export default function AdminCompanies() {
-  const [user, setUser] = useState<any>(null);
+  const { dashboardUser } = useAuth();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "verified" | "pending" | "rejected">("all");
-
-  useEffect(() => {
-    const unsub = onAuthChange((u) => setUser(u));
-    return () => unsub();
-  }, []);
 
   useEffect(() => {
     const q = query(collection(db, "companies"), orderBy("createdAt", "desc"));
@@ -100,41 +95,9 @@ export default function AdminCompanies() {
     }
   };
 
-  const getStatusBadge = (company: Company) => {
-    if (company.verificationStatus === "verified" || company.verified) {
-      return (
-        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-          <CheckBadgeIcon className="h-4 w-4" />
-          Verificat
-        </span>
-      );
-    }
-    if (company.verificationStatus === "pending") {
-      return (
-        <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
-          <ClockIcon className="h-4 w-4" />
-          În așteptare
-        </span>
-      );
-    }
-    if (company.verificationStatus === "rejected") {
-      return (
-        <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">
-          <XCircleIcon className="h-4 w-4" />
-          Respins
-        </span>
-      );
-    }
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-1 text-xs font-semibold text-gray-600">
-        Neverificat
-      </span>
-    );
-  };
-
   return (
     <RequireRole allowedRole="admin">
-      <DashboardLayout role="admin" user={user}>
+      <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
           {/* Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -155,31 +118,27 @@ export default function AdminCompanies() {
                 <option value="rejected">Respinse</option>
               </select>
               {/* Search */}
-              <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Caută companii..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 py-2 pl-10 pr-4 text-sm focus:border-purple-500 focus:outline-none sm:w-64"
-                />
-              </div>
+              <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Caută companii..."
+                focusColor="purple"
+              />
             </div>
           </div>
 
           {/* Grid */}
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-            </div>
+            <LoadingContainer>
+              <LoadingSpinner size="lg" color="purple" />
+            </LoadingContainer>
           ) : filteredCompanies.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 py-20 text-center">
-              <BuildingOfficeIcon className="h-12 w-12 text-gray-300" />
-              <p className="mt-4 text-gray-500">
-                {search || statusFilter !== "all" ? "Nu s-au găsit companii" : "Nu există companii înregistrate"}
-              </p>
-            </div>
+            <EmptyState
+              icon={BuildingOfficeIcon}
+              title={search || statusFilter !== "all" ? "Nu s-au găsit companii" : "Nu există companii înregistrate"}
+              description={search ? `Nu s-au găsit rezultate pentru "${search}"` : undefined}
+              variant="dashed"
+            />
           ) : (
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {filteredCompanies.map((company) => (
@@ -202,7 +161,11 @@ export default function AdminCompanies() {
                         )}
                       </div>
                     </div>
-                    {getStatusBadge(company)}
+                    {getVerificationStatusBadge(
+                      company.verificationStatus === "verified" || company.verified
+                        ? "verified"
+                        : company.verificationStatus || "none"
+                    )}
                   </div>
 
                   {/* Contact info */}

@@ -3,34 +3,28 @@ import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } fro
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import {
-  MagnifyingGlassIcon,
   TrashIcon,
   ArrowRightIcon,
   CalendarIcon,
   TruckIcon,
   HomeIcon,
-  CheckCircleIcon,
-  PauseCircleIcon,
-  XCircleIcon,
-  ClockIcon,
 } from "@heroicons/react/24/outline";
+import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import SearchInput from "@/components/ui/SearchInput";
+import { getRequestStatusBadge } from "@/components/ui/StatusBadge";
+import EmptyState from "@/components/ui/EmptyState";
 import type { MovingRequest } from "@/types";
 
 export default function AdminRequests() {
-  const [user, setUser] = useState<any>(null);
+  const { dashboardUser } = useAuth();
   const [requests, setRequests] = useState<MovingRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "closed" | "paused" | "cancelled">("all");
-
-  useEffect(() => {
-    const unsub = onAuthChange((u) => setUser(u));
-    return () => unsub();
-  }, []);
 
   useEffect(() => {
     const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
@@ -76,44 +70,9 @@ export default function AdminRequests() {
     }
   };
 
-  const getStatusBadge = (status: MovingRequest["status"]) => {
-    switch (status) {
-      case "active":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
-            <ClockIcon className="h-3.5 w-3.5" />
-            Activă
-          </span>
-        );
-      case "closed":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-700">
-            <CheckCircleIcon className="h-3.5 w-3.5" />
-            Finalizată
-          </span>
-        );
-      case "paused":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2.5 py-1 text-xs font-semibold text-amber-700">
-            <PauseCircleIcon className="h-3.5 w-3.5" />
-            Pauză
-          </span>
-        );
-      case "cancelled":
-        return (
-          <span className="inline-flex items-center gap-1 rounded-full bg-red-100 px-2.5 py-1 text-xs font-semibold text-red-700">
-            <XCircleIcon className="h-3.5 w-3.5" />
-            Anulată
-          </span>
-        );
-      default:
-        return null;
-    }
-  };
-
   return (
     <RequireRole allowedRole="admin">
-      <DashboardLayout role="admin" user={user}>
+      <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
           {/* Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -135,32 +94,27 @@ export default function AdminRequests() {
                 <option value="cancelled">Anulate</option>
               </select>
               {/* Search */}
-              <div className="relative">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Caută cereri..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="w-full rounded-lg border border-gray-200 py-2 pl-10 pr-4 text-sm focus:border-purple-500 focus:outline-none sm:w-64"
-                />
-              </div>
+              <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Caută cereri..."
+                focusColor="purple"
+              />
             </div>
           </div>
 
           {/* Table */}
           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-              </div>
+              <LoadingContainer>
+                <LoadingSpinner size="lg" color="purple" />
+              </LoadingContainer>
             ) : filteredRequests.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <TruckIcon className="h-12 w-12 text-gray-300" />
-                <p className="mt-4 text-gray-500">
-                  {search || statusFilter !== "all" ? "Nu s-au găsit cereri" : "Nu există cereri"}
-                </p>
-              </div>
+              <EmptyState
+                icon={TruckIcon}
+                title={search || statusFilter !== "all" ? "Nu s-au găsit cereri" : "Nu există cereri"}
+                description={search ? `Nu s-au găsit rezultate pentru "${search}"` : undefined}
+              />
             ) : (
               <div className="overflow-x-auto">
                 <table className="min-w-full divide-y divide-gray-200">
@@ -212,7 +166,7 @@ export default function AdminRequests() {
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
-                          {getStatusBadge(request.status)}
+                          {getRequestStatusBadge(request.status || "active")}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
                           <span className="font-mono text-sm text-gray-600">

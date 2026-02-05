@@ -3,7 +3,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import {
   Cog6ToothIcon,
@@ -12,6 +12,7 @@ import {
   TruckIcon,
 } from "@heroicons/react/24/outline";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
+import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
 
 interface CompanySettings {
   emailNotifications: boolean;
@@ -41,22 +42,17 @@ const romanianCities = [
 ];
 
 export default function CompanySettings() {
-  const [user, setUser] = useState<any>(null);
+  const { dashboardUser } = useAuth();
   const [settings, setSettings] = useState<CompanySettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const unsub = onAuthChange((u) => setUser(u));
-    return () => unsub();
-  }, []);
-
-  useEffect(() => {
-    if (!user?.uid) return;
+    if (!dashboardUser?.uid) return;
 
     const loadSettings = async () => {
       try {
-        const docRef = doc(db, "companies", user.uid);
+        const docRef = doc(db, "companies", dashboardUser.uid);
         const docSnap = await getDoc(docRef);
         if (docSnap.exists()) {
           const data = docSnap.data();
@@ -78,13 +74,13 @@ export default function CompanySettings() {
     };
 
     loadSettings();
-  }, [user?.uid]);
+  }, [dashboardUser?.uid]);
 
   const handleSave = async () => {
-    if (!user?.uid) return;
+    if (!dashboardUser?.uid) return;
     setSaving(true);
     try {
-      await updateDoc(doc(db, "companies", user.uid), {
+      await updateDoc(doc(db, "companies", dashboardUser.uid), {
         ...settings,
         updatedAt: new Date(),
       });
@@ -112,7 +108,7 @@ export default function CompanySettings() {
 
   return (
     <RequireRole allowedRole="company">
-      <DashboardLayout role="company" user={user}>
+      <DashboardLayout role="company" user={dashboardUser}>
         <div className="space-y-6">
           {/* Header */}
           <div>
@@ -121,9 +117,9 @@ export default function CompanySettings() {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" />
-            </div>
+            <LoadingContainer>
+              <LoadingSpinner size="lg" color="emerald" />
+            </LoadingContainer>
           ) : (
             <div className="space-y-6">
               {/* Notifications Section */}

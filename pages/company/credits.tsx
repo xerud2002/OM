@@ -1,20 +1,14 @@
-import { useEffect, useState } from "react";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
 import { TicketIcon, PhoneIcon, CheckCircleIcon } from "@heroicons/react/24/outline";
 
 export default function BuyCredits() {
-  const [user, setUser] = useState<any>(null);
-
-  useEffect(() => {
-    const unsub = onAuthChange((u) => setUser(u));
-    return () => unsub();
-  }, []);
+  const { dashboardUser } = useAuth();
 
   return (
     <RequireRole allowedRole="company">
-      <DashboardLayout role="company" user={user}>
+      <DashboardLayout role="company" user={dashboardUser}>
         <div className="space-y-8">
           {/* Header */}
           <div className="text-center">

@@ -3,7 +3,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
 import {
   Cog6ToothIcon,
@@ -13,6 +13,7 @@ import {
   ShieldCheckIcon,
 } from "@heroicons/react/24/outline";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
+import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
 
 interface PlatformSettings {
   creditPrice: number;
@@ -33,15 +34,10 @@ const defaultSettings: PlatformSettings = {
 };
 
 export default function AdminSettings() {
-  const [user, setUser] = useState<any>(null);
+  const { dashboardUser } = useAuth();
   const [settings, setSettings] = useState<PlatformSettings>(defaultSettings);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-
-  useEffect(() => {
-    const unsub = onAuthChange((u) => setUser(u));
-    return () => unsub();
-  }, []);
 
   useEffect(() => {
     const loadSettings = async () => {
@@ -80,7 +76,7 @@ export default function AdminSettings() {
 
   return (
     <RequireRole allowedRole="admin">
-      <DashboardLayout role="admin" user={user}>
+      <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
           {/* Header */}
           <div>
@@ -89,9 +85,9 @@ export default function AdminSettings() {
           </div>
 
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-            </div>
+            <LoadingContainer>
+              <LoadingSpinner size="lg" color="purple" />
+            </LoadingContainer>
           ) : (
             <div className="space-y-6">
               {/* Credits Section */}

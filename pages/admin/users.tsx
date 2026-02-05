@@ -3,16 +3,18 @@ import { collection, query, orderBy, onSnapshot, doc, deleteDoc } from "firebase
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import {
-  MagnifyingGlassIcon,
   TrashIcon,
   EnvelopeIcon,
   CalendarIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
+import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import SearchInput from "@/components/ui/SearchInput";
+import EmptyState from "@/components/ui/EmptyState";
 
 interface Customer {
   id: string;
@@ -23,15 +25,10 @@ interface Customer {
 }
 
 export default function AdminUsers() {
-  const [user, setUser] = useState<any>(null);
+  const { dashboardUser } = useAuth();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    const unsub = onAuthChange((u) => setUser(u));
-    return () => unsub();
-  }, []);
 
   useEffect(() => {
     const q = query(collection(db, "customers"), orderBy("createdAt", "desc"));
@@ -66,7 +63,7 @@ export default function AdminUsers() {
 
   return (
     <RequireRole allowedRole="admin">
-      <DashboardLayout role="admin" user={user}>
+      <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
           {/* Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -74,31 +71,26 @@ export default function AdminUsers() {
               <h1 className="text-2xl font-bold text-gray-900">Utilizatori</h1>
               <p className="text-gray-500">Gestionează utilizatorii platformei</p>
             </div>
-            <div className="relative">
-              <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Caută utilizatori..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="w-full rounded-lg border border-gray-200 py-2 pl-10 pr-4 text-sm focus:border-purple-500 focus:outline-none focus:ring-1 focus:ring-purple-500 sm:w-64"
-              />
-            </div>
+            <SearchInput
+              value={search}
+              onChange={setSearch}
+              placeholder="Caută utilizatori..."
+              focusColor="purple"
+            />
           </div>
 
           {/* Table */}
           <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-              </div>
+              <LoadingContainer>
+                <LoadingSpinner size="lg" color="purple" />
+              </LoadingContainer>
             ) : filteredCustomers.length === 0 ? (
-              <div className="flex flex-col items-center justify-center py-20 text-center">
-                <UserIcon className="h-12 w-12 text-gray-300" />
-                <p className="mt-4 text-gray-500">
-                  {search ? "Nu s-au găsit utilizatori" : "Nu există utilizatori înregistrați"}
-                </p>
-              </div>
+              <EmptyState
+                icon={UserIcon}
+                title={search ? "Nu s-au găsit utilizatori" : "Nu există utilizatori înregistrați"}
+                description={search ? `Nu s-au găsit rezultate pentru "${search}"` : undefined}
+              />
             ) : (
               <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">

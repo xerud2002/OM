@@ -27,17 +27,18 @@ import {
   CheckCircleIcon,
   ClockIcon,
   XCircleIcon,
-  MagnifyingGlassIcon,
   FunnelIcon,
   ArrowTrendingUpIcon,
   PencilIcon,
   TrashIcon,
   CheckIcon,
   XMarkIcon,
-  ChevronRightIcon,
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
+import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import SearchInput from "@/components/ui/SearchInput";
+import EmptyState from "@/components/ui/EmptyState";
 
 // Lazy load components
 const RequestsView = dynamic(() => import("@/components/company/RequestsView"), {
@@ -252,9 +253,9 @@ export default function CompanyDashboard() {
             {company ? (
               <RequestsView companyFromParent={company} />
             ) : (
-              <div className="flex items-center justify-center py-20">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
-              </div>
+              <LoadingContainer>
+                <LoadingSpinner size="lg" color="blue" />
+              </LoadingContainer>
             )}
           </motion.div>
         )}
@@ -268,15 +269,13 @@ export default function CompanyDashboard() {
           >
             {/* Filters */}
             <div className="flex flex-col gap-4 rounded-xl border border-gray-200 bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
-              <div className="relative flex-1 sm:max-w-sm">
-                <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                <input
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  placeholder="Caută după mesaj sau ID..."
-                  className="w-full rounded-lg border border-gray-200 bg-gray-50 py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20"
-                />
-              </div>
+              <SearchInput
+                value={search}
+                onChange={setSearch}
+                placeholder="Caută după mesaj sau ID..."
+                focusColor="blue"
+                className="flex-1 sm:max-w-sm"
+              />
               <div className="flex items-center gap-2">
                 <FunnelIcon className="h-4 w-4 text-gray-400" />
                 <select
@@ -294,9 +293,9 @@ export default function CompanyDashboard() {
 
             {/* Offers list */}
             {loading ? (
-              <div className="flex items-center justify-center py-20">
-                <div className="h-10 w-10 animate-spin rounded-full border-4 border-blue-200 border-t-blue-600" />
-              </div>
+              <LoadingContainer>
+                <LoadingSpinner size="lg" color="blue" />
+              </LoadingContainer>
             ) : filteredOffers.length > 0 ? (
               <div className="space-y-4">
                 {filteredOffers.map((offer, i) => (
@@ -429,20 +428,16 @@ export default function CompanyDashboard() {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-white py-16 text-center">
-                <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-                  <PaperAirplaneIcon className="h-8 w-8 text-gray-400" />
-                </div>
-                <p className="text-lg font-semibold text-gray-900">Nu ai oferte încă</p>
-                <p className="mt-1 text-sm text-gray-500">Trimite oferte la cererile clienților</p>
-                <button
-                  onClick={() => handleTabChange("requests")}
-                  className="mt-4 inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700"
-                >
-                  Vezi cererile
-                  <ChevronRightIcon className="h-4 w-4" />
-                </button>
-              </div>
+              <EmptyState
+                icon={PaperAirplaneIcon}
+                title="Nu ai oferte încă"
+                description="Trimite oferte la cererile clienților"
+                action={{
+                  label: "Vezi cererile",
+                  onClick: () => handleTabChange("requests"),
+                }}
+                variant="dashed"
+              />
             )}
           </motion.div>
         )}

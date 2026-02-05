@@ -3,7 +3,7 @@ import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, serverTi
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import {
@@ -12,19 +12,16 @@ import {
   DocumentTextIcon,
   MagnifyingGlassIcon
 } from "@heroicons/react/24/outline";
+import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import EmptyState from "@/components/ui/EmptyState";
 
 export default function AdminVerifications() {
-  const [user, setUser] = useState<any>(null);
+  const { dashboardUser } = useAuth();
   const [pendingCompanies, setPendingCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
-  const [rejectingId, setRejectingId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const unsub = onAuthChange((u) => setUser(u));
-    return () => unsub();
-  }, []);
+  const [rejectingId, setRejectingId] = useState<string | null>(null);;
 
   useEffect(() => {
     // Listen for pending verifications
@@ -86,7 +83,7 @@ export default function AdminVerifications() {
 
   return (
     <RequireRole allowedRole="admin">
-      <DashboardLayout role="admin" user={user}>
+      <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
           {/* Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -101,15 +98,16 @@ export default function AdminVerifications() {
 
           {/* Content */}
           {loading ? (
-            <div className="flex items-center justify-center py-20">
-              <div className="h-10 w-10 animate-spin rounded-full border-4 border-purple-200 border-t-purple-600" />
-            </div>
+            <LoadingContainer>
+              <LoadingSpinner size="lg" color="purple" />
+            </LoadingContainer>
           ) : pendingCompanies.length === 0 ? (
-            <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-gray-200 bg-white py-20">
-              <CheckCircleIcon className="h-16 w-16 text-gray-300" />
-              <p className="mt-4 text-lg font-medium text-gray-600">Nu există cereri în așteptare</p>
-              <p className="text-gray-400">Toate companiile sunt la zi</p>
-            </div>
+            <EmptyState
+              icon={CheckCircleIcon}
+              title="Nu există cereri în așteptare"
+              description="Toate companiile sunt la zi"
+              variant="dashed"
+            />
           ) : (
             <div className="grid gap-6">
               {pendingCompanies.map((company) => (
