@@ -90,20 +90,29 @@ function JobCard({
   const cost = calculateRequestCost(r);
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-gray-100 bg-white p-3 shadow-sm transition-all hover:shadow-md sm:p-4">
-       {/* Decorative Side Bar */}
+    <div className="relative overflow-hidden rounded-lg border border-gray-200 bg-white p-3 shadow-sm transition-all hover:shadow-md">
+       {/* Status Bar */}
        <div className={`absolute left-0 top-0 h-full w-1 ${
          hasMine ? "bg-emerald-500" : "bg-blue-500"
        }`} />
 
-       <div className="flex flex-col gap-3">
-         {/* Top Row: ID, Date, Status */}
-         <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="flex items-center gap-2">
-               <span className="font-mono text-xs font-bold text-gray-500">
+       <div className="flex flex-col gap-2 pl-2">
+         {/* Row 1: Route & Date */}
+         <div className="flex items-start justify-between gap-2">
+            <div className="flex flex-col">
+               <div className="flex items-center gap-1.5 text-sm font-bold text-gray-800">
+                  <span>{(r as any).fromCity}</span>
+                  <TruckIcon className="h-3.5 w-3.5 text-gray-400" />
+                  <span>{(r as any).toCity}</span>
+               </div>
+               <span className="text-[10px] font-mono text-gray-400">
                  {(r as any).requestCode || r.id.substring(0, 8)}
                </span>
-               <div className="flex items-center gap-1 rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-bold text-amber-700 ring-1 ring-amber-100/50">
+            </div>
+            
+            <div className="flex flex-col items-end gap-1">
+               {/* Date */}
+               <div className="flex items-center gap-1 rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-bold text-amber-700 ring-1 ring-amber-100/50">
                   <CalendarIcon className="h-3 w-3" />
                   <span>
                     {(() => {
@@ -112,135 +121,69 @@ function JobCard({
                     })()}
                   </span>
                </div>
-               {/* New Badge */}
-               {r.createdAt && (Date.now() - (r.createdAt.toMillis ? r.createdAt.toMillis() : r.createdAt) < 3600000) && (
-                 <span className="animate-pulse rounded-full bg-green-100 px-1.5 py-0.5 text-[9px] font-bold text-green-700">NOU</span>
+               {hasMine && (
+                  <span className="flex items-center gap-0.5 text-[10px] font-bold text-emerald-600">
+                     <CheckCircleIcon className="h-3 w-3" /> Ofertat
+                  </span>
                )}
             </div>
-            
-            {hasMine && (
-               <span className="flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-bold text-emerald-700">
-                 <CheckBadgeIcon className="h-3.5 w-3.5" />
-                 Ofertat
+         </div>
+
+         {/* Row 2: Details (One line if possible, or tightly wrapped) */}
+         <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[10px] text-gray-600">
+            {/* From Details */}
+            <div className="flex items-center gap-1">
+               <span className="font-semibold text-gray-400 uppercase">DE:</span>
+               <span>{(r as any).fromType === "house" ? "Casă" : "Apt"}</span>
+               {(r as any).fromRooms && <span>• {(r as any).fromRooms} cam</span>}
+               {(r as any).fromFloor !== undefined && <span>• Et. {(r as any).fromFloor}</span>}
+               <span className={(r as any).fromElevator ? "text-green-600" : "text-red-500"}>
+                 • {(r as any).fromElevator ? "Lift" : "Fără lift"}
                </span>
-            )}
-         </div>
-
-         {/* Compact Route Row with Inline Details */}
-         <div className="flex items-start gap-2 text-gray-800">
-            {/* From Column */}
-            <div className="flex flex-col min-w-[35%]">
-               <div className="flex items-baseline gap-1">
-                  <span className="text-xs font-medium text-gray-400 uppercase w-4">DE</span>
-                  <span className="text-sm font-bold leading-tight">{(r as any).fromCounty || r.fromCity}</span>
-               </div>
-               <div className="pl-5 text-xs text-gray-500">{r.fromCity}</div>
-               
-               {/* From Details Inline */}
-               <div className="pl-5 mt-1 flex flex-wrap gap-1 text-[10px] text-gray-600">
-                  <span className="rounded bg-gray-50 px-1 py-0.5">
-                     {(r as any).fromType === "house" ? "Casă" : "Apt"}
-                  </span>
-                  {(r as any).fromRooms && (
-                     <span className="rounded bg-gray-50 px-1 py-0.5">{(r as any).fromRooms} cam</span>
-                  )}
-                  {(r as any).fromFloor !== undefined && (
-                     <span className="rounded bg-gray-50 px-1 py-0.5">Et. {(r as any).fromFloor}</span>
-                  )}
-                   {(r as any).fromElevator !== undefined && (
-                     <span className={`rounded px-1 py-0.5 ${(r as any).fromElevator ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"}`}>
-                        {(r as any).fromElevator ? "Lift" : "Fără lift"}
-                     </span>
-                  )}
-               </div>
             </div>
-            
-            {/* Arrow / Icon */}
-            <div className="flex flex-1 items-center justify-center pt-2">
-               <div className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-50 text-gray-300">
-                  <TruckIcon className="h-3 w-3" />
-               </div>
-            </div>
-
-            {/* To Column */}
-            <div className="flex flex-col text-right min-w-[35%]">
-               <div className="flex flex-row-reverse items-baseline gap-1">
-                  <span className="text-xs font-medium text-gray-400 uppercase w-4 text-center">LA</span>
-                  <span className="text-sm font-bold leading-tight">{(r as any).toCounty || r.toCity}</span>
-               </div>
-               <div className="pr-5 text-xs text-gray-500">{r.toCity}</div>
-
-               {/* To Details Inline */}
-               <div className="pr-5 mt-1 flex flex-wrap justify-end gap-1 text-[10px] text-gray-600">
-                  <span className="rounded bg-gray-50 px-1 py-0.5">
-                     {(r as any).toType === "house" ? "Casă" : "Apt"}
-                  </span>
-                  {(r as any).toFloor !== undefined && (
-                     <span className="rounded bg-gray-50 px-1 py-0.5">Et. {(r as any).toFloor}</span>
-                  )}
-                  {(r as any).toElevator !== undefined && (
-                     <span className={`rounded px-1 py-0.5 ${(r as any).toElevator ? "text-green-700 bg-green-50" : "text-red-700 bg-red-50"}`}>
-                        {(r as any).toElevator ? "Lift" : "Fără lift"}
-                     </span>
-                  )}
-               </div>
+            {/* To Details */}
+            <div className="flex items-center gap-1">
+               <span className="font-semibold text-gray-400 uppercase">LA:</span>
+               <span>{(r as any).toType === "house" ? "Casă" : "Apt"}</span>
+               {(r as any).toFloor !== undefined && <span>• Et. {(r as any).toFloor}</span>}
+               <span className={(r as any).toElevator ? "text-green-600" : "text-red-500"}>
+                 • {(r as any).toElevator ? "Lift" : "Fără lift"}
+               </span>
             </div>
          </div>
 
-         {/* Services - Compact */}
-         {((r as any).serviceMoving || (r as any).servicePacking || (r as any).serviceDisassembly || (r as any).serviceCleanout || (r as any).serviceStorage) && (
-            <div className="flex flex-wrap gap-1.5 pt-1">
-               {(r as any).serviceMoving && (
-                  <span className="flex items-center gap-1 rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700 border border-indigo-100">
-                     <TruckIcon className="h-3 w-3" /> Transp
-                  </span>
-               )}
-               {(r as any).servicePacking && (
-                  <span className="flex items-center gap-1 rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700 border border-indigo-100">
-                     <ArchiveBoxIcon className="h-3 w-3" /> Ambalare
-                  </span>
-               )}
-               {(r as any).serviceDisassembly && (
-                  <span className="flex items-center gap-1 rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700 border border-indigo-100">
-                     <WrenchScrewdriverIcon className="h-3 w-3" /> Demontare
-                  </span>
-               )}
-               {((r as any).serviceCleanout || (r as any).serviceStorage) && (
-                  <span className="flex items-center gap-1 rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-700 border border-indigo-100">
-                     <HomeModernIcon className="h-3 w-3" /> Altele
-                  </span>
+         {/* Row 3: Services & Action */}
+         <div className="flex items-center justify-between gap-2 pt-1 border-t border-gray-50">
+            {/* Services Icons */}
+            <div className="flex items-center gap-2 overflow-hidden">
+               {((r as any).serviceMoving || (r as any).servicePacking || (r as any).serviceDisassembly || (r as any).serviceCleanout || (r as any).serviceStorage) ? (
+                 <>
+                   {(r as any).serviceMoving && <TruckIcon className="h-4 w-4 text-indigo-400" title="Transport" />}
+                   {(r as any).servicePacking && <ArchiveBoxIcon className="h-4 w-4 text-indigo-400" title="Ambalare" />}
+                   {(r as any).serviceDisassembly && <WrenchScrewdriverIcon className="h-4 w-4 text-indigo-400" title="Demontare" />}
+                   {((r as any).serviceCleanout || (r as any).serviceStorage) && <HomeModernIcon className="h-4 w-4 text-indigo-400" title="Alte servicii" />}
+                 </>
+               ) : (
+                  <span className="text-[10px] text-gray-300 italic">Fără servicii extra</span>
                )}
             </div>
-         )}
-         
-         {/* Actions */}
-         <div className="mt-1 flex items-center justify-end gap-2 border-t border-gray-50 pt-3">
+
+            {/* Action */}
             {hasMine ? (
-               <div className="flex gap-2">
-                  <span className="inline-flex items-center gap-1 rounded-md bg-emerald-50 px-2 py-1.5 text-xs font-bold text-emerald-700">
-                     <CheckCircleIcon className="h-3.5 w-3.5" />
-                     Aplicat
-                  </span>
-                  {typeof hasMine === 'string' && onChatClick && (
-                    <button 
-                      onClick={() => onChatClick(r.id, hasMine)}
-                      className="inline-flex items-center gap-1 rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow-sm hover:bg-emerald-700"
-                    >
-                      <ChatBubbleLeftEllipsisIcon className="h-3.5 w-3.5" />
-                      Chat
-                    </button>
-                  )}
-               </div>
+                 typeof hasMine === 'string' && onChatClick ? (
+                   <button 
+                     onClick={() => onChatClick(r.id, hasMine)}
+                     className="text-emerald-600 hover:text-emerald-700"
+                   >
+                     <ChatBubbleLeftEllipsisIcon className="h-5 w-5" />
+                   </button>
+                 ) : <span className="text-[10px] font-bold text-gray-400">Trimis</span>
             ) : (
                <button
                   onClick={() => onOfferClick(r)}
-                  className="flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-xs font-bold text-white shadow-sm shadow-blue-500/30 transition hover:bg-blue-700 hover:shadow-md"
+                  className="rounded bg-blue-600 px-3 py-1 text-[10px] font-bold text-white shadow-sm hover:bg-blue-700"
                >
-                  <PaperAirplaneIcon className="h-3.5 w-3.5" />
-                  Ofertează 
-                  <span className="ml-1 rounded bg-white/20 px-1 py-0.5 text-[9px] text-white">
-                     {cost} Cr
-                  </span>
+                  Ofertă ({cost})
                </button>
             )}
          </div>
