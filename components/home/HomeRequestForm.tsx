@@ -530,7 +530,7 @@ export default function HomeRequestForm() {
             <div
               className="grid gap-2"
               style={{
-                gridTemplateColumns: form.fromType === "house" ? "2fr 1fr 1fr" : "2fr 1fr 1fr",
+                gridTemplateColumns: form.fromType === "house" ? "1.4fr 1fr 1fr" : "1.4fr 1fr 1.2fr",
               }}
             >
               <div>
@@ -553,42 +553,52 @@ export default function HomeRequestForm() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
-                <input
-                  type="text"
-                  inputMode="numeric"
+                <label className="mb-1 block text-xs font-medium text-gray-600">Nr. Camere *</label>
+                <select
                   value={form.fromRooms || ""}
-                  onChange={(e) =>
-                    setForm((s) => ({ ...s, fromRooms: e.target.value.replace(/\D/g, "") }))
-                  }
-                  placeholder="ex: 2"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
-                />
+                  onChange={(e) => setForm((s) => ({ ...s, fromRooms: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                >
+                  <option value="">-</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
               </div>
               {form.fromType === "house" && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">Etaje *</label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
+                  <select
                     value={form.fromFloor || ""}
-                    onChange={(e) =>
-                      setForm((s) => ({ ...s, fromFloor: e.target.value.replace(/\D/g, "") }))
-                    }
-                    placeholder="ex: 2"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-emerald-500 focus:outline-none"
-                  />
+                    onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                  >
+                    <option value="">-</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5+">5+</option>
+                  </select>
                 </div>
               )}
               {(form.fromType === "flat" || form.fromType === "office") && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
-                  <input
+                  <select
                     value={form.fromFloor || ""}
                     onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
-                    placeholder="ex: 3"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-emerald-500 focus:outline-none"
-                  />
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+                  >
+                    <option value="">-</option>
+                    <option value="Demisol">Demisol</option>
+                    <option value="Parter">Parter</option>
+                    {[...Array(20)].map((_, i) => (
+                      <option key={i + 1} value={String(i + 1)}>{i + 1}</option>
+                    ))}
+                  </select>
                 </div>
               )}
             </div>
@@ -710,7 +720,7 @@ export default function HomeRequestForm() {
             <div
               className="grid gap-2"
               style={{
-                gridTemplateColumns: form.toType === "house" ? "2fr 1fr 1fr" : "2fr 1fr 1fr",
+                gridTemplateColumns: form.toType === "house" ? "1.4fr 1fr 1fr" : "1.4fr 1fr 1.2fr",
               }}
             >
               <div>
@@ -733,42 +743,52 @@ export default function HomeRequestForm() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">Camere *</label>
-                <input
-                  type="text"
-                  inputMode="numeric"
+                <label className="mb-1 block text-xs font-medium text-gray-600">Nr. Camere *</label>
+                <select
                   value={form.toRooms || ""}
-                  onChange={(e) =>
-                    setForm((s) => ({ ...s, toRooms: e.target.value.replace(/\D/g, "") }))
-                  }
-                  placeholder="ex: 3"
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
-                />
+                  onChange={(e) => setForm((s) => ({ ...s, toRooms: e.target.value }))}
+                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                >
+                  <option value="">-</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                  <option value="4">4</option>
+                  <option value="5+">5+</option>
+                </select>
               </div>
               {form.toType === "house" && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">Etaje *</label>
-                  <input
-                    type="text"
-                    inputMode="numeric"
+                  <select
                     value={form.toFloor || ""}
-                    onChange={(e) =>
-                      setForm((s) => ({ ...s, toFloor: e.target.value.replace(/\D/g, "") }))
-                    }
-                    placeholder="ex: 2"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-sky-500 focus:outline-none"
-                  />
+                    onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
+                  >
+                    <option value="">-</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5+">5+</option>
+                  </select>
                 </div>
               )}
               {(form.toType === "flat" || form.toType === "office") && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
-                  <input
+                  <select
                     value={form.toFloor || ""}
                     onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
-                    placeholder="ex: 5"
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-center text-sm focus:border-sky-500 focus:outline-none"
-                  />
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
+                  >
+                    <option value="">-</option>
+                    <option value="Demisol">Demisol</option>
+                    <option value="Parter">Parter</option>
+                    {[...Array(20)].map((_, i) => (
+                      <option key={i + 1} value={String(i + 1)}>{i + 1}</option>
+                    ))}
+                  </select>
                 </div>
               )}
             </div>
@@ -818,8 +838,8 @@ export default function HomeRequestForm() {
       <div className="mb-4 grid grid-cols-3 gap-2">
         {[
           { value: "exact", label: "Dată exactă" },
+          { value: "urgent", label: "Urgent" },
           { value: "flexible", label: "Flexibil" },
-          { value: "none", label: "Nu știu încă" },
         ].map((opt) => (
           <button
             key={opt.value}
@@ -827,7 +847,7 @@ export default function HomeRequestForm() {
             onClick={() =>
               setForm((s) => ({
                 ...s,
-                moveDateMode: opt.value as "exact" | "flexible" | "none",
+                moveDateMode: opt.value as "exact" | "flexible" | "urgent",
               }))
             }
             className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${form.moveDateMode === opt.value
@@ -840,6 +860,16 @@ export default function HomeRequestForm() {
         ))}
       </div>
 
+      {form.moveDateMode === "urgent" && (
+        <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-center space-y-2">
+          <p className="text-sm font-medium text-red-700">
+            🚨 Mutare urgentă - în următoarele 24-48 ore
+          </p>
+          <p className="text-xs text-red-600">
+            Companiile vor fi notificate imediat și vei primi oferte prioritare.
+          </p>
+        </div>
+      )}
       {form.moveDateMode === "exact" && (
         <div className="space-y-2">
           <InlineCalendar
@@ -881,13 +911,6 @@ export default function HomeRequestForm() {
           </div>
           <p className="rounded-lg bg-emerald-50 p-3 text-center text-xs text-emerald-700">
             💡 Companiile pot propune date în jurul perioadei selectate.
-          </p>
-        </div>
-      )}
-      {form.moveDateMode === "none" && (
-        <div className="rounded-lg bg-gray-50 p-4 text-center">
-          <p className="text-sm text-gray-600">
-            Nu-i problemă! Companiile îți vor propune mai multe date disponibile.
           </p>
         </div>
       )}

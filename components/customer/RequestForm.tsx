@@ -55,7 +55,7 @@ export type FormShape = {
   serviceFewItems?: boolean; // Added
   mediaUpload?: "now" | "later" | "none" | "list"; // Added list option
   mediaFiles?: File[];
-  moveDateMode?: "exact" | "range" | "none" | "flexible";
+  moveDateMode?: "exact" | "range" | "none" | "flexible" | "urgent";
   moveDateStart?: string;
   moveDateEnd?: string;
   moveDateFlexDays?: number;
