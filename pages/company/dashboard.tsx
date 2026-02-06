@@ -105,6 +105,7 @@ export default function CompanyDashboard() {
   // Offers listener
   useEffect(() => {
     if (!company?.uid) return;
+    setLoading(true);
 
     const q = query(
       collectionGroup(db, "offers"),
@@ -120,10 +121,12 @@ export default function CompanyDashboard() {
           requestId: doc.ref.parent.parent?.id,
           ...doc.data(),
         }));
+        logger.info("Offers loaded:", data.length);
         setOffers(data);
         setLoading(false);
       },
-      () => {
+      (error) => {
+        logger.error("Error loading offers:", error);
         setOffers([]);
         setLoading(false);
       }
