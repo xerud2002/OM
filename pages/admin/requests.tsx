@@ -35,7 +35,7 @@ export default function AdminRequests() {
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "closed" | "paused" | "cancelled"
+    "all" | "active" | "closed" | "paused" | "cancelled" | "accepted"
   >("all");
 
   useEffect(() => {
@@ -235,6 +235,7 @@ export default function AdminRequests() {
                               <option value="closed">Finalizată</option>
                               <option value="paused">Pauză</option>
                               <option value="cancelled">Anulată</option>
+                              <option value="accepted">Acceptată</option>
                             </select>
                             <button
                               onClick={() => handleDelete(request.id)}
