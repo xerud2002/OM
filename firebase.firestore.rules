@@ -12,6 +12,12 @@ service cloud.firestore {
     function canCreateCustomer() { return !isCompany(); }
     function canCreateCompany() { return !isCustomer(); }
 
+    // === COLLECTION GROUP RULES (must be at top level for collectionGroup queries) ===
+    // Allow companies to query their own offers across all requests via collectionGroup
+    match /{path=**}/offers/{offerId} {
+      allow read: if isSignedIn() && resource.data.companyId == request.auth.uid;
+    }
+
     // === CUSTOMERS COLLECTION ===
     match /customers/{customerId} {
       allow read: if isSignedIn() && (request.auth.uid == customerId || isAdmin());
@@ -197,12 +203,6 @@ service cloud.firestore {
       
       // No deletion - use archived flag instead
       allow delete: if false;
-    }
-
-    // === COLLECTION GROUP RULES ===
-    // Allow companies to query their own offers across all requests via collectionGroup
-    match /{path=**}/offers/{offerId} {
-      allow read: if isSignedIn() && resource.data.companyId == request.auth.uid;
     }
 
     // Deny everything else by default
