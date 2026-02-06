@@ -189,10 +189,16 @@ export default function DashboardLayout({
                   {/* User info mobile */}
                   <div className="py-4">
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3">
-                      <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${colors.accent}`}>
-                        {role === "customer" && <UserCircleIcon className="h-5 w-5 text-white" />}
-                        {role === "company" && <BuildingOfficeIcon className="h-5 w-5 text-white" />}
-                        {role === "admin" && <ShieldCheckIcon className="h-5 w-5 text-white" />}
+                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500">
+                        {role === "company" && user?.photoURL ? (
+                          <img src={user.photoURL} alt="Logo" className="h-full w-full object-cover" />
+                        ) : role === "company" ? (
+                          <img src="/pics/default-company.svg" alt="Logo" className="h-full w-full object-cover" />
+                        ) : role === "customer" ? (
+                          <UserCircleIcon className="h-5 w-5 text-white" />
+                        ) : (
+                          <ShieldCheckIcon className="h-5 w-5 text-white" />
+                        )}
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-gray-900">{userName}</p>
@@ -275,10 +281,16 @@ export default function DashboardLayout({
           {/* User info */}
           <div className="px-4 py-4">
             <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 p-3">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br ${colors.accent} shadow-sm`}>
-                {role === "customer" && <UserCircleIcon className="h-5 w-5 text-white" />}
-                {role === "company" && <BuildingOfficeIcon className="h-5 w-5 text-white" />}
-                {role === "admin" && <ShieldCheckIcon className="h-5 w-5 text-white" />}
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
+                {role === "company" && user?.photoURL ? (
+                  <img src={user.photoURL} alt="Logo" className="h-full w-full object-cover" />
+                ) : role === "company" ? (
+                  <img src="/pics/default-company.svg" alt="Logo" className="h-full w-full object-cover" />
+                ) : role === "customer" ? (
+                  <UserCircleIcon className="h-5 w-5 text-white" />
+                ) : (
+                  <ShieldCheckIcon className="h-5 w-5 text-white" />
+                )}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="truncate text-sm font-semibold text-gray-900">{userName}</p>

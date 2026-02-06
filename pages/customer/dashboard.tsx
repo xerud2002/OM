@@ -671,14 +671,26 @@ function OfferCard({
         <div className="flex items-start gap-4">
           {/* Logo column with contact info */}
           <div className="flex flex-col items-center gap-2">
-            <div className={`relative flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl text-xl font-bold text-white shadow-lg ${
+            <div className={`relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl shadow-lg ${
               isAccepted 
-                ? "bg-gradient-to-br from-emerald-500 to-green-500 shadow-emerald-500/30"
+                ? "shadow-emerald-500/30 ring-2 ring-emerald-500"
                 : isDeclined
-                  ? "bg-gradient-to-br from-gray-400 to-gray-500 shadow-gray-400/30"
-                  : "bg-gradient-to-br from-blue-500 to-indigo-500 shadow-blue-500/30"
+                  ? "shadow-gray-400/30"
+                  : "shadow-blue-500/30"
             }`}>
-              {offer.companyName?.charAt(0)?.toUpperCase() || "F"}
+              {offer.companyLogo ? (
+                <img 
+                  src={offer.companyLogo} 
+                  alt={offer.companyName || "Logo companie"} 
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <img 
+                  src="/pics/default-company.svg" 
+                  alt="Logo companie" 
+                  className={`h-full w-full object-cover ${isDeclined ? "opacity-50 grayscale" : ""}`}
+                />
+              )}
               {isAccepted && (
                 <div className="absolute -bottom-1 -right-1 rounded-full bg-white p-0.5">
                   <CheckCircleSolid className="h-5 w-5 text-emerald-500" />
