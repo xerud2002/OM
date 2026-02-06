@@ -818,30 +818,6 @@ function OfferCard({
                 </div>
               )}
             </div>
-            {/* Contact buttons under logo */}
-            {(isAccepted || isPending) &&
-              (offer.companyPhone || offer.companyEmail) && (
-                <div className="flex items-center gap-1">
-                  {offer.companyPhone && (
-                    <a
-                      href={`tel:${offer.companyPhone}`}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100"
-                      title={offer.companyPhone}
-                    >
-                      <PhoneIcon className="h-4 w-4" />
-                    </a>
-                  )}
-                  {offer.companyEmail && (
-                    <a
-                      href={`mailto:${offer.companyEmail}`}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition hover:bg-blue-100"
-                      title={offer.companyEmail}
-                    >
-                      <EnvelopeIcon className="h-4 w-4" />
-                    </a>
-                  )}
-                </div>
-              )}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
@@ -968,6 +944,38 @@ function OfferCard({
                 <a
                   href={`mailto:${offer.companyEmail}`}
                   className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                  title={offer.companyEmail}
+                >
+                  <EnvelopeIcon className="h-4 w-4" />
+                  Email
+                </a>
+              )}
+            </div>
+          )}
+
+          {isDeclined && (
+            <div className="flex flex-wrap justify-end gap-2">
+              <button
+                onClick={onChat}
+                className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Chat
+              </button>
+              {offer.companyPhone && (
+                <a
+                  href={`tel:${offer.companyPhone}`}
+                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
+                  title={offer.companyPhone}
+                >
+                  <PhoneIcon className="h-4 w-4" />
+                  Sună
+                </a>
+              )}
+              {offer.companyEmail && (
+                <a
+                  href={`mailto:${offer.companyEmail}`}
+                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
                   title={offer.companyEmail}
                 >
                   <EnvelopeIcon className="h-4 w-4" />

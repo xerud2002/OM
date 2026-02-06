@@ -36,6 +36,7 @@ import {
   PaperAirplaneIcon,
   PhoneIcon,
   EnvelopeIcon,
+  InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import LoadingSpinner, {
@@ -73,6 +74,7 @@ export default function CompanyDashboard() {
   const router = useRouter();
   const [company, setCompany] = useState<any>(null);
   const [companyName, setCompanyName] = useState<string>("");
+  const [companyLogo, setCompanyLogo] = useState<string | null>(null);
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState<
@@ -110,6 +112,7 @@ export default function CompanyDashboard() {
         const companyDoc = await getDoc(doc(db, "companies", company.uid));
         if (companyDoc.exists()) {
           setCompanyName(companyDoc.data()?.companyName || "");
+          setCompanyLogo(companyDoc.data()?.logoUrl || null);
         }
       } catch (err) {
         logger.error("Error fetching company name:", err);
@@ -273,7 +276,11 @@ export default function CompanyDashboard() {
     <RequireRole allowedRole="company">
       <DashboardLayout
         role="company"
-        user={company}
+        user={
+          company
+            ? { ...company, photoURL: companyLogo || company.photoURL }
+            : company
+        }
         companyName={companyName}
         navigation={navigation}
         activeTab={activeTab}
@@ -281,43 +288,13 @@ export default function CompanyDashboard() {
         stats={stats}
         headerActions={headerActions}
       >
-        {/* Tab switcher */}
-        <div className="mb-6">
-          <div className="inline-flex rounded-xl border border-gray-200 bg-white p-1 shadow-sm">
-            <button
-              onClick={() => handleTabChange("requests")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition ${
-                activeTab === "requests"
-                  ? "bg-blue-600 text-white shadow"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              <InboxIcon className="h-4 w-4" />
-              Cereri clienți
-            </button>
-            <button
-              onClick={() => handleTabChange("offers")}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition ${
-                activeTab === "offers"
-                  ? "bg-blue-600 text-white shadow"
-                  : "text-gray-600 hover:bg-gray-50"
-              }`}
-            >
-              <PaperAirplaneIcon className="h-4 w-4" />
-              Ofertele mele
-              {total > 0 && (
-                <span
-                  className={`ml-1 rounded-full px-2 py-0.5 text-xs ${
-                    activeTab === "offers"
-                      ? "bg-white/20"
-                      : "bg-blue-100 text-blue-700"
-                  }`}
-                >
-                  {total}
-                </span>
-              )}
-            </button>
-          </div>
+        {/* Info tip */}
+        <div className="mb-6 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4">
+          <InformationCircleIcon className="h-5 w-5 mt-0.5 flex-shrink-0 text-blue-600" />
+          <p className="text-sm text-blue-800">
+            Contactează clientul cât mai repede pentru a verifica informațiile
+            declarate și să-ți mărești șansele de a câștiga jobul.
+          </p>
         </div>
 
         {/* Requests Tab */}
