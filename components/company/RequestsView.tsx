@@ -44,17 +44,6 @@ import {
 
 import type { MovingRequest, CompanyUser } from "@/types";
 
-const SERVICE_BADGES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon; color: string }[] = [
-  { key: "serviceMoving", label: "Transport", icon: TruckIcon, color: "bg-indigo-50 text-indigo-700" },
-  { key: "servicePacking", label: "Ambalare", icon: ArchiveBoxIcon, color: "bg-indigo-50 text-indigo-700" },
-  { key: "serviceDisassembly", label: "Demontare", icon: WrenchScrewdriverIcon, color: "bg-indigo-50 text-indigo-700" },
-  { key: "serviceStorage", label: "Depozitare", icon: HomeModernIcon, color: "bg-indigo-50 text-indigo-700" },
-  { key: "serviceCleanout", label: "Debarasare", color: "bg-indigo-50 text-indigo-700" },
-  { key: "servicePiano", label: "Pian", color: "bg-amber-50 text-amber-700" },
-  { key: "serviceTransportOnly", label: "Doar transport", color: "bg-gray-100 text-gray-600" },
-  { key: "serviceFewItems", label: "Câteva obiecte", color: "bg-gray-100 text-gray-600" },
-];
-
 // Core services to always display
 const CORE_SERVICES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon }[] = [
   { key: "serviceMoving", label: "Transport", icon: TruckIcon },

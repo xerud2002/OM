@@ -1,5 +1,6 @@
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import Link from "next/link";
 import { useAuth } from "@/hooks/useAuth";
 import { db } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
@@ -431,7 +432,7 @@ export default function BuyCredits() {
           {/* FAQ Teaser */}
           <div className="text-center py-4">
             <p className="text-sm text-gray-500">
-              Ai întrebări? <a href="/faq" className="text-emerald-600 font-medium hover:underline">Vezi secțiunea FAQ</a> sau contactează-ne direct.
+              Ai întrebări? <Link href="/faq" className="text-emerald-600 font-medium hover:underline">Vezi secțiunea FAQ</Link> sau contactează-ne direct.
             </p>
           </div>
         </div>
