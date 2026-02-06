@@ -16,7 +16,7 @@ import {
   getDoc,
   where,
   runTransaction,
-  serverTimestamp
+  serverTimestamp,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
@@ -38,7 +38,7 @@ import {
   FunnelIcon,
   XMarkIcon,
   ChevronDownIcon,
-  ChevronUpIcon
+  ChevronUpIcon,
 } from "@heroicons/react/24/outline";
 
 // Types
@@ -91,232 +91,293 @@ function JobCard({
 
   return (
     <div className="relative flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg hover:border-gray-300">
-       {/* Top Status Bar */}
-       <div className={`absolute left-0 top-0 right-0 h-1 rounded-t-xl ${hasMine ? "bg-emerald-500" : "bg-blue-500"}`} />
+      {/* Top Status Bar */}
+      <div
+        className={`absolute left-0 top-0 right-0 h-1 rounded-t-xl ${hasMine ? "bg-emerald-500" : "bg-blue-500"}`}
+      />
 
-       {/* Header: Code, Date & Move Date */}
-       <div className="flex items-center justify-between border-b border-gray-100 px-4 pt-4 pb-3">
-          <div className="flex flex-col">
-             <span className="font-mono text-xs font-bold text-gray-500">
-                {(r as any).requestCode || r.id.substring(0, 8)}
-             </span>
-             <span className="text-[10px] text-gray-400">
-               {(() => {
-                 const ts = (r as any).createdAt;
-                 if (!ts) return "—";
-                 let d: Date;
-                 if (ts.toDate) {
-                   d = ts.toDate();
-                 } else if (ts.seconds) {
-                   d = new Date(ts.seconds * 1000);
-                 } else if (typeof ts === "number") {
-                   d = new Date(ts);
-                 } else {
-                   d = new Date(ts);
-                 }
-                 if (isNaN(d.getTime())) return "—";
-                 return d.toLocaleDateString("ro-RO", { day: "2-digit", month: "short" }) + 
-                   " • " + d.toLocaleTimeString("ro-RO", { hour: "2-digit", minute: "2-digit" });
-               })()}
-             </span>
-          </div>
-          <div className="flex items-center gap-1.5 rounded-md bg-amber-50 px-2 py-1 text-[10px] font-bold text-amber-700 ring-1 ring-amber-100">
-             <CalendarIcon className="h-3.5 w-3.5" />
-             <span>
-               {(() => {
-                 const d = formatMoveDateDisplay(r as any, { month: "short" });
-                  return d && d !== "-" ? d : "Flexibil";
-               })()}
-             </span>
-          </div>
-       </div>
+      {/* Header: Code, Date & Move Date */}
+      <div className="flex items-center justify-between border-b border-gray-100 px-4 pt-4 pb-3">
+        <div className="flex flex-col">
+          <span className="font-mono text-xs font-bold text-gray-500">
+            {(r as any).requestCode || r.id.substring(0, 8)}
+          </span>
+          <span className="text-[10px] text-gray-400">
+            {(() => {
+              const ts = (r as any).createdAt;
+              if (!ts) return "—";
+              let d: Date;
+              if (ts.toDate) {
+                d = ts.toDate();
+              } else if (ts.seconds) {
+                d = new Date(ts.seconds * 1000);
+              } else if (typeof ts === "number") {
+                d = new Date(ts);
+              } else {
+                d = new Date(ts);
+              }
+              if (isNaN(d.getTime())) return "—";
+              return (
+                d.toLocaleDateString("ro-RO", {
+                  day: "2-digit",
+                  month: "short",
+                }) +
+                " • " +
+                d.toLocaleTimeString("ro-RO", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              );
+            })()}
+          </span>
+        </div>
+        <div className="flex items-center gap-1.5 rounded-md bg-amber-50 px-2 py-1 text-[10px] font-bold text-amber-700 ring-1 ring-amber-100">
+          <CalendarIcon className="h-3.5 w-3.5" />
+          <span>
+            {(() => {
+              const d = formatMoveDateDisplay(r as any, { month: "short" });
+              return d && d !== "-" ? d : "Flexibil";
+            })()}
+          </span>
+        </div>
+      </div>
 
-       {/* Route */}
-       <div className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-gray-800">
-          <span className="line-clamp-1 text-right">{(r as any).fromCity}</span>
-          <TruckIcon className="h-4 w-4 shrink-0 text-blue-500" />
-          <span className="line-clamp-1 text-left">{(r as any).toCity}</span>
-       </div>
+      {/* Route */}
+      <div className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-gray-800">
+        <span className="line-clamp-1 text-right">{(r as any).fromCity}</span>
+        <TruckIcon className="h-4 w-4 shrink-0 text-blue-500" />
+        <span className="line-clamp-1 text-left">{(r as any).toCity}</span>
+      </div>
 
-       {/* Specs: Colectie & Livrare */}
-       <div className="grid grid-cols-2 gap-2 border-t border-gray-100 px-4 py-3 text-xs text-gray-600">
-          <div className="flex flex-col gap-0.5">
-             <span className="text-[10px] font-bold uppercase text-gray-400">Colecție</span>
-             <span className="font-medium">{(r as any).fromType === "house" ? "Casă" : "Apt"}</span>
-             {(r as any).fromRooms && <span>{(r as any).fromRooms} camere</span>}
-             {(r as any).fromFloor && <span>Etaj {(r as any).fromFloor}</span>}
-             <span className={(r as any).fromElevator ? "text-emerald-600 font-medium" : "text-rose-500 font-medium"}>
-                {(r as any).fromElevator !== undefined && ((r as any).fromElevator ? "✓ Lift" : "✗ Fără lift")}
-             </span>
-          </div>
-          <div className="flex flex-col gap-0.5">
-             <span className="text-[10px] font-bold uppercase text-gray-400">Livrare</span>
-             <span className="font-medium">{(r as any).toType === "house" ? "Casă" : "Apt"}</span>
-             {(r as any).toRooms && <span>{(r as any).toRooms} camere</span>}
-             {(r as any).toFloor !== undefined && <span>Etaj {(r as any).toFloor}</span>}
-             <span className={(r as any).toElevator ? "text-emerald-600 font-medium" : "text-rose-500 font-medium"}>
-                {(r as any).toElevator !== undefined && ((r as any).toElevator ? "✓ Lift" : "✗ Fără lift")}
-             </span>
-          </div>
-       </div>
+      {/* Specs: Colectie & Livrare */}
+      <div className="grid grid-cols-2 gap-2 border-t border-gray-100 px-4 py-3 text-xs text-gray-600">
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] font-bold uppercase text-gray-400">
+            Colecție
+          </span>
+          <span className="font-medium">
+            {(r as any).fromType === "house" ? "Casă" : "Apt"}
+          </span>
+          {(r as any).fromRooms && <span>{(r as any).fromRooms} camere</span>}
+          {(r as any).fromFloor && <span>Etaj {(r as any).fromFloor}</span>}
+          <span
+            className={
+              (r as any).fromElevator
+                ? "text-emerald-600 font-medium"
+                : "text-rose-500 font-medium"
+            }
+          >
+            {(r as any).fromElevator !== undefined &&
+              ((r as any).fromElevator ? "✓ Lift" : "✗ Fără lift")}
+          </span>
+        </div>
+        <div className="flex flex-col gap-0.5">
+          <span className="text-[10px] font-bold uppercase text-gray-400">
+            Livrare
+          </span>
+          <span className="font-medium">
+            {(r as any).toType === "house" ? "Casă" : "Apt"}
+          </span>
+          {(r as any).toRooms && <span>{(r as any).toRooms} camere</span>}
+          {(r as any).toFloor !== undefined && (
+            <span>Etaj {(r as any).toFloor}</span>
+          )}
+          <span
+            className={
+              (r as any).toElevator
+                ? "text-emerald-600 font-medium"
+                : "text-rose-500 font-medium"
+            }
+          >
+            {(r as any).toElevator !== undefined &&
+              ((r as any).toElevator ? "✓ Lift" : "✗ Fără lift")}
+          </span>
+        </div>
+      </div>
 
-       {/* Additional Details */}
-       {((r as any).details || (r as any).specialItems || (r as any).volumeM3 || (r as any).budgetEstimate) && (
-         <div className="border-t border-gray-100 px-4 py-3 text-xs text-gray-600">
-            {(r as any).volumeM3 && (
-              <div className="flex items-center gap-1 mb-1">
-                <span className="text-gray-400">Volum:</span>
-                <span className="font-medium">{(r as any).volumeM3} m³</span>
-              </div>
-            )}
-            {(r as any).budgetEstimate && (
-              <div className="flex items-center gap-1 mb-1">
-                <span className="text-gray-400">Buget:</span>
-                <span className="font-medium">{(r as any).budgetEstimate} RON</span>
-              </div>
-            )}
-            {(r as any).specialItems && (
-              <div className="mb-1">
-                <span className="text-gray-400">Obiecte speciale:</span>
-                <p className="text-gray-700 line-clamp-2">{(r as any).specialItems}</p>
-              </div>
-            )}
-            {(r as any).details && (
-              <div>
-                <span className="text-gray-400">Note:</span>
-                <p className="text-gray-700 line-clamp-3">{(r as any).details}</p>
-              </div>
-            )}
-         </div>
-       )}
-
-       {/* Media thumbnails */}
-       {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
-         <div className="border-t border-gray-100 px-4 py-2">
-            <div className="flex gap-1 overflow-x-auto">
-              {(r as any).mediaUrls.slice(0, 4).map((url: string, i: number) => (
-                <img key={i} src={url} alt="" className="h-12 w-12 rounded object-cover" />
-              ))}
-              {(r as any).mediaUrls.length > 4 && (
-                <div className="flex h-12 w-12 items-center justify-center rounded bg-gray-100 text-xs text-gray-500">
-                  +{(r as any).mediaUrls.length - 4}
-                </div>
-              )}
+      {/* Additional Details */}
+      {((r as any).details ||
+        (r as any).specialItems ||
+        (r as any).volumeM3 ||
+        (r as any).budgetEstimate) && (
+        <div className="border-t border-gray-100 px-4 py-3 text-xs text-gray-600">
+          {(r as any).volumeM3 && (
+            <div className="flex items-center gap-1 mb-1">
+              <span className="text-gray-400">Volum:</span>
+              <span className="font-medium">{(r as any).volumeM3} m³</span>
             </div>
-         </div>
-       )}
+          )}
+          {(r as any).budgetEstimate && (
+            <div className="flex items-center gap-1 mb-1">
+              <span className="text-gray-400">Buget:</span>
+              <span className="font-medium">
+                {(r as any).budgetEstimate} RON
+              </span>
+            </div>
+          )}
+          {(r as any).specialItems && (
+            <div className="mb-1">
+              <span className="text-gray-400">Obiecte speciale:</span>
+              <p className="text-gray-700 line-clamp-2">
+                {(r as any).specialItems}
+              </p>
+            </div>
+          )}
+          {(r as any).details && (
+            <div>
+              <span className="text-gray-400">Note:</span>
+              <p className="text-gray-700 line-clamp-3">{(r as any).details}</p>
+            </div>
+          )}
+        </div>
+      )}
 
-       {/* Services */}
-       <div className="flex flex-wrap items-center justify-center gap-1.5 border-t border-gray-100 px-4 py-2">
-          {(r as any).serviceMoving && (
-            <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-              <TruckIcon className="h-3 w-3" /> Transport
-            </span>
-          )}
-          {(r as any).servicePacking && (
-            <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-              <ArchiveBoxIcon className="h-3 w-3" /> Ambalare
-            </span>
-          )}
-          {(r as any).serviceDisassembly && (
-            <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-              <WrenchScrewdriverIcon className="h-3 w-3" /> Demontare
-            </span>
-          )}
-          {(r as any).serviceStorage && (
-            <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-              <HomeModernIcon className="h-3 w-3" /> Depozitare
-            </span>
-          )}
-          {(r as any).serviceCleanout && (
-            <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-              Debarasare
-            </span>
-          )}
-          {(r as any).servicePiano && (
-            <span className="flex items-center gap-1 rounded bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
-              🎹 Pian
-            </span>
-          )}
-          {(r as any).serviceTransportOnly && (
-            <span className="flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
-              Doar transport
-            </span>
-          )}
-          {(r as any).serviceFewItems && (
-            <span className="flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
-              Câteva obiecte
-            </span>
-          )}
-          {!(r as any).serviceMoving && !(r as any).servicePacking && !(r as any).serviceDisassembly && 
-           !(r as any).serviceCleanout && !(r as any).serviceStorage && !(r as any).servicePiano && 
-           !(r as any).serviceTransportOnly && !(r as any).serviceFewItems && (
-             <span className="text-[10px] text-gray-400">Transport standard</span>
-          )}
-       </div>
+      {/* Media thumbnails */}
+      {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
+        <div className="border-t border-gray-100 px-4 py-2">
+          <div className="flex gap-1 overflow-x-auto">
+            {(r as any).mediaUrls.slice(0, 4).map((url: string, i: number) => (
+              <img
+                key={i}
+                src={url}
+                alt=""
+                className="h-12 w-12 rounded object-cover"
+              />
+            ))}
+            {(r as any).mediaUrls.length > 4 && (
+              <div className="flex h-12 w-12 items-center justify-center rounded bg-gray-100 text-xs text-gray-500">
+                +{(r as any).mediaUrls.length - 4}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
 
-       {/* Action Button */}
-       <div className="px-4 pb-4 pt-2">
-          {hasMine ? (
-             <div className="flex items-center justify-center gap-2">
-                {hasMine.status === 'accepted' ? (
-                  <span className="flex items-center gap-1 rounded-lg bg-green-100 px-3 py-2 text-xs font-bold text-green-700 ring-1 ring-green-200">
-                    <CheckBadgeIcon className="h-4 w-4" />
-                    ACCEPTAT
-                  </span>
-                ) : hasMine.status === 'declined' || hasMine.status === 'rejected' ? (
-                  <span className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600">
-                    <XMarkIcon className="h-4 w-4" />
-                    REFUZAT
-                  </span>
-                ) : (
-                  <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
-                    <CheckBadgeIcon className="h-4 w-4" />
-                    OFERTAT
-                  </span>
-                )}
-                {hasMine.offerId && onChatClick && (
-                   <button 
-                     onClick={() => onChatClick(r.id, hasMine.offerId)}
-                     className="rounded-lg bg-emerald-600 p-2 text-white shadow-sm hover:bg-emerald-700 transition"
-                     title="Chat"
-                   >
-                     <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
-                   </button>
-                )}
-             </div>
-          ) : (
-             <button
-                onClick={() => onOfferClick(r)}
-                className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
-             >
-                <PaperAirplaneIcon className="h-4 w-4" />
-                <span>Trimite Ofertă</span>
-                <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-medium text-white">
-                  {cost}
-                </span>
-             </button>
+      {/* Services */}
+      <div className="flex flex-wrap items-center justify-center gap-1.5 border-t border-gray-100 px-4 py-2">
+        {(r as any).serviceMoving && (
+          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
+            <TruckIcon className="h-3 w-3" /> Transport
+          </span>
+        )}
+        {(r as any).servicePacking && (
+          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
+            <ArchiveBoxIcon className="h-3 w-3" /> Ambalare
+          </span>
+        )}
+        {(r as any).serviceDisassembly && (
+          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
+            <WrenchScrewdriverIcon className="h-3 w-3" /> Demontare
+          </span>
+        )}
+        {(r as any).serviceStorage && (
+          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
+            <HomeModernIcon className="h-3 w-3" /> Depozitare
+          </span>
+        )}
+        {(r as any).serviceCleanout && (
+          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
+            Debarasare
+          </span>
+        )}
+        {(r as any).servicePiano && (
+          <span className="flex items-center gap-1 rounded bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
+            🎹 Pian
+          </span>
+        )}
+        {(r as any).serviceTransportOnly && (
+          <span className="flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
+            Doar transport
+          </span>
+        )}
+        {(r as any).serviceFewItems && (
+          <span className="flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
+            Câteva obiecte
+          </span>
+        )}
+        {!(r as any).serviceMoving &&
+          !(r as any).servicePacking &&
+          !(r as any).serviceDisassembly &&
+          !(r as any).serviceCleanout &&
+          !(r as any).serviceStorage &&
+          !(r as any).servicePiano &&
+          !(r as any).serviceTransportOnly &&
+          !(r as any).serviceFewItems && (
+            <span className="text-[10px] text-gray-400">
+              Transport standard
+            </span>
           )}
-       </div>
+      </div>
+
+      {/* Action Button */}
+      <div className="px-4 pb-4 pt-2">
+        {hasMine ? (
+          <div className="flex items-center justify-center gap-2">
+            {hasMine.status === "accepted" ? (
+              <span className="flex items-center gap-1 rounded-lg bg-green-100 px-3 py-2 text-xs font-bold text-green-700 ring-1 ring-green-200">
+                <CheckBadgeIcon className="h-4 w-4" />
+                ACCEPTAT
+              </span>
+            ) : hasMine.status === "declined" ||
+              hasMine.status === "rejected" ? (
+              <span className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600">
+                <XMarkIcon className="h-4 w-4" />
+                REFUZAT
+              </span>
+            ) : (
+              <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
+                <CheckBadgeIcon className="h-4 w-4" />
+                OFERTAT
+              </span>
+            )}
+            {hasMine.offerId && onChatClick && (
+              <button
+                onClick={() => onChatClick(r.id, hasMine.offerId)}
+                className="rounded-lg bg-emerald-600 p-2 text-white shadow-sm hover:bg-emerald-700 transition"
+                title="Chat"
+              >
+                <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
+              </button>
+            )}
+          </div>
+        ) : (
+          <button
+            onClick={() => onOfferClick(r)}
+            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+          >
+            <PaperAirplaneIcon className="h-4 w-4" />
+            <span>Trimite Ofertă</span>
+            <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-medium text-white">
+              {cost}
+            </span>
+          </button>
+        )}
+      </div>
     </div>
   );
 }
 
-
-
-
 // --- Main RequestsView Component ---
-export default function RequestsView({ companyFromParent }: { companyFromParent?: CompanyUser }) {
-  const [company, setCompany] = useState<CompanyUser>(companyFromParent ?? null);
+export default function RequestsView({
+  companyFromParent,
+}: {
+  companyFromParent?: CompanyUser;
+}) {
+  const [company, setCompany] = useState<CompanyUser>(
+    companyFromParent ?? null,
+  );
   const PAGE_SIZE = 10;
   const [firstPage, setFirstPage] = useState<MovingRequest[]>([]);
   const [extra, setExtra] = useState<MovingRequest[]>([]);
-  const [lastDoc, setLastDoc] = useState<QueryDocumentSnapshot<DocumentData> | null>(null);
+  const [lastDoc, setLastDoc] =
+    useState<QueryDocumentSnapshot<DocumentData> | null>(null);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(false);
   const [hasMore, setHasMore] = useState(false);
   // Map of request ID to offer info: false = no offer, or { offerId, status }
-  const [hasMineMap, setHasMineMap] = useState<Record<string, false | { offerId: string; status: string }>>({});
+  const [hasMineMap, setHasMineMap] = useState<
+    Record<string, false | { offerId: string; status: string }>
+  >({});
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
 
   // Filter State
@@ -324,13 +385,18 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
   const [searchQuery, setSearchQuery] = useState("");
   const [filterService, setFilterService] = useState<string>("");
   const [filterElevator, setFilterElevator] = useState<"" | "yes" | "no">("");
-  const [filterPropertyType, setFilterPropertyType] = useState<"" | "apartment" | "house">("");
+  const [filterPropertyType, setFilterPropertyType] = useState<
+    "" | "apartment" | "house"
+  >("");
   const [filterDateFrom, setFilterDateFrom] = useState("");
   const [filterDateTo, setFilterDateTo] = useState("");
-  const [filterStatus, setFilterStatus] = useState<"" | "available" | "offered">("");
+  const [filterStatus, setFilterStatus] = useState<
+    "" | "available" | "offered"
+  >("");
 
   // Modal State
-  const [activeOfferRequest, setActiveOfferRequest] = useState<MovingRequest | null>(null);
+  const [activeOfferRequest, setActiveOfferRequest] =
+    useState<MovingRequest | null>(null);
   const [submittingOffer, setSubmittingOffer] = useState(false);
 
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -343,54 +409,77 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     return () => unsubAuth();
   }, [companyFromParent]);
 
-  const checkMyOffers = useCallback(async (requests: MovingRequest[], companyId: string) => {
-     try {
-       const toCheck = requests.filter(r => !checkedOffersRef.current.has(r.id));
-       if (toCheck.length === 0) return;
+  const checkMyOffers = useCallback(
+    async (requests: MovingRequest[], companyId: string) => {
+      try {
+        const toCheck = requests.filter(
+          (r) => !checkedOffersRef.current.has(r.id),
+        );
+        if (toCheck.length === 0) return;
 
-       const updates: Record<string, false | { offerId: string; status: string }> = {};
+        const updates: Record<
+          string,
+          false | { offerId: string; status: string }
+        > = {};
 
-       // Mark as checked immediately
-       toCheck.forEach(r => checkedOffersRef.current.add(r.id));
+        // Mark as checked immediately
+        toCheck.forEach((r) => checkedOffersRef.current.add(r.id));
 
-       await Promise.all(toCheck.map(async (r) => {
-          try {
-             // Check offers subcollection
-             const q = query(collection(db, "requests", r.id, "offers"), where("companyId", "==", companyId));
-             const snap = await getDocs(q);
-             if (!snap.empty) {
+        await Promise.all(
+          toCheck.map(async (r) => {
+            try {
+              // Check offers subcollection
+              const q = query(
+                collection(db, "requests", r.id, "offers"),
+                where("companyId", "==", companyId),
+              );
+              const snap = await getDocs(q);
+              if (!snap.empty) {
                 const offerDoc = snap.docs[0];
                 const offerData = offerDoc.data();
-                updates[r.id] = { 
-                  offerId: offerDoc.id, 
-                  status: offerData.status || 'pending' 
+                updates[r.id] = {
+                  offerId: offerDoc.id,
+                  status: offerData.status || "pending",
                 };
-             } else {
+              } else {
                 // Also check legacy payments
-                const paymentRef = doc(db, `companies/${companyId}/payments/${r.id}`);
+                const paymentRef = doc(
+                  db,
+                  `companies/${companyId}/payments/${r.id}`,
+                );
                 const paymentSnap = await getDoc(paymentRef);
-                if (paymentSnap.exists() && paymentSnap.data()?.status === "completed") {
-                   updates[r.id] = { offerId: r.id, status: 'pending' };
+                if (
+                  paymentSnap.exists() &&
+                  paymentSnap.data()?.status === "completed"
+                ) {
+                  updates[r.id] = { offerId: r.id, status: "pending" };
                 } else {
-                   updates[r.id] = false;
+                  updates[r.id] = false;
                 }
-             }
-          } catch (err) {
-             console.error("Error checking offer:", err);
-          }
-       }));
+              }
+            } catch (err) {
+              console.error("Error checking offer:", err);
+            }
+          }),
+        );
 
-       if (Object.keys(updates).length > 0) {
-          setHasMineMap(prev => ({ ...prev, ...updates }));
-       }
-     } catch (e) {
-       console.error("Error batch checking offers", e);
-     }
-  }, []);
+        if (Object.keys(updates).length > 0) {
+          setHasMineMap((prev) => ({ ...prev, ...updates }));
+        }
+      } catch (e) {
+        console.error("Error batch checking offers", e);
+      }
+    },
+    [],
+  );
 
   // Initial Load
   useEffect(() => {
-    const q = query(collection(db, "requests"), orderBy("createdAt", "desc"), limit(PAGE_SIZE));
+    const q = query(
+      collection(db, "requests"),
+      orderBy("createdAt", "desc"),
+      limit(PAGE_SIZE),
+    );
     const unsub = onSnapshot(
       q,
       async (snapshot) => {
@@ -405,7 +494,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
             const notArchived = !req.archived;
             return isVisible && notArchived;
           });
-        
+
         setFirstPage(list);
         setLoading(false);
         const last = snapshot.docs[snapshot.docs.length - 1] || null;
@@ -414,7 +503,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
         // Check which ones we have offered on
         if (company?.uid && list.length > 0) {
-            checkMyOffers(list, company.uid);
+          checkMyOffers(list, company.uid);
         }
       },
       (error) => {
@@ -422,7 +511,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         setFirstPage([]);
         setLoading(false);
         setHasMore(false);
-      }
+      },
     );
     return () => unsub();
   }, [company?.uid, checkMyOffers]);
@@ -435,7 +524,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         collection(db, "requests"),
         orderBy("createdAt", "desc"),
         startAfter(lastDoc),
-        limit(PAGE_SIZE)
+        limit(PAGE_SIZE),
       );
       const snap = await getDocs(q2);
       const list = snap.docs
@@ -451,13 +540,15 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         });
 
       setExtra((prev) => {
-        const seen = new Set(prev.map((p) => p.id).concat(firstPage.map((p) => p.id)));
+        const seen = new Set(
+          prev.map((p) => p.id).concat(firstPage.map((p) => p.id)),
+        );
         const newItems = list.filter((x) => !seen.has(x.id));
         return [...prev, ...newItems];
       });
-      
+
       if (company?.uid && list.length > 0) {
-         checkMyOffers(list, company.uid);
+        checkMyOffers(list, company.uid);
       }
 
       const last = snap.docs[snap.docs.length - 1] || null;
@@ -483,7 +574,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
           }
         });
       },
-      { rootMargin: "200px" }
+      { rootMargin: "200px" },
     );
     io.observe(el);
     return () => io.disconnect();
@@ -497,46 +588,53 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
   const sortedRequests = useMemo(() => {
     let arr = [...combinedRequests];
-    
+
     // Apply filters
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
-      arr = arr.filter(r => {
+      arr = arr.filter((r) => {
         const fromCity = ((r as any).fromCity || "").toLowerCase();
         const toCity = ((r as any).toCity || "").toLowerCase();
         const code = ((r as any).requestCode || r.id).toLowerCase();
         return fromCity.includes(q) || toCity.includes(q) || code.includes(q);
       });
     }
-    
+
     // Filter by service
     if (filterService) {
-      arr = arr.filter(r => {
+      arr = arr.filter((r) => {
         const req = r as any;
         switch (filterService) {
-          case "moving": return req.serviceMoving;
-          case "packing": return req.servicePacking;
-          case "disassembly": return req.serviceDisassembly;
-          case "storage": return req.serviceStorage;
-          case "piano": return req.servicePiano;
-          case "cleanout": return req.serviceCleanout;
-          default: return true;
+          case "moving":
+            return req.serviceMoving;
+          case "packing":
+            return req.servicePacking;
+          case "disassembly":
+            return req.serviceDisassembly;
+          case "storage":
+            return req.serviceStorage;
+          case "piano":
+            return req.servicePiano;
+          case "cleanout":
+            return req.serviceCleanout;
+          default:
+            return true;
         }
       });
     }
-    
+
     // Filter by elevator
     if (filterElevator) {
-      arr = arr.filter(r => {
+      arr = arr.filter((r) => {
         const req = r as any;
         const hasElevator = req.fromElevator || req.toElevator;
         return filterElevator === "yes" ? hasElevator : !hasElevator;
       });
     }
-    
+
     // Filter by property type
     if (filterPropertyType) {
-      arr = arr.filter(r => {
+      arr = arr.filter((r) => {
         const req = r as any;
         if (filterPropertyType === "apartment") {
           return req.fromType !== "house" || req.toType !== "house";
@@ -545,10 +643,10 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         }
       });
     }
-    
+
     // Filter by move date range
     if (filterDateFrom || filterDateTo) {
-      arr = arr.filter(r => {
+      arr = arr.filter((r) => {
         const req = r as any;
         if (!req.moveDate) return false;
         const moveDate = new Date(req.moveDate);
@@ -557,22 +655,33 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
         return true;
       });
     }
-    
+
     // Filter by offer status
     if (filterStatus) {
-      arr = arr.filter(r => {
+      arr = arr.filter((r) => {
         const hasOffer = hasMineMap[r.id];
         return filterStatus === "offered" ? hasOffer : !hasOffer;
       });
     }
-    
+
     // Apply sort
     const getTime = (r: MovingRequest) =>
       r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
     return sortBy === "date-desc"
       ? arr.sort((a, b) => getTime(b) - getTime(a))
       : arr.sort((a, b) => getTime(a) - getTime(b));
-  }, [combinedRequests, sortBy, searchQuery, filterService, filterElevator, filterPropertyType, filterDateFrom, filterDateTo, filterStatus, hasMineMap]);
+  }, [
+    combinedRequests,
+    sortBy,
+    searchQuery,
+    filterService,
+    filterElevator,
+    filterPropertyType,
+    filterDateFrom,
+    filterDateTo,
+    filterStatus,
+    hasMineMap,
+  ]);
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
@@ -583,7 +692,15 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
     if (filterDateFrom || filterDateTo) count++;
     if (filterStatus) count++;
     return count;
-  }, [searchQuery, filterService, filterElevator, filterPropertyType, filterDateFrom, filterDateTo, filterStatus]);
+  }, [
+    searchQuery,
+    filterService,
+    filterElevator,
+    filterPropertyType,
+    filterDateFrom,
+    filterDateTo,
+    filterStatus,
+  ]);
 
   const clearAllFilters = () => {
     setSearchQuery("");
@@ -597,98 +714,112 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
   // --- Handling Offer Submission ---
   const handleOfferSubmit = async (price: number, message: string) => {
-     if (!activeOfferRequest || !company?.uid) return;
-     
-     setSubmittingOffer(true);
-     try {
-       const cost = calculateRequestCost(activeOfferRequest);
-       
-       await runTransaction(db, async (transaction) => {
-         const companyRef = doc(db, "companies", company.uid);
-         const companyDoc = await transaction.get(companyRef);
- 
-         if (!companyDoc.exists()) throw "Profilul companiei nu a fost găsit.";
- 
-         const companyData = companyDoc.data();
-         if (companyData.verificationStatus !== 'verified') {
-           throw "Contul tău trebuie să fie verificat (KYC) pentru a trimite oferte.";
-         }
- 
-         const currentCredits = companyData.credits || 0;
-         if (currentCredits < cost) {
-           throw `Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${currentCredits}.`;
-         }
- 
-         // Deduct
-         transaction.update(companyRef, { credits: currentCredits - cost });
- 
-         // Create Offer
-         const offerRef = doc(collection(db, "requests", activeOfferRequest.id, "offers"));
-         const newOfferId = offerRef.id;
-        
-         transaction.set(offerRef, {
-           requestId: activeOfferRequest.id,
-           requestCode: (activeOfferRequest as any).requestCode || activeOfferRequest.id,
-           companyId: company.uid,
-           companyName: company.displayName || "Companie",
-           companyPhone: companyData.phone || null,
-           companyEmail: companyData.email || company.email || null,
-           price: price,
-           message: message,
-           status: "pending",
-           createdAt: serverTimestamp(),
-           costPaid: cost
-         });
- 
-         // Record Transaction
-         const txRef = doc(collection(db, "companies", company.uid, "transactions"));
-         transaction.set(txRef, {
-           type: "offer_placement",
-           amount: -cost,
-           requestId: activeOfferRequest.id,
-           description: `Ofertă pentru cererea ${(activeOfferRequest as any).requestCode || activeOfferRequest.id}`,
-           createdAt: serverTimestamp()
-         });
-         
-         return newOfferId;
-       });
+    if (!activeOfferRequest || !company?.uid) return;
 
-       // Send email notification to customer
-       const customerEmail = (activeOfferRequest as any).customerEmail || (activeOfferRequest as any).guestEmail;
-       if (customerEmail) {
-         try {
-           const { sendEmailViaAPI } = await import("@/utils/emailHelpers");
-           await sendEmailViaAPI("newOffer", {
-             customerEmail,
-             requestCode: (activeOfferRequest as any).requestCode || activeOfferRequest.id,
-             requestId: activeOfferRequest.id,
-             companyName: company.displayName || "Companie",
-             companyMessage: message,
-             price: price,
-             fromCity: (activeOfferRequest as any).fromCity,
-             toCity: (activeOfferRequest as any).toCity,
-             moveDate: (activeOfferRequest as any).moveDate || (activeOfferRequest as any).moveDateStart,
-           });
-         } catch (emailErr) {
-           logger.error("Failed to send offer notification email:", emailErr);
-           // Don't fail the whole operation just because email failed
-         }
-       }
+    setSubmittingOffer(true);
+    try {
+      const cost = calculateRequestCost(activeOfferRequest);
 
-       // Success
-       setHasMineMap(prev => ({ ...prev, [activeOfferRequest.id]: { offerId: 'temp', status: 'pending' } })); // Optimistic update
-       // Refresh actual ID via quick check or just use true for now
-       checkMyOffers([activeOfferRequest], company.uid);
-       
-     } catch (err: any) {
-        logger.error("Failed to place offer", err);
-        alert(err.toString() || "Eroare la trimiterea ofertei");
-     } finally {
-        setSubmittingOffer(false);
-        // Modal closes automatically via onConfirm unless we want to keep it open?
-        // OfferModal doesn't have controlled open state exposed but we used onClose in it. 
-        // We passed onClose to Modal, which calls setActiveOfferRequest(null).
-     }
+      await runTransaction(db, async (transaction) => {
+        const companyRef = doc(db, "companies", company.uid);
+        const companyDoc = await transaction.get(companyRef);
+
+        if (!companyDoc.exists()) throw "Profilul companiei nu a fost găsit.";
+
+        const companyData = companyDoc.data();
+        if (companyData.verificationStatus !== "verified") {
+          throw "Contul tău trebuie să fie verificat (KYC) pentru a trimite oferte.";
+        }
+
+        const currentCredits = companyData.credits || 0;
+        if (currentCredits < cost) {
+          throw `Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${currentCredits}.`;
+        }
+
+        // Deduct
+        transaction.update(companyRef, { credits: currentCredits - cost });
+
+        // Create Offer
+        const offerRef = doc(
+          collection(db, "requests", activeOfferRequest.id, "offers"),
+        );
+        const newOfferId = offerRef.id;
+
+        transaction.set(offerRef, {
+          requestId: activeOfferRequest.id,
+          requestCode:
+            (activeOfferRequest as any).requestCode || activeOfferRequest.id,
+          companyId: company.uid,
+          companyName:
+            companyData.companyName || company.displayName || "Companie",
+          companyLogo: companyData.logoUrl || companyData.photoURL || null,
+          companyPhone: companyData.phone || null,
+          companyEmail: companyData.email || company.email || null,
+          price: price,
+          message: message,
+          status: "pending",
+          createdAt: serverTimestamp(),
+          costPaid: cost,
+        });
+
+        // Record Transaction
+        const txRef = doc(
+          collection(db, "companies", company.uid, "transactions"),
+        );
+        transaction.set(txRef, {
+          type: "offer_placement",
+          amount: -cost,
+          requestId: activeOfferRequest.id,
+          description: `Ofertă pentru cererea ${(activeOfferRequest as any).requestCode || activeOfferRequest.id}`,
+          createdAt: serverTimestamp(),
+        });
+
+        return newOfferId;
+      });
+
+      // Send email notification to customer
+      const customerEmail =
+        (activeOfferRequest as any).customerEmail ||
+        (activeOfferRequest as any).guestEmail;
+      if (customerEmail) {
+        try {
+          const { sendEmailViaAPI } = await import("@/utils/emailHelpers");
+          await sendEmailViaAPI("newOffer", {
+            customerEmail,
+            requestCode:
+              (activeOfferRequest as any).requestCode || activeOfferRequest.id,
+            requestId: activeOfferRequest.id,
+            companyName: company.displayName || "Companie",
+            companyMessage: message,
+            price: price,
+            fromCity: (activeOfferRequest as any).fromCity,
+            toCity: (activeOfferRequest as any).toCity,
+            moveDate:
+              (activeOfferRequest as any).moveDate ||
+              (activeOfferRequest as any).moveDateStart,
+          });
+        } catch (emailErr) {
+          logger.error("Failed to send offer notification email:", emailErr);
+          // Don't fail the whole operation just because email failed
+        }
+      }
+
+      // Success
+      setHasMineMap((prev) => ({
+        ...prev,
+        [activeOfferRequest.id]: { offerId: "temp", status: "pending" },
+      })); // Optimistic update
+      // Refresh actual ID via quick check or just use true for now
+      checkMyOffers([activeOfferRequest], company.uid);
+    } catch (err: any) {
+      logger.error("Failed to place offer", err);
+      alert(err.toString() || "Eroare la trimiterea ofertei");
+    } finally {
+      setSubmittingOffer(false);
+      // Modal closes automatically via onConfirm unless we want to keep it open?
+      // OfferModal doesn't have controlled open state exposed but we used onClose in it.
+      // We passed onClose to Modal, which calls setActiveOfferRequest(null).
+    }
   };
 
   return (
@@ -717,7 +848,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
             <ChevronDownIcon className="h-4 w-4" />
           )}
         </button>
-        
+
         {/* Sort */}
         <select
           value={sortBy}
@@ -728,7 +859,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
           <option value="date-asc">Cele mai vechi</option>
         </select>
       </div>
-      
+
       {/* Expandable Filter Panel */}
       <AnimatePresence>
         {showFilters && (
@@ -742,7 +873,9 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
             <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
               {/* Search */}
               <div className="mb-4">
-                <label className="mb-1.5 block text-xs font-medium text-gray-600">Căutare</label>
+                <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                  Căutare
+                </label>
                 <div className="relative">
                   <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <input
@@ -762,91 +895,105 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                   )}
                 </div>
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-                  {/* Service Type */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-medium text-gray-600">Serviciu</label>
-                    <select
-                      value={filterService}
-                      onChange={(e) => setFilterService(e.target.value)}
-                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                    >
-                      <option value="">Toate serviciile</option>
-                      <option value="moving">Transport</option>
-                      <option value="packing">Ambalare</option>
-                      <option value="disassembly">Demontare</option>
-                      <option value="storage">Depozitare</option>
-                      <option value="piano">Pian</option>
-                      <option value="cleanout">Debarasare</option>
-                    </select>
-                  </div>
-                  
-                  {/* Property Type */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-medium text-gray-600">Tip proprietate</label>
-                    <select
-                      value={filterPropertyType}
-                      onChange={(e) => setFilterPropertyType(e.target.value as any)}
-                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                    >
-                      <option value="">Oricare</option>
-                      <option value="apartment">Apartament</option>
-                      <option value="house">Casă</option>
-                    </select>
-                  </div>
-                  
-                  {/* Elevator */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-medium text-gray-600">Lift</label>
-                    <select
-                      value={filterElevator}
-                      onChange={(e) => setFilterElevator(e.target.value as any)}
-                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                    >
-                      <option value="">Oricare</option>
-                      <option value="yes">Cu lift</option>
-                      <option value="no">Fără lift</option>
-                    </select>
-                  </div>
-                  
-                  {/* Status */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-medium text-gray-600">Status ofertă</label>
-                    <select
-                      value={filterStatus}
-                      onChange={(e) => setFilterStatus(e.target.value as any)}
-                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                    >
-                      <option value="">Toate</option>
-                      <option value="available">Disponibile</option>
-                      <option value="offered">Ofertate de mine</option>
-                    </select>
-                  </div>
-                  
-                  {/* Date From */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-medium text-gray-600">Data mutării de la</label>
-                    <input
-                      type="date"
-                      value={filterDateFrom}
-                      onChange={(e) => setFilterDateFrom(e.target.value)}
-                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-                  
-                  {/* Date To */}
-                  <div>
-                    <label className="mb-1.5 block text-xs font-medium text-gray-600">Data mutării până la</label>
-                    <input
-                      type="date"
-                      value={filterDateTo}
-                      onChange={(e) => setFilterDateTo(e.target.value)}
-                      className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
+                {/* Service Type */}
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                    Serviciu
+                  </label>
+                  <select
+                    value={filterService}
+                    onChange={(e) => setFilterService(e.target.value)}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="">Toate serviciile</option>
+                    <option value="moving">Transport</option>
+                    <option value="packing">Ambalare</option>
+                    <option value="disassembly">Demontare</option>
+                    <option value="storage">Depozitare</option>
+                    <option value="piano">Pian</option>
+                    <option value="cleanout">Debarasare</option>
+                  </select>
+                </div>
+
+                {/* Property Type */}
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                    Tip proprietate
+                  </label>
+                  <select
+                    value={filterPropertyType}
+                    onChange={(e) =>
+                      setFilterPropertyType(e.target.value as any)
+                    }
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="">Oricare</option>
+                    <option value="apartment">Apartament</option>
+                    <option value="house">Casă</option>
+                  </select>
+                </div>
+
+                {/* Elevator */}
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                    Lift
+                  </label>
+                  <select
+                    value={filterElevator}
+                    onChange={(e) => setFilterElevator(e.target.value as any)}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="">Oricare</option>
+                    <option value="yes">Cu lift</option>
+                    <option value="no">Fără lift</option>
+                  </select>
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                    Status ofertă
+                  </label>
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value as any)}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  >
+                    <option value="">Toate</option>
+                    <option value="available">Disponibile</option>
+                    <option value="offered">Ofertate de mine</option>
+                  </select>
+                </div>
+
+                {/* Date From */}
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                    Data mutării de la
+                  </label>
+                  <input
+                    type="date"
+                    value={filterDateFrom}
+                    onChange={(e) => setFilterDateFrom(e.target.value)}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+
+                {/* Date To */}
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
+                    Data mutării până la
+                  </label>
+                  <input
+                    type="date"
+                    value={filterDateTo}
+                    onChange={(e) => setFilterDateTo(e.target.value)}
+                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
               </div>
-              
+
               {/* Clear Filters */}
               {activeFiltersCount > 0 && (
                 <div className="mt-4 flex justify-end">
@@ -866,7 +1013,7 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
 
       {loading ? (
         <div className="flex justify-center py-12">
-           <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-500 border-t-transparent" />
         </div>
       ) : sortedRequests.length === 0 ? (
         <motion.p
@@ -887,19 +1034,20 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
                 exit={{ opacity: 0 }}
                 transition={{ delay: index * 0.05 }}
               >
-                 <JobCard 
-                   request={r}
-                   hasMine={hasMineMap[r.id] ?? false}
-                   onOfferClick={(req) => setActiveOfferRequest(req)}
-                   onChatClick={(reqId, offerId) => {
-                     // TODO: Implement chat handling
-                     console.log("Chat clicked", reqId, offerId);
-                     // If there's a parent handler, call it?
-                     // Currently checking parent usage. 
-                     // Dashboard passes nothing for onChat. We can ignore or implement navigation.
-                     if (window) window.location.href = `/company/chat?request=${reqId}&offer=${offerId}`;
-                   }}
-                 />
+                <JobCard
+                  request={r}
+                  hasMine={hasMineMap[r.id] ?? false}
+                  onOfferClick={(req) => setActiveOfferRequest(req)}
+                  onChatClick={(reqId, offerId) => {
+                    // TODO: Implement chat handling
+                    console.log("Chat clicked", reqId, offerId);
+                    // If there's a parent handler, call it?
+                    // Currently checking parent usage.
+                    // Dashboard passes nothing for onChat. We can ignore or implement navigation.
+                    if (window)
+                      window.location.href = `/company/chat?request=${reqId}&offer=${offerId}`;
+                  }}
+                />
               </motion.div>
             ))}
           </AnimatePresence>
@@ -919,11 +1067,15 @@ export default function RequestsView({ companyFromParent }: { companyFromParent?
       )}
 
       {/* Offer Modal */}
-      <OfferModal 
+      <OfferModal
         isOpen={!!activeOfferRequest}
         onClose={() => setActiveOfferRequest(null)}
         onConfirm={handleOfferSubmit}
-        title={activeOfferRequest ? `Ofertă pentru ${(activeOfferRequest as any).requestCode || "Cerere"}` : "Trimite Ofertă"}
+        title={
+          activeOfferRequest
+            ? `Ofertă pentru ${(activeOfferRequest as any).requestCode || "Cerere"}`
+            : "Trimite Ofertă"
+        }
         isLoading={submittingOffer}
       />
     </div>

@@ -36,20 +36,32 @@ import {
   PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
-import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import LoadingSpinner, {
+  LoadingContainer,
+} from "@/components/ui/LoadingSpinner";
 import SearchInput from "@/components/ui/SearchInput";
 import EmptyState from "@/components/ui/EmptyState";
 
 // Lazy load components
-const RequestsView = dynamic(() => import("@/components/company/RequestsView"), {
-  loading: () => <div className="h-96 animate-pulse rounded-xl bg-gray-100" />,
-  ssr: false,
-});
+const RequestsView = dynamic(
+  () => import("@/components/company/RequestsView"),
+  {
+    loading: () => (
+      <div className="h-96 animate-pulse rounded-xl bg-gray-100" />
+    ),
+    ssr: false,
+  },
+);
 
-const CreditBalance = dynamic(() => import("@/components/company/CreditBalance"), {
-  loading: () => <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />,
-  ssr: false,
-});
+const CreditBalance = dynamic(
+  () => import("@/components/company/CreditBalance"),
+  {
+    loading: () => (
+      <div className="h-8 w-20 animate-pulse rounded-lg bg-gray-200" />
+    ),
+    ssr: false,
+  },
+);
 
 const ConfirmModal = dynamic(() => import("@/components/ConfirmModal"), {
   ssr: false,
@@ -61,7 +73,9 @@ export default function CompanyDashboard() {
   const [companyName, setCompanyName] = useState<string>("");
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
-  const [statusFilter, setStatusFilter] = useState<"all" | "accepted" | "pending" | "rejected" | "declined">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "accepted" | "pending" | "rejected" | "declined"
+  >("all");
   const [search, setSearch] = useState("");
   const [activeTab, setActiveTab] = useState<"requests" | "offers">("requests");
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -69,6 +83,7 @@ export default function CompanyDashboard() {
   const [editMessage, setEditMessage] = useState<string>("");
   const [savingId, setSavingId] = useState<string | null>(null);
   const [withdrawOffer, setWithdrawOffer] = useState<any>(null);
+  const [offerError, setOfferError] = useState<string | null>(null);
 
   // Detect tab from URL
   useEffect(() => {
@@ -87,7 +102,7 @@ export default function CompanyDashboard() {
   // Fetch company name from Firestore
   useEffect(() => {
     if (!company?.uid) return;
-    
+
     const fetchCompanyName = async () => {
       try {
         const companyDoc = await getDoc(doc(db, "companies", company.uid));
@@ -98,7 +113,7 @@ export default function CompanyDashboard() {
         logger.error("Error fetching company name:", err);
       }
     };
-    
+
     fetchCompanyName();
   }, [company?.uid]);
 
@@ -106,11 +121,12 @@ export default function CompanyDashboard() {
   useEffect(() => {
     if (!company?.uid) return;
     setLoading(true);
+    setOfferError(null);
 
     const q = query(
       collectionGroup(db, "offers"),
       where("companyId", "==", company.uid),
-      orderBy("createdAt", "desc")
+      orderBy("createdAt", "desc"),
     );
 
     const unsub = onSnapshot(
@@ -121,15 +137,28 @@ export default function CompanyDashboard() {
           requestId: doc.ref.parent.parent?.id,
           ...doc.data(),
         }));
-        logger.info("Offers loaded:", data.length);
+        console.log(
+          "[DEBUG] Offers loaded for company",
+          company.uid,
+          ":",
+          data.length,
+          data,
+        );
         setOffers(data);
+        setOfferError(null);
         setLoading(false);
       },
-      (error) => {
-        logger.error("Error loading offers:", error);
+      (error: any) => {
+        console.error("[DEBUG] Error loading offers:", error?.message || error);
+        // Check if it's a missing index error
+        if (error?.message?.includes("index")) {
+          setOfferError("Index Firestore lipsă. Contactați administratorul.");
+        } else {
+          setOfferError(error?.message || "Eroare la încărcarea ofertelor");
+        }
         setOffers([]);
         setLoading(false);
-      }
+      },
     );
 
     return () => unsub();
@@ -137,7 +166,10 @@ export default function CompanyDashboard() {
 
   const filteredOffers = useMemo(() => {
     return offers.filter((o) => {
-      const statusOk = statusFilter === "all" ? true : (o.status ?? "pending") === statusFilter;
+      const statusOk =
+        statusFilter === "all"
+          ? true
+          : (o.status ?? "pending") === statusFilter;
       const q = search.toLowerCase();
       const text = `${o.message || ""} ${o.requestId || ""}`.toLowerCase();
       return statusOk && (!q || text.includes(q));
@@ -147,8 +179,12 @@ export default function CompanyDashboard() {
   // Stats
   const total = offers.length;
   const accepted = offers.filter((o) => o.status === "accepted").length;
-  const pending = offers.filter((o) => !o.status || o.status === "pending").length;
-  const rejected = offers.filter((o) => o.status === "rejected" || o.status === "declined").length;
+  const pending = offers.filter(
+    (o) => !o.status || o.status === "pending",
+  ).length;
+  const rejected = offers.filter(
+    (o) => o.status === "rejected" || o.status === "declined",
+  ).length;
 
   const stats = [
     { label: "Total Oferte", value: total },
@@ -185,10 +221,22 @@ export default function CompanyDashboard() {
 
   // Navigation with dynamic current tab
   const navigation = [
-    { name: "Cereri Disponibile", href: "/company/dashboard?tab=requests", icon: InboxIcon },
-    { name: "Ofertele Mele", href: "/company/dashboard?tab=offers", icon: DocumentTextIcon },
+    {
+      name: "Cereri Disponibile",
+      href: "/company/dashboard?tab=requests",
+      icon: InboxIcon,
+    },
+    {
+      name: "Ofertele Mele",
+      href: "/company/dashboard?tab=offers",
+      icon: DocumentTextIcon,
+    },
     { name: "Credite", href: "/company/credits", icon: CreditCardIcon },
-    { name: "Profil Companie", href: "/company/profile", icon: BuildingOfficeIcon },
+    {
+      name: "Profil Companie",
+      href: "/company/profile",
+      icon: BuildingOfficeIcon,
+    },
     { name: "Setări", href: "/company/settings", icon: Cog6ToothIcon },
   ];
 
@@ -237,9 +285,13 @@ export default function CompanyDashboard() {
               <PaperAirplaneIcon className="h-4 w-4" />
               Ofertele mele
               {total > 0 && (
-                <span className={`ml-1 rounded-full px-2 py-0.5 text-xs ${
-                  activeTab === "offers" ? "bg-white/20" : "bg-blue-100 text-blue-700"
-                }`}>
+                <span
+                  className={`ml-1 rounded-full px-2 py-0.5 text-xs ${
+                    activeTab === "offers"
+                      ? "bg-white/20"
+                      : "bg-blue-100 text-blue-700"
+                  }`}
+                >
                   {total}
                 </span>
               )}
@@ -294,6 +346,33 @@ export default function CompanyDashboard() {
               </div>
             </div>
 
+            {/* Error message */}
+            {offerError && (
+              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-red-700">
+                <p className="font-medium">Eroare: {offerError}</p>
+                <p className="mt-1 text-sm">
+                  Verificați consola browserului pentru detalii.
+                </p>
+              </div>
+            )}
+
+            {/* Debug panel - TEMPORARY for debugging */}
+            <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-blue-700 text-xs font-mono">
+              <p>DEBUG: company.uid = {company?.uid || "null"}</p>
+              <p>DEBUG: expected companyId = 7oE49PvCcrXZOXwedOOM2DLtpjY2</p>
+              <p>
+                DEBUG: uid matches expected ={" "}
+                {company?.uid === "7oE49PvCcrXZOXwedOOM2DLtpjY2"
+                  ? "YES ✓"
+                  : "NO ✗"}
+              </p>
+              <p>DEBUG: offers.length = {offers.length}</p>
+              <p>DEBUG: filteredOffers.length = {filteredOffers.length}</p>
+              <p>DEBUG: loading = {loading.toString()}</p>
+              <p>DEBUG: offerError = {offerError || "null"}</p>
+              <p>DEBUG: statusFilter = {statusFilter}</p>
+            </div>
+
             {/* Offers list */}
             {loading ? (
               <LoadingContainer>
@@ -311,35 +390,60 @@ export default function CompanyDashboard() {
                   >
                     <div className="flex">
                       {/* Status bar */}
-                      <div className={`w-1 ${
-                        offer.status === "accepted" ? "bg-emerald-500" :
-                        offer.status === "rejected" || offer.status === "declined" ? "bg-red-500" :
-                        "bg-amber-500"
-                      }`} />
+                      <div
+                        className={`w-1 ${
+                          offer.status === "accepted"
+                            ? "bg-emerald-500"
+                            : offer.status === "rejected" ||
+                                offer.status === "declined"
+                              ? "bg-red-500"
+                              : "bg-amber-500"
+                        }`}
+                      />
 
                       <div className="flex-1 p-5">
                         {/* Header */}
                         <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                           <div className="flex items-center gap-2">
                             <span className="rounded-lg bg-gray-100 px-3 py-1 text-sm font-bold text-gray-700">
-                              {offer.requestCode || `REQ-${String(offer.requestId).slice(0, 6).toUpperCase()}`}
+                              {offer.requestCode ||
+                                `REQ-${String(offer.requestId).slice(0, 6).toUpperCase()}`}
                             </span>
-                            <span className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold ${
-                              offer.status === "accepted" ? "bg-emerald-100 text-emerald-700" :
-                              offer.status === "rejected" || offer.status === "declined" ? "bg-red-100 text-red-700" :
-                              "bg-amber-100 text-amber-700"
-                            }`}>
-                              {offer.status === "accepted" && <CheckCircleIcon className="h-3.5 w-3.5" />}
-                              {(offer.status === "rejected" || offer.status === "declined") && <XCircleIcon className="h-3.5 w-3.5" />}
-                              {(!offer.status || offer.status === "pending") && <ClockIcon className="h-3.5 w-3.5" />}
-                              {offer.status === "accepted" ? "Acceptată" :
-                               offer.status === "rejected" ? "Respinsă" :
-                               offer.status === "declined" ? "Declinată" : "În așteptare"}
+                            <span
+                              className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold ${
+                                offer.status === "accepted"
+                                  ? "bg-emerald-100 text-emerald-700"
+                                  : offer.status === "rejected" ||
+                                      offer.status === "declined"
+                                    ? "bg-red-100 text-red-700"
+                                    : "bg-amber-100 text-amber-700"
+                              }`}
+                            >
+                              {offer.status === "accepted" && (
+                                <CheckCircleIcon className="h-3.5 w-3.5" />
+                              )}
+                              {(offer.status === "rejected" ||
+                                offer.status === "declined") && (
+                                <XCircleIcon className="h-3.5 w-3.5" />
+                              )}
+                              {(!offer.status ||
+                                offer.status === "pending") && (
+                                <ClockIcon className="h-3.5 w-3.5" />
+                              )}
+                              {offer.status === "accepted"
+                                ? "Acceptată"
+                                : offer.status === "rejected"
+                                  ? "Respinsă"
+                                  : offer.status === "declined"
+                                    ? "Declinată"
+                                    : "În așteptare"}
                             </span>
                           </div>
                           <div className="flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5">
                             <ArrowTrendingUpIcon className="h-4 w-4 text-blue-600" />
-                            <span className="text-lg font-bold text-blue-700">{offer.price ?? "—"} lei</span>
+                            <span className="text-lg font-bold text-blue-700">
+                              {offer.price ?? "—"} lei
+                            </span>
                           </div>
                         </div>
 
@@ -355,7 +459,9 @@ export default function CompanyDashboard() {
                           <div className="space-y-3 rounded-lg border border-blue-200 bg-blue-50/50 p-4">
                             <div className="grid gap-3 sm:grid-cols-2">
                               <div>
-                                <label className="mb-1 block text-xs font-semibold text-gray-700">Preț (lei)</label>
+                                <label className="mb-1 block text-xs font-semibold text-gray-700">
+                                  Preț (lei)
+                                </label>
                                 <input
                                   type="number"
                                   value={editPrice}
@@ -364,10 +470,14 @@ export default function CompanyDashboard() {
                                 />
                               </div>
                               <div>
-                                <label className="mb-1 block text-xs font-semibold text-gray-700">Mesaj</label>
+                                <label className="mb-1 block text-xs font-semibold text-gray-700">
+                                  Mesaj
+                                </label>
                                 <textarea
                                   value={editMessage}
-                                  onChange={(e) => setEditMessage(e.target.value)}
+                                  onChange={(e) =>
+                                    setEditMessage(e.target.value)
+                                  }
                                   className="w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
                                   rows={2}
                                 />
@@ -377,7 +487,10 @@ export default function CompanyDashboard() {
                               <button
                                 onClick={async () => {
                                   setSavingId(offer.id);
-                                  await updateOffer(offer, { price: Number(editPrice), message: editMessage });
+                                  await updateOffer(offer, {
+                                    price: Number(editPrice),
+                                    message: editMessage,
+                                  });
                                   setSavingId(null);
                                   setEditingId(null);
                                 }}
@@ -385,7 +498,9 @@ export default function CompanyDashboard() {
                                 className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
                               >
                                 <CheckIcon className="h-4 w-4" />
-                                {savingId === offer.id ? "Se salvează..." : "Salvează"}
+                                {savingId === offer.id
+                                  ? "Se salvează..."
+                                  : "Salvează"}
                               </button>
                               <button
                                 onClick={() => setEditingId(null)}
@@ -431,16 +546,18 @@ export default function CompanyDashboard() {
                 ))}
               </div>
             ) : (
-              <EmptyState
-                icon={PaperAirplaneIcon}
-                title="Nu ai oferte încă"
-                description="Trimite oferte la cererile clienților"
-                action={{
-                  label: "Vezi cererile",
-                  onClick: () => handleTabChange("requests"),
-                }}
-                variant="dashed"
-              />
+              <div>
+                <EmptyState
+                  icon={PaperAirplaneIcon}
+                  title="Nu ai oferte încă"
+                  description={`Trimite oferte la cererile clienților. (UID: ${company?.uid?.slice(0, 8) || "?"}, Loaded: ${offers.length}, Filtered: ${filteredOffers.length})`}
+                  action={{
+                    label: "Vezi cererile",
+                    onClick: () => handleTabChange("requests"),
+                  }}
+                  variant="dashed"
+                />
+              </div>
             )}
           </motion.div>
         )}
@@ -464,4 +581,3 @@ export default function CompanyDashboard() {
     </RequireRole>
   );
 }
-
