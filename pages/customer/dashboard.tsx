@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -14,14 +14,13 @@ import {
   TruckIcon,
   XMarkIcon,
   ChevronRightIcon,
-  DocumentTextIcon,
   GiftIcon,
   PhoneIcon,
   EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { MovingRequest, Offer } from "@/types";
-import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
+import { formatDateRO } from "@/utils/date";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/services/firebase";
@@ -77,55 +76,6 @@ export default function CustomerDashboard() {
       (o) => o?.status === "accepted",
     );
   };
-
-  // Stats for header - with icons and colors
-  const stats = useMemo(() => {
-    const totalOffers = Object.values(offersByRequest)
-      .flat()
-      .filter((o) => o && o.id).length;
-    const pendingOffers = Object.values(offersByRequest)
-      .flat()
-      .filter((o) => o?.status === "pending").length;
-    const acceptedOffers = Object.values(offersByRequest)
-      .flat()
-      .filter((o) => o?.status === "accepted").length;
-
-    return [
-      {
-        label: "Cereri Active",
-        value: requests.length,
-        icon: DocumentTextIcon,
-        color: "blue",
-        bgColor: "bg-blue-50",
-        iconColor: "text-blue-600",
-      },
-      {
-        label: "Oferte Primite",
-        value: totalOffers,
-        icon: GiftIcon,
-        color: "purple",
-        bgColor: "bg-purple-50",
-        iconColor: "text-purple-600",
-      },
-      {
-        label: "În Așteptare",
-        value: pendingOffers,
-        icon: ClockIcon,
-        color: "amber",
-        bgColor: "bg-amber-50",
-        iconColor: "text-amber-600",
-      },
-      {
-        label: "Acceptate",
-        value: acceptedOffers,
-        changeType: "positive" as const,
-        icon: CheckCircleIcon,
-        color: "emerald",
-        bgColor: "bg-emerald-50",
-        iconColor: "text-emerald-600",
-      },
-    ];
-  }, [requests, offersByRequest]);
 
   // Auth & data loading
   useEffect(() => {
@@ -354,36 +304,6 @@ export default function CustomerDashboard() {
         navigation={navigation}
         showStats={false}
       >
-        {/* Custom Stats Cards */}
-        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
-            return (
-              <div
-                key={stat.label}
-                className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-gray-200"
-              >
-                <div className="flex items-start justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-gray-500">
-                      {stat.label}
-                    </p>
-                    <p className="mt-2 text-3xl font-bold text-gray-900">
-                      {stat.value}
-                    </p>
-                  </div>
-                  <div className={`rounded-xl ${stat.bgColor} p-3`}>
-                    <Icon className={`h-6 w-6 ${stat.iconColor}`} />
-                  </div>
-                </div>
-                <div
-                  className={`absolute -bottom-6 -right-6 h-24 w-24 rounded-full ${stat.bgColor} opacity-50 transition-transform group-hover:scale-110`}
-                />
-              </div>
-            );
-          })}
-        </div>
-
         {requests.length === 0 ? (
           // Empty state
           <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
@@ -411,7 +331,7 @@ export default function CustomerDashboard() {
             {/* Requests sidebar */}
             <aside className="lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                <div className="border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white px-5 py-4">
+                <div className="border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white px-4 py-3 sm:px-5 sm:py-4">
                   <h3 className="text-sm font-bold text-gray-900">
                     Cererile tale
                   </h3>
@@ -420,7 +340,7 @@ export default function CustomerDashboard() {
                     {requests.length === 1 ? "cerere" : "cereri"}
                   </p>
                 </div>
-                <nav className="max-h-[calc(100vh-320px)] overflow-y-auto p-3">
+                <nav className="max-h-[60vh] lg:max-h-[calc(100vh-320px)] overflow-y-auto p-2 sm:p-3">
                   <ul className="space-y-2">
                     {requests.map((req) => {
                       const offers = offersByRequest[req.id] || [];
@@ -436,15 +356,15 @@ export default function CustomerDashboard() {
                         <li key={req.id}>
                           <button
                             onClick={() => setSelectedRequestId(req.id)}
-                            className={`group relative w-full rounded-xl p-4 text-left transition-all ${
+                            className={`group relative w-full rounded-xl p-3 sm:p-4 text-left transition-all active:scale-[0.98] ${
                               isSelected
                                 ? "bg-gradient-to-r from-emerald-50 to-teal-50 shadow-sm ring-1 ring-emerald-200"
-                                : "hover:bg-gray-50"
+                                : "hover:bg-gray-50 active:bg-gray-100"
                             }`}
                           >
                             {/* Status indicator line */}
                             <div
-                              className={`absolute left-0 top-3 bottom-3 w-1 rounded-full transition-all ${
+                              className={`absolute left-0 top-2 bottom-2 sm:top-3 sm:bottom-3 w-1 rounded-full transition-all ${
                                 isSelected
                                   ? "bg-emerald-500"
                                   : hasAccepted
@@ -455,29 +375,29 @@ export default function CustomerDashboard() {
                               }`}
                             />
 
-                            <div className="ml-3">
+                            <div className="ml-2 sm:ml-3">
                               <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0 flex-1">
                                   <p
-                                    className={`truncate font-semibold ${isSelected ? "text-emerald-900" : "text-gray-900"}`}
+                                    className={`truncate text-sm sm:text-base font-semibold ${isSelected ? "text-emerald-900" : "text-gray-900"}`}
                                   >
                                     {req.fromCity} → {req.toCity}
                                   </p>
-                                  <div className="mt-1.5 flex items-center gap-2 text-xs text-gray-500">
-                                    <CalendarIcon className="h-3.5 w-3.5" />
+                                  <div className="mt-1 sm:mt-1.5 flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-gray-500">
+                                    <CalendarIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                                     <span>
-                                      {formatMoveDateDisplay(req as any, {
+                                      {formatDateRO(req.createdAt, {
                                         month: "short",
-                                      }) || "Flexibil"}
+                                      }) || "-"}
                                     </span>
                                   </div>
                                 </div>
                               </div>
 
-                              <div className="mt-3 flex items-center justify-between">
+                              <div className="mt-2 sm:mt-3 flex items-center justify-between gap-2">
                                 {offers.length > 0 ? (
                                   <span
-                                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold ${
                                       hasAccepted
                                         ? "bg-emerald-100 text-emerald-700"
                                         : hasNewOffers
@@ -492,12 +412,12 @@ export default function CustomerDashboard() {
                                     {offers.length === 1 ? "ofertă" : "oferte"}
                                   </span>
                                 ) : (
-                                  <span className="text-xs text-gray-400">
+                                  <span className="text-[10px] sm:text-xs text-gray-400">
                                     Fără oferte
                                   </span>
                                 )}
                                 <span
-                                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                                  className={`shrink-0 rounded-full px-1.5 py-0.5 sm:px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
                                     req.status === "closed" ||
                                     req.status === "accepted"
                                       ? "bg-emerald-100 text-emerald-700"
@@ -526,28 +446,39 @@ export default function CustomerDashboard() {
                   {/* Request summary card */}
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                     {/* Header with gradient */}
-                    <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-5">
+                    <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 sm:px-6 sm:py-5">
                       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')] opacity-50" />
-                      <div className="relative flex flex-wrap items-center justify-between gap-4">
-                        <div className="flex items-center gap-4">
-                          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
-                            <TruckIcon className="h-7 w-7 text-white" />
+                      <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
+                        <div className="flex items-center gap-3 sm:gap-4">
+                          <div className="flex h-10 w-10 sm:h-14 sm:w-14 items-center justify-center rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-sm">
+                            <TruckIcon className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
                           </div>
-                          <div>
-                            <h2 className="text-xl font-bold text-white">
+                          <div className="min-w-0 flex-1">
+                            <h2 className="text-base sm:text-xl font-bold text-white truncate">
                               {selectedRequest.fromCity} →{" "}
                               {selectedRequest.toCity}
                             </h2>
-                            <p className="mt-0.5 text-sm text-white/80">
+                            <p className="mt-0.5 text-xs sm:text-sm text-white/80">
                               {selectedRequest.requestCode ||
                                 `#${selectedRequest.id.slice(0, 8)}`}
                             </p>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3">
+                        <div className="flex items-center gap-2 sm:gap-3">
+                          <button
+                            onClick={() => setShowDetails(!showDetails)}
+                            className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/30 active:bg-white/40"
+                          >
+                            {showDetails
+                              ? "Ascunde"
+                              : "Detalii"}
+                            <ChevronRightIcon
+                              className={`h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform ${showDetails ? "rotate-90" : ""}`}
+                            />
+                          </button>
                           <span
-                            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold backdrop-blur-sm ${
+                            className={`inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-2.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold backdrop-blur-sm ${
                               hasAcceptedOffer(selectedRequest.id)
                                 ? "bg-white text-emerald-700"
                                 : selectedRequest.status === "active"
@@ -556,30 +487,39 @@ export default function CustomerDashboard() {
                             }`}
                           >
                             {hasAcceptedOffer(selectedRequest.id) && (
-                              <CheckCircleSolid className="h-4 w-4" />
+                              <CheckCircleSolid className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                             )}
                             {selectedRequest.status === "active" &&
                               !hasAcceptedOffer(selectedRequest.id) && (
-                                <ClockIcon className="h-4 w-4" />
+                                <ClockIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                               )}
-                            {hasAcceptedOffer(selectedRequest.id)
-                              ? "Ofertă Acceptată"
-                              : selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id)
-                                ? "În Așteptare"
-                                : getStatusLabel(selectedRequest.status)}
+                            <span className="hidden sm:inline">
+                              {hasAcceptedOffer(selectedRequest.id)
+                                ? "Ofertă Acceptată"
+                                : selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id)
+                                  ? "În Așteptare"
+                                  : getStatusLabel(selectedRequest.status)}
+                            </span>
+                            <span className="sm:hidden">
+                              {hasAcceptedOffer(selectedRequest.id)
+                                ? "Acceptată"
+                                : selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id)
+                                  ? "Așteptare"
+                                  : getStatusLabel(selectedRequest.status)}
+                            </span>
                           </span>
                         </div>
                       </div>
                     </div>
 
                     {/* Content */}
-                    <div className="p-6">
+                    <div className="p-4 sm:p-6">
                       {/* Actions */}
-                      <div className="flex flex-wrap items-center gap-3">
-                        {selectedRequest.status === "closed" && (
+                      {selectedRequest.status === "closed" && (
+                        <div className="mb-4 sm:mb-5 flex flex-wrap items-center gap-2 sm:gap-3">
                           <button
                             onClick={() => handleReactivate(selectedRequest.id)}
-                            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                            className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 active:bg-emerald-800"
                           >
                             <svg
                               className="h-4 w-4"
@@ -596,19 +536,8 @@ export default function CustomerDashboard() {
                             </svg>
                             Reactivează cererea
                           </button>
-                        )}
-                        <button
-                          onClick={() => setShowDetails(!showDetails)}
-                          className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
-                        >
-                          {showDetails
-                            ? "Ascunde detalii"
-                            : "Vezi toate detaliile"}
-                          <ChevronRightIcon
-                            className={`h-4 w-4 transition-transform ${showDetails ? "rotate-90" : ""}`}
-                          />
-                        </button>
-                      </div>
+                        </div>
+                      )}
 
                       {/* Expandable details */}
                       <AnimatePresence>
@@ -617,9 +546,9 @@ export default function CustomerDashboard() {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="mt-5 overflow-hidden"
+                            className="overflow-hidden"
                           >
-                            <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
+                            <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 sm:p-4">
                               <RequestFullDetails
                                 request={selectedRequest}
                                 isOwner={true}
@@ -633,16 +562,16 @@ export default function CustomerDashboard() {
 
                   {/* Offers section */}
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    <div className="flex items-center justify-between border-b border-gray-100 px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-100">
-                          <GiftIcon className="h-5 w-5 text-purple-600" />
+                    <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 sm:px-6 sm:py-4">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-purple-100">
+                          <GiftIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-gray-900">
+                          <h3 className="text-sm sm:text-base font-bold text-gray-900">
                             Oferte primite
                           </h3>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-xs sm:text-sm text-gray-500">
                             {selectedOffers.length === 0
                               ? "Încă nu ai primit oferte"
                               : `${selectedOffers.length} ${selectedOffers.length === 1 ? "ofertă" : "oferte"} de la firme verificate`}
@@ -650,21 +579,21 @@ export default function CustomerDashboard() {
                         </div>
                       </div>
                       {selectedOffers.length > 0 && (
-                        <span className="rounded-full bg-purple-100 px-3 py-1 text-sm font-bold text-purple-700">
+                        <span className="rounded-full bg-purple-100 px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs sm:text-sm font-bold text-purple-700">
                           {selectedOffers.length}
                         </span>
                       )}
                     </div>
 
                     {selectedOffers.length === 0 ? (
-                      <div className="p-10 text-center">
-                        <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
-                          <ClockIcon className="h-8 w-8 text-gray-400" />
+                      <div className="p-6 sm:p-10 text-center">
+                        <div className="mx-auto flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl bg-gray-100">
+                          <ClockIcon className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
                         </div>
-                        <p className="mt-4 font-semibold text-gray-900">
+                        <p className="mt-3 sm:mt-4 text-sm sm:text-base font-semibold text-gray-900">
                           Încă nu ai oferte
                         </p>
-                        <p className="mt-1 text-sm text-gray-500">
+                        <p className="mt-1 text-xs sm:text-sm text-gray-500">
                           Firmele verificate îți vor trimite oferte în curând.
                         </p>
                       </div>
@@ -706,17 +635,17 @@ export default function CustomerDashboard() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+              className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 p-0 sm:p-4"
             >
               <motion.div
-                initial={{ scale: 0.95, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.95, opacity: 0 }}
-                className="relative h-[600px] w-full max-w-lg overflow-hidden rounded-2xl bg-white shadow-2xl"
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                className="relative h-[85vh] sm:h-[600px] w-full sm:max-w-lg overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl"
               >
                 <button
                   onClick={() => setChatOffer(null)}
-                  className="absolute right-4 top-4 z-10 rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200"
+                  className="absolute right-3 top-3 sm:right-4 sm:top-4 z-10 rounded-full bg-gray-100 p-2 text-gray-600 hover:bg-gray-200 active:bg-gray-300"
                 >
                   <XMarkIcon className="h-5 w-5" />
                 </button>
@@ -739,22 +668,19 @@ export default function CustomerDashboard() {
 // Offer card component
 const CONTACT_STYLES = {
   pending: {
-    chat: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700",
-    chatLabel: "Chat",
-    phone: "inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50",
-    email: "inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:border-blue-300 hover:bg-blue-50",
+    chat: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
+    phone: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-emerald-200 bg-white p-2 sm:p-2.5 text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100",
+    email: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-blue-200 bg-white p-2 sm:p-2.5 text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 active:bg-blue-100",
   },
   accepted: {
-    chat: "inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700",
-    chatLabel: "Contactează firma",
-    phone: "inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100",
-    email: "inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100",
+    chat: "inline-flex items-center justify-center rounded-lg sm:rounded-xl bg-emerald-600 p-2 sm:p-2.5 text-white shadow-sm transition hover:bg-emerald-700 active:bg-emerald-800",
+    phone: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-emerald-200 bg-emerald-50 p-2 sm:p-2.5 text-emerald-700 transition hover:bg-emerald-100 active:bg-emerald-200",
+    email: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-blue-200 bg-blue-50 p-2 sm:p-2.5 text-blue-700 transition hover:bg-blue-100 active:bg-blue-200",
   },
   declined: {
-    chat: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700",
-    chatLabel: "Chat",
-    phone: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700",
-    email: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700",
+    chat: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
+    phone: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 active:bg-emerald-100",
+    email: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
   },
 } as const;
 
@@ -762,20 +688,17 @@ function ContactButtons({ offer, onChat, variant }: { offer: Offer; onChat: () =
   const styles = CONTACT_STYLES[variant];
   return (
     <>
-      <button onClick={onChat} className={styles.chat}>
-        <MessageSquare className="h-4 w-4" />
-        {styles.chatLabel}
+      <button onClick={onChat} className={styles.chat} title="Chat">
+        <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
       </button>
       {offer.companyPhone && (
         <a href={`tel:${offer.companyPhone}`} className={styles.phone} title={offer.companyPhone}>
-          <PhoneIcon className="h-4 w-4" />
-          Sună
+          <PhoneIcon className="h-4 w-4 sm:h-5 sm:w-5" />
         </a>
       )}
       {offer.companyEmail && (
         <a href={`mailto:${offer.companyEmail}`} className={styles.email} title={offer.companyEmail}>
-          <EnvelopeIcon className="h-4 w-4" />
-          Email
+          <EnvelopeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
         </a>
       )}
     </>
@@ -806,7 +729,7 @@ function OfferCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className={`relative p-6 transition-colors ${
+      className={`relative p-4 sm:p-6 transition-colors ${
         isDeclined
           ? "bg-gray-50/50"
           : isAccepted
@@ -819,13 +742,13 @@ function OfferCard({
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
       )}
 
-      <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+      <div className="flex flex-col gap-4 sm:gap-5 sm:flex-row sm:items-start sm:justify-between">
         {/* Company info */}
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-3 sm:gap-4">
           {/* Logo column with contact info */}
           <div className="flex flex-col items-center gap-2">
             <div
-              className={`relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl shadow-lg ${
+              className={`relative flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl sm:rounded-2xl shadow-lg ${
                 isAccepted
                   ? "shadow-emerald-500/30 ring-2 ring-emerald-500"
                   : isDeclined
@@ -853,38 +776,38 @@ function OfferCard({
               )}
               {isAccepted && (
                 <div className="absolute -bottom-1 -right-1 rounded-full bg-white p-0.5">
-                  <CheckCircleSolid className="h-5 w-5 text-emerald-500" />
+                  <CheckCircleSolid className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500" />
                 </div>
               )}
             </div>
           </div>
           <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
               <p
-                className={`text-lg font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}
+                className={`text-base sm:text-lg font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}
               >
                 {offer.companyName}
               </p>
               {isAccepted && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2.5 py-0.5 text-xs font-semibold text-emerald-700">
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-emerald-700">
                   Acceptată
                 </span>
               )}
               {isDeclined && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-semibold text-gray-500">
+                <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-gray-500">
                   Refuzată
                 </span>
               )}
             </div>
-            <p className="mt-0.5 text-sm text-gray-500">
+            <p className="mt-0.5 text-xs sm:text-sm text-gray-500">
               {offer.createdAt?.toDate?.()
                 ? `Primită pe ${formatDateRO(offer.createdAt, { month: "short" })}`
                 : "Ofertă nouă"}
             </p>
             {offer.message && (
-              <div className="mt-3 rounded-xl bg-gray-100/80 p-4">
+              <div className="mt-2 sm:mt-3 rounded-lg sm:rounded-xl bg-gray-100/80 p-3 sm:p-4">
                 <p
-                  className={`text-sm leading-relaxed ${isDeclined ? "text-gray-500" : "text-gray-700"}`}
+                  className={`text-xs sm:text-sm leading-relaxed ${isDeclined ? "text-gray-500" : "text-gray-700"}`}
                 >
                   &ldquo;{offer.message}&rdquo;
                 </p>
@@ -894,13 +817,13 @@ function OfferCard({
         </div>
 
         {/* Price and actions */}
-        <div className="flex flex-col items-end gap-4 sm:min-w-[180px]">
-          <div className="text-right">
-            <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+        <div className="flex flex-col items-start sm:items-end gap-3 sm:gap-4 sm:min-w-[180px]">
+          <div className="sm:text-right">
+            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wider text-gray-400">
               Preț ofertat
             </p>
             <p
-              className={`mt-1 text-4xl font-bold ${
+              className={`mt-0.5 sm:mt-1 text-3xl sm:text-4xl font-bold ${
                 isAccepted
                   ? "text-emerald-600"
                   : isDeclined
@@ -909,24 +832,24 @@ function OfferCard({
               }`}
             >
               {offer.price}
-              <span className="ml-1 text-lg font-medium text-gray-400">
+              <span className="ml-1 text-base sm:text-lg font-medium text-gray-400">
                 lei
               </span>
             </p>
           </div>
 
           {isPending && (
-            <div className="flex flex-wrap justify-end gap-2">
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
               <button
                 onClick={() => onAccept(requestId, offer.id)}
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm shadow-emerald-500/20 transition hover:bg-emerald-700 hover:shadow-emerald-500/30"
+                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl bg-emerald-600 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-500/20 transition hover:bg-emerald-700 active:bg-emerald-800"
               >
                 <CheckCircleIcon className="h-4 w-4" />
                 Acceptă
               </button>
               <button
                 onClick={() => onDecline(requestId, offer.id)}
-                className="inline-flex items-center rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50 hover:border-gray-300"
+                className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-medium text-gray-600 transition hover:bg-gray-50 active:bg-gray-100"
               >
                 Refuză
               </button>
@@ -935,13 +858,13 @@ function OfferCard({
           )}
 
           {isAccepted && (
-            <div className="flex flex-wrap justify-end gap-2">
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
               <ContactButtons offer={offer} onChat={onChat} variant="accepted" />
             </div>
           )}
 
           {isDeclined && (
-            <div className="flex flex-wrap justify-end gap-2">
+            <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
               <ContactButtons offer={offer} onChat={onChat} variant="declined" />
             </div>
           )}

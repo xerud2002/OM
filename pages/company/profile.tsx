@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Image from "next/image";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import RequireRole from "@/components/auth/RequireRole";
 import { onAuthChange } from "@/utils/firebaseHelpers";
-import { db, auth } from "@/services/firebase";
+import { db, auth, storage } from "@/services/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import { motion } from "framer-motion";
 import StarRating from "@/components/reviews/StarRating";
 import { sendEmail } from "@/utils/emailHelpers";
@@ -12,7 +14,7 @@ import { logger } from "@/utils/logger";
 import VerificationSection from "@/components/company/VerificationSection";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
-import { XMarkIcon, EnvelopeIcon, UserIcon, StarIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, EnvelopeIcon, UserIcon, StarIcon, CameraIcon } from "@heroicons/react/24/outline";
 
 export default function CompanyProfile() {
   const [company, setCompany] = useState<any>(null);
@@ -32,6 +34,64 @@ export default function CompanyProfile() {
   const [city, setCity] = useState("");
   const [county, setCounty] = useState("");
   const [description, setDescription] = useState("");
+  
+  // Logo upload
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const logoInputRef = useRef<HTMLInputElement>(null);
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !company?.uid) return;
+
+    // Validate file type
+    if (!file.type.startsWith("image/")) {
+      toast.error("Te rugăm să încarci o imagine (JPG, PNG, etc.)");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Imaginea trebuie să fie mai mică de 5MB");
+      return;
+    }
+
+    setUploadingLogo(true);
+    try {
+      // Create storage reference
+      const ext = file.name.split(".").pop() || "jpg";
+      const storageRef = ref(storage, `companies/${company.uid}/logo.${ext}`);
+      
+      // Upload file
+      await uploadBytes(storageRef, file);
+      
+      // Get download URL
+      const downloadURL = await getDownloadURL(storageRef);
+      
+      // Update Firestore document
+      const docRef = doc(db, "companies", company.uid);
+      await updateDoc(docRef, {
+        logoUrl: downloadURL,
+        updatedAt: new Date(),
+      });
+      
+      // Reload profile
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        setProfile(docSnap.data());
+      }
+      
+      toast.success("Logo actualizat cu succes!");
+    } catch (err) {
+      logger.error("Error uploading logo:", err);
+      toast.error("Eroare la încărcarea logo-ului. Încearcă din nou.");
+    } finally {
+      setUploadingLogo(false);
+      // Reset input
+      if (logoInputRef.current) {
+        logoInputRef.current.value = "";
+      }
+    }
+  };
 
   // Track logged-in company
   useEffect(() => {
@@ -134,8 +194,45 @@ export default function CompanyProfile() {
             <div className="relative bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 p-4 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-center gap-3 sm:gap-4">
-                  <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/20 text-xl font-bold text-white backdrop-blur-sm sm:h-16 sm:w-16 sm:text-2xl">
-                    {(profile?.companyName || company?.displayName || "C").charAt(0).toUpperCase()}
+                  {/* Logo/Avatar with upload button */}
+                  <div className="relative group">
+                    <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/20 text-xl font-bold text-white backdrop-blur-sm sm:h-20 sm:w-20 sm:text-2xl">
+                      {profile?.logoUrl ? (
+                        <Image
+                          src={profile.logoUrl}
+                          alt="Logo companie"
+                          width={80}
+                          height={80}
+                          className="h-full w-full object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        (profile?.companyName || company?.displayName || "C").charAt(0).toUpperCase()
+                      )}
+                    </div>
+                    {/* Upload button overlay */}
+                    <button
+                      onClick={() => logoInputRef.current?.click()}
+                      disabled={uploadingLogo}
+                      className="absolute inset-0 flex items-center justify-center rounded-xl bg-black/50 opacity-0 transition-opacity group-hover:opacity-100 disabled:cursor-not-allowed"
+                      title="Schimbă logo"
+                    >
+                      {uploadingLogo ? (
+                        <svg className="h-5 w-5 animate-spin text-white" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                      ) : (
+                        <CameraIcon className="h-6 w-6 text-white" />
+                      )}
+                    </button>
+                    <input
+                      ref={logoInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleLogoUpload}
+                      className="hidden"
+                    />
                   </div>
                   <div className="min-w-0 flex-1">
                     <h2 className="truncate text-lg font-bold text-white sm:text-xl">
@@ -143,6 +240,9 @@ export default function CompanyProfile() {
                     </h2>
                     <p className="truncate text-sm text-emerald-100 sm:text-base">
                       {profile?.email || company?.email}
+                    </p>
+                    <p className="mt-1 text-xs text-white/60 sm:hidden">
+                      Atingeți logo-ul pentru a-l schimba
                     </p>
                   </div>
                 </div>

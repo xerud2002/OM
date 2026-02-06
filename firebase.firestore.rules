@@ -205,6 +205,27 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // === REVIEWS COLLECTION ===
+    match /reviews/{reviewId} {
+      // Public read access to all published reviews
+      allow read: if resource.data.status == 'published';
+      
+      // Anyone can create a review (guests submit by providing name)
+      allow create: if request.resource.data.keys().hasAll(['companyId', 'customerName', 'rating', 'comment', 'createdAt', 'status']) &&
+        request.resource.data.companyId is string &&
+        request.resource.data.customerName is string &&
+        request.resource.data.rating >= 1 &&
+        request.resource.data.rating <= 5 &&
+        request.resource.data.comment is string &&
+        request.resource.data.status == 'published';
+      
+      // Admin can update reviews (for moderation)
+      allow update: if isSignedIn() && isAdmin();
+      
+      // No deletion
+      allow delete: if false;
+    }
+
     // Deny everything else by default
     match /{document=**} {
       allow read, write: if false;

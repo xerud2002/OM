@@ -196,23 +196,28 @@ export default function NewReviewPage() {
 
       await addDoc(collection(db, "reviews"), reviewData);
 
-      // Update company's average rating
-      const companyRef = doc(db, "companies", companyId as string);
-      const companySnap = await getDoc(companyRef);
-      
-      if (companySnap.exists()) {
-        const data = companySnap.data();
-        const currentTotal = data.totalReviews || 0;
-        const currentAvg = data.averageRating || 0;
+      // Update company's average rating (non-blocking - may fail due to permissions)
+      try {
+        const companyRef = doc(db, "companies", companyId as string);
+        const companySnap = await getDoc(companyRef);
         
-        // Calculate new average
-        const newTotal = currentTotal + 1;
-        const newAvg = ((currentAvg * currentTotal) + overallRating) / newTotal;
-        
-        await updateDoc(companyRef, {
-          totalReviews: increment(1),
-          averageRating: Math.round(newAvg * 10) / 10, // Round to 1 decimal
-        });
+        if (companySnap.exists()) {
+          const data = companySnap.data();
+          const currentTotal = data.totalReviews || 0;
+          const currentAvg = data.averageRating || 0;
+          
+          // Calculate new average
+          const newTotal = currentTotal + 1;
+          const newAvg = ((currentAvg * currentTotal) + overallRating) / newTotal;
+          
+          await updateDoc(companyRef, {
+            totalReviews: increment(1),
+            averageRating: Math.round(newAvg * 10) / 10, // Round to 1 decimal
+          });
+        }
+      } catch (statsErr) {
+        // Company stats update failed (permission issue) - review is still saved
+        console.warn("Could not update company stats:", statsErr);
       }
 
       setSubmitted(true);
