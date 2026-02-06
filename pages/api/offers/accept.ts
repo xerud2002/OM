@@ -25,7 +25,10 @@ type OfferDoc = {
   message?: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json(apiError("Method Not Allowed"));
@@ -33,7 +36,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { requestId, offerId } = req.body || {};
   if (!requestId || !offerId) {
-    return res.status(400).json(apiError("Missing required fields: requestId, offerId"));
+    return res
+      .status(400)
+      .json(apiError("Missing required fields: requestId, offerId"));
   }
 
   const authResult = await verifyAuth(req);
@@ -51,11 +56,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
     const requestData = requestSnap.data() as RequestDoc;
     if (!requestData || requestData.customerId !== uid) {
-      return res.status(403).json(apiError("Not authorized to modify this request"));
+      return res
+        .status(403)
+        .json(apiError("Not authorized to modify this request"));
     }
 
     // Get accepted offer details
-    const acceptedOfferRef = adminDb.doc(`requests/${requestId}/offers/${offerId}`);
+    const acceptedOfferRef = adminDb.doc(
+      `requests/${requestId}/offers/${offerId}`,
+    );
     const acceptedOfferSnap = await acceptedOfferRef.get();
     if (!acceptedOfferSnap.exists) {
       return res.status(404).json({ error: "Offer not found" });
@@ -71,20 +80,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       logger.warn("Could not fetch company email:", err);
     }
 
-    // Accept selected offer and decline the rest in a batch
-    const offersCol = adminDb.collection(`requests/${requestId}/offers`);
-    const snap = await offersCol.get();
-    const batch = adminDb.batch();
-    snap.forEach((doc) => {
-      const ref = offersCol.doc(doc.id);
-      if (doc.id === offerId) {
-        batch.set(ref, { status: "accepted" }, { merge: true });
-      } else {
-        batch.set(ref, { status: "declined" }, { merge: true });
-      }
-    });
-    batch.set(requestRef, { status: "accepted" }, { merge: true });
-    await batch.commit();
+    // Accept only the selected offer (each offer is treated individually)
+    await acceptedOfferRef.set({ status: "accepted" }, { merge: true });
 
     // TODO: Send emails to declined companies when accept/decline feature is enabled
     // setImmediate(async () => { ... });
@@ -94,11 +91,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const customerName = requestData.customerName || "Clientul";
       const companyName = acceptedOfferData.companyName || "Compania";
       const price = acceptedOfferData.price || 0;
-      const requestCode = requestData.requestCode || requestId.substring(0, 8).toUpperCase();
+      const requestCode =
+        requestData.requestCode || requestId.substring(0, 8).toUpperCase();
       const fromCity = requestData.fromCity || "—";
       const toCity = requestData.toCity || "—";
       const rooms = requestData.rooms || "—";
-      const details = requestData.details || "Nu au fost furnizate detalii suplimentare.";
+      const details =
+        requestData.details || "Nu au fost furnizate detalii suplimentare.";
 
       const emailSubject = `🎉 Felicitări! Oferta ta a fost acceptată - ${requestCode}`;
       const emailHtml = `
@@ -231,7 +230,8 @@ contact@ofertemutare.ro
       // Send email via Resend API
       try {
         const RESEND_API_KEY = process.env.RESEND_API_KEY;
-        const fromAddress = process.env.NOTIFY_FROM_EMAIL || "info@ofertemutare.ro";
+        const fromAddress =
+          process.env.NOTIFY_FROM_EMAIL || "info@ofertemutare.ro";
 
         if (RESEND_API_KEY) {
           await fetch("https://api.resend.com/emails", {
@@ -249,7 +249,9 @@ contact@ofertemutare.ro
             }),
           });
         } else {
-          logger.warn("[offers/accept] RESEND_API_KEY missing – email not sent");
+          logger.warn(
+            "[offers/accept] RESEND_API_KEY missing – email not sent",
+          );
         }
       } catch (emailErr) {
         logger.error("[offers/accept] Email error:", emailErr);

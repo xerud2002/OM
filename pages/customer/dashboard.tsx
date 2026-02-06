@@ -249,22 +249,11 @@ export default function CustomerDashboard() {
       });
 
       if (!resp.ok && resp.status === 503) {
-        // Fallback for dev
-        const { writeBatch, doc } = await import("firebase/firestore");
-        const batch = writeBatch(db);
-        batch.update(doc(db, "requests", requestId, "offers", offerId), {
+        // Fallback for dev - only update the individual offer
+        const { doc, updateDoc } = await import("firebase/firestore");
+        await updateDoc(doc(db, "requests", requestId, "offers", offerId), {
           status: "accepted",
         });
-        const others = (offersByRequest[requestId] || []).filter(
-          (o) => o.id !== offerId,
-        );
-        for (const o of others) {
-          batch.update(doc(db, "requests", requestId, "offers", o.id), {
-            status: "declined",
-          });
-        }
-        batch.update(doc(db, "requests", requestId), { status: "closed" });
-        await batch.commit();
       } else if (!resp.ok) {
         throw new Error("Failed");
       }

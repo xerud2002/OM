@@ -356,23 +356,6 @@ export default function CompanyDashboard() {
               </div>
             )}
 
-            {/* Debug panel - TEMPORARY for debugging */}
-            <div className="mb-4 rounded-xl border border-blue-200 bg-blue-50 p-4 text-blue-700 text-xs font-mono">
-              <p>DEBUG: company.uid = {company?.uid || "null"}</p>
-              <p>DEBUG: expected companyId = 7oE49PvCcrXZOXwedOOM2DLtpjY2</p>
-              <p>
-                DEBUG: uid matches expected ={" "}
-                {company?.uid === "7oE49PvCcrXZOXwedOOM2DLtpjY2"
-                  ? "YES ✓"
-                  : "NO ✗"}
-              </p>
-              <p>DEBUG: offers.length = {offers.length}</p>
-              <p>DEBUG: filteredOffers.length = {filteredOffers.length}</p>
-              <p>DEBUG: loading = {loading.toString()}</p>
-              <p>DEBUG: offerError = {offerError || "null"}</p>
-              <p>DEBUG: statusFilter = {statusFilter}</p>
-            </div>
-
             {/* Offers list */}
             {loading ? (
               <LoadingContainer>
@@ -550,7 +533,7 @@ export default function CompanyDashboard() {
                 <EmptyState
                   icon={PaperAirplaneIcon}
                   title="Nu ai oferte încă"
-                  description={`Trimite oferte la cererile clienților. (UID: ${company?.uid?.slice(0, 8) || "?"}, Loaded: ${offers.length}, Filtered: ${filteredOffers.length})`}
+                  description="Trimite oferte la cererile clienților din secțiunea Cereri."
                   action={{
                     label: "Vezi cererile",
                     onClick: () => handleTabChange("requests"),
