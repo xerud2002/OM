@@ -58,7 +58,7 @@ export default function CustomerDashboard() {
     null,
   );
   const [chatOffer, setChatOffer] = useState<any>(null);
-  const [showDetails, setShowDetails] = useState(false);
+  const [showDetails, setShowDetails] = useState(true);
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
@@ -578,53 +578,8 @@ export default function CustomerDashboard() {
 
                     {/* Content */}
                     <div className="p-6">
-                      {/* Quick info */}
-                      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-                        <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                            De la
-                          </p>
-                          <p className="mt-1.5 font-bold text-gray-900">
-                            {selectedRequest.fromCity}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {selectedRequest.fromCounty}
-                          </p>
-                        </div>
-                        <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                            La
-                          </p>
-                          <p className="mt-1.5 font-bold text-gray-900">
-                            {selectedRequest.toCity}
-                          </p>
-                          <p className="text-sm text-gray-500">
-                            {selectedRequest.toCounty}
-                          </p>
-                        </div>
-                        <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                            Data
-                          </p>
-                          <p className="mt-1.5 font-bold text-gray-900">
-                            {formatMoveDateDisplay(selectedRequest as any, {
-                              month: "short",
-                            }) || "Flexibil"}
-                          </p>
-                        </div>
-                        <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
-                            Camere
-                          </p>
-                          <p className="mt-1.5 font-bold text-gray-900">
-                            {selectedRequest.fromRooms || "-"} →{" "}
-                            {selectedRequest.toRooms || "-"}
-                          </p>
-                        </div>
-                      </div>
-
                       {/* Actions */}
-                      <div className="mt-5 flex flex-wrap items-center gap-3">
+                      <div className="flex flex-wrap items-center gap-3">
                         {selectedRequest.status === "closed" && (
                           <button
                             onClick={() => handleReactivate(selectedRequest.id)}
