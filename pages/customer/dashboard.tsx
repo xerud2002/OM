@@ -446,7 +446,9 @@ export default function CustomerDashboard() {
                   {/* Request summary card */}
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                     {/* Header with gradient */}
-                    <div className="relative overflow-hidden bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 sm:px-6 sm:py-5">
+                    <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-500 to-teal-400 px-4 py-3 sm:px-6 sm:py-5">
+                      {/* Bottom fade */}
+                      <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white/20 to-transparent" />
                       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')] opacity-50" />
                       <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                         <div className="flex items-center gap-3 sm:gap-4">
@@ -513,7 +515,7 @@ export default function CustomerDashboard() {
                     </div>
 
                     {/* Content */}
-                    <div className="p-4 sm:p-6">
+                    <div className="p-4 sm:p-6 bg-gradient-to-b from-emerald-50/50 to-white">
                       {/* Actions */}
                       {selectedRequest.status === "closed" && (
                         <div className="mb-4 sm:mb-5 flex flex-wrap items-center gap-2 sm:gap-3">
