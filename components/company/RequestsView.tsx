@@ -55,6 +55,30 @@ const SERVICE_BADGES: { key: keyof MovingRequest; label: string; icon?: typeof T
   { key: "serviceFewItems", label: "Câteva obiecte", color: "bg-gray-100 text-gray-600" },
 ];
 
+// Core services to always display
+const CORE_SERVICES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon }[] = [
+  { key: "serviceMoving", label: "Transport", icon: TruckIcon },
+  { key: "servicePacking", label: "Ambalare", icon: ArchiveBoxIcon },
+  { key: "serviceDisassembly", label: "Demontare", icon: WrenchScrewdriverIcon },
+  { key: "serviceStorage", label: "Depozitare", icon: HomeModernIcon },
+  { key: "serviceCleanout", label: "Debarasare" },
+  { key: "serviceTransportOnly", label: "Doar transport" },
+];
+
+// County abbreviations mapping
+const COUNTY_ABBREV: Record<string, string> = {
+  "Alba": "AB", "Arad": "AR", "Argeș": "AG", "Bacău": "BC", "Bihor": "BH",
+  "Bistrița-Năsăud": "BN", "Botoșani": "BT", "Brașov": "BV", "Brăila": "BR",
+  "București": "B", "Buzău": "BZ", "Caraș-Severin": "CS", "Cluj": "CJ",
+  "Constanța": "CT", "Covasna": "CV", "Dâmbovița": "DB", "Dolj": "DJ",
+  "Galați": "GL", "Giurgiu": "GR", "Gorj": "GJ", "Harghita": "HR",
+  "Hunedoara": "HD", "Ialomița": "IL", "Iași": "IS", "Ilfov": "IF",
+  "Maramureș": "MM", "Mehedinți": "MH", "Mureș": "MS", "Neamț": "NT",
+  "Olt": "OT", "Prahova": "PH", "Satu Mare": "SM", "Sălaj": "SJ",
+  "Sibiu": "SB", "Suceava": "SV", "Teleorman": "TR", "Timiș": "TM",
+  "Tulcea": "TL", "Vaslui": "VS", "Vâlcea": "VL", "Vrancea": "VN",
+};
+
 function JobCard({
   request,
   hasMine,
@@ -79,12 +103,12 @@ function JobCard({
       />
 
       {/* Header: Code, Date & Move Date */}
-      <div className="flex items-center justify-between border-b border-gray-100 px-4 pt-4 pb-3">
+      <div className="flex items-center justify-between border-b border-gray-100 px-3 sm:px-4 pt-3 sm:pt-4 pb-2 sm:pb-3">
         <div className="flex flex-col">
-          <span className="font-mono text-xs font-bold text-gray-500">
+          <span className="font-mono text-[10px] sm:text-xs font-bold text-gray-500">
             {r.requestCode || r.id.substring(0, 8)}
           </span>
-          <span className="text-[10px] text-gray-400">
+          <span className="text-[9px] sm:text-[10px] text-gray-400">
             {(() => {
               const ts = r.createdAt;
               if (!ts) return "—";
@@ -111,8 +135,8 @@ function JobCard({
             })()}
           </span>
         </div>
-        <div className="flex items-center gap-1.5 rounded-md bg-amber-50 px-2 py-1 text-[10px] font-bold text-amber-700 ring-1 ring-amber-100">
-          <CalendarIcon className="h-3.5 w-3.5" />
+        <div className="flex items-center gap-1 sm:gap-1.5 rounded-md bg-amber-50 px-1.5 sm:px-2 py-1 text-[9px] sm:text-[10px] font-bold text-amber-700 ring-1 ring-amber-100">
+          <CalendarIcon className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
           <span>
             {(() => {
               const d = formatMoveDateDisplay(r as any, { month: "short" });
@@ -123,22 +147,26 @@ function JobCard({
       </div>
 
       {/* Route */}
-      <div className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-gray-800">
-        <span className="line-clamp-1 text-right">{r.fromCity}</span>
-        <TruckIcon className="h-4 w-4 shrink-0 text-blue-500" />
-        <span className="line-clamp-1 text-left">{r.toCity}</span>
+      <div className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-bold text-gray-800">
+        <span className="line-clamp-1 text-right max-w-[40%]">
+          {r.fromCity}{r.fromCounty && COUNTY_ABBREV[r.fromCounty] ? `, ${COUNTY_ABBREV[r.fromCounty]}` : ""}
+        </span>
+        <TruckIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4 shrink-0 text-blue-500" />
+        <span className="line-clamp-1 text-left max-w-[40%]">
+          {r.toCity}{r.toCounty && COUNTY_ABBREV[r.toCounty] ? `, ${COUNTY_ABBREV[r.toCounty]}` : ""}
+        </span>
       </div>
 
       {/* Specs: Colectie & Livrare */}
-      <div className="grid grid-cols-2 gap-2 border-t border-gray-100 px-4 py-3 text-xs text-gray-600">
+      <div className="grid grid-cols-2 gap-2 border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs text-gray-600">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] font-bold uppercase text-gray-400">
             Colecție
           </span>
           <span className="font-medium">
-            {r.fromType === "house" ? "Casă" : "Apt"}
+            {r.fromType === "house" ? "Casă" : "Apartament"}
           </span>
-          {r.fromRooms && <span>{r.fromRooms} camere</span>}
+          {r.fromRooms && <span>{r.fromRooms} {r.fromRooms === 1 ? "cameră" : "camere"}</span>}
           {r.fromFloor && <span>Etaj {r.fromFloor}</span>}
           <span
             className={
@@ -156,9 +184,9 @@ function JobCard({
             Livrare
           </span>
           <span className="font-medium">
-            {r.toType === "house" ? "Casă" : "Apt"}
+            {r.toType === "house" ? "Casă" : "Apartament"}
           </span>
-          {r.toRooms && <span>{r.toRooms} camere</span>}
+          {r.toRooms && <span>{r.toRooms} {r.toRooms === 1 ? "cameră" : "camere"}</span>}
           {r.toFloor !== undefined && (
             <span>Etaj {r.toFloor}</span>
           )}
@@ -176,11 +204,10 @@ function JobCard({
       </div>
 
       {/* Additional Details */}
-      {(r.details ||
-        r.specialItems ||
+      {(r.specialItems ||
         r.volumeM3 ||
         r.budgetEstimate) && (
-        <div className="border-t border-gray-100 px-4 py-3 text-xs text-gray-600">
+        <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs text-gray-600">
           {r.volumeM3 && (
             <div className="flex items-center gap-1 mb-1">
               <span className="text-gray-400">Volum:</span>
@@ -203,18 +230,12 @@ function JobCard({
               </p>
             </div>
           )}
-          {r.details && (
-            <div>
-              <span className="text-gray-400">Note:</span>
-              <p className="text-gray-700 line-clamp-3">{r.details}</p>
-            </div>
-          )}
         </div>
       )}
 
       {/* Media thumbnails */}
       {r.mediaUrls && r.mediaUrls.length > 0 && (
-        <div className="border-t border-gray-100 px-4 py-2">
+        <div className="border-t border-gray-100 px-3 sm:px-4 py-2">
           <div className="flex gap-1 overflow-x-auto">
             {r.mediaUrls.slice(0, 4).map((url: string, i: number) => (
               <Image
@@ -223,12 +244,12 @@ function JobCard({
                 alt=""
                 width={48}
                 height={48}
-                className="h-12 w-12 rounded object-cover"
+                className="h-10 w-10 sm:h-12 sm:w-12 rounded object-cover"
                 unoptimized
               />
             ))}
             {r.mediaUrls.length > 4 && (
-              <div className="flex h-12 w-12 items-center justify-center rounded bg-gray-100 text-xs text-gray-500">
+              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded bg-gray-100 text-[10px] sm:text-xs text-gray-500">
                 +{r.mediaUrls.length - 4}
               </div>
             )}
@@ -236,46 +257,59 @@ function JobCard({
         </div>
       )}
 
-      {/* Services */}
-      <div className="flex flex-wrap items-center justify-center gap-1.5 border-t border-gray-100 px-4 py-2">
-        {SERVICE_BADGES.filter((s) => r[s.key]).map((s) => (
-          <span key={s.key} className={`flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-medium ${s.color}`}>
-            {s.icon && <s.icon className="h-3 w-3" />}
-            {s.label}
-          </span>
-        ))}
-        {SERVICE_BADGES.every((s) => !r[s.key]) && (
-          <span className="text-[10px] text-gray-400">
-            Transport standard
-          </span>
-        )}
+      {/* Services - Always show all core services */}
+      <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 border-t border-gray-100 px-3 sm:px-4 py-2">
+        {CORE_SERVICES.map((s) => {
+          const isSelected = !!r[s.key];
+          return (
+            <span 
+              key={s.key} 
+              className={`flex items-center gap-0.5 sm:gap-1 rounded px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium ${
+                isSelected 
+                  ? 'bg-emerald-50 text-emerald-700' 
+                  : 'bg-red-50 text-red-400'
+              }`}
+            >
+              {s.icon && <s.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />}
+              {s.label}
+            </span>
+          );
+        })}
+      </div>
+
+      {/* Notes Section - Always visible, 3 lines fixed */}
+      <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs">
+        <span className="text-gray-400">Note:</span>
+        <p className={`mt-0.5 line-clamp-3 min-h-[3rem] sm:min-h-[3.75rem] ${r.details ? 'text-gray-700' : 'text-gray-300 italic'}`}>
+          {r.details || 'Nicio notă adăugată'}
+        </p>
       </div>
 
       {/* Action Button */}
-      <div className="px-4 pb-4 pt-2">
+      <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2">
         {hasMine ? (
           <div className="flex items-center justify-center gap-2">
             {hasMine.status === "accepted" ? (
-              <span className="flex items-center gap-1 rounded-lg bg-green-100 px-3 py-2 text-xs font-bold text-green-700 ring-1 ring-green-200">
-                <CheckBadgeIcon className="h-4 w-4" />
+              <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
+                <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 ACCEPTAT
               </span>
             ) : hasMine.status === "declined" ||
               hasMine.status === "rejected" ? (
-              <span className="flex items-center gap-1 rounded-lg bg-red-50 px-3 py-2 text-xs font-bold text-red-600">
-                <XMarkIcon className="h-4 w-4" />
+              <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-red-600">
+                <XMarkIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 REFUZAT
               </span>
             ) : (
-              <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-700">
-                <CheckBadgeIcon className="h-4 w-4" />
+              <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-emerald-700">
+                <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 OFERTAT
               </span>
             )}
             {hasMine.offerId && onChatClick && (
               <button
                 onClick={() => onChatClick(r.id, hasMine.offerId)}
-                className="rounded-lg bg-emerald-600 p-2 text-white shadow-sm hover:bg-emerald-700 transition"
+                className="rounded-lg bg-emerald-600 p-1.5 sm:p-2 text-white shadow-sm hover:bg-emerald-700 transition active:scale-95"
                 title="Chat"
               >
                 <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
@@ -285,11 +319,11 @@ function JobCard({
         ) : (
           <button
             onClick={() => onOfferClick(r)}
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+            className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-blue-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
           >
-            <PaperAirplaneIcon className="h-4 w-4" />
+            <PaperAirplaneIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
             <span>Trimite Ofertă</span>
-            <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] font-medium text-white">
+            <span className="rounded bg-white/20 px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-white">
               {cost}
             </span>
           </button>

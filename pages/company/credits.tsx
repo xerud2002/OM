@@ -14,7 +14,8 @@ import {
   BoltIcon,
   StarIcon,
   ArrowRightIcon,
-  FireIcon
+  FireIcon,
+  ClockIcon
 } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
 
@@ -23,6 +24,46 @@ export default function BuyCredits() {
   const [isFirstDeposit, setIsFirstDeposit] = useState(true);
   const [currentCredits, setCurrentCredits] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [timeLeft, setTimeLeft] = useState({ hours: 24, minutes: 0, seconds: 0 });
+  const [offerExpired, setOfferExpired] = useState(false);
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (!user?.uid) return;
+    
+    const storageKey = `offer_start_${user.uid}`;
+    let offerStart = localStorage.getItem(storageKey);
+    
+    if (!offerStart) {
+      offerStart = Date.now().toString();
+      localStorage.setItem(storageKey, offerStart);
+    }
+    
+    const startTime = parseInt(offerStart);
+    const endTime = startTime + 24 * 60 * 60 * 1000; // 24 hours
+    
+    const updateCountdown = () => {
+      const now = Date.now();
+      const remaining = endTime - now;
+      
+      if (remaining <= 0) {
+        setOfferExpired(true);
+        setTimeLeft({ hours: 0, minutes: 0, seconds: 0 });
+        return;
+      }
+      
+      const hours = Math.floor(remaining / (1000 * 60 * 60));
+      const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((remaining % (1000 * 60)) / 1000);
+      
+      setTimeLeft({ hours, minutes, seconds });
+    };
+    
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    
+    return () => clearInterval(interval);
+  }, [user?.uid]);
 
   useEffect(() => {
     const checkFirstDeposit = async () => {
@@ -106,14 +147,28 @@ export default function BuyCredits() {
           </div>
 
           {/* First Deposit Special Offer */}
-          {isFirstDeposit && !loading && (
+          {isFirstDeposit && !loading && !offerExpired && (
             <div className="relative rounded-2xl border-2 border-amber-300 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 p-6 sm:p-8 shadow-sm">
               <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-center">
                 <div className="flex-1 text-center lg:text-left">
-                  <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1 text-xs font-bold text-white uppercase tracking-wide mb-4">
-                    <StarIconSolid className="h-3 w-3" />
-                    Ofertă Exclusivă - Doar Prima Achiziție
+                  {/* Countdown Timer - inline */}
+                  <div className="flex items-center justify-center lg:justify-start gap-3 mb-4">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-amber-500 px-3 py-1 text-xs font-bold text-white uppercase tracking-wide">
+                      <StarIconSolid className="h-3 w-3" />
+                      Ofertă Exclusivă
+                    </div>
+                    <div className="flex items-center gap-2 rounded-lg bg-red-500 px-2.5 py-1.5 text-white shadow-md">
+                      <ClockIcon className="h-4 w-4" />
+                      <div className="flex items-center gap-0.5 font-mono text-xs font-bold">
+                        <span className="bg-red-600 rounded px-1 py-0.5">{String(timeLeft.hours).padStart(2, '0')}</span>
+                        <span>:</span>
+                        <span className="bg-red-600 rounded px-1 py-0.5">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                        <span>:</span>
+                        <span className="bg-red-600 rounded px-1 py-0.5">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                      </div>
+                    </div>
                   </div>
+                  
                   <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
                     🎁 Pachet de Start Exclusiv
                   </h3>
@@ -152,11 +207,11 @@ export default function BuyCredits() {
                         <span className="text-lg text-gray-500">RON</span>
                       </div>
                       <div className="mt-3 flex items-center justify-center gap-2">
-                        <span className="text-sm text-gray-400 line-through">400 credite</span>
+                        <span className="text-sm text-gray-400 line-through">199 credite</span>
                         <ArrowRightIcon className="h-4 w-4 text-amber-500" />
-                        <span className="text-lg font-bold text-amber-600">600 credite</span>
+                        <span className="text-lg font-bold text-amber-600">300 credite</span>
                       </div>
-                      <p className="text-xs text-emerald-600 font-semibold mt-1">+200 credite GRATIS!</p>
+                      <p className="text-xs text-emerald-600 font-semibold mt-1">+101 credite GRATIS!</p>
                     </div>
                     
                     <button 
@@ -201,13 +256,13 @@ export default function BuyCredits() {
                   <span className="text-3xl font-extrabold text-gray-900">250</span>
                   <span className="text-base font-medium text-gray-500">RON</span>
                 </div>
-                <p className="text-sm text-gray-500 mt-1">500 credite</p>
+                <p className="text-sm text-gray-500 mt-1">250 credite</p>
               </div>
               
               <ul className="mb-6 space-y-3 text-sm text-gray-600 flex-1">
                 <li className="flex items-center gap-2.5">
                   <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
-                  <span>~10 oferte trimise</span>
+                  <span>~5 oferte trimise</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
@@ -252,7 +307,7 @@ export default function BuyCredits() {
                   <span className="text-base font-medium text-gray-500">RON</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-sm text-gray-500">1200 credite</p>
+                  <p className="text-sm text-gray-500">600 credite</p>
                   <span className="text-xs font-bold text-emerald-600 bg-emerald-100 px-2 py-0.5 rounded-full">+20%</span>
                 </div>
               </div>
@@ -260,7 +315,7 @@ export default function BuyCredits() {
               <ul className="mb-6 space-y-3 text-sm text-gray-600 flex-1">
                 <li className="flex items-center gap-2.5">
                   <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
-                  <span>~24 oferte trimise</span>
+                  <span>~12 oferte trimise</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
@@ -302,7 +357,7 @@ export default function BuyCredits() {
                   <span className="text-base font-medium text-gray-500">RON</span>
                 </div>
                 <div className="flex items-center gap-2 mt-1">
-                  <p className="text-sm text-gray-500">2500 credite</p>
+                  <p className="text-sm text-gray-500">1250 credite</p>
                   <span className="text-xs font-bold text-purple-600 bg-purple-100 px-2 py-0.5 rounded-full">+25%</span>
                 </div>
               </div>
@@ -310,7 +365,7 @@ export default function BuyCredits() {
               <ul className="mb-6 space-y-3 text-sm text-gray-600 flex-1">
                 <li className="flex items-center gap-2.5">
                   <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
-                  <span>~50 oferte trimise</span>
+                  <span>~25 oferte trimise</span>
                 </li>
                 <li className="flex items-center gap-2.5">
                   <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
