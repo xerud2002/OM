@@ -42,37 +42,18 @@ import {
   ChevronUpIcon,
 } from "@heroicons/react/24/outline";
 
-// Types
-export type MovingRequest = {
-  id: string;
-  customerId: string;
-  customerName?: string;
-  customerEmail?: string;
-  fromCity: string;
-  toCity: string;
-  moveDate?: string;
-  details?: string;
-  createdAt?: any;
-  status?: string;
-  archived?: boolean;
-};
+import type { MovingRequest, CompanyUser } from "@/types";
 
-export type CompanyUser = {
-  uid: string;
-  displayName?: string | null;
-  email?: string | null;
-} | null;
-
-export type Offer = {
-  id: string;
-  companyId: string;
-  companyName: string;
-  companyLogo?: string | null;
-  price: number;
-  message: string;
-  status?: "pending" | "accepted" | "declined" | "rejected";
-  createdAt?: any;
-};
+const SERVICE_BADGES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon; color: string }[] = [
+  { key: "serviceMoving", label: "Transport", icon: TruckIcon, color: "bg-indigo-50 text-indigo-700" },
+  { key: "servicePacking", label: "Ambalare", icon: ArchiveBoxIcon, color: "bg-indigo-50 text-indigo-700" },
+  { key: "serviceDisassembly", label: "Demontare", icon: WrenchScrewdriverIcon, color: "bg-indigo-50 text-indigo-700" },
+  { key: "serviceStorage", label: "Depozitare", icon: HomeModernIcon, color: "bg-indigo-50 text-indigo-700" },
+  { key: "serviceCleanout", label: "Debarasare", color: "bg-indigo-50 text-indigo-700" },
+  { key: "servicePiano", label: "Pian", color: "bg-amber-50 text-amber-700" },
+  { key: "serviceTransportOnly", label: "Doar transport", color: "bg-gray-100 text-gray-600" },
+  { key: "serviceFewItems", label: "Câteva obiecte", color: "bg-gray-100 text-gray-600" },
+];
 
 function JobCard({
   request,
@@ -101,21 +82,19 @@ function JobCard({
       <div className="flex items-center justify-between border-b border-gray-100 px-4 pt-4 pb-3">
         <div className="flex flex-col">
           <span className="font-mono text-xs font-bold text-gray-500">
-            {(r as any).requestCode || r.id.substring(0, 8)}
+            {r.requestCode || r.id.substring(0, 8)}
           </span>
           <span className="text-[10px] text-gray-400">
             {(() => {
-              const ts = (r as any).createdAt;
+              const ts = r.createdAt;
               if (!ts) return "—";
               let d: Date;
               if (ts.toDate) {
                 d = ts.toDate();
               } else if (ts.seconds) {
                 d = new Date(ts.seconds * 1000);
-              } else if (typeof ts === "number") {
-                d = new Date(ts);
               } else {
-                d = new Date(ts);
+                return "—";
               }
               if (isNaN(d.getTime())) return "—";
               return (
@@ -145,9 +124,9 @@ function JobCard({
 
       {/* Route */}
       <div className="flex items-center justify-center gap-2 px-4 py-3 text-sm font-bold text-gray-800">
-        <span className="line-clamp-1 text-right">{(r as any).fromCity}</span>
+        <span className="line-clamp-1 text-right">{r.fromCity}</span>
         <TruckIcon className="h-4 w-4 shrink-0 text-blue-500" />
-        <span className="line-clamp-1 text-left">{(r as any).toCity}</span>
+        <span className="line-clamp-1 text-left">{r.toCity}</span>
       </div>
 
       {/* Specs: Colectie & Livrare */}
@@ -157,19 +136,19 @@ function JobCard({
             Colecție
           </span>
           <span className="font-medium">
-            {(r as any).fromType === "house" ? "Casă" : "Apt"}
+            {r.fromType === "house" ? "Casă" : "Apt"}
           </span>
-          {(r as any).fromRooms && <span>{(r as any).fromRooms} camere</span>}
-          {(r as any).fromFloor && <span>Etaj {(r as any).fromFloor}</span>}
+          {r.fromRooms && <span>{r.fromRooms} camere</span>}
+          {r.fromFloor && <span>Etaj {r.fromFloor}</span>}
           <span
             className={
-              (r as any).fromElevator
+              r.fromElevator
                 ? "text-emerald-600 font-medium"
                 : "text-rose-500 font-medium"
             }
           >
-            {(r as any).fromElevator !== undefined &&
-              ((r as any).fromElevator ? "✓ Lift" : "✗ Fără lift")}
+            {r.fromElevator !== undefined &&
+              (r.fromElevator ? "✓ Lift" : "✗ Fără lift")}
           </span>
         </div>
         <div className="flex flex-col gap-0.5">
@@ -177,67 +156,67 @@ function JobCard({
             Livrare
           </span>
           <span className="font-medium">
-            {(r as any).toType === "house" ? "Casă" : "Apt"}
+            {r.toType === "house" ? "Casă" : "Apt"}
           </span>
-          {(r as any).toRooms && <span>{(r as any).toRooms} camere</span>}
-          {(r as any).toFloor !== undefined && (
-            <span>Etaj {(r as any).toFloor}</span>
+          {r.toRooms && <span>{r.toRooms} camere</span>}
+          {r.toFloor !== undefined && (
+            <span>Etaj {r.toFloor}</span>
           )}
           <span
             className={
-              (r as any).toElevator
+              r.toElevator
                 ? "text-emerald-600 font-medium"
                 : "text-rose-500 font-medium"
             }
           >
-            {(r as any).toElevator !== undefined &&
-              ((r as any).toElevator ? "✓ Lift" : "✗ Fără lift")}
+            {r.toElevator !== undefined &&
+              (r.toElevator ? "✓ Lift" : "✗ Fără lift")}
           </span>
         </div>
       </div>
 
       {/* Additional Details */}
-      {((r as any).details ||
-        (r as any).specialItems ||
-        (r as any).volumeM3 ||
-        (r as any).budgetEstimate) && (
+      {(r.details ||
+        r.specialItems ||
+        r.volumeM3 ||
+        r.budgetEstimate) && (
         <div className="border-t border-gray-100 px-4 py-3 text-xs text-gray-600">
-          {(r as any).volumeM3 && (
+          {r.volumeM3 && (
             <div className="flex items-center gap-1 mb-1">
               <span className="text-gray-400">Volum:</span>
-              <span className="font-medium">{(r as any).volumeM3} m³</span>
+              <span className="font-medium">{r.volumeM3} m³</span>
             </div>
           )}
-          {(r as any).budgetEstimate && (
+          {r.budgetEstimate && (
             <div className="flex items-center gap-1 mb-1">
               <span className="text-gray-400">Buget:</span>
               <span className="font-medium">
-                {(r as any).budgetEstimate} RON
+                {r.budgetEstimate} RON
               </span>
             </div>
           )}
-          {(r as any).specialItems && (
+          {r.specialItems && (
             <div className="mb-1">
               <span className="text-gray-400">Obiecte speciale:</span>
               <p className="text-gray-700 line-clamp-2">
-                {(r as any).specialItems}
+                {r.specialItems}
               </p>
             </div>
           )}
-          {(r as any).details && (
+          {r.details && (
             <div>
               <span className="text-gray-400">Note:</span>
-              <p className="text-gray-700 line-clamp-3">{(r as any).details}</p>
+              <p className="text-gray-700 line-clamp-3">{r.details}</p>
             </div>
           )}
         </div>
       )}
 
       {/* Media thumbnails */}
-      {(r as any).mediaUrls && (r as any).mediaUrls.length > 0 && (
+      {r.mediaUrls && r.mediaUrls.length > 0 && (
         <div className="border-t border-gray-100 px-4 py-2">
           <div className="flex gap-1 overflow-x-auto">
-            {(r as any).mediaUrls.slice(0, 4).map((url: string, i: number) => (
+            {r.mediaUrls.slice(0, 4).map((url: string, i: number) => (
               <Image
                 key={i}
                 src={url}
@@ -248,9 +227,9 @@ function JobCard({
                 unoptimized
               />
             ))}
-            {(r as any).mediaUrls.length > 4 && (
+            {r.mediaUrls.length > 4 && (
               <div className="flex h-12 w-12 items-center justify-center rounded bg-gray-100 text-xs text-gray-500">
-                +{(r as any).mediaUrls.length - 4}
+                +{r.mediaUrls.length - 4}
               </div>
             )}
           </div>
@@ -259,58 +238,17 @@ function JobCard({
 
       {/* Services */}
       <div className="flex flex-wrap items-center justify-center gap-1.5 border-t border-gray-100 px-4 py-2">
-        {(r as any).serviceMoving && (
-          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-            <TruckIcon className="h-3 w-3" /> Transport
+        {SERVICE_BADGES.filter((s) => r[s.key]).map((s) => (
+          <span key={s.key} className={`flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-medium ${s.color}`}>
+            {s.icon && <s.icon className="h-3 w-3" />}
+            {s.label}
+          </span>
+        ))}
+        {SERVICE_BADGES.every((s) => !r[s.key]) && (
+          <span className="text-[10px] text-gray-400">
+            Transport standard
           </span>
         )}
-        {(r as any).servicePacking && (
-          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-            <ArchiveBoxIcon className="h-3 w-3" /> Ambalare
-          </span>
-        )}
-        {(r as any).serviceDisassembly && (
-          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-            <WrenchScrewdriverIcon className="h-3 w-3" /> Demontare
-          </span>
-        )}
-        {(r as any).serviceStorage && (
-          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-            <HomeModernIcon className="h-3 w-3" /> Depozitare
-          </span>
-        )}
-        {(r as any).serviceCleanout && (
-          <span className="flex items-center gap-1 rounded bg-indigo-50 px-2 py-0.5 text-[10px] font-medium text-indigo-700">
-            Debarasare
-          </span>
-        )}
-        {(r as any).servicePiano && (
-          <span className="flex items-center gap-1 rounded bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
-            🎹 Pian
-          </span>
-        )}
-        {(r as any).serviceTransportOnly && (
-          <span className="flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
-            Doar transport
-          </span>
-        )}
-        {(r as any).serviceFewItems && (
-          <span className="flex items-center gap-1 rounded bg-gray-100 px-2 py-0.5 text-[10px] font-medium text-gray-600">
-            Câteva obiecte
-          </span>
-        )}
-        {!(r as any).serviceMoving &&
-          !(r as any).servicePacking &&
-          !(r as any).serviceDisassembly &&
-          !(r as any).serviceCleanout &&
-          !(r as any).serviceStorage &&
-          !(r as any).servicePiano &&
-          !(r as any).serviceTransportOnly &&
-          !(r as any).serviceFewItems && (
-            <span className="text-[10px] text-gray-400">
-              Transport standard
-            </span>
-          )}
       </div>
 
       {/* Action Button */}
@@ -462,7 +400,7 @@ export default function RequestsView({
                 }
               }
             } catch (err) {
-              console.error("Error checking offer:", err);
+              logger.error("Error checking offer:", err);
             }
           }),
         );
@@ -471,7 +409,7 @@ export default function RequestsView({
           setHasMineMap((prev) => ({ ...prev, ...updates }));
         }
       } catch (e) {
-        console.error("Error batch checking offers", e);
+        logger.error("Error batch checking offers", e);
       }
     },
     [],
@@ -488,7 +426,7 @@ export default function RequestsView({
       q,
       async (snapshot) => {
         const list = snapshot.docs
-          .map((doc) => ({ id: doc.id, ...doc.data() }) as any)
+          .map((doc) => ({ id: doc.id, ...doc.data() }) as MovingRequest)
           .filter((req) => {
             const isVisible =
               !req.status ||
@@ -511,7 +449,7 @@ export default function RequestsView({
         }
       },
       (error) => {
-        console.warn("Error loading requests:", error);
+        logger.warn("Error loading requests:", error);
         setFirstPage([]);
         setLoading(false);
         setHasMore(false);
@@ -532,8 +470,8 @@ export default function RequestsView({
       );
       const snap = await getDocs(q2);
       const list = snap.docs
-        .map((d) => ({ id: d.id, ...d.data() }) as any)
-        .filter((req: any) => {
+        .map((d) => ({ id: d.id, ...d.data() }) as MovingRequest)
+        .filter((req) => {
           const isVisible =
             !req.status ||
             req.status === "active" ||
@@ -559,7 +497,7 @@ export default function RequestsView({
       setLastDoc(last);
       setHasMore(snap.size === PAGE_SIZE);
     } catch (error) {
-      console.warn("Error loading more requests:", error);
+      logger.warn("Error loading more requests:", error);
       setHasMore(false);
     } finally {
       setLoadingMore(false);
@@ -597,9 +535,9 @@ export default function RequestsView({
     if (searchQuery.trim()) {
       const q = searchQuery.toLowerCase();
       arr = arr.filter((r) => {
-        const fromCity = ((r as any).fromCity || "").toLowerCase();
-        const toCity = ((r as any).toCity || "").toLowerCase();
-        const code = ((r as any).requestCode || r.id).toLowerCase();
+        const fromCity = (r.fromCity || "").toLowerCase();
+        const toCity = (r.toCity || "").toLowerCase();
+        const code = (r.requestCode || r.id).toLowerCase();
         return fromCity.includes(q) || toCity.includes(q) || code.includes(q);
       });
     }
@@ -607,20 +545,19 @@ export default function RequestsView({
     // Filter by service
     if (filterService) {
       arr = arr.filter((r) => {
-        const req = r as any;
         switch (filterService) {
           case "moving":
-            return req.serviceMoving;
+            return r.serviceMoving;
           case "packing":
-            return req.servicePacking;
+            return r.servicePacking;
           case "disassembly":
-            return req.serviceDisassembly;
+            return r.serviceDisassembly;
           case "storage":
-            return req.serviceStorage;
+            return r.serviceStorage;
           case "piano":
-            return req.servicePiano;
+            return r.servicePiano;
           case "cleanout":
-            return req.serviceCleanout;
+            return r.serviceCleanout;
           default:
             return true;
         }
@@ -630,8 +567,7 @@ export default function RequestsView({
     // Filter by elevator
     if (filterElevator) {
       arr = arr.filter((r) => {
-        const req = r as any;
-        const hasElevator = req.fromElevator || req.toElevator;
+        const hasElevator = r.fromElevator || r.toElevator;
         return filterElevator === "yes" ? hasElevator : !hasElevator;
       });
     }
@@ -639,11 +575,10 @@ export default function RequestsView({
     // Filter by property type
     if (filterPropertyType) {
       arr = arr.filter((r) => {
-        const req = r as any;
         if (filterPropertyType === "apartment") {
-          return req.fromType !== "house" || req.toType !== "house";
+          return r.fromType !== "house" || r.toType !== "house";
         } else {
-          return req.fromType === "house" || req.toType === "house";
+          return r.fromType === "house" || r.toType === "house";
         }
       });
     }
@@ -651,9 +586,8 @@ export default function RequestsView({
     // Filter by move date range
     if (filterDateFrom || filterDateTo) {
       arr = arr.filter((r) => {
-        const req = r as any;
-        if (!req.moveDate) return false;
-        const moveDate = new Date(req.moveDate);
+        if (!r.moveDate) return false;
+        const moveDate = new Date(r.moveDate);
         if (filterDateFrom && moveDate < new Date(filterDateFrom)) return false;
         if (filterDateTo && moveDate > new Date(filterDateTo)) return false;
         return true;
@@ -669,8 +603,8 @@ export default function RequestsView({
     }
 
     // Apply sort
-    const getTime = (r: MovingRequest) =>
-      r.createdAt?.toMillis ? r.createdAt.toMillis() : r.createdAt || 0;
+    const getTime = (r: MovingRequest): number =>
+      r.createdAt?.toMillis ? r.createdAt.toMillis() : 0;
     return sortBy === "date-desc"
       ? arr.sort((a, b) => getTime(b) - getTime(a))
       : arr.sort((a, b) => getTime(a) - getTime(b));
@@ -752,7 +686,7 @@ export default function RequestsView({
         transaction.set(offerRef, {
           requestId: activeOfferRequest.id,
           requestCode:
-            (activeOfferRequest as any).requestCode || activeOfferRequest.id,
+            activeOfferRequest.requestCode || activeOfferRequest.id,
           companyId: company.uid,
           companyName:
             companyData.companyName || company.displayName || "Companie",
@@ -774,7 +708,7 @@ export default function RequestsView({
           type: "offer_placement",
           amount: -cost,
           requestId: activeOfferRequest.id,
-          description: `Ofertă pentru cererea ${(activeOfferRequest as any).requestCode || activeOfferRequest.id}`,
+          description: `Ofertă pentru cererea ${activeOfferRequest.requestCode || activeOfferRequest.id}`,
           createdAt: serverTimestamp(),
         });
 
@@ -783,24 +717,24 @@ export default function RequestsView({
 
       // Send email notification to customer
       const customerEmail =
-        (activeOfferRequest as any).customerEmail ||
-        (activeOfferRequest as any).guestEmail;
+        activeOfferRequest.customerEmail ||
+        activeOfferRequest.guestEmail;
       if (customerEmail) {
         try {
           const { sendEmailViaAPI } = await import("@/utils/emailHelpers");
           await sendEmailViaAPI("newOffer", {
             customerEmail,
             requestCode:
-              (activeOfferRequest as any).requestCode || activeOfferRequest.id,
+              activeOfferRequest.requestCode || activeOfferRequest.id,
             requestId: activeOfferRequest.id,
             companyName: company.displayName || "Companie",
             companyMessage: message,
             price: price,
-            fromCity: (activeOfferRequest as any).fromCity,
-            toCity: (activeOfferRequest as any).toCity,
+            fromCity: activeOfferRequest.fromCity,
+            toCity: activeOfferRequest.toCity,
             moveDate:
-              (activeOfferRequest as any).moveDate ||
-              (activeOfferRequest as any).moveDateStart,
+              activeOfferRequest.moveDate ||
+              activeOfferRequest.moveDateStart,
           });
         } catch (emailErr) {
           logger.error("Failed to send offer notification email:", emailErr);
@@ -1043,11 +977,6 @@ export default function RequestsView({
                   hasMine={hasMineMap[r.id] ?? false}
                   onOfferClick={(req) => setActiveOfferRequest(req)}
                   onChatClick={(reqId, offerId) => {
-                    // TODO: Implement chat handling
-                    console.log("Chat clicked", reqId, offerId);
-                    // If there's a parent handler, call it?
-                    // Currently checking parent usage.
-                    // Dashboard passes nothing for onChat. We can ignore or implement navigation.
                     if (window)
                       window.location.href = `/company/chat?request=${reqId}&offer=${offerId}`;
                   }}
@@ -1077,7 +1006,7 @@ export default function RequestsView({
         onConfirm={handleOfferSubmit}
         title={
           activeOfferRequest
-            ? `Ofertă pentru ${(activeOfferRequest as any).requestCode || "Cerere"}`
+            ? `Ofertă pentru ${activeOfferRequest.requestCode || "Cerere"}`
             : "Trimite Ofertă"
         }
         isLoading={submittingOffer}

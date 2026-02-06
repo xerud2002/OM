@@ -118,6 +118,25 @@ const roleLabels: Record<DashboardRole, string> = {
   admin: "Administrator",
 };
 
+const NAV_ACTIVE_STYLES: Record<DashboardRole, { container: string; icon: string; desktopExtra: string }> = {
+  customer: { container: "bg-emerald-50 text-emerald-700", icon: "text-emerald-600", desktopExtra: "border-l-2 border-emerald-500" },
+  company: { container: "bg-emerald-50 text-emerald-700", icon: "text-emerald-600", desktopExtra: "border-l-2 border-emerald-500" },
+  admin: { container: "bg-purple-50 text-purple-700", icon: "text-purple-600", desktopExtra: "border-l-2 border-purple-500" },
+};
+
+function UserAvatar({ role, photoURL }: { role: DashboardRole; photoURL?: string }) {
+  if (role === "company" && photoURL) {
+    return <Image src={photoURL} alt="Logo" width={40} height={40} className="h-full w-full object-cover" unoptimized />;
+  }
+  if (role === "company") {
+    return <Image src="/pics/default-company.svg" alt="Logo" width={40} height={40} className="h-full w-full object-cover" />;
+  }
+  if (role === "customer") {
+    return <UserCircleIcon className="h-5 w-5 text-white" />;
+  }
+  return <ShieldCheckIcon className="h-5 w-5 text-white" />;
+}
+
 export default function DashboardLayout({
   children,
   role,
@@ -228,28 +247,7 @@ export default function DashboardLayout({
                   <div className="py-4">
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3">
                       <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500">
-                        {role === "company" && user?.photoURL ? (
-                          <Image
-                            src={user.photoURL}
-                            alt="Logo"
-                            width={40}
-                            height={40}
-                            className="h-full w-full object-cover"
-                            unoptimized
-                          />
-                        ) : role === "company" ? (
-                          <Image
-                            src="/pics/default-company.svg"
-                            alt="Logo"
-                            width={40}
-                            height={40}
-                            className="h-full w-full object-cover"
-                          />
-                        ) : role === "customer" ? (
-                          <UserCircleIcon className="h-5 w-5 text-white" />
-                        ) : (
-                          <ShieldCheckIcon className="h-5 w-5 text-white" />
-                        )}
+                        <UserAvatar role={role} photoURL={user?.photoURL} />
                       </div>
                       <div>
                         <p className="text-sm font-semibold text-gray-900">
@@ -267,16 +265,6 @@ export default function DashboardLayout({
                       <li>
                         <ul role="list" className="space-y-1">
                           {navWithCurrent.map((item) => {
-                            const mobileActiveStyles = {
-                              customer: "bg-emerald-50 text-emerald-700",
-                              company: "bg-emerald-50 text-emerald-700",
-                              admin: "bg-purple-50 text-purple-700",
-                            };
-                            const mobileActiveIconStyles = {
-                              customer: "text-emerald-600",
-                              company: "text-emerald-600",
-                              admin: "text-purple-600",
-                            };
                             return (
                               <li key={item.name}>
                                 <Link
@@ -284,12 +272,12 @@ export default function DashboardLayout({
                                   onClick={() => setSidebarOpen(false)}
                                   className={`group flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
                                     item.current
-                                      ? mobileActiveStyles[role]
+                                      ? NAV_ACTIVE_STYLES[role].container
                                       : "text-gray-600 hover:bg-gray-50"
                                   }`}
                                 >
                                   <item.icon
-                                    className={`h-5 w-5 shrink-0 ${item.current ? mobileActiveIconStyles[role] : "text-gray-400"}`}
+                                    className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400"}`}
                                     aria-hidden="true"
                                   />
                                   {item.name}
@@ -342,28 +330,7 @@ export default function DashboardLayout({
           <div className="px-4 py-4">
             <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 p-3">
               <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
-                {role === "company" && user?.photoURL ? (
-                  <Image
-                    src={user.photoURL}
-                    alt="Logo"
-                    width={40}
-                    height={40}
-                    className="h-full w-full object-cover"
-                    unoptimized
-                  />
-                ) : role === "company" ? (
-                  <Image
-                    src="/pics/default-company.svg"
-                    alt="Logo"
-                    width={40}
-                    height={40}
-                    className="h-full w-full object-cover"
-                  />
-                ) : role === "customer" ? (
-                  <UserCircleIcon className="h-5 w-5 text-white" />
-                ) : (
-                  <ShieldCheckIcon className="h-5 w-5 text-white" />
-                )}
+                <UserAvatar role={role} photoURL={user?.photoURL} />
               </div>
               <div className="flex-1 min-w-0">
                 <p className="truncate text-sm font-semibold text-gray-900">
@@ -381,33 +348,18 @@ export default function DashboardLayout({
               <li>
                 <ul role="list" className="space-y-1">
                   {navWithCurrent.map((item) => {
-                    // Active styles based on role
-                    const activeStyles = {
-                      customer:
-                        "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
-                      company:
-                        "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
-                      admin:
-                        "bg-purple-50 text-purple-700 border-l-2 border-purple-500",
-                    };
-                    const activeIconStyles = {
-                      customer: "text-emerald-600",
-                      company: "text-emerald-600",
-                      admin: "text-purple-600",
-                    };
-
                     return (
                       <li key={item.name}>
                         <Link
                           href={item.href}
                           className={`group flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
                             item.current
-                              ? activeStyles[role]
+                              ? `${NAV_ACTIVE_STYLES[role].container} ${NAV_ACTIVE_STYLES[role].desktopExtra}`
                               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                           }`}
                         >
                           <item.icon
-                            className={`h-5 w-5 shrink-0 ${item.current ? activeIconStyles[role] : "text-gray-400 group-hover:text-gray-600"}`}
+                            className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400 group-hover:text-gray-600"}`}
                             aria-hidden="true"
                           />
                           <span className="flex-1">{item.name}</span>

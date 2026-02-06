@@ -58,6 +58,7 @@ export type MovingRequest = {
   customerId: string;
   customerName?: string;
   customerEmail?: string;
+  guestEmail?: string;
   contactName?: string; // Explicit contact name from form
   contactFirstName?: string;
   contactLastName?: string;
@@ -120,7 +121,7 @@ export type MovingRequest = {
   mediaUploadToken?: string;
   mediaUrls?: string[];
   createdAt: Timestamp;
-  status?: "active" | "closed" | "paused" | "cancelled" | "accepted";
+  status?: "active" | "closed" | "paused" | "cancelled" | "accepted" | "pending";
   archived?: boolean;
 };
 

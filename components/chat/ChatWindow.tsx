@@ -10,6 +10,7 @@ import {
   serverTimestamp
 } from "firebase/firestore";
 import { db, auth } from "@/services/firebase";
+import { logger } from "@/utils/logger";
 import { PaperAirplaneIcon, XMarkIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 
@@ -79,7 +80,7 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
       // 2. Update offer/request with last message info (optional, for list previews)
       // await updateDoc(...)
     } catch (err) {
-      console.error("Error sending message:", err);
+      logger.error("Error sending message:", err);
       // Maybe show toast
     } finally {
       setSending(false);

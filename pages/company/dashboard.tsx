@@ -173,7 +173,7 @@ export default function CompanyDashboard() {
         setLoading(false);
       },
       (error: any) => {
-        console.error("[DEBUG] Error loading offers:", error?.message || error);
+        logger.error("Error loading offers:", error?.message || error);
         // Check if it's a missing index error
         if (error?.message?.includes("index")) {
           setOfferError("Index Firestore lipsă. Contactați administratorul.");

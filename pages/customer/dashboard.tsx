@@ -48,6 +48,16 @@ const RequestFullDetails = dynamic(
   },
 );
 
+// Status label mapping
+const STATUS_LABELS: Record<string, string> = {
+  active: "Activă",
+  closed: "Finalizată",
+  accepted: "Acceptată",
+  paused: "Pauză",
+  cancelled: "Anulată",
+};
+const getStatusLabel = (status?: string) => STATUS_LABELS[status || ""] || status || "Activă";
+
 export default function CustomerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any | null>(null);
@@ -496,17 +506,7 @@ export default function CustomerDashboard() {
                                         : "bg-gray-100 text-gray-500"
                                   }`}
                                 >
-                                  {req.status === "closed"
-                                    ? "Finalizată"
-                                    : req.status === "accepted"
-                                      ? "Acceptată"
-                                      : req.status === "active"
-                                        ? "Activă"
-                                        : req.status === "paused"
-                                          ? "Pauză"
-                                          : req.status === "cancelled"
-                                            ? "Anulată"
-                                            : req.status}
+                                  {getStatusLabel(req.status)}
                                 </span>
                               </div>
                             </div>
@@ -564,15 +564,9 @@ export default function CustomerDashboard() {
                               )}
                             {hasAcceptedOffer(selectedRequest.id)
                               ? "Ofertă Acceptată"
-                              : selectedRequest.status === "active"
+                              : selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id)
                                 ? "În Așteptare"
-                                : selectedRequest.status === "closed"
-                                  ? "Finalizată"
-                                  : selectedRequest.status === "paused"
-                                    ? "Pauză"
-                                    : selectedRequest.status === "cancelled"
-                                      ? "Anulată"
-                                      : selectedRequest.status}
+                                : getStatusLabel(selectedRequest.status)}
                           </span>
                         </div>
                       </div>
@@ -743,6 +737,51 @@ export default function CustomerDashboard() {
 }
 
 // Offer card component
+const CONTACT_STYLES = {
+  pending: {
+    chat: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700",
+    chatLabel: "Chat",
+    phone: "inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50",
+    email: "inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:border-blue-300 hover:bg-blue-50",
+  },
+  accepted: {
+    chat: "inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700",
+    chatLabel: "Contactează firma",
+    phone: "inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100",
+    email: "inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100",
+  },
+  declined: {
+    chat: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700",
+    chatLabel: "Chat",
+    phone: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700",
+    email: "inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700",
+  },
+} as const;
+
+function ContactButtons({ offer, onChat, variant }: { offer: Offer; onChat: () => void; variant: keyof typeof CONTACT_STYLES }) {
+  const styles = CONTACT_STYLES[variant];
+  return (
+    <>
+      <button onClick={onChat} className={styles.chat}>
+        <MessageSquare className="h-4 w-4" />
+        {styles.chatLabel}
+      </button>
+      {offer.companyPhone && (
+        <a href={`tel:${offer.companyPhone}`} className={styles.phone} title={offer.companyPhone}>
+          <PhoneIcon className="h-4 w-4" />
+          Sună
+        </a>
+      )}
+      {offer.companyEmail && (
+        <a href={`mailto:${offer.companyEmail}`} className={styles.email} title={offer.companyEmail}>
+          <EnvelopeIcon className="h-4 w-4" />
+          Email
+        </a>
+      )}
+    </>
+  );
+}
+
 function OfferCard({
   offer,
   requestId,
@@ -891,97 +930,19 @@ function OfferCard({
               >
                 Refuză
               </button>
-              <button
-                onClick={onChat}
-                className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
-              >
-                <MessageSquare className="h-4 w-4" />
-                Chat
-              </button>
-              {offer.companyPhone && (
-                <a
-                  href={`tel:${offer.companyPhone}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
-                  title={offer.companyPhone}
-                >
-                  <PhoneIcon className="h-4 w-4" />
-                  Sună
-                </a>
-              )}
-              {offer.companyEmail && (
-                <a
-                  href={`mailto:${offer.companyEmail}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
-                  title={offer.companyEmail}
-                >
-                  <EnvelopeIcon className="h-4 w-4" />
-                  Email
-                </a>
-              )}
+              <ContactButtons offer={offer} onChat={onChat} variant="pending" />
             </div>
           )}
 
           {isAccepted && (
             <div className="flex flex-wrap justify-end gap-2">
-              <button
-                onClick={onChat}
-                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
-              >
-                <MessageSquare className="h-4 w-4" />
-                Contactează firma
-              </button>
-              {offer.companyPhone && (
-                <a
-                  href={`tel:${offer.companyPhone}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
-                  title={offer.companyPhone}
-                >
-                  <PhoneIcon className="h-4 w-4" />
-                  Sună
-                </a>
-              )}
-              {offer.companyEmail && (
-                <a
-                  href={`mailto:${offer.companyEmail}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
-                  title={offer.companyEmail}
-                >
-                  <EnvelopeIcon className="h-4 w-4" />
-                  Email
-                </a>
-              )}
+              <ContactButtons offer={offer} onChat={onChat} variant="accepted" />
             </div>
           )}
 
           {isDeclined && (
             <div className="flex flex-wrap justify-end gap-2">
-              <button
-                onClick={onChat}
-                className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
-              >
-                <MessageSquare className="h-4 w-4" />
-                Chat
-              </button>
-              {offer.companyPhone && (
-                <a
-                  href={`tel:${offer.companyPhone}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700"
-                  title={offer.companyPhone}
-                >
-                  <PhoneIcon className="h-4 w-4" />
-                  Sună
-                </a>
-              )}
-              {offer.companyEmail && (
-                <a
-                  href={`mailto:${offer.companyEmail}`}
-                  className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700"
-                  title={offer.companyEmail}
-                >
-                  <EnvelopeIcon className="h-4 w-4" />
-                  Email
-                </a>
-              )}
+              <ContactButtons offer={offer} onChat={onChat} variant="declined" />
             </div>
           )}
         </div>

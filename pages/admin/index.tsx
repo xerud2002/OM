@@ -4,6 +4,7 @@ import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import { logger } from "@/utils/logger";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 import { motion } from "framer-motion";
@@ -62,7 +63,7 @@ export default function AdminDashboard() {
         const requestsSnap = await getCountFromServer(requestsQ);
         setTotalRequests(requestsSnap.data().count);
       } catch (err) {
-        console.error("Failed to load stats", err);
+        logger.error("Failed to load stats", err);
       }
     };
 
@@ -97,7 +98,7 @@ export default function AdminDashboard() {
         rejectionReason: null
       });
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       alert("Eroare la aprovare");
     } finally {
       setProcessingId(null);
@@ -120,7 +121,7 @@ export default function AdminDashboard() {
       setRejectingId(null);
       setRejectReason("");
     } catch (e) {
-      console.error(e);
+      logger.error(e);
       alert("Eroare la respingere");
     } finally {
       setProcessingId(null);

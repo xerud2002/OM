@@ -56,7 +56,6 @@ export default function RequestFullDetails({
       toast.success("Fișierul a fost șters din cerere");
     } catch (err) {
       logger.error("Failed to delete media", err);
-      const { toast } = await import("sonner");
       toast.error("Nu s-a putut șterge fișierul");
       // Revert optimistic update
       setLocalMediaUrls(request.mediaUrls || []);
@@ -128,7 +127,7 @@ export default function RequestFullDetails({
           </div>
 
           {/* Arrow / Divider */}
-          <div className="flex items-center justify-center">
+          <div className="relative flex items-center justify-center">
             <div className="hidden h-full w-px bg-gray-200 md:block"></div>
             <div className="hidden md:flex flex-col items-center justify-center absolute bg-white p-2 rounded-full border border-gray-100 shadow-sm z-10">
               <span className="text-gray-300">→</span>
