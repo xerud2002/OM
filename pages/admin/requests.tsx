@@ -1,5 +1,13 @@
 import { useEffect, useState } from "react";
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, deleteDoc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -13,7 +21,9 @@ import {
   TruckIcon,
   HomeIcon,
 } from "@heroicons/react/24/outline";
-import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import LoadingSpinner, {
+  LoadingContainer,
+} from "@/components/ui/LoadingSpinner";
 import SearchInput from "@/components/ui/SearchInput";
 import { getRequestStatusBadge } from "@/components/ui/StatusBadge";
 import EmptyState from "@/components/ui/EmptyState";
@@ -24,13 +34,17 @@ export default function AdminRequests() {
   const [requests, setRequests] = useState<MovingRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "closed" | "paused" | "cancelled">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "closed" | "paused" | "cancelled"
+  >("all");
 
   useEffect(() => {
     const q = query(collection(db, "requests"), orderBy("createdAt", "desc"));
-    
+
     const unsub = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as MovingRequest));
+      const data = snapshot.docs.map(
+        (d) => ({ id: d.id, ...d.data() }) as MovingRequest,
+      );
       setRequests(data);
       setLoading(false);
     });
@@ -61,7 +75,10 @@ export default function AdminRequests() {
     }
   };
 
-  const handleStatusChange = async (requestId: string, newStatus: MovingRequest["status"]) => {
+  const handleStatusChange = async (
+    requestId: string,
+    newStatus: MovingRequest["status"],
+  ) => {
     try {
       await updateDoc(doc(db, "requests", requestId), { status: newStatus });
     } catch (err) {
@@ -78,7 +95,9 @@ export default function AdminRequests() {
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Cereri</h1>
-              <p className="text-gray-500">Toate cererile de mutare din platformă</p>
+              <p className="text-gray-500">
+                Toate cererile de mutare din platformă
+              </p>
             </div>
             <div className="flex flex-col gap-3 sm:flex-row">
               {/* Status filter */}
@@ -89,6 +108,7 @@ export default function AdminRequests() {
               >
                 <option value="all">Toate</option>
                 <option value="active">Active</option>
+                <option value="accepted">Acceptate</option>
                 <option value="closed">Finalizate</option>
                 <option value="paused">Pauză</option>
                 <option value="cancelled">Anulate</option>
@@ -112,8 +132,16 @@ export default function AdminRequests() {
             ) : filteredRequests.length === 0 ? (
               <EmptyState
                 icon={TruckIcon}
-                title={search || statusFilter !== "all" ? "Nu s-au găsit cereri" : "Nu există cereri"}
-                description={search ? `Nu s-au găsit rezultate pentru "${search}"` : undefined}
+                title={
+                  search || statusFilter !== "all"
+                    ? "Nu s-au găsit cereri"
+                    : "Nu există cereri"
+                }
+                description={
+                  search
+                    ? `Nu s-au găsit rezultate pentru "${search}"`
+                    : undefined
+                }
               />
             ) : (
               <div className="overflow-x-auto">
@@ -145,23 +173,41 @@ export default function AdminRequests() {
                       <tr key={request.id} className="hover:bg-gray-50">
                         <td className="whitespace-nowrap px-6 py-4">
                           <div className="flex items-center gap-2">
-                            {request.serviceMoving ? <TruckIcon className="h-4 w-4" /> : <HomeIcon className="h-4 w-4" />}
-                            <span className="font-medium text-gray-900">{request.fromCity}</span>
+                            {request.serviceMoving ? (
+                              <TruckIcon className="h-4 w-4" />
+                            ) : (
+                              <HomeIcon className="h-4 w-4" />
+                            )}
+                            <span className="font-medium text-gray-900">
+                              {request.fromCity}
+                            </span>
                             <ArrowRightIcon className="h-4 w-4 text-gray-400" />
-                            <span className="font-medium text-gray-900">{request.toCity}</span>
+                            <span className="font-medium text-gray-900">
+                              {request.toCity}
+                            </span>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
                           <div>
-                            <p className="font-medium text-gray-900">{request.customerName || request.contactName || "Anonim"}</p>
-                            <p className="text-sm text-gray-500">{request.phone || request.customerEmail}</p>
+                            <p className="font-medium text-gray-900">
+                              {request.customerName ||
+                                request.contactName ||
+                                "Anonim"}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {request.phone || request.customerEmail}
+                            </p>
                           </div>
                         </td>
                         <td className="whitespace-nowrap px-6 py-4">
                           <div className="flex items-center gap-2 text-sm text-gray-600">
                             <CalendarIcon className="h-4 w-4" />
                             {request.moveDate
-                              ? format(new Date(request.moveDate), "d MMM yyyy", { locale: ro })
+                              ? format(
+                                  new Date(request.moveDate),
+                                  "d MMM yyyy",
+                                  { locale: ro },
+                                )
                               : "Flexibil"}
                           </div>
                         </td>
@@ -177,7 +223,12 @@ export default function AdminRequests() {
                           <div className="flex items-center justify-end gap-2">
                             <select
                               value={request.status}
-                              onChange={(e) => handleStatusChange(request.id, e.target.value as any)}
+                              onChange={(e) =>
+                                handleStatusChange(
+                                  request.id,
+                                  e.target.value as any,
+                                )
+                              }
                               className="rounded border border-gray-200 px-2 py-1 text-xs focus:outline-none"
                             >
                               <option value="active">Activă</option>
@@ -211,4 +262,3 @@ export default function AdminRequests() {
     </RequireRole>
   );
 }
-

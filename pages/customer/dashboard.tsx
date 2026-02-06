@@ -24,7 +24,13 @@ import { formatDateRO, formatMoveDateDisplay } from "@/utils/date";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/services/firebase";
-import { collection, query, where, orderBy, onSnapshot } from "firebase/firestore";
+import {
+  collection,
+  query,
+  where,
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 
 // Lazy load heavy components
@@ -33,59 +39,74 @@ const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
   ssr: false,
 });
 
-const RequestFullDetails = dynamic(() => import("@/components/customer/RequestFullDetails"), {
-  loading: () => <div className="h-48 animate-pulse rounded-xl bg-gray-50" />,
-  ssr: false,
-});
+const RequestFullDetails = dynamic(
+  () => import("@/components/customer/RequestFullDetails"),
+  {
+    loading: () => <div className="h-48 animate-pulse rounded-xl bg-gray-50" />,
+    ssr: false,
+  },
+);
 
 export default function CustomerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<any | null>(null);
   const [requests, setRequests] = useState<MovingRequest[]>([]);
-  const [offersByRequest, setOffersByRequest] = useState<Record<string, Offer[]>>({});
-  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(null);
+  const [offersByRequest, setOffersByRequest] = useState<
+    Record<string, Offer[]>
+  >({});
+  const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
+    null,
+  );
   const [chatOffer, setChatOffer] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
-    return (offersByRequest[requestId] || []).some(o => o?.status === "accepted");
+    return (offersByRequest[requestId] || []).some(
+      (o) => o?.status === "accepted",
+    );
   };
 
   // Stats for header - with icons and colors
   const stats = useMemo(() => {
-    const totalOffers = Object.values(offersByRequest).flat().filter(o => o && o.id).length;
-    const pendingOffers = Object.values(offersByRequest).flat().filter(o => o?.status === "pending").length;
-    const acceptedOffers = Object.values(offersByRequest).flat().filter(o => o?.status === "accepted").length;
-    
+    const totalOffers = Object.values(offersByRequest)
+      .flat()
+      .filter((o) => o && o.id).length;
+    const pendingOffers = Object.values(offersByRequest)
+      .flat()
+      .filter((o) => o?.status === "pending").length;
+    const acceptedOffers = Object.values(offersByRequest)
+      .flat()
+      .filter((o) => o?.status === "accepted").length;
+
     return [
-      { 
-        label: "Cereri Active", 
+      {
+        label: "Cereri Active",
         value: requests.length,
         icon: DocumentTextIcon,
         color: "blue",
         bgColor: "bg-blue-50",
         iconColor: "text-blue-600",
       },
-      { 
-        label: "Oferte Primite", 
+      {
+        label: "Oferte Primite",
         value: totalOffers,
         icon: GiftIcon,
         color: "purple",
         bgColor: "bg-purple-50",
         iconColor: "text-purple-600",
       },
-      { 
-        label: "În Așteptare", 
+      {
+        label: "În Așteptare",
         value: pendingOffers,
         icon: ClockIcon,
         color: "amber",
         bgColor: "bg-amber-50",
         iconColor: "text-amber-600",
       },
-      { 
-        label: "Acceptate", 
-        value: acceptedOffers, 
+      {
+        label: "Acceptate",
+        value: acceptedOffers,
         changeType: "positive" as const,
         icon: CheckCircleIcon,
         color: "emerald",
@@ -106,10 +127,11 @@ export default function CustomerDashboard() {
       }
 
       // Ensure customer profile exists
-      const { doc, getDoc, setDoc, serverTimestamp } = await import("firebase/firestore");
+      const { doc, getDoc, setDoc, serverTimestamp } =
+        await import("firebase/firestore");
       const customerRef = doc(db, "customers", u.uid);
       const customerSnap = await getDoc(customerRef);
-      
+
       if (!customerSnap.exists()) {
         try {
           await setDoc(customerRef, {
@@ -129,32 +151,44 @@ export default function CustomerDashboard() {
       const q = query(
         collection(db, "requests"),
         where("customerId", "==", u.uid),
-        where("status", "in", ["active", "paused", "closed"]),
-        orderBy("createdAt", "desc")
+        where("status", "in", ["active", "paused", "closed", "accepted"]),
+        orderBy("createdAt", "desc"),
       );
 
-      const unsubRequests = onSnapshot(q, (snap) => {
-        const reqs = snap.docs.map((d) => ({ id: d.id, ...d.data() } as MovingRequest));
-        setRequests(reqs);
-
-        // Subscribe to offers for each request
-        reqs.forEach((req) => {
-          const offersQ = query(
-            collection(db, "requests", req.id, "offers"),
-            orderBy("createdAt", "desc")
+      const unsubRequests = onSnapshot(
+        q,
+        (snap) => {
+          const reqs = snap.docs.map(
+            (d) => ({ id: d.id, ...d.data() }) as MovingRequest,
           );
-          onSnapshot(offersQ, (offersSnap) => {
-            const offers = offersSnap.docs.map((od) => ({ id: od.id, ...od.data() } as Offer));
-            setOffersByRequest((prev) => ({ ...prev, [req.id]: offers }));
-          }, (err) => {
-            logger.error("Error loading offers for request", req.id, err);
+          setRequests(reqs);
+
+          // Subscribe to offers for each request
+          reqs.forEach((req) => {
+            const offersQ = query(
+              collection(db, "requests", req.id, "offers"),
+              orderBy("createdAt", "desc"),
+            );
+            onSnapshot(
+              offersQ,
+              (offersSnap) => {
+                const offers = offersSnap.docs.map(
+                  (od) => ({ id: od.id, ...od.data() }) as Offer,
+                );
+                setOffersByRequest((prev) => ({ ...prev, [req.id]: offers }));
+              },
+              (err) => {
+                logger.error("Error loading offers for request", req.id, err);
+              },
+            );
           });
-        });
-      }, (err) => {
-        logger.error("Error loading requests", err);
-        // Clear requests on error to show empty state
-        setRequests([]);
-      });
+        },
+        (err) => {
+          logger.error("Error loading requests", err);
+          // Clear requests on error to show empty state
+          setRequests([]);
+        },
+      );
 
       return () => unsubRequests();
     });
@@ -168,7 +202,7 @@ export default function CustomerDashboard() {
       setSelectedRequestId(null);
       return;
     }
-    
+
     // Check for requestId in URL query
     const queryRequestId = router.query.requestId as string;
     if (queryRequestId) {
@@ -176,31 +210,41 @@ export default function CustomerDashboard() {
       if (requestFromQuery) {
         setSelectedRequestId(queryRequestId);
         // Clear the query parameter from URL without refresh
-        router.replace('/customer/dashboard', undefined, { shallow: true });
+        router.replace("/customer/dashboard", undefined, { shallow: true });
         return;
       }
     }
-    
-    const withOffers = requests.find((r) => (offersByRequest[r.id] || []).length > 0)?.id;
+
+    const withOffers = requests.find(
+      (r) => (offersByRequest[r.id] || []).length > 0,
+    )?.id;
     setSelectedRequestId((prev) => prev || withOffers || requests[0].id);
   }, [requests, offersByRequest, router.query.requestId]);
 
   const selectedRequest = requests.find((r) => r.id === selectedRequestId);
-  const selectedOffers = selectedRequestId ? (offersByRequest[selectedRequestId] || []) : [];
+  const selectedOffers = selectedRequestId
+    ? offersByRequest[selectedRequestId] || []
+    : [];
 
   // Accept/Decline handlers
-  const handleAccept = async (requestId: string, offerId: string): Promise<void> => {
+  const handleAccept = async (
+    requestId: string,
+    offerId: string,
+  ): Promise<void> => {
     const { toast } = await import("sonner");
     try {
       if (!user) {
         toast.error("Trebuie să fii autentificat");
         return;
       }
-      
+
       const token = await user.getIdToken();
       const resp = await fetch("/api/offers/accept", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ requestId, offerId }),
       });
 
@@ -208,17 +252,23 @@ export default function CustomerDashboard() {
         // Fallback for dev
         const { writeBatch, doc } = await import("firebase/firestore");
         const batch = writeBatch(db);
-        batch.update(doc(db, "requests", requestId, "offers", offerId), { status: "accepted" });
-        const others = (offersByRequest[requestId] || []).filter((o) => o.id !== offerId);
+        batch.update(doc(db, "requests", requestId, "offers", offerId), {
+          status: "accepted",
+        });
+        const others = (offersByRequest[requestId] || []).filter(
+          (o) => o.id !== offerId,
+        );
         for (const o of others) {
-          batch.update(doc(db, "requests", requestId, "offers", o.id), { status: "declined" });
+          batch.update(doc(db, "requests", requestId, "offers", o.id), {
+            status: "declined",
+          });
         }
         batch.update(doc(db, "requests", requestId), { status: "closed" });
         await batch.commit();
       } else if (!resp.ok) {
         throw new Error("Failed");
       }
-      
+
       toast.success("Oferta a fost acceptată!");
     } catch (err) {
       logger.error("Failed to accept", err);
@@ -226,28 +276,36 @@ export default function CustomerDashboard() {
     }
   };
 
-  const handleDecline = async (requestId: string, offerId: string): Promise<void> => {
+  const handleDecline = async (
+    requestId: string,
+    offerId: string,
+  ): Promise<void> => {
     const { toast } = await import("sonner");
     try {
       if (!user) {
         toast.error("Trebuie să fii autentificat");
         return;
       }
-      
+
       const token = await user.getIdToken();
       const resp = await fetch("/api/offers/decline", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
         body: JSON.stringify({ requestId, offerId }),
       });
 
       if (!resp.ok && resp.status === 503) {
         const { doc, updateDoc } = await import("firebase/firestore");
-        await updateDoc(doc(db, "requests", requestId, "offers", offerId), { status: "declined" });
+        await updateDoc(doc(db, "requests", requestId, "offers", offerId), {
+          status: "declined",
+        });
       } else if (!resp.ok) {
         throw new Error("Failed");
       }
-      
+
       toast.success("Oferta a fost refuzată");
     } catch (err) {
       logger.error("Failed to decline", err);
@@ -263,13 +321,14 @@ export default function CustomerDashboard() {
         toast.error("Trebuie să fii autentificat");
         return;
       }
-      
-      const { doc, updateDoc, serverTimestamp } = await import("firebase/firestore");
-      await updateDoc(doc(db, "requests", requestId), { 
+
+      const { doc, updateDoc, serverTimestamp } =
+        await import("firebase/firestore");
+      await updateDoc(doc(db, "requests", requestId), {
         status: "active",
-        updatedAt: serverTimestamp()
+        updatedAt: serverTimestamp(),
       });
-      
+
       toast.success("Cererea a fost reactivată!");
     } catch (err) {
       logger.error("Failed to reactivate request", err);
@@ -278,14 +337,19 @@ export default function CustomerDashboard() {
   };
 
   const navigation = [
-    { name: "Cererile Mele", href: "/customer/dashboard", icon: InboxIcon, badge: requests.length },
+    {
+      name: "Cererile Mele",
+      href: "/customer/dashboard",
+      icon: InboxIcon,
+      badge: requests.length,
+    },
   ];
 
   return (
     <RequireRole allowedRole="customer">
-      <DashboardLayout 
-        role="customer" 
-        user={user} 
+      <DashboardLayout
+        role="customer"
+        user={user}
         navigation={navigation}
         showStats={false}
       >
@@ -294,20 +358,26 @@ export default function CustomerDashboard() {
           {stats.map((stat) => {
             const Icon = stat.icon;
             return (
-              <div 
-                key={stat.label} 
+              <div
+                key={stat.label}
                 className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:shadow-md hover:border-gray-200"
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <p className="text-sm font-medium text-gray-500">{stat.label}</p>
-                    <p className="mt-2 text-3xl font-bold text-gray-900">{stat.value}</p>
+                    <p className="text-sm font-medium text-gray-500">
+                      {stat.label}
+                    </p>
+                    <p className="mt-2 text-3xl font-bold text-gray-900">
+                      {stat.value}
+                    </p>
                   </div>
                   <div className={`rounded-xl ${stat.bgColor} p-3`}>
                     <Icon className={`h-6 w-6 ${stat.iconColor}`} />
                   </div>
                 </div>
-                <div className={`absolute -bottom-6 -right-6 h-24 w-24 rounded-full ${stat.bgColor} opacity-50 transition-transform group-hover:scale-110`} />
+                <div
+                  className={`absolute -bottom-6 -right-6 h-24 w-24 rounded-full ${stat.bgColor} opacity-50 transition-transform group-hover:scale-110`}
+                />
               </div>
             );
           })}
@@ -319,9 +389,12 @@ export default function CustomerDashboard() {
             <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
               <InboxIcon className="h-10 w-10 text-white" />
             </div>
-            <h3 className="mt-6 text-xl font-bold text-gray-900">Nu ai încă cereri</h3>
+            <h3 className="mt-6 text-xl font-bold text-gray-900">
+              Nu ai încă cereri
+            </h3>
             <p className="mt-2 max-w-sm text-gray-500">
-              Creează o cerere de pe pagina principală pentru a primi oferte de la firme de mutări verificate.
+              Creează o cerere de pe pagina principală pentru a primi oferte de
+              la firme de mutări verificate.
             </p>
             <button
               onClick={() => router.push("/")}
@@ -338,16 +411,25 @@ export default function CustomerDashboard() {
             <aside className="lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                 <div className="border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white px-5 py-4">
-                  <h3 className="text-sm font-bold text-gray-900">Cererile tale</h3>
-                  <p className="mt-0.5 text-xs text-gray-500">{requests.length} {requests.length === 1 ? "cerere" : "cereri"}</p>
+                  <h3 className="text-sm font-bold text-gray-900">
+                    Cererile tale
+                  </h3>
+                  <p className="mt-0.5 text-xs text-gray-500">
+                    {requests.length}{" "}
+                    {requests.length === 1 ? "cerere" : "cereri"}
+                  </p>
                 </div>
                 <nav className="max-h-[calc(100vh-320px)] overflow-y-auto p-3">
                   <ul className="space-y-2">
                     {requests.map((req) => {
                       const offers = offersByRequest[req.id] || [];
                       const isSelected = selectedRequestId === req.id;
-                      const hasNewOffers = offers.some(o => o.status === "pending");
-                      const hasAccepted = offers.some(o => o.status === "accepted");
+                      const hasNewOffers = offers.some(
+                        (o) => o.status === "pending",
+                      );
+                      const hasAccepted = offers.some(
+                        (o) => o.status === "accepted",
+                      );
 
                       return (
                         <li key={req.id}>
@@ -360,49 +442,80 @@ export default function CustomerDashboard() {
                             }`}
                           >
                             {/* Status indicator line */}
-                            <div className={`absolute left-0 top-3 bottom-3 w-1 rounded-full transition-all ${
-                              isSelected ? "bg-emerald-500" : 
-                              hasAccepted ? "bg-emerald-400" :
-                              hasNewOffers ? "bg-blue-400" : "bg-gray-200"
-                            }`} />
-                            
+                            <div
+                              className={`absolute left-0 top-3 bottom-3 w-1 rounded-full transition-all ${
+                                isSelected
+                                  ? "bg-emerald-500"
+                                  : hasAccepted
+                                    ? "bg-emerald-400"
+                                    : hasNewOffers
+                                      ? "bg-blue-400"
+                                      : "bg-gray-200"
+                              }`}
+                            />
+
                             <div className="ml-3">
                               <div className="flex items-start justify-between gap-2">
                                 <div className="min-w-0 flex-1">
-                                  <p className={`truncate font-semibold ${isSelected ? "text-emerald-900" : "text-gray-900"}`}>
+                                  <p
+                                    className={`truncate font-semibold ${isSelected ? "text-emerald-900" : "text-gray-900"}`}
+                                  >
                                     {req.fromCity} → {req.toCity}
                                   </p>
                                   <div className="mt-1.5 flex items-center gap-2 text-xs text-gray-500">
                                     <CalendarIcon className="h-3.5 w-3.5" />
-                                    <span>{formatMoveDateDisplay(req as any, { month: "short" }) || "Flexibil"}</span>
+                                    <span>
+                                      {formatMoveDateDisplay(req as any, {
+                                        month: "short",
+                                      }) || "Flexibil"}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
-                              
+
                               <div className="mt-3 flex items-center justify-between">
                                 {offers.length > 0 ? (
-                                  <span className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
-                                    hasAccepted 
-                                      ? "bg-emerald-100 text-emerald-700" 
-                                      : hasNewOffers 
-                                        ? "bg-blue-100 text-blue-700" 
-                                        : "bg-gray-100 text-gray-600"
-                                  }`}>
-                                    {hasAccepted && <CheckCircleSolid className="h-3 w-3" />}
-                                    {offers.length} {offers.length === 1 ? "ofertă" : "oferte"}
+                                  <span
+                                    className={`inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold ${
+                                      hasAccepted
+                                        ? "bg-emerald-100 text-emerald-700"
+                                        : hasNewOffers
+                                          ? "bg-blue-100 text-blue-700"
+                                          : "bg-gray-100 text-gray-600"
+                                    }`}
+                                  >
+                                    {hasAccepted && (
+                                      <CheckCircleSolid className="h-3 w-3" />
+                                    )}
+                                    {offers.length}{" "}
+                                    {offers.length === 1 ? "ofertă" : "oferte"}
                                   </span>
                                 ) : (
-                                  <span className="text-xs text-gray-400">Fără oferte</span>
+                                  <span className="text-xs text-gray-400">
+                                    Fără oferte
+                                  </span>
                                 )}
-                                <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                                  req.status === "closed" ? "bg-emerald-100 text-emerald-700" :
-                                  req.status === "active" ? "bg-blue-100 text-blue-700" : 
-                                  "bg-gray-100 text-gray-500"
-                                }`}>
-                                  {req.status === "closed" ? "Finalizată" : 
-                                   req.status === "active" ? "Activă" : 
-                                   req.status === "paused" ? "Pauză" :
-                                   req.status === "cancelled" ? "Anulată" : req.status}
+                                <span
+                                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                                    req.status === "closed" ||
+                                    req.status === "accepted"
+                                      ? "bg-emerald-100 text-emerald-700"
+                                      : req.status === "active"
+                                        ? "bg-blue-100 text-blue-700"
+                                        : "bg-gray-100 text-gray-500"
+                                  }`}
+                                >
+                                  {req.status === "closed"
+                                    ? "Finalizată"
+                                    : req.status === "accepted"
+                                      ? "Acceptată"
+                                      : req.status === "active"
+                                        ? "Activă"
+                                        : req.status === "paused"
+                                          ? "Pauză"
+                                          : req.status === "cancelled"
+                                            ? "Anulată"
+                                            : req.status}
                                 </span>
                               </div>
                             </div>
@@ -431,62 +544,92 @@ export default function CustomerDashboard() {
                           </div>
                           <div>
                             <h2 className="text-xl font-bold text-white">
-                              {selectedRequest.fromCity} → {selectedRequest.toCity}
+                              {selectedRequest.fromCity} →{" "}
+                              {selectedRequest.toCity}
                             </h2>
                             <p className="mt-0.5 text-sm text-white/80">
-                              {selectedRequest.requestCode || `#${selectedRequest.id.slice(0, 8)}`}
+                              {selectedRequest.requestCode ||
+                                `#${selectedRequest.id.slice(0, 8)}`}
                             </p>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-3">
-                          <span className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold backdrop-blur-sm ${
-                            hasAcceptedOffer(selectedRequest.id) 
-                              ? "bg-white text-emerald-700"
+                          <span
+                            className={`inline-flex items-center gap-1.5 rounded-full px-4 py-1.5 text-sm font-semibold backdrop-blur-sm ${
+                              hasAcceptedOffer(selectedRequest.id)
+                                ? "bg-white text-emerald-700"
+                                : selectedRequest.status === "active"
+                                  ? "bg-white/20 text-white"
+                                  : "bg-white/20 text-white"
+                            }`}
+                          >
+                            {hasAcceptedOffer(selectedRequest.id) && (
+                              <CheckCircleSolid className="h-4 w-4" />
+                            )}
+                            {selectedRequest.status === "active" &&
+                              !hasAcceptedOffer(selectedRequest.id) && (
+                                <ClockIcon className="h-4 w-4" />
+                              )}
+                            {hasAcceptedOffer(selectedRequest.id)
+                              ? "Ofertă Acceptată"
                               : selectedRequest.status === "active"
-                              ? "bg-white/20 text-white"
-                              : "bg-white/20 text-white"
-                          }`}>
-                            {hasAcceptedOffer(selectedRequest.id) && <CheckCircleSolid className="h-4 w-4" />}
-                            {selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id) && <ClockIcon className="h-4 w-4" />}
-                            {hasAcceptedOffer(selectedRequest.id) ? "Ofertă Acceptată" : 
-                             selectedRequest.status === "active" ? "În Așteptare" : 
-                             selectedRequest.status === "closed" ? "Finalizată" :
-                             selectedRequest.status === "paused" ? "Pauză" : 
-                             selectedRequest.status === "cancelled" ? "Anulată" : selectedRequest.status}
+                                ? "În Așteptare"
+                                : selectedRequest.status === "closed"
+                                  ? "Finalizată"
+                                  : selectedRequest.status === "paused"
+                                    ? "Pauză"
+                                    : selectedRequest.status === "cancelled"
+                                      ? "Anulată"
+                                      : selectedRequest.status}
                           </span>
                         </div>
                       </div>
                     </div>
-                    
+
                     {/* Content */}
                     <div className="p-6">
                       {/* Quick info */}
                       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                         <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">De la</p>
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                            De la
+                          </p>
                           <p className="mt-1.5 font-bold text-gray-900">
                             {selectedRequest.fromCity}
                           </p>
-                          <p className="text-sm text-gray-500">{selectedRequest.fromCounty}</p>
+                          <p className="text-sm text-gray-500">
+                            {selectedRequest.fromCounty}
+                          </p>
                         </div>
                         <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">La</p>
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                            La
+                          </p>
                           <p className="mt-1.5 font-bold text-gray-900">
                             {selectedRequest.toCity}
                           </p>
-                          <p className="text-sm text-gray-500">{selectedRequest.toCounty}</p>
-                        </div>
-                        <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Data</p>
-                          <p className="mt-1.5 font-bold text-gray-900">
-                            {formatMoveDateDisplay(selectedRequest as any, { month: "short" }) || "Flexibil"}
+                          <p className="text-sm text-gray-500">
+                            {selectedRequest.toCounty}
                           </p>
                         </div>
                         <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
-                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">Camere</p>
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                            Data
+                          </p>
                           <p className="mt-1.5 font-bold text-gray-900">
-                            {selectedRequest.fromRooms || "-"} → {selectedRequest.toRooms || "-"}
+                            {formatMoveDateDisplay(selectedRequest as any, {
+                              month: "short",
+                            }) || "Flexibil"}
+                          </p>
+                        </div>
+                        <div className="rounded-xl bg-gradient-to-br from-gray-50 to-gray-100/50 p-4">
+                          <p className="text-xs font-semibold uppercase tracking-wider text-gray-400">
+                            Camere
+                          </p>
+                          <p className="mt-1.5 font-bold text-gray-900">
+                            {selectedRequest.fromRooms || "-"} →{" "}
+                            {selectedRequest.toRooms || "-"}
                           </p>
                         </div>
                       </div>
@@ -498,8 +641,18 @@ export default function CustomerDashboard() {
                             onClick={() => handleReactivate(selectedRequest.id)}
                             className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
                           >
-                            <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                            <svg
+                              className="h-4 w-4"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                              />
                             </svg>
                             Reactivează cererea
                           </button>
@@ -508,8 +661,12 @@ export default function CustomerDashboard() {
                           onClick={() => setShowDetails(!showDetails)}
                           className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-semibold text-gray-700 transition hover:bg-gray-50"
                         >
-                          {showDetails ? "Ascunde detalii" : "Vezi toate detaliile"}
-                          <ChevronRightIcon className={`h-4 w-4 transition-transform ${showDetails ? "rotate-90" : ""}`} />
+                          {showDetails
+                            ? "Ascunde detalii"
+                            : "Vezi toate detaliile"}
+                          <ChevronRightIcon
+                            className={`h-4 w-4 transition-transform ${showDetails ? "rotate-90" : ""}`}
+                          />
                         </button>
                       </div>
 
@@ -523,7 +680,10 @@ export default function CustomerDashboard() {
                             className="mt-5 overflow-hidden"
                           >
                             <div className="rounded-xl border border-gray-100 bg-gray-50 p-4">
-                              <RequestFullDetails request={selectedRequest} isOwner={true} />
+                              <RequestFullDetails
+                                request={selectedRequest}
+                                isOwner={true}
+                              />
                             </div>
                           </motion.div>
                         )}
@@ -539,12 +699,13 @@ export default function CustomerDashboard() {
                           <GiftIcon className="h-5 w-5 text-purple-600" />
                         </div>
                         <div>
-                          <h3 className="font-bold text-gray-900">Oferte primite</h3>
+                          <h3 className="font-bold text-gray-900">
+                            Oferte primite
+                          </h3>
                           <p className="text-sm text-gray-500">
-                            {selectedOffers.length === 0 
+                            {selectedOffers.length === 0
                               ? "Încă nu ai primit oferte"
-                              : `${selectedOffers.length} ${selectedOffers.length === 1 ? "ofertă" : "oferte"} de la firme verificate`
-                            }
+                              : `${selectedOffers.length} ${selectedOffers.length === 1 ? "ofertă" : "oferte"} de la firme verificate`}
                           </p>
                         </div>
                       </div>
@@ -560,7 +721,9 @@ export default function CustomerDashboard() {
                         <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-gray-100">
                           <ClockIcon className="h-8 w-8 text-gray-400" />
                         </div>
-                        <p className="mt-4 font-semibold text-gray-900">Încă nu ai oferte</p>
+                        <p className="mt-4 font-semibold text-gray-900">
+                          Încă nu ai oferte
+                        </p>
                         <p className="mt-1 text-sm text-gray-500">
                           Firmele verificate îți vor trimite oferte în curând.
                         </p>
@@ -586,7 +749,9 @@ export default function CustomerDashboard() {
                 <div className="flex h-64 items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50">
                   <div className="text-center">
                     <InboxIcon className="mx-auto h-12 w-12 text-gray-300" />
-                    <p className="mt-2 font-medium text-gray-500">Selectează o cerere din listă</p>
+                    <p className="mt-2 font-medium text-gray-500">
+                      Selectează o cerere din listă
+                    </p>
                   </div>
                 </div>
               )}
@@ -657,37 +822,42 @@ function OfferCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
       className={`relative p-6 transition-colors ${
-        isDeclined ? "bg-gray-50/50" : 
-        isAccepted ? "bg-emerald-50/30" : "hover:bg-gray-50/50"
+        isDeclined
+          ? "bg-gray-50/50"
+          : isAccepted
+            ? "bg-emerald-50/30"
+            : "hover:bg-gray-50/50"
       }`}
     >
       {/* Accepted indicator */}
       {isAccepted && (
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
       )}
-      
+
       <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
         {/* Company info */}
         <div className="flex items-start gap-4">
           {/* Logo column with contact info */}
           <div className="flex flex-col items-center gap-2">
-            <div className={`relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl shadow-lg ${
-              isAccepted 
-                ? "shadow-emerald-500/30 ring-2 ring-emerald-500"
-                : isDeclined
-                  ? "shadow-gray-400/30"
-                  : "shadow-blue-500/30"
-            }`}>
+            <div
+              className={`relative flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-2xl shadow-lg ${
+                isAccepted
+                  ? "shadow-emerald-500/30 ring-2 ring-emerald-500"
+                  : isDeclined
+                    ? "shadow-gray-400/30"
+                    : "shadow-blue-500/30"
+              }`}
+            >
               {offer.companyLogo ? (
-                <img 
-                  src={offer.companyLogo} 
-                  alt={offer.companyName || "Logo companie"} 
+                <img
+                  src={offer.companyLogo}
+                  alt={offer.companyName || "Logo companie"}
                   className="h-full w-full object-cover"
                 />
               ) : (
-                <img 
-                  src="/pics/default-company.svg" 
-                  alt="Logo companie" 
+                <img
+                  src="/pics/default-company.svg"
+                  alt="Logo companie"
                   className={`h-full w-full object-cover ${isDeclined ? "opacity-50 grayscale" : ""}`}
                 />
               )}
@@ -698,32 +868,35 @@ function OfferCard({
               )}
             </div>
             {/* Contact buttons under logo */}
-            {(isAccepted || isPending) && (offer.companyPhone || offer.companyEmail) && (
-              <div className="flex items-center gap-1">
-                {offer.companyPhone && (
-                  <a
-                    href={`tel:${offer.companyPhone}`}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100"
-                    title={offer.companyPhone}
-                  >
-                    <PhoneIcon className="h-4 w-4" />
-                  </a>
-                )}
-                {offer.companyEmail && (
-                  <a
-                    href={`mailto:${offer.companyEmail}`}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition hover:bg-blue-100"
-                    title={offer.companyEmail}
-                  >
-                    <EnvelopeIcon className="h-4 w-4" />
-                  </a>
-                )}
-              </div>
-            )}
+            {(isAccepted || isPending) &&
+              (offer.companyPhone || offer.companyEmail) && (
+                <div className="flex items-center gap-1">
+                  {offer.companyPhone && (
+                    <a
+                      href={`tel:${offer.companyPhone}`}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-50 text-emerald-600 transition hover:bg-emerald-100"
+                      title={offer.companyPhone}
+                    >
+                      <PhoneIcon className="h-4 w-4" />
+                    </a>
+                  )}
+                  {offer.companyEmail && (
+                    <a
+                      href={`mailto:${offer.companyEmail}`}
+                      className="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-50 text-blue-600 transition hover:bg-blue-100"
+                      title={offer.companyEmail}
+                    >
+                      <EnvelopeIcon className="h-4 w-4" />
+                    </a>
+                  )}
+                </div>
+              )}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-2">
-              <p className={`text-lg font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}>
+              <p
+                className={`text-lg font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}
+              >
                 {offer.companyName}
               </p>
               {isAccepted && (
@@ -738,14 +911,15 @@ function OfferCard({
               )}
             </div>
             <p className="mt-0.5 text-sm text-gray-500">
-              {offer.createdAt?.toDate?.() 
+              {offer.createdAt?.toDate?.()
                 ? `Primită pe ${formatDateRO(offer.createdAt, { month: "short" })}`
-                : "Ofertă nouă"
-              }
+                : "Ofertă nouă"}
             </p>
             {offer.message && (
               <div className="mt-3 rounded-xl bg-gray-100/80 p-4">
-                <p className={`text-sm leading-relaxed ${isDeclined ? "text-gray-500" : "text-gray-700"}`}>
+                <p
+                  className={`text-sm leading-relaxed ${isDeclined ? "text-gray-500" : "text-gray-700"}`}
+                >
                   &ldquo;{offer.message}&rdquo;
                 </p>
               </div>
@@ -756,13 +930,22 @@ function OfferCard({
         {/* Price and actions */}
         <div className="flex flex-col items-end gap-4 sm:min-w-[180px]">
           <div className="text-right">
-            <p className="text-xs font-medium uppercase tracking-wider text-gray-400">Preț ofertat</p>
-            <p className={`mt-1 text-4xl font-bold ${
-              isAccepted ? "text-emerald-600" : 
-              isDeclined ? "text-gray-400" : "text-gray-900"
-            }`}>
+            <p className="text-xs font-medium uppercase tracking-wider text-gray-400">
+              Preț ofertat
+            </p>
+            <p
+              className={`mt-1 text-4xl font-bold ${
+                isAccepted
+                  ? "text-emerald-600"
+                  : isDeclined
+                    ? "text-gray-400"
+                    : "text-gray-900"
+              }`}
+            >
               {offer.price}
-              <span className="ml-1 text-lg font-medium text-gray-400">lei</span>
+              <span className="ml-1 text-lg font-medium text-gray-400">
+                lei
+              </span>
             </p>
           </div>
 
@@ -805,5 +988,3 @@ function OfferCard({
     </motion.div>
   );
 }
-
-

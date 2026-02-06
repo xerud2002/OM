@@ -6,7 +6,13 @@ import {
 } from "@heroicons/react/24/outline";
 import { CheckBadgeIcon } from "@heroicons/react/24/solid";
 
-type RequestStatus = "active" | "closed" | "paused" | "cancelled" | "pending";
+type RequestStatus =
+  | "active"
+  | "closed"
+  | "paused"
+  | "cancelled"
+  | "pending"
+  | "accepted";
 type VerificationStatus = "verified" | "pending" | "rejected" | "none";
 type OfferStatus = "pending" | "accepted" | "declined" | "rejected";
 
@@ -55,6 +61,12 @@ const requestStatusConfig: Record<
     bgClass: "bg-amber-100",
     textClass: "text-amber-700",
     label: "În așteptare",
+  },
+  accepted: {
+    icon: CheckCircleIcon,
+    bgClass: "bg-emerald-100",
+    textClass: "text-emerald-700",
+    label: "Acceptată",
   },
 };
 
@@ -120,13 +132,17 @@ const offerStatusConfig: Record<
   },
 };
 
-export default function StatusBadge({ type, status, size = "md" }: StatusBadgeProps) {
+export default function StatusBadge({
+  type,
+  status,
+  size = "md",
+}: StatusBadgeProps) {
   const config =
     type === "request"
       ? requestStatusConfig[status as RequestStatus]
       : type === "verification"
-      ? verificationStatusConfig[status as VerificationStatus]
-      : offerStatusConfig[status as OfferStatus];
+        ? verificationStatusConfig[status as VerificationStatus]
+        : offerStatusConfig[status as OfferStatus];
 
   if (!config) return null;
 
@@ -143,16 +159,25 @@ export default function StatusBadge({ type, status, size = "md" }: StatusBadgePr
 }
 
 // Utility function for getting request status badge (for backwards compatibility)
-export function getRequestStatusBadge(status: RequestStatus, size: "sm" | "md" = "md") {
+export function getRequestStatusBadge(
+  status: RequestStatus,
+  size: "sm" | "md" = "md",
+) {
   return <StatusBadge type="request" status={status} size={size} />;
 }
 
 // Utility function for getting verification status badge
-export function getVerificationStatusBadge(status: VerificationStatus, size: "sm" | "md" = "md") {
+export function getVerificationStatusBadge(
+  status: VerificationStatus,
+  size: "sm" | "md" = "md",
+) {
   return <StatusBadge type="verification" status={status} size={size} />;
 }
 
 // Utility function for getting offer status badge
-export function getOfferStatusBadge(status: OfferStatus, size: "sm" | "md" = "md") {
+export function getOfferStatusBadge(
+  status: OfferStatus,
+  size: "sm" | "md" = "md",
+) {
   return <StatusBadge type="offer" status={status} size={size} />;
 }

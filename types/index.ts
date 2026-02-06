@@ -29,7 +29,7 @@ export type CompanyProfile = BaseProfile & {
   averageRating?: number;
   totalReviews?: number;
   // Monetization & Verification
-  verificationStatus?: 'unverified' | 'pending' | 'verified' | 'rejected';
+  verificationStatus?: "unverified" | "pending" | "verified" | "rejected";
   documents?: {
     registration?: string; // URL
     insurance?: string; // URL
@@ -120,7 +120,7 @@ export type MovingRequest = {
   mediaUploadToken?: string;
   mediaUrls?: string[];
   createdAt: Timestamp;
-  status?: "active" | "closed" | "paused" | "cancelled";
+  status?: "active" | "closed" | "paused" | "cancelled" | "accepted";
   archived?: boolean;
 };
 
