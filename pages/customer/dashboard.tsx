@@ -960,17 +960,59 @@ function OfferCard({
                 <MessageSquare className="h-4 w-4" />
                 Chat
               </button>
+              {offer.companyPhone && (
+                <a
+                  href={`tel:${offer.companyPhone}`}
+                  className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-white px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50"
+                  title={offer.companyPhone}
+                >
+                  <PhoneIcon className="h-4 w-4" />
+                  Sună
+                </a>
+              )}
+              {offer.companyEmail && (
+                <a
+                  href={`mailto:${offer.companyEmail}`}
+                  className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-white px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
+                  title={offer.companyEmail}
+                >
+                  <EnvelopeIcon className="h-4 w-4" />
+                  Email
+                </a>
+              )}
             </div>
           )}
 
           {isAccepted && (
-            <button
-              onClick={onChat}
-              className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
-            >
-              <MessageSquare className="h-4 w-4" />
-              Contactează firma
-            </button>
+            <div className="flex flex-wrap justify-end gap-2">
+              <button
+                onClick={onChat}
+                className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+              >
+                <MessageSquare className="h-4 w-4" />
+                Contactează firma
+              </button>
+              {offer.companyPhone && (
+                <a
+                  href={`tel:${offer.companyPhone}`}
+                  className="inline-flex items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
+                  title={offer.companyPhone}
+                >
+                  <PhoneIcon className="h-4 w-4" />
+                  Sună
+                </a>
+              )}
+              {offer.companyEmail && (
+                <a
+                  href={`mailto:${offer.companyEmail}`}
+                  className="inline-flex items-center gap-2 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                  title={offer.companyEmail}
+                >
+                  <EnvelopeIcon className="h-4 w-4" />
+                  Email
+                </a>
+              )}
+            </div>
           )}
         </div>
       </div>

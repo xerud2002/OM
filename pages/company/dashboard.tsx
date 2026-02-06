@@ -34,6 +34,8 @@ import {
   CheckIcon,
   XMarkIcon,
   PaperAirplaneIcon,
+  PhoneIcon,
+  EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import LoadingSpinner, {
@@ -131,20 +133,39 @@ export default function CompanyDashboard() {
 
     const unsub = onSnapshot(
       q,
-      (snapshot) => {
-        const data = snapshot.docs.map((doc) => ({
+      async (snapshot) => {
+        const rawData = snapshot.docs.map((doc) => ({
           id: doc.id,
           requestId: doc.ref.parent.parent?.id,
           ...doc.data(),
         }));
-        console.log(
-          "[DEBUG] Offers loaded for company",
-          company.uid,
-          ":",
-          data.length,
-          data,
+
+        // Enrich offers with customer contact info from parent request
+        const enriched = await Promise.all(
+          rawData.map(async (offer: any) => {
+            if (!offer.requestId) return offer;
+            try {
+              const reqSnap = await getDoc(
+                doc(db, "requests", offer.requestId),
+              );
+              if (reqSnap.exists()) {
+                const reqData = reqSnap.data();
+                return {
+                  ...offer,
+                  customerName:
+                    reqData.customerName || reqData.contactName || null,
+                  customerPhone: reqData.phone || null,
+                  customerEmail: reqData.customerEmail || null,
+                };
+              }
+            } catch {
+              // Silently skip — customer data is optional
+            }
+            return offer;
+          }),
         );
-        setOffers(data);
+
+        setOffers(enriched);
         setOfferError(null);
         setLoading(false);
       },
@@ -502,25 +523,58 @@ export default function CompanyDashboard() {
                             </div>
                           </div>
                         ) : (
-                          <div className="flex flex-wrap gap-2 border-t border-gray-100 pt-4">
-                            <button
-                              onClick={() => {
-                                setEditingId(offer.id);
-                                setEditPrice(String(offer.price ?? ""));
-                                setEditMessage(offer.message ?? "");
-                              }}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
-                            >
-                              <PencilIcon className="h-4 w-4" />
-                              Editează
-                            </button>
-                            <button
-                              onClick={() => setWithdrawOffer(offer)}
-                              className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
-                            >
-                              <TrashIcon className="h-4 w-4" />
-                              Retrage
-                            </button>
+                          <div className="flex flex-wrap items-center gap-2 border-t border-gray-100 pt-4">
+                            {(!offer.status || offer.status === "pending") && (
+                              <>
+                                <button
+                                  onClick={() => {
+                                    setEditingId(offer.id);
+                                    setEditPrice(String(offer.price ?? ""));
+                                    setEditMessage(offer.message ?? "");
+                                  }}
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
+                                >
+                                  <PencilIcon className="h-4 w-4" />
+                                  Editează
+                                </button>
+                                <button
+                                  onClick={() => setWithdrawOffer(offer)}
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                                >
+                                  <TrashIcon className="h-4 w-4" />
+                                  Retrage
+                                </button>
+                              </>
+                            )}
+
+                            {/* Customer contact buttons */}
+                            {(offer.customerPhone || offer.customerEmail) && (
+                              <div className="ml-auto flex items-center gap-2">
+                                <span className="text-xs text-gray-400">
+                                  Contactează clientul:
+                                </span>
+                                {offer.customerPhone && (
+                                  <a
+                                    href={`tel:${offer.customerPhone}`}
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
+                                    title={offer.customerPhone}
+                                  >
+                                    <PhoneIcon className="h-4 w-4" />
+                                    Sună
+                                  </a>
+                                )}
+                                {offer.customerEmail && (
+                                  <a
+                                    href={`mailto:${offer.customerEmail}`}
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                                    title={offer.customerEmail}
+                                  >
+                                    <EnvelopeIcon className="h-4 w-4" />
+                                    Email
+                                  </a>
+                                )}
+                              </div>
+                            )}
                           </div>
                         )}
                       </div>
