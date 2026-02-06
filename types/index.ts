@@ -130,6 +130,7 @@ export type Offer = {
   requestCode?: string;
   companyId: string;
   companyName: string;
+  companyLogo?: string | null;
   companyPhone?: string;
   companyEmail?: string;
   price: number;

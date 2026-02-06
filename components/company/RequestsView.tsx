@@ -66,6 +66,7 @@ export type Offer = {
   id: string;
   companyId: string;
   companyName: string;
+  companyLogo?: string | null;
   price: number;
   message: string;
   status?: "pending" | "accepted" | "declined" | "rejected";
