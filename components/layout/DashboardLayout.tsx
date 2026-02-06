@@ -2,6 +2,7 @@
 
 import React, { useState, Fragment } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -54,14 +55,30 @@ interface DashboardLayoutProps {
 // Default navigation per role
 const defaultNavigation: Record<DashboardRole, NavItem[]> = {
   customer: [
-    { name: "Cererile Mele", href: "/customer/dashboard", icon: DocumentTextIcon },
+    {
+      name: "Cererile Mele",
+      href: "/customer/dashboard",
+      icon: DocumentTextIcon,
+    },
     { name: "Profil", href: "/customer/profile", icon: UserCircleIcon },
   ],
   company: [
-    { name: "Cereri Disponibile", href: "/company/dashboard?tab=requests", icon: InboxIcon },
-    { name: "Ofertele Mele", href: "/company/dashboard?tab=offers", icon: DocumentTextIcon },
+    {
+      name: "Cereri Disponibile",
+      href: "/company/dashboard?tab=requests",
+      icon: InboxIcon,
+    },
+    {
+      name: "Ofertele Mele",
+      href: "/company/dashboard?tab=offers",
+      icon: DocumentTextIcon,
+    },
     { name: "Credite", href: "/company/credits", icon: CreditCardIcon },
-    { name: "Profil Companie", href: "/company/profile", icon: BuildingOfficeIcon },
+    {
+      name: "Profil Companie",
+      href: "/company/profile",
+      icon: BuildingOfficeIcon,
+    },
     { name: "Setări", href: "/company/settings", icon: Cog6ToothIcon },
   ],
   admin: [
@@ -74,7 +91,10 @@ const defaultNavigation: Record<DashboardRole, NavItem[]> = {
   ],
 };
 
-const roleColors: Record<DashboardRole, { primary: string; accent: string; bg: string }> = {
+const roleColors: Record<
+  DashboardRole,
+  { primary: string; accent: string; bg: string }
+> = {
   customer: {
     primary: "emerald",
     accent: "from-emerald-500 to-teal-500",
@@ -119,7 +139,9 @@ export default function DashboardLayout({
   const currentPath = router.asPath;
   const navWithCurrent = nav.map((item) => ({
     ...item,
-    current: activeTab ? item.href.includes(activeTab) : currentPath.startsWith(item.href.split("?")[0]),
+    current: activeTab
+      ? item.href.includes(activeTab)
+      : currentPath.startsWith(item.href.split("?")[0]),
   }));
 
   const handleSignOut = async () => {
@@ -128,15 +150,20 @@ export default function DashboardLayout({
   };
 
   // For companies, use companyName if available, otherwise use displayName
-  const userName = role === "company" && companyName 
-    ? companyName 
-    : user?.displayName || user?.email?.split("@")[0] || roleLabels[role];
+  const userName =
+    role === "company" && companyName
+      ? companyName
+      : user?.displayName || user?.email?.split("@")[0] || roleLabels[role];
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile sidebar */}
       <Transition.Root show={sidebarOpen} as={Fragment}>
-        <Dialog as="div" className="relative z-50 lg:hidden" onClose={setSidebarOpen}>
+        <Dialog
+          as="div"
+          className="relative z-50 lg:hidden"
+          onClose={setSidebarOpen}
+        >
           <Transition.Child
             as={Fragment}
             enter="transition-opacity ease-linear duration-300"
@@ -170,9 +197,16 @@ export default function DashboardLayout({
                   leaveTo="opacity-0"
                 >
                   <div className="absolute left-full top-0 flex w-16 justify-center pt-5">
-                    <button type="button" className="-m-2.5 p-2.5" onClick={() => setSidebarOpen(false)}>
+                    <button
+                      type="button"
+                      className="-m-2.5 p-2.5"
+                      onClick={() => setSidebarOpen(false)}
+                    >
                       <span className="sr-only">Închide sidebar</span>
-                      <XMarkIcon className="h-6 w-6 text-white" aria-hidden="true" />
+                      <XMarkIcon
+                        className="h-6 w-6 text-white"
+                        aria-hidden="true"
+                      />
                     </button>
                   </div>
                 </Transition.Child>
@@ -181,19 +215,36 @@ export default function DashboardLayout({
                 <div className="flex grow flex-col overflow-y-auto bg-white px-6 pb-4">
                   <div className="flex h-16 shrink-0 items-center border-b border-gray-100">
                     <Link href="/" className="flex items-center gap-1">
-                      <span className="text-xl font-bold text-emerald-600">Ofertemutare</span>
-                      <sup className="text-[10px] font-bold text-gray-400">.ro</sup>
+                      <span className="text-xl font-bold text-emerald-600">
+                        Ofertemutare
+                      </span>
+                      <sup className="text-[10px] font-bold text-gray-400">
+                        .ro
+                      </sup>
                     </Link>
                   </div>
-                  
+
                   {/* User info mobile */}
                   <div className="py-4">
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3">
                       <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500">
                         {role === "company" && user?.photoURL ? (
-                          <img src={user.photoURL} alt="Logo" className="h-full w-full object-cover" />
+                          <Image
+                            src={user.photoURL}
+                            alt="Logo"
+                            width={40}
+                            height={40}
+                            className="h-full w-full object-cover"
+                            unoptimized
+                          />
                         ) : role === "company" ? (
-                          <img src="/pics/default-company.svg" alt="Logo" className="h-full w-full object-cover" />
+                          <Image
+                            src="/pics/default-company.svg"
+                            alt="Logo"
+                            width={40}
+                            height={40}
+                            className="h-full w-full object-cover"
+                          />
                         ) : role === "customer" ? (
                           <UserCircleIcon className="h-5 w-5 text-white" />
                         ) : (
@@ -201,8 +252,12 @@ export default function DashboardLayout({
                         )}
                       </div>
                       <div>
-                        <p className="text-sm font-semibold text-gray-900">{userName}</p>
-                        <p className="text-xs text-gray-500">{roleLabels[role]}</p>
+                        <p className="text-sm font-semibold text-gray-900">
+                          {userName}
+                        </p>
+                        <p className="text-xs text-gray-500">
+                          {roleLabels[role]}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -233,7 +288,10 @@ export default function DashboardLayout({
                                       : "text-gray-600 hover:bg-gray-50"
                                   }`}
                                 >
-                                  <item.icon className={`h-5 w-5 shrink-0 ${item.current ? mobileActiveIconStyles[role] : "text-gray-400"}`} aria-hidden="true" />
+                                  <item.icon
+                                    className={`h-5 w-5 shrink-0 ${item.current ? mobileActiveIconStyles[role] : "text-gray-400"}`}
+                                    aria-hidden="true"
+                                  />
                                   {item.name}
                                 </Link>
                               </li>
@@ -273,7 +331,9 @@ export default function DashboardLayout({
           {/* Logo */}
           <div className="flex h-16 shrink-0 items-center px-6 border-b border-gray-100">
             <Link href="/" className="flex items-center gap-1">
-              <span className="text-xl font-bold text-emerald-600">Ofertemutare</span>
+              <span className="text-xl font-bold text-emerald-600">
+                Ofertemutare
+              </span>
               <sup className="text-[10px] font-bold text-gray-400">.ro</sup>
             </Link>
           </div>
@@ -283,9 +343,22 @@ export default function DashboardLayout({
             <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 p-3">
               <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
                 {role === "company" && user?.photoURL ? (
-                  <img src={user.photoURL} alt="Logo" className="h-full w-full object-cover" />
+                  <Image
+                    src={user.photoURL}
+                    alt="Logo"
+                    width={40}
+                    height={40}
+                    className="h-full w-full object-cover"
+                    unoptimized
+                  />
                 ) : role === "company" ? (
-                  <img src="/pics/default-company.svg" alt="Logo" className="h-full w-full object-cover" />
+                  <Image
+                    src="/pics/default-company.svg"
+                    alt="Logo"
+                    width={40}
+                    height={40}
+                    className="h-full w-full object-cover"
+                  />
                 ) : role === "customer" ? (
                   <UserCircleIcon className="h-5 w-5 text-white" />
                 ) : (
@@ -293,8 +366,12 @@ export default function DashboardLayout({
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="truncate text-sm font-semibold text-gray-900">{userName}</p>
-                <p className="truncate text-xs text-gray-500">{roleLabels[role]}</p>
+                <p className="truncate text-sm font-semibold text-gray-900">
+                  {userName}
+                </p>
+                <p className="truncate text-xs text-gray-500">
+                  {roleLabels[role]}
+                </p>
               </div>
             </div>
           </div>
@@ -306,9 +383,12 @@ export default function DashboardLayout({
                   {navWithCurrent.map((item) => {
                     // Active styles based on role
                     const activeStyles = {
-                      customer: "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
-                      company: "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
-                      admin: "bg-purple-50 text-purple-700 border-l-2 border-purple-500",
+                      customer:
+                        "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
+                      company:
+                        "bg-emerald-50 text-emerald-700 border-l-2 border-emerald-500",
+                      admin:
+                        "bg-purple-50 text-purple-700 border-l-2 border-purple-500",
                     };
                     const activeIconStyles = {
                       customer: "text-emerald-600",
@@ -390,7 +470,9 @@ export default function DashboardLayout({
 
               {/* Profile dropdown mobile */}
               <div className="flex items-center gap-3 lg:hidden">
-                <div className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r ${colors.accent} text-sm font-bold text-white`}>
+                <div
+                  className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r ${colors.accent} text-sm font-bold text-white`}
+                >
                   {userName.charAt(0).toUpperCase()}
                 </div>
               </div>
@@ -405,17 +487,21 @@ export default function DashboardLayout({
               <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {stats.map((stat) => (
                   <div key={stat.label} className="rounded-lg bg-gray-50 p-4">
-                    <dt className="truncate text-sm font-medium text-gray-500">{stat.label}</dt>
+                    <dt className="truncate text-sm font-medium text-gray-500">
+                      {stat.label}
+                    </dt>
                     <dd className="mt-1 flex items-baseline gap-2">
-                      <span className="text-2xl font-bold text-gray-900">{stat.value}</span>
+                      <span className="text-2xl font-bold text-gray-900">
+                        {stat.value}
+                      </span>
                       {stat.change && (
                         <span
                           className={`text-sm font-medium ${
                             stat.changeType === "positive"
                               ? "text-green-600"
                               : stat.changeType === "negative"
-                              ? "text-red-600"
-                              : "text-gray-500"
+                                ? "text-red-600"
+                                : "text-gray-500"
                           }`}
                         >
                           {stat.change}
@@ -431,11 +517,11 @@ export default function DashboardLayout({
 
         {/* Page content */}
         <main className="py-6">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">{children}</div>
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            {children}
+          </div>
         </main>
       </div>
     </div>
   );
 }
-
-

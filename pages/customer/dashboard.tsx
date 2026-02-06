@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useRouter } from "next/router";
 import { logger } from "@/utils/logger";
 import RequireRole from "@/components/auth/RequireRole";
@@ -219,6 +220,7 @@ export default function CustomerDashboard() {
       (r) => (offersByRequest[r.id] || []).length > 0,
     )?.id;
     setSelectedRequestId((prev) => prev || withOffers || requests[0].id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requests, offersByRequest, router.query.requestId]);
 
   const selectedRequest = requests.find((r) => r.id === selectedRequestId);
@@ -793,15 +795,20 @@ function OfferCard({
               }`}
             >
               {offer.companyLogo ? (
-                <img
+                <Image
                   src={offer.companyLogo}
                   alt={offer.companyName || "Logo companie"}
+                  width={56}
+                  height={56}
                   className="h-full w-full object-cover"
+                  unoptimized
                 />
               ) : (
-                <img
+                <Image
                   src="/pics/default-company.svg"
                   alt="Logo companie"
+                  width={56}
+                  height={56}
                   className={`h-full w-full object-cover ${isDeclined ? "opacity-50 grayscale" : ""}`}
                 />
               )}

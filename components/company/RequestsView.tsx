@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState, useMemo, useRef, useCallback } from "react";
+import Image from "next/image";
 import { db } from "@/services/firebase";
 import {
   collection,
@@ -237,11 +238,14 @@ function JobCard({
         <div className="border-t border-gray-100 px-4 py-2">
           <div className="flex gap-1 overflow-x-auto">
             {(r as any).mediaUrls.slice(0, 4).map((url: string, i: number) => (
-              <img
+              <Image
                 key={i}
                 src={url}
                 alt=""
+                width={48}
+                height={48}
                 className="h-12 w-12 rounded object-cover"
+                unoptimized
               />
             ))}
             {(r as any).mediaUrls.length > 4 && (
