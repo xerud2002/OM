@@ -79,6 +79,12 @@ export function isLogoutInProgress() {
 }
 
 // ---- Role-aware profile helpers
+
+// Welcome credits for new companies:
+// 50 credits = 1 free offer to test the platform
+// This creates scarcity and urgency to purchase more
+const COMPANY_WELCOME_CREDITS = 50;
+
 export async function ensureUserProfile(u: User, role: UserRole) {
   const col = COLLECTIONS[role];
   const profileRef = doc(db, col, u.uid);
@@ -97,7 +103,7 @@ export async function ensureUserProfile(u: User, role: UserRole) {
   }
 
   if (!snap.exists()) {
-    await setDoc(profileRef, {
+    const baseProfile = {
       uid: u.uid,
       email: u.email,
       displayName: u.displayName ?? u.email?.split("@")[0] ?? "User",
@@ -105,12 +111,33 @@ export async function ensureUserProfile(u: User, role: UserRole) {
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
       role,
-      // Initialize with 200 credits for companies
-      ...(role === "company" ? {
-        credits: 200,
-        verificationStatus: 'pending' // pending | verified | rejected
-      } : {}),
-    });
+    };
+
+    if (role === "company") {
+      await setDoc(profileRef, {
+        ...baseProfile,
+        // Credits & Monetization
+        credits: COMPANY_WELCOME_CREDITS,
+        welcomeCreditsReceived: COMPANY_WELCOME_CREDITS,
+        firstPurchaseBonusAvailable: true, // 199 RON → 300 credits (+50%)
+        // Verification
+        verificationStatus: "pending", // pending | verified | rejected
+        // Onboarding tracking
+        onboardingCompleted: false,
+        onboardingStep: 1,
+        // Profile completion tracking
+        profileCompleteness: 0,
+      });
+    } else if (role === "customer") {
+      await setDoc(profileRef, {
+        ...baseProfile,
+        // Customer onboarding
+        onboardingCompleted: false,
+        firstRequestSubmitted: false,
+      });
+    } else {
+      await setDoc(profileRef, baseProfile);
+    }
   } else {
     // Keep updatedAt fresh
     await updateDoc(profileRef, { updatedAt: serverTimestamp() });

@@ -721,6 +721,9 @@ export default function RequestsView({
           status: "pending",
           createdAt: serverTimestamp(),
           costPaid: cost,
+          // Refund tracking
+          refunded: false,
+          refundEligibleAt: new Date(Date.now() + 72 * 60 * 60 * 1000), // 72 hours from now
         });
 
         // Record Transaction
@@ -1033,6 +1036,7 @@ export default function RequestsView({
             : "Trimite Ofertă"
         }
         isLoading={submittingOffer}
+        offerCost={activeOfferRequest ? calculateRequestCost(activeOfferRequest) : undefined}
       />
     </div>
   );

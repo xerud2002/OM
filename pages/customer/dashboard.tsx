@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { logger } from "@/utils/logger";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
+import CustomerWelcome from "@/components/customer/CustomerWelcome";
 import {
   InboxIcon,
   CheckCircleIcon,
@@ -17,6 +19,8 @@ import {
   GiftIcon,
   PhoneIcon,
   EnvelopeIcon,
+  DocumentPlusIcon,
+  ArrowRightIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { MovingRequest, Offer } from "@/types";
@@ -305,25 +309,30 @@ export default function CustomerDashboard() {
         showStats={false}
       >
         {requests.length === 0 ? (
-          // Empty state
-          <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
-              <InboxIcon className="h-10 w-10 text-white" />
+          // Welcome state for new users
+          <div className="space-y-6">
+            <CustomerWelcome userName={user?.displayName} />
+            
+            {/* Empty state card */}
+            <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
+                <InboxIcon className="h-10 w-10 text-white" />
+              </div>
+              <h3 className="mt-6 text-xl font-bold text-gray-900">
+                Nu ai încă cereri
+              </h3>
+              <p className="mt-2 max-w-sm text-gray-500">
+                Creează o cerere pentru a primi oferte de la firme de mutări verificate.
+              </p>
+              <Link
+                href="/"
+                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
+              >
+                <DocumentPlusIcon className="h-5 w-5" />
+                Creează prima cerere
+                <ArrowRightIcon className="h-4 w-4" />
+              </Link>
             </div>
-            <h3 className="mt-6 text-xl font-bold text-gray-900">
-              Nu ai încă cereri
-            </h3>
-            <p className="mt-2 max-w-sm text-gray-500">
-              Creează o cerere de pe pagina principală pentru a primi oferte de
-              la firme de mutări verificate.
-            </p>
-            <button
-              onClick={() => router.push("/")}
-              className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
-            >
-              Creează cerere
-              <ChevronRightIcon className="h-4 w-4" />
-            </button>
           </div>
         ) : (
           // Main content grid

@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import NotificationBell from "@/components/company/NotificationBell";
+import OnboardingWizard from "@/components/company/OnboardingWizard";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { logger } from "@/utils/logger";
@@ -73,8 +74,10 @@ const ConfirmModal = dynamic(() => import("@/components/ConfirmModal"), {
 export default function CompanyDashboard() {
   const router = useRouter();
   const [company, setCompany] = useState<any>(null);
+  const [companyData, setCompanyData] = useState<any>(null);
   const [companyName, setCompanyName] = useState<string>("");
   const [companyLogo, setCompanyLogo] = useState<string | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const [offers, setOffers] = useState<any[]>([]);
   const [loading, setLoading] = useState(false);
   const [statusFilter, setStatusFilter] = useState<
@@ -107,19 +110,26 @@ export default function CompanyDashboard() {
   useEffect(() => {
     if (!company?.uid) return;
 
-    const fetchCompanyName = async () => {
+    const fetchCompanyData = async () => {
       try {
         const companyDoc = await getDoc(doc(db, "companies", company.uid));
         if (companyDoc.exists()) {
-          setCompanyName(companyDoc.data()?.companyName || "");
-          setCompanyLogo(companyDoc.data()?.logoUrl || null);
+          const data = companyDoc.data();
+          setCompanyData(data);
+          setCompanyName(data?.companyName || "");
+          setCompanyLogo(data?.logoUrl || null);
+          
+          // Show onboarding wizard if not completed
+          if (data?.onboardingCompleted === false) {
+            setShowOnboarding(true);
+          }
         }
       } catch (err) {
-        logger.error("Error fetching company name:", err);
+        logger.error("Error fetching company data:", err);
       }
     };
 
-    fetchCompanyName();
+    fetchCompanyData();
   }, [company?.uid]);
 
   // Offers listener
@@ -274,6 +284,25 @@ export default function CompanyDashboard() {
 
   return (
     <RequireRole allowedRole="company">
+      {/* Onboarding Wizard */}
+      {showOnboarding && company?.uid && companyData && (
+        <OnboardingWizard
+          companyId={company.uid}
+          companyData={companyData}
+          onComplete={() => {
+            setShowOnboarding(false);
+            // Refresh company data
+            getDoc(doc(db, "companies", company.uid)).then((snap) => {
+              if (snap.exists()) {
+                setCompanyData(snap.data());
+                setCompanyName(snap.data()?.companyName || "");
+              }
+            });
+          }}
+          onSkip={() => setShowOnboarding(false)}
+        />
+      )}
+      
       <DashboardLayout
         role="company"
         user={

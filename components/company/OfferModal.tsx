@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon, PaperAirplaneIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 type OfferModalProps = {
@@ -9,6 +9,7 @@ type OfferModalProps = {
   onConfirm: (price: number, message: string) => Promise<void>;
   title?: string;
   isLoading?: boolean;
+  offerCost?: number; // Credits cost for this offer
 };
 
 export default function OfferModal({
@@ -17,6 +18,7 @@ export default function OfferModal({
   onConfirm,
   title = "Trimite Ofertă",
   isLoading = false,
+  offerCost,
 }: OfferModalProps) {
   const [price, setPrice] = useState<string>("");
   const [message, setMessage] = useState<string>("");
@@ -68,9 +70,17 @@ export default function OfferModal({
 
                 {/* Title */}
                 <h3 className="mb-2 text-center text-xl font-bold text-gray-900">{title}</h3>
-                <p className="mb-6 text-center text-sm text-gray-500">
+                <p className="mb-4 text-center text-sm text-gray-500">
                   Introduceți prețul și un mesaj opțional pentru client.
                 </p>
+
+                {/* Cost info */}
+                {offerCost && (
+                  <div className="mb-4 flex items-center justify-center gap-2 rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-800">
+                    <span>Cost ofertă:</span>
+                    <span className="font-bold">{offerCost} credite</span>
+                  </div>
+                )}
 
                 <div className="space-y-4">
                   <div>
@@ -110,8 +120,16 @@ export default function OfferModal({
                   </div>
                 </div>
 
+                {/* Refund protection notice */}
+                <div className="mt-4 flex items-start gap-2 rounded-lg bg-emerald-50 p-3 ring-1 ring-emerald-100">
+                  <ShieldCheckIcon className="h-5 w-5 shrink-0 text-emerald-600 mt-0.5" />
+                  <p className="text-xs text-emerald-800">
+                    <strong>Protecție refund:</strong> Dacă clientul nu răspunde în 72h, creditele îți sunt returnate automat.
+                  </p>
+                </div>
+
                 {/* Buttons */}
-                <div className="mt-8 flex gap-3">
+                <div className="mt-6 flex gap-3">
                   <button
                     type="button"
                     onClick={onClose}
