@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OferteMutare.ro — Plan Comprehensiv de Business & Marketing</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+    
+    .header { background: linear-gradient(135deg, #059669, #0d9488); color: white; padding: 3rem 2rem; text-align: center; }
+    .header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .header p { font-size: 1.1rem; opacity: 0.9; }
+    .header .date { margin-top: 1rem; font-size: 0.85rem; opacity: 0.7; }
+    
+    .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+    
+    .toc { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .toc h2 { font-size: 1.3rem; margin-bottom: 1rem; color: #059669; }
+    .toc ol { padding-left: 1.5rem; }
+    .toc li { margin-bottom: 0.5rem; }
+    .toc a { color: #0d9488; text-decoration: none; font-weight: 500; }
+    .toc a:hover { text-decoration: underline; }
+    
+    .section { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+    .section h2 { font-size: 1.5rem; font-weight: 700; color: #059669; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d1fae5; }
+    .section h3 { font-size: 1.15rem; font-weight: 600; color: #1e293b; margin: 1.5rem 0 0.75rem; }
+    .section h4 { font-size: 1rem; font-weight: 600; color: #475569; margin: 1rem 0 0.5rem; }
+    .section p { margin-bottom: 0.75rem; color: #475569; }
+    .section ul, .section ol { padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
+    .section li { margin-bottom: 0.4rem; }
+    
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+    th { background: #f1f5f9; color: #1e293b; font-weight: 600; text-align: left; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; }
+    td { padding: 0.75rem 1rem; border: 1px solid #e2e8f0; color: #475569; }
+    tr:hover td { background: #f8fafc; }
+    
+    .highlight { background: #d1fae5; border-left: 4px solid #059669; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+    .highlight strong { color: #065f46; }
+    
+    .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+    .warning strong { color: #92400e; }
+    
+    .danger { background: #fee2e2; border-left: 4px solid #ef4444; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+    .danger strong { color: #991b1b; }
+    
+    .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+    .metric-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 1.25rem; text-align: center; }
+    .metric-card .value { font-size: 1.8rem; font-weight: 800; color: #059669; }
+    .metric-card .label { font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; }
+    
+    .keyword-tag { display: inline-block; background: #f1f5f9; border: 1px solid #e2e8f0; border-radius: 6px; padding: 0.25rem 0.6rem; margin: 0.2rem; font-size: 0.85rem; font-family: monospace; color: #475569; }
+    .keyword-neg { background: #fee2e2; border-color: #fecaca; color: #991b1b; }
+    
+    .step-list { counter-reset: steps; list-style: none; padding-left: 0; }
+    .step-list li { counter-increment: steps; padding: 0.75rem 0 0.75rem 3rem; position: relative; border-bottom: 1px solid #f1f5f9; }
+    .step-list li::before { content: counter(steps); position: absolute; left: 0; top: 0.65rem; width: 2rem; height: 2rem; background: #059669; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.85rem; }
+    
+    .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-amber { background: #fef3c7; color: #92400e; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    
+    .footer { text-align: center; padding: 2rem; color: #94a3b8; font-size: 0.85rem; }
+    
+    @media (max-width: 768px) {
+      .header h1 { font-size: 1.6rem; }
+      .container { padding: 1rem; }
+      .section { padding: 1.25rem; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 0.5rem; }
+      .metric-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    
+    @media print {
+      body { background: white; }
+      .section { box-shadow: none; border: 1px solid #e2e8f0; page-break-inside: avoid; }
+      .header { background: #059669 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <h1>📋 OferteMutare.ro — Plan de Business &amp; Marketing</h1>
+  <p>Strategie completă: Prețuri, Achiziție Clienți, Achiziție Companii, Google Ads</p>
+  <div class="date">Generat: Februarie 2026 | Budget lunar: £2,000 (~11,000 RON)</div>
+</div>
+
+<div class="container">
+
+  <!-- TABLE OF CONTENTS -->
+  <div class="toc">
+    <h2>📑 Cuprins</h2>
+    <ol>
+      <li><a href="#revenue-model">Modelul de Venituri</a></li>
+      <li><a href="#pricing">Prețuri &amp; Pachete Credite</a></li>
+      <li><a href="#breakeven">Analiza Break-Even</a></li>
+      <li><a href="#company-acquisition">Achiziție Companii — Strategie</a></li>
+      <li><a href="#credit-strategy">Strategie Credite Gratuite</a></li>
+      <li><a href="#refund-policy">Politica de Refund Credite</a></li>
+      <li><a href="#ads-budget">Buget Publicitate — £2,000/lună</a></li>
+      <li><a href="#google-keywords">Google Ads — Keywords &amp; Structură</a></li>
+      <li><a href="#meta-ads">Meta Ads (Facebook/Instagram)</a></li>
+      <li><a href="#weekly-checklist">Checklist Săptămânal</a></li>
+      <li><a href="#growth-targets">Obiective de Creștere</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. REVENUE MODEL -->
+  <div class="section" id="revenue-model">
+    <h2>1. Modelul de Venituri</h2>
+    
+    <p>OferteMutare.ro este o platformă de lead generation bilaterală:</p>
+    
+    <table>
+      <tr>
+        <th>Acțiune</th>
+        <th>Cine plătește</th>
+        <th>Cost</th>
+      </tr>
+      <tr>
+        <td>Client trimite cerere de mutare</td>
+        <td>Nimeni (gratuit)</td>
+        <td>0 RON</td>
+      </tr>
+      <tr>
+        <td>Companie trimite ofertă pe cerere</td>
+        <td>Compania</td>
+        <td>45-50 credite (= 45-50 RON)</td>
+      </tr>
+    </table>
+
+    <h3>Venit per cerere (lead)</h3>
+    <table>
+      <tr>
+        <th>Scenariul</th>
+        <th>Companii care ofertează</th>
+        <th>Venit</th>
+      </tr>
+      <tr>
+        <td>Oraș mic / 1 companie</td>
+        <td>1</td>
+        <td>~41-50 RON</td>
+      </tr>
+      <tr>
+        <td>Medie</td>
+        <td>3</td>
+        <td>~123 RON</td>
+      </tr>
+      <tr>
+        <td>Orașe mari (București, Cluj)</td>
+        <td>4-5</td>
+        <td>~164-205 RON</td>
+      </tr>
+    </table>
+
+    <div class="highlight">
+      <strong>Concluzie:</strong> Cu cât mai multe companii pe platformă, cu atât mai mult venit per cerere. Prioritatea #1 este achiziția de companii.
+    </div>
+  </div>
+
+  <!-- 2. PRICING -->
+  <div class="section" id="pricing">
+    <h2>2. Prețuri &amp; Pachete Credite</h2>
+    
+    <p>1 Credit = 1 RON. Compania plătește credite pentru fiecare ofertă trimisă.</p>
+
+    <h3>Cost per ofertă</h3>
+    <table>
+      <tr>
+        <th>Tip cerere</th>
+        <th>Credite/ofertă</th>
+        <th>Justificare</th>
+      </tr>
+      <tr>
+        <td>Orașe mari (București, Cluj, Timișoara)</td>
+        <td><strong>50 credite</strong></td>
+        <td>Joburi de valoare mare (2,000-5,000+ RON)</td>
+      </tr>
+      <tr>
+        <td>Orașe medii</td>
+        <td><strong>45 credite</strong></td>
+        <td>Standard</td>
+      </tr>
+      <tr>
+        <td>Orașe mici / zonă cu puțini competitori</td>
+        <td><strong>30 credite</strong></td>
+        <td>Barieră mai mică, încurajare adopție</td>
+      </tr>
+    </table>
+
+    <div class="highlight">
+      <strong>Perspectiva companiei:</strong> O firmă plătește 50 RON pentru un lead care poate genera 1,500-5,000 RON venituri. Aceasta este o rată de achiziție de doar 1-3% — extrem de competitivă pe piață.
+    </div>
+
+    <h3>Pachete de credite</h3>
+    <table>
+      <tr>
+        <th>Pachet</th>
+        <th>Preț</th>
+        <th>Credite</th>
+        <th>Bonus</th>
+        <th>Preț efectiv/credit</th>
+      </tr>
+      <tr>
+        <td>🎁 Prima Achiziție (limited)</td>
+        <td>199 RON</td>
+        <td>300</td>
+        <td><span class="badge badge-amber">+50%</span></td>
+        <td>0.66 RON</td>
+      </tr>
+      <tr>
+        <td>⭐ Start</td>
+        <td>250 RON</td>
+        <td>250</td>
+        <td>—</td>
+        <td>1.00 RON</td>
+      </tr>
+      <tr>
+        <td>🚀 Pro <span class="badge badge-green">Recomandat</span></td>
+        <td>500 RON</td>
+        <td>600</td>
+        <td><span class="badge badge-green">+20%</span></td>
+        <td>0.83 RON</td>
+      </tr>
+      <tr>
+        <td>🛡️ Business</td>
+        <td>1,000 RON</td>
+        <td>1,250</td>
+        <td><span class="badge badge-blue">+25%</span></td>
+        <td>0.80 RON</td>
+      </tr>
+    </table>
+    
+    <p><strong>Preț mediu ponderat per credit vândut:</strong> ~0.82 RON</p>
+
+    <h3>Minimul absolut de taxat</h3>
+    <div class="warning">
+      <strong>Nu coborî sub 25 credite/ofertă.</strong> Sub acest prag, nu poți susține costurile de reclamă pentru achiziția de clienți chiar și la rate optime de conversie.
+    </div>
+  </div>
+
+  <!-- 3. BREAK-EVEN -->
+  <div class="section" id="breakeven">
+    <h2>3. Analiza Break-Even</h2>
+
+    <div class="metric-grid">
+      <div class="metric-card">
+        <div class="value">80 RON</div>
+        <div class="label">Break-even per lead</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">40 RON</div>
+        <div class="label">Target profitabil (50% margin)</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">22 RON</div>
+        <div class="label">Target agresiv (72% margin)</div>
+      </div>
+      <div class="metric-card">
+        <div class="value">123 RON</div>
+        <div class="label">Venit mediu per lead (3 companii)</div>
+      </div>
+    </div>
+
+    <h3>Formula</h3>
+    <p><strong>Venit per lead</strong> = Nr. companii × 50 credite × 0.82 RON/credit</p>
+    <p><strong>Break-even</strong> = Venit per lead × Fill rate (65%) = 123 × 0.65 = <strong>~80 RON</strong></p>
+
+    <h3>Scenarii lunare (budget £2,000)</h3>
+    <table>
+      <tr>
+        <th>Scenariul</th>
+        <th>Cost/Lead</th>
+        <th>Lead-uri/lună</th>
+        <th>Venit/lună</th>
+        <th>Profit</th>
+      </tr>
+      <tr>
+        <td>Break-even</td>
+        <td>£14.50 (80 RON)</td>
+        <td>138</td>
+        <td>£2,000</td>
+        <td>£0</td>
+      </tr>
+      <tr>
+        <td><strong>Target (50% margin)</strong></td>
+        <td><strong>£7 (40 RON)</strong></td>
+        <td><strong>286</strong></td>
+        <td><strong>£4,100</strong></td>
+        <td><strong>£2,100</strong></td>
+      </tr>
+      <tr>
+        <td>Agresiv</td>
+        <td>£4 (22 RON)</td>
+        <td>500</td>
+        <td>£7,200</td>
+        <td>£5,200</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 4. COMPANY ACQUISITION -->
+  <div class="section" id="company-acquisition">
+    <h2>4. Achiziție Companii — Strategie</h2>
+
+    <h3>Acoperire necesară per zonă</h3>
+    <table>
+      <tr>
+        <th>Nivel</th>
+        <th>Companii/zonă</th>
+        <th>Timp răspuns</th>
+        <th>Experiența clientului</th>
+      </tr>
+      <tr>
+        <td><span class="badge badge-red">Zonă moartă</span></td>
+        <td>0-1</td>
+        <td>Zile sau niciodată</td>
+        <td>Clientul pleacă, bani de reclamă pierduți</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-amber">Minim viabil</span></td>
+        <td>2-3</td>
+        <td>12-24h</td>
+        <td>Acceptabil</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-green">Bun</span></td>
+        <td>4-6</td>
+        <td>2-6h</td>
+        <td>Clientul primește opțiuni</td>
+      </tr>
+      <tr>
+        <td><span class="badge badge-blue">Excelent</span></td>
+        <td>8+</td>
+        <td>&lt;2h</td>
+        <td>Oferte competitive rapide</td>
+      </tr>
+    </table>
+
+    <h3>Orașe prioritare (Top 10)</h3>
+    <ol>
+      <li><strong>București</strong> — cel mai mare volum și CPC</li>
+      <li><strong>Cluj-Napoca</strong></li>
+      <li><strong>Timișoara</strong></li>
+      <li><strong>Iași</strong></li>
+      <li><strong>Brașov</strong></li>
+      <li><strong>Constanța</strong></li>
+      <li><strong>Sibiu</strong></li>
+      <li><strong>Oradea</strong></li>
+      <li><strong>Craiova</strong></li>
+      <li><strong>Ploiești</strong></li>
+    </ol>
+
+    <h3>Pitch pentru prima companie într-o zonă (exclusivitate)</h3>
+    <div class="highlight">
+      <strong>Script:</strong> <em>"Ești singura firmă de mutări din [Oraș] pe platforma noastră. Fiecare cerere vine direct la tine, fără concurență. 30 credite per ofertă = ai clientul aproape garantat."</em>
+    </div>
+    <p>Nu este nevoie de credite gratuite — <strong>exclusivitatea este valoarea</strong>. Compania va cumpăra credite imediat.</p>
+
+    <h3>Canal de outreach</h3>
+    <ol class="step-list">
+      <li><strong>Cold call/WhatsApp</strong> — 10 firme de mutări per oraș. Google Maps → "firma mutari [City]" → contactează-le direct.</li>
+      <li><strong>Auto-notificare</strong> — Când o cerere aterizează într-o zonă cu &lt;3 companii, trimite email/WhatsApp firmelor din zonă: <em>"Un client din [City] caută firmă de mutări. Înregistrează-te acum!"</em></li>
+      <li><strong>Referral</strong> — Companie aduce altă companie → ambele primesc 50 credite bonus.</li>
+    </ol>
+  </div>
+
+  <!-- 5. CREDIT STRATEGY -->
+  <div class="section" id="credit-strategy">
+    <h2>5. Strategie Credite Gratuite</h2>
+
+    <div class="warning">
+      <strong>Principiu cheie: Creditele nu te costă nimic.</strong> Sunt token-uri digitale în baza de date. Singurul cost real este ad spend-ul pentru a aduce cereri de la clienți. Fii generos cu creditele — ele construiesc loialitate și nu afectează bugetul.
+    </div>
+
+    <h3>Credite gratuite la înregistrare</h3>
+    <table>
+      <tr>
+        <th>Companii în zonă</th>
+        <th>Credite gratuite</th>
+        <th>Rațiune</th>
+      </tr>
+      <tr>
+        <td><strong>Singura companie</strong> (exclusivitate)</td>
+        <td>0 (dar preț redus: 30 credite/ofertă)</td>
+        <td>Exclusivitatea este deja suficient de valoroasă</td>
+      </tr>
+      <tr>
+        <td><strong>2-3 companii</strong></td>
+        <td>50 credite (1 ofertă gratuită)</td>
+        <td>Testează platforma, creează senzația de nevoie</td>
+      </tr>
+      <tr>
+        <td><strong>4+ companii</strong></td>
+        <td>100 credite (2 oferte gratuite)</td>
+        <td>Mai multă competiție = mai bine pentru tine</td>
+      </tr>
+    </table>
+
+    <h3>De ce 50 credite (1 ofertă) e sweet spot-ul</h3>
+    <ul>
+      <li><strong>Scarcity</strong> — resursă limitată creează urgență. Compania vede cereri noi dar nu mai are credite → cumpără.</li>
+      <li>Văd sistemul funcționând cu un client real</li>
+      <li>Posibil câștigă jobul → validare imediată a platformei</li>
+      <li>Risc minim de abuz (vs. 200 credite gratuite)</li>
+    </ul>
+
+    <h3>Bonusuri suplimentare</h3>
+    <table>
+      <tr>
+        <th>Acțiune</th>
+        <th>Bonus</th>
+      </tr>
+      <tr>
+        <td>Referral (aduc altă companie)</td>
+        <td>+50 credite ambelor companii</td>
+      </tr>
+      <tr>
+        <td>Completează profilul 100%</td>
+        <td>+25 credite</td>
+      </tr>
+      <tr>
+        <td>Prima recenzie primită de la client</td>
+        <td>+25 credite</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 6. REFUND POLICY -->
+  <div class="section" id="refund-policy">
+    <h2>6. Politica de Refund Credite</h2>
+
+    <div class="highlight">
+      <strong>Creditele nu costă nimic → fii generos cu refund-urile.</strong> O companie care pleacă = 0 RON pe viață. O companie care primește refund = probabil cumpără pachete ulterior.
+    </div>
+
+    <table>
+      <tr>
+        <th>Situația</th>
+        <th>Acțiune</th>
+        <th>Efect</th>
+      </tr>
+      <tr>
+        <td>Clientul nu răspunde în 72h</td>
+        <td><span class="badge badge-green">Auto-refund credite</span></td>
+        <td>Compania plătește doar pentru oportunități reale</td>
+      </tr>
+      <tr>
+        <td>Prima ofertă a companiei eșuează (respinsă)</td>
+        <td><span class="badge badge-green">Refund 50 + 25 bonus</span> (o singură dată)</td>
+        <td>Încurajare să încerce din nou</td>
+      </tr>
+      <tr>
+        <td>Cererea expiră fără răspuns de la client</td>
+        <td><span class="badge badge-green">Auto-refund tuturor companiilor</span></td>
+        <td>Construiește încredere masivă</td>
+      </tr>
+      <tr>
+        <td>Clientul acceptă altă companie</td>
+        <td><span class="badge badge-amber">Fără refund</span></td>
+        <td>Competiție corectă — au avut șansa</td>
+      </tr>
+    </table>
+
+    <div class="highlight">
+      <strong>Reputația:</strong> <em>"E corect, dacă clientul nu răspunde primești banii înapoi"</em> — acest mesaj valorează mai mult decât orice reclamă.
+    </div>
+  </div>
+
+  <!-- 7. ADS BUDGET -->
+  <div class="section" id="ads-budget">
+    <h2>7. Buget Publicitate — £2,000/lună (~11,000 RON)</h2>
+
+    <h3>Alocarea bugetului</h3>
+    <table>
+      <tr>
+        <th>Canal</th>
+        <th>Buget</th>
+        <th>%</th>
+        <th>Scop</th>
+      </tr>
+      <tr>
+        <td><strong>Google Search Ads</strong></td>
+        <td>£900</td>
+        <td>45%</td>
+        <td>Intent ridicat — oameni care caută activ firme de mutări</td>
+      </tr>
+      <tr>
+        <td><strong>Google Performance Max</strong></td>
+        <td>£300</td>
+        <td>15%</td>
+        <td>Retargeting + display pe site-uri relevante</td>
+      </tr>
+      <tr>
+        <td><strong>Meta Lead Gen (FB/IG)</strong></td>
+        <td>£400</td>
+        <td>20%</td>
+        <td>Targetare life events (schimbare job, relație, oraș)</td>
+      </tr>
+      <tr>
+        <td><strong>Meta Brand Awareness</strong></td>
+        <td>£200</td>
+        <td>10%</td>
+        <td>Video 15s, lookalike audiences</td>
+      </tr>
+      <tr>
+        <td><strong>Testing</strong></td>
+        <td>£200</td>
+        <td>10%</td>
+        <td>TikTok, micro-influenceri, experimente</td>
+      </tr>
+    </table>
+
+    <h3>Ținte lunare realiste</h3>
+    <table>
+      <tr>
+        <th>Canal</th>
+        <th>Buget</th>
+        <th>Click-uri</th>
+        <th>Conversii (cereri)</th>
+        <th>Cost/Lead</th>
+      </tr>
+      <tr>
+        <td>Google Search</td>
+        <td>£900</td>
+        <td>~4,000</td>
+        <td>~200</td>
+        <td>~£4.50</td>
+      </tr>
+      <tr>
+        <td>Google PMax</td>
+        <td>£300</td>
+        <td>~1,500</td>
+        <td>~40</td>
+        <td>~£7.50</td>
+      </tr>
+      <tr>
+        <td>Meta Lead Gen</td>
+        <td>£400</td>
+        <td>~3,000</td>
+        <td>~80</td>
+        <td>~£5.00</td>
+      </tr>
+      <tr>
+        <td>Meta Awareness</td>
+        <td>£200</td>
+        <td>~8,000</td>
+        <td>~20</td>
+        <td>~£10.00</td>
+      </tr>
+      <tr>
+        <td><strong>TOTAL</strong></td>
+        <td><strong>£1,800</strong></td>
+        <td><strong>~16,500</strong></td>
+        <td><strong>~340 cereri</strong></td>
+        <td><strong>~£5.30</strong></td>
+      </tr>
+    </table>
+
+    <h3>Programare reclame</h3>
+    <ul>
+      <li><strong>Luni-Vineri 08:00-20:00</strong> — bid-uri pline</li>
+      <li><strong>Weekend</strong> — reducere 30% (oamenii planifică mai puțin)</li>
+      <li><strong>Sezonalitate:</strong> Mai-Septembrie = peak season (crește bugetul 30%), Nov-Feb = low season (scade 20%)</li>
+    </ul>
+
+    <h3>Strategie pe dispozitive</h3>
+    <ul>
+      <li><strong>Mobile:</strong> +15% bid adjustment (conversii mai bune pentru mutări)</li>
+      <li><strong>Desktop:</strong> Standard</li>
+      <li><strong>Tablet:</strong> -10%</li>
+    </ul>
+  </div>
+
+  <!-- 8. GOOGLE KEYWORDS -->
+  <div class="section" id="google-keywords">
+    <h2>8. Google Ads — Keywords &amp; Structura Campaniilor</h2>
+
+    <h3>Tier 1 — Intent ridicat, competiție scăzută (START AICI)</h3>
+    <p>Long-tail keywords cu CPC mic dar conversie bună:</p>
+    <table>
+      <tr>
+        <th>Keyword</th>
+        <th>Match Type</th>
+        <th>Est. CPC (RON)</th>
+        <th>Landing Page</th>
+      </tr>
+      <tr><td><span class="keyword-tag">"oferte mutari"</span></td><td>Phrase</td><td>0.5-1.5</td><td>/</td></tr>
+      <tr><td><span class="keyword-tag">"cat costa o mutare"</span></td><td>Phrase</td><td>0.3-0.8</td><td>/calculator</td></tr>
+      <tr><td><span class="keyword-tag">"firma mutari pret"</span></td><td>Phrase</td><td>0.8-1.5</td><td>/</td></tr>
+      <tr><td><span class="keyword-tag">"mutare apartament pret"</span></td><td>Phrase</td><td>0.5-1.0</td><td>/mutari/tipuri/apartamente</td></tr>
+      <tr><td><span class="keyword-tag">"transport mobila pret"</span></td><td>Phrase</td><td>0.3-0.8</td><td>/</td></tr>
+      <tr><td><span class="keyword-tag">"mutare 2 camere pret"</span></td><td>Phrase</td><td>0.2-0.5</td><td>/calculator</td></tr>
+      <tr><td><span class="keyword-tag">"mutare 3 camere pret"</span></td><td>Phrase</td><td>0.2-0.5</td><td>/calculator</td></tr>
+      <tr><td><span class="keyword-tag">"compara preturi mutari"</span></td><td>Phrase</td><td>0.3-0.7</td><td>/</td></tr>
+      <tr><td><span class="keyword-tag">"cerere oferta mutare"</span></td><td>Exact</td><td>0.3-0.6</td><td>/</td></tr>
+    </table>
+
+    <h3>Tier 2 — City-Specific</h3>
+    <p>Ad group per oraș cu aceste pattern-uri:</p>
+    <table>
+      <tr>
+        <th>Keyword</th>
+        <th>Landing Page</th>
+      </tr>
+      <tr><td><span class="keyword-tag">[firma mutari bucuresti]</span></td><td>/mutari/bucuresti</td></tr>
+      <tr><td><span class="keyword-tag">[mutari cluj napoca]</span></td><td>/mutari/cluj-napoca</td></tr>
+      <tr><td><span class="keyword-tag">[transport mobila timisoara]</span></td><td>/mutari/timisoara</td></tr>
+      <tr><td><span class="keyword-tag">[firma mutari iasi pret]</span></td><td>/mutari/iasi</td></tr>
+      <tr><td><span class="keyword-tag">[mutari brasov]</span></td><td>/mutari/brasov</td></tr>
+    </table>
+
+    <h3>Tier 3 — Route-Based (CEL MAI IEFTIN)</h3>
+    <p>Competiție foarte scăzută, CPC: 0.1-0.5 RON:</p>
+    <div>
+      <span class="keyword-tag">"mutare bucuresti cluj"</span>
+      <span class="keyword-tag">"mutare bucuresti timisoara"</span>
+      <span class="keyword-tag">"transport mobila cluj bucuresti"</span>
+      <span class="keyword-tag">"mutare din bucuresti in iasi"</span>
+      <span class="keyword-tag">"cat costa mutarea din X in Y"</span>
+    </div>
+    <p style="margin-top:0.5rem">Landing: <code>/mutari/[from]/[to]</code> — paginile deja existente!</p>
+
+    <h3>Tier 4 — Informational (trafic ieftin)</h3>
+    <p>CPC: 0.1-0.3 RON, conversie 1-2%, dar volum mare:</p>
+    <div>
+      <span class="keyword-tag">"sfaturi mutare"</span>
+      <span class="keyword-tag">"checklist mutare"</span>
+      <span class="keyword-tag">"cum sa te pregatesti de mutare"</span>
+      <span class="keyword-tag">"materiale ambalare mutare"</span>
+      <span class="keyword-tag">"schimbare adresa acte"</span>
+    </div>
+
+    <h3>Structura campaniilor</h3>
+    <table>
+      <tr>
+        <th>Campanie</th>
+        <th>Buget/lună</th>
+        <th>Ad Groups</th>
+      </tr>
+      <tr>
+        <td><strong>1. Brand + Generic</strong></td>
+        <td>£300</td>
+        <td>Brand, Generic, Cost/Preț</td>
+      </tr>
+      <tr>
+        <td><strong>2. City</strong></td>
+        <td>£400</td>
+        <td>București, Cluj, Timișoara, Iași, Alte Orașe</td>
+      </tr>
+      <tr>
+        <td><strong>3. Routes</strong></td>
+        <td>£150</td>
+        <td>Din București, Din Cluj, Intercity</td>
+      </tr>
+      <tr>
+        <td><strong>4. Services</strong></td>
+        <td>£50</td>
+        <td>Ambalare, Depozitare, Transport Pian</td>
+      </tr>
+    </table>
+
+    <h3>Negative Keywords (adaugă DIN ZIUA 1)</h3>
+    <div>
+      <span class="keyword-tag keyword-neg">-angajare</span>
+      <span class="keyword-tag keyword-neg">-job</span>
+      <span class="keyword-tag keyword-neg">-locuri de munca</span>
+      <span class="keyword-tag keyword-neg">-soferi</span>
+      <span class="keyword-tag keyword-neg">-DIY</span>
+      <span class="keyword-tag keyword-neg">-singur</span>
+      <span class="keyword-tag keyword-neg">-gratis</span>
+      <span class="keyword-tag keyword-neg">-gratuit</span>
+      <span class="keyword-tag keyword-neg">-inchiriere</span>
+      <span class="keyword-tag keyword-neg">-camion de inchiriat</span>
+      <span class="keyword-tag keyword-neg">-rent</span>
+      <span class="keyword-tag keyword-neg">-uber</span>
+      <span class="keyword-tag keyword-neg">-taxi</span>
+      <span class="keyword-tag keyword-neg">-international</span>
+      <span class="keyword-tag keyword-neg">-strainatate</span>
+      <span class="keyword-tag keyword-neg">-germania</span>
+      <span class="keyword-tag keyword-neg">-italia</span>
+      <span class="keyword-tag keyword-neg">-spania</span>
+      <span class="keyword-tag keyword-neg">-cursuri</span>
+      <span class="keyword-tag keyword-neg">-tutorial</span>
+    </div>
+
+    <h3>Ad Copy Templates</h3>
+    <table>
+      <tr>
+        <th>Element</th>
+        <th>Text</th>
+      </tr>
+      <tr><td>Headline 1</td><td>Mutări {City} — Compară Prețuri Gratuit</td></tr>
+      <tr><td>Headline 2</td><td>3+ Oferte în 24h | Economisești 40%</td></tr>
+      <tr><td>Headline 3</td><td>Firme Verificate | Fără Obligații</td></tr>
+      <tr><td>Description 1</td><td>Primești oferte de la firme verificate de mutări în {City}. Compară prețuri, recenzii și alege ce ți se potrivește.</td></tr>
+      <tr><td>Description 2</td><td>✓ Gratuit ✓ Fără obligații ✓ Firme verificate ✓ Răspuns în 24h. Solicită ofertă acum!</td></tr>
+    </table>
+
+    <h4>Sitelinks</h4>
+    <ul>
+      <li>Calculator Preț Mutare → /calculator</li>
+      <li>Mutări Apartamente → /mutari/tipuri/apartamente</li>
+      <li>Mutări Case → /mutari/tipuri/case</li>
+      <li>Recenzii Clienți → /reviews</li>
+    </ul>
+
+    <h3>Bidding Strategy Timeline</h3>
+    <table>
+      <tr><th>Săptămâna</th><th>Strategie</th><th>De ce</th></tr>
+      <tr><td>1-2</td><td>Manual CPC, max 2 RON</td><td>Colectare date</td></tr>
+      <tr><td>3-4</td><td>Manual CPC, ajustare per keyword</td><td>Elimină keywords slabe</td></tr>
+      <tr><td>5+</td><td>Target CPA (£5/conversie)</td><td>Google optimizează automat</td></tr>
+    </table>
+  </div>
+
+  <!-- 9. META ADS -->
+  <div class="section" id="meta-ads">
+    <h2>9. Meta Ads (Facebook / Instagram)</h2>
+
+    <h3>Targetare</h3>
+    <ul>
+      <li><strong>Life events:</strong> Schimbare relație, job nou, relocare recentă</li>
+      <li><strong>Vârsta:</strong> 25-45 ani</li>
+      <li><strong>Zone urbane:</strong> Top 10 orașe</li>
+      <li><strong>Lookalike audiences:</strong> din clienții existenți</li>
+    </ul>
+
+    <h3>Formate recomandate</h3>
+    <table>
+      <tr><th>Format</th><th>Buget</th><th>Mesaj</th></tr>
+      <tr><td>Lead Gen (formular nativ FB)</td><td>£400</td><td>"Compară 3+ oferte de mutări gratuit"</td></tr>
+      <tr><td>Video 15s (Reels/Stories)</td><td>£200</td><td>Demo platformă: completezi formularul → primești oferte</td></tr>
+    </table>
+
+    <h3>Carousel Ad — Sugestie</h3>
+    <ol>
+      <li>Card 1: "Completezi cererea în 2 minute"</li>
+      <li>Card 2: "Primești 3+ oferte de la firme verificate"</li>
+      <li>Card 3: "Compari prețuri și recenzii"</li>
+      <li>Card 4: "Economisești până la 40%"</li>
+      <li>Card 5: "Gratuit, fără obligații" + CTA</li>
+    </ol>
+  </div>
+
+  <!-- 10. WEEKLY CHECKLIST -->
+  <div class="section" id="weekly-checklist">
+    <h2>10. Checklist Săptămânal de Optimizare</h2>
+
+    <ol class="step-list">
+      <li><strong>Search Terms Report</strong> — adaugă 5-10 negative keywords pe săptămână</li>
+      <li><strong>Kill</strong> keywords cu CPC &gt; 4 RON și 0 conversii</li>
+      <li><strong>Boost</strong> keywords care convertesc sub £4/lead</li>
+      <li><strong>Quality Score</strong> — țintește 7+ pe fiecare keyword (îmbunătățește relevanța ad-ului + landing page)</li>
+      <li><strong>Ad scheduling</strong> — după 2 săptămâni, verifică orele și reduce bid-urile pe perioade cu conversie slabă</li>
+      <li><strong>Device bids</strong> — mobile +15%, verifică datele</li>
+      <li><strong>Fill rate</strong> — verifică câte cereri primesc oferte. Dacă &lt;50%, focus pe achiziția de companii</li>
+      <li><strong>Company churn</strong> — contactează companiile care nu au cumpărat credite în ultima lună</li>
+    </ol>
+  </div>
+
+  <!-- 11. GROWTH TARGETS -->
+  <div class="section" id="growth-targets">
+    <h2>11. Obiective de Creștere</h2>
+
+    <h3>Luna 1-2 (Foundation)</h3>
+    <table>
+      <tr><th>Metric</th><th>Target</th></tr>
+      <tr><td>Companii onboarded</td><td>50+ (minim 3 per oraș principal)</td></tr>
+      <tr><td>Cereri clienți/lună</td><td>100-150</td></tr>
+      <tr><td>Fill rate</td><td>&gt;40%</td></tr>
+      <tr><td>Cost per lead</td><td>&lt;£10 (learning phase)</td></tr>
+    </table>
+
+    <h3>Luna 3-4 (Growth)</h3>
+    <table>
+      <tr><th>Metric</th><th>Target</th></tr>
+      <tr><td>Companii active</td><td>100+</td></tr>
+      <tr><td>Cereri clienți/lună</td><td>250-350</td></tr>
+      <tr><td>Fill rate</td><td>&gt;60%</td></tr>
+      <tr><td>Cost per lead</td><td>&lt;£7</td></tr>
+      <tr><td>Venit lunar</td><td>£3,000-4,000</td></tr>
+    </table>
+
+    <h3>Luna 5-6 (Scale)</h3>
+    <table>
+      <tr><th>Metric</th><th>Target</th></tr>
+      <tr><td>Companii active</td><td>200+</td></tr>
+      <tr><td>Cereri clienți/lună</td><td>400-600</td></tr>
+      <tr><td>Fill rate</td><td>&gt;70%</td></tr>
+      <tr><td>Cost per lead</td><td>&lt;£5</td></tr>
+      <tr><td>Venit lunar</td><td>£6,000-8,000</td></tr>
+      <tr><td>Profit lunar</td><td>£4,000-6,000</td></tr>
+    </table>
+
+    <h3>Efectul de rețea (Flywheel)</h3>
+    <div class="highlight">
+      <strong>Mai multe companii →</strong> Mai multe oferte per cerere →<br>
+      <strong>Experiență mai bună client →</strong> Mai multe recomandări →<br>
+      <strong>Mai multe cereri →</strong> Mai mulți bani →<br>
+      <strong>Mai multe companii atrase →</strong> 🔄 Repeat
+    </div>
+
+    <div class="danger">
+      <strong>⚠️ Cel mai mare risc:</strong> Să cheltuiți pe reclame pentru clienți FĂRĂ să aveți companii suficiente. O cerere fără ofertă = bani pierduți + client dezamăgit. Regula: <strong>Nu scala ad spend-ul pentru clienți până nu ai minim 3 companii active per zonă targetată.</strong>
+    </div>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="section" style="background: linear-gradient(135deg, #f0fdf4, #ecfdf5); border: 2px solid #059669;">
+    <h2 style="color: #065f46; border-color: #059669;">📌 Rezumat Decizii Cheie</h2>
+    
+    <table>
+      <tr>
+        <th>Decizie</th>
+        <th>Valoare</th>
+      </tr>
+      <tr><td>Cost per ofertă (orașe mari)</td><td><strong>50 credite</strong></td></tr>
+      <tr><td>Cost per ofertă (zone noi, puțini competitori)</td><td><strong>30 credite</strong></td></tr>
+      <tr><td>Credite gratuite la onboarding</td><td><strong>50-100</strong> (în funcție de acoperire)</td></tr>
+      <tr><td>Prima achiziție specială</td><td><strong>199 RON → 300 credite (+50%)</strong></td></tr>
+      <tr><td>Refund pe lead-uri fără răspuns (72h)</td><td><strong>Auto-refund</strong></td></tr>
+      <tr><td>Max cost per lead (break-even)</td><td><strong>80 RON / £14.50</strong></td></tr>
+      <tr><td>Target cost per lead</td><td><strong>30-40 RON / £5-7</strong></td></tr>
+      <tr><td>Buget lunar reclame</td><td><strong>£2,000 (60% Google, 30% Meta, 10% test)</strong></td></tr>
+      <tr><td>Prioritate #1</td><td><strong>Achiziție companii, NU clienți</strong></td></tr>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>OferteMutare.ro — Plan de Business &amp; Marketing | Februarie 2026</p>
+  <p>Document confidențial — uz intern</p>
+</div>
+
+</body>
+</html>
