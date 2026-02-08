@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="ro">
   <head>
     <meta charset="UTF-8" />
@@ -4020,104 +4020,443 @@
 
       <!-- 22. LEGAL & GDPR -->
       <div class="section" id="legal-gdpr">
-        <h2>22. Legal &amp; Conformitate GDPR</h2>
+        <h2>22. Legal, GDPR &amp; Conformitate Fiscala</h2>
 
-        <h3>Bază legală pentru prelucrarea datelor</h3>
+        <div class="warning">
+          <strong>Structura juridica:</strong> Companie inregistrata in
+          <strong>Marea Britanie (Ltd.)</strong> care ofera servicii
+          utilizatorilor din <strong>Romania (UE)</strong>. Se aplica simultan
+          <strong>UK GDPR</strong> si <strong>EU GDPR</strong>.
+        </div>
+
+        <h3>22.1 Cadru juridic aplicabil</h3>
         <table>
           <tr>
-            <th>Date</th>
-            <th>Bază legală GDPR</th>
+            <th>Legislatie</th>
+            <th>De ce se aplica</th>
+            <th>Autoritate</th>
+            <th>Obligatii cheie</th>
+          </tr>
+          <tr>
+            <td><strong>UK GDPR + DPA 2018</strong></td>
+            <td>Compania e inregistrata in UK</td>
+            <td>ICO (Information Commissioner's Office)</td>
+            <td>Inregistrare ICO (~40 GBP/an), notificare brese ICO in 72h</td>
+          </tr>
+          <tr>
+            <td><strong>EU GDPR (Reg. 2016/679)</strong></td>
+            <td>Art. 3(2) -- oferi servicii persoanelor din UE (site in RO, preturi RON, servicii locale)</td>
+            <td>ANSPDCP (Romania)</td>
+            <td>Reprezentant UE Art. 27, drepturi utilizatori Art. 15-22</td>
+          </tr>
+          <tr>
+            <td><strong>Directiva ePrivacy</strong></td>
+            <td>Cookies + tracking pe utilizatori UE</td>
+            <td>ANSPDCP</td>
+            <td>Cookie consent opt-in, server-side tracking ca fallback</td>
+          </tr>
+          <tr>
+            <td><strong>UK-EU Adequacy Decision</strong></td>
+            <td>Transfer date intre UK - UE</td>
+            <td>Comisia Europeana</td>
+            <td>Valid pana 27 iunie 2025 (extindere asteptata) -- monitorizare continua</td>
+          </tr>
+        </table>
+
+        <h3>22.2 Reprezentant in UE (Art. 27 GDPR) -- OBLIGATORIU</h3>
+        <div class="danger">
+          <strong>OBLIGATORIU:</strong> Fiind companie non-UE care prelucreaza
+          date personale ale persoanelor din UE, trebuie sa desemnezi un
+          <strong>Reprezentant in UE</strong> conform Art. 27 GDPR. Fara
+          reprezentant, risti amenzi de pana la <strong>10 milioane EUR</strong>.
+        </div>
+        <table>
+          <tr>
+            <th>Aspect</th>
+            <th>Detalii</th>
+          </tr>
+          <tr>
+            <td>Ce e Art. 27?</td>
+            <td>Obliga operatorii non-UE sa numeasca o entitate/persoana in UE ca punct de contact pentru autoritatile de protectia datelor si persoanele vizate</td>
+          </tr>
+          <tr>
+            <td>Unde trebuie stabilit</td>
+            <td><strong>Romania</strong> (tara unde sunt majoritatea persoanelor vizate)</td>
+          </tr>
+          <tr>
+            <td>Cine poate fi</td>
+            <td>Firma juridica, persoana fizica, sau serviciu specializat (DataRep, GDPR-Rep.eu, EuroRep)</td>
+          </tr>
+          <tr>
+            <td>Cost estimat</td>
+            <td>100-300 EUR/luna sau 1,000-2,500 EUR/an</td>
+          </tr>
+          <tr>
+            <td>Ce face reprezentantul</td>
+            <td>Primeste solicitari ANSPDCP, gestioneaza cereri drepturi utilizatori, tine registrul activitatilor de prelucrare (Art. 30)</td>
+          </tr>
+          <tr>
+            <td>Mentionare obligatorie</td>
+            <td>Numele si datele de contact ale reprezentantului trebuie mentionate in <strong>Privacy Policy</strong></td>
+          </tr>
+        </table>
+
+        <h3>22.3 Baza legala pentru prelucrarea datelor</h3>
+        <table>
+          <tr>
+            <th>Date prelucrate</th>
+            <th>Tip utilizator</th>
+            <th>Baza legala GDPR</th>
             <th>Articol</th>
           </tr>
           <tr>
-            <td>Cerere client (oraș, dată, nr. camere)</td>
-            <td>Consimțământ explicit (formular)</td>
+            <td>Cerere mutare (oras, data, nr. camere)</td>
+            <td>Client (B2C)</td>
+            <td>Consimtamant explicit (formular)</td>
             <td>Art. 6(1)(a)</td>
           </tr>
           <tr>
             <td>Telefon / email client</td>
+            <td>Client (B2C)</td>
             <td>Interes legitim + minimizare (vizibil doar la acceptare)</td>
             <td>Art. 6(1)(f)</td>
           </tr>
           <tr>
-            <td>Date companie (CUI, contact)</td>
+            <td>Date companie (CUI, adresa, ONRC)</td>
+            <td>Companie (B2B)</td>
+            <td>Executare contract -- <em>NU sunt date personale</em></td>
+            <td>Art. 6(1)(b)</td>
+          </tr>
+          <tr>
+            <td>Date persoana de contact companie (nume, tel, email)</td>
+            <td>Companie (B2B)</td>
+            <td>Executare contract + interes legitim -- <em>SUNT date personale</em></td>
+            <td>Art. 6(1)(b) + (f)</td>
+          </tr>
+          <tr>
+            <td>Tranzactii credite / facturi</td>
+            <td>Companie (B2B)</td>
+            <td>Obligatie legala (fiscala) -- pastrare 5-10 ani</td>
+            <td>Art. 6(1)(c)</td>
+          </tr>
+          <tr>
+            <td>Date autentificare (Firebase Auth)</td>
+            <td>Ambele</td>
             <td>Executare contract</td>
             <td>Art. 6(1)(b)</td>
           </tr>
           <tr>
-            <td>Tranzacții credite</td>
-            <td>Obligație legală (fiscală)</td>
-            <td>Art. 6(1)(c)</td>
+            <td>Analytics / tracking (GA4, Meta Pixel)</td>
+            <td>Ambele</td>
+            <td>Consimtamant explicit (cookie banner opt-in)</td>
+            <td>Art. 6(1)(a)</td>
           </tr>
         </table>
 
-        <h3>Principii de minimizare a datelor</h3>
+        <h3>22.4 Principii de minimizare a datelor</h3>
         <ul>
           <li>
-            <strong>Contact client ascuns</strong> — telefon/email stocat
-            separat, acces doar la acceptare
+            <strong>Contact client ascuns</strong> -- telefon/email stocat
+            separat, acces doar la acceptare oferta
           </li>
           <li>
-            <strong>Chat filtrat</strong> — blochează schimbul de date personale
-            în mesaje
+            <strong>Chat filtrat</strong> -- blocheaza schimbul de date personale
+            in mesaje (regex pe numere/emailuri)
           </li>
           <li>
-            <strong>Retenție limitată</strong> — cereri inactive șterse după 90
-            zile
+            <strong>Retentie limitata</strong> -- cereri inactive sterse dupa 90
+            zile, conturi inactive dupa 12 luni
           </li>
           <li>
-            <strong>Log de acces</strong> — fiecare acces la contactInfo este
+            <strong>Log de acces</strong> -- fiecare acces la contactInfo este
             logat (audit trail)
+          </li>
+          <li>
+            <strong>Date companii</strong> -- CUI/ONRC sunt date publice, nu
+            necesita consimtamant, dar datele persoanei de contact DA
+          </li>
+          <li>
+            <strong>Firebase hosting</strong> -- datele sunt stocate pe servere
+            Google (EU -- Frankfurt / Belgium), acoperite de Google DPA
           </li>
         </ul>
 
-        <h3>Drepturi utilizatori (GDPR Art. 15-22)</h3>
+        <h3>22.5 Transfer international de date (UK - UE)</h3>
+        <table>
+          <tr>
+            <th>Directie transfer</th>
+            <th>Mecanism legal</th>
+            <th>Status</th>
+          </tr>
+          <tr>
+            <td>UE &rarr; UK</td>
+            <td>Adequacy Decision (Comisia Europeana, 28 iunie 2021)</td>
+            <td><span class="badge badge-amber">Valid -- monitorizare extindere</span></td>
+          </tr>
+          <tr>
+            <td>UK &rarr; UE</td>
+            <td>UK considera UE ca "adequate" (automatic)</td>
+            <td><span class="badge badge-green">Valid</span></td>
+          </tr>
+          <tr>
+            <td>UE/UK &rarr; US (Firebase/Google)</td>
+            <td>EU-US Data Privacy Framework (DPF) + Google DPA</td>
+            <td><span class="badge badge-green">Google certificat DPF</span></td>
+          </tr>
+        </table>
+        <div class="warning">
+          <strong>Risc:</strong> Daca UK Adequacy Decision expira fara
+          extindere, va trebui sa implementezi <strong>Standard Contractual
+          Clauses (SCCs)</strong> pentru transferul UE &rarr; UK. Monitorizeaza
+          periodic si pregateste SCCs ca backup.
+        </div>
+
+        <h3>22.6 Drepturi utilizatori (GDPR Art. 15-22)</h3>
         <table>
           <tr>
             <th>Drept</th>
             <th>Implementare</th>
+            <th>Termen</th>
           </tr>
           <tr>
-            <td>Dreptul la acces</td>
+            <td>Dreptul la acces (Art. 15)</td>
             <td>Export date din dashboard (JSON/PDF)</td>
+            <td>30 zile</td>
           </tr>
           <tr>
-            <td>Dreptul la ștergere</td>
-            <td>Buton “Șterge contul” — cascade delete în 72h</td>
+            <td>Dreptul la stergere (Art. 17)</td>
+            <td>Buton "Sterge contul" -- cascade delete in 72h (exceptie: date fiscale pastrate 5-10 ani)</td>
+            <td>30 zile</td>
           </tr>
           <tr>
-            <td>Dreptul la rectificare</td>
+            <td>Dreptul la rectificare (Art. 16)</td>
             <td>Editare profil din dashboard</td>
+            <td>30 zile</td>
           </tr>
           <tr>
-            <td>Dreptul la portabilitate</td>
+            <td>Dreptul la portabilitate (Art. 20)</td>
             <td>Export CSV/JSON al tuturor datelor</td>
+            <td>30 zile</td>
+          </tr>
+          <tr>
+            <td>Dreptul la opozitie (Art. 21)</td>
+            <td>Dezabonare email/SMS + opt-out analytics</td>
+            <td>Imediat</td>
+          </tr>
+          <tr>
+            <td>Dreptul la restrictie (Art. 18)</td>
+            <td>Marcare cont ca "restricted" -- datele raman dar nu se prelucreaza</td>
+            <td>30 zile</td>
           </tr>
         </table>
 
-        <h3>Cookie Consent &amp; Analytics</h3>
+        <h3>22.7 Cookie Consent &amp; Analytics</h3>
         <ul>
           <li>
             <strong>Cookie banner</strong> cu opt-in explicit (GA4, Meta Pixel)
+            -- conform ePrivacy Directive
           </li>
           <li>
             <strong>Cookieless tracking</strong> ca fallback (server-side
-            conversions)
+            conversions via Google Tag Manager server-side)
           </li>
           <li>
-            <strong>Privacy Policy</strong> și
-            <strong>Terms</strong> actualizate cu modelul Pay-on-View
+            <strong>Privacy Policy</strong> si
+            <strong>Terms</strong> actualizate cu: modelul Pay-on-View, identitatea UK Ltd., reprezentant UE Art. 27, detalii transfer date
           </li>
           <li>
-            <strong>DPO</strong> — desemnat (owner inițial, extern după Scale)
+            <strong>DPO</strong> -- nu e obligatoriu legal (&lt; 250 angajati, fara
+            date sensibile la scara larga), dar recomandat: owner initial &rarr;
+            extern dupa Scale
           </li>
         </ul>
 
-        <div class="highlight">
-          <strong>ANSPDCP Notificare:</strong> Înregistrare ca operator de date
-          personale la Autoritatea Națională de Supraveghere.
+        <h3>22.8 Inregistrari obligatorii</h3>
+        <table>
+          <tr>
+            <th>Inregistrare</th>
+            <th>Unde</th>
+            <th>Cost</th>
+            <th>Cand</th>
+          </tr>
+          <tr>
+            <td><strong>ICO Registration</strong></td>
+            <td>UK -- ico.org.uk</td>
+            <td>40 GBP/an (tier 1)</td>
+            <td>Inainte de go-live</td>
+          </tr>
+          <tr>
+            <td><strong>Reprezentant UE Art. 27</strong></td>
+            <td>Romania -- firma juridica sau serviciu</td>
+            <td>100-300 EUR/luna</td>
+            <td>Inainte de go-live</td>
+          </tr>
+          <tr>
+            <td><strong>Companies House</strong></td>
+            <td>UK -- gov.uk</td>
+            <td>12-50 GBP</td>
+            <td>La inregistrare companie</td>
+          </tr>
+          <tr>
+            <td><strong>HMRC (VAT)</strong></td>
+            <td>UK -- daca depasesti 90,000 GBP turnover</td>
+            <td>Gratuit</td>
+            <td>La prag sau voluntar</td>
+          </tr>
+          <tr>
+            <td><strong>Registrul prelucrarilor (Art. 30)</strong></td>
+            <td>Intern -- tinut de reprezentantul UE</td>
+            <td>Inclus in cost reprezentant</td>
+            <td>Permanent</td>
+          </tr>
+        </table>
+
+        <h3>22.9 Conformitate fiscala -- UK Ltd. cu clienti Romania</h3>
+        <div class="warning">
+          <strong>Important:</strong> Structura fiscala depinde de tipul
+          clientului (B2B vs B2C) si de pragurile de vanzari cross-border.
         </div>
+
+        <h4>Facturare B2B (catre companii de mutari din Romania)</h4>
+        <table>
+          <tr>
+            <th>Aspect</th>
+            <th>Detalii</th>
+          </tr>
+          <tr>
+            <td>TVA pe facturi</td>
+            <td><strong>Fara TVA</strong> -- servicii B2B cross-border, se aplica <strong>reverse charge</strong> (compania RO declara TVA-ul)</td>
+          </tr>
+          <tr>
+            <td>Mentiune pe factura</td>
+            <td>"Reverse charge -- Art. 44 Directiva TVA 2006/112/CE. Clientul este obligat la plata TVA."</td>
+          </tr>
+          <tr>
+            <td>Validare CUI/VAT</td>
+            <td>Obligatoriu verificare VIES inainte de emitere factura fara TVA</td>
+          </tr>
+          <tr>
+            <td>Moneda facturii</td>
+            <td>RON (recomandat pentru clienti) sau GBP -- specifica cursul de schimb</td>
+          </tr>
+          <tr>
+            <td>Declaratie UK</td>
+            <td>Vanzarile B2B cross-border se raporteaza in EC Sales List (daca UK VAT registered)</td>
+          </tr>
+        </table>
+
+        <h4>Facturare B2C (clienti persoane fizice -- daca e cazul)</h4>
+        <table>
+          <tr>
+            <th>Aspect</th>
+            <th>Detalii</th>
+          </tr>
+          <tr>
+            <td>Prag OSS</td>
+            <td><strong>10,000 EUR/an</strong> vanzari cross-border B2C in UE &rarr; obligat la TVA locala</td>
+          </tr>
+          <tr>
+            <td>Solutie simplificata</td>
+            <td><strong>OSS (One Stop Shop)</strong> -- nu mai e disponibil direct pentru UK post-Brexit. Trebuie inregistrare TVA in Romania sau prin intermediar UE</td>
+          </tr>
+          <tr>
+            <td>Cota TVA Romania</td>
+            <td>19% pe servicii digitale</td>
+          </tr>
+          <tr>
+            <td>Risc actual</td>
+            <td><span class="badge badge-green">Scazut</span> -- modelul actual taxeaza doar companiile (B2B), clientii persoane fizice nu platesc nimic</td>
+          </tr>
+        </table>
+
+        <h4>Taxe &amp; obligatii UK</h4>
+        <table>
+          <tr>
+            <th>Obligatie</th>
+            <th>Detalii</th>
+            <th>Termen</th>
+          </tr>
+          <tr>
+            <td>Corporation Tax</td>
+            <td>25% pe profitul companiei (19% sub 50k GBP profit -- Small Profits Rate)</td>
+            <td>Anual -- Companies House + HMRC</td>
+          </tr>
+          <tr>
+            <td>Annual Accounts</td>
+            <td>Depunere la Companies House</td>
+            <td>9 luni de la sfarsitul anului fiscal</td>
+          </tr>
+          <tr>
+            <td>Confirmation Statement</td>
+            <td>Confirmare anuala date companie</td>
+            <td>Anual -- 13 GBP</td>
+          </tr>
+          <tr>
+            <td>VAT Registration</td>
+            <td>Optional sub 90,000 GBP turnover (obligatoriu peste)</td>
+            <td>La prag</td>
+          </tr>
+          <tr>
+            <td>Self Assessment (Director)</td>
+            <td>Declaratie personala director -- dividende + salary</td>
+            <td>31 ianuarie anual</td>
+          </tr>
+          <tr>
+            <td>Contabilitate</td>
+            <td>Recomandat: accountant UK specializat pe SME (100-200 GBP/luna)</td>
+            <td>Lunar / trimestrial</td>
+          </tr>
+        </table>
+
+        <h4>Structura optima de remunerare director (Tax-efficient)</h4>
+        <div class="highlight">
+          <strong>Clasic UK Ltd.:</strong> Platesti salariu minim director
+          (~12,570 GBP/an = personal allowance, 0% income tax) + restul ca
+          <strong>dividende</strong> (taxate la 8.75% pana la 50,270 GBP). Total
+          taxe efective: ~15-20% vs 40%+ ca angajat.
+        </div>
+
+        <h3>22.10 Checklist pre-lansare legal</h3>
+        <ol class="step-list">
+          <li>
+            <strong>Inregistreaza compania UK Ltd.</strong> la Companies House
+            (1-2 zile online, 12-50 GBP)
+          </li>
+          <li>
+            <strong>Inregistrare ICO</strong> -- ico.org.uk, completeaza data
+            protection fee (40 GBP)
+          </li>
+          <li>
+            <strong>Numeste Reprezentant UE Art. 27</strong> -- firma din Romania
+            sau serviciu online
+          </li>
+          <li>
+            <strong>Actualizeaza Privacy Policy</strong> -- include: identitate
+            UK Ltd., reprezentant UE, baze legale, transfer date, drepturi
+          </li>
+          <li>
+            <strong>Actualizeaza Terms &amp; Conditions</strong> -- legislatie
+            aplicabila UK, dar drepturi consumator UE protejate
+          </li>
+          <li>
+            <strong>Implementeaza Cookie Banner</strong> -- opt-in explicit, server-side
+            tracking fallback
+          </li>
+          <li>
+            <strong>Deschide cont bancar UK</strong> -- Tide, Starling sau Wise
+            Business (accepta non-residents)
+          </li>
+          <li>
+            <strong>Contracteaza accountant UK</strong> -- pentru Corporation Tax,
+            VAT, Annual Accounts
+          </li>
+          <li>
+            <strong>Configureaza Stripe/plati</strong> -- entitate UK, settlement
+            in GBP, clienti platesc in RON
+          </li>
+        </ol>
       </div>
+
 
       <!-- SUMMARY -->
       <div
