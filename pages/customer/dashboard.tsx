@@ -21,6 +21,7 @@ import {
   EnvelopeIcon,
   DocumentPlusIcon,
   ArrowRightIcon,
+  StarIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { MovingRequest, Offer } from "@/types";
@@ -870,6 +871,13 @@ function OfferCard({
 
           {isAccepted && (
             <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
+              <Link
+                href={`/reviews/new?company=${offer.companyId}&request=${requestId}`}
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg sm:rounded-xl bg-amber-500 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-amber-500/20 transition hover:bg-amber-600 active:bg-amber-700"
+              >
+                <StarIcon className="h-4 w-4" />
+                Lasă un review
+              </Link>
               <ContactButtons offer={offer} onChat={onChat} variant="accepted" />
             </div>
           )}
