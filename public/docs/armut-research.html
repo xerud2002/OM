@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Armut Teknoloji A.&#350;. &#8212; Competitor Research</title>
+    <style>
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      body { font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+      .header { background: linear-gradient(135deg, #059669, #0d9488); color: white; padding: 3rem 2rem; text-align: center; }
+      .header h1 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+      .header p { font-size: 1.1rem; opacity: 0.9; }
+      .header .date { margin-top: 1rem; font-size: 0.85rem; opacity: 0.7; }
+      .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+      .section { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 1.5rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+      .section h2 { font-size: 1.5rem; font-weight: 700; color: #059669; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid #d1fae5; }
+      .section h3 { font-size: 1.15rem; font-weight: 600; color: #1e293b; margin: 1.5rem 0 0.75rem; }
+      .section h4 { font-size: 1rem; font-weight: 600; color: #475569; margin: 1rem 0 0.5rem; }
+      .section p { margin-bottom: 0.75rem; color: #475569; }
+      .section ul, .section ol { padding-left: 1.5rem; margin-bottom: 1rem; color: #475569; }
+      .section li { margin-bottom: 0.4rem; }
+      table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+      th { background: #f1f5f9; color: #1e293b; font-weight: 600; text-align: left; padding: 0.75rem 1rem; border: 1px solid #e2e8f0; }
+      td { padding: 0.75rem 1rem; border: 1px solid #e2e8f0; color: #475569; }
+      tr:hover td { background: #f8fafc; }
+      .highlight { background: #d1fae5; border-left: 4px solid #059669; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+      .highlight strong { color: #065f46; }
+      .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+      .warning strong { color: #92400e; }
+      .danger { background: #fee2e2; border-left: 4px solid #ef4444; padding: 1rem 1.25rem; border-radius: 0 8px 8px 0; margin: 1rem 0; }
+      .danger strong { color: #991b1b; }
+      .metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+      .metric-card { background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; padding: 1.25rem; text-align: center; }
+      .metric-card .value { font-size: 1.8rem; font-weight: 800; color: #059669; }
+      .metric-card .label { font-size: 0.85rem; color: #6b7280; margin-top: 0.25rem; }
+      .badge { display: inline-block; padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+      .badge-green { background: #d1fae5; color: #065f46; }
+      .badge-amber { background: #fef3c7; color: #92400e; }
+      .badge-red { background: #fee2e2; color: #991b1b; }
+      .badge-blue { background: #dbeafe; color: #1e40af; }
+      .toc { background: white; border-radius: 12px; padding: 2rem; margin-bottom: 2rem; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+      .toc h2 { font-size: 1.3rem; margin-bottom: 1rem; color: #059669; }
+      .toc ol { padding-left: 1.5rem; }
+      .toc li { margin-bottom: 0.5rem; }
+      .toc a { color: #0d9488; text-decoration: none; font-weight: 500; }
+      .toc a:hover { text-decoration: underline; }
+      .footer { text-align: center; padding: 2rem; color: #94a3b8; font-size: 0.85rem; }
+      @media (max-width: 768px) {
+        .header h1 { font-size: 1.5rem; }
+        .container { padding: 1rem; }
+        .section { padding: 1.25rem; }
+        table { font-size: 0.8rem; }
+        th, td { padding: 0.5rem; }
+        .metric-grid { grid-template-columns: 1fr 1fr; }
+      }
+      @media print {
+        body { background: white; }
+        .section { box-shadow: none; border: 1px solid #e2e8f0; break-inside: avoid; }
+        .header { background: #059669; -webkit-print-color-adjust: exact; }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>&#128270; Armut Teknoloji A.&#350;. &#8212; Competitor Research</h1>
+      <p>Turkey's leading home services marketplace &#8212; a key reference model for OferteMutare.ro</p>
+      <div class="date">Research date: February 2026 | Source: armut.com, Crunchbase, public data</div>
+    </div>
+
+    <div class="container">
+      <!-- TABLE OF CONTENTS -->
+      <div class="toc">
+        <h2>&#128209; Contents</h2>
+        <ol>
+          <li><a href="#overview">Company Overview &amp; Key Metrics</a></li>
+          <li><a href="#business-model">Business Model</a></li>
+          <li><a href="#services">Services &amp; Categories</a></li>
+          <li><a href="#market-position">Market Position &amp; Awards</a></li>
+          <li><a href="#funding">Funding &amp; Investors</a></li>
+          <li><a href="#financials">Revenue &amp; Growth</a></li>
+          <li><a href="#platform-features">Platform Features</a></li>
+          <li><a href="#pricing">Pricing Model for Service Providers</a></li>
+          <li><a href="#reviews-verification">Reviews, Verification &amp; Trust</a></li>
+          <li><a href="#international">International Expansion (ProntoPro &amp; HomeRun)</a></li>
+          <li><a href="#tech-stack">Technology &amp; Apps</a></li>
+          <li><a href="#marketing">Marketing Strategies</a></li>
+          <li><a href="#lessons">Lessons for OferteMutare.ro</a></li>
+        </ol>
+      </div>
+
+      <!-- 1. OVERVIEW -->
+      <div class="section" id="overview" style="border: 2px solid #059669;">
+        <h2 style="color: #065f46; border-color: #059669;">1. Company Overview &amp; Key Metrics</h2>
+        <table>
+          <tr><th>Detail</th><th>Information</th></tr>
+          <tr><td><strong>Full name</strong></td><td>Armut Teknoloji A.&#350;.</td></tr>
+          <tr><td><strong>Website</strong></td><td><a href="https://armut.com" target="_blank">armut.com</a></td></tr>
+          <tr><td><strong>Founded</strong></td><td>2011</td></tr>
+          <tr><td><strong>Headquarters</strong></td><td>Istanbul, Turkey (dual HQ with Milan, Italy via ProntoPro)</td></tr>
+          <tr><td><strong>Co-founder</strong></td><td>Ba&#351;ak Ta&#351;p&#305;nar De&#287;im</td></tr>
+          <tr><td><strong>What they do</strong></td><td>Turkey's leading online local services marketplace &#8212; connecting customers with vetted service professionals across 4,000+ categories</td></tr>
+          <tr><td><strong>Team</strong></td><td>Average employee age 28, 10+ nationalities</td></tr>
+          <tr><td><strong>Contact</strong></td><td>destek@armut.com &#8226; 0-850-333-22-00</td></tr>
+        </table>
+
+        <div class="metric-grid">
+          <div class="metric-card"><div class="value">2.5M+</div><div class="label">Professionals (global)</div></div>
+          <div class="metric-card"><div class="value">600K+</div><div class="label">Professionals (Turkey)</div></div>
+          <div class="metric-card"><div class="value">14M+</div><div class="label">Customers served</div></div>
+          <div class="metric-card"><div class="value">7.5M</div><div class="label">Requests in 2025</div></div>
+          <div class="metric-card"><div class="value">98%</div><div class="label">Customer satisfaction</div></div>
+          <div class="metric-card"><div class="value">14</div><div class="label">Countries</div></div>
+          <div class="metric-card"><div class="value">4,000+</div><div class="label">Service categories (TR)</div></div>
+          <div class="metric-card"><div class="value">$18M</div><div class="label">Total funding raised</div></div>
+        </div>
+
+        <div class="highlight">
+          <strong>Key takeaway:</strong> Armut processes a new service request every <strong>5 seconds</strong>.
+          They grew from a Turkish-only startup to a 14-country operation in 14 years with only $18M in funding &#8212; remarkably capital-efficient.
+        </div>
+      </div>
+
+      <!-- 2. BUSINESS MODEL -->
+      <div class="section" id="business-model">
+        <h2>2. Business Model</h2>
+        <p>Armut operates a <strong>lead-generation / quote-comparison marketplace</strong> very similar to OferteMutare.ro:</p>
+        <table>
+          <tr><th>Aspect</th><th>How it works</th></tr>
+          <tr><td><strong>Customer side</strong></td><td><strong>100% free</strong> &#8212; users post service needs at no cost, receive up to 5 competitive quotes</td></tr>
+          <tr><td><strong>Professional side</strong></td><td><strong>Free registration</strong>, then <strong>pay-per-lead (credit system)</strong> &#8212; pros buy credits to respond to requests</td></tr>
+          <tr><td><strong>Revenue source</strong></td><td>Professionals purchasing credits (k&ouml;nt&ouml;r) to send quotes to customer leads</td></tr>
+          <tr><td><strong>Matching</strong></td><td>Smart matching algorithm connects requests with up to 5 relevant professionals based on location, service type, ratings, availability</td></tr>
+          <tr><td><strong>Competition mechanic</strong></td><td>Professionals compete on price, reviews, and service quality to win jobs</td></tr>
+          <tr><td><strong>Booking model</strong></td><td>Some services (e.g., cleaning) also offer direct reservation/booking alongside quotes</td></tr>
+          <tr><td><strong>Subscriptions</strong></td><td>Available for recurring services &#8212; e.g., weekly cleaning with 3-month or unlimited plans</td></tr>
+        </table>
+
+        <div class="highlight">
+          <strong>OferteMutare.ro parallel:</strong> Our Pay-on-View credit system is essentially the same model &#8212;
+          Armut validates it works at massive scale (7.5M requests/year). Key difference: we charge when the customer
+          <em>views</em> the offer, Armut charges when the professional <em>sends</em> the offer.
+        </div>
+      </div>
+
+      <!-- 3. SERVICES -->
+      <div class="section" id="services">
+        <h2>3. Services &amp; Categories</h2>
+        <p>Armut covers <strong>4,000+ service categories</strong> in Turkey and <strong>26,000+</strong> globally across all brands:</p>
+        <table>
+          <tr><th>Category</th><th>English</th><th># Professionals</th><th>Verified Reviews</th></tr>
+          <tr><td>Temizlik</td><td>Cleaning</td><td>9,631+</td><td>420,103+</td></tr>
+          <tr><td><strong>Nakliyat</strong></td><td><strong>Moving / Relocation</strong></td><td><strong>2,901+</strong></td><td><strong>185,911+</strong></td></tr>
+          <tr><td>Boya Badana</td><td>Painting</td><td>10,655+</td><td>115,368+</td></tr>
+          <tr><td>&#350;ehirler Aras&#305; Nakliye</td><td>Intercity Moving</td><td>3,445+</td><td>190,551+</td></tr>
+          <tr><td>Tadilat</td><td>Renovation / Remodeling</td><td>&#8212;</td><td>&#8212;</td></tr>
+          <tr><td>Tamir</td><td>Repair Services</td><td>&#8212;</td><td>&#8212;</td></tr>
+          <tr><td>&Ouml;zel Ders</td><td>Private Tutoring</td><td>&#8212;</td><td>&#8212;</td></tr>
+          <tr><td>Organizasyon</td><td>Events / Organization</td><td>&#8212;</td><td>&#8212;</td></tr>
+        </table>
+
+        <h3>Niche / unusual services (showing category breadth)</h3>
+        <ul>
+          <li>G&uuml;ne&#351; Enerjisi &#8212; Solar energy installation</li>
+          <li>EV &#350;arj &#304;stasyonu Kurulumu &#8212; EV charger installation</li>
+          <li>Drone E&#287;itimi, Buz Pateni Dersi, Kayak E&#287;itimi &#8212; Training &amp; sports lessons</li>
+          <li>Kiral&#305;k Kaleci &#8212; Goalie rental for indoor soccer</li>
+          <li>Yaprak Sarma Yap&#305;m&#305; &#8212; Stuffed grape leaves making</li>
+          <li>&Ccedil;elik Ev / Prefabrik Ev &#8212; Steel / prefab house construction</li>
+          <li>Site Y&ouml;netimi &#8212; Building management</li>
+          <li>Asans&ouml;r Bak&#305;m&#305; &#8212; Elevator maintenance</li>
+        </ul>
+
+        <div class="warning">
+          <strong>Moving is their 2nd largest vertical</strong> with 6,346+ professionals for house &amp;
+          intercity moving combined and 376,000+ verified reviews &#8212; proving the moving marketplace model at scale.
+        </div>
+      </div>
+
+      <!-- 4. MARKET POSITION -->
+      <div class="section" id="market-position">
+        <h2>4. Market Position &amp; Awards</h2>
+        <table>
+          <tr><th>Achievement</th><th>Details</th></tr>
+          <tr><td><strong>Market position</strong></td><td>Undisputed #1 home services marketplace in Turkey</td></tr>
+          <tr><td><strong>Deloitte Fast 50</strong></td><td><span class="badge badge-green">2nd</span> fastest growing tech company in Turkey</td></tr>
+          <tr><td><strong>Deloitte Fast 500 EMEA</strong></td><td><span class="badge badge-green">40th</span> in Europe, Middle East &amp; Africa</td></tr>
+          <tr><td><strong>Growth rate</strong></td><td>2,000% growth in 5 years</td></tr>
+          <tr><td><strong>Awards from</strong></td><td>Endeavor, Wired, Forbes, Felis, Ekonomist, Bo&#287;azi&ccedil;i University, Global Entrepreneurship Summit</td></tr>
+        </table>
+
+        <h3>Competitors in Turkey</h3>
+        <table>
+          <tr><th>Competitor</th><th>Focus</th><th>Threat level</th></tr>
+          <tr><td>Temizlikyolda</td><td>Cleaning-focused</td><td><span class="badge badge-green">Low</span></td></tr>
+          <tr><td>Temiz</td><td>Cleaning-focused</td><td><span class="badge badge-green">Low</span></td></tr>
+          <tr><td>Various local companies</td><td>Single-category services</td><td><span class="badge badge-green">Low</span></td></tr>
+        </table>
+
+        <h3>International peers</h3>
+        <table>
+          <tr><th>Company</th><th>Country</th><th>Similarity</th></tr>
+          <tr><td>ProntoPro</td><td>Italy (now merged with Armut)</td><td>Same company / sister brand</td></tr>
+          <tr><td>HomeRun</td><td>Netherlands (now merged with Armut)</td><td>Same company / sister brand</td></tr>
+          <tr><td>Pricenet</td><td>South Africa</td><td>Quote-based marketplace</td></tr>
+          <tr><td>AnyTrades</td><td>UK</td><td>Trade services marketplace</td></tr>
+          <tr><td>Recommend.my</td><td>Malaysia</td><td>Home services marketplace</td></tr>
+        </table>
+      </div>
+
+      <!-- 5. FUNDING -->
+      <div class="section" id="funding">
+        <h2>5. Funding &amp; Investors</h2>
+        <table>
+          <tr><th>Metric</th><th>Value</th></tr>
+          <tr><td><strong>Total raised</strong></td><td><strong>$18.07M</strong></td></tr>
+          <tr><td><strong>Last round</strong></td><td>$14.87M (~2023)</td></tr>
+          <tr><td><strong>Key investors</strong></td><td><strong>Hummingbird Ventures</strong> (Belgian VC), <strong>AddVenture</strong> (Turkish VC)</td></tr>
+          <tr><td><strong>Stage</strong></td><td>Late-stage / growth</td></tr>
+        </table>
+
+        <div class="highlight">
+          <strong>Capital efficiency:</strong> $18M total funding to build a 14-country, 2.5M-professional platform
+          is remarkably lean. Most growth appears revenue-funded &#8212; validating the profitability of the credit-based model.
+        </div>
+      </div>
+
+      <!-- 6. FINANCIALS -->
+      <div class="section" id="financials">
+        <h2>6. Revenue &amp; Growth</h2>
+        <div class="warning">
+          <strong>Note:</strong> Armut does not publicly disclose absolute revenue figures.
+          Growth percentages are EUR-denominated year-over-year.
+        </div>
+
+        <table>
+          <tr><th>Year</th><th>Revenue growth (YoY, EUR)</th><th>Context</th></tr>
+          <tr><td><strong>2025</strong></td><td><strong>+46%</strong></td><td>Slower but on a much larger base</td></tr>
+          <tr><td><strong>2024</strong></td><td><strong>+78%</strong></td><td>Strong post-expansion growth</td></tr>
+          <tr><td>Historical</td><td>2,000% over 5 years</td><td>Deloitte ranking period</td></tr>
+        </table>
+
+        <h3>2025 European growth by market</h3>
+        <table>
+          <tr><th>Market</th><th>Revenue growth</th><th>Status</th></tr>
+          <tr><td>Germany &amp; Switzerland</td><td><strong>+250%</strong></td><td><span class="badge badge-green">Explosive</span></td></tr>
+          <tr><td>France</td><td><strong>+170%</strong></td><td><span class="badge badge-green">Very strong</span></td></tr>
+          <tr><td>Spain</td><td><strong>+140%</strong></td><td><span class="badge badge-green">Strong</span></td></tr>
+          <tr><td>Turkey</td><td>Professionals grew <strong>+38%</strong></td><td><span class="badge badge-blue">Mature</span></td></tr>
+        </table>
+
+        <h3>Platform activity</h3>
+        <table>
+          <tr><th>Metric</th><th>2025</th><th>2024</th></tr>
+          <tr><td>Service requests (global)</td><td>~7.5M</td><td>~7.1M</td></tr>
+          <tr><td>Service requests (Turkey)</td><td>~5.5M</td><td>&#8212;</td></tr>
+          <tr><td>Monthly customers searching</td><td>400K&#8211;500K</td><td>&#8212;</td></tr>
+          <tr><td>Request frequency</td><td>1 every 5 seconds</td><td>&#8212;</td></tr>
+        </table>
+      </div>
+
+      <!-- 7. PLATFORM FEATURES -->
+      <div class="section" id="platform-features">
+        <h2>7. Platform Features</h2>
+        <table>
+          <tr><th>#</th><th>Feature</th><th>Description</th></tr>
+          <tr><td>1</td><td><strong>Smart matching algorithm</strong></td><td>Auto-matches requests with most relevant professionals by location, category, ratings, availability</td></tr>
+          <tr><td>2</td><td><strong>Up to 5 competitive quotes</strong></td><td>Max 5 offers per request &#8212; healthy competition without info overload</td></tr>
+          <tr><td>3</td><td><strong>Verified customer reviews</strong></td><td>Hundreds of thousands of verified reviews tied to completed transactions &#8212; 5-star system</td></tr>
+          <tr><td>4</td><td><strong>Armut Garantisi (Guarantee)</strong></td><td>Protection up to 2,000 TL for property damage or injuries. 72h claim window</td></tr>
+          <tr><td>5</td><td><strong>Real-time messaging</strong></td><td>In-platform chat between customer and professional</td></tr>
+          <tr><td>6</td><td><strong>Price transparency pages</strong></td><td>Public pages showing average costs per service in each city (doubles as SEO)</td></tr>
+          <tr><td>7</td><td><strong>Location-based matching</strong></td><td>"En Yak&#305;n" (nearest) feature for proximity-based results</td></tr>
+          <tr><td>8</td><td><strong>Subscription / recurring</strong></td><td>Weekly cleaning plans with 3-month or unlimited subscription options</td></tr>
+          <tr><td>9</td><td><strong>Professional profiles</strong></td><td>Full profiles with ratings, review history, response times, portfolio</td></tr>
+          <tr><td>10</td><td><strong>Detailed request forms</strong></td><td>Structured questionnaires per service category</td></tr>
+          <tr><td>11</td><td><strong>Mobile apps (iOS + Android)</strong></td><td>Full request-to-quote flow on mobile</td></tr>
+          <tr><td>12</td><td><strong>Contact protection</strong></td><td>Contact info stays private until a quote is accepted</td></tr>
+        </table>
+
+        <div class="highlight">
+          <strong>OferteMutare.ro comparison:</strong> We already implement most of these. Key features to adopt:
+          <strong>price transparency pages</strong> (SEO value), <strong>guarantee program</strong> (trust building),
+          <strong>subscription model</strong> for recurring services.
+        </div>
+      </div>
+
+      <!-- 8. PRICING -->
+      <div class="section" id="pricing">
+        <h2>8. Pricing Model for Service Providers</h2>
+        <table>
+          <tr><th>Aspect</th><th>Details</th></tr>
+          <tr><td><strong>Registration</strong></td><td>Free ("&Uuml;cretsiz &Uuml;ye Ol")</td></tr>
+          <tr><td><strong>Model</strong></td><td>Pay-per-lead &#8212; buy credits (k&ouml;nt&ouml;r) to respond to customer requests</td></tr>
+          <tr><td><strong>Monthly subscription</strong></td><td>None &#8212; credits purchased as needed</td></tr>
+          <tr><td><strong>Credit pricing</strong></td><td>Not publicly disclosed (varies by service category value)</td></tr>
+        </table>
+
+        <h3>Top earner testimonials (monthly income via Armut)</h3>
+        <table>
+          <tr><th>Service category</th><th>Monthly earning potential</th></tr>
+          <tr><td>Boya Badana (Painting)</td><td><strong>90,000 TL/month</strong></td></tr>
+          <tr><td>Evden Eve Nakliyat (Moving)</td><td><strong>80,000 TL/month</strong></td></tr>
+          <tr><td>Psikolog (Psychology)</td><td><strong>80,000 TL/month</strong></td></tr>
+          <tr><td>&#304;ngilizce &Ouml;zel Ders (English tutoring)</td><td><strong>50,000 TL/month</strong></td></tr>
+          <tr><td>Direksiyon Dersi (Driving lessons)</td><td><strong>40,000 TL/month</strong></td></tr>
+          <tr><td>Ev Temizli&#287;i (Home cleaning)</td><td><strong>30,000 TL/month</strong></td></tr>
+        </table>
+
+        <div class="highlight">
+          <strong>Provider testimonial:</strong> "100% of my income comes from Armut. I do 30&#8211;40 thousand lira
+          of work per month." &#8212; Validates that platforms like OferteMutare.ro can become the
+          <strong>primary lead source</strong> for service providers.
+        </div>
+      </div>
+
+      <!-- 9. REVIEWS -->
+      <div class="section" id="reviews-verification">
+        <h2>9. Reviews, Verification &amp; Trust</h2>
+        <table>
+          <tr><th>Mechanism</th><th>How it works</th></tr>
+          <tr><td><strong>Verified reviews</strong></td><td>Reviews tied to completed transactions only &#8212; not open for anyone to post</td></tr>
+          <tr><td><strong>Rating system</strong></td><td>5-star scale visible on all professional profiles</td></tr>
+          <tr><td><strong>Review volume</strong></td><td>Massive: 420K+ cleaning, 185K+ moving, 115K+ painting</td></tr>
+          <tr><td><strong>Armut Garantisi</strong></td><td>Up to 2,000 TL coverage for property damage or injuries. Must be booked through platform</td></tr>
+          <tr><td><strong>Claim window</strong></td><td>72 hours after service delivery</td></tr>
+          <tr><td><strong>Contact protection</strong></td><td>Personal info hidden until quote accepted &#8212; prevents off-platform deals</td></tr>
+        </table>
+
+        <div class="warning">
+          <strong>Lesson for OM:</strong> The guarantee program is a major trust differentiator.
+          Even 500&#8211;1,000 RON coverage would significantly reduce customer hesitation for moving
+          services where damage risk is real.
+        </div>
+      </div>
+
+      <!-- 10. INTERNATIONAL -->
+      <div class="section" id="international" style="border: 2px solid #f59e0b;">
+        <h2 style="color: #92400e; border-color: #f59e0b;">10. International Expansion &#8212; ProntoPro &amp; HomeRun</h2>
+
+        <div class="warning">
+          <strong>Major strategic move:</strong> Armut merged with ProntoPro (Italy) and HomeRun (Netherlands)
+          to form a pan-European home services group &#8212; 14 countries, 3 continents.
+        </div>
+
+        <table>
+          <tr><th>Brand</th><th>Market focus</th><th>HQ</th></tr>
+          <tr><td><strong>Armut</strong></td><td>Turkey</td><td>Istanbul</td></tr>
+          <tr><td><strong>ProntoPro</strong></td><td>Italy, Southern Europe</td><td>Milan</td></tr>
+          <tr><td><strong>HomeRun</strong></td><td>Other European markets</td><td>Netherlands</td></tr>
+        </table>
+
+        <h3>Geographic presence (14 countries)</h3>
+        <p>
+          Operates under 3 local brands: Turkey, Italy, France, Spain, Germany, Switzerland,
+          Netherlands, Austria, and others. Strategy: <strong>localized brands</strong> sharing the
+          same technology platform.
+        </p>
+
+        <div class="highlight">
+          <strong>Vision:</strong> Become the <strong>leading service marketplace in EMEA</strong>
+          (Europe, Middle East &amp; Africa).
+        </div>
+
+        <div class="danger">
+          <strong>Romania implication:</strong> Armut/ProntoPro/HomeRun does NOT currently operate in Romania.
+          This is both a <strong>window of opportunity</strong> for OferteMutare.ro AND a future competitive
+          threat. Given 250% growth in Germany/Switzerland, Eastern European expansion is plausible within 2&#8211;3 years.
+        </div>
+      </div>
+
+      <!-- 11. TECH -->
+      <div class="section" id="tech-stack">
+        <h2>11. Technology &amp; Apps</h2>
+        <table>
+          <tr><th>Component</th><th>Technology</th></tr>
+          <tr><td><strong>CDN / Images</strong></td><td>ImageKit via cdn.armut.com (on-the-fly transformations)</td></tr>
+          <tr><td><strong>Tracking</strong></td><td>Facebook Pixel, Adjust (mobile attribution)</td></tr>
+          <tr><td><strong>Customer support</strong></td><td>Zendesk (armuttr.zendesk.com)</td></tr>
+          <tr><td><strong>Blog / Corporate</strong></td><td>Squarespace (blog2.armut.com, info.armut.com)</td></tr>
+          <tr><td><strong>Forms</strong></td><td>JotForm (guarantee claims)</td></tr>
+          <tr><td><strong>Core matching</strong></td><td>Proprietary "ak&#305;ll&#305; e&#351;le&#351;tirme algoritmas&#305;" (smart matching algorithm)</td></tr>
+          <tr><td><strong>Mobile apps</strong></td><td>iOS (App Store) + Android (Google Play)</td></tr>
+          <tr><td><strong>Compensation</strong></td><td>Stock options offered (equity-based, startup culture)</td></tr>
+        </table>
+      </div>
+
+      <!-- 12. MARKETING -->
+      <div class="section" id="marketing">
+        <h2>12. Marketing Strategies</h2>
+        <table>
+          <tr><th>#</th><th>Strategy</th><th>Details</th><th>For OM?</th></tr>
+          <tr><td>1</td><td><strong>SEO content marketing</strong></td><td>Extensive blog with how-to articles, seasonal guides</td><td><span class="badge badge-green">Doing this</span></td></tr>
+          <tr><td>2</td><td><strong>Price transparency pages</strong></td><td>SEO pages like "/fiyatlari/ev-temizligi" with real pricing data</td><td><span class="badge badge-amber">Should implement</span></td></tr>
+          <tr><td>3</td><td><strong>Social media</strong></td><td>Active on Instagram, Facebook, TikTok, YouTube, Pinterest</td><td><span class="badge badge-amber">Expand</span></td></tr>
+          <tr><td>4</td><td><strong>Zero ad spend for providers</strong></td><td>600K+ professionals acquired with zero ad spend &#8212; entirely organic</td><td><span class="badge badge-green">Target</span></td></tr>
+          <tr><td>5</td><td><strong>Facebook Pixel retargeting</strong></td><td>Pixel tracking for retargeting campaigns</td><td><span class="badge badge-green">Doing this</span></td></tr>
+          <tr><td>6</td><td><strong>PR &amp; media</strong></td><td>Annual year-in-review data releases for media coverage</td><td><span class="badge badge-amber">Consider</span></td></tr>
+          <tr><td>7</td><td><strong>Awards credibility</strong></td><td>Deloitte, Forbes, Wired mentions displayed prominently</td><td><span class="badge badge-blue">Future</span></td></tr>
+          <tr><td>8</td><td><strong>Guarantee program</strong></td><td>Trust-building, reduces customer hesitation</td><td><span class="badge badge-amber">Should implement</span></td></tr>
+          <tr><td>9</td><td><strong>Provider testimonials</strong></td><td>Featured success stories of professionals</td><td><span class="badge badge-amber">Should implement</span></td></tr>
+          <tr><td>10</td><td><strong>Data-driven annual reports</strong></td><td>Published stats generate free media coverage</td><td><span class="badge badge-blue">After scale</span></td></tr>
+        </table>
+
+        <div class="highlight">
+          <strong>Key insight:</strong> Armut acquired 600K+ professionals with <strong>ZERO advertising spend</strong>.
+          This validates focusing ad budget on <strong>customer acquisition only</strong> &#8212; providers come
+          organically when the leads flow.
+        </div>
+      </div>
+
+      <!-- 13. LESSONS -->
+      <div class="section" id="lessons" style="background: linear-gradient(135deg, #f0fdf4, #d1fae5); border: 2px solid #059669;">
+        <h2 style="color: #065f46; border-color: #059669;">13. Key Lessons for OferteMutare.ro</h2>
+
+        <h3>What Armut validates about our model</h3>
+        <table>
+          <tr><th>Our feature</th><th>Armut equivalent</th><th>Validation</th></tr>
+          <tr><td>Pay-on-View credits</td><td>Pay-per-lead credits (k&ouml;nt&ouml;r)</td><td><span class="badge badge-green">Proven at 7.5M req/year</span></td></tr>
+          <tr><td>Contact protection</td><td>Hidden contact until accepted</td><td><span class="badge badge-green">Proven</span></td></tr>
+          <tr><td>Max 5 offers per request</td><td>Up to 5 competitive quotes</td><td><span class="badge badge-green">Identical</span></td></tr>
+          <tr><td>Verified reviews</td><td>Transaction-tied reviews</td><td><span class="badge badge-green">Proven</span></td></tr>
+          <tr><td>In-platform chat</td><td>Real-time messaging</td><td><span class="badge badge-green">Proven</span></td></tr>
+          <tr><td>Free for customers</td><td>Free for customers</td><td><span class="badge badge-green">Industry standard</span></td></tr>
+        </table>
+
+        <h3>What we should adopt from Armut</h3>
+        <ol>
+          <li><strong>Guarantee program</strong> &#8212; Even 500&#8211;1,000 RON coverage for moving damage. Low cost, massive trust signal. Armut uses 2,000 TL (~&#8364;55)</li>
+          <li><strong>Price transparency pages</strong> &#8212; "C&#226;t cost&#259; o mutare &#238;n Bucure&#351;ti?" pages with real data. SEO + trust + conversion</li>
+          <li><strong>Provider testimonials</strong> &#8212; Feature top-earning companies: "Facem 15,000 RON/lun&#259; prin OferteMutare.ro"</li>
+          <li><strong>Zero-ad provider acquisition</strong> &#8212; Focus ALL budget on customers. Let organic/referral grow provider side</li>
+          <li><strong>Annual data reports</strong> &#8212; Once at scale, publish "Starea mut&#259;rilor &#238;n Rom&#226;nia" for free PR</li>
+        </ol>
+
+        <h3>Strategic implications</h3>
+        <div class="danger">
+          <strong>Competitive threat:</strong> Armut/ProntoPro/HomeRun is aggressively expanding in Europe
+          (250% growth Germany/Switzerland). Romania is a logical next market. Our advantage:
+          <strong>being first with local expertise</strong>. Build a moat (reviews, company relationships, SEO)
+          before they potentially enter.
+        </div>
+
+        <div class="highlight">
+          <strong>Capital efficiency:</strong> Armut built a 14-country platform with only $18M.
+          Proves a lean team with credit-based model can scale without massive VC.
+          Our &#163;2,000/month budget is realistic for Romania.
+        </div>
+
+        <div class="warning">
+          <strong>Moving vertical:</strong> Armut has 6,346+ professionals and 376K+ reviews for moving
+          in Turkey (pop: 85M). Romania (pop: 19M) proportionally needs ~1,400 moving companies and
+          ~80K reviews for saturation &#8212; aligns with our targets.
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Armut Teknoloji A.&#350;. &#8212; Competitor Research | February 2026</p>
+      <p>Document for internal use &#8212; OferteMutare.ro strategic planning</p>
+    </div>
+  </body>
+</html>
