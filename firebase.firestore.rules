@@ -28,8 +28,10 @@ service cloud.firestore {
 
     // === COMPANIES COLLECTION ===
     match /companies/{companyId} {
-      // Admin can read all companies, company can only read own
-      allow read: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
+      // Anyone can read a single company doc (needed for reviews page, public profiles)
+      allow get: if true;
+      // List queries restricted to signed-in company owner or admin
+      allow list: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
       allow create: if isSignedIn() && request.auth.uid == companyId && canCreateCompany();
       // Admin can update any company (for verification), company can update own
       // Company credits updates are allowed for offer placements
