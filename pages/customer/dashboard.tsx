@@ -337,7 +337,7 @@ export default function CustomerDashboard() {
           </div>
         ) : (
           // Main content grid
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 items-start">
             {/* Requests sidebar */}
             <aside className="lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
@@ -452,11 +452,11 @@ export default function CustomerDashboard() {
             {/* Main content */}
             <main className="lg:col-span-8 xl:col-span-9">
               {selectedRequest ? (
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {/* Request summary card */}
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                     {/* Header with gradient */}
-                    <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-500 to-teal-400 px-4 py-3 sm:px-6 sm:py-5">
+                    <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-500 to-teal-400 px-4 py-2.5 sm:px-6 sm:py-4">
                       {/* Bottom fade */}
                       <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white/20 to-transparent" />
                       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')] opacity-50" />
