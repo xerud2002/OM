@@ -30,9 +30,10 @@ export default function FAQPage() {
           q: "Ce este OferteMutare.ro?",
           a: (
             <>
-              OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări
-              verificate din România. Completezi un singur formular și primești 3-5 oferte
-              personalizate în 24 ore. Acoperim toate orașele majore (
+              OferteMutare.ro este o platformă gratuită care conectează clienții
+              cu firme de mutări verificate din România. Completezi un singur
+              formular și primești 3-5 oferte personalizate în 24 ore. Acoperim
+              toate orașele majore (
               <Link
                 href="/mutari/bucuresti"
                 className="text-emerald-600 underline hover:text-emerald-700"
@@ -102,12 +103,15 @@ export default function FAQPage() {
           a: (
             <>
               1) Completezi{" "}
-              <Link href="/" className="text-emerald-600 underline hover:text-emerald-700">
+              <Link
+                href="/"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
                 formularul
               </Link>{" "}
-              cu detalii despre mutare (5 minute), 2) Firmele verificate primesc cererea ta, 3)
-              Primești 3-5 oferte în 24h, 4) Compari și alegi oferta potrivită, 5) Confirmarea
-              directă cu firma aleasă.
+              cu detalii despre mutare (5 minute), 2) Firmele verificate primesc
+              cererea ta, 3) Primești 3-5 oferte în 24h, 4) Compari și alegi
+              oferta potrivită, 5) Confirmarea directă cu firma aleasă.
             </>
           ),
           aText:
@@ -128,8 +132,8 @@ export default function FAQPage() {
               >
                 contul de client
               </Link>
-              , poți edita detaliile cererii, adăuga/șterge fotografii sau anula cererea complet
-              dacă planurile s-au schimbat.
+              , poți edita detaliile cererii, adăuga/șterge fotografii sau anula
+              cererea complet dacă planurile s-au schimbat.
             </>
           ),
           aText:
@@ -149,13 +153,17 @@ export default function FAQPage() {
           a: (
             <>
               Oferim servicii în toată România! Vezi{" "}
-              <Link href="/mutari" className="text-emerald-600 underline hover:text-emerald-700">
+              <Link
+                href="/mutari"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
                 toate orașele acoperite
               </Link>
-              : București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova,
-              Ploiești, Oradea, Brăila, Arad, Pitești, Sibiu, Bacău, Târgu-Mureș, Baia Mare, Buzău,
-              Botoșani, Satu Mare, Suceava, Piatra-Neamț, Drobeta-Turnu Severin, Târgoviște,
-              Focșani, Tulcea, și multe alte orașe.
+              : București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov,
+              Galați, Craiova, Ploiești, Oradea, Brăila, Arad, Pitești, Sibiu,
+              Bacău, Târgu-Mureș, Baia Mare, Buzău, Botoșani, Satu Mare,
+              Suceava, Piatra-Neamț, Drobeta-Turnu Severin, Târgoviște, Focșani,
+              Tulcea, și multe alte orașe.
             </>
           ),
           aText:
@@ -186,12 +194,15 @@ export default function FAQPage() {
           q: "Ce fac dacă am probleme cu o firmă?",
           a: (
             <>
-              <Link href="/contact" className="text-emerald-600 underline hover:text-emerald-700">
+              <Link
+                href="/contact"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
                 Contactează-ne
               </Link>{" "}
-              imediat la info@ofertemutare.ro. Investigăm toate reclamațiile și, dacă firma nu
-              respectă standardele, este exclusă de pe platformă. De asemenea, poți lăsa o recenzie
-              după mutare.
+              imediat la info@ofertemutare.ro. Investigăm toate reclamațiile și,
+              dacă firma nu respectă standardele, este exclusă de pe platformă.
+              De asemenea, poți lăsa o recenzie după mutare.
             </>
           ),
           aText:
@@ -214,9 +225,9 @@ export default function FAQPage() {
           q: "Cât costă o mutare în România?",
           a: (
             <>
-              Depinde de: distanță, volum, etaj, acces, servicii extra. Orientativ: garsonieră
-              800-1.500 lei, 2 camere 1.500-2.500 lei, 3+ camere 2.500-4.500 lei, casă/vilă
-              4.000-10.000+ lei. Folosește{" "}
+              Depinde de: distanță, volum, etaj, acces, servicii extra.
+              Orientativ: garsonieră 800-1.500 lei, 2 camere 1.500-2.500 lei, 3+
+              camere 2.500-4.500 lei, casă/vilă 4.000-10.000+ lei. Folosește{" "}
               <Link
                 href="/calculator"
                 className="text-emerald-600 underline hover:text-emerald-700"
@@ -278,8 +289,8 @@ export default function FAQPage() {
               >
                 împachetare completă
               </Link>{" "}
-              (materiale incluse): vesela, obiectele fragile, haine, cărți. Costă în plus 200-800
-              lei funcție de volum. Vezi și{" "}
+              (materiale incluse): vesela, obiectele fragile, haine, cărți.
+              Costă în plus 200-800 lei funcție de volum. Vezi și{" "}
               <Link
                 href="/servicii/impachetare/materiale"
                 className="text-emerald-600 underline hover:text-emerald-700"
@@ -303,8 +314,9 @@ export default function FAQPage() {
               >
                 mutări de piane
               </Link>{" "}
-              și obiecte grele. Un pian vertical: +300-600 lei, pian cu coadă: +800-1.500 lei.
-              Trebuie specificat în cerere pentru echipament special.
+              și obiecte grele. Un pian vertical: +300-600 lei, pian cu coadă:
+              +800-1.500 lei. Trebuie specificat în cerere pentru echipament
+              special.
             </>
           ),
           aText:
@@ -321,8 +333,9 @@ export default function FAQPage() {
               >
                 depozite proprii
               </Link>{" "}
-              sau parteneriate. Costă 50-150 lei/zi pentru un apartament de 2 camere. Util dacă ai
-              nevoie de câteva zile între mutări sau renovezi.
+              sau parteneriate. Costă 50-150 lei/zi pentru un apartament de 2
+              camere. Util dacă ai nevoie de câteva zile între mutări sau
+              renovezi.
             </>
           ),
           aText:
@@ -339,8 +352,9 @@ export default function FAQPage() {
               >
                 debarasare
               </Link>{" "}
-              (mobilier vechi, electronice, moloz) în același timp cu mutarea. Costă +200-800 lei
-              funcție de cantitate și necesită mențiune în cerere.
+              (mobilier vechi, electronice, moloz) în același timp cu mutarea.
+              Costă +200-800 lei funcție de cantitate și necesită mențiune în
+              cerere.
             </>
           ),
           aText:
@@ -356,11 +370,14 @@ export default function FAQPage() {
           a: (
             <>
               Nu inițial! Poți completa{" "}
-              <Link href="/" className="text-emerald-600 underline hover:text-emerald-700">
+              <Link
+                href="/"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
                 formularul
               </Link>{" "}
-              fără cont. După trimitere, vei primi un email pentru a-ți crea cont și a gestiona
-              cererile și ofertele primite.
+              fără cont. După trimitere, vei primi un email pentru a-ți crea
+              cont și a gestiona cererile și ofertele primite.
             </>
           ),
           aText:
@@ -370,9 +387,13 @@ export default function FAQPage() {
           q: "Ce faceți cu datele mele personale?",
           a: (
             <>
-              Le folosim doar pentru a-ți trimite oferte și a facilita comunicarea cu firmele. Nu
-              vindem/partajăm datele cu terțe părți. Vezi{" "}
-              <Link href="/privacy" className="text-emerald-600 underline hover:text-emerald-700">
+              Le folosim doar pentru a-ți trimite oferte și a facilita
+              comunicarea cu firmele. Nu vindem/partajăm datele cu terțe părți.
+              Vezi{" "}
+              <Link
+                href="/privacy"
+                className="text-emerald-600 underline hover:text-emerald-700"
+              >
                 Politica de confidențialitate
               </Link>{" "}
               pentru detalii complete.
@@ -392,8 +413,8 @@ export default function FAQPage() {
               >
                 Setările contului
               </Link>{" "}
-              și alege &apos;Șterge cont&apos;. Toate datele tale vor fi șterse permanent în
-              conformitate cu GDPR.
+              și alege &apos;Șterge cont&apos;. Toate datele tale vor fi șterse
+              permanent în conformitate cu GDPR.
             </>
           ),
           aText:
@@ -419,7 +440,7 @@ export default function FAQPage() {
           "@type": "Answer",
           text: faq.aText || (typeof faq.a === "string" ? faq.a : faq.q),
         },
-      }))
+      })),
     ),
   };
 
@@ -458,7 +479,9 @@ export default function FAQPage() {
   return (
     <>
       <Head>
-        <title>Întrebări Frecvente (FAQ) Mutări România 2026 | OferteMutare.ro</title>
+        <title>
+          Întrebări Frecvente (FAQ) Mutări România 2026 | OferteMutare.ro
+        </title>
         <meta
           name="description"
           content="🚚 Răspunsuri complete despre mutări în București, Cluj, Timișoara, Iași. Prețuri, proces, firme verificate, termene. 100% gratuit!"
@@ -480,7 +503,10 @@ export default function FAQPage() {
         />
         <meta property="og:url" content="https://ofertemutare.ro/faq" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta
+          property="og:image"
+          content="https://ofertemutare.ro/pics/index.webp"
+        />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -492,7 +518,10 @@ export default function FAQPage() {
           name="twitter:description"
           content="Răspunsuri complete la toate întrebările despre mutări în România. 100% gratuit!"
         />
-        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta
+          name="twitter:image"
+          content="https://ofertemutare.ro/pics/index.webp"
+        />
 
         {/* FAQ Schema.org Structured Data */}
         <script
@@ -556,8 +585,8 @@ export default function FAQPage() {
               </span>
             </h1>
             <p className="mx-auto max-w-2xl px-4 text-base text-gray-600 sm:text-lg">
-              Răspunsuri clare la cele mai comune întrebări despre platformă, proces, prețuri și mai
-              mult.
+              Răspunsuri clare la cele mai comune întrebări despre platformă,
+              proces, prețuri și mai mult.
             </p>
           </div>
 
@@ -565,10 +594,13 @@ export default function FAQPage() {
           <div className="mb-10 rounded-xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-6">
             <div className="mb-3 flex items-center justify-center gap-2">
               <MapPin className="h-5 w-5 text-emerald-600" />
-              <h3 className="text-lg font-bold text-emerald-800">Acoperim Toată România</h3>
+              <h3 className="text-lg font-bold text-emerald-800">
+                Acoperim Toată România
+              </h3>
             </div>
             <p className="mb-3 text-center text-sm text-gray-700">
-              Servicii de mutări disponibile în: <strong>{majorCities.join(", ")}</strong> și peste{" "}
+              Servicii de mutări disponibile în:{" "}
+              <strong>{majorCities.join(", ")}</strong> și peste{" "}
               <strong>30 de reședințe de județ</strong>
             </p>
             <div className="flex flex-wrap justify-center gap-2">
@@ -590,10 +622,10 @@ export default function FAQPage() {
             <p className="text-center text-sm text-gray-700 sm:text-base">
               <strong>Nu găsești răspunsul?</strong> Contactează-ne la{" "}
               <a
-                href="mailto:contact@ofertemutare.ro"
+                href="mailto:info@ofertemutare.ro"
                 className="font-semibold text-emerald-600 underline hover:text-emerald-700"
               >
-                contact@ofertemutare.ro
+                info@ofertemutare.ro
               </a>
             </p>
           </div>
@@ -612,7 +644,9 @@ export default function FAQPage() {
                       className="group rounded-lg border border-gray-200 bg-white p-4 shadow-sm transition-shadow hover:shadow-md sm:p-5"
                     >
                       <summary className="flex cursor-pointer items-start justify-between gap-4 font-semibold text-gray-800 hover:text-emerald-600">
-                        <span className="flex-1 text-sm sm:text-base">{faq.q}</span>
+                        <span className="flex-1 text-sm sm:text-base">
+                          {faq.q}
+                        </span>
                         <Check className="mt-1 h-5 w-5 shrink-0 text-emerald-500 opacity-0 transition-opacity group-open:opacity-100" />
                       </summary>
                       <p className="mt-4 text-sm leading-relaxed text-gray-600 sm:text-base">
@@ -631,7 +665,8 @@ export default function FAQPage() {
               Servicii Mutări în Toate Orașele României
             </h3>
             <p className="mb-6 text-center text-sm text-gray-600 sm:text-base">
-              Platformă națională de comparare oferte mutări. Acoperim toate orașele mari și medii:
+              Platformă națională de comparare oferte mutări. Acoperim toate
+              orașele mari și medii:
             </p>
             <div className="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">
               {[...majorCities, ...countyCities].map((city) => (
@@ -650,9 +685,12 @@ export default function FAQPage() {
 
           {/* CTA */}
           <div className="mt-16 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 p-6 text-center text-white sm:p-8">
-            <h3 className="mb-4 text-xl font-bold sm:text-2xl">Gata să Începi?</h3>
+            <h3 className="mb-4 text-xl font-bold sm:text-2xl">
+              Gata să Începi?
+            </h3>
             <p className="mb-6 text-base sm:text-lg">
-              Solicită oferte gratuite de la cele mai bune firme de mutări din România
+              Solicită oferte gratuite de la cele mai bune firme de mutări din
+              România
             </p>
             <Link
               href="/customer/dashboard"
@@ -666,5 +704,3 @@ export default function FAQPage() {
     </>
   );
 }
-
-

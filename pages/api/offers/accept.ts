@@ -224,7 +224,7 @@ Următorii pași:
 Mult succes!
 
 Echipa OferteMutare.ro
-contact@ofertemutare.ro
+info@ofertemutare.ro
 `;
 
       // Send email via Resend API

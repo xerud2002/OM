@@ -1,10 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { BuildingOfficeIcon as Facebook, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
+import {
+  BuildingOfficeIcon as Facebook,
+  EnvelopeIcon as Mail,
+} from "@heroicons/react/24/outline";
 
 /* 🔹 Constants */
-const CONTACT_INFO = [{ icon: Mail, text: "info@ofertemutare.ro", label: null }];
+const CONTACT_INFO = [
+  { icon: Mail, text: "info@ofertemutare.ro", label: null },
+];
 
 const USEFUL_LINKS = [
   { href: "/about", label: "Despre noi" },
@@ -17,9 +22,15 @@ const RESOURCES = [
   { href: "/blog", label: "Blog" },
   { href: "/faq", label: "Întrebări frecvente" },
   { href: "/articole/mutare", label: "Ghid complet de mutare" },
-  { href: "/articole/cat-costa-mutarea-2026", label: "Cât costă o mutare 2026" },
+  {
+    href: "/articole/cat-costa-mutarea-2026",
+    label: "Cât costă o mutare 2026",
+  },
   { href: "/articole/sfaturi-mutari", label: "50+ Sfaturi pentru mutări" },
-  { href: "/articole/schimbare-adresa-documente", label: "Acte schimbare adresă" },
+  {
+    href: "/articole/schimbare-adresa-documente",
+    label: "Acte schimbare adresă",
+  },
 ];
 
 const SERVICE_LINKS = [
@@ -73,8 +84,8 @@ export default function Footer() {
           </div>
 
           <p className="mx-auto mb-3 max-w-xs text-sm leading-relaxed text-gray-600 sm:mx-0 sm:mb-4">
-            Platforma care conectează clienți și firme de mutări verificate din România. Rapid,
-            sigur și transparent.
+            Platforma care conectează clienți și firme de mutări verificate din
+            România. Rapid, sigur și transparent.
           </p>
 
           <div className="flex flex-col items-center gap-1 text-sm text-gray-600 sm:items-start">
@@ -84,7 +95,9 @@ export default function Footer() {
                 <a href={`mailto:${text}`} className="hover:text-emerald-600">
                   {text}
                 </a>
-                {label && <span className="text-xs text-gray-500">({label})</span>}
+                {label && (
+                  <span className="text-xs text-gray-500">({label})</span>
+                )}
               </div>
             ))}
           </div>
@@ -126,6 +139,18 @@ export default function Footer() {
                 </Link>
               </li>
             ))}
+            <li>
+              <button
+                type="button"
+                onClick={() => {
+                  window.dispatchEvent(new Event("om:consent-reopen"));
+                }}
+                className="group relative inline-block transition-all duration-300 hover:text-emerald-600"
+              >
+                🍪 Setări cookie-uri
+                <span className="absolute bottom-0 left-0 h-px w-0 bg-gradient-to-r from-emerald-500 to-sky-500 transition-all duration-300 group-hover:w-full" />
+              </button>
+            </li>
           </ul>
 
           <div className="flex justify-center gap-4 sm:justify-start">
@@ -149,8 +174,8 @@ export default function Footer() {
       <div className="border-t border-gray-200 bg-gray-50 px-4 py-4 text-center text-xs text-gray-500 sm:py-5 sm:text-sm">
         <p suppressHydrationWarning>
           © {new Date().getFullYear()}{" "}
-          <span className="font-medium text-emerald-600">ofertemutare.ro</span> · Toate drepturile
-          rezervate
+          <span className="font-medium text-emerald-600">ofertemutare.ro</span>{" "}
+          · Toate drepturile rezervate
         </p>
       </div>
     </footer>
@@ -167,7 +192,9 @@ function FooterColumn({
 }) {
   return (
     <div className="text-center sm:text-left">
-      <h3 className="mb-3 text-base font-semibold text-emerald-600 sm:mb-4 sm:text-lg">{title}</h3>
+      <h3 className="mb-3 text-base font-semibold text-emerald-600 sm:mb-4 sm:text-lg">
+        {title}
+      </h3>
       <ul className="space-y-1.5 text-sm sm:space-y-2">
         {links.map(({ href, label }) => (
           <li key={href}>
@@ -184,5 +211,3 @@ function FooterColumn({
     </div>
   );
 }
-
-

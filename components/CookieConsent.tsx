@@ -14,6 +14,9 @@ import Link from "next/link";
 /** Emitted when consent changes — listeners can react (e.g. load GA). */
 export const CONSENT_EVENT = "om:consent-update";
 
+/** Dispatch this event to re-open the cookie banner (e.g. from Footer link). */
+export const REOPEN_CONSENT_EVENT = "om:consent-reopen";
+
 function dispatchConsentEvent(consent: ConsentType) {
   if (typeof window !== "undefined") {
     window.dispatchEvent(new CustomEvent(CONSENT_EVENT, { detail: consent }));
@@ -35,6 +38,16 @@ export default function CookieConsent() {
       }
     }, 1500);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Allow re-opening banner via custom event (e.g. Footer "Setări cookie-uri" link)
+  useEffect(() => {
+    const onReopen = () => {
+      setShowSettings(true);
+      setVisible(true);
+    };
+    window.addEventListener(REOPEN_CONSENT_EVENT, onReopen);
+    return () => window.removeEventListener(REOPEN_CONSENT_EVENT, onReopen);
   }, []);
 
   const handleAcceptAll = useCallback(() => {
