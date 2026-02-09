@@ -22,6 +22,7 @@ import { logger } from "@/utils/logger";
 
 export default function CustomerAuthPage() {
   const [isLogin, setIsLogin] = useState(true);
+  const [resetMode, setResetMode] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -170,14 +171,18 @@ export default function CustomerAuthPage() {
   };
 
   // ✅ Password reset
-  const handlePasswordReset = async () => {
+  const handlePasswordReset = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (!email) return setMessage("Introdu adresa de email pentru resetare.");
+    setLoading(true);
     try {
       const mod = await import("@/utils/firebaseHelpers");
       await mod.resetPassword(email);
-      setMessage("✉️ Email de resetare trimis cu succes!");
+      setMessage("✉️ Email de resetare trimis cu succes! Verifică și folderul Spam.");
     } catch (err: any) {
       setMessage(translateFirebaseError(err));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -301,37 +306,29 @@ export default function CustomerAuthPage() {
                 <h1 className="mb-2 text-3xl font-bold text-slate-900 lg:text-4xl">
                   <AnimatePresence mode="wait">
                     <motion.span
-                      key={isLogin ? "login" : "register"}
+                      key={resetMode ? "reset" : isLogin ? "login" : "register"}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: -20 }}
                       transition={{ duration: 0.3 }}
                     >
-                      {isLogin ? "Bine ai revenit!" : "Creează cont"}
+                      {resetMode ? "Resetare parolă" : isLogin ? "Bine ai revenit!" : "Creează cont"}
                     </motion.span>
                   </AnimatePresence>
                 </h1>
                 <p className="text-gray-600">
-                  {isLogin
-                    ? "Intră în cont pentru a gestiona cererile tale."
-                    : "Înregistrează-te gratuit și primește oferte instant."}
+                  {resetMode
+                    ? "Introdu adresa de email și îți vom trimite un link de resetare."
+                    : isLogin
+                      ? "Intră în cont pentru a gestiona cererile tale."
+                      : "Înregistrează-te gratuit și primește oferte instant."}
                 </p>
               </div>
 
               {/* === Email Form === */}
-              <form onSubmit={handleEmailAuth} className="space-y-6">
+              <form onSubmit={resetMode ? handlePasswordReset : handleEmailAuth} className="space-y-6">
                 {/* Email Input with Floating Label */}
                 <div className="group relative">
-                  <label
-                    htmlFor="email"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
-                      email
-                        ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
-                        : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
-                    }`}
-                  >
-                    Adresa ta de email
-                  </label>
                   <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
                     <motion.div
                       animate={{
@@ -352,42 +349,46 @@ export default function CustomerAuthPage() {
                       autoComplete="email"
                     />
                   </div>
+                  <label
+                    htmlFor="email"
+                    className="pointer-events-none absolute -top-2.5 left-3 z-10 bg-white px-2 text-xs font-medium text-gray-500 transition-all duration-200 group-focus-within:text-emerald-600"
+                  >
+                    Adresa ta de email
+                  </label>
                 </div>
 
                 {/* Password Input with Floating Label */}
-                <div className="group relative">
-                  <label
-                    htmlFor="password"
-                    className={`pointer-events-none absolute left-12 transition-all duration-200 ${
-                      password
-                        ? "-top-2.5 left-3 bg-white px-2 text-xs font-medium text-emerald-600"
-                        : "top-3.5 text-gray-400 group-focus-within:-top-2.5 group-focus-within:left-3 group-focus-within:bg-white group-focus-within:px-2 group-focus-within:text-xs group-focus-within:font-medium group-focus-within:text-emerald-600"
-                    }`}
-                  >
-                    Parola ta
-                  </label>
-                  <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
-                    <motion.div
-                      animate={{
-                        scale: password ? 1.1 : 1,
-                        rotate: password ? [0, 5, -5, 0] : 0,
-                      }}
-                      transition={{ duration: 0.3 }}
+                {!resetMode && (
+                  <div className="group relative">
+                    <div className="relative flex items-center rounded-xl border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-white px-4 py-3.5 transition-all duration-300 focus-within:border-emerald-500 focus-within:bg-white focus-within:shadow-lg focus-within:ring-4 focus-within:shadow-emerald-100 focus-within:ring-emerald-50 hover:border-gray-300 hover:shadow-sm">
+                      <motion.div
+                        animate={{
+                          scale: password ? 1.1 : 1,
+                          rotate: password ? [0, 5, -5, 0] : 0,
+                        }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        <Lock className="h-5 w-5 mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
+                      </motion.div>
+                      <input
+                        id="password"
+                        type="password"
+                        required
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        className="w-full bg-transparent text-gray-900 placeholder-transparent outline-none"
+                        autoComplete="off"
+                        name="password"
+                      />
+                    </div>
+                    <label
+                      htmlFor="password"
+                      className="pointer-events-none absolute -top-2.5 left-3 z-10 bg-white px-2 text-xs font-medium text-gray-500 transition-all duration-200 group-focus-within:text-emerald-600"
                     >
-                      <Lock className="h-5 w-5 mr-3 text-gray-400 transition-all duration-300 group-focus-within:text-emerald-600 group-hover:text-gray-500" />
-                    </motion.div>
-                    <input
-                      id="password"
-                      type="password"
-                      required
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      className="w-full bg-transparent text-gray-900 placeholder-transparent outline-none"
-                      autoComplete="off"
-                      name="password"
-                    />
+                      Parola ta
+                    </label>
                   </div>
-                </div>
+                )}
 
                 <motion.button
                   whileTap={{ scale: 0.98 }}
@@ -405,6 +406,11 @@ export default function CustomerAuthPage() {
                         />
                         Se procesează...
                       </>
+                    ) : resetMode ? (
+                      <>
+                        Trimite link de resetare
+                        <Mail className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+                      </>
                     ) : (
                       <>
                         {isLogin ? "Autentificare" : "Creează cont gratuit"}
@@ -415,40 +421,56 @@ export default function CustomerAuthPage() {
                   <div className="absolute inset-0 -z-0 bg-gradient-to-r from-emerald-700 via-teal-700 to-cyan-700 opacity-0 transition-opacity group-hover:opacity-100" />
                 </motion.button>
 
-                {isLogin && (
+                {isLogin && !resetMode && (
                   <div className="text-right">
                     <button
                       type="button"
-                      onClick={handlePasswordReset}
+                      onClick={() => { setResetMode(true); setMessage(""); }}
                       className="text-sm font-medium text-emerald-600 transition-colors hover:text-emerald-700 hover:underline"
                     >
                       Ai uitat parola?
                     </button>
                   </div>
                 )}
+
+                {resetMode && (
+                  <div className="text-center">
+                    <button
+                      type="button"
+                      onClick={() => { setResetMode(false); setMessage(""); }}
+                      className="text-sm font-medium text-gray-500 transition-colors hover:text-emerald-600 hover:underline"
+                    >
+                      ← Înapoi la autentificare
+                    </button>
+                  </div>
+                )}
               </form>
 
-              <div className="relative my-6">
-                <div className="absolute inset-0 flex items-center">
-                  <div className="w-full border-t border-gray-200" />
-                </div>
-                <div className="relative flex justify-center text-sm">
-                  <span className="bg-white px-4 text-gray-500">sau continuă cu</span>
-                </div>
-              </div>
+              {!resetMode && (
+                <>
+                  <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200" />
+                    </div>
+                    <div className="relative flex justify-center text-sm">
+                      <span className="bg-white px-4 text-gray-500">sau continuă cu</span>
+                    </div>
+                  </div>
 
-              {/* === Social Login Buttons === */}
-              <div className="flex gap-3">
-                <motion.button
-                  whileTap={{ scale: 0.98 }}
-                  onClick={handleGoogleLogin}
-                  disabled={loading}
-                  className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-4 py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
-                >
-                  <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
-                  Google
-                </motion.button>
-              </div>
+                  {/* === Social Login Buttons === */}
+                  <div className="flex gap-3">
+                    <motion.button
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleGoogleLogin}
+                      disabled={loading}
+                      className="group flex flex-1 items-center justify-center gap-3 rounded-xl border-2 border-gray-200 bg-white px-4 py-4 font-medium text-gray-700 shadow-sm transition-all hover:border-gray-300 hover:shadow-md disabled:opacity-50"
+                    >
+                      <Image src="/pics/google.svg" alt="Google" width={24} height={24} />
+                      Google
+                    </motion.button>
+                  </div>
+                </>
+              )}
 
               {/* === Status Message === */}
               <AnimatePresence>
@@ -465,18 +487,20 @@ export default function CustomerAuthPage() {
               </AnimatePresence>
 
               {/* === Toggle login/register === */}
-              <div className="mt-8 text-center text-sm text-gray-600">
-                {isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
-                <button
-                  onClick={() => {
-                    setIsLogin(!isLogin);
-                    setMessage("");
-                  }}
-                  className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 hover:underline"
-                >
-                  {isLogin ? "Creează unul acum" : "Autentifică-te"}
-                </button>
-              </div>
+              {!resetMode && (
+                <div className="mt-8 text-center text-sm text-gray-600">
+                  {isLogin ? "Nu ai cont?" : "Ai deja cont?"}{" "}
+                  <button
+                    onClick={() => {
+                      setIsLogin(!isLogin);
+                      setMessage("");
+                    }}
+                    className="font-semibold text-emerald-600 transition-colors hover:text-emerald-700 hover:underline"
+                  >
+                    {isLogin ? "Creează unul acum" : "Autentifică-te"}
+                  </button>
+                </div>
+              )}
 
               {/* Company auth link */}
               <div className="mt-4 text-center text-sm text-gray-500">
