@@ -121,7 +121,7 @@ export async function ensureUserProfile(u: User, role: UserRole) {
         welcomeCreditsReceived: COMPANY_WELCOME_CREDITS,
         firstPurchaseBonusAvailable: true, // 199 RON → 300 credits (+50%)
         // Verification
-        verificationStatus: "pending", // pending | verified | rejected
+        verificationStatus: "unverified", // unverified | pending | verified | rejected
         // Onboarding tracking
         onboardingCompleted: false,
         onboardingStep: 1,

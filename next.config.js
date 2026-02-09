@@ -119,6 +119,12 @@ const nextConfig = {
         destination: "/articole/:slug",
         permanent: true,
       },
+      // Consolidated duplicate content (Feb 2026 - Search Console fix)
+      {
+        source: "/articole/impachetare",
+        destination: "/servicii/impachetare/profesionala",
+        permanent: true,
+      },
       // Legacy URL renames
       {
         source: "/articole/survey",

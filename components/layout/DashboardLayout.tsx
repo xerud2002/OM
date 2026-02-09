@@ -10,6 +10,7 @@ import {
   XMarkIcon,
   HomeIcon,
   DocumentTextIcon,
+  DocumentPlusIcon,
   InboxIcon,
   Cog6ToothIcon,
   UserCircleIcon,
@@ -60,7 +61,16 @@ const defaultNavigation: Record<DashboardRole, NavItem[]> = {
       href: "/customer/dashboard",
       icon: DocumentTextIcon,
     },
-    { name: "Profil", href: "/customer/profile", icon: UserCircleIcon },
+    {
+      name: "Cerere Nouă",
+      href: "/customer/cerere-noua",
+      icon: DocumentPlusIcon,
+    },
+    {
+      name: "Setări",
+      href: "/customer/settings",
+      icon: Cog6ToothIcon,
+    },
   ],
   company: [
     {

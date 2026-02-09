@@ -259,3 +259,4 @@ img {
 .bg-gradient-slate {
   @apply bg-gradient-to-br from-slate-900 via-gray-800 to-slate-900;
 }
+

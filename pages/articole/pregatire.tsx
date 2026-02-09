@@ -270,7 +270,7 @@ export default function ArticlePregatire() {
                   <span>
                     <strong>Cumpără materiale de ambalare</strong> &ndash; Vezi{" "}
                     <Link
-                      href="/articole/impachetare"
+                      href="/servicii/impachetare/profesionala"
                       className="text-emerald-600 underline hover:text-emerald-700"
                     >
                       ghidul nostru complet despre împachetare
@@ -692,7 +692,7 @@ export default function ArticlePregatire() {
             <h3 className="mb-4 text-2xl font-bold text-gray-800">Alte Articole Utile</h3>
             <div className="grid gap-4 md:grid-cols-3">
               <Link
-                href="/articole/impachetare"
+                href="/servicii/impachetare/profesionala"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Ghid Împachetare</h4>

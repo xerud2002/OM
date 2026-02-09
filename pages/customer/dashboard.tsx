@@ -22,6 +22,8 @@ import {
   DocumentPlusIcon,
   ArrowRightIcon,
   StarIcon,
+  Cog6ToothIcon,
+  DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { MovingRequest, Offer } from "@/types";
@@ -296,8 +298,18 @@ export default function CustomerDashboard() {
     {
       name: "Cererile Mele",
       href: "/customer/dashboard",
-      icon: InboxIcon,
+      icon: DocumentTextIcon,
       badge: requests.length,
+    },
+    {
+      name: "Cerere Nouă",
+      href: "/customer/cerere-noua",
+      icon: DocumentPlusIcon,
+    },
+    {
+      name: "Setări",
+      href: "/customer/settings",
+      icon: Cog6ToothIcon,
     },
   ];
 
@@ -341,14 +353,23 @@ export default function CustomerDashboard() {
             {/* Requests sidebar */}
             <aside className="lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                <div className="border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white px-4 py-3 sm:px-5 sm:py-4">
-                  <h3 className="text-sm font-bold text-gray-900">
-                    Cererile tale
-                  </h3>
-                  <p className="mt-0.5 text-xs text-gray-500">
-                    {requests.length}{" "}
-                    {requests.length === 1 ? "cerere" : "cereri"}
-                  </p>
+                <div className="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white px-4 py-3 sm:px-5 sm:py-4">
+                  <div>
+                    <h3 className="text-sm font-bold text-gray-900">
+                      Cererile tale
+                    </h3>
+                    <p className="mt-0.5 text-xs text-gray-500">
+                      {requests.length}{" "}
+                      {requests.length === 1 ? "cerere" : "cereri"}
+                    </p>
+                  </div>
+                  <Link
+                    href="/customer/cerere-noua"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700 active:bg-emerald-800"
+                  >
+                    <DocumentPlusIcon className="h-3.5 w-3.5" />
+                    Nouă
+                  </Link>
                 </div>
                 <nav className="max-h-[60vh] lg:max-h-[calc(100vh-320px)] overflow-y-auto p-2 sm:p-3">
                   <ul className="space-y-2">
@@ -453,11 +474,82 @@ export default function CustomerDashboard() {
             <main className="lg:col-span-8 xl:col-span-9">
               {selectedRequest ? (
                 <div className="space-y-4">
-                  {/* Request summary card */}
+                  {/* Offers section */}
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    {/* Header with gradient */}
+                    <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 sm:px-6 sm:py-4">
+                      <div className="flex items-center gap-2 sm:gap-3">
+                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-purple-100">
+                          <GiftIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
+                        </div>
+                        <div>
+                          <h3 className="text-sm sm:text-base font-bold text-gray-900">
+                            Oferte primite
+                          </h3>
+                          <p className="text-xs sm:text-sm text-gray-500">
+                            {selectedOffers.length === 0
+                              ? "Încă nu ai primit oferte"
+                              : `${selectedOffers.length} ${selectedOffers.length === 1 ? "ofertă" : "oferte"} de la firme verificate`}
+                          </p>
+                        </div>
+                      </div>
+                      {selectedOffers.length > 0 && (
+                        <span className="rounded-full bg-purple-100 px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs sm:text-sm font-bold text-purple-700">
+                          {selectedOffers.length}
+                        </span>
+                      )}
+                    </div>
+
+                    {selectedOffers.length === 0 ? (
+                      <div className="p-6 sm:p-10 text-center">
+                        <div className="mx-auto flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl bg-gray-100">
+                          <ClockIcon className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
+                        </div>
+                        <p className="mt-3 sm:mt-4 text-sm sm:text-base font-semibold text-gray-900">
+                          Încă nu ai oferte
+                        </p>
+                        <p className="mt-1 text-xs sm:text-sm text-gray-500">
+                          Firmele verificate îți vor trimite oferte în curând.
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="divide-y divide-gray-100">
+                        {selectedOffers.map((offer, idx) => (
+                          <OfferCard
+                            key={offer.id}
+                            offer={offer}
+                            requestId={selectedRequestId!}
+                            index={idx}
+                            onAccept={handleAccept}
+                            onDecline={handleDecline}
+                            onChat={() => setChatOffer(offer)}
+                          />
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Expandable details */}
+                  <AnimatePresence>
+                    {showDetails && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+                      >
+                        <div className="p-4 sm:p-6">
+                          <RequestFullDetails
+                            request={selectedRequest}
+                            isOwner={true}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                  {/* Request summary card (route + status) */}
+                  <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                     <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-500 to-teal-400 px-4 py-2.5 sm:px-6 sm:py-4">
-                      {/* Bottom fade */}
                       <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white/20 to-transparent" />
                       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')] opacity-50" />
                       <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
@@ -524,11 +616,10 @@ export default function CustomerDashboard() {
                       </div>
                     </div>
 
-                    {/* Content */}
-                    <div className="p-4 sm:p-6 bg-gradient-to-b from-emerald-50/50 to-white">
-                      {/* Actions */}
-                      {selectedRequest.status === "closed" && (
-                        <div className="mb-4 sm:mb-5 flex flex-wrap items-center gap-2 sm:gap-3">
+                    {/* Actions for closed requests */}
+                    {selectedRequest.status === "closed" && (
+                      <div className="p-4 sm:p-6 bg-gradient-to-b from-emerald-50/50 to-white">
+                        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                           <button
                             onClick={() => handleReactivate(selectedRequest.id)}
                             className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 sm:px-4 sm:py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 active:bg-emerald-800"
@@ -549,79 +640,6 @@ export default function CustomerDashboard() {
                             Reactivează cererea
                           </button>
                         </div>
-                      )}
-
-                      {/* Expandable details */}
-                      <AnimatePresence>
-                        {showDetails && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden"
-                          >
-                            <div className="rounded-xl border border-gray-100 bg-gray-50 p-3 sm:p-4">
-                              <RequestFullDetails
-                                request={selectedRequest}
-                                isOwner={true}
-                              />
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  </div>
-
-                  {/* Offers section */}
-                  <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    <div className="flex items-center justify-between border-b border-gray-100 px-4 py-3 sm:px-6 sm:py-4">
-                      <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="flex h-8 w-8 sm:h-10 sm:w-10 items-center justify-center rounded-lg sm:rounded-xl bg-purple-100">
-                          <GiftIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
-                        </div>
-                        <div>
-                          <h3 className="text-sm sm:text-base font-bold text-gray-900">
-                            Oferte primite
-                          </h3>
-                          <p className="text-xs sm:text-sm text-gray-500">
-                            {selectedOffers.length === 0
-                              ? "Încă nu ai primit oferte"
-                              : `${selectedOffers.length} ${selectedOffers.length === 1 ? "ofertă" : "oferte"} de la firme verificate`}
-                          </p>
-                        </div>
-                      </div>
-                      {selectedOffers.length > 0 && (
-                        <span className="rounded-full bg-purple-100 px-2.5 py-0.5 sm:px-3 sm:py-1 text-xs sm:text-sm font-bold text-purple-700">
-                          {selectedOffers.length}
-                        </span>
-                      )}
-                    </div>
-
-                    {selectedOffers.length === 0 ? (
-                      <div className="p-6 sm:p-10 text-center">
-                        <div className="mx-auto flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl bg-gray-100">
-                          <ClockIcon className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
-                        </div>
-                        <p className="mt-3 sm:mt-4 text-sm sm:text-base font-semibold text-gray-900">
-                          Încă nu ai oferte
-                        </p>
-                        <p className="mt-1 text-xs sm:text-sm text-gray-500">
-                          Firmele verificate îți vor trimite oferte în curând.
-                        </p>
-                      </div>
-                    ) : (
-                      <div className="divide-y divide-gray-100">
-                        {selectedOffers.map((offer, idx) => (
-                          <OfferCard
-                            key={offer.id}
-                            offer={offer}
-                            requestId={selectedRequestId!}
-                            index={idx}
-                            onAccept={handleAccept}
-                            onDecline={handleDecline}
-                            onChat={() => setChatOffer(offer)}
-                          />
-                        ))}
                       </div>
                     )}
                   </div>

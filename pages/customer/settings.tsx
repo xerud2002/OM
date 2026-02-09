@@ -4,6 +4,29 @@ import RequireRole from "@/components/auth/RequireRole";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { db } from "@/services/firebase";
 import { doc, getDoc, updateDoc, serverTimestamp } from "firebase/firestore";
+import {
+  DocumentTextIcon,
+  DocumentPlusIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/outline";
+
+const navigation = [
+  {
+    name: "Cererile Mele",
+    href: "/customer/dashboard",
+    icon: DocumentTextIcon,
+  },
+  {
+    name: "Cerere Nouă",
+    href: "/customer/cerere-noua",
+    icon: DocumentPlusIcon,
+  },
+  {
+    name: "Setări",
+    href: "/customer/settings",
+    icon: Cog6ToothIcon,
+  },
+];
 
 export default function CustomerSettings() {
   const [user, setUser] = useState<any>(null);
@@ -54,7 +77,7 @@ export default function CustomerSettings() {
 
   return (
     <RequireRole allowedRole="customer">
-      <DashboardLayout role="customer">
+      <DashboardLayout role="customer" user={user} navigation={navigation}>
         <section className="mx-auto max-w-3xl px-4 py-10">
           <h1 className="mb-6 text-2xl font-bold text-slate-900">
             Setări{" "}
@@ -104,6 +127,7 @@ export default function CustomerSettings() {
               </div>
             </form>
           )}
+
         </section>
       </DashboardLayout>
     </RequireRole>

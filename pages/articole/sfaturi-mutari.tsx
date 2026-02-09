@@ -351,7 +351,7 @@ export default function ArticleTips() {
                 <p className="mt-3 text-sm">
                   💡 Vezi{" "}
                   <Link
-                    href="/articole/impachetare"
+                    href="/servicii/impachetare/profesionala"
                     className="font-semibold text-blue-600 underline"
                   >
                     ghidul nostru complet de împachetare
@@ -626,7 +626,7 @@ export default function ArticleTips() {
                   <p>
                     <span className="font-semibold text-green-600">Soluția:</span> Citește{" "}
                     <Link
-                      href="/articole/impachetare"
+                      href="/servicii/impachetare/profesionala"
                       className="font-semibold text-emerald-600 underline"
                     >
                       ghidul nostru de împachetare
@@ -905,7 +905,7 @@ export default function ArticleTips() {
                 <p className="text-sm text-gray-600">Planificare pas cu pas în 8 săptămâni</p>
               </Link>
               <Link
-                href="/articole/impachetare"
+                href="/servicii/impachetare/profesionala"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Ghid Împachetare</h4>

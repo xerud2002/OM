@@ -22,6 +22,7 @@ export default function VerificationSection({ company, onUpdate }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   const status = company?.verificationStatus || "unverified"; // unverified | pending | verified | rejected
+  const hasDocument = !!company?.verificationDocUrl;
 
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -81,12 +82,12 @@ export default function VerificationSection({ company, onUpdate }: Props) {
                <Verified className="h-5 w-5" /> Verificat
              </span>
            )}
-           {status === 'pending' && (
+           {status === 'pending' && hasDocument && (
              <span className="flex items-center gap-1 rounded-full bg-amber-100 px-3 py-1 text-sm font-bold text-amber-700">
                <Pending className="h-5 w-5" /> În curs
              </span>
            )}
-           {status === 'rejected' && (
+           {((status === 'unverified') || (status === 'pending' && !hasDocument)) && (
              <span className="flex items-center gap-1 rounded-full bg-rose-100 px-3 py-1 text-sm font-bold text-rose-700">
                <Rejected className="h-5 w-5" /> Respins
              </span>
@@ -108,7 +109,7 @@ export default function VerificationSection({ company, onUpdate }: Props) {
                <p className="text-sm text-emerald-700">Acum poți trimite oferte nelimitate clienților.</p>
              </div>
            </div>
-         ) : status === 'pending' ? (
+         ) : status === 'pending' && hasDocument ? (
            <div className="flex items-center gap-3 rounded-xl bg-amber-50 p-4">
              <Pending className="h-6 w-6 text-amber-600" />
              <div>

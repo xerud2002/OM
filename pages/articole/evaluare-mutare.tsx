@@ -782,7 +782,7 @@ export default function ArticleSurvey() {
                 <p className="text-sm text-gray-600">Planificare în 8 săptămâni, pas cu pas</p>
               </Link>
               <Link
-                href="/articole/impachetare"
+                href="/servicii/impachetare/profesionala"
                 className="rounded-lg border border-gray-200 p-4 transition-shadow hover:shadow-md"
               >
                 <h4 className="mb-2 font-semibold text-emerald-700">Ghid Împachetare</h4>

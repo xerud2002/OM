@@ -162,7 +162,7 @@ export default function GuideMutare() {
 
             {/* Article 2 - Impachetare */}
             <Link
-              href="/articole/impachetare"
+              href="/servicii/impachetare/profesionala"
               className="group overflow-x-auto rounded-xl border-2 border-blue-200 bg-white shadow-md transition-all duration-300"
             >
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 text-white">
