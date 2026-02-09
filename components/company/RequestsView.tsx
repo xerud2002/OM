@@ -11,6 +11,7 @@ import {
   getDocs,
   startAfter,
   limit,
+  limitToLast,
   QueryDocumentSnapshot,
   DocumentData,
   doc,
@@ -73,6 +74,7 @@ function JobCard({
   hasMine,
   onOfferClick,
   onChatClick,
+  unreadOfferIds,
 }: {
   request: MovingRequest;
   hasMine: false | { offerId: string; status: string };
@@ -80,6 +82,7 @@ function JobCard({
   onOfferClick: (r: MovingRequest) => void;
   // eslint-disable-next-line no-unused-vars
   onChatClick?: (requestId: string, offerId: string) => void;
+  unreadOfferIds?: Set<string>;
 }) {
   const r = request;
   const cost = calculateRequestCost(r);
@@ -298,10 +301,16 @@ function JobCard({
             {hasMine.offerId && onChatClick && (
               <button
                 onClick={() => onChatClick(r.id, hasMine.offerId)}
-                className="rounded-lg bg-emerald-600 p-1.5 sm:p-2 text-white shadow-sm hover:bg-emerald-700 transition active:scale-95"
+                className="relative rounded-lg bg-emerald-600 p-1.5 sm:p-2 text-white shadow-sm hover:bg-emerald-700 transition active:scale-95"
                 title="Chat"
               >
                 <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
+                {unreadOfferIds?.has(hasMine.offerId) && (
+                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+                  </span>
+                )}
               </button>
             )}
           </div>
@@ -364,8 +373,68 @@ export default function RequestsView({
     useState<MovingRequest | null>(null);
   const [submittingOffer, setSubmittingOffer] = useState(false);
 
+  // Unread chat messages tracking
+  const [unreadOfferIds, setUnreadOfferIds] = useState<Set<string>>(new Set());
+
   const sentinelRef = useRef<HTMLDivElement | null>(null);
   const checkedOffersRef = useRef<Set<string>>(new Set());
+  const unreadSubsRef = useRef<Map<string, () => void>>(new Map());
+
+  // Track unread messages for company offers
+  useEffect(() => {
+    if (!company?.uid) return;
+
+    const entries = Object.entries(hasMineMap).filter(
+      (entry): entry is [string, { offerId: string; status: string }] =>
+        entry[1] !== false,
+    );
+
+    // Subscribe to new offer chats, skip already-subscribed
+    const currentSubs = unreadSubsRef.current;
+    for (const [requestId, offerInfo] of entries) {
+      const key = `${requestId}__${offerInfo.offerId}`;
+      if (currentSubs.has(key)) continue;
+
+      const messagesRef = collection(
+        db,
+        "requests",
+        requestId,
+        "offers",
+        offerInfo.offerId,
+        "messages",
+      );
+      const q = query(messagesRef, orderBy("createdAt", "asc"), limitToLast(1));
+
+      const unsub = onSnapshot(
+        q,
+        (snap) => {
+          if (snap.empty) return;
+          const lastMsg = snap.docs[0].data();
+          const isFromCustomer =
+            lastMsg.senderId !== company.uid && lastMsg.senderRole !== "company";
+
+          setUnreadOfferIds((prev) => {
+            const next = new Set(prev);
+            if (isFromCustomer) {
+              next.add(offerInfo.offerId);
+            } else {
+              next.delete(offerInfo.offerId);
+            }
+            return next;
+          });
+        },
+        () => {/* ignore errors for missing collections */},
+      );
+
+      currentSubs.set(key, unsub);
+    }
+
+    return () => {
+      // Cleanup all unread subscriptions on unmount or company change
+      currentSubs.forEach((unsub) => unsub());
+      currentSubs.clear();
+    };
+  }, [company?.uid, hasMineMap]);
 
   // Auth (if not provided by parent)
   useEffect(() => {
@@ -1012,9 +1081,16 @@ export default function RequestsView({
                   hasMine={hasMineMap[r.id] ?? false}
                   onOfferClick={(req) => setActiveOfferRequest(req)}
                   onChatClick={(reqId, offerId) => {
+                    // Clear unread when opening chat
+                    setUnreadOfferIds((prev) => {
+                      const next = new Set(prev);
+                      next.delete(offerId);
+                      return next;
+                    });
                     if (window)
                       window.location.href = `/company/chat?request=${reqId}&offer=${offerId}`;
                   }}
+                  unreadOfferIds={unreadOfferIds}
                 />
               </motion.div>
             ))}

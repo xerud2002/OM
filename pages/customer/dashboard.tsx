@@ -7,6 +7,7 @@ import { logger } from "@/utils/logger";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import CustomerWelcome from "@/components/customer/CustomerWelcome";
+import CustomerNotificationBell from "@/components/customer/CustomerNotificationBell";
 import {
   InboxIcon,
   CheckCircleIcon,
@@ -39,6 +40,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import { onAuthChange } from "@/utils/firebaseHelpers";
+import { useUnreadMessages, countUnreadForRequest } from "@/hooks/useUnreadMessages";
 
 // Lazy load heavy components
 const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
@@ -76,6 +78,7 @@ export default function CustomerDashboard() {
   );
   const [chatOffer, setChatOffer] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [readOfferIds, setReadOfferIds] = useState<Set<string>>(new Set());
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
@@ -194,6 +197,24 @@ export default function CustomerDashboard() {
   const selectedOffers = selectedRequestId
     ? offersByRequest[selectedRequestId] || []
     : [];
+
+  // Track unread chat messages
+  const requestIdsList = requests.map((r) => r.id);
+  const unreadOffers = useUnreadMessages(
+    requestIdsList,
+    offersByRequest,
+    "customer",
+    readOfferIds,
+  );
+
+  // When user opens a chat, mark that offer as read
+  const handleOpenChat = (offer: any) => {
+    setReadOfferIds((prev) => new Set(prev).add(offer.id));
+    setChatOffer(offer);
+  };
+
+  // Total unread across all requests
+  const totalUnreadChats = unreadOffers.size;
 
   // Accept/Decline handlers
   const handleAccept = async (
@@ -320,6 +341,14 @@ export default function CustomerDashboard() {
         user={user}
         navigation={navigation}
         showStats={false}
+        headerActions={
+          user?.uid ? (
+            <CustomerNotificationBell
+              customerId={user.uid}
+              unreadChats={totalUnreadChats}
+            />
+          ) : null
+        }
       >
         {requests.length === 0 ? (
           // Welcome state for new users
@@ -382,6 +411,11 @@ export default function CustomerDashboard() {
                       const hasAccepted = offers.some(
                         (o) => o.status === "accepted",
                       );
+                      const reqUnreadCount = countUnreadForRequest(
+                        req.id,
+                        offersByRequest,
+                        unreadOffers,
+                      );
 
                       return (
                         <li key={req.id}>
@@ -427,21 +461,29 @@ export default function CustomerDashboard() {
 
                               <div className="mt-2 sm:mt-3 flex items-center justify-between gap-2">
                                 {offers.length > 0 ? (
-                                  <span
-                                    className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold ${
-                                      hasAccepted
-                                        ? "bg-emerald-100 text-emerald-700"
-                                        : hasNewOffers
-                                          ? "bg-blue-100 text-blue-700"
-                                          : "bg-gray-100 text-gray-600"
-                                    }`}
-                                  >
-                                    {hasAccepted && (
-                                      <CheckCircleSolid className="h-3 w-3" />
+                                  <div className="flex items-center gap-1.5">
+                                    <span
+                                      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold ${
+                                        hasAccepted
+                                          ? "bg-emerald-100 text-emerald-700"
+                                          : hasNewOffers
+                                            ? "bg-blue-100 text-blue-700"
+                                            : "bg-gray-100 text-gray-600"
+                                      }`}
+                                    >
+                                      {hasAccepted && (
+                                        <CheckCircleSolid className="h-3 w-3" />
+                                      )}
+                                      {offers.length}{" "}
+                                      {offers.length === 1 ? "ofertă" : "oferte"}
+                                    </span>
+                                    {reqUnreadCount > 0 && (
+                                      <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-600">
+                                        <MessageSquare className="h-2.5 w-2.5" />
+                                        {reqUnreadCount}
+                                      </span>
                                     )}
-                                    {offers.length}{" "}
-                                    {offers.length === 1 ? "ofertă" : "oferte"}
-                                  </span>
+                                  </div>
                                 ) : (
                                   <span className="text-[10px] sm:text-xs text-gray-400">
                                     Fără oferte
@@ -521,7 +563,8 @@ export default function CustomerDashboard() {
                             index={idx}
                             onAccept={handleAccept}
                             onDecline={handleDecline}
-                            onChat={() => setChatOffer(offer)}
+                            onChat={() => handleOpenChat(offer)}
+                            hasUnread={unreadOffers.has(offer.id)}
                           />
                         ))}
                       </div>
@@ -549,12 +592,10 @@ export default function CustomerDashboard() {
 
                   {/* Request summary card (route + status) */}
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    <div className="relative overflow-hidden bg-gradient-to-br from-emerald-500 via-emerald-500 to-teal-400 px-4 py-2.5 sm:px-6 sm:py-4">
-                      <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-white/20 to-transparent" />
-                      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjIiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iMC4xIi8+PC9nPjwvc3ZnPg==')] opacity-50" />
+                    <div className="relative overflow-hidden bg-emerald-600 px-4 py-2.5 sm:px-6 sm:py-4">
                       <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
                         <div className="flex items-center gap-3 sm:gap-4">
-                          <div className="flex h-10 w-10 sm:h-14 sm:w-14 items-center justify-center rounded-xl sm:rounded-2xl bg-white/20 backdrop-blur-sm">
+                          <div className="flex h-10 w-10 sm:h-14 sm:w-14 items-center justify-center rounded-xl sm:rounded-2xl bg-white/20">
                             <TruckIcon className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
                           </div>
                           <div className="min-w-0 flex-1">
@@ -572,7 +613,7 @@ export default function CustomerDashboard() {
                         <div className="flex items-center gap-2 sm:gap-3">
                           <button
                             onClick={() => setShowDetails(!showDetails)}
-                            className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-white/20 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/30 active:bg-white/40"
+                            className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-white/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/30 active:bg-white/40"
                           >
                             {showDetails
                               ? "Ascunde"
@@ -582,7 +623,7 @@ export default function CustomerDashboard() {
                             />
                           </button>
                           <span
-                            className={`inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-2.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold backdrop-blur-sm ${
+                            className={`inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-2.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold ${
                               hasAcceptedOffer(selectedRequest.id)
                                 ? "bg-white text-emerald-700"
                                 : selectedRequest.status === "active"
@@ -685,6 +726,7 @@ export default function CustomerDashboard() {
                   otherPartyName={chatOffer.companyName || "Companie"}
                   currentUserRole="customer"
                   onClose={() => setChatOffer(null)}
+                  offerMessage={chatOffer.message}
                 />
               </motion.div>
             </motion.div>
@@ -714,12 +756,18 @@ const CONTACT_STYLES = {
   },
 } as const;
 
-function ContactButtons({ offer, onChat, variant }: { offer: Offer; onChat: () => void; variant: keyof typeof CONTACT_STYLES }) {
+function ContactButtons({ offer, onChat, variant, hasUnread }: { offer: Offer; onChat: () => void; variant: keyof typeof CONTACT_STYLES; hasUnread?: boolean }) {
   const styles = CONTACT_STYLES[variant];
   return (
     <>
-      <button onClick={onChat} className={styles.chat} title="Chat">
+      <button onClick={onChat} className={`${styles.chat} relative`} title="Chat">
         <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
+        {hasUnread && (
+          <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+            <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+          </span>
+        )}
       </button>
       {offer.companyPhone && (
         <a href={`tel:${offer.companyPhone}`} className={styles.phone} title={offer.companyPhone}>
@@ -742,6 +790,7 @@ function OfferCard({
   onAccept,
   onDecline,
   onChat,
+  hasUnread,
 }: {
   offer: Offer;
   requestId: string;
@@ -749,6 +798,7 @@ function OfferCard({
   onAccept: (reqId: string, offerId: string) => Promise<void>;
   onDecline: (reqId: string, offerId: string) => Promise<void>;
   onChat: () => void;
+  hasUnread?: boolean;
 }) {
   const isAccepted = offer.status === "accepted";
   const isDeclined = offer.status === "declined";
@@ -834,15 +884,6 @@ function OfferCard({
                 ? `Primită pe ${formatDateRO(offer.createdAt, { month: "short" })}`
                 : "Ofertă nouă"}
             </p>
-            {offer.message && (
-              <div className="mt-2 sm:mt-3 rounded-lg sm:rounded-xl bg-gray-100/80 p-3 sm:p-4">
-                <p
-                  className={`text-xs sm:text-sm leading-relaxed ${isDeclined ? "text-gray-500" : "text-gray-700"}`}
-                >
-                  &ldquo;{offer.message}&rdquo;
-                </p>
-              </div>
-            )}
           </div>
         </div>
 
@@ -883,7 +924,7 @@ function OfferCard({
               >
                 Refuză
               </button>
-              <ContactButtons offer={offer} onChat={onChat} variant="pending" />
+              <ContactButtons offer={offer} onChat={onChat} variant="pending" hasUnread={hasUnread} />
             </div>
           )}
 
@@ -896,13 +937,13 @@ function OfferCard({
                 <StarIcon className="h-4 w-4" />
                 Lasă un review
               </Link>
-              <ContactButtons offer={offer} onChat={onChat} variant="accepted" />
+              <ContactButtons offer={offer} onChat={onChat} variant="accepted" hasUnread={hasUnread} />
             </div>
           )}
 
           {isDeclined && (
             <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
-              <ContactButtons offer={offer} onChat={onChat} variant="declined" />
+              <ContactButtons offer={offer} onChat={onChat} variant="declined" hasUnread={hasUnread} />
             </div>
           )}
         </div>

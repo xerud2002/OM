@@ -20,6 +20,7 @@ type Props = {
   otherPartyName: string; // The name of the company (if customer) or customer (if company)
   currentUserRole: "company" | "customer";
   onClose: () => void;
+  offerMessage?: string;
 };
 
 type Message = {
@@ -30,7 +31,7 @@ type Message = {
   createdAt: any;
 };
 
-export default function ChatWindow({ requestId, offerId, otherPartyName, currentUserRole, onClose }: Props) {
+export default function ChatWindow({ requestId, offerId, otherPartyName, currentUserRole, onClose, offerMessage }: Props) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [sending, setSending] = useState(false);
@@ -113,6 +114,12 @@ export default function ChatWindow({ requestId, offerId, otherPartyName, current
         className="flex-1 overflow-y-auto bg-slate-50 px-4 py-6 sm:px-6"
       >
         <div className="space-y-4">
+          {offerMessage && (
+            <div className="mx-auto max-w-[90%] rounded-xl bg-blue-50 px-4 py-3 text-center ring-1 ring-blue-100">
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-blue-400">Mesajul ofertei</p>
+              <p className="mt-1 text-sm text-blue-700">&ldquo;{offerMessage}&rdquo;</p>
+            </div>
+          )}
           {messages.length === 0 && (
             <div className="py-10 text-center text-sm text-slate-400">
               Începe conversația...

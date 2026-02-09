@@ -33,11 +33,13 @@ function LocationAutocomplete({
   onChange,
   placeholder,
   label,
+  hasError,
 }: {
   value: { city: string; county: string };
   onChange: (city: string, county: string) => void;
   placeholder?: string;
   label?: string;
+  hasError?: boolean;
 }) {
   const [inputValue, setInputValue] = useState(
     value.city && value.county ? `${value.city}, ${value.county}` : "",
@@ -142,7 +144,11 @@ function LocationAutocomplete({
           onChange={handleInputChange}
           onFocus={() => inputValue.length >= 2 && setShowDropdown(true)}
           placeholder={placeholder || "Caută oraș sau localitate..."}
-          className={`w-full rounded-lg border border-gray-200 bg-white px-3 py-2 pr-8 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none ${
+          className={`w-full rounded-lg border bg-white px-3 py-2 pr-8 text-sm focus:outline-none ${
+            hasError
+              ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+              : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+          } ${
             value.city && value.county ? "text-gray-900" : "text-gray-700"
           }`}
         />
@@ -599,6 +605,7 @@ export default function HomeRequestForm() {
   const [submittedRequestCode, setSubmittedRequestCode] = useState<
     string | null
   >(null);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   // Initialize with default values to avoid hydration mismatch
   const [form, setForm] = useState<FormShape>({
@@ -627,6 +634,7 @@ export default function HomeRequestForm() {
     contactFirstName: "",
     contactLastName: "",
     phone: "",
+    email: "",
     serviceMoving: true,
     servicePacking: false,
     serviceDisassembly: false,
@@ -742,6 +750,19 @@ export default function HomeRequestForm() {
       }
 
       if (errors.length > 0) {
+        // Build field-level error map for ALL invalid fields
+        const errs: Record<string, boolean> = {};
+        if (!form.fromCity || !form.fromCounty) errs.fromCity = true;
+        if (!form.fromRooms) errs.fromRooms = true;
+        if (!form.toCity || !form.toCounty) errs.toCity = true;
+        if (!form.toRooms) errs.toRooms = true;
+        if (!form.contactFirstName) errs.contactFirstName = true;
+        if (!form.contactLastName) errs.contactLastName = true;
+        if (!form.phone || !/^07\d{8}$/.test(phoneClean)) errs.phone = true;
+        if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = true;
+        if (!form.acceptedTerms) errs.acceptedTerms = true;
+        setFieldErrors(errs);
+        toast.error("Completează câmpurile obligatorii marcate cu roșu.");
         setIsSubmitting(false);
         return;
       }
@@ -839,20 +860,33 @@ export default function HomeRequestForm() {
   );
 
   const nextStep = useCallback(async () => {
+    const { toast } = await import("sonner");
+
     // Validate step 1 before moving to step 2
     if (currentStep === 1) {
-      if (!form.fromCounty || !form.fromCity || !form.fromRooms) {
+      const errs: Record<string, boolean> = {};
+      if (!form.fromCity || !form.fromCounty) errs.fromCity = true;
+      if (!form.fromRooms) errs.fromRooms = true;
+      if (Object.keys(errs).length > 0) {
+        setFieldErrors((prev) => ({ ...prev, ...errs }));
+        toast.error("Completează câmpurile obligatorii marcate cu roșu.");
         return;
       }
     }
 
     // Validate step 2 before moving to step 3
     if (currentStep === 2) {
-      if (!form.toCounty || !form.toCity || !form.toRooms) {
+      const errs: Record<string, boolean> = {};
+      if (!form.toCity || !form.toCounty) errs.toCity = true;
+      if (!form.toRooms) errs.toRooms = true;
+      if (Object.keys(errs).length > 0) {
+        setFieldErrors((prev) => ({ ...prev, ...errs }));
+        toast.error("Completează câmpurile obligatorii marcate cu roșu.");
         return;
       }
     }
 
+    setFieldErrors({});
     setCurrentStep((s) => Math.min(s + 1, TOTAL_STEPS));
   }, [currentStep, form]);
 
@@ -874,11 +908,13 @@ export default function HomeRequestForm() {
         {/* Location Autocomplete */}
         <LocationAutocomplete
           value={{ city: form.fromCity || "", county: form.fromCounty || "" }}
-          onChange={(city, county) =>
-            setForm((s) => ({ ...s, fromCity: city, fromCounty: county }))
-          }
+          onChange={(city, county) => {
+            setForm((s) => ({ ...s, fromCity: city, fromCounty: county }));
+            if (city && county) setFieldErrors((prev) => { const n = { ...prev }; delete n.fromCity; return n; });
+          }}
           label="Localitate *"
           placeholder="Caută oraș sau localitate..."
+          hasError={!!fieldErrors.fromCity}
         />
 
         {/* Details - appear after city is selected */}
@@ -918,10 +954,15 @@ export default function HomeRequestForm() {
                 </label>
                 <select
                   value={form.fromRooms || ""}
-                  onChange={(e) =>
-                    setForm((s) => ({ ...s, fromRooms: e.target.value }))
-                  }
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  onChange={(e) => {
+                    setForm((s) => ({ ...s, fromRooms: e.target.value }));
+                    if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.fromRooms; return n; });
+                  }}
+                  className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
+                    fieldErrors.fromRooms
+                      ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                  }`}
                 >
                   <option value="">-</option>
                   <option value="1">1</option>
@@ -1031,11 +1072,13 @@ export default function HomeRequestForm() {
         {/* Location Autocomplete */}
         <LocationAutocomplete
           value={{ city: form.toCity || "", county: form.toCounty || "" }}
-          onChange={(city, county) =>
-            setForm((s) => ({ ...s, toCity: city, toCounty: county }))
-          }
+          onChange={(city, county) => {
+            setForm((s) => ({ ...s, toCity: city, toCounty: county }));
+            if (city && county) setFieldErrors((prev) => { const n = { ...prev }; delete n.toCity; return n; });
+          }}
           label="Localitate *"
           placeholder="Caută oraș sau localitate..."
+          hasError={!!fieldErrors.toCity}
         />
 
         {/* Details - appear after city is selected */}
@@ -1073,10 +1116,15 @@ export default function HomeRequestForm() {
                 </label>
                 <select
                   value={form.toRooms || ""}
-                  onChange={(e) =>
-                    setForm((s) => ({ ...s, toRooms: e.target.value }))
-                  }
-                  className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
+                  onChange={(e) => {
+                    setForm((s) => ({ ...s, toRooms: e.target.value }));
+                    if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.toRooms; return n; });
+                  }}
+                  className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
+                    fieldErrors.toRooms
+                      ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      : "border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
+                  }`}
                 >
                   <option value="">-</option>
                   <option value="1">1</option>
@@ -1685,11 +1733,16 @@ export default function HomeRequestForm() {
               </label>
               <input
                 value={form.contactFirstName || ""}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, contactFirstName: e.target.value }))
-                }
+                onChange={(e) => {
+                  setForm((s) => ({ ...s, contactFirstName: e.target.value }));
+                  if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.contactFirstName; return n; });
+                }}
                 placeholder="Ion"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
+                  fieldErrors.contactFirstName
+                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                }`}
               />
             </div>
             <div>
@@ -1698,11 +1751,16 @@ export default function HomeRequestForm() {
               </label>
               <input
                 value={form.contactLastName || ""}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, contactLastName: e.target.value }))
-                }
+                onChange={(e) => {
+                  setForm((s) => ({ ...s, contactLastName: e.target.value }));
+                  if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.contactLastName; return n; });
+                }}
                 placeholder="Popescu"
-                className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
+                  fieldErrors.contactLastName
+                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+                }`}
               />
             </div>
           </div>
@@ -1714,11 +1772,16 @@ export default function HomeRequestForm() {
             <input
               type="tel"
               value={form.phone || ""}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, phone: e.target.value }))
-              }
+              onChange={(e) => {
+                setForm((s) => ({ ...s, phone: e.target.value }));
+                if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.phone; return n; });
+              }}
               placeholder="07xx xxx xxx"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+              className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
+                fieldErrors.phone
+                  ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                  : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+              }`}
             />
           </div>
 
@@ -1729,24 +1792,32 @@ export default function HomeRequestForm() {
             <input
               type="email"
               value={form.email || ""}
-              onChange={(e) =>
-                setForm((s) => ({ ...s, email: e.target.value }))
-              }
+              onChange={(e) => {
+                setForm((s) => ({ ...s, email: e.target.value }));
+                if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.email; return n; });
+              }}
               placeholder="exemplu@email.com"
-              className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+              className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
+                fieldErrors.email
+                  ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                  : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
+              }`}
             />
           </div>
         </div>
       </div>
 
       {/* Terms */}
-      <label className="flex items-start gap-2 rounded-lg border border-gray-200 bg-gray-50 p-3">
+      <label className={`flex items-start gap-2 rounded-lg border p-3 ${
+        fieldErrors.acceptedTerms ? "border-red-400 bg-red-50" : "border-gray-200 bg-gray-50"
+      }`}>
         <input
           type="checkbox"
           checked={!!form.acceptedTerms}
-          onChange={(e) =>
-            setForm((s) => ({ ...s, acceptedTerms: e.target.checked }))
-          }
+          onChange={(e) => {
+            setForm((s) => ({ ...s, acceptedTerms: e.target.checked }));
+            if (e.target.checked) setFieldErrors((prev) => { const n = { ...prev }; delete n.acceptedTerms; return n; });
+          }}
           className="mt-0.5 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
         />
         <span className="text-xs text-gray-600">
