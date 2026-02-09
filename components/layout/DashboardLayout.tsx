@@ -136,7 +136,7 @@ const NAV_ACTIVE_STYLES: Record<DashboardRole, { container: string; icon: string
 
 function UserAvatar({ role, photoURL }: { role: DashboardRole; photoURL?: string }) {
   if (role === "company" && photoURL) {
-    return <Image src={photoURL} alt="Logo" width={40} height={40} className="h-full w-full object-cover" unoptimized />;
+    return <Image src={photoURL} alt="Logo" width={40} height={40} className="h-full w-full object-cover" />;
   }
   if (role === "company") {
     return <Image src="/pics/default-company.svg" alt="Logo" width={40} height={40} className="h-full w-full object-cover" />;
@@ -490,7 +490,17 @@ export default function DashboardLayout({
         {/* Page content */}
         <main className="py-4">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            {children}
+            {children || (
+              <div className="space-y-4 animate-pulse">
+                <div className="h-8 w-48 rounded-lg bg-gray-200" />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                  {[1,2,3].map(i => (
+                    <div key={i} className="h-32 rounded-xl bg-gray-200" />
+                  ))}
+                </div>
+                <div className="h-64 rounded-xl bg-gray-200" />
+              </div>
+            )}
           </div>
         </main>
       </div>

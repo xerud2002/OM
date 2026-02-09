@@ -3,6 +3,9 @@ import { adminDb } from "@/lib/firebaseAdmin";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
+import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
+
+const isRateLimited = createRateLimiter({ name: "declineOffer", max: 5, windowMs: 60_000 });
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") {
@@ -13,6 +16,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { requestId, offerId } = req.body || {};
   if (!requestId || !offerId) {
     return res.status(400).json(apiError("Missing required fields: requestId, offerId"));
+  }
+
+  // Rate limiting
+  const clientIp = getClientIp(req);
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json(apiError("Too many requests. Please try again later."));
   }
 
   const authResult = await verifyAuth(req);

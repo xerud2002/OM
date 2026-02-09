@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,6 +27,7 @@ import {
   DocumentTextIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
+import type { User } from "firebase/auth";
 import { MovingRequest, Offer } from "@/types";
 import { formatDateRO } from "@/utils/date";
 
@@ -68,7 +69,7 @@ const getStatusLabel = (status?: string) => STATUS_LABELS[status || ""] || statu
 
 export default function CustomerDashboard() {
   const router = useRouter();
-  const [user, setUser] = useState<any | null>(null);
+  const [user, setUser] = useState<User | null>(null);
   const [requests, setRequests] = useState<MovingRequest[]>([]);
   const [offersByRequest, setOffersByRequest] = useState<
     Record<string, Offer[]>
@@ -76,8 +77,9 @@ export default function CustomerDashboard() {
   const [selectedRequestId, setSelectedRequestId] = useState<string | null>(
     null,
   );
-  const [chatOffer, setChatOffer] = useState<any>(null);
+  const [chatOffer, setChatOffer] = useState<Offer | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const offerUnsubsRef = useRef<Array<() => void>>([]);
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
@@ -88,7 +90,7 @@ export default function CustomerDashboard() {
 
   // Auth & data loading
   useEffect(() => {
-    const unsubAuth = onAuthChange(async (u: any) => {
+    const unsubAuth = onAuthChange(async (u: User | null) => {
       setUser(u);
       if (!u) {
         setRequests([]);
@@ -133,13 +135,17 @@ export default function CustomerDashboard() {
           );
           setRequests(reqs);
 
+          // Clean up previous offer subscriptions
+          offerUnsubsRef.current.forEach(unsub => unsub());
+          offerUnsubsRef.current = [];
+
           // Subscribe to offers for each request
           reqs.forEach((req) => {
             const offersQ = query(
               collection(db, "requests", req.id, "offers"),
               orderBy("createdAt", "desc"),
             );
-            onSnapshot(
+            const unsubOffers = onSnapshot(
               offersQ,
               (offersSnap) => {
                 const offers = offersSnap.docs.map(
@@ -151,6 +157,7 @@ export default function CustomerDashboard() {
                 logger.error("Error loading offers for request", req.id, err);
               },
             );
+            offerUnsubsRef.current.push(unsubOffers);
           });
         },
         (err) => {
@@ -160,7 +167,11 @@ export default function CustomerDashboard() {
         },
       );
 
-      return () => unsubRequests();
+      return () => {
+        unsubRequests();
+        offerUnsubsRef.current.forEach(unsub => unsub());
+        offerUnsubsRef.current = [];
+      };
     });
 
     return () => unsubAuth();
@@ -206,7 +217,7 @@ export default function CustomerDashboard() {
   );
 
   // When user opens a chat, mark that offer as read
-  const handleOpenChat = (offer: any) => {
+  const handleOpenChat = (offer: Offer) => {
     markRead(offer.id);
     setChatOffer(offer);
   };
@@ -237,11 +248,8 @@ export default function CustomerDashboard() {
       });
 
       if (!resp.ok && resp.status === 503) {
-        // Fallback for dev - only update the individual offer
-        const { doc, updateDoc } = await import("firebase/firestore");
-        await updateDoc(doc(db, "requests", requestId, "offers", offerId), {
-          status: "accepted",
-        });
+        toast.error("Serviciul este temporar indisponibil. Încearcă din nou.");
+        return;
       } else if (!resp.ok) {
         throw new Error("Failed");
       }
@@ -275,10 +283,8 @@ export default function CustomerDashboard() {
       });
 
       if (!resp.ok && resp.status === 503) {
-        const { doc, updateDoc } = await import("firebase/firestore");
-        await updateDoc(doc(db, "requests", requestId, "offers", offerId), {
-          status: "declined",
-        });
+        toast.error("Serviciul este temporar indisponibil. Încearcă din nou.");
+        return;
       } else if (!resp.ok) {
         throw new Error("Failed");
       }
@@ -336,7 +342,7 @@ export default function CustomerDashboard() {
     <RequireRole allowedRole="customer">
       <DashboardLayout
         role="customer"
-        user={user}
+        user={user ? { displayName: user.displayName || undefined, email: user.email || undefined, photoURL: user.photoURL || undefined } : undefined}
         navigation={navigation}
         showStats={false}
         headerActions={
@@ -541,15 +547,26 @@ export default function CustomerDashboard() {
 
                     {selectedOffers.length === 0 ? (
                       <div className="p-6 sm:p-10 text-center">
-                        <div className="mx-auto flex h-12 w-12 sm:h-16 sm:w-16 items-center justify-center rounded-xl sm:rounded-2xl bg-gray-100">
-                          <ClockIcon className="h-6 w-6 sm:h-8 sm:w-8 text-gray-400" />
+                        <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50">
+                          <svg className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-400" viewBox="0 0 48 48" fill="none">
+                            <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" opacity="0.5" />
+                            <path d="M16 28l4-4 4 4 8-8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            <circle cx="36" cy="14" r="4" fill="#10b981" opacity="0.6">
+                              <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
+                            </circle>
+                          </svg>
                         </div>
                         <p className="mt-3 sm:mt-4 text-sm sm:text-base font-semibold text-gray-900">
-                          Încă nu ai oferte
+                          Așteptăm oferte pentru tine
                         </p>
-                        <p className="mt-1 text-xs sm:text-sm text-gray-500">
-                          Firmele verificate îți vor trimite oferte în curând.
+                        <p className="mt-1 text-xs sm:text-sm text-gray-500 max-w-xs mx-auto">
+                          Firmele verificate analizează cererea ta. Primești oferte în maxim 24h.
                         </p>
+                        <div className="mt-4 flex items-center justify-center gap-1.5">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: "0ms" }} />
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: "150ms" }} />
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                        </div>
                       </div>
                     ) : (
                       <div className="divide-y divide-gray-100">
@@ -841,7 +858,6 @@ function OfferCard({
                   width={56}
                   height={56}
                   className="h-full w-full object-cover"
-                  unoptimized
                 />
               ) : (
                 <Image

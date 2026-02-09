@@ -12,6 +12,18 @@ import { CONSENT_EVENT } from "@/components/CookieConsent";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
+// Web Vitals reporting - sends LCP, FID, CLS, INP, TTFB to GA4
+export function reportWebVitals({ id, name, label, value }: { id: string; name: string; label: string; value: number }) {
+  if (typeof window !== "undefined" && "gtag" in window) {
+    (window as any).gtag("event", name, {
+      event_category: label === "web-vital" ? "Web Vitals" : "Next.js Metric",
+      event_label: id,
+      value: Math.round(name === "CLS" ? value * 1000 : value),
+      non_interaction: true,
+    });
+  }
+}
+
 // Dev error suppressor loaded only in development (tree-shaken in production)
 if (process.env.NODE_ENV === "development") {
   // eslint-disable-next-line @typescript-eslint/no-require-imports
@@ -148,12 +160,10 @@ export default function App({ Component, pageProps }: AppProps) {
           sizes="32x32"
         />
         <link rel="icon" href="/logo.webp" type="image/webp" sizes="any" />
-        <title>
-          Ofertemutare.ro | Oferte reale de la firme de mutări verificate
-        </title>
+        <title>OferteMutare.ro | Oferte de la firme de mutări verificate</title>
         <meta
           name="description"
-          content="Primește rapid oferte reale de la firme de mutări verificate din România. Compară prețuri și alege varianta potrivită pentru tine."
+          content="Platformă online pentru compararea ofertelor de mutări în România. Conectăm clienții cu firme verificate."
         />
 
         {/* Open Graph tags - only global defaults, pages override with their own */}

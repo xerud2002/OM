@@ -260,6 +260,30 @@ img {
   overscroll-behavior-y: contain;
 }
 
+/* Landscape orientation - compact UI for phones in landscape */
+@media (orientation: landscape) and (max-height: 500px) {
+  .hero-title {
+    font-size: 1.5rem !important;
+  }
+
+  /* Reduce vertical padding in landscape */
+  section {
+    padding-top: 1rem !important;
+    padding-bottom: 1rem !important;
+  }
+
+  /* Hide secondary elements */
+  .landscape-hide {
+    display: none !important;
+  }
+
+  /* Compact hero */
+  [class*="min-h-[85vh]"],
+  [class*="min-h-screen"] {
+    min-height: auto !important;
+  }
+}
+
 /* Custom Hero Gradients */
 .bg-gradient-brand {
   @apply bg-gradient-to-br from-indigo-900 via-purple-900 to-indigo-900;

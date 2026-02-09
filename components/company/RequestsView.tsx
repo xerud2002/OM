@@ -247,7 +247,6 @@ function JobCard({
                 width={48}
                 height={48}
                 className="h-10 w-10 sm:h-12 sm:w-12 rounded object-cover"
-                unoptimized
               />
             ))}
             {r.mediaUrls.length > 4 && (
@@ -918,7 +917,8 @@ export default function RequestsView({
         {/* Sort */}
         <select
           value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as any)}
+          onChange={(e) => setSortBy(e.target.value as "date-desc" | "date-asc")}
+          aria-label="Sortare cereri"
           className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
         >
           <option value="date-desc">Cele mai noi</option>

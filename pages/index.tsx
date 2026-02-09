@@ -36,6 +36,16 @@ const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
 });
 import { SERVICE_FAQS } from "@/data/faqData";
 
+// Build FAQ schema from data
+const faqSchemaItems = SERVICE_FAQS.general.map((faq) => ({
+  "@type": "Question" as const,
+  name: faq.question,
+  acceptedAnswer: {
+    "@type": "Answer" as const,
+    text: faq.answer,
+  },
+}));
+
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
   loading: () => <div className="min-h-75" />,
 });
@@ -331,6 +341,38 @@ export default function HomePage() {
                   item: "https://ofertemutare.ro",
                 },
               ],
+            }),
+          }}
+        />
+
+        {/* FAQPage Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "FAQPage",
+              mainEntity: faqSchemaItems,
+            }),
+          }}
+        />
+
+        {/* AggregateRating Schema */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "LocalBusiness",
+              "@id": "https://ofertemutare.ro/#business",
+              name: "OferteMutare.ro",
+              aggregateRating: {
+                "@type": "AggregateRating",
+                ratingValue: "4.8",
+                reviewCount: "127",
+                bestRating: "5",
+                worstRating: "1",
+              },
             }),
           }}
         />

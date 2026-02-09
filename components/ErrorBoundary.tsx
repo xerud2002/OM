@@ -23,6 +23,19 @@ export default class ErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     logger.error("ErrorBoundary caught an error:", error, errorInfo);
+    // Report to error tracking service if available
+    if (typeof window !== "undefined" && (window as any).__SENTRY__) {
+      try {
+        (window as any).Sentry?.captureException(error, { extra: { componentStack: errorInfo.componentStack } });
+      } catch { /* ignore if Sentry not loaded */ }
+    }
+    // Also report to GA4 if available
+    if (typeof window !== "undefined" && (window as any).gtag) {
+      (window as any).gtag("event", "exception", {
+        description: error.message,
+        fatal: true,
+      });
+    }
   }
 
   render() {

@@ -8,7 +8,12 @@ import {
   onSnapshot,
   addDoc,
   serverTimestamp,
+  limitToLast,
+  doc,
+  setDoc,
+  deleteDoc,
 } from "firebase/firestore";
+import Image from "next/image";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { db, auth, storage } from "@/services/firebase";
 import { logger } from "@/utils/logger";
@@ -71,6 +76,8 @@ export default function ChatWindow({
     type: "image" | "video";
   } | null>(null);
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [isTyping, setIsTyping] = useState(false);
+  const typingTimeoutRef = useRef<NodeJS.Timeout>();
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -96,7 +103,8 @@ export default function ChatWindow({
 
     const q = query(
       collection(db, "requests", requestId, "offers", offerId, "messages"),
-      orderBy("createdAt", "asc")
+      orderBy("createdAt", "asc"),
+      limitToLast(50)
     );
 
     const unsub = onSnapshot(q, (snapshot) => {
@@ -114,6 +122,37 @@ export default function ChatWindow({
 
     return () => unsub();
   }, [requestId, offerId]);
+
+  // Subscribe to typing indicator
+  useEffect(() => {
+    if (!requestId || !offerId) return;
+    const typingDocRef = doc(db, "requests", requestId, "offers", offerId, "typing", currentUserRole === "company" ? "customer" : "company");
+    const unsub = onSnapshot(typingDocRef, (snap) => {
+      if (snap.exists()) {
+        const data = snap.data();
+        const ts = data?.timestamp;
+        if (ts) {
+          const now = Date.now();
+          const typingTime = ts.toMillis ? ts.toMillis() : ts.seconds * 1000;
+          setIsTyping(now - typingTime < 4000);
+        }
+      } else {
+        setIsTyping(false);
+      }
+    });
+    return () => unsub();
+  }, [requestId, offerId, currentUserRole]);
+
+  // Emit typing indicator
+  const emitTyping = useCallback(() => {
+    if (!auth.currentUser || !requestId || !offerId) return;
+    const typingDocRef = doc(db, "requests", requestId, "offers", offerId, "typing", currentUserRole);
+    setDoc(typingDocRef, { timestamp: serverTimestamp() }).catch(() => {});
+    if (typingTimeoutRef.current) clearTimeout(typingTimeoutRef.current);
+    typingTimeoutRef.current = setTimeout(() => {
+      deleteDoc(typingDocRef).catch(() => {});
+    }, 3000);
+  }, [requestId, offerId, currentUserRole]);
 
   // Upload file to Firebase Storage
   const uploadFile = useCallback(
@@ -245,6 +284,17 @@ export default function ChatWindow({
     }
   };
 
+  // Group messages by date for date separators
+  const getDateLabel = (date: Date): string => {
+    const now = new Date();
+    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const yesterday = new Date(today.getTime() - 86400000);
+    const msgDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    if (msgDate.getTime() === today.getTime()) return "Azi";
+    if (msgDate.getTime() === yesterday.getTime()) return "Ieri";
+    return `${date.getDate()} ${["Ian","Feb","Mar","Apr","Mai","Iun","Iul","Aug","Sep","Oct","Nov","Dec"][date.getMonth()]} ${date.getFullYear()}`;
+  };
+
   // Render attachment in message bubble
   const renderAttachment = (attachment: Attachment) => {
     if (attachment.type === "image") {
@@ -253,10 +303,11 @@ export default function ChatWindow({
           onClick={() => setLightboxUrl(attachment.url)}
           className="mt-1.5 block overflow-hidden rounded-xl"
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <Image
             src={attachment.url}
             alt={attachment.name}
+            width={320}
+            height={240}
             className="max-h-48 sm:max-h-64 md:max-h-80 w-auto max-w-full rounded-xl object-cover"
             loading="lazy"
           />
@@ -320,13 +371,23 @@ export default function ChatWindow({
               Începe conversația...
             </div>
           )}
-          {messages.map((msg) => {
+          {messages.map((msg, idx) => {
             const isMe = msg.senderRole === currentUserRole;
+            // Date separator
+            const msgDate = msg.createdAt?.toDate ? msg.createdAt.toDate() : null;
+            const prevMsg = idx > 0 ? messages[idx - 1] : null;
+            const prevDate = prevMsg?.createdAt?.toDate ? prevMsg.createdAt.toDate() : null;
+            const showDateSep = msgDate && (!prevDate || getDateLabel(msgDate) !== getDateLabel(prevDate));
             return (
-              <div
-                key={msg.id}
-                className={`flex ${isMe ? "justify-end" : "justify-start"}`}
-              >
+              <div key={msg.id}>
+                {showDateSep && (
+                  <div className="flex items-center gap-3 my-3">
+                    <div className="flex-1 h-px bg-slate-200" />
+                    <span className="text-[10px] sm:text-xs font-medium text-slate-400 whitespace-nowrap">{getDateLabel(msgDate)}</span>
+                    <div className="flex-1 h-px bg-slate-200" />
+                  </div>
+                )}
+                <div className={`flex ${isMe ? "justify-end" : "justify-start"}`}>
                 <div
                   className={`max-w-[85%] sm:max-w-[75%] md:max-w-[65%] rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 text-sm shadow-sm ${
                     isMe
@@ -346,9 +407,22 @@ export default function ChatWindow({
                       : "..."}
                   </p>
                 </div>
+                </div>
               </div>
             );
           })}
+          {/* Typing indicator */}
+          {isTyping && (
+            <div className="flex justify-start">
+              <div className="max-w-[85%] sm:max-w-[75%] md:max-w-[65%] rounded-2xl px-4 py-3 bg-white text-slate-900 rounded-bl-none ring-1 ring-slate-200 shadow-sm">
+                <div className="flex gap-1 items-center h-4">
+                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '0ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '150ms' }} />
+                  <span className="w-2 h-2 rounded-full bg-slate-400 animate-bounce" style={{ animationDelay: '300ms' }} />
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
@@ -375,11 +449,13 @@ export default function ChatWindow({
           <div className="flex items-center gap-3">
             <div className="relative h-14 w-14 sm:h-16 sm:w-16 shrink-0 overflow-hidden rounded-lg bg-gray-200">
               {previewFile.type === "image" ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
+                <Image
                   src={previewFile.url}
                   alt="Preview"
+                  width={64}
+                  height={64}
                   className="h-full w-full object-cover"
+                  unoptimized
                 />
               ) : (
                 <div className="flex h-full w-full items-center justify-center bg-gray-800">
@@ -415,6 +491,9 @@ export default function ChatWindow({
               onClick={() => setShowAttachMenu(!showAttachMenu)}
               className="rounded-full p-2 sm:p-2.5 text-gray-400 transition hover:bg-gray-100 hover:text-gray-600 active:bg-gray-200"
               disabled={uploading || sending}
+              aria-label="Atașează fișier"
+              aria-expanded={showAttachMenu}
+              aria-haspopup="true"
             >
               <PaperClipIcon className="h-5 w-5" />
             </button>
@@ -478,8 +557,12 @@ export default function ChatWindow({
           <input
             type="text"
             value={newMessage}
-            onChange={(e) => setNewMessage(e.target.value)}
+            onChange={(e) => {
+              setNewMessage(e.target.value);
+              emitTyping();
+            }}
             placeholder="Scrie un mesaj..."
+            aria-label="Scrie un mesaj"
             className="min-w-0 flex-1 rounded-full border border-slate-300 bg-slate-50 px-3.5 py-2 sm:px-4 sm:py-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
             disabled={uploading || sending}
           />
@@ -489,6 +572,7 @@ export default function ChatWindow({
             type="submit"
             disabled={(!newMessage.trim() && !previewFile) || sending || uploading}
             className="shrink-0 rounded-full bg-emerald-600 p-2 sm:p-2.5 text-white shadow-sm hover:bg-emerald-700 active:bg-emerald-800 disabled:opacity-50 transition"
+            aria-label="Trimite mesaj"
           >
             <PaperAirplaneIcon className="h-5 w-5" />
           </button>

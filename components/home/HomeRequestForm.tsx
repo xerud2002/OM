@@ -47,8 +47,11 @@ function LocationAutocomplete({
   const [suggestions, setSuggestions] = useState<LocalApiResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
+  const listboxRef = useRef<HTMLUListElement>(null);
   const debounceRef = useRef<NodeJS.Timeout>();
+  const listboxId = useRef(`loc-listbox-${Math.random().toString(36).slice(2,8)}`).current;
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -104,6 +107,7 @@ function LocationAutocomplete({
     const val = e.target.value;
     setInputValue(val);
     setShowDropdown(true);
+    setActiveIndex(-1);
 
     // Clear previous selection
     if (value.city || value.county) {
@@ -122,12 +126,31 @@ function LocationAutocomplete({
     onChange(item.name, item.county);
     setSuggestions([]);
     setShowDropdown(false);
+    setActiveIndex(-1);
   };
 
   const handleClear = () => {
     setInputValue("");
     onChange("", "");
     setSuggestions([]);
+    setActiveIndex(-1);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (!showDropdown || suggestions.length === 0) return;
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setActiveIndex(prev => (prev + 1) % suggestions.length);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setActiveIndex(prev => (prev <= 0 ? suggestions.length - 1 : prev - 1));
+    } else if (e.key === "Enter" && activeIndex >= 0) {
+      e.preventDefault();
+      handleSelect(suggestions[activeIndex]);
+    } else if (e.key === "Escape") {
+      setShowDropdown(false);
+      setActiveIndex(-1);
+    }
   };
 
   return (
@@ -143,7 +166,14 @@ function LocationAutocomplete({
           value={inputValue}
           onChange={handleInputChange}
           onFocus={() => inputValue.length >= 2 && setShowDropdown(true)}
+          onKeyDown={handleKeyDown}
           placeholder={placeholder || "Caută oraș sau localitate..."}
+          role="combobox"
+          aria-expanded={showDropdown && suggestions.length > 0}
+          aria-controls={listboxId}
+          aria-activedescendant={activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined}
+          aria-autocomplete="list"
+          aria-label={label || placeholder || "Caută oraș sau localitate"}
           className={`w-full rounded-lg border bg-white px-3 py-2 pr-8 text-sm focus:outline-none ${
             hasError
               ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
@@ -167,14 +197,17 @@ function LocationAutocomplete({
       {showDropdown && (suggestions.length > 0 || isLoading) && (
         <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg">
           {isLoading ? (
-            <div className="px-3 py-2 text-sm text-gray-500">Se caută...</div>
+            <div className="px-3 py-2 text-sm text-gray-500" role="status">Se caută...</div>
           ) : (
-            <ul className="max-h-48 overflow-auto py-1">
-              {suggestions.map((item) => (
+            <ul ref={listboxRef} id={listboxId} role="listbox" className="max-h-48 overflow-auto py-1">
+              {suggestions.map((item, idx) => (
                 <li
                   key={item.id}
+                  id={`${listboxId}-${idx}`}
+                  role="option"
+                  aria-selected={idx === activeIndex}
                   onClick={() => handleSelect(item)}
-                  className="cursor-pointer px-3 py-2 text-sm hover:bg-emerald-50 flex items-center justify-between"
+                  className={`cursor-pointer px-3 py-2 text-sm flex items-center justify-between ${idx === activeIndex ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50"}`}
                 >
                   <span className="font-medium text-gray-800">{item.name}</span>
                   <span className="text-xs text-gray-500 ml-2">
@@ -216,6 +249,8 @@ function InlineCalendar({
     if (value) return new Date(`${value}T00:00:00`);
     return today;
   });
+  const [focusDay, setFocusDay] = useState<number | null>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
 
   const roMonthsFull = [
     "Ianuarie",
@@ -292,35 +327,58 @@ function InlineCalendar({
   for (let i = 0; i < firstDay; i++) days.push(null);
   for (let d = 1; d <= daysInMonth; d++) days.push(d);
 
+  const handleCalendarKeyDown = (e: React.KeyboardEvent) => {
+    const current = focusDay || (value ? new Date(`${value}T00:00:00`).getDate() : 1);
+    let next = current;
+    if (e.key === "ArrowRight") { e.preventDefault(); next = Math.min(current + 1, daysInMonth); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); next = Math.max(current - 1, 1); }
+    else if (e.key === "ArrowDown") { e.preventDefault(); next = Math.min(current + 7, daysInMonth); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); next = Math.max(current - 7, 1); }
+    else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      if (!isDateDisabled(current)) handleSelect(current);
+      return;
+    }
+    else return;
+    setFocusDay(next);
+    // Focus the button
+    const btn = gridRef.current?.querySelector(`[data-day="${next}"]`) as HTMLButtonElement;
+    btn?.focus();
+  };
+
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-3">
+    <div className="rounded-xl border border-gray-200 bg-white p-3" role="group" aria-label="Calendar selectare dată">
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">
         <button
           type="button"
           onClick={prevMonth}
           className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+          aria-label="Luna anterioară"
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <span className="text-sm font-semibold text-gray-800">
+        <span className="text-sm font-semibold text-gray-800" aria-live="polite">
           {roMonthsFull[month]} {year}
         </span>
         <button
           type="button"
           onClick={nextMonth}
           className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+          aria-label="Luna următoare"
         >
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
 
       {/* Weekday headers */}
-      <div className="mb-2 grid grid-cols-7 gap-1">
+      <div className="mb-2 grid grid-cols-7 gap-1" role="row">
         {roWeekdaysShort.map((wd) => (
           <div
             key={wd}
             className="text-center text-xs font-medium text-gray-400"
+            role="columnheader"
+            aria-label={wd}
           >
             {wd}
           </div>
@@ -328,7 +386,7 @@ function InlineCalendar({
       </div>
 
       {/* Days grid */}
-      <div className="grid grid-cols-7 gap-1">
+      <div ref={gridRef} className="grid grid-cols-7 gap-1" role="grid" aria-label="Zile disponibile" onKeyDown={handleCalendarKeyDown}>
         {days.map((day, idx) => {
           if (day === null) {
             return <div key={`empty-${idx}`} className="h-8" />;
@@ -341,8 +399,13 @@ function InlineCalendar({
             <button
               key={day}
               type="button"
+              data-day={day}
               onClick={() => handleSelect(day)}
               disabled={disabled}
+              role="gridcell"
+              aria-selected={selected}
+              aria-label={`${day} ${roMonthsFull[month]} ${year}`}
+              tabIndex={selected || (focusDay === day) ? 0 : -1}
               className={`h-8 w-full rounded-lg text-sm font-medium transition ${
                 disabled
                   ? "cursor-not-allowed text-gray-300"
@@ -1852,6 +1915,10 @@ export default function HomeRequestForm() {
           }
         }}
       >
+        {/* Step announcement for screen readers */}
+        <div aria-live="polite" aria-atomic="true" className="sr-only">
+          Pasul {currentStep} din {TOTAL_STEPS}
+        </div>
         {/* Form Steps */}
         <div>
           {currentStep === 1 && renderStep1()}
