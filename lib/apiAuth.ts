@@ -4,6 +4,47 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminAuth, adminReady } from "@/lib/firebaseAdmin";
 import { apiError, ErrorCodes } from "@/types/api";
+import { logCritical, logger } from "@/utils/logger";
+
+// ── T4 fix: Boot-time validation of INTERNAL_API_SECRET ──────────────
+const MIN_SECRET_LENGTH = 32;
+const internalSecret = process.env.INTERNAL_API_SECRET;
+const secretConfigured =
+  typeof internalSecret === "string" && internalSecret.length >= MIN_SECRET_LENGTH;
+
+if (!secretConfigured) {
+  logCritical(
+    "[SECURITY] INTERNAL_API_SECRET is missing or too short (< 32 chars). " +
+      "All internal API requests will be REJECTED until this is fixed.",
+  );
+}
+
+/**
+ * Validate the x-internal-key header against INTERNAL_API_SECRET.
+ * Returns { valid: true } on success, or error details on failure.
+ */
+export function validateInternalSecret(req: NextApiRequest): 
+  | { valid: true }
+  | { valid: false; status: number; error: string; code: string } {
+  if (!secretConfigured) {
+    return {
+      valid: false,
+      status: 503,
+      error: "Internal API secret not configured",
+      code: ErrorCodes.ADMIN_NOT_READY,
+    };
+  }
+  const provided = req.headers["x-internal-key"];
+  if (provided !== internalSecret) {
+    return {
+      valid: false,
+      status: 401,
+      error: "Unauthorized",
+      code: ErrorCodes.UNAUTHORIZED,
+    };
+  }
+  return { valid: true };
+}
 
 export type AuthResult =
   | { success: true; uid: string }
@@ -70,5 +111,28 @@ export function withAuth(
       return sendAuthError(res, authResult);
     }
     return handler(req, res, authResult.uid);
+  };
+}
+
+/**
+ * Wrapper that adds consistent try/catch error handling + logging.
+ * Use around any API handler to prevent uncaught exceptions from leaking.
+ *
+ * @example
+ * export default withErrorHandler(async (req, res) => { ... });
+ */
+export function withErrorHandler(
+  handler: (req: NextApiRequest, res: NextApiResponse) => Promise<void | NextApiResponse>,
+) {
+  return async (req: NextApiRequest, res: NextApiResponse) => {
+    try {
+      return await handler(req, res);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      logger.error(`[API ${req.method} ${req.url}] Unhandled error:`, message);
+      if (!res.headersSent) {
+        return res.status(500).json(apiError("Internal server error", ErrorCodes.INTERNAL_ERROR));
+      }
+    }
   };
 }

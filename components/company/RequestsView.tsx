@@ -747,21 +747,30 @@ export default function RequestsView({
         activeOfferRequest.guestEmail;
       if (customerEmail) {
         try {
-          const { sendEmailViaAPI } = await import("@/utils/emailHelpers");
-          await sendEmailViaAPI("newOffer", {
-            customerEmail,
-            requestCode:
-              activeOfferRequest.requestCode || activeOfferRequest.id,
-            requestId: activeOfferRequest.id,
-            companyName: company.displayName || "Companie",
-            companyMessage: message,
-            price: price,
-            fromCity: activeOfferRequest.fromCity,
-            toCity: activeOfferRequest.toCity,
-            moveDate:
-              activeOfferRequest.moveDate ||
-              activeOfferRequest.moveDateStart,
+          const response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              type: 'newOffer',
+              data: {
+                customerEmail,
+                requestCode:
+                  activeOfferRequest.requestCode || activeOfferRequest.id,
+                requestId: activeOfferRequest.id,
+                companyName: company.displayName || "Companie",
+                companyMessage: message,
+                price: price,
+                fromCity: activeOfferRequest.fromCity,
+                toCity: activeOfferRequest.toCity,
+                moveDate:
+                  activeOfferRequest.moveDate ||
+                  activeOfferRequest.moveDateStart,
+              },
+            }),
           });
+          if (!response.ok) {
+            logger.error("Offer email API returned error:", await response.text());
+          }
         } catch (emailErr) {
           logger.error("Failed to send offer notification email:", emailErr);
           // Don't fail the whole operation just because email failed

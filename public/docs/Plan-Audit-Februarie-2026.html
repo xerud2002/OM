@@ -490,7 +490,7 @@
           <div class="label">Linii de cod</div>
         </div>
         <div class="summary-card sc-done">
-          <div class="number">57</div>
+          <div class="number">60</div>
           <div class="label">&#9989; Fix-uri aplicate</div>
         </div>
         <div class="summary-card sc-crit">
@@ -498,7 +498,7 @@
           <div class="label">&#128308; Critice restante</div>
         </div>
         <div class="summary-card sc-high">
-          <div class="number">3</div>
+          <div class="number">0</div>
           <div class="label">&#128992; Ridicate restante</div>
         </div>
         <div class="summary-card sc-med">
@@ -1682,7 +1682,7 @@
 
       <!-- 9. COMPLETED -->
       <div class="section" id="completed">
-        <h2>&#9989; Ce s-a rezolvat &mdash; 57 Fix-uri (9 Feb 2026)</h2>
+        <h2>&#9989; Ce s-a rezolvat &mdash; 60 Fix-uri (9 Feb 2026)</h2>
         <p class="section-desc">
           Toate problemele rezolvate in sesiunea de audit din 9 februarie 2026.
         </p>
@@ -2149,7 +2149,6 @@
             </div>
           </div>
         </div>
-      </div>
 
         <h3 class="subsection-title">
           Sprint 5 &mdash; Hardening &amp; Securitate (8 fix-uri)
@@ -2201,6 +2200,30 @@
             <span class="check">&#10003;</span>
             <div>
               <strong>#43-#44 Cleanup</strong> &mdash; GuaranteeSection_old.tsx.bak sters, lucide-react din modularizeImports, comentariu stale<br /><span class="file-mono">next.config.js, generateUploadLink.ts</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">
+          Sprint 6 &mdash; Securitate API (3 fix-uri)
+        </h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#45 T2: generateUploadLink auth</strong> &mdash; Adaugat INTERNAL_API_SECRET via validateInternalSecret(); endpoint-ul nu mai accepta cereri fara x-internal-key header<br /><span class="file-mono">pages/api/generateUploadLink.ts, lib/apiAuth.ts</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#46 T3: uploadTokens Firestore rules</strong> &mdash; Regula de read setata la <code>allow get, list: if false</code> &mdash; tokenii sunt accesibili doar server-side via Admin SDK<br /><span class="file-mono">firebase.firestore.rules</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#47 T4: INTERNAL_API_SECRET boot validation</strong> &mdash; Validare la boot: daca lipseste sau &lt;32 chars, logCritical() + reject 503 pe toate cererile interne. send-email.ts refactorizat pe validateInternalSecret() shared<br /><span class="file-mono">lib/apiAuth.ts, pages/api/send-email.ts</span>
             </div>
           </div>
         </div>
@@ -2910,7 +2933,7 @@
 
       <!-- TODO SECTION -->
       <div class="section" id="todo">
-        <h2>&#128736;&#65039; TODO &mdash; Imbunatatiri Restante (31)</h2>
+        <h2>&#128736;&#65039; TODO &mdash; Imbunatatiri Restante (28)</h2>
         <p class="section-desc">
           Toate imbunatatirile identificate in al doilea audit, inca neimplementate. Organizate pe prioritate.
         </p>
@@ -2934,33 +2957,30 @@
         </div>
 
         <!-- HIGH -->
-        <h3 class="subsection-title" style="color: var(--orange)">&#128992; Prioritate Ridicata (3)</h3>
+        <h3 class="subsection-title" style="color: var(--orange)">&#128992; Prioritate Ridicata (0) &mdash; TOATE REZOLVATE</h3>
 
-        <div class="issue high">
+        <div class="issue high resolved">
           <div class="issue-header">
-            <span class="badge badge-high">HIGH</span><span class="title">T2. generateUploadLink &mdash; auth doar pe email</span>
+            <span class="badge badge-done">DONE</span><span class="title">T2. generateUploadLink &mdash; auth doar pe email</span>
           </div>
           <span class="file">pages/api/generateUploadLink.ts</span>
-          <p class="desc">Auth-ul verifica doar daca email-ul din body se potriveste cu un request existent. Nu verifica Firebase token sau ownership real. Un atacator care stie un email valid poate genera tokeni de upload.</p>
-          <p class="action">&rarr; Adauga verifyIdToken() sau cel putin un request-specific token/secret pe langa email match.</p>
+          <p class="desc">Adaugat INTERNAL_API_SECRET via validateInternalSecret() &mdash; endpoint-ul nu mai accepta cereri fara x-internal-key header.</p>
         </div>
 
-        <div class="issue high">
+        <div class="issue high resolved">
           <div class="issue-header">
-            <span class="badge badge-high">HIGH</span><span class="title">T3. Firestore rules uploadTokens &mdash; lipsa guard pe read</span>
+            <span class="badge badge-done">DONE</span><span class="title">T3. Firestore rules uploadTokens &mdash; lipsa guard pe read</span>
           </div>
           <span class="file">firebase.firestore.rules</span>
-          <p class="desc">Oricine autentificat poate citi orice token din colectia uploadTokens, inclusiv tokeni folositi. Ar trebui sa limiteze read-ul la <code>used == false</code> sau la owner.</p>
-          <p class="action">&rarr; Adauga <code>resource.data.used == false</code> in regula de read, sau restrictioneaza pe baza emailului utilizatorului.</p>
+          <p class="desc">Deja rezolvat &mdash; regula de read este <code>allow get, list: if false</code>. Tokenii sunt accesibili doar server-side via Admin SDK.</p>
         </div>
 
-        <div class="issue high">
+        <div class="issue high resolved">
           <div class="issue-header">
-            <span class="badge badge-high">HIGH</span><span class="title">T4. INTERNAL_API_SECRET &mdash; fara validare la boot</span>
+            <span class="badge badge-done">DONE</span><span class="title">T4. INTERNAL_API_SECRET &mdash; fara validare la boot</span>
           </div>
-          <span class="file">pages/api/send-email.ts, lib/apiAuth.ts</span>
-          <p class="desc">Daca INTERNAL_API_SECRET lipseste sau e prea scurt, API-ul accepta orice request intern fara avertisment. Ar trebui sa refuze pornirea sau sa logheze un avertisment critic.</p>
-          <p class="action">&rarr; Adauga validare la import: daca lipseste sau are &lt;32 caractere, logheaza logCritical() si intoarce 500 pe fiecare request.</p>
+          <span class="file">lib/apiAuth.ts, pages/api/send-email.ts</span>
+          <p class="desc">Validare la boot: daca lipseste sau &lt;32 chars, logCritical() + reject 503 pe toate cererile interne. send-email.ts refactorizat pe validateInternalSecret() shared.</p>
         </div>
 
         <!-- MEDIUM -->

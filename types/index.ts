@@ -149,3 +149,64 @@ export type CompanyUser = {
 
 // Customer dashboard tab navigation
 export type DashboardTab = "new" | "requests" | "offers" | "archive";
+
+/**
+ * Input data for the createGuest API route.
+ * Represents form data before it's cleaned and stored as a MovingRequest.
+ */
+export type CreateGuestRequestInput = {
+  // Contact info (required)
+  contactFirstName: string;
+  contactLastName: string;
+  email: string;
+  phone: string;
+  acceptedTerms: boolean;
+  // Locations (required)
+  fromCounty: string;
+  fromCity: string;
+  fromRooms: number | string;
+  toCounty: string;
+  toCity: string;
+  toRooms: number | string;
+  // Optional address details
+  fromStreet?: string;
+  fromNumber?: string;
+  fromType?: "house" | "flat";
+  fromBloc?: string;
+  fromStaircase?: string;
+  fromApartment?: string;
+  fromFloor?: string;
+  fromElevator?: boolean;
+  toStreet?: string;
+  toNumber?: string;
+  toType?: "house" | "flat";
+  toBloc?: string;
+  toStaircase?: string;
+  toApartment?: string;
+  toFloor?: string;
+  toElevator?: boolean;
+  // Date fields
+  moveDateMode?: "exact" | "range" | "none" | "flexible";
+  moveDateStart?: string;
+  moveDateEnd?: string;
+  moveDateFlexDays?: number;
+  // Services
+  serviceMoving?: boolean;
+  servicePacking?: boolean;
+  serviceDisassembly?: boolean;
+  serviceCleanout?: boolean;
+  serviceStorage?: boolean;
+  serviceTransportOnly?: boolean;
+  servicePiano?: boolean;
+  serviceFewItems?: boolean;
+  // Other
+  details?: string;
+  volumeM3?: number;
+  furniture?: string;
+  specialItems?: string;
+  surveyType?: "in-person" | "video" | "quick-estimate";
+  mediaUpload?: "now" | "later";
+  mediaFiles?: File[];
+  fromCityManual?: string;
+  toCityManual?: string;
+};

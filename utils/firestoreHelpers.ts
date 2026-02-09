@@ -13,24 +13,7 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-
-// Helper: Build full address string from components
-function buildAddressString(
-  street?: string,
-  number?: string,
-  type?: "house" | "flat",
-  bloc?: string,
-  staircase?: string,
-  apartment?: string,
-): string {
-  const parts = [street, number];
-  if (type === "flat") {
-    if (bloc) parts.push(`Bl. ${bloc}`);
-    if (staircase) parts.push(`Sc. ${staircase}`);
-    if (apartment) parts.push(`Ap. ${apartment}`);
-  }
-  return parts.filter(Boolean).join(", ");
-}
+import { buildAddressString } from "@/utils/requestHelpers";
 
 // Helper: Build move date fields from data
 function buildMoveDateFields(data: any): Record<string, any> {

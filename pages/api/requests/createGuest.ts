@@ -5,35 +5,15 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiSuccess, apiError } from "@/types/api";
+import type { CreateGuestRequestInput } from "@/types";
 import { FieldValue } from "firebase-admin/firestore";
 import { logger } from "@/utils/logger";
 import { sendEmail, emailTemplates } from "@/services/email";
+import { buildAddressString } from "@/utils/requestHelpers";
+import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 
-// Simple in-memory rate limiter (per-process; sufficient for single-server VPS)
-const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
-const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
-const RATE_LIMIT_MAX = 5; // max 5 requests per minute per IP
-
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const entry = rateLimitMap.get(ip);
-  if (!entry || now > entry.resetAt) {
-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-  entry.count++;
-  return entry.count > RATE_LIMIT_MAX;
-}
-
-// Clean up stale entries every 5 minutes
-if (typeof setInterval !== "undefined") {
-  setInterval(() => {
-    const now = Date.now();
-    for (const [ip, entry] of rateLimitMap) {
-      if (now > entry.resetAt) rateLimitMap.delete(ip);
-    }
-  }, 5 * 60_000);
-}
+// Rate limiter: max 5 requests per minute per IP
+const isRateLimited = createRateLimiter({ name: "createGuest", max: 5, windowMs: 60_000 });
 
 // Validate Romanian phone number format
 function isValidPhone(phone: string): boolean {
@@ -44,24 +24,6 @@ function isValidPhone(phone: string): boolean {
 // Validate email format
 function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-// Build full address string from components
-function buildAddressString(
-  street?: string,
-  number?: string,
-  type?: "house" | "flat",
-  bloc?: string,
-  staircase?: string,
-  apartment?: string,
-): string {
-  const parts = [street, number];
-  if (type === "flat") {
-    if (bloc) parts.push(`Bl. ${bloc}`);
-    if (staircase) parts.push(`Sc. ${staircase}`);
-    if (apartment) parts.push(`Ap. ${apartment}`);
-  }
-  return parts.filter(Boolean).join(", ");
 }
 
 // Generate sequential request code
@@ -92,10 +54,7 @@ export default async function handler(
   }
 
   // Rate limiting
-  const clientIp =
-    (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
-    req.socket.remoteAddress ||
-    "unknown";
+  const clientIp = getClientIp(req);
   if (isRateLimited(clientIp)) {
     return res
       .status(429)
@@ -107,7 +66,7 @@ export default async function handler(
   }
 
   try {
-    const data = req.body;
+    const data: CreateGuestRequestInput = req.body;
 
     // Validate required fields
     const errors: string[] = [];
@@ -131,6 +90,15 @@ export default async function handler(
     if (data.email && !isValidEmail(data.email)) {
       errors.push("Format email invalid");
     }
+
+    // T17: Input length limits to prevent abuse
+    if (data.contactFirstName && data.contactFirstName.length > 100) errors.push("Prenumele este prea lung (max 100)");
+    if (data.contactLastName && data.contactLastName.length > 100) errors.push("Numele este prea lung (max 100)");
+    if (data.email && data.email.length > 254) errors.push("Email-ul este prea lung");
+    if (data.details && data.details.length > 5000) errors.push("Detaliile sunt prea lungi (max 5000)");
+    if (data.specialItems && data.specialItems.length > 1000) errors.push("Descrierea obiectelor speciale e prea lungă (max 1000)");
+    if (data.fromStreet && data.fromStreet.length > 200) errors.push("Adresa plecare prea lungă (max 200)");
+    if (data.toStreet && data.toStreet.length > 200) errors.push("Adresa destinație prea lungă (max 200)");
 
     if (errors.length > 0) {
       return res

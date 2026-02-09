@@ -2,7 +2,8 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes } from "crypto";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
-import { apiError, apiSuccess } from "@/types/api";
+import { apiError, apiSuccess, ErrorCodes } from "@/types/api";
+import { validateInternalSecret } from "@/lib/apiAuth";
 
 export default async function handler(
   req: NextApiRequest,
@@ -11,6 +12,14 @@ export default async function handler(
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json(apiError("Method Not Allowed"));
+  }
+
+  // T2 fix: Require INTERNAL_API_SECRET — this is a server-to-server endpoint
+  const secretCheck = validateInternalSecret(req);
+  if (!secretCheck.valid) {
+    return res
+      .status(secretCheck.status)
+      .json(apiError(secretCheck.error, secretCheck.code));
   }
 
   const { requestId, customerEmail, customerName } = req.body || {};

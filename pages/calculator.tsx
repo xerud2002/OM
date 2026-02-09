@@ -1,7 +1,12 @@
 import Head from "next/head";
 import Link from "next/link";
-import SavingsCalculator from "@/components/cro/SavingsCalculator";
+import dynamic from "next/dynamic";
 import LayoutWrapper from "@/components/layout/Layout";
+
+const SavingsCalculator = dynamic(
+  () => import("@/components/cro/SavingsCalculator"),
+  { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 rounded-2xl h-96" /> }
+);
 import CTASection from "@/components/home/CTASection";
 import { BreadcrumbSchema, FAQPageSchema } from "@/components/seo/SchemaMarkup";
 import ArticleMetadata from "@/components/content/ArticleMetadata";

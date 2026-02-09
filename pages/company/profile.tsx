@@ -8,7 +8,6 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL} from "firebase/storage";
 import { motion } from "framer-motion";
 import StarRating from "@/components/reviews/StarRating";
-import { sendEmail } from "@/utils/emailHelpers";
 import { toast } from "sonner";
 import { logger } from "@/utils/logger";
 import VerificationSection from "@/components/company/VerificationSection";
@@ -620,15 +619,23 @@ export default function CompanyProfile() {
 
                               setSendingReview(true);
                               try {
-                                await sendEmail(
-                                  {
-                                    to_email: reviewEmail,
-                                    to_name: reviewCustomerName,
-                                    company_name: profile?.companyName || "Compania noastră",
-                                    review_link: `${window.location.origin}/reviews/new?company=${auth.currentUser?.uid}`,
-                                  },
-                                  "template_review_request"
-                                );
+                                const response = await fetch('/api/send-email', {
+                                  method: 'POST',
+                                  headers: { 'Content-Type': 'application/json' },
+                                  body: JSON.stringify({
+                                    type: 'reviewRequest',
+                                    data: {
+                                      customerEmail: reviewEmail,
+                                      customerName: reviewCustomerName,
+                                      companyName: profile?.companyName || "Compania noastră",
+                                      reviewUrl: `${window.location.origin}/reviews/new?company=${auth.currentUser?.uid}`,
+                                    },
+                                  }),
+                                });
+                                if (!response.ok) {
+                                  const err = await response.json();
+                                  throw new Error(err.error || 'Email sending failed');
+                                }
 
                                 toast.success(`✅ Email trimis către ${reviewCustomerName}`);
                                 setShowRequestReview(false);

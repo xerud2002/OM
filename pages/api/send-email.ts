@@ -2,10 +2,14 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { sendEmail, emailTemplates, escapeHtml } from "@/services/email";
 import { apiSuccess, apiError, ErrorCodes } from "@/types/api";
 import { logger } from "@/utils/logger";
+import { validateInternalSecret } from "@/lib/apiAuth";
+import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 
 // Types that can be called from the browser without an API secret
-// contactForm only sends to the admin inbox, so abuse risk is limited to spam
 const PUBLIC_TYPES = ["contactForm"];
+
+// Rate limit public endpoints (3 per minute per IP)
+const isRateLimited = createRateLimiter({ name: "sendEmail", max: 3, windowMs: 60_000 });
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,14 +27,18 @@ export default async function handler(
       .json(apiError("Missing type or data", ErrorCodes.BAD_REQUEST));
   }
 
-  // Protect non-public types with an internal API secret
+  // Rate limit public types only (internal calls are already authenticated)
+  if (PUBLIC_TYPES.includes(type) && isRateLimited(getClientIp(req))) {
+    return res.status(429).json(apiError("Prea multe cereri. Încercați din nou peste un minut."));
+  }
+
+  // Protect non-public types with INTERNAL_API_SECRET (uses boot-time validated secret)
   if (!PUBLIC_TYPES.includes(type)) {
-    const internalSecret = process.env.INTERNAL_API_SECRET;
-    const providedKey = req.headers["x-internal-key"];
-    if (!internalSecret || providedKey !== internalSecret) {
+    const secretCheck = validateInternalSecret(req);
+    if (!secretCheck.valid) {
       return res
-        .status(401)
-        .json(apiError("Unauthorized", ErrorCodes.UNAUTHORIZED));
+        .status(secretCheck.status)
+        .json(apiError(secretCheck.error, secretCheck.code));
     }
   }
 
@@ -42,6 +50,16 @@ export default async function handler(
         .json(
           apiError("Missing required contact fields", ErrorCodes.BAD_REQUEST),
         );
+    }
+    // T17: Input length limits
+    if (typeof data.name === "string" && data.name.length > 100) {
+      return res.status(400).json(apiError("Numele este prea lung (max 100 caractere)", ErrorCodes.BAD_REQUEST));
+    }
+    if (typeof data.message === "string" && data.message.length > 5000) {
+      return res.status(400).json(apiError("Mesajul este prea lung (max 5000 caractere)", ErrorCodes.BAD_REQUEST));
+    }
+    if (typeof data.email === "string" && data.email.length > 254) {
+      return res.status(400).json(apiError("Email-ul este prea lung", ErrorCodes.BAD_REQUEST));
     }
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {

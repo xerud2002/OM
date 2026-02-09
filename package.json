@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "rimraf .next && next dev -p 3000",
-    "build": "next build",
+    "build": "node scripts/generate-sitemap.cjs && next build",
     "start": "next start",
     "lint": "next lint --max-warnings=0"
   },
