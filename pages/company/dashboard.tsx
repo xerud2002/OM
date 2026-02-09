@@ -38,6 +38,7 @@ import {
   PhoneIcon,
   EnvelopeIcon,
   InformationCircleIcon,
+  TruckIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import LoadingSpinner, {
@@ -169,6 +170,9 @@ export default function CompanyDashboard() {
                     reqData.customerName || reqData.contactName || null,
                   customerPhone: reqData.phone || null,
                   customerEmail: reqData.customerEmail || null,
+                  fromCity: reqData.fromCity || null,
+                  toCity: reqData.toCity || null,
+                  requestCode: reqData.requestCode || offer.requestCode || null,
                 };
               }
             } catch {
@@ -412,6 +416,16 @@ export default function CompanyDashboard() {
                       />
 
                       <div className="flex-1 p-5">
+                        {/* Route */}
+                        {(offer.fromCity || offer.toCity) && (
+                          <div className="mb-3 flex items-center gap-2 text-base font-bold text-gray-800">
+                            <TruckIcon className="h-4 w-4 text-blue-500" />
+                            <span>{offer.fromCity || "—"}</span>
+                            <span className="text-gray-400">→</span>
+                            <span>{offer.toCity || "—"}</span>
+                          </div>
+                        )}
+
                         {/* Header */}
                         <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
                           <div className="flex items-center gap-2">

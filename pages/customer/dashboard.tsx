@@ -75,7 +75,7 @@ export default function CustomerDashboard() {
     null,
   );
   const [chatOffer, setChatOffer] = useState<any>(null);
-  const [showDetails, setShowDetails] = useState(true);
+  const [showDetails, setShowDetails] = useState(false);
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
