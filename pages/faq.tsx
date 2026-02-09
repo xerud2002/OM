@@ -539,7 +539,8 @@ export default function FAQPage() {
               serviceType: "Platformă Comparare Servicii Mutări",
               provider: {
                 "@type": "Organization",
-                name: "OferteMutare.ro",
+                name: "Ofertemutare Ltd",
+                legalName: "Ofertemutare Ltd",
                 url: "https://ofertemutare.ro",
                 logo: "https://ofertemutare.ro/logo.webp",
               },
@@ -620,7 +621,8 @@ export default function FAQPage() {
           {/* Quick Contact */}
           <div className="mb-12 rounded-lg border-2 border-emerald-200 bg-emerald-50 p-5 sm:p-6">
             <p className="text-center text-sm text-gray-700 sm:text-base">
-              <strong>Nu găsești răspunsul?</strong> Contactează-ne la{" "}
+              <strong>Nu găsești răspunsul?</strong> Contactează{" "}
+              <strong>Ofertemutare Ltd</strong> la{" "}
               <a
                 href="mailto:info@ofertemutare.ro"
                 className="font-semibold text-emerald-600 underline hover:text-emerald-700"
