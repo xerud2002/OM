@@ -14,6 +14,7 @@ import "react-day-picker/dist/style.css";
 
 // Dev error suppressor loaded only in development (tree-shaken in production)
 if (process.env.NODE_ENV === "development") {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   require("@/utils/devErrorSuppressor");
 }
 import { pageView } from "@/utils/analytics";
