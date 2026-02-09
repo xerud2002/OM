@@ -48,7 +48,12 @@ export default function CompanyChatPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!requestId || !offerId) return;
+    if (!router.isReady) return;
+    if (!requestId || !offerId) {
+      setLoading(false);
+      setError("Parametri lipsă în URL");
+      return;
+    }
 
     async function fetchData() {
       setLoading(true);
@@ -106,7 +111,7 @@ export default function CompanyChatPage() {
     }
 
     fetchData();
-  }, [requestId, offerId]);
+  }, [requestId, offerId, router.isReady]);
 
   const customerDisplayName = requestData?.customerName || "Client";
 
