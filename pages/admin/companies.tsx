@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { logger } from "@/utils/logger";
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
@@ -76,7 +77,7 @@ export default function AdminCompanies() {
         verifiedAt: serverTimestamp(),
       });
     } catch (err) {
-      console.error("Failed to verify", err);
+      logger.error("Failed to verify", err);
       alert("Eroare la verificare");
     }
   };
@@ -90,7 +91,7 @@ export default function AdminCompanies() {
         verifiedAt: null,
       });
     } catch (err) {
-      console.error("Failed to unverify", err);
+      logger.error("Failed to unverify", err);
       alert("Eroare");
     }
   };

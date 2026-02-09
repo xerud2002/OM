@@ -51,8 +51,25 @@ export default function RequestFullDetails({
       const updated = localMediaUrls.filter((u) => u !== url);
       setLocalMediaUrls(updated); // optimistic UI
 
-      const { updateRequest } = await import("@/utils/firestoreHelpers");
-      await updateRequest(request.id, { mediaUrls: updated });
+      // Use server-side API route instead of client-side Firestore write
+      const { getAuth } = await import("firebase/auth");
+      const token = await getAuth().currentUser?.getIdToken();
+      if (!token) throw new Error("Not authenticated");
+
+      const res = await fetch("/api/requests/updateMedia", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId: request.id, mediaUrls: updated }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to update media");
+      }
+
       toast.success("Fișierul a fost șters din cerere");
     } catch (err) {
       logger.error("Failed to delete media", err);

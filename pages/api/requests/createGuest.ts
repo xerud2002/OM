@@ -11,6 +11,7 @@ import { logger } from "@/utils/logger";
 import { sendEmail, emailTemplates } from "@/services/email";
 import { buildAddressString } from "@/utils/requestHelpers";
 import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
+import { withErrorHandler } from "@/lib/apiAuth";
 
 // Rate limiter: max 5 requests per minute per IP
 const isRateLimited = createRateLimiter({ name: "createGuest", max: 5, windowMs: 60_000 });
@@ -45,7 +46,7 @@ async function generateRequestCode(): Promise<string> {
   return `REQ-${String(nextSeq).padStart(6, "0")}`;
 }
 
-export default async function handler(
+export default withErrorHandler(async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -329,4 +330,4 @@ export default async function handler(
     logger.error("Error creating guest request:", error);
     return res.status(500).json(apiError("Eroare la crearea cererii"));
   }
-}
+});

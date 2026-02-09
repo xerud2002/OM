@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { logger } from "@/utils/logger";
 import { collection, query, orderBy, onSnapshot, doc, deleteDoc } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
@@ -56,7 +57,7 @@ export default function AdminUsers() {
     try {
       await deleteDoc(doc(db, "customers", customerId));
     } catch (err) {
-      console.error("Failed to delete customer", err);
+      logger.error("Failed to delete customer", err);
       alert("Eroare la ștergere");
     }
   };

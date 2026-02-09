@@ -1,6 +1,38 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logger } from "@/utils/logger";
 
+// ── In-memory cache (TTL 5 min) ──
+type CacheEntry = { data: LocationResult[]; expiresAt: number };
+const cache = new Map<string, CacheEntry>();
+const CACHE_TTL = 5 * 60_000; // 5 minutes
+const MAX_CACHE_SIZE = 200;
+
+type LocationResult = {
+  id: string;
+  name: string;
+  county: string;
+  full: string;
+};
+
+function getCached(key: string): LocationResult[] | null {
+  const entry = cache.get(key);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    cache.delete(key);
+    return null;
+  }
+  return entry.data;
+}
+
+function setCache(key: string, data: LocationResult[]) {
+  // Evict oldest entries if cache is too large
+  if (cache.size >= MAX_CACHE_SIZE) {
+    const oldest = cache.keys().next().value;
+    if (oldest) cache.delete(oldest);
+  }
+  cache.set(key, { data, expiresAt: Date.now() + CACHE_TTL });
+}
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
@@ -13,6 +45,14 @@ export default async function handler(
 
   if (!q || typeof q !== "string" || q.length < 2) {
     return res.status(200).json([]);
+  }
+
+  const cacheKey = q.trim().toLowerCase();
+
+  // Check cache first
+  const cached = getCached(cacheKey);
+  if (cached) {
+    return res.status(200).json(cached);
   }
 
   try {
@@ -35,12 +75,7 @@ export default async function handler(
     const data = await response.json();
 
     // Parse and normalize the response
-    const results: Array<{
-      id: string;
-      name: string;
-      county: string;
-      full: string;
-    }> = [];
+    const results: LocationResult[] = [];
     const seen = new Set<string>();
 
     if (Array.isArray(data)) {
@@ -66,7 +101,9 @@ export default async function handler(
       }
     }
 
-    res.status(200).json(results.slice(0, 10));
+    const final = results.slice(0, 10);
+    setCache(cacheKey, final);
+    res.status(200).json(final);
   } catch (error) {
     logger.error("LocalAPI proxy error:", error);
     res.status(500).json({ error: "Failed to fetch locations" });

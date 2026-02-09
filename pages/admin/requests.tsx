@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { logger } from "@/utils/logger";
 import {
   collection,
   query,
@@ -70,7 +71,7 @@ export default function AdminRequests() {
     try {
       await deleteDoc(doc(db, "requests", requestId));
     } catch (err) {
-      console.error("Failed to delete request", err);
+      logger.error("Failed to delete request", err);
       alert("Eroare la ștergere");
     }
   };
@@ -82,7 +83,7 @@ export default function AdminRequests() {
     try {
       await updateDoc(doc(db, "requests", requestId), { status: newStatus });
     } catch (err) {
-      console.error("Failed to update status", err);
+      logger.error("Failed to update status", err);
       alert("Eroare la actualizare");
     }
   };

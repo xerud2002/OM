@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/services/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { toast } from "sonner";
+import { logger } from "@/utils/logger";
 import {
   CheckIcon,
   ArrowRightIcon,
@@ -107,7 +108,7 @@ export default function OnboardingWizard({
         updatedAt: new Date(),
       });
     } catch (err) {
-      console.error("Error saving progress:", err);
+      logger.error("Error saving progress:", err);
     } finally {
       setSaving(false);
     }
@@ -151,7 +152,7 @@ export default function OnboardingWizard({
       toast.success("Felicitări! Ești gata să primești cereri! 🎉");
       onComplete();
     } catch (err) {
-      console.error("Error completing onboarding:", err);
+      logger.error("Error completing onboarding:", err);
       toast.error("Eroare la salvare. Încearcă din nou.");
     } finally {
       setSaving(false);

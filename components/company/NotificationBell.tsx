@@ -85,7 +85,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
       );
       await updateDoc(notifRef, { read: true });
     } catch (error) {
-      console.error("Error marking notification as read:", error);
+      logger.error("Error marking notification as read:", error);
     }
   };
 
@@ -105,7 +105,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
         });
       await Promise.all(promises);
     } catch (error) {
-      console.error("Error marking all as read:", error);
+      logger.error("Error marking all as read:", error);
     }
   };
 

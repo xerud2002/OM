@@ -18,6 +18,7 @@ import {
   EnvelopeIcon as Mail,
 } from "@heroicons/react/24/outline";
 import type { FormShape } from "@/components/customer/RequestForm";
+import { logger } from "@/utils/logger";
 
 // Location Autocomplete Component using localapi.ro
 type LocalApiResult = {
@@ -90,7 +91,7 @@ function LocationAutocomplete({
         setSuggestions([]);
       }
     } catch (err) {
-      console.error("LocalAPI error:", err);
+      logger.error("LocalAPI error:", err);
       setSuggestions([]);
     } finally {
       setIsLoading(false);
@@ -824,7 +825,7 @@ export default function HomeRequestForm() {
           // Ignore analytics errors
         }
       } catch (error: any) {
-        console.error("Submit error:", error);
+        logger.error("Submit error:", error);
         toast.error(
           error.message ||
             "Eroare la trimiterea cererii. Te rugăm să încerci din nou.",

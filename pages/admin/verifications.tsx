@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { logger } from "@/utils/logger";
 import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
@@ -51,7 +52,7 @@ export default function AdminVerifications() {
         rejectionReason: null
       });
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to approve verification", e);
       alert("Eroare la aprovare");
     } finally {
       setProcessingId(null);
@@ -74,7 +75,7 @@ export default function AdminVerifications() {
       setRejectingId(null);
       setRejectReason("");
     } catch (e) {
-      console.error(e);
+      logger.error("Failed to reject verification", e);
       alert("Eroare la respingere");
     } finally {
       setProcessingId(null);

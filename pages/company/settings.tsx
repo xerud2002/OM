@@ -5,6 +5,7 @@ import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { toast } from "sonner";
+import { logger } from "@/utils/logger";
 import {
   Cog6ToothIcon,
   BellIcon,
@@ -67,7 +68,7 @@ export default function CompanySettings() {
           });
         }
       } catch (err) {
-        console.error("Failed to load settings", err);
+        logger.error("Failed to load settings", err);
       } finally {
         setLoading(false);
       }
@@ -86,7 +87,7 @@ export default function CompanySettings() {
       });
       toast.success("Setările au fost salvate!");
     } catch (err) {
-      console.error("Failed to save settings", err);
+      logger.error("Failed to save settings", err);
       toast.error("Eroare la salvare");
     } finally {
       setSaving(false);

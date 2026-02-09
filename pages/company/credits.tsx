@@ -19,6 +19,7 @@ import {
   ClockIcon,
 } from "@heroicons/react/24/outline";
 import { StarIcon as StarIconSolid } from "@heroicons/react/24/solid";
+import { logger } from "@/utils/logger";
 
 export default function BuyCredits() {
   const { dashboardUser, user } = useAuth();
@@ -82,7 +83,7 @@ export default function BuyCredits() {
           setIsFirstDeposit(!data.firstPurchaseDate);
         }
       } catch (err) {
-        console.error("Error checking deposit status:", err);
+        logger.error("Error checking deposit status:", err);
       } finally {
         setLoading(false);
       }

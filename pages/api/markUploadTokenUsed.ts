@@ -2,8 +2,19 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
 import { apiError, apiSuccess } from "@/types/api";
+import { withErrorHandler } from "@/lib/apiAuth";
 
-export default async function handler(
+interface UploadTokenData {
+  requestId?: string;
+  used?: boolean;
+  uploadedAt?: string;
+}
+
+interface RequestOwnerData {
+  customerId?: string;
+}
+
+export default withErrorHandler(async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -40,7 +51,7 @@ export default async function handler(
     if (!tokenSnap.exists) {
       return res.status(404).json(apiError("Token not found"));
     }
-    const tokenData: any = tokenSnap.data();
+    const tokenData = tokenSnap.data() as UploadTokenData | undefined;
     const requestId = tokenData?.requestId;
     if (!requestId) {
       return res.status(400).json(apiError("Token missing request reference"));
@@ -51,7 +62,7 @@ export default async function handler(
     if (!requestSnap.exists) {
       return res.status(404).json(apiError("Request not found"));
     }
-    const requestData: any = requestSnap.data();
+    const requestData = requestSnap.data() as RequestOwnerData | undefined;
     if (requestData?.customerId !== uid) {
       return res
         .status(403)
@@ -68,4 +79,4 @@ export default async function handler(
     logger.error("[markUploadTokenUsed] error", err);
     return res.status(500).json(apiError("Internal server error"));
   }
-}
+});

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { onAuthChange, getUserRole, isLogoutInProgress } from "@/utils/firebaseHelpers";
 import { toast } from "sonner";
+import { logger } from "@/utils/logger";
 
 type Props = {
   allowedRole: "company" | "customer" | "admin";
@@ -42,7 +43,7 @@ export default function RequireRole({ allowedRole, children }: Props) {
               role = await getUserRole(u);
               if (role) break;
             } catch (err) {
-              console.error(`Role check attempt ${i + 1} failed:`, err);
+              logger.error(`Role check attempt ${i + 1} failed:`, err);
             }
             // wait a bit and retry (but not after last attempt)
             if (i < maxAttempts - 1) {
@@ -68,7 +69,7 @@ export default function RequireRole({ allowedRole, children }: Props) {
             setChecking(false);
           }
         } catch (err) {
-          console.error("Role check failed:", err);
+          logger.error("Role check failed:", err);
           toast.error("Eroare la verificarea contului.");
           router.push("/");
         }

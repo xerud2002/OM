@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { logger } from "@/utils/logger";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
@@ -48,7 +49,7 @@ export default function AdminSettings() {
           setSettings({ ...defaultSettings, ...docSnap.data() });
         }
       } catch (err) {
-        console.error("Failed to load settings", err);
+        logger.error("Failed to load settings", err);
       } finally {
         setLoading(false);
       }
@@ -63,7 +64,7 @@ export default function AdminSettings() {
       await setDoc(doc(db, "meta", "settings"), settings);
       toast.success("Setările au fost salvate!");
     } catch (err) {
-      console.error("Failed to save settings", err);
+      logger.error("Failed to save settings", err);
       toast.error("Eroare la salvare");
     } finally {
       setSaving(false);

@@ -2,10 +2,10 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes } from "crypto";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
-import { apiError, apiSuccess, ErrorCodes } from "@/types/api";
-import { validateInternalSecret } from "@/lib/apiAuth";
+import { apiError, apiSuccess } from "@/types/api";
+import { validateInternalSecret, withErrorHandler } from "@/lib/apiAuth";
 
-export default async function handler(
+export default withErrorHandler(async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -87,4 +87,4 @@ export default async function handler(
     logger.error("Error generating upload link:", error);
     return res.status(500).json(apiError("Internal server error"));
   }
-}
+});

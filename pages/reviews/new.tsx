@@ -27,6 +27,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { CompanyProfile } from "@/types";
+import { logger } from "@/utils/logger";
 
 type RatingCategory = {
   key: string;
@@ -142,7 +143,7 @@ export default function NewReviewPage() {
           }
         }
       } catch (err) {
-        console.error("Error fetching company:", err);
+        logger.error("Error fetching company:", err);
         setError("Eroare la încărcarea datelor");
       } finally {
         setLoading(false);
@@ -217,12 +218,12 @@ export default function NewReviewPage() {
         }
       } catch (statsErr) {
         // Company stats update failed (permission issue) - review is still saved
-        console.warn("Could not update company stats:", statsErr);
+        logger.warn("Could not update company stats:", statsErr);
       }
 
       setSubmitted(true);
     } catch (err) {
-      console.error("Error submitting review:", err);
+      logger.error("Error submitting review:", err);
       setError("Eroare la trimiterea recenziei. Te rugăm să încerci din nou.");
     } finally {
       setSubmitting(false);

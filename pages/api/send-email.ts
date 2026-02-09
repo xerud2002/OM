@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { sendEmail, emailTemplates, escapeHtml } from "@/services/email";
 import { apiSuccess, apiError, ErrorCodes } from "@/types/api";
 import { logger } from "@/utils/logger";
-import { validateInternalSecret } from "@/lib/apiAuth";
+import { validateInternalSecret, withErrorHandler } from "@/lib/apiAuth";
 import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 
 // Types that can be called from the browser without an API secret
@@ -11,7 +11,7 @@ const PUBLIC_TYPES = ["contactForm"];
 // Rate limit public endpoints (3 per minute per IP)
 const isRateLimited = createRateLimiter({ name: "sendEmail", max: 3, windowMs: 60_000 });
 
-export default async function handler(
+export default withErrorHandler(async function handler(
   req: NextApiRequest,
   res: NextApiResponse,
 ) {
@@ -340,4 +340,4 @@ export default async function handler(
       .status(500)
       .json(apiError("Server error", ErrorCodes.INTERNAL_ERROR));
   }
-}
+});

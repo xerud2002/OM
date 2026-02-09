@@ -9,6 +9,7 @@ import { db } from "@/services/firebase";
 import { doc, getDoc } from "firebase/firestore";
 import { ArrowLeftIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { logger } from "@/utils/logger";
 
 const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
   loading: () => (
@@ -98,7 +99,7 @@ export default function CompanyChatPage() {
 
         setLoading(false);
       } catch (err) {
-        console.error("Error fetching chat data:", err);
+        logger.error("Error fetching chat data:", err);
         setError("Eroare la încărcarea datelor");
         setLoading(false);
       }
