@@ -1,23 +1,61 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import { sendEmail, emailTemplates } from '@/services/email';
-import { apiSuccess, apiError, ErrorCodes } from '@/types/api';
+import type { NextApiRequest, NextApiResponse } from "next";
+import { sendEmail, emailTemplates, escapeHtml } from "@/services/email";
+import { apiSuccess, apiError, ErrorCodes } from "@/types/api";
+import { logger } from "@/utils/logger";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method !== 'POST') {
-    return res.status(405).json(apiError('Method Not Allowed'));
+// Types that can be called from the browser without an API secret
+// contactForm only sends to the admin inbox, so abuse risk is limited to spam
+const PUBLIC_TYPES = ["contactForm"];
+
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
+  if (req.method !== "POST") {
+    return res.status(405).json(apiError("Method Not Allowed"));
   }
 
   const { type, data } = req.body;
 
   if (!type || !data) {
-    return res.status(400).json(apiError('Missing type or data', ErrorCodes.BAD_REQUEST));
+    return res
+      .status(400)
+      .json(apiError("Missing type or data", ErrorCodes.BAD_REQUEST));
+  }
+
+  // Protect non-public types with an internal API secret
+  if (!PUBLIC_TYPES.includes(type)) {
+    const internalSecret = process.env.INTERNAL_API_SECRET;
+    const providedKey = req.headers["x-internal-key"];
+    if (!internalSecret || providedKey !== internalSecret) {
+      return res
+        .status(401)
+        .json(apiError("Unauthorized", ErrorCodes.UNAUTHORIZED));
+    }
+  }
+
+  // Validate contactForm fields
+  if (type === "contactForm") {
+    if (!data.name || !data.email || !data.message) {
+      return res
+        .status(400)
+        .json(
+          apiError("Missing required contact fields", ErrorCodes.BAD_REQUEST),
+        );
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(data.email)) {
+      return res
+        .status(400)
+        .json(apiError("Invalid email format", ErrorCodes.BAD_REQUEST));
+    }
   }
 
   try {
     let emailResult;
 
     switch (type) {
-      case 'guestRequestConfirmation':
+      case "guestRequestConfirmation":
         emailResult = await sendEmail({
           to: data.email,
           subject: `✅ Cererea ta de mutare #${data.requestCode} a fost înregistrată`,
@@ -26,12 +64,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data.name,
             data.from,
             data.to,
-            data.movingDate
+            data.movingDate,
           ),
         });
         break;
 
-      case 'newOffer':
+      case "newOffer":
         emailResult = await sendEmail({
           to: data.customerEmail,
           subject: `🎉 Ofertă nouă pentru mutarea ${data.fromCity} → ${data.toCity} - ${data.companyName}`,
@@ -44,12 +82,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             fromCity: data.fromCity,
             toCity: data.toCity,
             moveDate: data.moveDate,
-            dashboardUrl: data.dashboardUrl || `https://ofertemutare.ro/customer/dashboard?requestId=${data.requestId}`,
+            dashboardUrl:
+              data.dashboardUrl ||
+              `https://ofertemutare.ro/customer/dashboard?requestId=${data.requestId}`,
           }),
         });
         break;
 
-      case 'offerAccepted':
+      case "offerAccepted":
         emailResult = await sendEmail({
           to: data.companyEmail,
           subject: `✅ Oferta acceptată - ${data.requestCode}`,
@@ -57,25 +97,34 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data.requestCode,
             data.customerName,
             data.customerPhone,
-            data.customerEmail
+            data.customerEmail,
           ),
         });
         break;
 
-      case 'contactForm':
+      case "contactForm":
         emailResult = await sendEmail({
-          to: process.env.RESEND_ADMIN_EMAIL || 'info@ofertemutare.ro',
+          to: process.env.RESEND_ADMIN_EMAIL || "info@ofertemutare.ro",
           subject: `[OferteMutare] Contact nou de la ${data.name}`,
-          html: emailTemplates.contactForm(data.name, data.email, data.phone, data.message),
+          html: emailTemplates.contactForm(
+            data.name,
+            data.email,
+            data.phone,
+            data.message,
+          ),
           replyTo: data.email,
         });
         break;
 
-      case 'reviewRequest':
-        emailResult = await sendEmail({
-          to: data.customerEmail,
-          subject: `Cum a fost experiența ta cu ${data.companyName}? Lasă o recenzie!`,
-          html: `
+      case "reviewRequest":
+        {
+          const safeName = escapeHtml(data.customerName || "");
+          const safeCompany = escapeHtml(data.companyName || "");
+          const safeUrl = escapeHtml(data.reviewUrl || "");
+          emailResult = await sendEmail({
+            to: data.customerEmail,
+            subject: `Cum a fost experiența ta cu ${safeCompany}? Lasă o recenzie!`,
+            html: `
             <!DOCTYPE html>
             <html lang="ro">
               <head>
@@ -105,19 +154,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     <h1 style="margin: 0;">Părerea ta contează!</h1>
                   </div>
                   <div class="content">
-                    <p>Bună ${data.customerName},</p>
+                    <p>Bună ${safeName},</p>
                     
-                    <p>Ai ales oferta de la <strong>${data.companyName}</strong> pentru mutarea ta. Sperăm că totul a decurs conform așteptărilor!</p>
+                    <p>Ai ales oferta de la <strong>${safeCompany}</strong> pentru mutarea ta. Sperăm că totul a decurs conform așteptărilor!</p>
                     
                     <div class="highlight">
-                      <p style="margin: 0;"><strong>🎯 Te rugăm să lași o recenzie pentru ${data.companyName}</strong></p>
+                      <p style="margin: 0;"><strong>🎯 Te rugăm să lași o recenzie pentru ${safeCompany}</strong></p>
                       <p style="margin: 10px 0 0 0; font-size: 14px;">Feedback-ul tău ajută alți clienți să ia decizii informate și ajută companiile să își îmbunătățească serviciile.</p>
                     </div>
                     
                     <p>Durează doar 1-2 minute și înseamnă foarte mult pentru comunitatea noastră!</p>
                     
                     <p style="text-align: center;">
-                      <a href="${data.reviewUrl}" class="button">✍️ Lasă o Recenzie Acum</a>
+                      <a href="${safeUrl}" class="button">✍️ Lasă o Recenzie Acum</a>
                     </p>
                     
                     <p style="color: #6b7280; font-size: 14px;">Poți evalua: profesionalismul echipei, punctualitatea, grija față de obiectele tale și raportul calitate-preț.</p>
@@ -130,14 +179,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               </body>
             </html>
           `,
-        });
+          });
+        }
         break;
 
-      case 'uploadReminder':
-        emailResult = await sendEmail({
-          to: data.email,
-          subject: `📸 Reminder: Încarcă poze pentru cererea ${data.requestCode}`,
-          html: `
+      case "uploadReminder":
+        {
+          const safeName = escapeHtml(data.name || "");
+          const safeCode = escapeHtml(data.requestCode || "");
+          const safeUploadUrl = escapeHtml(data.uploadUrl || "");
+          emailResult = await sendEmail({
+            to: data.email,
+            subject: `📸 Reminder: Încarcă poze pentru cererea ${safeCode}`,
+            html: `
             <!DOCTYPE html>
             <html lang="ro">
               <head>
@@ -157,11 +211,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                     <h1>📸 Nu uita să încarci pozele!</h1>
                   </div>
                   <div class="content">
-                    <p>Bună ${data.name},</p>
-                    <p>Te rugăm să încarci poze cu obiectele de mutat pentru cererea <strong>${data.requestCode}</strong>.</p>
+                    <p>Bună ${safeName},</p>
+                    <p>Te rugăm să încarci poze cu obiectele de mutat pentru cererea <strong>${safeCode}</strong>.</p>
                     <p>Pozele ajută companiile să îți ofere prețuri mai precise.</p>
                     <p style="text-align: center;">
-                      <a href="${data.uploadUrl}" class="button">Încarcă Poze Acum</a>
+                      <a href="${safeUploadUrl}" class="button">Încarcă Poze Acum</a>
                     </p>
                   </div>
                   <div class="footer">
@@ -171,10 +225,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
               </body>
             </html>
           `,
-        });
+          });
+        }
         break;
 
-      case 'newRequestNotification':
+      case "newRequestNotification":
         // Send to company about new request available
         emailResult = await sendEmail({
           to: data.companyEmail,
@@ -184,12 +239,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data.from,
             data.to,
             data.movingDate,
-            data.furniture
+            data.furniture,
           ),
         });
         break;
 
-      case 'offerDeclined':
+      case "offerDeclined":
         // Notify company that their offer was declined
         emailResult = await sendEmail({
           to: data.companyEmail,
@@ -197,26 +252,26 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           html: emailTemplates.offerDeclined(
             data.requestCode,
             data.companyName,
-            data.customerName
+            data.customerName,
           ),
         });
         break;
 
-      case 'offerReminder':
+      case "offerReminder":
         // Remind customer about pending offers
         emailResult = await sendEmail({
           to: data.customerEmail,
-          subject: `⏰ Ai ${data.offerCount} ${data.offerCount === 1 ? 'ofertă' : 'oferte'} în așteptare - ${data.requestCode}`,
+          subject: `⏰ Ai ${data.offerCount} ${data.offerCount === 1 ? "ofertă" : "oferte"} în așteptare - ${data.requestCode}`,
           html: emailTemplates.offerReminder(
             data.requestCode,
             data.customerName,
             data.offerCount,
-            data.dashboardLink
+            data.dashboardLink,
           ),
         });
         break;
 
-      case 'newMessageFromCompany':
+      case "newMessageFromCompany":
         // Notify customer about new message from company
         emailResult = await sendEmail({
           to: data.customerEmail,
@@ -224,12 +279,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           html: emailTemplates.newMessageFromCompany(
             data.companyName,
             data.messagePreview,
-            data.conversationLink
+            data.conversationLink,
           ),
         });
         break;
 
-      case 'newMessageFromCustomer':
+      case "newMessageFromCustomer":
         // Notify company about new message from customer
         emailResult = await sendEmail({
           to: data.companyEmail,
@@ -238,22 +293,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             data.customerName,
             data.requestCode,
             data.messagePreview,
-            data.conversationLink
+            data.conversationLink,
           ),
         });
         break;
 
       default:
-        return res.status(400).json(apiError('Invalid email type', ErrorCodes.BAD_REQUEST));
+        return res
+          .status(400)
+          .json(apiError("Invalid email type", ErrorCodes.BAD_REQUEST));
     }
 
     if (!emailResult.success) {
-      return res.status(500).json(apiError(emailResult.error || 'Email sending failed', ErrorCodes.INTERNAL_ERROR));
+      return res
+        .status(500)
+        .json(
+          apiError(
+            emailResult.error || "Email sending failed",
+            ErrorCodes.INTERNAL_ERROR,
+          ),
+        );
     }
 
     return res.status(200).json(apiSuccess({ emailId: emailResult.id }));
   } catch (error) {
-    console.error('[Send Email API Error]', error);
-    return res.status(500).json(apiError('Server error', ErrorCodes.INTERNAL_ERROR));
+    logger.error("[Send Email API Error]", error);
+    return res
+      .status(500)
+      .json(apiError("Server error", ErrorCodes.INTERNAL_ERROR));
   }
 }

@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
+import { apiError } from "@/types/api";
 
 type UploadTokenData = {
   requestId: string;
@@ -13,20 +14,27 @@ type UploadTokenData = {
   uploadedAt: string | null;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json(apiError("Method Not Allowed"));
   }
 
   const { token } = req.query;
   if (!token || typeof token !== "string") {
-    return res.status(400).json({ error: "Missing token parameter", valid: false });
+    return res
+      .status(400)
+      .json({ ...apiError("Missing token parameter"), valid: false });
   }
 
   try {
     if (!adminReady) {
-      logger.warn("[validateUploadToken] Firebase Admin not configured - returning invalid");
+      logger.warn(
+        "[validateUploadToken] Firebase Admin not configured - returning invalid",
+      );
       return res.status(200).json({
         valid: false,
         reason: "admin_unconfigured",
@@ -39,7 +47,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const tokenSnap = await tokenRef.get();
 
     if (!tokenSnap.exists) {
-      return res.status(404).json({ error: "Token not found", valid: false });
+      return res
+        .status(404)
+        .json({ ...apiError("Token not found"), valid: false });
     }
 
     const tokenData = tokenSnap.data() as UploadTokenData;
@@ -60,20 +70,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.status(200).json({
         valid: false,
         reason: "expired",
-        message: "Acest link a expirat. Te rugăm să contactezi echipa pentru un link nou.",
+        message:
+          "Acest link a expirat. Te rugăm să contactezi echipa pentru un link nou.",
       });
     }
 
-    // Token is valid
+    // Token is valid — return only non-PII fields
     return res.status(200).json({
       valid: true,
       requestId: tokenData.requestId,
-      customerEmail: tokenData.customerEmail,
-      customerName: tokenData.customerName,
       expiresAt: tokenData.expiresAt,
     });
   } catch (error) {
     logger.error("Error validating token:", error);
-    return res.status(500).json({ error: "Internal server error", valid: false });
+    return res
+      .status(500)
+      .json({ ...apiError("Internal server error"), valid: false });
   }
 }

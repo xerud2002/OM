@@ -396,8 +396,8 @@ export default function PrivacyPage() {
                     atacurilor DDoS
                   </li>
                   <li>
-                    ✓ <strong>Autentificare securizată</strong> cu hash-uire
-                    parole (bcrypt)
+                    ✓ <strong>Autentificare securizată</strong> prin Firebase
+                    Authentication (hash securizat)
                   </li>
                   <li>
                     ✓ <strong>Backup regulat</strong> al bazelor de date

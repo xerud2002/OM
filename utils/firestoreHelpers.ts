@@ -136,6 +136,8 @@ function prepareRequestData(data: any): Record<string, any> {
 /**
  * Create a guest request (no authentication required).
  * Requires updated Firestore rules that allow unauthenticated writes with guestEmail.
+ * @deprecated Use the /api/requests/createGuest API route instead. This client-side function
+ * bypasses server-side rate limiting and validation. Kept for reference only.
  */
 export async function createGuestRequest(
   data: any,

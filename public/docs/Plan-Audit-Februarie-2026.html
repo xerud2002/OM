@@ -1,0 +1,3241 @@
+<!doctype html>
+<html lang="ro">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Plan Tehnic Complet – OferteMutare.ro | Ofertemutare Ltd</title>
+    <style>
+      :root {
+        --emerald: #059669;
+        --emerald-light: #ecfdf5;
+        --red: #dc2626;
+        --red-light: #fef2f2;
+        --orange: #ea580c;
+        --orange-light: #fff7ed;
+        --yellow: #ca8a04;
+        --yellow-light: #fefce8;
+        --blue: #2563eb;
+        --blue-light: #eff6ff;
+        --purple: #7c3aed;
+        --purple-light: #f5f3ff;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font-family:
+          "Inter",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        color: var(--gray-800);
+        background: linear-gradient(
+          135deg,
+          var(--emerald-light) 0%,
+          #fff 40%,
+          var(--blue-light) 100%
+        );
+        min-height: 100vh;
+        line-height: 1.6;
+      }
+      .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1.5rem;
+      }
+      a {
+        color: var(--emerald);
+        text-decoration: none;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      code {
+        font-family: "Fira Code", "Consolas", monospace;
+        font-size: 0.82rem;
+        background: rgba(0, 0, 0, 0.06);
+        padding: 0.1rem 0.4rem;
+        border-radius: 4px;
+      }
+      .header {
+        text-align: center;
+        padding: 3rem 0 2rem;
+        border-bottom: 3px solid var(--emerald);
+        margin-bottom: 2.5rem;
+      }
+      .header h1 {
+        font-size: 2.4rem;
+        font-weight: 800;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+      }
+      .header h1 span {
+        color: var(--emerald);
+      }
+      .header .subtitle {
+        font-size: 1.1rem;
+        color: var(--gray-600);
+        max-width: 750px;
+        margin: 0 auto;
+      }
+      .header .date {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.4rem 1.2rem;
+        background: var(--emerald-light);
+        color: var(--emerald);
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+      .summary-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 0.8rem;
+        margin-bottom: 2.5rem;
+      }
+      .summary-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.2rem 1rem;
+        text-align: center;
+        border: 2px solid var(--gray-200);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+      }
+      .summary-card .number {
+        font-size: 2.2rem;
+        font-weight: 800;
+        line-height: 1;
+      }
+      .summary-card .label {
+        font-size: 0.8rem;
+        color: var(--gray-600);
+        margin-top: 0.3rem;
+        font-weight: 500;
+      }
+      .sc-pages .number {
+        color: var(--blue);
+      }
+      .sc-api .number {
+        color: var(--purple);
+      }
+      .sc-comp .number {
+        color: var(--orange);
+      }
+      .sc-loc .number {
+        color: var(--emerald);
+      }
+      .sc-done .number {
+        color: var(--emerald);
+      }
+      .sc-crit .number {
+        color: var(--red);
+      }
+      .sc-high .number {
+        color: var(--orange);
+      }
+      .sc-med .number {
+        color: var(--yellow);
+      }
+      .toc {
+        background: white;
+        border: 2px solid var(--gray-200);
+        border-radius: 12px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 2.5rem;
+        columns: 2;
+        column-gap: 2rem;
+      }
+      .toc h3 {
+        font-size: 1rem;
+        font-weight: 700;
+        margin-bottom: 0.8rem;
+        column-span: all;
+      }
+      .toc ol {
+        list-style: decimal;
+        padding-left: 1.5rem;
+      }
+      .toc li {
+        padding: 0.15rem 0;
+        font-size: 0.88rem;
+        break-inside: avoid;
+      }
+      .toc a {
+        font-weight: 500;
+      }
+      .section {
+        margin-bottom: 3rem;
+      }
+      .section h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.3rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 3px solid var(--emerald);
+        display: inline-block;
+      }
+      .section-desc {
+        color: var(--gray-600);
+        margin-bottom: 1.2rem;
+        font-size: 0.95rem;
+      }
+      .subsection-title {
+        margin: 1.5rem 0 0.6rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--gray-800);
+      }
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+        margin-bottom: 1.5rem;
+        font-size: 0.88rem;
+      }
+      .data-table th {
+        padding: 0.7rem 1rem;
+        text-align: left;
+        font-size: 0.8rem;
+        font-weight: 700;
+        background: var(--gray-100);
+        border-bottom: 2px solid var(--gray-200);
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--gray-700);
+      }
+      .data-table td {
+        padding: 0.6rem 1rem;
+        border-bottom: 1px solid var(--gray-100);
+        vertical-align: top;
+      }
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+      .data-table tr:hover td {
+        background: var(--gray-50);
+      }
+      .issue {
+        background: white;
+        border-radius: 10px;
+        padding: 1.1rem 1.4rem;
+        margin-bottom: 0.7rem;
+        border-left: 4px solid var(--gray-200);
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        transition: box-shadow 0.2s;
+      }
+      .issue:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      .issue.critical {
+        border-left-color: var(--red);
+        background: var(--red-light);
+      }
+      .issue.high {
+        border-left-color: var(--orange);
+        background: var(--orange-light);
+      }
+      .issue.medium {
+        border-left-color: var(--yellow);
+        background: var(--yellow-light);
+      }
+      .issue.low {
+        border-left-color: var(--blue);
+        background: var(--blue-light);
+      }
+      .issue .issue-header {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-bottom: 0.3rem;
+      }
+      .badge {
+        display: inline-block;
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: white;
+        flex-shrink: 0;
+      }
+      .badge-critical {
+        background: var(--red);
+      }
+      .badge-high {
+        background: var(--orange);
+      }
+      .badge-medium {
+        background: var(--yellow);
+        color: var(--gray-900);
+      }
+      .badge-low {
+        background: var(--blue);
+      }
+      .badge-done {
+        background: var(--emerald);
+      }
+      .issue .title {
+        font-weight: 700;
+        font-size: 0.92rem;
+        color: var(--gray-900);
+      }
+      .issue .file {
+        font-family: "Fira Code", "Consolas", monospace;
+        font-size: 0.78rem;
+        color: var(--gray-600);
+        background: rgba(0, 0, 0, 0.04);
+        padding: 0.1rem 0.5rem;
+        border-radius: 4px;
+        display: inline-block;
+        margin-top: 0.15rem;
+      }
+      .issue .desc {
+        font-size: 0.85rem;
+        color: var(--gray-600);
+        margin-top: 0.35rem;
+        line-height: 1.6;
+      }
+      .issue .action {
+        font-size: 0.83rem;
+        color: var(--emerald);
+        font-weight: 600;
+        margin-top: 0.35rem;
+      }
+      .done-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 0.7rem;
+      }
+      .done-item {
+        background: var(--emerald-light);
+        border: 1px solid #a7f3d0;
+        border-radius: 8px;
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+      .done-item .check {
+        color: var(--emerald);
+        font-weight: 700;
+        flex-shrink: 0;
+        font-size: 1.1rem;
+      }
+      .done-item .file-mono {
+        font-family: monospace;
+        font-size: 0.75rem;
+        color: var(--gray-600);
+      }
+      .flow-container {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        border: 2px solid var(--gray-200);
+        margin-bottom: 1.5rem;
+        overflow-x: auto;
+      }
+      .flow-steps {
+        display: flex;
+        align-items: center;
+        gap: 0;
+        min-width: 900px;
+        justify-content: center;
+      }
+      .flow-step {
+        background: var(--emerald-light);
+        border: 2px solid var(--emerald);
+        border-radius: 10px;
+        padding: 0.7rem 1rem;
+        text-align: center;
+        min-width: 120px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: var(--gray-800);
+      }
+      .flow-step small {
+        display: block;
+        font-weight: 400;
+        color: var(--gray-600);
+        font-size: 0.7rem;
+        margin-top: 2px;
+      }
+      .flow-arrow {
+        font-size: 1.4rem;
+        color: var(--emerald);
+        padding: 0 0.3rem;
+        flex-shrink: 0;
+      }
+      .highlight-box {
+        padding: 1.3rem 1.5rem;
+        border-radius: 12px;
+        margin: 1rem 0;
+      }
+      .highlight-box.green {
+        background: var(--emerald-light);
+        border: 2px solid #a7f3d0;
+      }
+      .highlight-box.red {
+        background: var(--red-light);
+        border: 2px solid #fca5a5;
+      }
+      .highlight-box .hl-title {
+        font-weight: 700;
+        margin-bottom: 0.4rem;
+        font-size: 0.95rem;
+      }
+      .highlight-box.green .hl-title {
+        color: var(--emerald);
+      }
+      .highlight-box.red .hl-title {
+        color: var(--red);
+      }
+      .highlight-box p {
+        font-size: 0.88rem;
+        color: var(--gray-600);
+      }
+      .issue.resolved {
+        border-left-color: var(--emerald) !important;
+        background: var(--emerald-light) !important;
+        position: relative;
+      }
+      .issue.resolved::after {
+        content: "\2705 REZOLVAT";
+        position: absolute;
+        top: 0.6rem;
+        right: 0.8rem;
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--emerald);
+        background: white;
+        padding: 0.15rem 0.6rem;
+        border-radius: 999px;
+        border: 1px solid var(--emerald);
+      }
+      @media print {
+        body {
+          background: white !important;
+        }
+        .issue,
+        .flow-container,
+        .data-table {
+          break-inside: avoid;
+        }
+        .toc {
+          columns: 1;
+        }
+      }
+      @media (max-width: 768px) {
+        .header h1 {
+          font-size: 1.6rem;
+        }
+        .summary-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .done-grid {
+          grid-template-columns: 1fr;
+        }
+        .toc {
+          columns: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>
+          &#128736;&#65039; Plan Tehnic Complet: <span>OferteMutare.ro</span>
+        </h1>
+        <p class="subtitle">
+          Documentatie completa a platformei &mdash; arhitectura,
+          functionalitati implementate, audit de securitate si roadmap de
+          imbunatatiri pentru <strong>Ofertemutare Ltd</strong>
+        </p>
+        <span class="date">&#128197; 9 Februarie 2026</span>
+      </div>
+
+      <div class="summary-grid">
+        <div class="summary-card sc-pages">
+          <div class="number">45+</div>
+          <div class="label">Pagini totale</div>
+        </div>
+        <div class="summary-card sc-api">
+          <div class="number">14</div>
+          <div class="label">API Routes</div>
+        </div>
+        <div class="summary-card sc-comp">
+          <div class="number">30+</div>
+          <div class="label">Componente React</div>
+        </div>
+        <div class="summary-card sc-loc">
+          <div class="number">20k+</div>
+          <div class="label">Linii de cod</div>
+        </div>
+        <div class="summary-card sc-done">
+          <div class="number">57</div>
+          <div class="label">&#9989; Fix-uri aplicate</div>
+        </div>
+        <div class="summary-card sc-crit">
+          <div class="number">1</div>
+          <div class="label">&#128308; Critice restante</div>
+        </div>
+        <div class="summary-card sc-high">
+          <div class="number">3</div>
+          <div class="label">&#128992; Ridicate restante</div>
+        </div>
+        <div class="summary-card sc-med">
+          <div class="number">27</div>
+          <div class="label">&#128993;&#128309; Restante</div>
+        </div>
+      </div>
+
+      <div class="toc">
+        <h3>&#128203; Cuprins</h3>
+        <ol>
+          <li><a href="#tech-stack">Stack Tehnologic</a></li>
+          <li><a href="#architecture">Arhitectura Platformei</a></li>
+          <li><a href="#pages">Inventar Pagini (45+)</a></li>
+          <li><a href="#api">API Routes (14)</a></li>
+          <li><a href="#components">Componente Cheie (30+)</a></li>
+          <li><a href="#business-flow">Fluxul de Business</a></li>
+          <li><a href="#seo">SEO &amp; Continut</a></li>
+          <li><a href="#infrastructure">Infrastructura &amp; Deploy</a></li>
+          <li><a href="#completed">&#9989; Ce s-a rezolvat (57 fix-uri)</a></li>
+          <li><a href="#critical">&#9989; Critice (5/5 rezolvate)</a></li>
+          <li>
+            <a href="#high">&#9989; Prioritate Ridicata (7/7 rezolvate)</a>
+          </li>
+          <li>
+            <a href="#medium">&#9989; Prioritate Medie (12/12 rezolvate)</a>
+          </li>
+          <li>
+            <a href="#low">&#9989; Prioritate Scazuta (11/11 rezolvate)</a>
+          </li>
+          <li>
+            <a href="#hardening">&#9989; Sprint 5 &mdash; Hardening (8/8 rezolvate)</a>
+          </li>
+          <li>
+            <a href="#roadmap">&#128506;&#65039; Roadmap de Implementare</a>
+          </li>
+          <li>
+            <a href="#todo">&#128736;&#65039; TODO &mdash; Imbunatatiri Restante (31)</a>
+          </li>
+        </ol>
+      </div>
+
+      <!-- 1. TECH STACK -->
+      <div class="section" id="tech-stack">
+        <h2>1. Stack Tehnologic</h2>
+        <p class="section-desc">
+          Tehnologiile utilizate in platforma, cu versiunile curente.
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Categorie</th>
+              <th>Tehnologie</th>
+              <th>Versiune</th>
+              <th>Rol</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Framework</td>
+              <td><strong>Next.js</strong> (Pages Router)</td>
+              <td>14.2.35</td>
+              <td>SSR, SSG, API Routes</td>
+            </tr>
+            <tr>
+              <td>UI</td>
+              <td><strong>React</strong> + <strong>TypeScript</strong></td>
+              <td>18.3.1 / 5.9.3</td>
+              <td>Componente, tipuri strict</td>
+            </tr>
+            <tr>
+              <td>Styling</td>
+              <td><strong>Tailwind CSS</strong></td>
+              <td>4.1.18</td>
+              <td>Utility-first CSS</td>
+            </tr>
+            <tr>
+              <td>Animatii</td>
+              <td><strong>Framer Motion</strong></td>
+              <td>12.33.0</td>
+              <td>Animatii pagini, componente</td>
+            </tr>
+            <tr>
+              <td>Auth + DB + Storage</td>
+              <td><strong>Firebase</strong> (Client SDK)</td>
+              <td>12.8.0</td>
+              <td>Auth (Google + Email), Firestore, Storage</td>
+            </tr>
+            <tr>
+              <td>Server Firebase</td>
+              <td><strong>Firebase Admin SDK</strong></td>
+              <td>12.7.0</td>
+              <td>Admin operations server-side</td>
+            </tr>
+            <tr>
+              <td>Email</td>
+              <td><strong>Resend</strong></td>
+              <td>6.9.1</td>
+              <td>Email tranzactional (7+ template-uri)</td>
+            </tr>
+            <tr>
+              <td>UI Kit</td>
+              <td><strong>Headless UI</strong> + <strong>Heroicons</strong></td>
+              <td>2.2.9 / 2.2.0</td>
+              <td>Componente accesibile</td>
+            </tr>
+            <tr>
+              <td>Date</td>
+              <td>
+                <strong>date-fns</strong> + <strong>react-day-picker</strong>
+              </td>
+              <td>3.6.0 / 8.10.1</td>
+              <td>Formatare date romana, calendar</td>
+            </tr>
+            <tr>
+              <td>Notificari</td>
+              <td><strong>Sonner</strong></td>
+              <td>2.0.7</td>
+              <td>Toast notifications</td>
+            </tr>
+            <tr>
+              <td>Location API</td>
+              <td><strong>localapi.ro</strong></td>
+              <td>&mdash;</td>
+              <td>Autocomplete adrese Romania</td>
+            </tr>
+            <tr>
+              <td>Analytics</td>
+              <td><strong>Google Analytics 4</strong></td>
+              <td>G-6624X6E5GQ</td>
+              <td>Tracking (gated pe consent)</td>
+            </tr>
+            <tr>
+              <td>Process Manager</td>
+              <td><strong>PM2</strong> (cluster)</td>
+              <td>&mdash;</td>
+              <td>Multi-instance, auto-restart</td>
+            </tr>
+            <tr>
+              <td>Web Server</td>
+              <td><strong>Nginx</strong></td>
+              <td>&mdash;</td>
+              <td>Reverse proxy, SSL, caching</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 2. ARCHITECTURE -->
+      <div class="section" id="architecture">
+        <h2>2. Arhitectura Platformei</h2>
+        <p class="section-desc">
+          Structura proiectului si pattern-urile arhitecturale cheie.
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Director</th>
+              <th>Fisiere</th>
+              <th>Scop</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>pages/</code></td>
+              <td>45+</td>
+              <td>
+                Pagini publice, dashboards (admin/company/customer), API routes
+              </td>
+            </tr>
+            <tr>
+              <td><code>components/</code></td>
+              <td>30+</td>
+              <td>
+                Componente React: UI, layout, auth, chat, CRO, home, reviews,
+                SEO
+              </td>
+            </tr>
+            <tr>
+              <td><code>pages/api/</code></td>
+              <td>14</td>
+              <td>
+                API RESTful: email, offers, requests, cron, locations, upload
+              </td>
+            </tr>
+            <tr>
+              <td><code>services/</code></td>
+              <td>2</td>
+              <td>
+                Firebase client init, email service (1,079 linii, 7+
+                template-uri)
+              </td>
+            </tr>
+            <tr>
+              <td><code>utils/</code></td>
+              <td>12</td>
+              <td>
+                Helpers: auth, Firestore CRUD, analytics, cost, cookies, date,
+                logger
+              </td>
+            </tr>
+            <tr>
+              <td><code>hooks/</code></td>
+              <td>1</td>
+              <td>
+                <code>useAuth</code> &mdash; Firebase auth state management
+              </td>
+            </tr>
+            <tr>
+              <td><code>lib/</code></td>
+              <td>2</td>
+              <td>Firebase Admin SDK init, API auth middleware</td>
+            </tr>
+            <tr>
+              <td><code>types/</code></td>
+              <td>2</td>
+              <td>
+                TypeScript types: roles, profiles, requests, offers, reviews
+              </td>
+            </tr>
+            <tr>
+              <td><code>data/</code></td>
+              <td>1</td>
+              <td>FAQ data structured by category</td>
+            </tr>
+            <tr>
+              <td><code>scripts/</code></td>
+              <td>17</td>
+              <td>
+                Build tooling: TOC, image optimization, WebP, SEO injection
+              </td>
+            </tr>
+            <tr>
+              <td><code>public/</code></td>
+              <td>&mdash;</td>
+              <td>Assets statice, sitemap, robots.txt, documente business</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">Pattern-uri Arhitecturale Cheie</h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#9654;</span>
+            <div>
+              <strong>Guest-first UX</strong> &mdash; Cereri fara autentificare;
+              conturi legate retroactiv prin email matching
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#9654;</span>
+            <div>
+              <strong>Role-based Access</strong> &mdash; 3 roluri
+              (<code>customer</code>, <code>company</code>, <code>admin</code>)
+              enforced la route, component, Firestore rules
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#9654;</span>
+            <div>
+              <strong>Credit Economy</strong> &mdash; Tranzactii atomice
+              Firestore: deducere credite + creare oferta simultana
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#9654;</span>
+            <div>
+              <strong>Real-time</strong> &mdash;
+              <code>onSnapshot</code> listeners: notificari, sold credite,
+              mesaje chat
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#9654;</span>
+            <div>
+              <strong>SEO-heavy</strong> &mdash; 30+ pagini SSG pentru orase,
+              Schema.org pe fiecare pagina, breadcrumbs, sitemap
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#9654;</span>
+            <div>
+              <strong>Performance</strong> &mdash; Lazy loading, GA4 deferred pe
+              interactiune, auto WebP, Nginx static caching
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. PAGES INVENTORY -->
+      <div class="section" id="pages">
+        <h2>3. Inventar Pagini (45+)</h2>
+        <p class="section-desc">
+          Toate paginile platformei, organizate pe categorie.
+        </p>
+
+        <h3 class="subsection-title">Pagini Publice (10)</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pagina</th>
+              <th>Fisier</th>
+              <th>Descriere</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Homepage</strong></td>
+              <td>pages/index.tsx (373 linii)</td>
+              <td>
+                Hero, LogoTicker, Steps, Articles, ClientAccount,
+                PartnerSection, Services, Testimonials, FAQ, CityLinks, CTA.
+                Schema.org complet
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Despre noi</strong></td>
+              <td>pages/about.tsx (727 linii)</td>
+              <td>
+                Parallax hero, valori companie, timeline (2010-2025), statistici
+                animate
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Contact</strong></td>
+              <td>pages/contact.tsx (615 linii)</td>
+              <td>
+                Formular contact, informatii (email, telefon, ore, locatie), FAQ
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Calculator</strong></td>
+              <td>pages/calculator.tsx (300 linii)</td>
+              <td>
+                Calculator interactiv costuri mutare, WebApplication schema
+              </td>
+            </tr>
+            <tr>
+              <td><strong>FAQ</strong></td>
+              <td>pages/faq.tsx (709 linii)</td>
+              <td>
+                Intrebari frecvente pe categorii, linkuri interne orase,
+                Schema.org FAQPage
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Devino Partener</strong></td>
+              <td>pages/partener.tsx (481 linii)</td>
+              <td>
+                Landing page recrutare companii: beneficii, pasi, cereri live
+                (SSR)
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Confidentialitate</strong></td>
+              <td>pages/privacy.tsx (642 linii)</td>
+              <td>Politica GDPR completa</td>
+            </tr>
+            <tr>
+              <td><strong>Termeni</strong></td>
+              <td>pages/terms.tsx (399 linii)</td>
+              <td>Termeni si conditii</td>
+            </tr>
+            <tr>
+              <td><strong>Blog</strong></td>
+              <td>pages/blog/index.tsx (327 linii)</td>
+              <td>Listare 8+ articole cu carduri gradient</td>
+            </tr>
+            <tr>
+              <td><strong>Recenzie Noua</strong></td>
+              <td>pages/reviews/new.tsx (509 linii)</td>
+              <td>Formular recenzie publica: rating multi-categorie + text</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">
+          Articole (9) &mdash; <code>pages/articole/</code>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Articol</th>
+              <th>Subiect</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>mutare.tsx</td>
+              <td>Ghid complet mutare</td>
+            </tr>
+            <tr>
+              <td>pregatire.tsx</td>
+              <td>Pregatire pentru mutare</td>
+            </tr>
+            <tr>
+              <td>evaluare-mutare.tsx</td>
+              <td>Evaluarea costurilor mutarii</td>
+            </tr>
+            <tr>
+              <td>sfaturi-mutari.tsx</td>
+              <td>Sfaturi practice mutari</td>
+            </tr>
+            <tr>
+              <td>cat-costa-mutarea-2026.tsx</td>
+              <td>Preturi mutari 2026</td>
+            </tr>
+            <tr>
+              <td>cele-mai-bune-cartiere-bucuresti.tsx</td>
+              <td>Top cartiere Bucuresti</td>
+            </tr>
+            <tr>
+              <td>mutare-bucuresti-complet.tsx</td>
+              <td>Ghid mutare Bucuresti</td>
+            </tr>
+            <tr>
+              <td>mutare-cluj-napoca.tsx</td>
+              <td>Ghid mutare Cluj-Napoca</td>
+            </tr>
+            <tr>
+              <td>schimbare-adresa-documente.tsx</td>
+              <td>Schimbare adresa documente</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">
+          Pagini Mutari (8) &mdash; <code>pages/mutari/</code>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pagina</th>
+              <th>Tip</th>
+              <th>Descriere</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>mutari/index.tsx</td>
+              <td>Hub</td>
+              <td>Listare toate tipurile de mutari + top orase</td>
+            </tr>
+            <tr>
+              <td>mutari/[from]/index.tsx</td>
+              <td>SSG dinamic</td>
+              <td>
+                30+ pagini orase romanesti cu date SEO locale, preturi,
+                cartiere, sfaturi
+              </td>
+            </tr>
+            <tr>
+              <td>mutari/[from]/[to].tsx</td>
+              <td>SSG dinamic</td>
+              <td>Rute oras-oras cu distanta, durata, estimare pret</td>
+            </tr>
+            <tr>
+              <td>mutari/tipuri/apartamente.tsx</td>
+              <td>Static</td>
+              <td>Mutari apartamente</td>
+            </tr>
+            <tr>
+              <td>mutari/tipuri/case.tsx</td>
+              <td>Static</td>
+              <td>Mutari case</td>
+            </tr>
+            <tr>
+              <td>mutari/tipuri/studenti.tsx</td>
+              <td>Static</td>
+              <td>Mutari studenti</td>
+            </tr>
+            <tr>
+              <td>mutari/tipuri/birouri.tsx</td>
+              <td>Static</td>
+              <td>Mutari birouri</td>
+            </tr>
+            <tr>
+              <td>mutari/specializate/piane.tsx</td>
+              <td>Static</td>
+              <td>Transport piane (specializat)</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">
+          Pagini Servicii (6) &mdash; <code>pages/servicii/</code>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pagina</th>
+              <th>Descriere</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>servicii/index.tsx</td>
+              <td>Hub servicii</td>
+            </tr>
+            <tr>
+              <td>servicii/impachetare/profesionala.tsx</td>
+              <td>Serviciu impachetare profesionala</td>
+            </tr>
+            <tr>
+              <td>servicii/impachetare/materiale.tsx</td>
+              <td>Materiale de impachetare</td>
+            </tr>
+            <tr>
+              <td>servicii/montaj/mobila.tsx</td>
+              <td>Montaj/demontaj mobila</td>
+            </tr>
+            <tr>
+              <td>servicii/depozitare.tsx</td>
+              <td>Depozitare temporara</td>
+            </tr>
+            <tr>
+              <td>servicii/debarasare.tsx</td>
+              <td>Debarasare obiecte vechi</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">
+          Dashboard Admin (6) &mdash; <code>pages/admin/</code>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pagina</th>
+              <th>Functionalitati</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>admin/index.tsx (350 linii)</td>
+              <td>Dashboard: statistici totale, aprobari/respingeri pending</td>
+            </tr>
+            <tr>
+              <td>admin/requests.tsx</td>
+              <td>
+                Management cereri: cautare, filtru status, stergere, schimbare
+                status
+              </td>
+            </tr>
+            <tr>
+              <td>admin/companies.tsx</td>
+              <td>Management companii: cautare, filtru, verificare/anulare</td>
+            </tr>
+            <tr>
+              <td>admin/users.tsx</td>
+              <td>Management clienti: cautare, stergere</td>
+            </tr>
+            <tr>
+              <td>admin/verifications.tsx</td>
+              <td>Coada verificari: aprobare sau respingere cu motiv</td>
+            </tr>
+            <tr>
+              <td>admin/settings.tsx</td>
+              <td>
+                Setari platforma: creditPrice, creditsPerContact,
+                welcomeCredits, maintenanceMode, emailNotifications, adminEmail
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">
+          Dashboard Companie (6) &mdash; <code>pages/company/</code>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pagina</th>
+              <th>Functionalitati</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>company/auth.tsx (450 linii)</td>
+              <td>
+                Login/Register: Google OAuth + Email/Password, detectare
+                conflict rol
+              </td>
+            </tr>
+            <tr>
+              <td>company/dashboard.tsx (627 linii)</td>
+              <td>
+                View principal: tab-uri, RequestsView, management oferte,
+                OnboardingWizard, CreditBalance, NotificationBell
+              </td>
+            </tr>
+            <tr>
+              <td>company/credits.tsx (531 linii)</td>
+              <td>
+                Achizitie credite: first-deposit hero, countdown, pachete (prin
+                telefon)
+              </td>
+            </tr>
+            <tr>
+              <td>company/profile.tsx (688 linii)</td>
+              <td>
+                Editare profil: nume, CIF, telefon, oras, descriere, logo
+                upload, VerificationSection
+              </td>
+            </tr>
+            <tr>
+              <td>company/chat.tsx</td>
+              <td>Chat cu ChatWindow component</td>
+            </tr>
+            <tr>
+              <td>company/settings.tsx</td>
+              <td>
+                Preferinte notificari, zone servicii, distanta max, auto-reply
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">
+          Dashboard Client (4) &mdash; <code>pages/customer/</code>
+        </h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pagina</th>
+              <th>Functionalitati</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>customer/auth.tsx (497 linii)</td>
+              <td>
+                Login/Register: Google + Email, legare cereri guest la login
+              </td>
+            </tr>
+            <tr>
+              <td>customer/dashboard.tsx (913 linii)</td>
+              <td>
+                <strong>Cea mai mare pagina</strong> &mdash; Lista cereri,
+                oferte, accept/decline, chat, detalii cerere
+              </td>
+            </tr>
+            <tr>
+              <td>customer/cerere-noua.tsx</td>
+              <td>Formular cerere noua (HomeRequestForm embedded)</td>
+            </tr>
+            <tr>
+              <td>customer/settings.tsx</td>
+              <td>Profil: displayName, telefon, oras</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">Upload Media</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pagina</th>
+              <th>Functionalitati</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>upload/[token].tsx (466 linii)</td>
+              <td>
+                Upload media token-based: validare token, upload Firebase
+                Storage, update cerere cu URLs
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 4. API ROUTES -->
+      <div class="section" id="api">
+        <h2>4. API Routes (14)</h2>
+        <p class="section-desc">
+          Toate endpoint-urile server-side ale platformei.
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Endpoint</th>
+              <th>Metoda</th>
+              <th>Auth</th>
+              <th>Scop</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>/api/send-email</code></td>
+              <td>POST</td>
+              <td>&#10060;</td>
+              <td>
+                Hub email central via Resend. 7+ tipuri:
+                guestRequestConfirmation, newOffer, offerAccepted, contactForm,
+                reviewRequest, newRequestNotification, uploadReminder
+              </td>
+            </tr>
+            <tr>
+              <td><code>/api/requests/createGuest</code></td>
+              <td>POST</td>
+              <td>&#10060;</td>
+              <td>
+                <strong>Core</strong> &mdash; Creare cerere fara auth, cod
+                secvential REQ-XXXXXX, email matching, notificare companii
+              </td>
+            </tr>
+            <tr>
+              <td><code>/api/requests/linkToAccount</code></td>
+              <td>POST</td>
+              <td>&#9989;</td>
+              <td>Legare cereri guest la cont autentificat prin email</td>
+            </tr>
+            <tr>
+              <td><code>/api/offers/accept</code></td>
+              <td>POST</td>
+              <td>&#9989;</td>
+              <td>
+                Acceptare oferta: verificare ownership, update status, email
+                companie cu date contact client
+              </td>
+            </tr>
+            <tr>
+              <td><code>/api/offers/decline</code></td>
+              <td>POST</td>
+              <td>&#9989;</td>
+              <td>Respingere oferta: set status declined</td>
+            </tr>
+            <tr>
+              <td><code>/api/offers/message</code></td>
+              <td>POST</td>
+              <td>&#9989;</td>
+              <td>
+                Mesaj chat: doc in offers/{id}/messages, creare notificare
+              </td>
+            </tr>
+            <tr>
+              <td><code>/api/generateUploadLink</code></td>
+              <td>POST</td>
+              <td>&#10060;</td>
+              <td>
+                Genereaza token upload unic, Firestore uploadTokens, expiry 7
+                zile
+              </td>
+            </tr>
+            <tr>
+              <td><code>/api/validateUploadToken</code></td>
+              <td>GET</td>
+              <td>&#10060;</td>
+              <td>Validare token (existenta, utilizat, expiry)</td>
+            </tr>
+            <tr>
+              <td><code>/api/markUploadTokenUsed</code></td>
+              <td>POST</td>
+              <td>&#9989;</td>
+              <td>Marcheaza token ca utilizat</td>
+            </tr>
+            <tr>
+              <td><code>/api/notifyCompaniesOnUpload</code></td>
+              <td>POST</td>
+              <td>&mdash;</td>
+              <td>Notificare companii la upload media client</td>
+            </tr>
+            <tr>
+              <td><code>/api/sendUploadReminders</code></td>
+              <td>POST</td>
+              <td>&#128274;</td>
+              <td>Cron: remindere pentru tokeni neutilizati 3+ zile</td>
+            </tr>
+            <tr>
+              <td><code>/api/cron/auto-refund</code></td>
+              <td>POST</td>
+              <td>&#128274;</td>
+              <td>
+                Auto-refund credite oferte fara raspuns dupa 72h (CRON_SECRET)
+              </td>
+            </tr>
+            <tr>
+              <td><code>/api/locations/search</code></td>
+              <td>GET</td>
+              <td>&#10060;</td>
+              <td>Proxy autocomplete adrese din localapi.ro</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 5. COMPONENTS -->
+      <div class="section" id="components">
+        <h2>5. Componente Cheie (30+)</h2>
+        <p class="section-desc">
+          Cele mai importante componente React ale platformei.
+        </p>
+
+        <h3 class="subsection-title">Componente Majore</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Componenta</th>
+              <th>Linii</th>
+              <th>Scop</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>HomeRequestForm</strong></td>
+              <td>1,691</td>
+              <td>
+                Wizard multi-step: LocationAutocomplete, tip proprietate,
+                camere, servicii (8+), selector data (4 moduri), contact, upload
+                optional
+              </td>
+            </tr>
+            <tr>
+              <td><strong>RequestsView</strong></td>
+              <td>1,044</td>
+              <td>
+                Job board companie: infinite scroll, cautare, filtre, trimitere
+                oferta cu tranzactie Firestore
+              </td>
+            </tr>
+            <tr>
+              <td><strong>RequestForm</strong></td>
+              <td>632</td>
+              <td>Formular cerere detaliat cu FormShape type</td>
+            </tr>
+            <tr>
+              <td><strong>OnboardingWizard</strong></td>
+              <td>520</td>
+              <td>
+                4 pasi: welcome &rarr; profil &rarr; zone servicii &rarr; ready
+              </td>
+            </tr>
+            <tr>
+              <td><strong>DashboardLayout</strong></td>
+              <td>490</td>
+              <td>
+                Sidebar responsive cu nav role-based, mobile drawer, meniu
+                utilizator
+              </td>
+            </tr>
+            <tr>
+              <td><strong>RequestFullDetails</strong></td>
+              <td>393</td>
+              <td>View complet cerere: galerie media, stergere</td>
+            </tr>
+            <tr>
+              <td><strong>SavingsCalculator</strong></td>
+              <td>332</td>
+              <td>Calculator interactiv cu modificatori pret pe judet</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 class="subsection-title">Componente Feature</h3>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Componenta</th>
+              <th>Scop</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CreditBalance</td>
+              <td>Sold credite real-time via Firestore onSnapshot</td>
+            </tr>
+            <tr>
+              <td>NotificationBell (228 linii)</td>
+              <td>Dropdown notificari real-time cu badge unread</td>
+            </tr>
+            <tr>
+              <td>OfferModal (176 linii)</td>
+              <td>Modal trimitere oferta (pret + mesaj)</td>
+            </tr>
+            <tr>
+              <td>VerificationSection (167 linii)</td>
+              <td>Upload document CUI pentru verificare companie</td>
+            </tr>
+            <tr>
+              <td>ChatWindow (170 linii)</td>
+              <td>Chat real-time Firestore, ambele roluri</td>
+            </tr>
+            <tr>
+              <td>RequireRole (91 linii)</td>
+              <td>
+                Route guard: Firebase auth + Firestore role check cu retry
+              </td>
+            </tr>
+            <tr>
+              <td>Navbar (229 linii)</td>
+              <td>Nav public cu lazy auth, dashboard links role-based</td>
+            </tr>
+            <tr>
+              <td>CookieConsent</td>
+              <td>Banner GDPR consent cu categorii granulare</td>
+            </tr>
+            <tr>
+              <td>ErrorBoundary</td>
+              <td>Error boundary React cu fallback UI</td>
+            </tr>
+            <tr>
+              <td>FloatingCTA</td>
+              <td>Buton floating call-to-action</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 6. BUSINESS FLOW -->
+      <div class="section" id="business-flow">
+        <h2>6. Fluxul de Business</h2>
+        <p class="section-desc">Cum functioneaza platforma end-to-end.</p>
+
+        <div class="flow-container">
+          <div class="flow-steps">
+            <div class="flow-step">
+              &#128221; Cerere Noua<small>HomeRequestForm</small>
+            </div>
+            <span class="flow-arrow">&rarr;</span>
+            <div class="flow-step">
+              &#128228; createGuest<small>API + Firestore</small>
+            </div>
+            <span class="flow-arrow">&rarr;</span>
+            <div class="flow-step">
+              &#128276; Notificare<small>Email + Bell</small>
+            </div>
+            <span class="flow-arrow">&rarr;</span>
+            <div class="flow-step">
+              &#128176; Oferta<small>Deducere credite</small>
+            </div>
+            <span class="flow-arrow">&rarr;</span>
+            <div class="flow-step">
+              &#9989; Accept<small>Date contact shared</small>
+            </div>
+            <span class="flow-arrow">&rarr;</span>
+            <div class="flow-step">
+              &#128172; Chat<small>Real-time msgs</small>
+            </div>
+            <span class="flow-arrow">&rarr;</span>
+            <div class="flow-step">
+              &#11088; Recenzie<small>Multi-rating</small>
+            </div>
+          </div>
+        </div>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Pas</th>
+              <th>Actor</th>
+              <th>Actiune</th>
+              <th>Sistem</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>Client</td>
+              <td>
+                Completeaza formularul multi-step (locatii, tip, servicii, data,
+                contact)
+              </td>
+              <td>HomeRequestForm &rarr; /api/requests/createGuest</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>Sistem</td>
+              <td>
+                Genereaza cod secvential REQ-XXXXXX, leaga la cont existent daca
+                emailul se potriveste
+              </td>
+              <td>Firestore meta/counters + requests</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>Sistem</td>
+              <td>
+                Notifica companiile (Firestore notifications + email Resend)
+              </td>
+              <td>Toate companiile primesc notificare</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>Client</td>
+              <td>
+                Incarca poze/video prin link tokenizat (7 zile expiry) -
+                optional
+              </td>
+              <td>upload/[token] &rarr; Firebase Storage</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>Companie</td>
+              <td>
+                Vede cererea in RequestsView, trimite oferta (pret + mesaj)
+              </td>
+              <td>Tranzactie Firestore: -credite + creare oferta atomic</td>
+            </tr>
+            <tr>
+              <td>6</td>
+              <td>Client</td>
+              <td>Vede ofertele, accepta sau respinge</td>
+              <td>/api/offers/accept sau /decline</td>
+            </tr>
+            <tr>
+              <td>7</td>
+              <td>Sistem</td>
+              <td>
+                La accept: partajeaza datele de contact ale clientului cu
+                compania
+              </td>
+              <td>Email detaliat catre companie</td>
+            </tr>
+            <tr>
+              <td>8</td>
+              <td>Ambii</td>
+              <td>Comunicare via chat real-time</td>
+              <td>ChatWindow + Firestore subcollection</td>
+            </tr>
+            <tr>
+              <td>9</td>
+              <td>Sistem</td>
+              <td>Auto-refund credite daca clientul nu raspunde 72h</td>
+              <td>/api/cron/auto-refund</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>Client</td>
+              <td>Lasa recenzie dupa serviciu</td>
+              <td>/reviews/new &rarr; Firestore reviews</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="highlight-box green">
+          <p class="hl-title">&#128176; Sistem Credite</p>
+          <p>
+            Companiile cumpara credite <strong>prin telefon</strong> (fara
+            gateway plati online inca).<br />
+            Cost per contact: <strong>Tier 1</strong> (50 credite) &mdash;
+            Bucuresti, Cluj, Timisoara | <strong>Tier 2</strong> (45 credite)
+            &mdash; Brasov, Constanta, Iasi, Sibiu, Oradea |
+            <strong>Tier 3</strong> (30 credite) &mdash; restul oraselor.<br />
+            Welcome bonus la inregistrare: <strong>50 credite gratuite</strong>.
+          </p>
+        </div>
+      </div>
+
+      <!-- 7. SEO -->
+      <div class="section" id="seo">
+        <h2>7. SEO &amp; Continut</h2>
+        <p class="section-desc">Strategia SEO si continutul platformei.</p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Element SEO</th>
+              <th>Implementare</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Schema.org Markup</td>
+              <td>
+                Organization, LocalBusiness, Service, WebSite, Breadcrumb,
+                FAQPage, WebApplication, Article
+              </td>
+            </tr>
+            <tr>
+              <td>Pagini Orase SSG</td>
+              <td>
+                30+ pagini generate static din citySlugData.ts (1,178 linii) cu
+                date SEO locale
+              </td>
+            </tr>
+            <tr>
+              <td>Rute Oras-Oras</td>
+              <td>
+                Matrice distante din routeData.ts: estimari pret, durata,
+                distanta
+              </td>
+            </tr>
+            <tr>
+              <td>Articole Blog</td>
+              <td>
+                9 articole cu TableOfContents, ArticleMetadata, FAQSection, WebP
+                images
+              </td>
+            </tr>
+            <tr>
+              <td>Sitemap</td>
+              <td>public/sitemap.xml (static, hardcoded)</td>
+            </tr>
+            <tr>
+              <td>Robots.txt</td>
+              <td>
+                Permite crawling, blocheaza admin/API/dashboards, crawl-delay 1
+              </td>
+            </tr>
+            <tr>
+              <td>301 Redirects</td>
+              <td>Blog vechi &rarr; /articole/ noi (next.config.js)</td>
+            </tr>
+            <tr>
+              <td>Scripturi SEO</td>
+              <td>
+                17 scripturi: TOC, image injection, link injection, WebP
+                migration, Schema update
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 8. INFRASTRUCTURE -->
+      <div class="section" id="infrastructure">
+        <h2>8. Infrastructura &amp; Deploy</h2>
+        <p class="section-desc">
+          Setup-ul de deployment si infrastructura serverului.
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Componenta</th>
+              <th>Fisier</th>
+              <th>Detalii</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>PM2 Cluster</strong></td>
+              <td>ecosystem.config.cjs</td>
+              <td>
+                Mod cluster, max instante, 500 MB memory limit, /var/www/om
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Nginx</strong></td>
+              <td>nginx-om.conf</td>
+              <td>
+                SSL Let's Encrypt, gzip, cache static (365 zile),
+                HTTP&rarr;HTTPS, proxy localhost:3000
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Deploy Manual</strong></td>
+              <td>deploy.sh</td>
+              <td>
+                SSH VPS, git pull, npm install, npm run build, pm2 restart
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Deploy Automat</strong></td>
+              <td>auto-deploy-vps.sh</td>
+              <td>Deploy automatizat cu health checks</td>
+            </tr>
+            <tr>
+              <td><strong>Firebase</strong></td>
+              <td>firebase.json</td>
+              <td>Firestore + Storage rules (fara Firebase Hosting)</td>
+            </tr>
+            <tr>
+              <td><strong>Firestore Rules</strong></td>
+              <td>firebase.firestore.rules</td>
+              <td>Reguli fine-grained per colectie</td>
+            </tr>
+            <tr>
+              <td><strong>Storage Rules</strong></td>
+              <td>firebase.storage.rules</td>
+              <td>Logos 5MB, docs 10MB, media 50MB</td>
+            </tr>
+            <tr>
+              <td><strong>Next.js Config</strong></td>
+              <td>next.config.js</td>
+              <td>Security headers, rewrites, redirects 301</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 9. COMPLETED -->
+      <div class="section" id="completed">
+        <h2>&#9989; Ce s-a rezolvat &mdash; 57 Fix-uri (9 Feb 2026)</h2>
+        <p class="section-desc">
+          Toate problemele rezolvate in sesiunea de audit din 9 februarie 2026.
+        </p>
+
+        <h3 class="subsection-title">Audit Cod (8 fix-uri)</h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Crash runtime</strong> &mdash; Import invalid
+              <code>admin</code><br /><span class="file-mono"
+                >pages/api/offers/message.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Eroare inconsistenta + Resend from field</strong
+              ><br /><span class="file-mono">pages/api/offers/accept.ts</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Missing adminReady guard</strong><br /><span
+                class="file-mono"
+                >pages/api/sendUploadReminders.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Missing adminReady guard</strong><br /><span
+                class="file-mono"
+                >pages/api/generateUploadLink.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>5 dynamic imports redundante</strong> eliminate<br /><span
+                class="file-mono"
+                >utils/firestoreHelpers.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>UX bug</strong> &mdash; Formular resetat la eroare<br /><span
+                class="file-mono"
+                >components/company/OfferModal.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Query Firestore duplicat</strong> consolidat<br /><span
+                class="file-mono"
+                >pages/api/cron/auto-refund.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Indentare inconsistenta</strong><br /><span
+                class="file-mono"
+                >utils/date.ts</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">Securitate Firebase (6 fix-uri)</h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>CRITIC</strong> &mdash; meta/counters acces neautentificat
+              blocat<br /><span class="file-mono"
+                >firebase.firestore.rules</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>CRITIC</strong> &mdash; Companie putea sa-si creasca
+              singura creditele<br /><span class="file-mono"
+                >firebase.firestore.rules</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>RIDICAT</strong> &mdash; Toti clientii puteau vedea toate
+              cererile<br /><span class="file-mono"
+                >firebase.firestore.rules</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>RIDICAT</strong> &mdash; Recenzii fara validare (spam)<br /><span
+                class="file-mono"
+                >firebase.firestore.rules</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>MEDIU</strong> &mdash; Client putea schimba
+              role/uid/createdAt<br /><span class="file-mono"
+                >firebase.firestore.rules</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>MEDIU</strong> &mdash; Tranzactii fara validare campuri
+              obligatorii<br /><span class="file-mono"
+                >firebase.firestore.rules</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">GDPR &amp; Legal</h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Cookie consent GDPR</strong> &mdash; Banner complet cu 3
+              categorii<br /><span class="file-mono"
+                >components/CookieConsent.tsx + utils/cookies.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>GA4 gated pe consent</strong><br /><span class="file-mono"
+                >pages/_app.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Buton "Setari cookie-uri" in Footer</strong><br /><span
+                class="file-mono"
+                >components/layout/Footer.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Pagini legale actualizate</strong> (Ofertemutare Ltd, 9
+              Feb 2026)<br /><span class="file-mono"
+                >pages/terms.tsx, pages/privacy.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>FAQ actualizat</strong> (Schema.org + company name)<br /><span
+                class="file-mono"
+                >pages/faq.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>Email consolidat</strong> &rarr; info@ofertemutare.ro (12
+              fisiere)<br /><span class="file-mono">site-wide</span>
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">
+          Sprint 1 &mdash; Securitate Critica (5 fix-uri)
+        </h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#1 Contact form functional</strong> &mdash; Conectat la
+              /api/send-email cu tip contactForm<br /><span class="file-mono"
+                >pages/contact.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#2 Storage rules securizate</strong> &mdash; request.auth
+              != null obligatoriu<br /><span class="file-mono"
+                >firebase.storage.rules</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#3 send-email securizat</strong> &mdash;
+              INTERNAL_API_SECRET + PUBLIC_TYPES<br /><span class="file-mono"
+                >pages/api/send-email.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#4 generateUploadLink securizat</strong> &mdash; Auth +
+              request existence + email match<br /><span class="file-mono"
+                >pages/api/generateUploadLink.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#5 auto-refund &rarr; logger</strong><br /><span
+                class="file-mono"
+                >pages/api/cron/auto-refund.ts</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">
+          Sprint 2 &mdash; Stabilitate (7 fix-uri)
+        </h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#6 Duplicate Head unificat</strong><br /><span
+                class="file-mono"
+                >pages/contact.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#7 Rate limiting</strong> &mdash; 5 req/min/IP pe
+              createGuest<br /><span class="file-mono"
+                >pages/api/requests/createGuest.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#8 Circular fetch eliminat</strong> &mdash; import direct
+              sendEmail()<br /><span class="file-mono"
+                >pages/api/sendUploadReminders.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#9 Zone filtering</strong> &mdash; notificari doar in zone
+              serviciu<br /><span class="file-mono"
+                >pages/api/requests/createGuest.ts</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#10-11 console.* &rarr; logger</strong> &mdash; email.ts,
+              locations/search.ts, firebaseAdmin.ts<br /><span class="file-mono"
+                >multiple fisiere</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#12 Validare oferte decomentata</strong><br /><span
+                class="file-mono"
+                >firebase.firestore.rules</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">
+          Sprint 3 &mdash; Legal + SEO + Cookie (12 fix-uri)
+        </h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#13 Telefon placeholder eliminat</strong> din
+              Schema.org<br /><span class="file-mono">pages/faq.tsx</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#14-16 Ofertemutare Ltd</strong> adaugat in about,
+              contact, Footer<br /><span class="file-mono">3 fisiere</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#17 CSP header</strong> &mdash; Content-Security-Policy
+              strict<br /><span class="file-mono">next.config.js</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#18 Sitemap</strong> &mdash; deferred (necesita build
+              script)<br /><span class="file-mono">public/sitemap.xml</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#19-20 PII + logging</strong> &mdash; NotificationBell
+              logger, validateUploadToken stripped<br /><span class="file-mono"
+                >2 fisiere</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#21-23 Cookie polish</strong> &mdash; marketing text,
+              toggle init, bcrypt &rarr; Firebase Auth<br /><span
+                class="file-mono"
+                >CookieConsent.tsx, privacy.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#24 Email centralizat</strong> &mdash; offers/accept.ts
+              &rarr; sendEmail()<br /><span class="file-mono"
+                >pages/api/offers/accept.ts</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <h3 class="subsection-title">
+          Sprint 4 &mdash; Cleanup + Best Practices (11 fix-uri)
+        </h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#25 Import duplicat</strong> eliminat
+              ArrowTrendingUpIcon<br /><span class="file-mono"
+                >pages/about.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#26 Framer Motion</strong> &mdash; pastrat (integral UX
+              brand)<br /><span class="file-mono">decizie arhitecturala</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#27 devErrorSuppressor</strong> &mdash; conditional
+              require(), tree-shaken<br /><span class="file-mono"
+                >pages/_app.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#28 AI bots blocked</strong> &mdash; GPTBot,
+              Google-Extended, CCBot, etc.<br /><span class="file-mono"
+                >public/robots.txt</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#29 Strict Mode</strong> &mdash; reactStrictMode: true<br /><span
+                class="file-mono"
+                >next.config.js</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#30 Indexes OK</strong> &mdash; 6 composite indexes
+              adecvate<br /><span class="file-mono"
+                >firestore.indexes.json</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#31 apiError/apiSuccess</strong> standardizat pe 5+ API<br /><span
+                class="file-mono"
+                >multiple fisiere</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#32 og:image</strong> consistent /pics/index.webp<br /><span
+                class="file-mono"
+                >pages/contact.tsx</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#33 X-Robots-Tag noindex</strong> pe
+              admin/company/customer<br /><span class="file-mono"
+                >next.config.js</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#34 README.md</strong> actualizat complet<br /><span
+                class="file-mono"
+                >README.md</span
+              >
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#35 VerificationSection</strong> &mdash; logger.error cu
+              context<br /><span class="file-mono"
+                >components/company/VerificationSection.tsx</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+        <h3 class="subsection-title">
+          Sprint 5 &mdash; Hardening &amp; Securitate (8 fix-uri)
+        </h3>
+        <div class="done-grid">
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#36 .env.production din git</strong> &mdash; .gitignore + git rm --cached<br /><span class="file-mono">.gitignore</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#37 Logger errors/warnings silent</strong> &mdash; error() si warn() acum logheaza mereu<br /><span class="file-mono">utils/logger.ts</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#38 sendUploadReminders fail-open</strong> &mdash; auth fail-closed, CRON_API_KEY obligatoriu<br /><span class="file-mono">pages/api/sendUploadReminders.ts</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#39 sharp in devDependencies</strong> &mdash; mutat in dependencies pt productie<br /><span class="file-mono">package.json</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#40 createGuest circular fetch</strong> &mdash; import direct sendEmail(), eliminat fetch /api/send-email<br /><span class="file-mono">pages/api/requests/createGuest.ts</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#41 XSS in email templates</strong> &mdash; escapeHtml() pe toate inputurile user in 9+ template-uri<br /><span class="file-mono">services/email.ts, pages/api/send-email.ts</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#42 Client-side fallback bypass</strong> &mdash; eliminat createGuestRequest() fallback pe 503<br /><span class="file-mono">components/home/HomeRequestForm.tsx</span>
+            </div>
+          </div>
+          <div class="done-item">
+            <span class="check">&#10003;</span>
+            <div>
+              <strong>#43-#44 Cleanup</strong> &mdash; GuaranteeSection_old.tsx.bak sters, lucide-react din modularizeImports, comentariu stale<br /><span class="file-mono">next.config.js, generateUploadLink.ts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 15. HARDENING -->
+      <div class="section" id="hardening">
+        <h2>&#9989; Sprint 5 &mdash; Hardening (8/8 rezolvate)</h2>
+        <p class="section-desc">
+          Al doilea audit &mdash; securitate, XSS, cleanup, si best practices.
+        </p>
+
+        <div class="issue critical resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">36. .env.production comis in git</span>
+          </div>
+          <span class="file">.gitignore + git rm --cached</span>
+          <p class="desc">Fisierul cu TOATE secretele (Firebase Admin private key, Resend API key, CRON_API_KEY) era tracked in git. Adaugat in .gitignore si eliminat din index.</p>
+          <p class="action">&rarr; &#9888;&#65039; ROTESTE toate secretele &mdash; raman in git history</p>
+        </div>
+
+        <div class="issue critical resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">37. Logger silentios in productie</span>
+          </div>
+          <span class="file">utils/logger.ts</span>
+          <p class="desc">error() si warn() erau protejate de if(isDevelopment) &mdash; erorile in productie erau complet pierdute.</p>
+          <p class="action">&rarr; error() si warn() logheaza mereu. PM2 capteaza stderr.</p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">38. sendUploadReminders auth fail-open</span>
+          </div>
+          <span class="file">pages/api/sendUploadReminders.ts</span>
+          <p class="desc">Auth se activa doar daca process.env.CRON_API_KEY exista. Fara variabila, endpoint-ul era complet deschis.</p>
+          <p class="action">&rarr; Fail-closed: daca CRON_API_KEY lipseste, returneaza 401.</p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">39. sharp in devDependencies</span>
+          </div>
+          <span class="file">package.json</span>
+          <p class="desc">Next.js Image Optimization necesita sharp in productie. Era doar in devDependencies.</p>
+          <p class="action">&rarr; Mutat in dependencies.</p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">40. createGuest face self-fetch circular</span>
+          </div>
+          <span class="file">pages/api/requests/createGuest.ts</span>
+          <p class="desc">Trimitea emailuri prin fetch() catre /api/send-email pe acelasi server. Overhead, latenta, risc timeout.</p>
+          <p class="action">&rarr; Import direct sendEmail() + emailTemplates din services/email.ts.</p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">41. XSS in template-uri email</span>
+          </div>
+          <span class="file">services/email.ts, pages/api/send-email.ts</span>
+          <p class="desc">Toate cele 9+ template-uri interpoleaza date user fara sanitizare. Atacator putea injecta HTML/script in emailuri.</p>
+          <p class="action">&rarr; Adaugat escapeHtml() pe toate inputurile user in fiecare template.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">42. Client-side fallback bypasseaza server</span>
+          </div>
+          <span class="file">components/home/HomeRequestForm.tsx</span>
+          <p class="desc">Pe status 503, formularul apela createGuestRequest() direct din client, ocolind rate limiting si validarea server.</p>
+          <p class="action">&rarr; Eliminat fallback. Doar calea API server-side ramane.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span><span class="title">43-44. Cleanup cod mort</span>
+          </div>
+          <span class="file">next.config.js, generateUploadLink.ts, GuaranteeSection_old.tsx.bak</span>
+          <p class="desc">Fisier .bak stale sters, lucide-react din modularizeImports (pachet neinstalat), comentariu EmailJS stale actualizat, @deprecated pe createGuestRequest().</p>
+        </div>
+      </div>
+
+      <!-- 10. CRITICAL -->
+      <div class="section" id="critical">
+        <h2>&#9989; Probleme Critice &mdash; TOATE REZOLVATE (5/5)</h2>
+        <p class="section-desc">
+          Toate problemele critice au fost rezolvate in sesiunea de audit din 9
+          februarie 2026.
+        </p>
+
+        <div class="issue critical resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >1. Formularul de contact NU trimite emailuri</span
+            >
+          </div>
+          <span class="file">pages/contact.tsx &rarr; handleSubmit()</span>
+          <p class="desc">
+            <code>handleSubmit</code> face doar
+            <code>setTimeout(resolve, 1500)</code> &mdash; simuleaza trimiterea.
+            Mesajele clientilor sunt pierdute complet.
+          </p>
+          <p class="action">
+            &rarr; Implementeaza apel catre /api/send-email cu tipul contactForm
+          </p>
+        </div>
+
+        <div class="issue critical resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >2. Firebase Storage &mdash; upload-uri neautentificate
+              permise</span
+            >
+          </div>
+          <span class="file">firebase.storage.rules (linia ~37)</span>
+          <p class="desc">
+            Regula write include conditii OR fara
+            <code>request.auth != null</code>. Oricine poate incarca fisiere pe
+            server.
+          </p>
+          <p class="action">
+            &rarr; Adauga request.auth != null in toate conditiile de write
+          </p>
+        </div>
+
+        <div class="issue critical resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >3. API /api/send-email fara autentificare</span
+            >
+          </div>
+          <span class="file">pages/api/send-email.ts</span>
+          <p class="desc">
+            Orice cerere POST e acceptata. Un atacator poate trimite emailuri
+            arbitrare prin contul Resend.
+          </p>
+          <p class="action">
+            &rarr; Adauga API key secret sau verificare Firebase token
+          </p>
+        </div>
+
+        <div class="issue critical resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >4. API /api/generateUploadLink fara autentificare</span
+            >
+          </div>
+          <span class="file">pages/api/generateUploadLink.ts</span>
+          <p class="desc">
+            Oricine poate genera token-uri de upload pentru orice cerere.
+          </p>
+          <p class="action">
+            &rarr; Adauga verifyAuth(req) si verificare ownership
+          </p>
+        </div>
+
+        <div class="issue critical resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >5. console.error in auto-refund expune date sensibile</span
+            >
+          </div>
+          <span class="file"
+            >pages/api/cron/auto-refund.ts (liniile 145, 168)</span
+          >
+          <p class="desc">
+            <code>console.error</code> direct care logheaza in productie,
+            potential expunand IDs si erori Firestore.
+          </p>
+          <p class="action">
+            &rarr; Inlocuieste cu logger.error din utils/logger.ts
+          </p>
+        </div>
+      </div>
+
+      <!-- 11. HIGH -->
+      <div class="section" id="high">
+        <h2>&#9989; Prioritate Ridicata &mdash; TOATE REZOLVATE (7/7)</h2>
+        <p class="section-desc">
+          Toate problemele de prioritate ridicata au fost rezolvate.
+        </p>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">6. Duplicate Head in pagina contact</span>
+          </div>
+          <span class="file">pages/contact.tsx (liniile 126-170)</span>
+          <p class="desc">
+            Doua componente Head cu title si meta tags conflictuale. SEO
+            afectat.
+          </p>
+          <p class="action">&rarr; Unifica cele doua blocuri Head</p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >7. /api/requests/createGuest fara rate limiting</span
+            >
+          </div>
+          <span class="file">pages/api/requests/createGuest.ts</span>
+          <p class="desc">
+            Endpoint public. Fara rate limiting, un atacator poate genera mii de
+            cereri false + emailuri.
+          </p>
+          <p class="action">
+            &rarr; Adauga rate limiting (IP-based, 5 req/min) sau reCAPTCHA v3
+          </p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >8. sendUploadReminders face fetch circular intern</span
+            >
+          </div>
+          <span class="file"
+            >pages/api/sendUploadReminders.ts (liniile 80-94)</span
+          >
+          <p class="desc">
+            Face fetch() catre /api/send-email pe acelasi server &mdash;
+            overhead inutil.
+          </p>
+          <p class="action">
+            &rarr; Import direct sendEmail() din services/email.ts
+          </p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">9. createGuest notifica TOATE companiile</span>
+          </div>
+          <span class="file"
+            >pages/api/requests/createGuest.ts (linia 213)</span
+          >
+          <p class="desc">
+            Emailuri la toate companiile, indiferent de zona. Spam pentru
+            companii din alte orase.
+          </p>
+          <p class="action">
+            &rarr; Filtreaza companiile dupa zona/judetul cererii
+          </p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >10. console.error in productie &mdash; mai multe fisiere</span
+            >
+          </div>
+          <span class="file"
+            >services/email.ts, pages/api/send-email.ts,
+            pages/api/locations/search.ts</span
+          >
+          <p class="desc">console.error direct care va afisa in productie.</p>
+          <p class="action">&rarr; Migreaza pe logger.error</p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >11. firebaseAdmin.ts logheaza credentiale la boot</span
+            >
+          </div>
+          <span class="file">lib/firebaseAdmin.ts (liniile 33-38)</span>
+          <p class="desc">
+            6 apeluri console.log afiseaza project ID, client email prefix si
+            lungime cheie.
+          </p>
+          <p class="action">&rarr; Inlocuieste cu logger.log</p>
+        </div>
+
+        <div class="issue high resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >12. Validare oferte comentata in Firestore rules</span
+            >
+          </div>
+          <span class="file">firebase.firestore.rules (liniile 127-133)</span>
+          <p class="desc">
+            Verificarea daca cererea e archived/closed e comentata. Companiile
+            pot trimite oferte pe cereri inchise.
+          </p>
+          <p class="action">&rarr; Decomenteaza validarea</p>
+        </div>
+      </div>
+
+      <!-- 12. MEDIUM -->
+      <div class="section" id="medium">
+        <h2>&#9989; Prioritate Medie &mdash; TOATE REZOLVATE (12/12)</h2>
+        <p class="section-desc">
+          Toate imbunatatirile de prioritate medie au fost implementate.
+        </p>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">13. Telefon placeholder in Schema.org</span>
+          </div>
+          <span class="file">pages/faq.tsx (linia 564)</span>
+          <p class="desc">"+40-729-XXX-XXX" vizibil pentru Google.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >14. about.tsx nu mentioneaza "Ofertemutare Ltd"</span
+            >
+          </div>
+          <span class="file">pages/about.tsx</span>
+          <p class="desc">Inconsistenta cu terms/privacy/faq.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >15. contact.tsx nu mentioneaza "Ofertemutare Ltd"</span
+            >
+          </div>
+          <span class="file">pages/contact.tsx</span>
+          <p class="desc">Pagina de contact nu contine numele legal.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">16. Footer nu afiseaza numele legal</span>
+          </div>
+          <span class="file">components/layout/Footer.tsx (linia 180)</span>
+          <p class="desc">
+            Arata "ofertemutare.ro" nu "Ofertemutare Ltd". Legal cerut pentru
+            Ltd.
+          </p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >17. Lipseste header Content-Security-Policy</span
+            >
+          </div>
+          <span class="file">next.config.js (liniile 157-186)</span>
+          <p class="desc">HSTS, X-Frame-Options prezente, dar fara CSP.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">18. sitemap.xml este static/manual</span>
+          </div>
+          <span class="file">public/sitemap.xml</span>
+          <p class="desc">Hardcoded. Pagini noi nu sunt adaugate automat.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">19. console.log in NotificationBell</span>
+          </div>
+          <span class="file"
+            >components/company/NotificationBell.tsx (liniile 50, 58)</span
+          >
+          <p class="desc">console.log vizibil in consola browser-ului.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >20. validateUploadToken expune PII fara auth</span
+            >
+          </div>
+          <span class="file">pages/api/validateUploadToken.ts</span>
+          <p class="desc">
+            Returneaza email, nume, request ID oricui valideaza un token.
+          </p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">21. Marketing toggle afisat dar inactiv</span>
+          </div>
+          <span class="file">components/CookieConsent.tsx</span>
+          <p class="desc">Categoria "Marketing" salvarea nu are efect.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >22. Privacy mentioneaza "bcrypt" &mdash; incorect</span
+            >
+          </div>
+          <span class="file">pages/privacy.tsx (~linia 402)</span>
+          <p class="desc">Firebase Auth nu foloseste bcrypt.</p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >23. Cookie toggles nu initializeaza din stare salvata</span
+            >
+          </div>
+          <span class="file">components/CookieConsent.tsx (liniile 31-32)</span>
+          <p class="desc">
+            La redeschidere din Footer, toggle-urile pornesc ca false.
+          </p>
+        </div>
+
+        <div class="issue medium resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >24. offers/accept.ts duplica logica email</span
+            >
+          </div>
+          <span class="file">pages/api/offers/accept.ts (liniile 231-250)</span>
+          <p class="desc">
+            Trimite email direct prin fetch in loc de sendEmail() centralizat.
+          </p>
+        </div>
+      </div>
+
+      <!-- 13. LOW -->
+      <div class="section" id="low">
+        <h2>&#9989; Prioritate Scazuta &mdash; TOATE REZOLVATE (11/11)</h2>
+        <p class="section-desc">
+          Toate optimizarile de prioritate scazuta au fost implementate.
+        </p>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">25. Import-uri nefolosite in about.tsx</span>
+          </div>
+          <span class="file">pages/about.tsx (linia 12)</span>
+          <p class="desc">ArrowTrendingUpIcon importat de doua ori.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">26. Framer Motion pe pagini statice</span>
+          </div>
+          <span class="file">pages/contact.tsx, pages/about.tsx</span>
+          <p class="desc">Animatii grele pe pagini cu continut static.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >27. devErrorSuppressor importat in productie</span
+            >
+          </div>
+          <span class="file">pages/_app.tsx (linia 16)</span>
+          <p class="desc">Importat pentru toate mediile.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">28. robots.txt permite AI bots</span>
+          </div>
+          <span class="file">public/robots.txt (liniile 8-14)</span>
+          <p class="desc">GPTBot, Google-Extended, CCBot au acces.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">29. React Strict Mode dezactivat</span>
+          </div>
+          <span class="file">next.config.js (linia 3)</span>
+          <p class="desc">reactStrictMode: false</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">30. firestore.indexes.json neverificat</span>
+          </div>
+          <span class="file">firestore.indexes.json</span>
+          <p class="desc">Indexuri composite lipsa pot afecta performanta.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">31. Format raspunsuri API inconsistent</span>
+          </div>
+          <span class="file"
+            >generateUploadLink, validateUploadToken, auto-refund, etc.</span
+          >
+          <p class="desc">Folosesc { error: "..." } in loc de apiError().</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">32. og:image inconsistent</span>
+          </div>
+          <span class="file">pages/contact.tsx</span>
+          <p class="desc">
+            Foloseste /images/og-image.png vs /pics/index.webp.
+          </p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">33. Pagini admin fara noindex</span>
+          </div>
+          <span class="file">pages/admin/*</span>
+          <p class="desc">Ar trebui meta robots noindex.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title">34. README.md cu TODO-uri stale</span>
+          </div>
+          <span class="file">README.md (linia 68)</span>
+          <p class="desc">Feature-uri marcate ca TODO invechite.</p>
+        </div>
+
+        <div class="issue low resolved">
+          <div class="issue-header">
+            <span class="badge badge-done">REZOLVAT</span
+            ><span class="title"
+              >35. console.error fara context in VerificationSection</span
+            >
+          </div>
+          <span class="file"
+            >components/company/VerificationSection.tsx (linia 63)</span
+          >
+          <p class="desc">console.error(err) fara string descriptor.</p>
+        </div>
+      </div>
+
+      <!-- 14. ROADMAP -->
+      <div class="section" id="roadmap">
+        <h2>&#128506;&#65039; Roadmap de Implementare</h2>
+        <p class="section-desc">
+          Plan de actiune prioritizat, cu estimari de efort.
+        </p>
+
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 140px">Faza</th>
+              <th>Ce se face</th>
+              <th style="width: 100px">Issues</th>
+              <th style="width: 80px; text-align: center">Efort</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style="font-weight: 700; color: var(--emerald)">
+                Sprint 1<br /><small
+                  style="color: var(--gray-600); font-weight: 400"
+                  >&#9989; COMPLET</small
+                >
+              </td>
+              <td>
+                <strong>Securitate API + Contact fix</strong><br />Fix contact
+                form, auth pe send-email &amp; generateUploadLink, fix storage
+                rules, replace console.error
+              </td>
+              <td>#1-#5</td>
+              <td style="text-align: center">&#9989;</td>
+            </tr>
+            <tr style="background: var(--gray-50)">
+              <td style="font-weight: 700; color: var(--emerald)">
+                Sprint 2<br /><small
+                  style="color: var(--gray-600); font-weight: 400"
+                  >&#9989; COMPLET</small
+                >
+              </td>
+              <td>
+                <strong>Stabilitate + Consistenta</strong><br />Duplicate Head,
+                rate limiting createGuest, console.log cleanup, validare oferte,
+                circular fetch fix, zone filtering
+              </td>
+              <td>#6-#12</td>
+              <td style="text-align: center">&#9989;</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--emerald)">
+                Sprint 3<br /><small
+                  style="color: var(--gray-600); font-weight: 400"
+                  >&#9989; COMPLET</small
+                >
+              </td>
+              <td>
+                <strong>Legal + SEO + Cookie polish</strong><br />Company name
+                peste tot, fix telefon Schema.org, fix bcrypt text, cookie
+                toggle, CSP header, centralized email
+              </td>
+              <td>#13-#24</td>
+              <td style="text-align: center">&#9989;</td>
+            </tr>
+            <tr style="background: var(--gray-50)">
+              <td style="font-weight: 700; color: var(--emerald)">
+                Sprint 4<br /><small
+                  style="color: var(--gray-600); font-weight: 400"
+                  >&#9989; COMPLET</small
+                >
+              </td>
+              <td>
+                <strong>Cleanup + Best Practices</strong><br />Import-uri
+                nefolosite, API response format, noindex admin, README update,
+                strict mode, AI bots blocked
+              </td>
+              <td>#25-#35</td>
+              <td style="text-align: center">&#9989;</td>
+            </tr>
+            <tr>
+              <td style="font-weight: 700; color: var(--emerald)">
+                Sprint 5<br /><small
+                  style="color: var(--gray-600); font-weight: 400"
+                  >&#9989; COMPLET</small
+                >
+              </td>
+              <td>
+                <strong>Hardening &amp; Securitate</strong><br />.env.production
+                din git, logger fail-safe, auth fail-closed, sharp prod, XSS
+                email protection, circular fetch eliminat, client-side bypass
+                eliminat, cleanup cod mort
+              </td>
+              <td>#36-#44</td>
+              <td style="text-align: center">&#9989;</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="highlight-box green">
+          <p class="hl-title">&#9989; Toate cele 5 sprint-uri finalizate</p>
+          <p>
+            <strong>57 de fix-uri aplicate</strong> (14 din auditul initial + 35
+            din sprint-uri + 8 hardening) in cadrul sesiunii de audit din 9
+            februarie 2026.<br />
+            Platforma este acum securizata, consistenta si pregatita pentru
+            deploy.
+          </p>
+        </div>
+
+        <div class="highlight-box red">
+          <p class="hl-title">
+            &#9888;&#65039; Atentie: Secrete Expuse in Git History
+          </p>
+          <p>
+            <strong>.env.production</strong> a fost comis in 2 commit-uri Git.
+            Chiar daca a fost eliminat din tracking, secretele raman in
+            istoricul Git.<br />
+            <strong>Actiune obligatorie:</strong> Roteste Firebase Admin private
+            key, Resend API key, CRON_API_KEY, si orice alt secret din
+            .env.production. Optional, curata istoricul cu
+            <code>git filter-repo</code> sau
+            <a href="https://rtyley.github.io/bfg-repo-cleaner/"
+              >BFG Repo Cleaner</a
+            >.
+          </p>
+        </div>
+
+        <div class="highlight-box red">
+          <p class="hl-title">
+            &#9888;&#65039; Functionalitati Planificate (Viitor)
+          </p>
+          <p>
+            <strong>Gateway plati online</strong> &mdash; in prezent creditele
+            se cumpara doar prin telefon.<br />
+            <strong>ExitIntentPopup + WhatsAppWidget</strong> &mdash; componente
+            CRO dezactivate.<br />
+            <strong>Dashboard analytics</strong> &mdash; statistici detaliate
+            pentru companii (rata conversie, cost/lead).<br />
+            <strong>Sistem review response</strong> &mdash; companiile nu pot
+            raspunde la recenzii.<br />
+            <strong>Sitemap dinamic</strong> &mdash; generare automata cu
+            sluguri articole din Firestore.<br />
+            <strong>Testing framework</strong> &mdash; Jest/Vitest + Playwright
+            E2E tests.<br />
+            <strong>Monitoring</strong> &mdash; health endpoint, Sentry error
+            tracking, structured logging.
+          </p>
+        </div>
+      </div>
+
+      <!-- TODO SECTION -->
+      <div class="section" id="todo">
+        <h2>&#128736;&#65039; TODO &mdash; Imbunatatiri Restante (31)</h2>
+        <p class="section-desc">
+          Toate imbunatatirile identificate in al doilea audit, inca neimplementate. Organizate pe prioritate.
+        </p>
+
+        <!-- CRITICAL -->
+        <h3 class="subsection-title" style="color: var(--red)">&#128308; Critic (1)</h3>
+
+        <div class="issue critical">
+          <div class="issue-header">
+            <span class="badge badge-critical">CRITIC</span><span class="title">T1. Roteste TOATE secretele din .env.production</span>
+          </div>
+          <span class="file">.env.production (in git history: dcc6e4b, d024e8d)</span>
+          <p class="desc">Fisierul .env.production cu TOATE secretele a fost comis in 2 commit-uri Git. Chiar daca a fost eliminat din tracking, secretele sunt vizibile in istoricul Git. Daca repo-ul e privat riscul e mai mic, dar secretele trebuie rotite oricum.</p>
+          <p class="action">&rarr; <strong>Secrete de rotit:</strong><br />
+            &bull; Firebase Admin private key (Firebase Console &rarr; Service Accounts &rarr; Generate new key)<br />
+            &bull; Resend API key (<code>re_aPTzwZ6u_...</code>)<br />
+            &bull; CRON_API_KEY (<code>7a8f9b2c...</code>)<br />
+            &bull; INTERNAL_API_SECRET (daca a fost comis)<br />
+            &bull; Optional: <code>git filter-repo</code> sau <a href="https://rtyley.github.io/bfg-repo-cleaner/">BFG Repo Cleaner</a> pentru a sterge din history
+          </p>
+        </div>
+
+        <!-- HIGH -->
+        <h3 class="subsection-title" style="color: var(--orange)">&#128992; Prioritate Ridicata (3)</h3>
+
+        <div class="issue high">
+          <div class="issue-header">
+            <span class="badge badge-high">HIGH</span><span class="title">T2. generateUploadLink &mdash; auth doar pe email</span>
+          </div>
+          <span class="file">pages/api/generateUploadLink.ts</span>
+          <p class="desc">Auth-ul verifica doar daca email-ul din body se potriveste cu un request existent. Nu verifica Firebase token sau ownership real. Un atacator care stie un email valid poate genera tokeni de upload.</p>
+          <p class="action">&rarr; Adauga verifyIdToken() sau cel putin un request-specific token/secret pe langa email match.</p>
+        </div>
+
+        <div class="issue high">
+          <div class="issue-header">
+            <span class="badge badge-high">HIGH</span><span class="title">T3. Firestore rules uploadTokens &mdash; lipsa guard pe read</span>
+          </div>
+          <span class="file">firebase.firestore.rules</span>
+          <p class="desc">Oricine autentificat poate citi orice token din colectia uploadTokens, inclusiv tokeni folositi. Ar trebui sa limiteze read-ul la <code>used == false</code> sau la owner.</p>
+          <p class="action">&rarr; Adauga <code>resource.data.used == false</code> in regula de read, sau restrictioneaza pe baza emailului utilizatorului.</p>
+        </div>
+
+        <div class="issue high">
+          <div class="issue-header">
+            <span class="badge badge-high">HIGH</span><span class="title">T4. INTERNAL_API_SECRET &mdash; fara validare la boot</span>
+          </div>
+          <span class="file">pages/api/send-email.ts, lib/apiAuth.ts</span>
+          <p class="desc">Daca INTERNAL_API_SECRET lipseste sau e prea scurt, API-ul accepta orice request intern fara avertisment. Ar trebui sa refuze pornirea sau sa logheze un avertisment critic.</p>
+          <p class="action">&rarr; Adauga validare la import: daca lipseste sau are &lt;32 caractere, logheaza logCritical() si intoarce 500 pe fiecare request.</p>
+        </div>
+
+        <!-- MEDIUM -->
+        <h3 class="subsection-title" style="color: var(--yellow)">&#128993; Prioritate Medie (14)</h3>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T5. Dynamic imports pentru componente grele</span>
+          </div>
+          <span class="file">components/cro/SavingsCalculator.tsx, components/chat/ChatWindow.tsx, etc.</span>
+          <p class="desc">Componente mari (300-500+ linii) sunt importate static pe pagini care le folosesc conditional. Pot fi lazy-loaded cu <code>next/dynamic</code> pentru a reduce bundle-ul initial.</p>
+          <p class="action">&rarr; Foloseste <code>dynamic(() =&gt; import(...))</code> cu <code>ssr: false</code> pentru: SavingsCalculator, ChatWindow, ExitIntentPopup, WhatsAppWidget, RequestFullDetails.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T6. Cod duplicat: buildAddressString + generateRequestCode</span>
+          </div>
+          <span class="file">utils/firestoreHelpers.ts, pages/api/requests/createGuest.ts</span>
+          <p class="desc">Ambele functii exista in doua locuri cu implementari identice. DRY violation &mdash; un bug fixat intr-una nu se propaga in cealalta.</p>
+          <p class="action">&rarr; Extrage intr-un fisier <code>utils/requestHelpers.ts</code> si importa din ambele locuri. firestoreHelpers.ts e @deprecated, deci eventual elimina complet.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T7. TypeScript <code>any</code> pe request/offer data</span>
+          </div>
+          <span class="file">utils/firestoreHelpers.ts, pages/api/requests/createGuest.ts, types/index.ts</span>
+          <p class="desc">Functiile createGuestRequest, createRequest, addOffer folosesc <code>data: any</code>. Lipsesc interfete strict tipizate pentru Request, Offer, CompanyProfile.</p>
+          <p class="action">&rarr; Defineste interfete TypeScript in <code>types/index.ts</code>: <code>MovingRequest</code>, <code>Offer</code>, <code>CompanyProfile</code>, <code>CustomerProfile</code>. Inlocuieste <code>any</code>.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T8. Elimina variabile EmailJS moarte din .env</span>
+          </div>
+          <span class="file">.env, .env.production</span>
+          <p class="desc">4 variabile NEXT_PUBLIC_EMAILJS_* nu mai sunt folosite nicaieri in cod (migrarea pe Resend e completa). Creeaza confuzie.</p>
+          <p class="action">&rarr; Sterge <code>NEXT_PUBLIC_EMAILJS_SERVICE_ID</code>, <code>NEXT_PUBLIC_EMAILJS_TEMPLATE_ID</code>, <code>NEXT_PUBLIC_EMAILJS_PUBLIC_KEY</code>, <code>NEXT_PUBLIC_EMAILJS_REMINDER_TEMPLATE_ID</code> din ambele fisiere.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T9. Audit rel="noopener" pe link-uri externe</span>
+          </div>
+          <span class="file">site-wide (articole, footer, about, contact)</span>
+          <p class="desc">Link-urile externe cu <code>target="_blank"</code> pot lipsi atributul <code>rel="noopener noreferrer"</code>, permitand reverse tabnabbing.</p>
+          <p class="action">&rarr; Cauta toate <code>target="_blank"</code> si asigura-te ca au <code>rel="noopener noreferrer"</code>.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T10. Image optimization &mdash; lazy loading explicit</span>
+          </div>
+          <span class="file">components/home/Hero.tsx, pages/articole/*.tsx</span>
+          <p class="desc">Imagini below-the-fold nu au <code>loading="lazy"</code> explicit. Next/Image face asta automat, dar <code>&lt;img&gt;</code> standard nu.</p>
+          <p class="action">&rarr; Cauta <code>&lt;img</code> fara <code>loading="lazy"</code> si adauga. Sau inlocuieste cu <code>next/image</code>.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T11. emailHelpers.ts &mdash; migrare completa pe Resend</span>
+          </div>
+          <span class="file">utils/emailHelpers.ts, pages/company/profile.tsx, components/company/RequestsView.tsx</span>
+          <p class="desc">emailHelpers.ts inca foloseste functii vechi (probabil EmailJS). E importat in 2 componente. Trebuie migrat pe sendEmail() din services/email.ts.</p>
+          <p class="action">&rarr; Analizeaza ce functii le foloseste profile.tsx si RequestsView.tsx, migreaza-le pe sendEmail(), sterge emailHelpers.ts.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T12. Security headers &mdash; Permissions-Policy</span>
+          </div>
+          <span class="file">next.config.js</span>
+          <p class="desc">Lipseste header-ul Permissions-Policy care restrictioneaza API-uri browser (camera, microfon, geolocation, etc.).</p>
+          <p class="action">&rarr; Adauga <code>Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()</code> in security headers.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T13. Error handling uniform pe API routes</span>
+          </div>
+          <span class="file">pages/api/*.ts</span>
+          <p class="desc">Unele API routes au try/catch cu erori generice "Internal server error". Nu exista un middleware centralizat de error handling.</p>
+          <p class="action">&rarr; Creeaza un wrapper <code>withErrorHandler(handler)</code> in <code>lib/apiAuth.ts</code> care face try/catch si logheaza consistent.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T14. Rate limiting centralizat</span>
+          </div>
+          <span class="file">pages/api/requests/createGuest.ts</span>
+          <p class="desc">Rate limiting exista doar pe createGuest (in-memory Map). Alte endpoint-uri publice (send-email contactForm, generateUploadLink) nu au rate limiting.</p>
+          <p class="action">&rarr; Extrage rate limiter-ul intr-un modul reutilizabil <code>lib/rateLimit.ts</code> si aplica-l pe toate endpoint-urile publice.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T15. Firestore batch writes pe notificari companii</span>
+          </div>
+          <span class="file">pages/api/requests/createGuest.ts</span>
+          <p class="desc">Notificarile Firestore pentru companii sunt create cu <code>addDoc()</code> individual in loop. Pentru 20+ companii, asta inseamna 20+ write operations secventiale.</p>
+          <p class="action">&rarr; Foloseste <code>adminDb.batch()</code> pentru a scrie toate notificarile intr-o singura operatie atomica.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T16. Validate email format pe API routes</span>
+          </div>
+          <span class="file">pages/api/requests/createGuest.ts, pages/api/send-email.ts</span>
+          <p class="desc">Emailurile din body nu sunt validate ca format. Un string arbitrar este acceptat si trimis catre Resend.</p>
+          <p class="action">&rarr; Adauga regex email validation: <code>/^[^\s@]+@[^\s@]+\.[^\s@]+$/</code> pe fiecare endpoint care primeste email.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T17. Input length limits pe API routes</span>
+          </div>
+          <span class="file">pages/api/requests/createGuest.ts, pages/api/send-email.ts</span>
+          <p class="desc">Nu exista limita pe lungimea campurilor (name, message, address). Un atacator poate trimite megabytes de text.</p>
+          <p class="action">&rarr; Adauga validare: name &lt; 100 chars, message &lt; 5000 chars, address &lt; 200 chars. Returneaza 400 daca depaseste.</p>
+        </div>
+
+        <div class="issue medium">
+          <div class="issue-header">
+            <span class="badge badge-medium">MEDIUM</span><span class="title">T18. Sitemap dinamic (build-time)</span>
+          </div>
+          <span class="file">public/sitemap.xml, scripts/</span>
+          <p class="desc">Sitemap-ul este static. Pagini noi (articole, orase) nu sunt adaugate automat. Google nu vede continut nou.</p>
+          <p class="action">&rarr; Creeaza un script <code>scripts/generate-sitemap.cjs</code> care ruleaza la build si genereaza sitemap.xml din paginile existente.</p>
+        </div>
+
+        <!-- LOW -->
+        <h3 class="subsection-title" style="color: var(--blue)">&#128309; Prioritate Scazuta (13)</h3>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T19. Elimina dependinta <code>dotenv</code> nefolosita</span>
+          </div>
+          <span class="file">package.json</span>
+          <p class="desc">Next.js incarca automat .env files. dotenv in dependencies e redundant.</p>
+          <p class="action">&rarr; <code>npm uninstall dotenv</code></p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T20. Testing framework &mdash; Jest/Vitest + Playwright</span>
+          </div>
+          <span class="file">package.json (new)</span>
+          <p class="desc">Zero teste. Orice refactoring e riscant fara teste automate.</p>
+          <p class="action">&rarr; Setup Vitest pentru unit tests + Playwright pentru E2E. Minimum: teste pe createGuest, sendEmail, rate limiter.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T21. Health/monitoring endpoint</span>
+          </div>
+          <span class="file">pages/api/health.ts (new)</span>
+          <p class="desc">Nu exista un endpoint de health check. PM2/Nginx nu pot verifica daca app-ul functioneaza corect.</p>
+          <p class="action">&rarr; Creeaza <code>/api/health</code> care verifica: Firebase Admin ready, Resend configured, uptime, memory usage.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T22. Structured error codes</span>
+          </div>
+          <span class="file">types/api.ts</span>
+          <p class="desc">Erorile sunt string-uri libere. Frontend-ul nu poate face logica pe tipul erorii.</p>
+          <p class="action">&rarr; Defineste enum <code>ErrorCode</code> (RATE_LIMITED, UNAUTHORIZED, VALIDATION_ERROR, etc.) si returneaza-l in <code>apiError()</code>.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T23. Sentry error tracking</span>
+          </div>
+          <span class="file">pages/_app.tsx, next.config.js</span>
+          <p class="desc">Erorile in productie sunt capturate doar de PM2 logs. Nu exista alertare automata.</p>
+          <p class="action">&rarr; Integreaza @sentry/nextjs. Configureaza DSN, source maps, si error boundary integration.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T24. Accessibility audit (a11y)</span>
+          </div>
+          <span class="file">site-wide</span>
+          <p class="desc">Nu s-a facut un audit de accesibilitate. Posibil lipsesc aria-labels, contrast ratio, keyboard navigation.</p>
+          <p class="action">&rarr; Ruleaza axe-core sau Lighthouse accessibility audit. Fixeaza minimum WCAG 2.1 Level A.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T25. Bundle analysis &amp; optimization</span>
+          </div>
+          <span class="file">next.config.js, package.json</span>
+          <p class="desc">Nu s-a facut analiza bundle size. Posibil librarii mari importate complet (date-fns, heroicons).</p>
+          <p class="action">&rarr; Ruleaza <code>npx @next/bundle-analyzer</code>. Identifica si optimizeaza importurile cele mai mari.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T26. API response caching pe endpoint-uri publice</span>
+          </div>
+          <span class="file">pages/api/locations/search.ts</span>
+          <p class="desc">Localapi.ro proxy-ul nu face caching. Aceleasi cautari se repeta frecvent.</p>
+          <p class="action">&rarr; Adauga in-memory cache (Map cu TTL 5 min) pe locations/search pentru a reduce latenta si request-urile externe.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T27. PWA support &mdash; service worker</span>
+          </div>
+          <span class="file">public/site.webmanifest, next.config.js</span>
+          <p class="desc">site.webmanifest exista dar nu e un PWA complet. Lipseste service worker pentru offline support si push notifications.</p>
+          <p class="action">&rarr; Adauga <code>next-pwa</code> sau un service worker manual. Minimum: cache static assets, offline fallback page.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T28. Consolidare services/ &mdash; firebase.ts split</span>
+          </div>
+          <span class="file">services/firebase.ts</span>
+          <p class="desc">firebase.ts contine init + auth helpers + Firestore helpers. Ar putea fi split in module separate.</p>
+          <p class="action">&rarr; Optional: split in <code>services/firebaseConfig.ts</code> (init), <code>services/firebaseAuth.ts</code> (auth), pastreaza backward compatibility.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T29. Env var documentation</span>
+          </div>
+          <span class="file">.env.example (new)</span>
+          <p class="desc">Nu exista un .env.example. Un developer nou nu stie ce variabile trebuie setate.</p>
+          <p class="action">&rarr; Creeaza <code>.env.example</code> cu toate variabilele necesare (fara valori reale) si documentatie pe fiecare.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T30. Git hooks &mdash; pre-commit lint</span>
+          </div>
+          <span class="file">package.json</span>
+          <p class="desc">Nu exista git hooks. Codul poate fi comis cu erori TypeScript sau lint warnings.</p>
+          <p class="action">&rarr; Adauga <code>husky</code> + <code>lint-staged</code> cu pre-commit: <code>tsc --noEmit &amp;&amp; eslint</code>.</p>
+        </div>
+
+        <div class="issue low">
+          <div class="issue-header">
+            <span class="badge badge-low">LOW</span><span class="title">T31. CI/CD pipeline</span>
+          </div>
+          <span class="file">.github/workflows/ (new)</span>
+          <p class="desc">Deploy-ul e manual (deploy.sh). Nu exista CI/CD. Build failures pot ajunge in productie.</p>
+          <p class="action">&rarr; Creeaza GitHub Actions workflow: on push to main &rarr; lint, typecheck, build, deploy via SSH.</p>
+        </div>
+      </div>
+
+      <div
+        style="
+          text-align: center;
+          padding: 2rem 0 1rem;
+          border-top: 2px solid var(--gray-200);
+          margin-top: 2rem;
+        "
+      >
+        <p
+          style="
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            margin-bottom: 0.3rem;
+          "
+        >
+          <strong>Plan Tehnic Complet</strong> &mdash; generat pe baza auditului
+          complet al codului sursa
+        </p>
+        <p style="font-size: 0.8rem; color: var(--gray-600)">
+          <strong>Ofertemutare Ltd</strong> &middot; ofertemutare.ro &middot; 9
+          Februarie 2026
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

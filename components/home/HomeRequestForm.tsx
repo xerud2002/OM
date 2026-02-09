@@ -3,7 +3,20 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
-import { ArrowRightIcon as ArrowRight, MapPinIcon as MapPin, HomeIcon as Home, SparklesIcon as Sparkles, CalendarIcon as Calendar, UserIcon as User, CubeIcon as Package, ChevronLeftIcon as ChevronLeft, ChevronRightIcon as ChevronRight, CheckCircleIcon as CheckCircle, XMarkIcon as X, EnvelopeIcon as Mail } from "@heroicons/react/24/outline";
+import {
+  ArrowRightIcon as ArrowRight,
+  MapPinIcon as MapPin,
+  HomeIcon as Home,
+  SparklesIcon as Sparkles,
+  CalendarIcon as Calendar,
+  UserIcon as User,
+  CubeIcon as Package,
+  ChevronLeftIcon as ChevronLeft,
+  ChevronRightIcon as ChevronRight,
+  CheckCircleIcon as CheckCircle,
+  XMarkIcon as X,
+  EnvelopeIcon as Mail,
+} from "@heroicons/react/24/outline";
 import type { FormShape } from "@/components/customer/RequestForm";
 
 // Location Autocomplete Component using localapi.ro
@@ -26,7 +39,7 @@ function LocationAutocomplete({
   label?: string;
 }) {
   const [inputValue, setInputValue] = useState(
-    value.city && value.county ? `${value.city}, ${value.county}` : ""
+    value.city && value.county ? `${value.city}, ${value.county}` : "",
   );
   const [suggestions, setSuggestions] = useState<LocalApiResult[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -37,7 +50,10 @@ function LocationAutocomplete({
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setShowDropdown(false);
       }
     };
@@ -63,10 +79,10 @@ function LocationAutocomplete({
     setIsLoading(true);
     try {
       const res = await fetch(
-        `/api/locations/search?q=${encodeURIComponent(query)}`
+        `/api/locations/search?q=${encodeURIComponent(query)}`,
       );
       const data = await res.json();
-      
+
       // API already returns normalized format
       if (Array.isArray(data)) {
         setSuggestions(data);
@@ -85,7 +101,7 @@ function LocationAutocomplete({
     const val = e.target.value;
     setInputValue(val);
     setShowDropdown(true);
-    
+
     // Clear previous selection
     if (value.city || value.county) {
       onChange("", "");
@@ -114,7 +130,9 @@ function LocationAutocomplete({
   return (
     <div ref={containerRef} className="relative">
       {label && (
-        <label className="mb-1 block text-xs font-medium text-gray-600">{label}</label>
+        <label className="mb-1 block text-xs font-medium text-gray-600">
+          {label}
+        </label>
       )}
       <div className="relative">
         <input
@@ -152,7 +170,9 @@ function LocationAutocomplete({
                   className="cursor-pointer px-3 py-2 text-sm hover:bg-emerald-50 flex items-center justify-between"
                 >
                   <span className="font-medium text-gray-800">{item.name}</span>
-                  <span className="text-xs text-gray-500 ml-2">jud. {item.county}</span>
+                  <span className="text-xs text-gray-500 ml-2">
+                    jud. {item.county}
+                  </span>
                 </li>
               ))}
             </ul>
@@ -206,7 +226,8 @@ function InlineCalendar({
   ];
   const roWeekdaysShort = ["Lu", "Ma", "Mi", "Jo", "Vi", "Sâ", "Du"];
 
-  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const getDaysInMonth = (year: number, month: number) =>
+    new Date(year, month + 1, 0).getDate();
   const getFirstDayOfMonth = (year: number, month: number) => {
     const day = new Date(year, month, 1).getDay();
     return day === 0 ? 6 : day - 1; // Monday = 0
@@ -239,12 +260,18 @@ function InlineCalendar({
     if (!value) return false;
     const selected = new Date(`${value}T00:00:00`);
     return (
-      selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day
+      selected.getFullYear() === year &&
+      selected.getMonth() === month &&
+      selected.getDate() === day
     );
   };
 
   const isToday = (day: number) => {
-    return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+    return (
+      today.getFullYear() === year &&
+      today.getMonth() === month &&
+      today.getDate() === day
+    );
   };
 
   const handleSelect = (day: number) => {
@@ -284,7 +311,10 @@ function InlineCalendar({
       {/* Weekday headers */}
       <div className="mb-2 grid grid-cols-7 gap-1">
         {roWeekdaysShort.map((wd) => (
-          <div key={wd} className="text-center text-xs font-medium text-gray-400">
+          <div
+            key={wd}
+            className="text-center text-xs font-medium text-gray-400"
+          >
             {wd}
           </div>
         ))}
@@ -306,14 +336,15 @@ function InlineCalendar({
               type="button"
               onClick={() => handleSelect(day)}
               disabled={disabled}
-              className={`h-8 w-full rounded-lg text-sm font-medium transition ${disabled
+              className={`h-8 w-full rounded-lg text-sm font-medium transition ${
+                disabled
                   ? "cursor-not-allowed text-gray-300"
                   : selected
                     ? "bg-emerald-500 text-white shadow-sm"
                     : todayClass
                       ? "border border-emerald-300 text-emerald-600 hover:bg-emerald-50"
                       : "text-gray-700 hover:bg-gray-100"
-                }`}
+              }`}
             >
               {day}
             </button>
@@ -346,12 +377,23 @@ function InlineRangeCalendar({
   const [selectingEnd, setSelectingEnd] = useState(false);
 
   const roMonthsFull = [
-    "Ianuarie", "Februarie", "Martie", "Aprilie", "Mai", "Iunie",
-    "Iulie", "August", "Septembrie", "Octombrie", "Noiembrie", "Decembrie",
+    "Ianuarie",
+    "Februarie",
+    "Martie",
+    "Aprilie",
+    "Mai",
+    "Iunie",
+    "Iulie",
+    "August",
+    "Septembrie",
+    "Octombrie",
+    "Noiembrie",
+    "Decembrie",
   ];
   const roWeekdaysShort = ["Lu", "Ma", "Mi", "Jo", "Vi", "Sâ", "Du"];
 
-  const getDaysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
+  const getDaysInMonth = (year: number, month: number) =>
+    new Date(year, month + 1, 0).getDate();
   const getFirstDayOfMonth = (year: number, month: number) => {
     const day = new Date(year, month, 1).getDay();
     return day === 0 ? 6 : day - 1;
@@ -390,13 +432,21 @@ function InlineRangeCalendar({
   const isStartDate = (day: number) => {
     if (!startDate) return false;
     const selected = new Date(`${startDate}T00:00:00`);
-    return selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day;
+    return (
+      selected.getFullYear() === year &&
+      selected.getMonth() === month &&
+      selected.getDate() === day
+    );
   };
 
   const isEndDate = (day: number) => {
     if (!endDate) return false;
     const selected = new Date(`${endDate}T00:00:00`);
-    return selected.getFullYear() === year && selected.getMonth() === month && selected.getDate() === day;
+    return (
+      selected.getFullYear() === year &&
+      selected.getMonth() === month &&
+      selected.getDate() === day
+    );
   };
 
   const isInRange = (day: number) => {
@@ -411,14 +461,18 @@ function InlineRangeCalendar({
   };
 
   const isToday = (day: number) => {
-    return today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+    return (
+      today.getFullYear() === year &&
+      today.getMonth() === month &&
+      today.getDate() === day
+    );
   };
 
   const handleSelect = (day: number) => {
     if (isDateDisabled(day)) return;
     const date = new Date(year, month, day);
     const dateStr = formatDateYMD(date);
-    
+
     if (!selectingEnd) {
       // Selecting start date
       onChangeStart(dateStr);
@@ -445,18 +499,30 @@ function InlineRangeCalendar({
     <div className="rounded-xl border border-gray-200 bg-white p-3">
       {/* Instruction */}
       <div className="mb-3 rounded-lg bg-emerald-50 px-3 py-2 text-center text-xs text-emerald-700">
-        {!startDate ? "📅 Selectează data de început" : !endDate ? "📅 Acum selectează data de final" : "✓ Interval selectat"}
+        {!startDate
+          ? "📅 Selectează data de început"
+          : !endDate
+            ? "📅 Acum selectează data de final"
+            : "✓ Interval selectat"}
       </div>
 
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">
-        <button type="button" onClick={prevMonth} className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100">
+        <button
+          type="button"
+          onClick={prevMonth}
+          className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+        >
           <ChevronLeft className="h-5 w-5" />
         </button>
         <span className="text-sm font-semibold text-gray-800">
           {roMonthsFull[month]} {year}
         </span>
-        <button type="button" onClick={nextMonth} className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100">
+        <button
+          type="button"
+          onClick={nextMonth}
+          className="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100"
+        >
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
@@ -464,7 +530,12 @@ function InlineRangeCalendar({
       {/* Weekday headers */}
       <div className="mb-2 grid grid-cols-7 gap-1">
         {roWeekdaysShort.map((wd) => (
-          <div key={wd} className="text-center text-xs font-medium text-gray-400">{wd}</div>
+          <div
+            key={wd}
+            className="text-center text-xs font-medium text-gray-400"
+          >
+            {wd}
+          </div>
         ))}
       </div>
 
@@ -524,7 +595,9 @@ export default function HomeRequestForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
-  const [submittedRequestCode, setSubmittedRequestCode] = useState<string | null>(null);
+  const [submittedRequestCode, setSubmittedRequestCode] = useState<
+    string | null
+  >(null);
 
   // Initialize with default values to avoid hydration mismatch
   const [form, setForm] = useState<FormShape>({
@@ -591,7 +664,15 @@ export default function HomeRequestForm() {
   const minDate = formatYMD(today);
 
   // Calendar helpers for a friendlier UX
-  const roWeekdays = ["Duminică", "Luni", "Marți", "Miercuri", "Joi", "Vineri", "Sâmbătă"];
+  const roWeekdays = [
+    "Duminică",
+    "Luni",
+    "Marți",
+    "Miercuri",
+    "Joi",
+    "Vineri",
+    "Sâmbătă",
+  ];
   const roMonths = [
     "ian",
     "feb",
@@ -667,7 +748,6 @@ export default function HomeRequestForm() {
       try {
         let requestCode: string | null = null;
 
-        // Try API first
         const response = await fetch("/api/requests/createGuest", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -677,11 +757,6 @@ export default function HomeRequestForm() {
         if (response.ok) {
           const result = await response.json();
           requestCode = result.data.requestCode;
-        } else if (response.status === 503) {
-          // Admin SDK not ready - use client-side Firebase directly
-          const { createGuestRequest } = await import("@/utils/firestoreHelpers");
-          const result = await createGuestRequest(form);
-          requestCode = result.requestCode;
         } else {
           const result = await response.json().catch(() => ({}));
           throw new Error(result.error || "Eroare la trimiterea cererii");
@@ -743,20 +818,23 @@ export default function HomeRequestForm() {
           trackRequestCreated(
             form.fromCity || "",
             form.toCity || "",
-            parseInt(String(form.fromRooms || 0), 10)
+            parseInt(String(form.fromRooms || 0), 10),
           );
         } catch {
           // Ignore analytics errors
         }
       } catch (error: any) {
         console.error("Submit error:", error);
-        toast.error(error.message || "Eroare la trimiterea cererii. Te rugăm să încerci din nou.");
+        toast.error(
+          error.message ||
+            "Eroare la trimiterea cererii. Te rugăm să încerci din nou.",
+        );
       } finally {
         setIsSubmitting(false);
       }
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [form, currentStep]
+    [form, currentStep],
   );
 
   const nextStep = useCallback(async () => {
@@ -808,7 +886,10 @@ export default function HomeRequestForm() {
             <div
               className="grid gap-2"
               style={{
-                gridTemplateColumns: form.fromType === "house" ? "1.4fr 1fr 1fr" : "1.4fr 1fr 1.2fr",
+                gridTemplateColumns:
+                  form.fromType === "house"
+                    ? "1.4fr 1fr 1fr"
+                    : "1.4fr 1fr 1.2fr",
               }}
             >
               <div>
@@ -831,10 +912,14 @@ export default function HomeRequestForm() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">Nr. Camere *</label>
+                <label className="mb-1 block text-xs font-medium text-gray-600">
+                  Nr. Camere *
+                </label>
                 <select
                   value={form.fromRooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, fromRooms: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, fromRooms: e.target.value }))
+                  }
                   className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
                 >
                   <option value="">-</option>
@@ -847,10 +932,14 @@ export default function HomeRequestForm() {
               </div>
               {form.fromType === "house" && (
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaje *</label>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">
+                    Etaje *
+                  </label>
                   <select
                     value={form.fromFloor || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, fromFloor: e.target.value }))
+                    }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
                   >
                     <option value="">-</option>
@@ -864,17 +953,23 @@ export default function HomeRequestForm() {
               )}
               {(form.fromType === "flat" || form.fromType === "office") && (
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">
+                    Etaj *
+                  </label>
                   <select
                     value={form.fromFloor || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, fromFloor: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, fromFloor: e.target.value }))
+                    }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
                   >
                     <option value="">-</option>
                     <option value="Demisol">Demisol</option>
                     <option value="Parter">Parter</option>
                     {[...Array(20)].map((_, i) => (
-                      <option key={i + 1} value={String(i + 1)}>{i + 1}</option>
+                      <option key={i + 1} value={String(i + 1)}>
+                        {i + 1}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -882,25 +977,33 @@ export default function HomeRequestForm() {
             </div>
             {(form.fromType === "flat" || form.fromType === "office") && (
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">Lift *</label>
+                <label className="mb-1 block text-xs font-medium text-gray-600">
+                  Lift *
+                </label>
                 <div className="flex gap-2">
                   <button
                     type="button"
-                    onClick={() => setForm((s) => ({ ...s, fromElevator: true }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.fromElevator === true
+                    onClick={() =>
+                      setForm((s) => ({ ...s, fromElevator: true }))
+                    }
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.fromElevator === true
                         ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
-                      }`}
+                    }`}
                   >
                     Da
                   </button>
                   <button
                     type="button"
-                    onClick={() => setForm((s) => ({ ...s, fromElevator: false }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.fromElevator === false
+                    onClick={() =>
+                      setForm((s) => ({ ...s, fromElevator: false }))
+                    }
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.fromElevator === false
                         ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
-                      }`}
+                    }`}
                   >
                     Nu
                   </button>
@@ -940,7 +1043,8 @@ export default function HomeRequestForm() {
             <div
               className="grid gap-2"
               style={{
-                gridTemplateColumns: form.toType === "house" ? "1.4fr 1fr 1fr" : "1.4fr 1fr 1.2fr",
+                gridTemplateColumns:
+                  form.toType === "house" ? "1.4fr 1fr 1fr" : "1.4fr 1fr 1.2fr",
               }}
             >
               <div>
@@ -963,10 +1067,14 @@ export default function HomeRequestForm() {
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">Nr. Camere *</label>
+                <label className="mb-1 block text-xs font-medium text-gray-600">
+                  Nr. Camere *
+                </label>
                 <select
                   value={form.toRooms || ""}
-                  onChange={(e) => setForm((s) => ({ ...s, toRooms: e.target.value }))}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, toRooms: e.target.value }))
+                  }
                   className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20 focus:outline-none"
                 >
                   <option value="">-</option>
@@ -979,10 +1087,14 @@ export default function HomeRequestForm() {
               </div>
               {form.toType === "house" && (
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaje *</label>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">
+                    Etaje *
+                  </label>
                   <select
                     value={form.toFloor || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, toFloor: e.target.value }))
+                    }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
                   >
                     <option value="">-</option>
@@ -996,17 +1108,23 @@ export default function HomeRequestForm() {
               )}
               {(form.toType === "flat" || form.toType === "office") && (
                 <div>
-                  <label className="mb-1 block text-xs font-medium text-gray-600">Etaj *</label>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">
+                    Etaj *
+                  </label>
                   <select
                     value={form.toFloor || ""}
-                    onChange={(e) => setForm((s) => ({ ...s, toFloor: e.target.value }))}
+                    onChange={(e) =>
+                      setForm((s) => ({ ...s, toFloor: e.target.value }))
+                    }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
                   >
                     <option value="">-</option>
                     <option value="Demisol">Demisol</option>
                     <option value="Parter">Parter</option>
                     {[...Array(20)].map((_, i) => (
-                      <option key={i + 1} value={String(i + 1)}>{i + 1}</option>
+                      <option key={i + 1} value={String(i + 1)}>
+                        {i + 1}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -1014,25 +1132,31 @@ export default function HomeRequestForm() {
             </div>
             {(form.toType === "flat" || form.toType === "office") && (
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">Lift *</label>
+                <label className="mb-1 block text-xs font-medium text-gray-600">
+                  Lift *
+                </label>
                 <div className="flex gap-2">
                   <button
                     type="button"
                     onClick={() => setForm((s) => ({ ...s, toElevator: true }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.toElevator === true
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.toElevator === true
                         ? "border-sky-500 bg-sky-50 text-sky-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
-                      }`}
+                    }`}
                   >
                     Da
                   </button>
                   <button
                     type="button"
-                    onClick={() => setForm((s) => ({ ...s, toElevator: false }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${form.toElevator === false
+                    onClick={() =>
+                      setForm((s) => ({ ...s, toElevator: false }))
+                    }
+                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      form.toElevator === false
                         ? "border-sky-500 bg-sky-50 text-sky-700"
                         : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
-                      }`}
+                    }`}
                   >
                     Nu
                   </button>
@@ -1070,10 +1194,11 @@ export default function HomeRequestForm() {
                 moveDateMode: opt.value as "exact" | "flexible" | "urgent",
               }))
             }
-            className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${form.moveDateMode === opt.value
+            className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${
+              form.moveDateMode === opt.value
                 ? "bg-emerald-500 text-white shadow-sm"
                 : "border border-gray-200 bg-white text-gray-600 hover:border-emerald-300 hover:bg-emerald-50"
-              }`}
+            }`}
           >
             {opt.label}
           </button>
@@ -1109,13 +1234,18 @@ export default function HomeRequestForm() {
           <InlineRangeCalendar
             startDate={form.moveDateStart || ""}
             endDate={form.moveDateEnd || ""}
-            onChangeStart={(date) => setForm((s) => ({ ...s, moveDateStart: date }))}
-            onChangeEnd={(date) => setForm((s) => ({ ...s, moveDateEnd: date }))}
+            onChangeStart={(date) =>
+              setForm((s) => ({ ...s, moveDateStart: date }))
+            }
+            onChangeEnd={(date) =>
+              setForm((s) => ({ ...s, moveDateEnd: date }))
+            }
             minDate={minDate}
           />
           {form.moveDateStart && form.moveDateEnd && (
             <p className="text-center text-sm font-medium text-emerald-600">
-              📅 {formatWeekdayPreview(form.moveDateStart)} → {formatWeekdayPreview(form.moveDateEnd)}
+              📅 {formatWeekdayPreview(form.moveDateStart)} →{" "}
+              {formatWeekdayPreview(form.moveDateEnd)}
             </p>
           )}
         </div>
@@ -1149,7 +1279,9 @@ export default function HomeRequestForm() {
             <label
               key={opt.value}
               className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
-                (opt.value === "full" && form.serviceMoving && !form.serviceTransportOnly) ||
+                (opt.value === "full" &&
+                  form.serviceMoving &&
+                  !form.serviceTransportOnly) ||
                 (opt.value === "transport" && form.serviceTransportOnly)
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
@@ -1159,12 +1291,18 @@ export default function HomeRequestForm() {
                 type="radio"
                 name="serviceType"
                 checked={
-                  (opt.value === "full" && form.serviceMoving && !form.serviceTransportOnly) ||
+                  (opt.value === "full" &&
+                    form.serviceMoving &&
+                    !form.serviceTransportOnly) ||
                   (opt.value === "transport" && form.serviceTransportOnly)
                 }
                 onChange={() => {
                   if (opt.value === "full") {
-                    setForm((s) => ({ ...s, serviceMoving: true, serviceTransportOnly: false }));
+                    setForm((s) => ({
+                      ...s,
+                      serviceMoving: true,
+                      serviceTransportOnly: false,
+                    }));
                   } else {
                     setForm((s) => ({
                       ...s,
@@ -1196,9 +1334,21 @@ export default function HomeRequestForm() {
 
           <div className="grid grid-cols-1 gap-2">
             {[
-              { key: "servicePacking", label: "Ambalare profesională", desc: "Noi împachetăm tot" },
-              { key: "serviceDisassembly", label: "Montaj mobilier", desc: "Demontare și remontare" },
-              { key: "serviceStorage", label: "Depozitare", desc: "Stocare temporară" },
+              {
+                key: "servicePacking",
+                label: "Ambalare profesională",
+                desc: "Noi împachetăm tot",
+              },
+              {
+                key: "serviceDisassembly",
+                label: "Montaj mobilier",
+                desc: "Demontare și remontare",
+              },
+              {
+                key: "serviceStorage",
+                label: "Depozitare",
+                desc: "Stocare temporară",
+              },
             ].map((svc) => (
               <label
                 key={svc.key}
@@ -1211,12 +1361,16 @@ export default function HomeRequestForm() {
                 <input
                   type="checkbox"
                   checked={!!(form as Record<string, boolean>)[svc.key]}
-                  onChange={(e) => setForm((s) => ({ ...s, [svc.key]: e.target.checked }))}
+                  onChange={(e) =>
+                    setForm((s) => ({ ...s, [svc.key]: e.target.checked }))
+                  }
                   className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
                 />
                 <span className="text-sm leading-tight text-gray-700">
                   {svc.label}
-                  <span className="block text-xs text-gray-500">{svc.desc}</span>
+                  <span className="block text-xs text-gray-500">
+                    {svc.desc}
+                  </span>
                 </span>
               </label>
             ))}
@@ -1225,7 +1379,9 @@ export default function HomeRequestForm() {
       )}
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">Detalii (opțional)</label>
+        <label className="mb-1 block text-sm font-medium text-gray-700">
+          Detalii (opțional)
+        </label>
         <textarea
           value={form.details || ""}
           onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
@@ -1251,13 +1407,14 @@ export default function HomeRequestForm() {
             <path
               strokeLinecap="round"
               strokeLinejoin="round"
-
               d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
             />
           </svg>
           <span className="font-semibold text-gray-800">Tip evaluare *</span>
         </div>
-        <p className="mb-3 text-xs text-gray-500">Cum preferi să primești oferta?</p>
+        <p className="mb-3 text-xs text-gray-500">
+          Cum preferi să primești oferta?
+        </p>
 
         <div className="grid grid-cols-1 gap-2">
           {[
@@ -1266,7 +1423,11 @@ export default function HomeRequestForm() {
               label: "Evaluare la fața locului",
               desc: "Un specialist vine să evalueze volumul",
             },
-            { value: "video", label: "Video-evaluare", desc: "Consultație video pentru estimare" },
+            {
+              value: "video",
+              label: "Video-evaluare",
+              desc: "Consultație video pentru estimare",
+            },
             {
               value: "quick-estimate",
               label: "Estimare rapidă",
@@ -1275,21 +1436,26 @@ export default function HomeRequestForm() {
           ].map((opt) => (
             <label
               key={opt.value}
-              className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${form.surveyType === opt.value
+              className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
+                form.surveyType === opt.value
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
-                }`}
+              }`}
             >
               <input
                 type="radio"
                 name="surveyType"
                 value={opt.value}
                 checked={form.surveyType === opt.value}
-                onChange={(e) => setForm((s) => ({ ...s, surveyType: e.target.value as any }))}
+                onChange={(e) =>
+                  setForm((s) => ({ ...s, surveyType: e.target.value as any }))
+                }
                 className="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-emerald-500"
               />
               <div>
-                <span className="text-sm font-medium text-gray-800">{opt.label}</span>
+                <span className="text-sm font-medium text-gray-800">
+                  {opt.label}
+                </span>
                 <span className="block text-xs text-gray-500">{opt.desc}</span>
               </div>
             </label>
@@ -1330,23 +1496,29 @@ export default function HomeRequestForm() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-
                 d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
               />
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-
                 d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
               />
             </svg>
-            <span className="font-semibold text-gray-800">Fotografii / Video</span>
+            <span className="font-semibold text-gray-800">
+              Fotografii / Video
+            </span>
           </div>
-          <p className="mb-3 text-xs text-gray-500">Ajută firmele să-ți facă oferte mai precise</p>
+          <p className="mb-3 text-xs text-gray-500">
+            Ajută firmele să-ți facă oferte mai precise
+          </p>
 
           <div className="grid grid-cols-1 gap-2">
             {[
-              { value: "now", label: "Încarcă acum", desc: "Adaugă fotografii sau video imediat" },
+              {
+                value: "now",
+                label: "Încarcă acum",
+                desc: "Adaugă fotografii sau video imediat",
+              },
               {
                 value: "later",
                 label: "Primește link",
@@ -1360,22 +1532,32 @@ export default function HomeRequestForm() {
             ].map((opt) => (
               <label
                 key={opt.value}
-                className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${form.mediaUpload === opt.value
+                className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
+                  form.mediaUpload === opt.value
                     ? "border-emerald-500 bg-emerald-50"
                     : "border-gray-200 hover:border-emerald-200"
-                  }`}
+                }`}
               >
                 <input
                   type="radio"
                   name="mediaUpload"
                   value={opt.value}
                   checked={form.mediaUpload === opt.value}
-                  onChange={(e) => setForm((s) => ({ ...s, mediaUpload: e.target.value as any }))}
+                  onChange={(e) =>
+                    setForm((s) => ({
+                      ...s,
+                      mediaUpload: e.target.value as any,
+                    }))
+                  }
                   className="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-emerald-500"
                 />
                 <div>
-                  <span className="text-sm font-medium text-gray-800">{opt.label}</span>
-                  <span className="block text-xs text-gray-500">{opt.desc}</span>
+                  <span className="text-sm font-medium text-gray-800">
+                    {opt.label}
+                  </span>
+                  <span className="block text-xs text-gray-500">
+                    {opt.desc}
+                  </span>
                 </div>
               </label>
             ))}
@@ -1405,12 +1587,15 @@ export default function HomeRequestForm() {
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-
                     d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
                   />
                 </svg>
-                <p className="mt-2 text-sm font-medium text-gray-700">Click pentru a încărca</p>
-                <p className="mt-1 text-xs text-gray-500">Poze sau video (max 50MB)</p>
+                <p className="mt-2 text-sm font-medium text-gray-700">
+                  Click pentru a încărca
+                </p>
+                <p className="mt-1 text-xs text-gray-500">
+                  Poze sau video (max 50MB)
+                </p>
               </label>
 
               {/* File List */}
@@ -1424,7 +1609,9 @@ export default function HomeRequestForm() {
                       key={i}
                       className="flex items-center justify-between rounded-md border border-gray-200 bg-white px-2 py-1.5"
                     >
-                      <span className="truncate text-xs text-gray-700">{file.name}</span>
+                      <span className="truncate text-xs text-gray-700">
+                        {file.name}
+                      </span>
                       <button
                         type="button"
                         onClick={() => handleRemoveFile(i)}
@@ -1443,8 +1630,8 @@ export default function HomeRequestForm() {
           {form.mediaUpload === "later" && (
             <div className="mt-4 rounded-lg border border-blue-200 bg-blue-50 p-3">
               <p className="text-xs text-blue-800">
-                📧 Vei primi un email cu link personalizat pentru încărcarea pozelor sau
-                videoclipurilor cu ce ai de mutat.
+                📧 Vei primi un email cu link personalizat pentru încărcarea
+                pozelor sau videoclipurilor cu ce ai de mutat.
               </p>
             </div>
           )}
@@ -1457,7 +1644,9 @@ export default function HomeRequestForm() {
               </label>
               <textarea
                 value={form.itemsList || ""}
-                onChange={(e) => setForm((s) => ({ ...s, itemsList: e.target.value }))}
+                onChange={(e) =>
+                  setForm((s) => ({ ...s, itemsList: e.target.value }))
+                }
                 placeholder="Ex: canapea 3 locuri, dulap dormitor, masă sufragerie, 10 cutii cărți..."
                 rows={4}
                 className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
@@ -1469,7 +1658,8 @@ export default function HomeRequestForm() {
           )}
         </div>
         <p className="text-center text-xs text-gray-500">
-          Fotografiile ajută firmele să estimeze mai exact volumul și costul mutării.
+          Fotografiile ajută firmele să estimeze mai exact volumul și costul
+          mutării.
         </p>
       </div>
     );
@@ -1481,25 +1671,35 @@ export default function HomeRequestForm() {
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
           <User className="h-5 w-5 text-emerald-600" />
-          <span className="font-semibold text-gray-800">Datele tale de contact</span>
+          <span className="font-semibold text-gray-800">
+            Datele tale de contact
+          </span>
         </div>
 
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">Prenume *</label>
+              <label className="mb-1 block text-xs font-medium text-gray-600">
+                Prenume *
+              </label>
               <input
                 value={form.contactFirstName || ""}
-                onChange={(e) => setForm((s) => ({ ...s, contactFirstName: e.target.value }))}
+                onChange={(e) =>
+                  setForm((s) => ({ ...s, contactFirstName: e.target.value }))
+                }
                 placeholder="Ion"
                 className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">Nume *</label>
+              <label className="mb-1 block text-xs font-medium text-gray-600">
+                Nume *
+              </label>
               <input
                 value={form.contactLastName || ""}
-                onChange={(e) => setForm((s) => ({ ...s, contactLastName: e.target.value }))}
+                onChange={(e) =>
+                  setForm((s) => ({ ...s, contactLastName: e.target.value }))
+                }
                 placeholder="Popescu"
                 className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
               />
@@ -1507,22 +1707,30 @@ export default function HomeRequestForm() {
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Telefon *</label>
+            <label className="mb-1 block text-xs font-medium text-gray-600">
+              Telefon *
+            </label>
             <input
               type="tel"
               value={form.phone || ""}
-              onChange={(e) => setForm((s) => ({ ...s, phone: e.target.value }))}
+              onChange={(e) =>
+                setForm((s) => ({ ...s, phone: e.target.value }))
+              }
               placeholder="07xx xxx xxx"
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">Email *</label>
+            <label className="mb-1 block text-xs font-medium text-gray-600">
+              Email *
+            </label>
             <input
               type="email"
               value={form.email || ""}
-              onChange={(e) => setForm((s) => ({ ...s, email: e.target.value }))}
+              onChange={(e) =>
+                setForm((s) => ({ ...s, email: e.target.value }))
+              }
               placeholder="exemplu@email.com"
               className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
             />
@@ -1535,16 +1743,24 @@ export default function HomeRequestForm() {
         <input
           type="checkbox"
           checked={!!form.acceptedTerms}
-          onChange={(e) => setForm((s) => ({ ...s, acceptedTerms: e.target.checked }))}
+          onChange={(e) =>
+            setForm((s) => ({ ...s, acceptedTerms: e.target.checked }))
+          }
           className="mt-0.5 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
         />
         <span className="text-xs text-gray-600">
           Accept{" "}
-          <Link href="/terms" className="text-emerald-600 underline hover:text-emerald-700">
+          <Link
+            href="/terms"
+            className="text-emerald-600 underline hover:text-emerald-700"
+          >
             termenii
           </Link>{" "}
           și{" "}
-          <Link href="/privacy" className="text-emerald-600 underline hover:text-emerald-700">
+          <Link
+            href="/privacy"
+            className="text-emerald-600 underline hover:text-emerald-700"
+          >
             politica de confidențialitate
           </Link>
           .
@@ -1615,76 +1831,81 @@ export default function HomeRequestForm() {
       </p>
 
       {/* Success Modal - rendered via portal to escape container */}
-      {showSuccessModal && typeof document !== 'undefined' && createPortal(
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
-          <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
-            {/* Close button */}
-            <button
-              onClick={() => setShowSuccessModal(false)}
-              className="absolute top-4 right-4 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-            >
-              <X className="h-5 w-5" />
-            </button>
+      {showSuccessModal &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
+            <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
+              {/* Close button */}
+              <button
+                onClick={() => setShowSuccessModal(false)}
+                className="absolute top-4 right-4 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              >
+                <X className="h-5 w-5" />
+              </button>
 
-            {/* Success icon */}
-            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
-              <CheckCircle className="h-10 w-10 text-emerald-600" />
-            </div>
-
-            {/* Title */}
-            <h2 className="mb-2 text-center text-xl font-bold text-gray-900">
-              Mulțumim pentru cerere! 🎉
-            </h2>
-
-            {/* Request code */}
-            {submittedRequestCode && (
-              <p className="mb-4 text-center text-sm text-gray-600">
-                Codul cererii tale:{" "}
-                <span className="font-semibold text-emerald-600">{submittedRequestCode}</span>
-              </p>
-            )}
-
-            {/* Message */}
-            <div className="mb-6 rounded-lg bg-emerald-50 p-4 text-center">
-              <p className="text-sm text-gray-700">
-                <strong>Vei primi 3-5 oferte în maxim 24h</strong> de la firme de mutări verificate.
-              </p>
-              <p className="mt-2 text-sm text-gray-600">
-                Ofertele vor fi trimise pe adresa de email furnizată.
-              </p>
-            </div>
-
-            {/* Account creation CTA */}
-            <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4">
-              <div className="mb-3 flex items-center gap-2">
-                <Mail className="h-5 w-5 text-emerald-600" />
-                <span className="font-semibold text-gray-800">Creează-ți cont gratuit</span>
+              {/* Success icon */}
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100">
+                <CheckCircle className="h-10 w-10 text-emerald-600" />
               </div>
-              <p className="mb-3 text-sm text-gray-600">
-                Cu un cont poți vedea toate ofertele, comunica direct cu transportatorii și gestiona
-                mutarea ta.
-              </p>
-              <div className="flex gap-2">
-                <Link
-                  href="/customer/auth"
-                  className="flex-1 rounded-lg bg-emerald-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-emerald-600"
-                >
-                  Creează cont
-                </Link>
-                <button
-                  onClick={() => setShowSuccessModal(false)}
-                  className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
-                >
-                  Mai târziu
-                </button>
+
+              {/* Title */}
+              <h2 className="mb-2 text-center text-xl font-bold text-gray-900">
+                Mulțumim pentru cerere! 🎉
+              </h2>
+
+              {/* Request code */}
+              {submittedRequestCode && (
+                <p className="mb-4 text-center text-sm text-gray-600">
+                  Codul cererii tale:{" "}
+                  <span className="font-semibold text-emerald-600">
+                    {submittedRequestCode}
+                  </span>
+                </p>
+              )}
+
+              {/* Message */}
+              <div className="mb-6 rounded-lg bg-emerald-50 p-4 text-center">
+                <p className="text-sm text-gray-700">
+                  <strong>Vei primi 3-5 oferte în maxim 24h</strong> de la firme
+                  de mutări verificate.
+                </p>
+                <p className="mt-2 text-sm text-gray-600">
+                  Ofertele vor fi trimise pe adresa de email furnizată.
+                </p>
+              </div>
+
+              {/* Account creation CTA */}
+              <div className="rounded-lg border border-emerald-200 bg-emerald-50/50 p-4">
+                <div className="mb-3 flex items-center gap-2">
+                  <Mail className="h-5 w-5 text-emerald-600" />
+                  <span className="font-semibold text-gray-800">
+                    Creează-ți cont gratuit
+                  </span>
+                </div>
+                <p className="mb-3 text-sm text-gray-600">
+                  Cu un cont poți vedea toate ofertele, comunica direct cu
+                  transportatorii și gestiona mutarea ta.
+                </p>
+                <div className="flex gap-2">
+                  <Link
+                    href="/customer/auth"
+                    className="flex-1 rounded-lg bg-emerald-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-emerald-600"
+                  >
+                    Creează cont
+                  </Link>
+                  <button
+                    onClick={() => setShowSuccessModal(false)}
+                    className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                  >
+                    Mai târziu
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        </div>,
-        document.body
-      )}
+          </div>,
+          document.body,
+        )}
     </div>
   );
 }
-
-

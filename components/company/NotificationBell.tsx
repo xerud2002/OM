@@ -1,8 +1,20 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BellIcon as Bell, XMarkIcon as X, CheckIcon as Check } from "@heroicons/react/24/outline";
+import {
+  BellIcon as Bell,
+  XMarkIcon as X,
+  CheckIcon as Check,
+} from "@heroicons/react/24/outline";
 import { db } from "@/services/firebase";
-import { collection, query, orderBy, onSnapshot, updateDoc, doc } from "firebase/firestore";
+import {
+  collection,
+  query,
+  orderBy,
+  onSnapshot,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
+import { logger } from "@/utils/logger";
 
 type Notification = {
   id: string;
@@ -32,7 +44,7 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
     try {
       const q = query(
         collection(db, "companies", companyId, "notifications"),
-        orderBy("createdAt", "desc")
+        orderBy("createdAt", "desc"),
       );
 
       const unsub = onSnapshot(
@@ -47,15 +59,15 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
         },
         (error) => {
           // Collection might not exist yet or index missing, that's OK
-          console.log("Notifications error:", error.message);
+          logger.log("Notifications error:", error.message);
           setNotifications([]);
           setLoading(false);
-        }
+        },
       );
 
       return () => unsub();
     } catch (error) {
-      console.log("Notifications setup error:", error);
+      logger.log("Notifications setup error:", error);
       setLoading(false);
     }
   }, [companyId]);
@@ -64,7 +76,13 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
 
   const markAsRead = async (notificationId: string) => {
     try {
-      const notifRef = doc(db, "companies", companyId, "notifications", notificationId);
+      const notifRef = doc(
+        db,
+        "companies",
+        companyId,
+        "notifications",
+        notificationId,
+      );
       await updateDoc(notifRef, { read: true });
     } catch (error) {
       console.error("Error marking notification as read:", error);
@@ -76,7 +94,13 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
       const promises = notifications
         .filter((n) => !n.read)
         .map((n) => {
-          const notifRef = doc(db, "companies", companyId, "notifications", n.id);
+          const notifRef = doc(
+            db,
+            "companies",
+            companyId,
+            "notifications",
+            n.id,
+          );
           return updateDoc(notifRef, { read: true });
         });
       await Promise.all(promises);
@@ -122,7 +146,10 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
         {showDropdown && (
           <>
             {/* Backdrop */}
-            <div className="fixed inset-0 z-40" onClick={() => setShowDropdown(false)} />
+            <div
+              className="fixed inset-0 z-40"
+              onClick={() => setShowDropdown(false)}
+            />
 
             {/* Notifications Panel */}
             <motion.div
@@ -136,7 +163,9 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                 <div>
                   <h3 className="font-semibold text-gray-900">Notificări</h3>
                   {unreadCount > 0 && (
-                    <p className="text-xs text-gray-500">{unreadCount} necitite</p>
+                    <p className="text-xs text-gray-500">
+                      {unreadCount} necitite
+                    </p>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
@@ -190,7 +219,8 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
                               )}
                             </div>
                             <p className="text-sm text-gray-600">
-                              {notification.message || "Ai o notificare nouă. Verifică detaliile."}
+                              {notification.message ||
+                                "Ai o notificare nouă. Verifică detaliile."}
                             </p>
                             <div className="mt-2 flex items-center justify-between">
                               <p className="text-xs text-gray-400">
@@ -223,5 +253,3 @@ export default function NotificationBell({ companyId }: NotificationBellProps) {
     </div>
   );
 }
-
-

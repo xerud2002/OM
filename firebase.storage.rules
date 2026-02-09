@@ -29,10 +29,9 @@ service firebase.storage {
       // Anyone can read (so companies and customers can view media)
       allow read: if true;
       
-      // Authenticated customer can upload with validation
-      // OR anyone can upload (for public upload links via token validation)
-      allow write: if (isSignedIn() && isOwner(customerId) && isValidSize() && isValidContentType()) ||
-                      (isValidSize() && isValidContentType());
+      // Only authenticated customer who owns this path can upload
+      // Token validation happens at application layer (upload page requires auth)
+      allow write: if isSignedIn() && isOwner(customerId) && isValidSize() && isValidContentType();
       
       // Only the customer who owns this path can delete
       allow delete: if isOwner(customerId);

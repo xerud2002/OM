@@ -5,11 +5,10 @@ import Link from "next/link";
 import { useRef } from "react";
 import {
   UsersIcon as Users,
-  ArrowTrendingUpIcon as Target,
+  ArrowTrendingUpIcon as TrendingUp,
   HeartIcon as Heart,
   ShieldCheckIcon as Shield,
   ClockIcon as Clock,
-  ArrowTrendingUpIcon as TrendingUp,
   CheckCircleIcon as CheckCircle,
   ArrowRightIcon as ArrowRight,
   SparklesIcon as Sparkles,
@@ -95,10 +94,13 @@ export default function AboutPage() {
   return (
     <>
       <Head>
-        <title>Despre Noi | OferteMutare.ro - Platformă de Mutări în România</title>
+        <title>
+          Despre Noi | OferteMutare.ro - Platformă de Mutări în România
+        </title>
+        <meta name="author" content="Ofertemutare Ltd" />
         <meta
           name="description"
-          content="Descoperă povestea OferteMutare.ro - platforma care conectează clienții cu firme de mutări verificate din România. Transparență, siguranță și prețuri corecte."
+          content="Descoperă povestea OferteMutare.ro, operată de Ofertemutare Ltd - platforma care conectează clienții cu firme de mutări verificate din România. Transparență, siguranță și prețuri corecte."
         />
         <meta
           name="keywords"
@@ -112,7 +114,10 @@ export default function AboutPage() {
         />
         <meta property="og:url" content="https://ofertemutare.ro/about" />
         <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://ofertemutare.ro/pics/team.webp" />
+        <meta
+          property="og:image"
+          content="https://ofertemutare.ro/pics/team.webp"
+        />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -122,14 +127,23 @@ export default function AboutPage() {
           name="twitter:description"
           content="Platforma care conectează clienții cu firme de mutări verificate din România."
         />
-        <meta name="twitter:image" content="https://ofertemutare.ro/pics/team.webp" />
+        <meta
+          name="twitter:image"
+          content="https://ofertemutare.ro/pics/team.webp"
+        />
       </Head>
 
       <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">
         {/* Hero Section - Enhanced with Parallax */}
-        <section ref={heroRef} className="relative overflow-hidden pt-24 pb-20 sm:pt-32 sm:pb-32">
+        <section
+          ref={heroRef}
+          className="relative overflow-hidden pt-24 pb-20 sm:pt-32 sm:pb-32"
+        >
           {/* Animated Background Elements */}
-          <motion.div className="pointer-events-none absolute inset-0" style={{ y: heroY }}>
+          <motion.div
+            className="pointer-events-none absolute inset-0"
+            style={{ y: heroY }}
+          >
             <div className="absolute top-0 left-1/4 h-125 w-125 -translate-y-1/2 rounded-full bg-gradient-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
             <div className="absolute right-1/4 bottom-0 h-100 w-100 translate-y-1/2 rounded-full bg-gradient-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
             <div className="absolute top-1/2 left-1/2 h-75 w-75 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
@@ -155,7 +169,9 @@ export default function AboutPage() {
                 <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
                   <Sparkles className="h-3.5 w-3.5 text-white" />
                 </span>
-                <span className="text-sm font-semibold text-emerald-700">Povestea noastră</span>
+                <span className="text-sm font-semibold text-emerald-700">
+                  Povestea noastră
+                </span>
               </motion.div>
 
               <h1 className="mb-8 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
@@ -183,7 +199,13 @@ export default function AboutPage() {
                       transition={{ delay: 0.8, duration: 1.2 }}
                     />
                     <defs>
-                      <linearGradient id="gradient" x1="0" y1="0" x2="400" y2="0">
+                      <linearGradient
+                        id="gradient"
+                        x1="0"
+                        y1="0"
+                        x2="400"
+                        y2="0"
+                      >
                         <stop offset="0%" stopColor="#059669" />
                         <stop offset="50%" stopColor="#14b8a6" />
                         <stop offset="100%" stopColor="#0284c7" />
@@ -194,9 +216,9 @@ export default function AboutPage() {
               </h1>
 
               <p className="mx-auto mb-12 max-w-2xl text-lg leading-relaxed text-slate-600 sm:text-xl">
-                Ofertemutare.ro s-a născut dintr-o frustrare comună: cât de greu era să găsești o
-                firmă de mutări de încredere la un preț corect. Am creat platforma pe care ne-am fi
-                dorit-o noi înșine.
+                Ofertemutare.ro s-a născut dintr-o frustrare comună: cât de greu
+                era să găsești o firmă de mutări de încredere la un preț corect.
+                Am creat platforma pe care ne-am fi dorit-o noi înșine.
               </p>
 
               {/* Quick CTA */}
@@ -273,8 +295,10 @@ export default function AboutPage() {
                   className="order-1 lg:order-2"
                 >
                   <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-sky-50 to-indigo-50 px-5 py-2.5 shadow-sm">
-                    <Target className="h-4 w-4 text-sky-600" />
-                    <span className="text-sm font-semibold text-sky-700">Misiunea noastră</span>
+                    <TrendingUp className="h-4 w-4 text-sky-600" />
+                    <span className="text-sm font-semibold text-sky-700">
+                      Misiunea noastră
+                    </span>
                   </div>
 
                   <h2 className="mb-6 text-3xl leading-tight font-bold text-slate-900 sm:text-4xl lg:text-5xl">
@@ -286,15 +310,17 @@ export default function AboutPage() {
 
                   <div className="mb-8 space-y-5">
                     <p className="text-lg leading-relaxed text-slate-600">
-                      Credem că toată lumea merită o mutare fără griji. De aceea am construit o
-                      platformă care pune în legătură direct clienții cu firmele de mutări
-                      verificate, eliminând intermediarii și costurile nejustificate.
+                      Credem că toată lumea merită o mutare fără griji. De aceea
+                      am construit o platformă care pune în legătură direct
+                      clienții cu firmele de mutări verificate, eliminând
+                      intermediarii și costurile nejustificate.
                     </p>
 
                     <p className="text-lg leading-relaxed text-slate-600">
-                      Fiecare firmă parteneră trece printr-un proces de verificare riguroasă. Ne
-                      asigurăm că au experiență, echipamente adecvate și, cel mai important,
-                      recenzii pozitive de la clienți reali.
+                      Fiecare firmă parteneră trece printr-un proces de
+                      verificare riguroasă. Ne asigurăm că au experiență,
+                      echipamente adecvate și, cel mai important, recenzii
+                      pozitive de la clienți reali.
                     </p>
                   </div>
 
@@ -315,7 +341,9 @@ export default function AboutPage() {
                         className="flex items-center gap-2.5 rounded-xl bg-emerald-50/80 px-4 py-3 backdrop-blur-sm"
                       >
                         <item.icon className="h-5 w-5 text-emerald-600" />
-                        <span className="text-sm font-semibold text-emerald-700">{item.text}</span>
+                        <span className="text-sm font-semibold text-emerald-700">
+                          {item.text}
+                        </span>
                       </motion.div>
                     ))}
                   </div>
@@ -336,7 +364,9 @@ export default function AboutPage() {
             >
               <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-indigo-200 bg-indigo-50 px-5 py-2.5">
                 <Clock className="h-4 w-4 text-indigo-600" />
-                <span className="text-sm font-semibold text-indigo-700">Parcursul nostru</span>
+                <span className="text-sm font-semibold text-indigo-700">
+                  Parcursul nostru
+                </span>
               </div>
 
               <h2 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl">
@@ -346,7 +376,8 @@ export default function AboutPage() {
               </h2>
 
               <p className="text-lg text-slate-600">
-                15+ ani de experiență în mutări ne-au inspirat să creăm o platformă de încredere.
+                15+ ani de experiență în mutări ne-au inspirat să creăm o
+                platformă de încredere.
               </p>
             </motion.div>
 
@@ -367,12 +398,18 @@ export default function AboutPage() {
                     }`}
                   >
                     {/* Content card */}
-                    <div className={`w-full sm:w-1/2 ${i % 2 === 0 ? "sm:pr-12" : "sm:pl-12"}`}>
+                    <div
+                      className={`w-full sm:w-1/2 ${i % 2 === 0 ? "sm:pr-12" : "sm:pl-12"}`}
+                    >
                       <motion.div className="rounded-2xl border border-slate-200/50 bg-white p-6 shadow-lg transition-shadow hover:shadow-xl">
                         <div className="mb-3 inline-flex rounded-lg bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-1">
-                          <span className="text-sm font-bold text-white">{item.year}</span>
+                          <span className="text-sm font-bold text-white">
+                            {item.year}
+                          </span>
                         </div>
-                        <h3 className="mb-2 text-xl font-bold text-slate-900">{item.title}</h3>
+                        <h3 className="mb-2 text-xl font-bold text-slate-900">
+                          {item.title}
+                        </h3>
                         <p className="text-slate-600">{item.desc}</p>
                       </motion.div>
                     </div>
@@ -400,7 +437,9 @@ export default function AboutPage() {
             >
               <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-purple-200 bg-gradient-to-r from-purple-50 to-pink-50 px-5 py-2.5 shadow-sm">
                 <Heart className="h-4 w-4 text-purple-600" />
-                <span className="text-sm font-semibold text-purple-700">Valorile noastre</span>
+                <span className="text-sm font-semibold text-purple-700">
+                  Valorile noastre
+                </span>
               </div>
 
               <h2 className="mb-5 text-3xl font-bold text-slate-900 sm:text-4xl lg:text-5xl">
@@ -411,7 +450,8 @@ export default function AboutPage() {
               </h2>
 
               <p className="text-lg text-slate-600">
-                Fiecare decizie pe care o luăm se bazează pe aceste valori fundamentale.
+                Fiecare decizie pe care o luăm se bazează pe aceste valori
+                fundamentale.
               </p>
             </motion.div>
 
@@ -442,8 +482,12 @@ export default function AboutPage() {
                     </div>
 
                     {/* Content */}
-                    <h3 className="mb-3 text-xl font-bold text-slate-900">{value.title}</h3>
-                    <p className="text-sm leading-relaxed text-slate-600">{value.desc}</p>
+                    <h3 className="mb-3 text-xl font-bold text-slate-900">
+                      {value.title}
+                    </h3>
+                    <p className="text-sm leading-relaxed text-slate-600">
+                      {value.desc}
+                    </p>
 
                     {/* Decorative corner */}
                     <div
@@ -486,13 +530,18 @@ export default function AboutPage() {
                 {/* Rating */}
                 <div className="mb-4 flex items-center justify-center gap-1">
                   {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="h-6 w-6 fill-amber-400 text-amber-400" />
+                    <Star
+                      key={i}
+                      className="h-6 w-6 fill-amber-400 text-amber-400"
+                    />
                   ))}
                 </div>
 
                 {/* Author */}
                 <div>
-                  <p className="text-lg font-bold text-white">{testimonial.author}</p>
+                  <p className="text-lg font-bold text-white">
+                    {testimonial.author}
+                  </p>
                   <p className="text-white/70">{testimonial.role}</p>
                 </div>
               </div>
@@ -516,7 +565,9 @@ export default function AboutPage() {
                 >
                   <div className="mb-5 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-amber-50 to-orange-50 px-5 py-2.5 shadow-sm">
                     <Handshake className="h-4 w-4 text-amber-600" />
-                    <span className="text-sm font-semibold text-amber-700">Cum te ajutăm</span>
+                    <span className="text-sm font-semibold text-amber-700">
+                      Cum te ajutăm
+                    </span>
                   </div>
 
                   <h2 className="mb-8 text-3xl leading-tight font-bold text-slate-900 sm:text-4xl lg:text-5xl">
@@ -562,8 +613,12 @@ export default function AboutPage() {
                           <item.icon className="h-7 w-7 text-white" />
                         </div>
                         <div>
-                          <h3 className="mb-2 text-lg font-bold text-slate-900">{item.title}</h3>
-                          <p className="text-sm leading-relaxed text-slate-600">{item.desc}</p>
+                          <h3 className="mb-2 text-lg font-bold text-slate-900">
+                            {item.title}
+                          </h3>
+                          <p className="text-sm leading-relaxed text-slate-600">
+                            {item.desc}
+                          </p>
                         </div>
                       </motion.div>
                     ))}
@@ -604,7 +659,11 @@ export default function AboutPage() {
                         initial={{ scale: 0, rotate: 10 }}
                         whileInView={{ scale: 1, rotate: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.6, type: "spring", stiffness: 200 }}
+                        transition={{
+                          delay: 0.6,
+                          type: "spring",
+                          stiffness: 200,
+                        }}
                         className="absolute -bottom-4 -left-4 sm:-bottom-6 sm:-left-6"
                       >
                         <div className="rounded-2xl border border-amber-100 bg-white p-4 shadow-xl sm:p-5">
@@ -613,10 +672,15 @@ export default function AboutPage() {
                               <Award className="h-6 w-6 text-white" />
                             </div>
                             <div>
-                              <p className="text-xl font-bold text-slate-900">Top Rating</p>
+                              <p className="text-xl font-bold text-slate-900">
+                                Top Rating
+                              </p>
                               <div className="flex items-center gap-0.5">
                                 {[...Array(5)].map((_, i) => (
-                                  <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                                  <Star
+                                    key={i}
+                                    className="h-4 w-4 fill-amber-400 text-amber-400"
+                                  />
                                 ))}
                               </div>
                             </div>
@@ -656,7 +720,9 @@ export default function AboutPage() {
                   <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
                     <Sparkles className="h-3.5 w-3.5 text-white" />
                   </span>
-                  <span className="text-sm font-semibold text-emerald-700">Începe acum</span>
+                  <span className="text-sm font-semibold text-emerald-700">
+                    Începe acum
+                  </span>
                 </motion.div>
 
                 <h2 className="mb-5 text-3xl font-bold text-slate-900 sm:text-4xl lg:text-5xl">
@@ -668,8 +734,8 @@ export default function AboutPage() {
                 </h2>
 
                 <p className="mx-auto mb-10 max-w-2xl text-lg text-slate-600 sm:text-xl">
-                  Alătură-te celor peste 500 de clienți mulțumiți care au găsit firma de mutări
-                  perfectă prin platforma noastră.
+                  Alătură-te celor peste 500 de clienți mulțumiți care au găsit
+                  firma de mutări perfectă prin platforma noastră.
                 </p>
 
                 <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
@@ -721,6 +787,3 @@ export default function AboutPage() {
     </>
   );
 }
-
-
-

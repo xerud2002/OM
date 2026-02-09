@@ -1,4 +1,5 @@
 import admin from "firebase-admin";
+import { logger } from "@/utils/logger";
 // import "dotenv/config"; // Load .env file (handled by Next.js automatically)
 
 // Use global to persist state across hot-reloads in development
@@ -10,7 +11,8 @@ declare global {
 // Initialize Firebase Admin SDK once per runtime
 if (!admin.apps.length) {
   const projectId =
-    process.env.FIREBASE_ADMIN_PROJECT_ID || process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
+    process.env.FIREBASE_ADMIN_PROJECT_ID ||
+    process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
   const clientEmail = process.env.FIREBASE_ADMIN_CLIENT_EMAIL || "";
   // Private key might contain escaped newlines - handle multiple formats
   const privateKeyRaw = process.env.FIREBASE_ADMIN_PRIVATE_KEY || "";
@@ -23,19 +25,25 @@ if (!admin.apps.length) {
   }
 
   const storageBucket =
-    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || `${projectId}.appspot.com`;
+    process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET ||
+    `${projectId}.appspot.com`;
 
-  const looksPlaceholderEmail = clientEmail.toLowerCase().includes("placeholder");
+  const looksPlaceholderEmail = clientEmail
+    .toLowerCase()
+    .includes("placeholder");
   const missingEssentials = !projectId || !clientEmail || !privateKey;
   const hasValidKeyFormat =
-    privateKey.includes("-----BEGIN") && privateKey.includes("PRIVATE KEY-----");
+    privateKey.includes("-----BEGIN") &&
+    privateKey.includes("PRIVATE KEY-----");
 
-  console.log("[firebaseAdmin] Initialization check:");
-  console.log("  - projectId:", projectId || "MISSING");
-  console.log("  - clientEmail:", clientEmail ? `${clientEmail.substring(0, 30)}...` : "MISSING");
-  console.log("  - privateKey length:", privateKey.length, "chars");
-  console.log("  - hasValidKeyFormat:", hasValidKeyFormat);
-  console.log("  - NODE_ENV:", process.env.NODE_ENV);
+  logger.log("[firebaseAdmin] Initialization check:");
+  logger.log("  - projectId:", projectId ? "set" : "MISSING");
+  logger.log("  - clientEmail:", clientEmail ? "set" : "MISSING");
+  logger.log(
+    "  - privateKey:",
+    privateKey.length > 0 ? `${privateKey.length} chars` : "MISSING",
+  );
+  logger.log("  - hasValidKeyFormat:", hasValidKeyFormat);
 
   try {
     if (!missingEssentials && !looksPlaceholderEmail && hasValidKeyFormat) {
@@ -56,8 +64,8 @@ if (!admin.apps.length) {
           : !hasValidKeyFormat
             ? "invalid private key format"
             : "unknown";
-      console.warn(
-        `Firebase Admin not configured (${reason}). Guest requests will fall back to client-side.`
+      logger.warn(
+        `Firebase Admin not configured (${reason}). Guest requests will fall back to client-side.`,
       );
       // Initialize with minimal config for development
       admin.initializeApp({
@@ -66,7 +74,10 @@ if (!admin.apps.length) {
       globalThis._firebaseAdminHasCredentials = false;
     }
   } catch (e) {
-    console.warn("Firebase Admin initialization failed; falling back to minimal config.", e);
+    logger.warn(
+      "Firebase Admin initialization failed; falling back to minimal config.",
+      e,
+    );
     admin.initializeApp({
       projectId: projectId || "demo-project",
     });

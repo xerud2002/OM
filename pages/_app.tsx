@@ -12,8 +12,10 @@ import { CONSENT_EVENT } from "@/components/CookieConsent";
 import "../globals.css";
 import "react-day-picker/dist/style.css";
 
-// Import dev error suppressor for cleaner console in development
-import "@/utils/devErrorSuppressor";
+// Dev error suppressor loaded only in development (tree-shaken in production)
+if (process.env.NODE_ENV === "development") {
+  require("@/utils/devErrorSuppressor");
+}
 import { pageView } from "@/utils/analytics";
 
 // Self-hosted Inter font with optimal loading strategy

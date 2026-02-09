@@ -6,6 +6,7 @@ import {
   acceptAllCookies,
   acceptNecessaryOnly,
   setConsent,
+  getConsent,
   hasConsentChoice,
   type CookieConsent as ConsentType,
 } from "@/utils/cookies";
@@ -43,6 +44,12 @@ export default function CookieConsent() {
   // Allow re-opening banner via custom event (e.g. Footer "Setări cookie-uri" link)
   useEffect(() => {
     const onReopen = () => {
+      // Restore saved preferences into toggles when re-opening settings
+      const saved = getConsent();
+      if (saved) {
+        setAnalytics(saved.analytics);
+        setMarketing(saved.marketing);
+      }
       setShowSettings(true);
       setVisible(true);
     };
@@ -182,8 +189,8 @@ export default function CookieConsent() {
                       Marketing
                     </span>
                     <p className="mt-0.5 text-xs text-gray-500">
-                      Cookie-uri pentru publicitate și remarketing (momentan
-                      inactive).
+                      Cookie-uri pentru publicitate și remarketing (nefolosite
+                      încă — pregătite pentru viitor).
                     </p>
                   </div>
                   <input

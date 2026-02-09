@@ -1,5 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
+import { logger } from "@/utils/logger";
+import { apiError, apiSuccess } from "@/types/api";
 import type {
   QueryDocumentSnapshot,
   DocumentData,
@@ -27,7 +29,7 @@ export default async function handler(
 ) {
   // Only allow POST requests
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json(apiError("Method not allowed"));
   }
 
   // Verify cron secret
@@ -35,12 +37,12 @@ export default async function handler(
   const cronSecret = process.env.CRON_SECRET;
 
   if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
-    return res.status(401).json({ error: "Unauthorized" });
+    return res.status(401).json(apiError("Unauthorized"));
   }
 
   // Check if Firebase Admin is ready
   if (!adminReady) {
-    return res.status(500).json({ error: "Firebase Admin not configured" });
+    return res.status(500).json(apiError("Firebase Admin not configured"));
   }
 
   try {
@@ -142,7 +144,7 @@ export default async function handler(
           success: true,
         });
       } catch (error) {
-        console.error(`Failed to refund offer ${offerId}:`, error);
+        logger.error(`Failed to refund offer ${offerId}:`, error);
         refundResults.push({
           offerId,
           companyId,
@@ -157,18 +159,17 @@ export default async function handler(
       .filter((r) => r.success)
       .reduce((sum, r) => sum + r.amount, 0);
 
-    return res.status(200).json({
-      processed: refundResults.length,
-      successful: successCount,
-      failed: refundResults.length - successCount,
-      totalCreditsRefunded: totalRefunded,
-      results: refundResults,
-    });
+    return res.status(200).json(
+      apiSuccess({
+        processed: refundResults.length,
+        successful: successCount,
+        failed: refundResults.length - successCount,
+        totalCreditsRefunded: totalRefunded,
+        results: refundResults,
+      }),
+    );
   } catch (error) {
-    console.error("Auto-refund cron error:", error);
-    return res.status(500).json({
-      error: "Internal server error",
-      message: error instanceof Error ? error.message : "Unknown error",
-    });
+    logger.error("Auto-refund cron error:", error);
+    return res.status(500).json(apiError("Internal server error"));
   }
 }

@@ -4,15 +4,21 @@
 User-agent: *
 Allow: /
 
-# Explicitly allow AI Bots (GEO Strategy)
+# Block AI Bots (protect content from training)
 User-agent: GPTBot
-Allow: /
+Disallow: /
 
 User-agent: Google-Extended
-Allow: /
+Disallow: /
 
 User-agent: CCBot
-Allow: /
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
 
 # Block private/authenticated pages
 Disallow: /customer/dashboard

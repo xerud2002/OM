@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes } from "crypto";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
+import { apiError, apiSuccess } from "@/types/api";
 
 export default async function handler(
   req: NextApiRequest,
@@ -9,21 +10,34 @@ export default async function handler(
 ) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json(apiError("Method Not Allowed"));
   }
 
   const { requestId, customerEmail, customerName } = req.body || {};
   if (!requestId || !customerEmail) {
     return res
       .status(400)
-      .json({ error: "Missing required fields: requestId, customerEmail" });
+      .json(apiError("Missing required fields: requestId, customerEmail"));
   }
 
   try {
     if (!adminReady) {
       return res
         .status(503)
-        .json({ error: "Admin not configured in this environment" });
+        .json(apiError("Admin not configured in this environment"));
+    }
+
+    // Verify the request exists and the email matches the one on record
+    const requestDoc = await adminDb.doc(`requests/${requestId}`).get();
+    if (!requestDoc.exists) {
+      return res.status(404).json(apiError("Request not found"));
+    }
+    const requestData = requestDoc.data();
+    if (
+      requestData?.email !== customerEmail &&
+      requestData?.contactEmail !== customerEmail
+    ) {
+      return res.status(403).json(apiError("Email does not match request"));
     }
 
     // Generate unique upload token
@@ -51,16 +65,17 @@ export default async function handler(
     const requestRef = adminDb.doc(`requests/${requestId}`);
     await requestRef.set({ mediaUploadToken: uploadToken }, { merge: true });
 
-    // Return token - email will be sent client-side via EmailJS
-    return res.status(200).json({
-      ok: true,
-      uploadToken,
-      uploadLink,
-      customerEmail,
-      customerName,
-    });
+    // Return token - email notification handled separately
+    return res.status(200).json(
+      apiSuccess({
+        uploadToken,
+        uploadLink,
+        customerEmail,
+        customerName,
+      }),
+    );
   } catch (error) {
     logger.error("Error generating upload link:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json(apiError("Internal server error"));
   }
 }

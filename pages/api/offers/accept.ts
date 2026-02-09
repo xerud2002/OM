@@ -3,6 +3,7 @@ import { adminDb, adminAuth } from "@/lib/firebaseAdmin";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
+import { sendEmail } from "@/services/email";
 
 type RequestDoc = {
   customerId: string;
@@ -204,54 +205,16 @@ export default async function handler(
 </html>
 `;
 
-      const emailText = `
-Felicitări, ${companyName}!
-
-Oferta ta a fost acceptată de ${customerName}!
-
-Detalii cerere: ${requestCode}
-- Traseu: ${fromCity} → ${toCity}
-- Camere: ${rooms}
-- Preț acceptat: ${price} lei
-- Detalii: ${details}
-
-Următorii pași:
-1. Contactează clientul cât mai curând pentru a confirma detaliile mutării
-2. Stabilește data și ora exactă a mutării
-3. Asigură-te că ai echipamentul necesar
-4. După finalizarea mutării, încurajează clientul să lase un review pentru ${companyName}
-
-Mult succes!
-
-Echipa OferteMutare.ro
-info@ofertemutare.ro
-`;
-
-      // Send email via Resend API
+      // Send email via centralized email service
       try {
-        const RESEND_API_KEY = process.env.RESEND_API_KEY;
-        const fromAddress =
-          process.env.NOTIFY_FROM_EMAIL || "info@ofertemutare.ro";
+        const result = await sendEmail({
+          to: companyEmail,
+          subject: emailSubject,
+          html: emailHtml,
+        });
 
-        if (RESEND_API_KEY) {
-          await fetch("https://api.resend.com/emails", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${RESEND_API_KEY}`,
-            },
-            body: JSON.stringify({
-              from: `OferteMutare.ro <${fromAddress}>`,
-              to: [companyEmail],
-              subject: emailSubject,
-              html: emailHtml,
-              text: emailText,
-            }),
-          });
-        } else {
-          logger.warn(
-            "[offers/accept] RESEND_API_KEY missing – email not sent",
-          );
+        if (!result.success) {
+          logger.warn("[offers/accept] Email send failed:", result.error);
         }
       } catch (emailErr) {
         logger.error("[offers/accept] Email error:", emailErr);

@@ -126,13 +126,12 @@ service cloud.firestore {
 
         // Only companies can create offers for requests on active, non-archived requests
         allow create: if isSignedIn() &&
-          request.resource.data.companyId == request.auth.uid;
-          // Temporarily removed extended validation for debugging
-          // && !(get(/databases/$(database)/documents/requests/$(requestId)).data.archived == true) &&
-          // !(
-          //   get(/databases/$(database)/documents/requests/$(requestId)).data.status == 'closed' ||
-          //   get(/databases/$(database)/documents/requests/$(requestId)).data.status == 'cancelled'
-          // );
+          request.resource.data.companyId == request.auth.uid &&
+          !(get(/databases/$(database)/documents/requests/$(requestId)).data.archived == true) &&
+          !(
+            get(/databases/$(database)/documents/requests/$(requestId)).data.status == 'closed' ||
+            get(/databases/$(database)/documents/requests/$(requestId)).data.status == 'cancelled'
+          );
 
         // Strict updates:
         // - Company (owner) may only change price/message (and not rebind companyId/requestId)

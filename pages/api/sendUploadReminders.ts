@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
+import { sendEmail } from "@/services/email";
 import { logger } from "@/utils/logger";
+import { apiError, apiSuccess } from "@/types/api";
 
 /**
  * API pentru verificarea token-urilor nefolosite și trimiterea reminder-elor
@@ -16,22 +18,21 @@ export default async function handler(
 ) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json(apiError("Method Not Allowed"));
   }
 
-  // Auth: Check API key for production security
+  // Auth: Always require API key (fail closed)
   const apiKey = req.headers["x-api-key"];
-  if (process.env.NODE_ENV === "production" && process.env.CRON_API_KEY) {
-    if (apiKey !== process.env.CRON_API_KEY) {
-      return res.status(401).json({ error: "Unauthorized" });
-    }
+  const cronApiKey = process.env.CRON_API_KEY;
+  if (!cronApiKey || apiKey !== cronApiKey) {
+    return res.status(401).json(apiError("Unauthorized"));
   }
 
   try {
     if (!adminReady) {
       return res
         .status(503)
-        .json({ error: "Admin not configured in this environment" });
+        .json(apiError("Admin not configured in this environment"));
     }
 
     const threeDaysAgo = new Date();
@@ -70,27 +71,22 @@ export default async function handler(
         };
         reminders.push(reminderInfo);
 
-        // Send reminder email via new API
+        // Send reminder email directly via sendEmail service (no circular HTTP call)
         try {
-          const response = await fetch(
-            `${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                type: "uploadReminder",
-                data: {
-                  email: tokenData.customerEmail,
-                  name: tokenData.customerName,
-                  requestCode: tokenData.requestId || "cererea ta",
-                  uploadUrl: tokenData.uploadLink,
-                },
-              }),
-            },
-          );
+          const emailResult = await sendEmail({
+            to: tokenData.customerEmail,
+            subject: `📸 Reminder: Încarcă poze pentru cererea ${tokenData.requestId || "ta"}`,
+            html: `
+              <!DOCTYPE html>
+              <html lang="ro">
+                <head><meta charset="utf-8"><style>body{font-family:Arial,sans-serif;line-height:1.6;color:#333;margin:0;padding:0}.container{max-width:600px;margin:0 auto;padding:20px}.header{background:linear-gradient(135deg,#10b981,#0ea5e9);padding:30px;text-align:center;color:white;border-radius:8px 8px 0 0}.content{background:#fff;padding:30px;border:1px solid #e5e7eb;border-top:none}.button{display:inline-block;background:#10b981;color:white;padding:12px 30px;text-decoration:none;border-radius:6px;margin:20px 0}.footer{text-align:center;padding:20px;color:#6b7280;font-size:14px}</style></head>
+                <body><div class="container"><div class="header"><h1>📸 Nu uita să încarci pozele!</h1></div><div class="content"><p>Bună ${tokenData.customerName || ""},</p><p>Te rugăm să încarci poze cu obiectele de mutat pentru cererea <strong>${tokenData.requestId || "ta"}</strong>.</p><p>Pozele ajută companiile să îți ofere prețuri mai precise.</p><p style="text-align:center"><a href="${tokenData.uploadLink}" class="button">Încarcă Poze Acum</a></p></div><div class="footer"><p><strong>OferteMutare.ro</strong></p></div></div></body>
+              </html>
+            `,
+          });
 
-          if (!response.ok) {
-            throw new Error("Email API returned error");
+          if (!emailResult.success) {
+            throw new Error(emailResult.error || "Email sending failed");
           }
 
           // Mark reminder as sent
@@ -110,15 +106,16 @@ export default async function handler(
       }
     }
 
-    return res.status(200).json({
-      ok: true,
-      total: reminders.length,
-      sent: sentCount,
-      failed: failedCount,
-      reminders,
-    });
+    return res.status(200).json(
+      apiSuccess({
+        total: reminders.length,
+        sent: sentCount,
+        failed: failedCount,
+        reminders,
+      }),
+    );
   } catch (error) {
     logger.error("Error checking upload reminders:", error);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json(apiError("Internal server error"));
   }
 }

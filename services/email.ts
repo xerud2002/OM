@@ -1,4 +1,5 @@
-import { Resend } from 'resend';
+import { Resend } from "resend";
+import { logger } from "@/utils/logger";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -18,10 +19,17 @@ export async function sendEmail({
   replyTo,
   cc,
   bcc,
-}: SendEmailOptions): Promise<{ success: boolean; error?: string; id?: string }> {
+}: SendEmailOptions): Promise<{
+  success: boolean;
+  error?: string;
+  id?: string;
+}> {
   try {
-    const fromEmail = process.env.RESEND_FROM_EMAIL || process.env.NOTIFY_FROM_EMAIL || 'info@ofertemutare.ro';
-    const adminEmail = process.env.RESEND_ADMIN_EMAIL || 'info@ofertemutare.ro';
+    const fromEmail =
+      process.env.RESEND_FROM_EMAIL ||
+      process.env.NOTIFY_FROM_EMAIL ||
+      "info@ofertemutare.ro";
+    const adminEmail = process.env.RESEND_ADMIN_EMAIL || "info@ofertemutare.ro";
 
     const { data, error } = await resend.emails.send({
       from: `OferteMutare.ro <${fromEmail}>`,
@@ -34,20 +42,57 @@ export async function sendEmail({
     });
 
     if (error) {
-      console.error('[Resend Error]', error);
+      logger.error("[Resend Error]", error);
       return { success: false, error: error.message };
     }
 
     return { success: true, id: data?.id };
   } catch (err) {
-    console.error('[Email Send Error]', err);
+    logger.error("[Email Send Error]", err);
     return { success: false, error: String(err) };
   }
 }
 
 // Email templates - Premium Style
+
+// Sanitize user-provided strings before interpolating into HTML
+export function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// Helper to escape all string values in a data object
+function escapeData<T extends Record<string, unknown>>(data: T): T {
+  const escaped = { ...data };
+  for (const key of Object.keys(escaped)) {
+    if (typeof escaped[key] === "string") {
+      (escaped as Record<string, unknown>)[key] = escapeHtml(
+        escaped[key] as string,
+      );
+    }
+  }
+  return escaped;
+}
+
 export const emailTemplates = {
-  guestRequestConfirmation: (requestCode: string, name: string, from: string, to: string, movingDate: string) => `
+  guestRequestConfirmation: (
+    requestCode: string,
+    name: string,
+    from: string,
+    to: string,
+    movingDate: string,
+  ) => {
+    // Sanitize all user-provided inputs
+    requestCode = escapeHtml(requestCode);
+    name = escapeHtml(name);
+    from = escapeHtml(from);
+    to = escapeHtml(to);
+    movingDate = escapeHtml(movingDate);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -222,7 +267,8 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
   newOffer: (data: {
     requestCode: string;
@@ -234,7 +280,9 @@ export const emailTemplates = {
     toCity: string;
     moveDate?: string;
     dashboardUrl: string;
-  }) => `
+  }) => {
+    data = escapeData(data) as typeof data;
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -371,7 +419,7 @@ export const emailTemplates = {
             <div class="content">
               <div class="route-card">
                 <div class="route-text">${data.fromCity} → ${data.toCity}</div>
-                ${data.moveDate ? `<div class="route-date">📅 ${data.moveDate}</div>` : ''}
+                ${data.moveDate ? `<div class="route-date">📅 ${data.moveDate}</div>` : ""}
               </div>
               
               <div class="message">
@@ -380,9 +428,9 @@ export const emailTemplates = {
               
               <div class="offer-card">
                 <div class="company-name">${data.companyName}</div>
-                <div class="price-display">${data.price.toLocaleString('ro-RO')}</div>
+                <div class="price-display">${data.price.toLocaleString("ro-RO")}</div>
                 <div class="price-label">Lei RON</div>
-                ${data.companyMessage ? `<div class="company-message">"${data.companyMessage}"</div>` : ''}
+                ${data.companyMessage ? `<div class="company-message">"${data.companyMessage}"</div>` : ""}
               </div>
 
               <div class="reference">
@@ -408,9 +456,20 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
-  offerAccepted: (requestCode: string, customerName: string, customerPhone: string, customerEmail: string) => `
+  offerAccepted: (
+    requestCode: string,
+    customerName: string,
+    customerPhone: string,
+    customerEmail: string,
+  ) => {
+    requestCode = escapeHtml(requestCode);
+    customerName = escapeHtml(customerName);
+    customerPhone = escapeHtml(customerPhone);
+    customerEmail = escapeHtml(customerEmail);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -514,9 +573,20 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
-  contactForm: (name: string, email: string, phone: string, message: string) => `
+  contactForm: (
+    name: string,
+    email: string,
+    phone: string,
+    message: string,
+  ) => {
+    name = escapeHtml(name);
+    email = escapeHtml(email);
+    phone = escapeHtml(phone);
+    message = escapeHtml(message);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -561,7 +631,7 @@ export const emailTemplates = {
               </div>
               <div class="field">
                 <div class="label">Telefon</div>
-                <div class="value"><a href="tel:${phone}">${phone || 'Nu a furnizat'}</a></div>
+                <div class="value"><a href="tel:${phone}">${phone || "Nu a furnizat"}</a></div>
               </div>
               <div class="field">
                 <div class="label">Mesaj</div>
@@ -572,10 +642,23 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
   // Notification to companies about new moving request
-  newRequestNotification: (requestCode: string, from: string, to: string, movingDate: string, furniture: string) => `
+  newRequestNotification: (
+    requestCode: string,
+    from: string,
+    to: string,
+    movingDate: string,
+    furniture: string,
+  ) => {
+    requestCode = escapeHtml(requestCode);
+    from = escapeHtml(from);
+    to = escapeHtml(to);
+    movingDate = escapeHtml(movingDate);
+    furniture = escapeHtml(furniture);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -686,7 +769,7 @@ export const emailTemplates = {
               </div>
 
               <div class="cta-wrapper">
-                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" class="cta">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://ofertemutare.ro"}/company/dashboard" class="cta">
                   Trimite Oferta
                 </a>
               </div>
@@ -705,10 +788,19 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
   // Notify company that their offer was declined
-  offerDeclined: (requestCode: string, companyName: string, customerName: string) => `
+  offerDeclined: (
+    requestCode: string,
+    companyName: string,
+    customerName: string,
+  ) => {
+    requestCode = escapeHtml(requestCode);
+    companyName = escapeHtml(companyName);
+    customerName = escapeHtml(customerName);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -768,7 +860,7 @@ export const emailTemplates = {
               </div>
 
               <div class="cta-wrapper">
-                <a href="${process.env.NEXT_PUBLIC_APP_URL || 'https://ofertemutare.ro'}/company/dashboard" class="cta">
+                <a href="${process.env.NEXT_PUBLIC_APP_URL || "https://ofertemutare.ro"}/company/dashboard" class="cta">
                   Vezi Cereri Noi
                 </a>
               </div>
@@ -783,10 +875,20 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
   // Remind customer about pending offers
-  offerReminder: (requestCode: string, customerName: string, offerCount: number, dashboardLink: string) => `
+  offerReminder: (
+    requestCode: string,
+    customerName: string,
+    offerCount: number,
+    dashboardLink: string,
+  ) => {
+    requestCode = escapeHtml(requestCode);
+    customerName = escapeHtml(customerName);
+    dashboardLink = escapeHtml(dashboardLink);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -860,11 +962,11 @@ export const emailTemplates = {
               
               <div class="offer-badge">
                 <div class="offer-count">${offerCount}</div>
-                <div class="offer-label">${offerCount === 1 ? 'ofertă disponibilă' : 'oferte disponibile'}</div>
+                <div class="offer-label">${offerCount === 1 ? "ofertă disponibilă" : "oferte disponibile"}</div>
               </div>
 
               <div class="message">
-                Ai primit ${offerCount === 1 ? 'o ofertă' : 'multiple oferte'} pentru mutarea ta. Compară opțiunile și alege-o pe cea care se potrivește cel mai bine nevoilor tale.
+                Ai primit ${offerCount === 1 ? "o ofertă" : "multiple oferte"} pentru mutarea ta. Compară opțiunile și alege-o pe cea care se potrivește cel mai bine nevoilor tale.
               </div>
               
               <div class="benefits">
@@ -893,10 +995,19 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
   // Notify customer about new message from company
-  newMessageFromCompany: (companyName: string, messagePreview: string, conversationLink: string) => `
+  newMessageFromCompany: (
+    companyName: string,
+    messagePreview: string,
+    conversationLink: string,
+  ) => {
+    companyName = escapeHtml(companyName);
+    messagePreview = escapeHtml(messagePreview);
+    conversationLink = escapeHtml(conversationLink);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -974,10 +1085,21 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 
   // Notify company about new message from customer
-  newMessageFromCustomer: (customerName: string, requestCode: string, messagePreview: string, conversationLink: string) => `
+  newMessageFromCustomer: (
+    customerName: string,
+    requestCode: string,
+    messagePreview: string,
+    conversationLink: string,
+  ) => {
+    customerName = escapeHtml(customerName);
+    requestCode = escapeHtml(requestCode);
+    messagePreview = escapeHtml(messagePreview);
+    conversationLink = escapeHtml(conversationLink);
+    return `
     <!DOCTYPE html>
     <html lang="ro">
       <head>
@@ -1074,5 +1196,6 @@ export const emailTemplates = {
         </div>
       </body>
     </html>
-  `,
+  `;
+  },
 };

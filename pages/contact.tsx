@@ -40,7 +40,9 @@ export default function ContactPage() {
   const [error, setError] = useState("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >,
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -51,9 +53,32 @@ export default function ContactPage() {
     setError("");
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "contactForm",
+          data: {
+            name: formData.name,
+            email: formData.email,
+            phone: "",
+            message: `[${formData.subject}] (${formData.type})\n\n${formData.message}`,
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Email sending failed");
+      }
+
       setSent(true);
-      setFormData({ name: "", email: "", subject: "", type: "client", message: "" });
+      setFormData({
+        name: "",
+        email: "",
+        subject: "",
+        type: "client",
+        message: "",
+      });
     } catch {
       setError("A apărut o eroare. Te rugăm să încerci din nou.");
     } finally {
@@ -110,61 +135,30 @@ export default function ContactPage() {
   return (
     <>
       <Head>
-        <title>Contact - OferteMutare.ro | Contactează Echipa Noastră</title>
+        <title>Contact | OferteMutare.ro - Suport și Întrebări</title>
+        <meta name="author" content="Ofertemutare Ltd" />
         <meta
           name="description"
-          content="Ai întrebări despre mutările tale? Contactează echipa OferteMutare.ro pentru suport rapid. Email: info@ofertemutare.ro | Răspundem în maxim 24h."
+          content="Contactează echipa Ofertemutare Ltd (OferteMutare.ro) pentru întrebări, suport sau parteneriate. Răspundem în maxim 24 de ore. Email și formular de contact."
         />
         <meta
           name="keywords"
-          content="contact mutari, suport mutari, contact ofertemutare, asistenta mutari, intrebari mutari romania"
+          content="contact ofertemutare, suport mutări, întrebări mutare, parteneriat firme mutări, contact mutari romania"
         />
+        <link rel="canonical" href="https://ofertemutare.ro/contact" />
 
-        {/* Open Graph / Facebook */}
+        {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro/contact" />
-        <meta
-          property="og:title"
-          content="Contact - OferteMutare.ro | Contactează Echipa Noastră"
-        />
-        <meta
-          property="og:description"
-          content="Ai întrebări despre mutările tale? Contactează echipa OferteMutare.ro pentru suport rapid. Răspundem în maxim 24h."
-        />
-        <meta property="og:image" content="https://ofertemutare.ro/images/og-image.png" />
-
-        {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://ofertemutare.ro/contact" />
-        <meta property="twitter:title" content="Contact - OferteMutare.ro" />
-        <meta
-          property="twitter:description"
-          content="Contactează echipa OferteMutare.ro pentru suport și întrebări despre mutări."
-        />
-        <meta property="twitter:image" content="https://ofertemutare.ro/images/og-image.png" />
-
-        {/* Canonical */}
-        <link rel="canonical" href="https://ofertemutare.ro/contact" />
-      </Head>
-      <Head>
-        <title>Contact | OferteMutare.ro - Suport și Întrebări</title>
-        <meta
-          name="description"
-          content="Contactează echipa OferteMutare.ro pentru întrebări, suport sau parteneriate. Răspundem în maxim 24 de ore. Email, telefon și formular de contact."
-        />
-        <meta
-          name="keywords"
-          content="contact ofertemutare, suport mutări, întrebări mutare, parteneriat firme mutări"
-        />
-        <link rel="canonical" href="https://ofertemutare.ro/contact" />
         <meta property="og:title" content="Contact | OferteMutare.ro" />
         <meta
           property="og:description"
-          content="Contactează-ne pentru întrebări sau suport. Răspundem în 24h."
+          content="Contactează echipa OferteMutare.ro pentru suport rapid. Răspundem în maxim 24h."
         />
-        <meta property="og:url" content="https://ofertemutare.ro/contact" />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta
+          property="og:image"
+          content="https://ofertemutare.ro/pics/index.webp"
+        />
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
@@ -174,14 +168,23 @@ export default function ContactPage() {
           name="twitter:description"
           content="Contactează-ne pentru întrebări sau suport. Răspundem în 24h."
         />
-        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta
+          name="twitter:image"
+          content="https://ofertemutare.ro/pics/index.webp"
+        />
       </Head>
 
       <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">
         {/* Hero Section */}
-        <section ref={heroRef} className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24">
+        <section
+          ref={heroRef}
+          className="relative overflow-hidden pt-24 pb-16 sm:pt-32 sm:pb-24"
+        >
           {/* Animated Background Elements */}
-          <motion.div className="pointer-events-none absolute inset-0" style={{ y: heroY }}>
+          <motion.div
+            className="pointer-events-none absolute inset-0"
+            style={{ y: heroY }}
+          >
             <div className="absolute top-0 left-1/4 h-[500px] w-[500px] -translate-y-1/2 rounded-full bg-gradient-to-br from-emerald-200/40 to-teal-100/30 blur-[120px]" />
             <div className="absolute right-1/4 bottom-0 h-[400px] w-[400px] translate-y-1/2 rounded-full bg-gradient-to-br from-sky-200/40 to-indigo-100/30 blur-[120px]" />
             <div className="absolute top-1/2 left-1/2 h-[300px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-gradient-to-br from-purple-100/20 to-pink-100/20 blur-[100px]" />
@@ -237,7 +240,13 @@ export default function ContactPage() {
                       transition={{ delay: 0.8, duration: 1.2 }}
                     />
                     <defs>
-                      <linearGradient id="contactGradient" x1="0" y1="0" x2="300" y2="0">
+                      <linearGradient
+                        id="contactGradient"
+                        x1="0"
+                        y1="0"
+                        x2="300"
+                        y2="0"
+                      >
                         <stop offset="0%" stopColor="#059669" />
                         <stop offset="50%" stopColor="#14b8a6" />
                         <stop offset="100%" stopColor="#0284c7" />
@@ -248,8 +257,8 @@ export default function ContactPage() {
               </h1>
 
               <p className="mx-auto mb-10 max-w-2xl text-lg leading-relaxed text-slate-600 sm:text-xl">
-                Fie că ești client sau companie de mutări, echipa noastră îți răspunde în cel mai
-                scurt timp. Suntem aici să te ajutăm!
+                Fie că ești client sau companie de mutări, echipa noastră îți
+                răspunde în cel mai scurt timp. Suntem aici să te ajutăm!
               </p>
             </motion.div>
           </div>
@@ -276,7 +285,9 @@ export default function ContactPage() {
                       >
                         <item.icon className="h-6 w-6 text-white" />
                       </div>
-                      <h3 className="mb-1 font-bold text-slate-900">{item.title}</h3>
+                      <h3 className="mb-1 font-bold text-slate-900">
+                        {item.title}
+                      </h3>
                       {item.href ? (
                         <a
                           href={item.href}
@@ -331,7 +342,8 @@ export default function ContactPage() {
                           Trimite-ne un mesaj
                         </h2>
                         <p className="mb-8 text-slate-600">
-                          Completează formularul și îți răspundem în cel mai scurt timp.
+                          Completează formularul și îți răspundem în cel mai
+                          scurt timp.
                         </p>
 
                         {sent ? (
@@ -347,7 +359,8 @@ export default function ContactPage() {
                               Mesaj trimis! 🎉
                             </h3>
                             <p className="mb-6 text-slate-600">
-                              Îți mulțumim pentru mesaj. Te vom contacta în cel mai scurt timp.
+                              Îți mulțumim pentru mesaj. Te vom contacta în cel
+                              mai scurt timp.
                             </p>
                             <button
                               onClick={() => setSent(false)}
@@ -363,7 +376,9 @@ export default function ContactPage() {
                             <div className="flex gap-3">
                               <button
                                 type="button"
-                                onClick={() => setFormData({ ...formData, type: "client" })}
+                                onClick={() =>
+                                  setFormData({ ...formData, type: "client" })
+                                }
                                 className={`flex flex-1 items-center justify-center gap-2 rounded-xl border-2 px-4 py-3.5 font-semibold transition-all ${
                                   formData.type === "client"
                                     ? "border-emerald-500 bg-emerald-50 text-emerald-700 shadow-sm"
@@ -375,7 +390,9 @@ export default function ContactPage() {
                               </button>
                               <button
                                 type="button"
-                                onClick={() => setFormData({ ...formData, type: "company" })}
+                                onClick={() =>
+                                  setFormData({ ...formData, type: "company" })
+                                }
                                 className={`flex flex-1 items-center justify-center gap-2 rounded-xl border-2 px-4 py-3.5 font-semibold transition-all ${
                                   formData.type === "company"
                                     ? "border-blue-500 bg-blue-50 text-blue-700 shadow-sm"
@@ -469,7 +486,11 @@ export default function ContactPage() {
                                 <>
                                   <motion.div
                                     animate={{ rotate: 360 }}
-                                    transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                    transition={{
+                                      duration: 1,
+                                      repeat: Infinity,
+                                      ease: "linear",
+                                    }}
                                     className="h-5 w-5 rounded-full border-2 border-white/30 border-t-white"
                                   />
                                   Se trimite...
@@ -509,7 +530,9 @@ export default function ContactPage() {
                         </span>
                       </div>
 
-                      <h3 className="mb-6 text-xl font-bold text-slate-900">Răspunsuri rapide</h3>
+                      <h3 className="mb-6 text-xl font-bold text-slate-900">
+                        Răspunsuri rapide
+                      </h3>
 
                       <div className="space-y-4">
                         {faqs.map((item, i) => (
@@ -521,7 +544,9 @@ export default function ContactPage() {
                             transition={{ delay: 0.3 + i * 0.1 }}
                             className="rounded-xl bg-slate-50 p-4 transition-all hover:bg-emerald-50/50"
                           >
-                            <h4 className="mb-2 font-semibold text-slate-900">{item.q}</h4>
+                            <h4 className="mb-2 font-semibold text-slate-900">
+                              {item.q}
+                            </h4>
                             <p className="text-sm text-slate-600">{item.a}</p>
                           </motion.div>
                         ))}
@@ -546,25 +571,33 @@ export default function ContactPage() {
                       <div className="mb-4 inline-flex rounded-xl bg-white/10 p-3 backdrop-blur-sm">
                         <Zap className="h-8 w-8" />
                       </div>
-                      <h3 className="mb-2 text-2xl font-bold">Răspundem rapid!</h3>
+                      <h3 className="mb-2 text-2xl font-bold">
+                        Răspundem rapid!
+                      </h3>
                       <p className="mb-6 text-emerald-100">
-                        Echipa noastră de suport îți răspunde de obicei în mai puțin de 4 ore în
-                        zilele lucrătoare.
+                        Echipa noastră de suport îți răspunde de obicei în mai
+                        puțin de 4 ore în zilele lucrătoare.
                       </p>
 
                       <div className="space-y-3">
                         <div className="flex items-center gap-3 rounded-xl bg-white/10 p-4 backdrop-blur-sm">
                           <Clock className="h-5 w-5" />
                           <div>
-                            <p className="text-sm font-semibold">Program suport</p>
-                            <p className="text-sm text-emerald-100">Luni - Vineri: 9:00 - 18:00</p>
+                            <p className="text-sm font-semibold">
+                              Program suport
+                            </p>
+                            <p className="text-sm text-emerald-100">
+                              Luni - Vineri: 9:00 - 18:00
+                            </p>
                           </div>
                         </div>
 
                         <div className="flex items-center gap-3 rounded-xl bg-white/10 p-4 backdrop-blur-sm">
                           <Shield className="h-5 w-5" />
                           <div>
-                            <p className="text-sm font-semibold">Confidențialitate</p>
+                            <p className="text-sm font-semibold">
+                              Confidențialitate
+                            </p>
                             <p className="text-sm text-emerald-100">
                               Datele tale sunt în siguranță
                             </p>
@@ -587,10 +620,12 @@ export default function ContactPage() {
                         Ești firma de mutări?
                       </span>
                     </div>
-                    <h3 className="mb-3 text-xl font-bold text-slate-900">Devino partener</h3>
+                    <h3 className="mb-3 text-xl font-bold text-slate-900">
+                      Devino partener
+                    </h3>
                     <p className="mb-6 text-slate-600">
-                      Alătură-te rețelei noastre de firme verificate și primește cereri de la
-                      clienți din toată țara.
+                      Alătură-te rețelei noastre de firme verificate și primește
+                      cereri de la clienți din toată țara.
                     </p>
                     <Link
                       href="/company/auth"
@@ -609,6 +644,3 @@ export default function ContactPage() {
     </>
   );
 }
-
-
-

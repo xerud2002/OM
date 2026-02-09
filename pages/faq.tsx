@@ -561,7 +561,6 @@ export default function FAQPage() {
               availableChannel: {
                 "@type": "ServiceChannel",
                 serviceUrl: "https://ofertemutare.ro/customer/dashboard",
-                servicePhone: "+40-729-XXX-XXX",
                 availableLanguage: {
                   "@type": "Language",
                   name: "Romanian",

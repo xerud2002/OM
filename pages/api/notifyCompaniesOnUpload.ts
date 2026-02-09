@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
+import { apiError, apiSuccess } from "@/types/api";
 
 type OfferDoc = {
   companyId: string;
@@ -11,27 +12,34 @@ type OfferDoc = {
   requestId: string;
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
-    return res.status(405).json({ error: "Method Not Allowed" });
+    return res.status(405).json(apiError("Method Not Allowed"));
   }
 
   const { requestId } = req.body || {};
   if (!requestId || typeof requestId !== "string") {
-    return res.status(400).json({ error: "Missing required field: requestId" });
+    return res.status(400).json(apiError("Missing required field: requestId"));
   }
 
   try {
     if (!adminReady) {
-      return res.status(503).json({ error: "Admin not configured in this environment" });
+      return res
+        .status(503)
+        .json(apiError("Admin not configured in this environment"));
     }
 
     // Verify Firebase ID token and ownership
     const authHeader = req.headers.authorization || "";
     const match = authHeader.match(/^Bearer (.+)$/);
     if (!match) {
-      return res.status(401).json({ error: "Missing Authorization bearer token" });
+      return res
+        .status(401)
+        .json(apiError("Missing Authorization bearer token"));
     }
     const idToken = match[1];
     const decoded = await adminAuth.verifyIdToken(idToken);
@@ -41,15 +49,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const requestRef = adminDb.doc(`requests/${requestId}`);
     const requestSnap = await requestRef.get();
     if (!requestSnap.exists) {
-      return res.status(404).json({ error: "Request not found" });
+      return res.status(404).json(apiError("Request not found"));
     }
     const requestData: any = requestSnap.data();
     if (requestData?.customerId !== uid) {
-      return res.status(403).json({ error: "Not authorized to notify for this request" });
+      return res
+        .status(403)
+        .json(apiError("Not authorized to notify for this request"));
     }
 
     const offersRef = adminDb.collection(`requests/${requestId}/offers`);
-    const pendingOffersSnap = await offersRef.where("status", "==", "pending").get();
+    const pendingOffersSnap = await offersRef
+      .where("status", "==", "pending")
+      .get();
 
     const batch = adminDb.batch();
     let count = 0;
@@ -58,7 +70,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const data = offerDoc.data() as OfferDoc;
       const companyId = data.companyId;
       if (!companyId) continue;
-      const notifRef = adminDb.collection(`companies/${companyId}/notifications`).doc();
+      const notifRef = adminDb
+        .collection(`companies/${companyId}/notifications`)
+        .doc();
       batch.set(notifRef, {
         type: "media_uploaded",
         requestId,
@@ -74,9 +88,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await batch.commit();
     }
 
-    return res.status(200).json({ ok: true, count });
+    return res.status(200).json(apiSuccess({ count }));
   } catch (err) {
     logger.error("Error notifying companies:", err);
-    return res.status(500).json({ error: "Internal server error" });
+    return res.status(500).json(apiError("Internal server error"));
   }
 }

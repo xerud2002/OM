@@ -1,11 +1,13 @@
 # 🚚 OferteMutare.ro
 
-**Platform modernă pentru conectarea clienților cu firme de mutări verificate din România.**
+**Platformă modernă pentru conectarea clienților cu firme de mutări verificate din România.**
 
-[![Next.js](https://img.shields.io/badge/Next.js-14-black)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.2-blue)](https://www.typescriptlang.org/)
-[![Firebase](https://img.shields.io/badge/Firebase-12.4-orange)](https://firebase.google.com/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3.4-38bdf8)](https://tailwindcss.com/)
+**Operator:** Ofertemutare Ltd
+
+[![Next.js](https://img.shields.io/badge/Next.js-14.2-black)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue)](https://www.typescriptlang.org/)
+[![Firebase](https://img.shields.io/badge/Firebase-12.8-orange)](https://firebase.google.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.1-38bdf8)](https://tailwindcss.com/)
 
 ---
 
@@ -49,23 +51,23 @@ OferteMutare.ro este o platformă all-in-one care simplifică procesul de mutare
 
 ### ✅ Notificări Active (Trimise Automat)
 
-| Template | Destinatar | Trigger | Status |
-|----------|-----------|---------|--------|
-| `guestRequestConfirmation` | Client | După trimitere cerere | ✅ ACTIV |
-| `newRequestNotification` | Toate companiile active | După creare cerere nouă | ✅ ACTIV |
-| `newOffer` | Client | După ce companie trimite ofertă | ✅ ACTIV |
-| `offerAccepted` | Companie | După acceptare ofertă | ✅ ACTIV |
-| `contactForm` | Admin | După trimitere formular contact | ✅ ACTIV |
+| Template                   | Destinatar              | Trigger                         | Status   |
+| -------------------------- | ----------------------- | ------------------------------- | -------- |
+| `guestRequestConfirmation` | Client                  | După trimitere cerere           | ✅ ACTIV |
+| `newRequestNotification`   | Toate companiile active | După creare cerere nouă         | ✅ ACTIV |
+| `newOffer`                 | Client                  | După ce companie trimite ofertă | ✅ ACTIV |
+| `offerAccepted`            | Companie                | După acceptare ofertă           | ✅ ACTIV |
+| `contactForm`              | Admin                   | După trimitere formular contact | ✅ ACTIV |
 
 ### 🔒 Template-uri Pregătite (Funcționalități Inactive)
 
-| Template | Destinatar | Trigger | Status |
-|----------|-----------|---------|--------|
-| `offerDeclined` | Companiile respinse | Accept/decline UI | 🔒 Gata (feature-ul nu e live) |
-| `newMessageFromCompany` | Client | Chat message | 🔒 Gata (chat-ul nu e live) |
-| `newMessageFromCustomer` | Companie | Chat message | 🔒 Gata (chat-ul nu e live) |
+| Template                 | Destinatar          | Trigger           | Status                         |
+| ------------------------ | ------------------- | ----------------- | ------------------------------ |
+| `offerDeclined`          | Companiile respinse | Accept/decline UI | 🔒 Gata (feature-ul nu e live) |
+| `newMessageFromCompany`  | Client              | Chat message      | 🔒 Gata (chat-ul nu e live)    |
+| `newMessageFromCustomer` | Companie            | Chat message      | 🔒 Gata (chat-ul nu e live)    |
 
-### 📅 TODO (Implementare Necesară)
+### � Funcționalități Planificate
 
 - **`offerReminder`**: Email reminder la 48h după prima ofertă primită (necesită CRON job)
 
@@ -79,6 +81,7 @@ OferteMutare.ro este o platformă all-in-one care simplifică procesul de mutare
 ### Activare Funcționalități Dezactivate
 
 Când chat-ul sau accept/decline devin live, șterge comentariile TODO din:
+
 - `pages/api/offers/message.ts` - Pentru notificări chat
 - `pages/api/offers/accept.ts` - Pentru notificări decline
 
@@ -88,11 +91,12 @@ Când chat-ul sau accept/decline devin live, șterge comentariile TODO din:
 
 ### Frontend
 
-- **[Next.js 14](https://nextjs.org/)** - React framework cu Pages Router
-- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
-- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS
-- **[Framer Motion](https://www.framer.com/motion/)** - Animații fluide
-- **[Lucide React](https://lucide.dev/)** - Icon library modern
+- **[Next.js 14.2](https://nextjs.org/)** - React framework cu Pages Router
+- **[TypeScript 5.9](https://www.typescriptlang.org/)** - Type safety (strict mode)
+- **[Tailwind CSS 4.1](https://tailwindcss.com/)** - Utility-first CSS
+- **[Framer Motion 12](https://www.framer.com/motion/)** - Animații fluide
+- **[Heroicons 2.2](https://heroicons.com/)** - Icon library
+- **[Headless UI 2.2](https://headlessui.com/)** - Accessible UI components
 - **[Sonner](https://sonner.emilkowal.ski/)** - Toast notifications
 
 ### Backend & Database
@@ -100,15 +104,15 @@ Când chat-ul sau accept/decline devin live, șterge comentariile TODO din:
 - **[Firebase Auth](https://firebase.google.com/docs/auth)** - Autentificare (Google OAuth + Email/Password)
 - **[Firestore](https://firebase.google.com/docs/firestore)** - NoSQL database real-time
 - **[Firebase Storage](https://firebase.google.com/docs/storage)** - File storage pentru imagini/video
-- **[Firebase Admin SDK](https://firebase.google.com/docs/admin/setup)** - Server-side operations
+- **[Firebase Admin SDK 12.7](https://firebase.google.com/docs/admin/setup)** - Server-side operations
+- **[Resend 6.9](https://resend.com/)** - Transactional email service
 
 ### Tools & Libraries
 
 - **[ESLint](https://eslint.org/)** - Linting (flat config)
-- **[Prettier](https://prettier.io/)** - Code formatting
-- **[Husky](https://typicode.github.io/husky/)** - Git hooks
-- **[lint-staged](https://github.com/okonet/lint-staged)** - Pre-commit linting
-- **[EmailJS](https://www.emailjs.com/)** - Email notifications
+- **[Sharp](https://sharp.pixelplumbing.com/)** - Image optimization
+- **[PM2](https://pm2.io/)** - Process manager (cluster mode)
+- **[Nginx](https://nginx.org/)** - Reverse proxy cu SSL
 
 ---
 
@@ -128,11 +132,20 @@ Când chat-ul sau accept/decline devin live, șterge comentariile TODO din:
 
 ### Security Features
 
-- ✅ **Firebase Security Rules** - Role-based access control
+- ✅ **Firebase Security Rules** - Role-based access control cu validări stricte
 - ✅ **Dual-role prevention** - Users nu pot avea ambele roluri
-- ✅ **API authentication** - Firebase ID token verification
+- ✅ **API authentication** - Firebase ID token verification + INTERNAL_API_SECRET
 - ✅ **Ownership validation** - Pe toate operațiile sensibile
-- ✅ **HTTPS only** - Secure communication
+- ✅ **HTTPS only** - HSTS cu preload
+- ✅ **Content-Security-Policy** - Whitelist strict pentru scripts/styles/connections
+- ✅ **Rate limiting** - In-memory per IP pe endpoint-uri publice (5 req/min)
+- ✅ **GDPR Cookie Consent** - Banner granular cu 3 categorii (necesar/analiză/marketing)
+- ✅ **GA4 condițional** - Google Analytics se încarcă doar cu consimțământ
+- ✅ **PII protection** - Endpoint-urile publice nu expun date personale
+- ✅ **Zone filtering** - Companiile primesc notificări doar pentru zonele lor
+- ✅ **X-Robots-Tag noindex** - Pe paginile admin/company/customer
+- ✅ **Centralized logging** - `logger` (dev-only) în loc de `console.*`
+- ✅ **Standardized API responses** - `apiError()`/`apiSuccess()` pe toate endpoint-urile
 
 ---
 
@@ -184,7 +197,7 @@ Când chat-ul sau accept/decline devin live, șterge comentariile TODO din:
 
 6. **Open browser**
    ```
-   http://localhost:3001
+   http://localhost:3000
    ```
 
 ---
@@ -193,69 +206,89 @@ Când chat-ul sau accept/decline devin live, șterge comentariile TODO din:
 
 ```
 OM/
-├── .github/
-│   └── copilot-instructions.md     # AI coding agent guidelines
 ├── components/
 │   ├── auth/
 │   │   └── RequireRole.tsx         # Role-based page protection
 │   ├── company/
 │   │   ├── NotificationBell.tsx    # Real-time notifications
-│   │   └── RequestsView.tsx        # Company dashboard view
+│   │   ├── RequestsView.tsx        # Company dashboard view
+│   │   └── VerificationSection.tsx # Company verification upload
 │   ├── customer/
 │   │   ├── RequestForm.tsx         # Create/edit requests
-│   │   ├── MyRequestCard.tsx       # Request display card
-│   │   ├── OfferComparison.tsx     # Compare offers
-│   │   └── EditRequestModal.tsx    # Edit request modal
+│   │   └── RequestFullDetails.tsx  # Full request view
 │   ├── home/
 │   │   ├── Hero.tsx                # Landing page hero
-│   │   ├── Services.tsx            # Services section
-│   │   └── Steps.tsx               # How it works
-│   └── layout/
-│       ├── Navbar.tsx              # Global navigation
-│       ├── Footer.tsx              # Global footer
-│       └── Layout.tsx              # Page wrapper
+│   │   └── HomeRequestForm.tsx     # Embedded request form
+│   ├── layout/
+│   │   ├── Navbar.tsx              # Global navigation
+│   │   ├── Footer.tsx              # Global footer + cookie settings
+│   │   └── LayoutWrapper.tsx       # Page wrapper
+│   ├── CookieConsent.tsx           # GDPR cookie banner
+│   ├── ConfirmModal.tsx            # Reusable confirm dialog
+│   └── ErrorBoundary.tsx           # Global error handler
 ├── lib/
-│   └── firebaseAdmin.ts            # Firebase Admin SDK init
+│   ├── firebaseAdmin.ts            # Firebase Admin SDK init
+│   └── apiAuth.ts                  # API authentication helpers
 ├── pages/
 │   ├── api/
-│   │   ├── generateUploadLink.ts   # Media upload token
-│   │   ├── validateUploadToken.ts  # Validate token
+│   │   ├── send-email.ts           # Central email hub (10+ types)
+│   │   ├── generateUploadLink.ts   # Media upload token generation
+│   │   ├── validateUploadToken.ts  # Validate upload token
+│   │   ├── markUploadTokenUsed.ts  # Mark token as used
 │   │   ├── notifyCompaniesOnUpload.ts # Notify after upload
-│   │   └── offers/
-│   │       ├── accept.ts           # Accept offer (secure)
-│   │       ├── decline.ts          # Decline offer (secure)
-│   │       └── message.ts          # Send message (secure)
-│   ├── customer/
-│   │   ├── auth.tsx                # Customer login/signup
-│   │   ├── dashboard.tsx           # Customer dashboard
-│   │   └── settings.tsx            # Customer settings
-│   ├── company/
-│   │   ├── auth.tsx                # Company login/signup
-│   │   └── dashboard.tsx           # Company dashboard
+│   │   ├── sendUploadReminders.ts  # CRON: upload reminders
+│   │   ├── cron/
+│   │   │   └── auto-refund.ts      # CRON: 72h auto-refund
+│   │   ├── offers/
+│   │   │   ├── accept.ts           # Accept offer (secure)
+│   │   │   ├── decline.ts          # Decline offer (secure)
+│   │   │   └── message.ts          # Send message (secure)
+│   │   ├── requests/
+│   │   │   ├── createGuest.ts      # Public: create request (rate-limited)
+│   │   │   └── linkToAccount.ts    # Link guest request to account
+│   │   └── locations/
+│   │       └── search.ts           # Autocomplete search
+│   ├── admin/                      # Admin dashboard (6 pages)
+│   ├── company/                    # Company dashboard (6 pages)
+│   ├── customer/                   # Customer dashboard (4 pages)
+│   ├── articole/                   # Blog articles (9 pages)
+│   ├── mutari/                     # Moving routes (8 pages)
+│   ├── servicii/                   # Services (6 pages)
 │   ├── upload/
 │   │   └── [token].tsx             # Token-based media upload
-│   ├── _app.tsx                    # App shell
-│   └── index.tsx                   # Landing page
+│   ├── _app.tsx                    # App shell + GA4 consent
+│   ├── index.tsx                   # Landing page
+│   ├── contact.tsx                 # Contact page + form
+│   ├── about.tsx                   # About page
+│   ├── privacy.tsx                 # Privacy policy (GDPR)
+│   └── terms.tsx                   # Terms of service
 ├── public/
-│   ├── pics/                       # Static images
-│   └── patterns/                   # Background patterns
+│   ├── pics/                       # Static images (WebP)
+│   ├── docs/                       # Technical documentation
+│   ├── robots.txt                  # Crawler rules (AI bots blocked)
+│   └── sitemap.xml                 # SEO sitemap
 ├── services/
-│   └── firebase.ts                 # Firebase client init
+│   ├── firebase.ts                 # Firebase client init
+│   └── email.ts                    # Centralized Resend email service
 ├── types/
-│   └── index.ts                    # TypeScript definitions
+│   ├── index.ts                    # TypeScript definitions
+│   └── api.ts                      # API response types (apiError/apiSuccess)
 ├── utils/
+│   ├── cookies.ts                  # Cookie CRUD + GDPR consent management
+│   ├── logger.ts                   # Dev-only logging (replaces console.*)
+│   ├── analytics.ts                # GA4 page view tracking
 │   ├── firebaseHelpers.ts          # Auth & profile helpers
 │   ├── firestoreHelpers.ts         # CRUD operations
-│   ├── emailHelpers.ts             # EmailJS integration
-│   ├── validation.ts               # Romanian validators
-│   ├── date.ts                     # Date formatting
-│   └── animations.ts               # Framer Motion variants
+│   ├── costCalculator.ts           # Moving cost estimator
+│   ├── devErrorSuppressor.ts       # Dev console cleanup (prod tree-shaken)
+│   └── date.ts                     # Date formatting
 ├── .env                            # Environment variables (gitignored)
-├── .env copy.example               # Environment template
 ├── firebase.firestore.rules        # Firestore security rules
 ├── firebase.storage.rules          # Storage security rules
-├── next.config.js                  # Next.js configuration
-├── tailwind.config.ts              # Tailwind configuration
+├── firestore.indexes.json          # Composite indexes (6)
+├── next.config.js                  # Next.js config + security headers
+├── ecosystem.config.cjs            # PM2 cluster config
+├── nginx-om.conf                   # Nginx reverse proxy
 ├── tsconfig.json                   # TypeScript configuration
 └── package.json                    # Dependencies
 ```
@@ -287,19 +320,26 @@ FIREBASE_ADMIN_CLIENT_EMAIL=firebase-adminsdk@your_project.iam.gserviceaccount.c
 FIREBASE_ADMIN_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----\n"
 ```
 
-### EmailJS
+### Resend (Email)
 
 ```env
-NEXT_PUBLIC_EMAILJS_SERVICE_ID=your_service_id
-NEXT_PUBLIC_EMAILJS_TEMPLATE_ID=your_template_id
-NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=your_public_key
+RESEND_API_KEY=re_xxxx
+RESEND_FROM_EMAIL=info@ofertemutare.ro
+RESEND_ADMIN_EMAIL=info@ofertemutare.ro
+```
+
+### Security
+
+```env
+INTERNAL_API_SECRET=random_64_char_hex_string
+CRON_SECRET=random_secure_string_for_cron_auth
+CRON_API_KEY=random_secure_string_for_cron_endpoints
 ```
 
 ### Optional
 
 ```env
-CRON_API_KEY=random_secure_string_for_cron_endpoints
-NEXT_PUBLIC_GA_ID=your_google_analytics_id
+NEXT_PUBLIC_GA_ID=G-XXXXXXXXXX
 ```
 
 ---
@@ -390,24 +430,18 @@ firebase deploy --only storage
    # etc.
    ```
 
-### 9. Setup EmailJS (opțional dar recomandat)
+### 9. Setup Resend (Email Service)
 
-1. Creează cont pe [EmailJS](https://www.emailjs.com/)
-2. Add **Email Service** (Gmail/Outlook/etc.)
-3. Create **Email Template** pentru upload links:
-
+1. Creează cont pe [Resend](https://resend.com/)
+2. Adaugă și verifică domeniul `ofertemutare.ro` (SPF/DKIM/DMARC)
+3. Generează API Key
+4. Adaugă în `.env`:
+   ```env
+   RESEND_API_KEY=re_xxxx
+   RESEND_FROM_EMAIL=info@ofertemutare.ro
+   RESEND_ADMIN_EMAIL=info@ofertemutare.ro
    ```
-   Subject: Link pentru încărcarea pozelor - Cererea {{request_code}}
-
-   Bună {{customer_name}},
-
-   Te rugăm să încarci pozele pentru cererea ta de mutare:
-   {{upload_link}}
-
-   Link-ul este valabil 7 zile.
-   ```
-
-4. Copiază credentials în `.env`
+5. Emailurile sunt gestionate centralizat prin `services/email.ts`
 
 ---
 
@@ -416,7 +450,7 @@ firebase deploy --only storage
 ### Available Scripts
 
 ```bash
-# Development server (port 3001)
+# Development server (port 3000)
 npm run dev
 
 # Build for production
@@ -427,17 +461,9 @@ npm run start
 
 # Lint code
 npm run lint
-
-# Format code
-npm run format
 ```
 
 ### Code Quality
-
-- **Pre-commit hooks**: Husky + lint-staged
-  - Auto-format cu Prettier
-  - Auto-lint cu ESLint
-  - Only pe staged files
 
 - **TypeScript**: Strict mode enabled
   - No implicit any
@@ -447,15 +473,15 @@ npm run format
 - **ESLint**: Flat config
   - Next.js rules
   - React hooks rules
-  - Tailwind classnames order
   - Max warnings: 0
 
 ### Development Tips
 
 1. **Hot Reload**: Next.js HMR funcționează out-of-the-box
-2. **Error Suppressor**: `utils/devErrorSuppressor.ts` curăță console-ul în dev
-3. **Port**: App rulează pe `:3001` (configurat în `package.json`)
-4. **Firebase Emulators** (opțional):
+2. **Error Suppressor**: `utils/devErrorSuppressor.ts` curăță console-ul în dev (conditional `require()`, tree-shaken din producție)
+3. **Logger**: Folosește `utils/logger.ts` în loc de `console.*` — loguri doar în development
+4. **Port**: App rulează pe `:3000` (configurat în `package.json`)
+5. **Firebase Emulators** (opțional):
    ```bash
    firebase emulators:start
    ```
@@ -464,7 +490,7 @@ npm run format
 
 ## 🚢 Deployment
 
-### Vercel (Recomandat)
+### VPS cu PM2 + Nginx (Producție)
 
 1. **Push la GitHub**
 
@@ -474,35 +500,56 @@ npm run format
    git push origin main
    ```
 
-2. **Deploy pe Vercel**
-   - Mergi la [vercel.com](https://vercel.com)
-   - Import repository
-   - Vercel detectează automat Next.js
-   - Add **Environment Variables** din `.env`
-   - Deploy!
+2. **Setup VPS** (Ubuntu)
 
-3. **Post-Deploy**
-   - Update `NEXT_PUBLIC_APP_URL` în Vercel environment vars
-   - Redeploy pentru a aplica schimbarea
+   ```bash
+   # Install Node.js 18+, PM2, Nginx
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   sudo apt install -y nodejs nginx
+   sudo npm install -g pm2
+   ```
 
-### Firebase Hosting (Alternativ)
+3. **Clone & Build**
 
-```bash
-# Build app
-npm run build
+   ```bash
+   git clone https://github.com/xerud2002/OM.git
+   cd OM
+   npm install
+   npm run build
+   ```
 
-# Deploy
-firebase deploy --only hosting
-```
+4. **Start cu PM2** (cluster mode)
+
+   ```bash
+   pm2 start ecosystem.config.cjs
+   pm2 save
+   pm2 startup
+   ```
+
+5. **Nginx Reverse Proxy**
+
+   ```bash
+   sudo cp nginx-om.conf /etc/nginx/sites-available/ofertemutare.ro
+   sudo ln -s /etc/nginx/sites-available/ofertemutare.ro /etc/nginx/sites-enabled/
+   sudo certbot --nginx -d ofertemutare.ro -d www.ofertemutare.ro
+   sudo nginx -t && sudo systemctl reload nginx
+   ```
+
+6. **Auto-deploy** (opțional)
+   ```bash
+   # Folosește auto-deploy-vps.sh sau deploy.sh
+   bash deploy.sh
+   ```
 
 ### Environment Variables în Producție
 
-**CRITICAL**: Asigură-te că toate variabilele din `.env` sunt setate în Vercel/hosting provider:
+**CRITICAL**: Asigură-te că toate variabilele din `.env` sunt setate pe server:
 
 - ✅ Toate `NEXT_PUBLIC_*` vars
 - ✅ `FIREBASE_ADMIN_*` vars (SECRETE!)
-- ✅ `EMAILJS_*` vars
-- ✅ `CRON_API_KEY` (pentru reminder endpoint)
+- ✅ `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_ADMIN_EMAIL`
+- ✅ `INTERNAL_API_SECRET` (64-char hex)
+- ✅ `CRON_SECRET`, `CRON_API_KEY` (pentru CRON endpoints)
 
 ---
 
@@ -555,29 +602,43 @@ Firebase Admin SDK ←→ Firestore/Auth (server-side)
 
 ```
 1. Customer creates request → mediaUpload: "later"
-2. /api/generateUploadLink → 64-char token, 7-day expiry
-3. EmailJS → Send link to customer
+2. /api/generateUploadLink → 64-char token, 7-day expiry (auth + request verified)
+3. Resend → Send link to customer via services/email.ts
 4. Customer visits /upload/[token]
 5. Firebase Storage → Direct upload cu progress
 6. Update request.mediaUrls[]
-7. /api/notifyCompaniesOnUpload → Notify all companies cu offers
-8. Reminder system → /api/sendUploadReminders (CRON)
+7. /api/notifyCompaniesOnUpload → Notify companies cu offers
+8. Reminder system → /api/sendUploadReminders (CRON, direct sendEmail())
 ```
 
 ### Security Model
 
 - **Firestore Rules**: Role-based access control
   - Customers: read/write own requests
-  - Companies: read all requests, write own offers
+  - Companies: read all requests, write own offers (validated)
   - Dual-role prevention
   - Subcollection isolation
 
-- **API Routes**: Firebase ID token verification
+- **API Routes**: Firebase ID token verification + INTERNAL_API_SECRET
   - `/api/offers/accept` → Verify ownership
   - `/api/offers/decline` → Verify ownership
   - `/api/offers/message` → Verify participation
   - `/api/markUploadTokenUsed` → Verify ownership
   - `/api/notifyCompaniesOnUpload` → Verify ownership
+  - `/api/send-email` → INTERNAL_API_SECRET (public types: contactForm only)
+  - `/api/requests/createGuest` → Rate-limited (5 req/min/IP)
+  - `/api/cron/auto-refund` → CRON_SECRET auth
+
+- **HTTP Security Headers** (next.config.js)
+  - Content-Security-Policy (strict whitelist)
+  - HSTS cu preload
+  - X-Robots-Tag noindex pe admin/company/customer
+
+- **Privacy & GDPR**
+  - Cookie consent granular (3 categorii)
+  - GA4 se încarcă doar cu consimțământ
+  - PII nu se expune în API-uri publice
+  - Centralized logging cu `logger` (dev-only)
 
 ---
 
@@ -596,7 +657,7 @@ Firebase Admin SDK ←→ Firestore/Auth (server-side)
 - **TypeScript** pentru toate fișierele noi
 - **Functional components** cu hooks (nu class components)
 - **Tailwind** pentru styling (evită CSS-in-JS)
-- **ESLint + Prettier** vor formata automat la commit
+- **ESLint** va verifica automat codul
 
 ### Commit Messages
 
@@ -632,7 +693,7 @@ Acest proiect este proprietate privată. All rights reserved.
 - **AI Assistant**: GitHub Copilot
 - **Framework**: Next.js Team
 - **Database**: Firebase Team
-- **UI Icons**: Lucide
+- **UI Icons**: Heroicons
 
 ---
 

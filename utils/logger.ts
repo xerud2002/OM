@@ -1,5 +1,6 @@
 // Centralized logging utility
-// Logs only in development, silent in production
+// Debug/info logs only in development; errors and warnings always logged
+// PM2 captures stdout/stderr in production logs
 
 const isDevelopment = process.env.NODE_ENV === "development";
 
@@ -11,16 +12,14 @@ export const logger = {
   },
 
   warn: (...args: any[]) => {
-    if (isDevelopment) {
-      console.warn(...args);
-    }
+    // Warnings always logged — important for deprecations and issues
+    console.warn(...args);
   },
 
   error: (...args: any[]) => {
-    if (isDevelopment) {
-      console.error(...args);
-    }
-    // In production, you could send to error tracking service:
+    // Errors always logged — PM2 captures stderr for production monitoring
+    console.error(...args);
+    // In production, you could also send to error tracking service:
     // if (!isDevelopment) {
     //   // Sentry.captureException(...args);
     // }

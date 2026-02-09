@@ -7,6 +7,33 @@ import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiSuccess, apiError } from "@/types/api";
 import { FieldValue } from "firebase-admin/firestore";
 import { logger } from "@/utils/logger";
+import { sendEmail, emailTemplates } from "@/services/email";
+
+// Simple in-memory rate limiter (per-process; sufficient for single-server VPS)
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_WINDOW_MS = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 5; // max 5 requests per minute per IP
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimitMap.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return false;
+  }
+  entry.count++;
+  return entry.count > RATE_LIMIT_MAX;
+}
+
+// Clean up stale entries every 5 minutes
+if (typeof setInterval !== "undefined") {
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, entry] of rateLimitMap) {
+      if (now > entry.resetAt) rateLimitMap.delete(ip);
+    }
+  }, 5 * 60_000);
+}
 
 // Validate Romanian phone number format
 function isValidPhone(phone: string): boolean {
@@ -26,7 +53,7 @@ function buildAddressString(
   type?: "house" | "flat",
   bloc?: string,
   staircase?: string,
-  apartment?: string
+  apartment?: string,
 ): string {
   const parts = [street, number];
   if (type === "flat") {
@@ -56,9 +83,23 @@ async function generateRequestCode(): Promise<string> {
   return `REQ-${String(nextSeq).padStart(6, "0")}`;
 }
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "POST") {
     return res.status(405).json(apiError("Method not allowed"));
+  }
+
+  // Rate limiting
+  const clientIp =
+    (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() ||
+    req.socket.remoteAddress ||
+    "unknown";
+  if (isRateLimited(clientIp)) {
+    return res
+      .status(429)
+      .json(apiError("Prea multe cereri. Încercați din nou peste un minut."));
   }
 
   if (!adminReady) {
@@ -92,7 +133,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     if (errors.length > 0) {
-      return res.status(400).json(apiError(`Câmpuri lipsă: ${errors.join(", ")}`));
+      return res
+        .status(400)
+        .json(apiError(`Câmpuri lipsă: ${errors.join(", ")}`));
     }
 
     const email = data.email.toLowerCase().trim();
@@ -142,11 +185,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       if (data.moveDateMode === "exact" && data.moveDateStart) {
         clean.moveDate = data.moveDateStart;
         clean.moveDateStart = data.moveDateStart;
-      } else if (data.moveDateMode === "range" && data.moveDateStart && data.moveDateEnd) {
+      } else if (
+        data.moveDateMode === "range" &&
+        data.moveDateStart &&
+        data.moveDateEnd
+      ) {
         clean.moveDate = data.moveDateStart;
         clean.moveDateStart = data.moveDateStart;
         clean.moveDateEnd = data.moveDateEnd;
-      } else if (data.moveDateMode === "flexible" && data.moveDateStart && data.moveDateFlexDays) {
+      } else if (
+        data.moveDateMode === "flexible" &&
+        data.moveDateStart &&
+        data.moveDateFlexDays
+      ) {
         clean.moveDate = data.moveDateStart;
         clean.moveDateStart = data.moveDateStart;
         clean.moveDateFlexDays = data.moveDateFlexDays;
@@ -161,7 +212,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         clean.fromType,
         clean.fromBloc,
         clean.fromStaircase,
-        clean.fromApartment
+        clean.fromApartment,
       );
     }
 
@@ -172,7 +223,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         clean.toType,
         clean.toBloc,
         clean.toStaircase,
-        clean.toApartment
+        clean.toApartment,
       );
     }
 
@@ -203,7 +254,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const companiesSnapshot = await adminDb.collection("companies").get();
     const batch = adminDb.batch();
 
-    companiesSnapshot.docs.forEach((companyDoc) => {
+    // Filter companies by service zone (county matching)
+    const requestCounty = (clean.fromCounty || "").toLowerCase().trim();
+    const relevantCompanies = companiesSnapshot.docs.filter((companyDoc) => {
+      const companyData = companyDoc.data();
+      // If company has no service zones configured, notify them (backwards compatible)
+      const serviceCounties: string[] = companyData.serviceCounties || [];
+      const serviceAreas: string[] = companyData.serviceAreas || [];
+      if (serviceCounties.length === 0 && serviceAreas.length === 0)
+        return true;
+      // Check if the request's county matches any of the company's service counties
+      const matchesCounty = serviceCounties.some(
+        (c: string) => c.toLowerCase().trim() === requestCounty,
+      );
+      // Also check service areas (cities)
+      const requestCity = (clean.fromCity || "").toLowerCase().trim();
+      const matchesCity = serviceAreas.some(
+        (a: string) => a.toLowerCase().trim() === requestCity,
+      );
+      return matchesCounty || matchesCity;
+    });
+
+    relevantCompanies.forEach((companyDoc) => {
       const notificationRef = adminDb
         .collection("companies")
         .doc(companyDoc.id)
@@ -228,49 +300,52 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     setImmediate(async () => {
       try {
         // 1. Send confirmation email to customer
-        await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            type: 'guestRequestConfirmation',
-            data: {
-              email: email, // API expects 'email' not 'customerEmail'
-              requestCode,
-              name: data.contactFirstName,
-              from: `${clean.fromCity}, ${clean.fromCounty}`,
-              to: `${clean.toCity}, ${clean.toCounty}`,
-              movingDate: clean.moveDate || 'Nedefinită'
-            }
-          })
+        const confirmResult = await sendEmail({
+          to: email,
+          subject: `✅ Cererea ta de mutare #${requestCode} a fost înregistrată`,
+          html: emailTemplates.guestRequestConfirmation(
+            requestCode,
+            data.contactFirstName,
+            `${clean.fromCity}, ${clean.fromCounty}`,
+            `${clean.toCity}, ${clean.toCounty}`,
+            clean.moveDate || "Nedefinită",
+          ),
         });
-        logger.log(`Sent confirmation email to customer ${email} for ${requestCode}`);
+        if (confirmResult.success) {
+          logger.log(
+            `Sent confirmation email to customer ${email} for ${requestCode}`,
+          );
+        } else {
+          logger.error(
+            `Failed to send confirmation email to ${email}:`,
+            confirmResult.error,
+          );
+        }
 
-        // 2. Send notifications to all companies
-        const emailPromises = companiesSnapshot.docs.map(async (companyDoc) => {
+        // 2. Send notifications to relevant companies (zone-filtered)
+        const emailPromises = relevantCompanies.map(async (companyDoc) => {
           const companyData = companyDoc.data();
           if (!companyData.email) return; // Skip if no email
 
-          await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/send-email`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: 'newRequestNotification',
-              data: {
-                companyEmail: companyData.email,
-                requestCode,
-                from: `${clean.fromCity}, ${clean.fromCounty}`,
-                to: `${clean.toCity}, ${clean.toCounty}`,
-                movingDate: clean.moveDate || 'Nedefinită',
-                furniture: clean.furniture || 'Nedefinit'
-              }
-            })
+          await sendEmail({
+            to: companyData.email,
+            subject: `🚚 Cerere nouă de mutare disponibilă - ${requestCode}`,
+            html: emailTemplates.newRequestNotification(
+              requestCode,
+              `${clean.fromCity}, ${clean.fromCounty}`,
+              `${clean.toCity}, ${clean.toCounty}`,
+              clean.moveDate || "Nedefinită",
+              clean.furniture || "Nedefinit",
+            ),
           });
         });
 
         await Promise.allSettled(emailPromises);
-        logger.log(`Sent email notifications to ${companiesSnapshot.docs.length} companies for ${requestCode}`);
+        logger.log(
+          `Sent email notifications to ${relevantCompanies.length}/${companiesSnapshot.docs.length} companies for ${requestCode}`,
+        );
       } catch (emailError) {
-        logger.error('Error sending email notifications:', emailError);
+        logger.error("Error sending email notifications:", emailError);
         // Don't fail the request if emails fail
       }
     });
@@ -280,7 +355,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         requestId: requestRef.id,
         requestCode,
         linked: !!customerId,
-      })
+      }),
     );
   } catch (error) {
     logger.error("Error creating guest request:", error);
