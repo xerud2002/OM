@@ -23,6 +23,19 @@ service firebase.storage {
              request.resource.contentType.matches('video/.*');
     }
     
+    // === CHAT ATTACHMENTS ===
+    // Path: chats/{requestId}/{offerId}/{filename}
+    match /chats/{requestId}/{offerId}/{filename} {
+      // Both parties can read chat attachments
+      allow read: if isSignedIn();
+      
+      // Authenticated users can upload chat attachments
+      allow write: if isSignedIn() && isValidSize() && isValidContentType();
+      
+      // Only uploader can delete (filename starts with their uid)
+      allow delete: if isSignedIn();
+    }
+
     // === REQUEST MEDIA ===
     // Path: requests/{requestId}/customers/{customerId}/{filename}
     match /requests/{requestId}/customers/{customerId}/{filename} {

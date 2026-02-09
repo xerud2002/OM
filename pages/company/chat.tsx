@@ -113,27 +113,27 @@ export default function CompanyChatPage() {
   return (
     <RequireRole allowedRole="company">
       <DashboardLayout role="company">
-        <div className="mx-auto max-w-4xl px-4 py-6">
+        <div className="mx-auto max-w-4xl px-2 py-3 sm:px-4 sm:py-6">
           {/* Back button and header */}
-          <div className="mb-6">
+          <div className="mb-3 sm:mb-6">
             <Link
               href="/company/dashboard"
-              className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700 transition"
+              className="inline-flex items-center gap-1.5 text-xs sm:text-sm text-gray-500 hover:text-gray-700 transition"
             >
-              <ArrowLeftIcon className="h-4 w-4" />
+              <ArrowLeftIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               Înapoi la Dashboard
             </Link>
 
             {requestData && (
-              <div className="mt-4">
-                <h1 className="text-2xl font-bold text-gray-900">
+              <div className="mt-2 sm:mt-4">
+                <h1 className="text-lg sm:text-2xl font-bold text-gray-900">
                   Chat - {requestData.requestCode || requestData.id.substring(0, 8)}
                 </h1>
-                <p className="text-sm text-gray-500">
+                <p className="text-xs sm:text-sm text-gray-500">
                   {requestData.fromCity} → {requestData.toCity}
-                  {offerData?.price && ` • Ofertă: ${offerData.price.toLocaleString('ro-RO')} RON`}
+                  {offerData?.price && ` • ${offerData.price.toLocaleString('ro-RO')} RON`}
                   {offerData?.status && (
-                    <span className={`ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
+                    <span className={`ml-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] sm:text-xs font-medium ${
                       offerData.status === 'accepted' 
                         ? 'bg-green-100 text-green-700' 
                         : offerData.status === 'declined' || offerData.status === 'rejected'
@@ -150,8 +150,8 @@ export default function CompanyChatPage() {
             )}
           </div>
 
-          {/* Chat area */}
-          <div className="h-[600px] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-lg">
+          {/* Chat area - full height on mobile */}
+          <div className="h-[calc(100vh-180px)] sm:h-[600px] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200 bg-white shadow-sm sm:shadow-lg">
             {loading ? (
               <div className="flex h-full items-center justify-center">
                 <div className="text-center">

@@ -710,7 +710,7 @@ export default function CustomerDashboard() {
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                className="relative h-[85vh] sm:h-[600px] w-full sm:max-w-lg overflow-hidden rounded-t-2xl sm:rounded-2xl bg-white shadow-2xl"
+                className="relative h-[100dvh] sm:h-[600px] w-full sm:max-w-lg overflow-hidden rounded-none sm:rounded-2xl bg-white shadow-2xl"
               >
                 <button
                   onClick={() => setChatOffer(null)}

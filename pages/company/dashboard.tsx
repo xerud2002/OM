@@ -323,9 +323,9 @@ export default function CompanyDashboard() {
         headerActions={headerActions}
       >
         {/* Info tip */}
-        <div className="mb-6 flex items-start gap-3 rounded-xl border border-blue-200 bg-blue-50 p-4">
-          <InformationCircleIcon className="h-5 w-5 mt-0.5 flex-shrink-0 text-blue-600" />
-          <p className="text-sm text-blue-800">
+        <div className="mb-4 sm:mb-6 flex items-start gap-2 sm:gap-3 rounded-lg sm:rounded-xl border border-blue-200 bg-blue-50 p-3 sm:p-4">
+          <InformationCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0 text-blue-600" />
+          <p className="text-xs sm:text-sm text-blue-800">
             Contactează clientul cât mai repede pentru a verifica informațiile
             declarate și să-ți mărești șansele de a câștiga jobul.
           </p>
@@ -416,19 +416,19 @@ export default function CompanyDashboard() {
                         }`}
                       />
 
-                      <div className="flex-1 p-5">
+                      <div className="flex-1 p-3 sm:p-5">
                         {/* Route */}
                         {(offer.fromCity || offer.toCity) && (
-                          <div className="mb-3 flex items-center gap-2 text-base font-bold text-gray-800">
-                            <TruckIcon className="h-4 w-4 text-blue-500" />
-                            <span>{offer.fromCity || "—"}</span>
+                          <div className="mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base font-bold text-gray-800">
+                            <TruckIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-500 shrink-0" />
+                            <span className="truncate">{offer.fromCity || "—"}</span>
                             <span className="text-gray-400">→</span>
-                            <span>{offer.toCity || "—"}</span>
+                            <span className="truncate">{offer.toCity || "—"}</span>
                           </div>
                         )}
 
                         {/* Header */}
-                        <div className="mb-3 flex flex-wrap items-start justify-between gap-3">
+                        <div className="mb-2 sm:mb-3 flex flex-wrap items-start justify-between gap-2 sm:gap-3">
                           <div className="flex items-center gap-2">
                             <span className="rounded-lg bg-gray-100 px-3 py-1 text-sm font-bold text-gray-700">
                               {offer.requestCode ||
@@ -553,52 +553,51 @@ export default function CompanyDashboard() {
                                     setEditPrice(String(offer.price ?? ""));
                                     setEditMessage(offer.message ?? "");
                                   }}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs sm:text-sm font-medium text-blue-700 hover:bg-blue-100"
                                 >
-                                  <PencilIcon className="h-4 w-4" />
+                                  <PencilIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                   Editează
                                 </button>
                                 <button
                                   onClick={() => setWithdrawOffer(offer)}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-50"
                                 >
-                                  <TrashIcon className="h-4 w-4" />
+                                  <TrashIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                   Retrage
                                 </button>
                               </>
                             )}
 
-                            {/* Customer contact buttons */}
                             {/* Customer contact buttons - always show (Chat is always available) */}
-                              <div className="ml-auto flex items-center gap-2">
-                                <span className="text-xs text-gray-400">
+                              <div className="ml-auto flex flex-wrap items-center gap-2">
+                                <span className="hidden sm:inline text-xs text-gray-400">
                                   Contactează clientul:
                                 </span>
                                 {offer.customerPhone && (
                                   <a
                                     href={`tel:${offer.customerPhone}`}
-                                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
                                     title={offer.customerPhone}
                                   >
-                                    <PhoneIcon className="h-4 w-4" />
-                                    Sună
+                                    <PhoneIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                                    <span className="hidden sm:inline">Sună</span>
                                   </a>
                                 )}
                                 <button
                                   onClick={() => router.push(`/company/chat?requestId=${offer.requestId}&offerId=${offer.id}`)}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-2 text-sm font-medium text-purple-700 transition hover:bg-purple-100"
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-purple-700 transition hover:bg-purple-100"
                                 >
-                                  <ChatBubbleLeftRightIcon className="h-4 w-4" />
+                                  <ChatBubbleLeftRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
                                   Chat
                                 </button>
                                 {offer.customerEmail && (
                                   <a
                                     href={`mailto:${offer.customerEmail}`}
-                                    className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 transition hover:bg-blue-100"
+                                    className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-blue-700 transition hover:bg-blue-100"
                                     title={offer.customerEmail}
                                   >
-                                    <EnvelopeIcon className="h-4 w-4" />
-                                    Email
+                                    <EnvelopeIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                                    <span className="hidden sm:inline">Email</span>
                                   </a>
                                 )}
                               </div>
