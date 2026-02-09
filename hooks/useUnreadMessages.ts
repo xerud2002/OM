@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import {
   collection,
   query,
@@ -9,21 +9,41 @@ import {
 import { db, auth } from "@/services/firebase";
 import { logger } from "@/utils/logger";
 
+const READ_TS_KEY = "om_chat_read_ts";
+
+function getReadTimestamps(): Record<string, number> {
+  try {
+    const raw = localStorage.getItem(READ_TS_KEY);
+    return raw ? JSON.parse(raw) : {};
+  } catch { return {}; }
+}
+
+export function markOfferAsRead(offerId: string): void {
+  const ts = getReadTimestamps();
+  ts[offerId] = Date.now();
+  localStorage.setItem(READ_TS_KEY, JSON.stringify(ts));
+}
+
 /**
  * Hook that tracks unread messages per offer.
  * Returns a Set of offerIds that have unread messages (from the other party).
- *
- * It subscribes to the last message in each offer's messages subcollection
- * and checks if the sender is someone other than the current user.
+ * Uses localStorage to persist read timestamps across page refreshes.
  */
 export function useUnreadMessages(
   requestIds: string[],
   offersByRequest: Record<string, { id: string }[]>,
   currentUserRole: "company" | "customer",
-  /** Set of offer IDs that the user has opened the chat for (clears unread) */
-  readOfferIds?: Set<string>,
-): Set<string> {
+): { unreadOffers: Set<string>; markRead: (offerId: string) => void } {
   const [unreadOffers, setUnreadOffers] = useState<Set<string>>(new Set());
+
+  const markRead = useCallback((offerId: string) => {
+    markOfferAsRead(offerId);
+    setUnreadOffers((prev) => {
+      const next = new Set(prev);
+      next.delete(offerId);
+      return next;
+    });
+  }, []);
 
   // Stabilize dependencies to avoid lint warnings with complex expressions
   const requestKey = requestIds.join(",");
@@ -35,13 +55,13 @@ export function useUnreadMessages(
       ]),
     ),
   );
-  const readKey = readOfferIds ? Array.from(readOfferIds).join(",") : "";
 
   useEffect(() => {
     if (!auth.currentUser || requestIds.length === 0) return;
 
     const userId = auth.currentUser.uid;
     const unsubs: (() => void)[] = [];
+    const readTs = getReadTimestamps();
 
     for (const requestId of requestIds) {
       const offers = offersByRequest[requestId] || [];
@@ -66,9 +86,14 @@ export function useUnreadMessages(
               lastMsg.senderId !== userId &&
               lastMsg.senderRole !== currentUserRole;
 
+            // Compare message timestamp with last read timestamp
+            const msgTime = lastMsg.createdAt?.toMillis?.()
+              || (lastMsg.createdAt?.seconds ? lastMsg.createdAt.seconds * 1000 : 0);
+            const lastRead = readTs[offer.id] || 0;
+
             setUnreadOffers((prev) => {
               const next = new Set(prev);
-              if (isFromOtherParty && !readOfferIds?.has(offer.id)) {
+              if (isFromOtherParty && msgTime > lastRead) {
                 next.add(offer.id);
               } else {
                 next.delete(offer.id);
@@ -87,9 +112,9 @@ export function useUnreadMessages(
 
     return () => unsubs.forEach((u) => u());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [requestKey, offersKey, currentUserRole, readKey]);
+  }, [requestKey, offersKey, currentUserRole]);
 
-  return unreadOffers;
+  return { unreadOffers, markRead };
 }
 
 /**

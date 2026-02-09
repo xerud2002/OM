@@ -26,6 +26,7 @@ import { onAuthChange } from "@/utils/firebaseHelpers";
 import { calculateRequestCost } from "@/utils/costCalculator";
 import OfferModal from "@/components/company/OfferModal";
 import { logger } from "@/utils/logger";
+import { markOfferAsRead } from "@/hooks/useUnreadMessages";
 
 import {
   ChatBubbleLeftEllipsisIcon,
@@ -87,11 +88,20 @@ function JobCard({
   const r = request;
   const cost = calculateRequestCost(r);
 
+  // Determine card colors based on offer status
+  const cardStyle = !hasMine
+    ? { bg: "bg-blue-50/40", border: "border-blue-200", bar: "bg-blue-500" }
+    : hasMine.status === "accepted"
+      ? { bg: "bg-emerald-50/40", border: "border-emerald-200", bar: "bg-emerald-500" }
+      : hasMine.status === "declined" || hasMine.status === "rejected"
+        ? { bg: "bg-red-50/40", border: "border-red-200", bar: "bg-red-400" }
+        : { bg: "bg-amber-50/40", border: "border-amber-200", bar: "bg-amber-400" };
+
   return (
-    <div className="relative flex flex-col rounded-xl border border-gray-200 bg-white shadow-sm transition-all hover:shadow-lg hover:border-gray-300">
+    <div className={`relative flex flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-lg`}>
       {/* Top Status Bar */}
       <div
-        className={`absolute left-0 top-0 right-0 h-1 rounded-t-xl ${hasMine ? "bg-emerald-500" : "bg-blue-500"}`}
+        className={`absolute left-0 top-0 right-0 h-1 rounded-t-xl ${cardStyle.bar}`}
       />
 
       {/* Header: Code, Date & Move Date */}
@@ -380,6 +390,14 @@ export default function RequestsView({
   const checkedOffersRef = useRef<Set<string>>(new Set());
   const unreadSubsRef = useRef<Map<string, () => void>>(new Map());
 
+  // Helpers to read persisted timestamps from localStorage
+  const getReadTimestamps = (): Record<string, number> => {
+    try {
+      const raw = localStorage.getItem("om_chat_read_ts");
+      return raw ? JSON.parse(raw) : {};
+    } catch { return {}; }
+  };
+
   // Track unread messages for company offers
   useEffect(() => {
     if (!company?.uid) return;
@@ -388,6 +406,8 @@ export default function RequestsView({
       (entry): entry is [string, { offerId: string; status: string }] =>
         entry[1] !== false,
     );
+
+    const readTs = getReadTimestamps();
 
     // Subscribe to new offer chats, skip already-subscribed
     const currentSubs = unreadSubsRef.current;
@@ -413,9 +433,13 @@ export default function RequestsView({
           const isFromCustomer =
             lastMsg.senderId !== company.uid && lastMsg.senderRole !== "company";
 
+          // Check if message is newer than last read timestamp
+          const msgTime = lastMsg.createdAt?.toMillis?.() || lastMsg.createdAt?.seconds * 1000 || 0;
+          const lastRead = readTs[offerInfo.offerId] || 0;
+
           setUnreadOfferIds((prev) => {
             const next = new Set(prev);
-            if (isFromCustomer) {
+            if (isFromCustomer && msgTime > lastRead) {
               next.add(offerInfo.offerId);
             } else {
               next.delete(offerInfo.offerId);
@@ -1081,7 +1105,8 @@ export default function RequestsView({
                   hasMine={hasMineMap[r.id] ?? false}
                   onOfferClick={(req) => setActiveOfferRequest(req)}
                   onChatClick={(reqId, offerId) => {
-                    // Clear unread when opening chat
+                    // Clear unread and persist read timestamp
+                    markOfferAsRead(offerId);
                     setUnreadOfferIds((prev) => {
                       const next = new Set(prev);
                       next.delete(offerId);

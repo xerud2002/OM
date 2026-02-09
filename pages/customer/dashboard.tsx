@@ -78,7 +78,6 @@ export default function CustomerDashboard() {
   );
   const [chatOffer, setChatOffer] = useState<any>(null);
   const [showDetails, setShowDetails] = useState(false);
-  const [readOfferIds, setReadOfferIds] = useState<Set<string>>(new Set());
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
@@ -200,16 +199,15 @@ export default function CustomerDashboard() {
 
   // Track unread chat messages
   const requestIdsList = requests.map((r) => r.id);
-  const unreadOffers = useUnreadMessages(
+  const { unreadOffers, markRead } = useUnreadMessages(
     requestIdsList,
     offersByRequest,
     "customer",
-    readOfferIds,
   );
 
   // When user opens a chat, mark that offer as read
   const handleOpenChat = (offer: any) => {
-    setReadOfferIds((prev) => new Set(prev).add(offer.id));
+    markRead(offer.id);
     setChatOffer(offer);
   };
 

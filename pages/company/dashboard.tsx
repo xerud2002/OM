@@ -39,6 +39,7 @@ import {
   EnvelopeIcon,
   InformationCircleIcon,
   TruckIcon,
+  ChatBubbleLeftRightIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import LoadingSpinner, {
@@ -568,7 +569,7 @@ export default function CompanyDashboard() {
                             )}
 
                             {/* Customer contact buttons */}
-                            {(offer.customerPhone || offer.customerEmail) && (
+                            {/* Customer contact buttons - always show (Chat is always available) */}
                               <div className="ml-auto flex items-center gap-2">
                                 <span className="text-xs text-gray-400">
                                   Contactează clientul:
@@ -583,6 +584,13 @@ export default function CompanyDashboard() {
                                     Sună
                                   </a>
                                 )}
+                                <button
+                                  onClick={() => router.push(`/company/chat?requestId=${offer.requestId}&offerId=${offer.id}`)}
+                                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-2 text-sm font-medium text-purple-700 transition hover:bg-purple-100"
+                                >
+                                  <ChatBubbleLeftRightIcon className="h-4 w-4" />
+                                  Chat
+                                </button>
                                 {offer.customerEmail && (
                                   <a
                                     href={`mailto:${offer.customerEmail}`}
@@ -594,7 +602,6 @@ export default function CompanyDashboard() {
                                   </a>
                                 )}
                               </div>
-                            )}
                           </div>
                         )}
                       </div>
