@@ -6,6 +6,8 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Inter } from "next/font/google";
 import { loadGoogleAnalytics } from "@/utils/interactionLoader";
+import { hasConsent } from "@/utils/cookies";
+import { CONSENT_EVENT } from "@/components/CookieConsent";
 // Vercel Analytics removed - site is self-hosted on VPS, not Vercel
 import "../globals.css";
 import "react-day-picker/dist/style.css";
@@ -39,7 +41,9 @@ const Navbar = dynamic(() => import("@/components/layout/Navbar"), {
 
 const Footer = dynamic(() => import("@/components/layout/Footer"), {
   ssr: true,
-  loading: () => <footer className="mt-10 border-t border-gray-200 bg-white py-14" />,
+  loading: () => (
+    <footer className="mt-10 border-t border-gray-200 bg-white py-14" />
+  ),
 });
 
 // Lazy load non-critical components
@@ -49,27 +53,45 @@ const FloatingCTA = dynamic(() => import("@/components/FloatingCTA"), {
 });
 
 // Defer Toaster until after hydration
-const Toaster = dynamic(() => import("sonner").then((mod) => ({ default: mod.Toaster })), {
-  ssr: false,
-});
+const Toaster = dynamic(
+  () => import("sonner").then((mod) => ({ default: mod.Toaster })),
+  {
+    ssr: false,
+  },
+);
 
-const ExitIntentPopup = dynamic(() => import("@/components/cro/ExitIntentPopup"), {
-  ssr: false,
-  loading: () => null,
-});
+const ExitIntentPopup = dynamic(
+  () => import("@/components/cro/ExitIntentPopup"),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
 
-const WhatsAppWidget = dynamic(() => import("@/components/cro/WhatsAppWidget"), {
-  ssr: false,
-  loading: () => null,
-});
+const WhatsAppWidget = dynamic(
+  () => import("@/components/cro/WhatsAppWidget"),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
+
+const CookieConsentBanner = dynamic(
+  () => import("@/components/CookieConsent"),
+  {
+    ssr: false,
+    loading: () => null,
+  },
+);
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   // Check if current route is a dashboard route (no header/footer)
-  const isDashboardRoute = router.pathname.startsWith("/customer") || 
-                           router.pathname.startsWith("/company") || 
-                           router.pathname.startsWith("/admin");
+  const isDashboardRoute =
+    router.pathname.startsWith("/customer") ||
+    router.pathname.startsWith("/company") ||
+    router.pathname.startsWith("/admin");
 
   // Track page views on route change (GA4 handles initial page view automatically)
   useEffect(() => {
@@ -82,9 +104,24 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
-  // Load Google Analytics on first user interaction (deferred for performance)
+  // Load Google Analytics only if user has consented to analytics cookies
   useEffect(() => {
-    loadGoogleAnalytics("G-6624X6E5GQ");
+    const GA_ID = "G-6624X6E5GQ";
+
+    // Load now if consent already exists (returning visitor)
+    if (hasConsent("analytics")) {
+      loadGoogleAnalytics(GA_ID);
+    }
+
+    // Listen for consent updates (new visitor clicks accept)
+    const onConsent = (e: Event) => {
+      const consent = (e as CustomEvent).detail;
+      if (consent?.analytics) {
+        loadGoogleAnalytics(GA_ID);
+      }
+    };
+    window.addEventListener(CONSENT_EVENT, onConsent);
+    return () => window.removeEventListener(CONSENT_EVENT, onConsent);
   }, []);
 
   return (
@@ -101,9 +138,16 @@ export default function App({ Component, pageProps }: AppProps) {
         {/* Preconnect moved to _document.tsx */}
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
 
-        <link rel="icon" href="/favicon-32x32.webp" type="image/png" sizes="32x32" />
+        <link
+          rel="icon"
+          href="/favicon-32x32.webp"
+          type="image/png"
+          sizes="32x32"
+        />
         <link rel="icon" href="/logo.webp" type="image/webp" sizes="any" />
-        <title>Ofertemutare.ro | Oferte reale de la firme de mutări verificate</title>
+        <title>
+          Ofertemutare.ro | Oferte reale de la firme de mutări verificate
+        </title>
         <meta
           name="description"
           content="Primește rapid oferte reale de la firme de mutări verificate din România. Compară prețuri și alege varianta potrivită pentru tine."
@@ -131,7 +175,10 @@ export default function App({ Component, pageProps }: AppProps) {
       <div className={`${inter.variable} font-sans`}>
         {!isDashboardRoute && <Navbar />}
 
-        <main id="main-content" className={isDashboardRoute ? "min-h-screen" : "min-h-[60vh] pt-20"}>
+        <main
+          id="main-content"
+          className={isDashboardRoute ? "min-h-screen" : "min-h-[60vh] pt-20"}
+        >
           <Component {...pageProps} />
         </main>
 
@@ -147,11 +194,11 @@ export default function App({ Component, pageProps }: AppProps) {
         </>
       )}
 
+      {/* GDPR Cookie Consent Banner */}
+      <CookieConsentBanner />
+
       {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
       <Toaster richColors position="top-right" closeButton />
-
-      {/* Google Analytics 4 - Loaded on interaction via interactionLoader */}
     </ErrorBoundary>
   );
 }
-

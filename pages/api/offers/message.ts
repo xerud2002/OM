@@ -1,10 +1,14 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import admin, { adminDb } from "@/lib/firebaseAdmin";
+import { adminDb } from "@/lib/firebaseAdmin";
+import { FieldValue } from "firebase-admin/firestore";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json(apiError("Method Not Allowed"));
@@ -12,7 +16,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { requestId, offerId, text } = req.body || {};
   if (!requestId || !offerId || !text || String(text).trim().length === 0) {
-    return res.status(400).json(apiError("Missing required fields: requestId, offerId, text"));
+    return res
+      .status(400)
+      .json(apiError("Missing required fields: requestId, offerId, text"));
   }
 
   const authResult = await verifyAuth(req);
@@ -25,42 +31,54 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Load request and offer to determine permissions and targets
     const requestRef = adminDb.doc(`requests/${requestId}`);
     const requestSnap = await requestRef.get();
-    if (!requestSnap.exists) return res.status(404).json(apiError("Request not found"));
-    const requestData = requestSnap.data() as { customerId?: string; customerName?: string; requestCode?: string };
+    if (!requestSnap.exists)
+      return res.status(404).json(apiError("Request not found"));
+    const requestData = requestSnap.data() as {
+      customerId?: string;
+      customerName?: string;
+      requestCode?: string;
+    };
 
     const offerRef = adminDb.doc(`requests/${requestId}/offers/${offerId}`);
     const offerSnap = await offerRef.get();
-    if (!offerSnap.exists) return res.status(404).json(apiError("Offer not found"));
+    if (!offerSnap.exists)
+      return res.status(404).json(apiError("Offer not found"));
     const offerData = offerSnap.data() as { companyId?: string };
 
     const isCustomer = requestData?.customerId === uid;
     const isCompany = offerData?.companyId === uid;
 
     if (!isCustomer && !isCompany) {
-      return res.status(403).json(apiError("Not authorized to message on this offer"));
+      return res
+        .status(403)
+        .json(apiError("Not authorized to message on this offer"));
     }
 
     const senderRole = isCustomer ? "customer" : "company";
 
     // Create a messages subcollection under the offer
-    const messagesCol = adminDb.collection(`requests/${requestId}/offers/${offerId}/messages`);
+    const messagesCol = adminDb.collection(
+      `requests/${requestId}/offers/${offerId}/messages`,
+    );
     await messagesCol.add({
       text: String(text).trim(),
       senderId: uid,
       senderRole,
-      createdAt: admin.firestore.FieldValue.serverTimestamp(),
+      createdAt: FieldValue.serverTimestamp(),
     });
 
     // Optional lightweight notification for company when customer sends a message
     if (isCustomer && offerData?.companyId) {
       try {
-        const notifRef = adminDb.collection(`companies/${offerData.companyId}/notifications`).doc();
+        const notifRef = adminDb
+          .collection(`companies/${offerData.companyId}/notifications`)
+          .doc();
         await notifRef.set({
           type: "message",
           requestId,
           offerId,
           text: String(text).trim().slice(0, 500),
-          createdAt: admin.firestore.FieldValue.serverTimestamp(),
+          createdAt: FieldValue.serverTimestamp(),
           seen: false,
         });
 

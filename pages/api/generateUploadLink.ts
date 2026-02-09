@@ -1,9 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { randomBytes } from "crypto";
-import { adminDb } from "@/lib/firebaseAdmin";
+import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -11,10 +14,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const { requestId, customerEmail, customerName } = req.body || {};
   if (!requestId || !customerEmail) {
-    return res.status(400).json({ error: "Missing required fields: requestId, customerEmail" });
+    return res
+      .status(400)
+      .json({ error: "Missing required fields: requestId, customerEmail" });
   }
 
   try {
+    if (!adminReady) {
+      return res
+        .status(503)
+        .json({ error: "Admin not configured in this environment" });
+    }
+
     // Generate unique upload token
     const uploadToken = randomBytes(32).toString("hex");
     const uploadLink = `${process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"}/upload/${uploadToken}`;

@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { adminDb } from "@/lib/firebaseAdmin";
+import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { logger } from "@/utils/logger";
 
 /**
@@ -10,7 +10,10 @@ import { logger } from "@/utils/logger";
  * - Setează un cron job care apelează: GET /api/sendUploadReminders
  * - Sau rulează manual pentru testare
  */
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   if (req.method !== "GET") {
     res.setHeader("Allow", ["GET"]);
     return res.status(405).json({ error: "Method Not Allowed" });
@@ -25,11 +28,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
+    if (!adminReady) {
+      return res
+        .status(503)
+        .json({ error: "Admin not configured in this environment" });
+    }
+
     const threeDaysAgo = new Date();
     threeDaysAgo.setDate(threeDaysAgo.getDate() - 3);
 
     // Query via Admin SDK
-    const tokensSnap = await adminDb.collection("uploadTokens").where("used", "==", false).get();
+    const tokensSnap = await adminDb
+      .collection("uploadTokens")
+      .where("used", "==", false)
+      .get();
 
     const reminders: Array<{ email: string; name: string; link: string }> = [];
     const now = new Date();
@@ -38,11 +50,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     for (const tokenDoc of tokensSnap.docs) {
       const tokenData = tokenDoc.data() as any;
-      const createdAt = tokenData.createdAt ? new Date(tokenData.createdAt) : null;
-      const expiresAt = tokenData.expiresAt ? new Date(tokenData.expiresAt) : null;
+      const createdAt = tokenData.createdAt
+        ? new Date(tokenData.createdAt)
+        : null;
+      const expiresAt = tokenData.expiresAt
+        ? new Date(tokenData.expiresAt)
+        : null;
       if (!createdAt || !expiresAt) continue;
 
-      if (createdAt <= threeDaysAgo && now <= expiresAt && !tokenData.reminderSent) {
+      if (
+        createdAt <= threeDaysAgo &&
+        now <= expiresAt &&
+        !tokenData.reminderSent
+      ) {
         const reminderInfo = {
           email: tokenData.customerEmail,
           name: tokenData.customerName,
@@ -52,22 +72,25 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
         // Send reminder email via new API
         try {
-          const response = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: 'uploadReminder',
-              data: {
-                email: tokenData.customerEmail,
-                name: tokenData.customerName,
-                requestCode: tokenData.requestId || "cererea ta",
-                uploadUrl: tokenData.uploadLink,
-              },
-            }),
-          });
+          const response = await fetch(
+            `${process.env.NEXT_PUBLIC_APP_URL}/api/send-email`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                type: "uploadReminder",
+                data: {
+                  email: tokenData.customerEmail,
+                  name: tokenData.customerName,
+                  requestCode: tokenData.requestId || "cererea ta",
+                  uploadUrl: tokenData.uploadLink,
+                },
+              }),
+            },
+          );
 
           if (!response.ok) {
-            throw new Error('Email API returned error');
+            throw new Error("Email API returned error");
           }
 
           // Mark reminder as sent
@@ -78,7 +101,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
           sentCount++;
         } catch (emailError) {
-          logger.error(`Failed to send reminder to ${tokenData.customerEmail}:`, emailError);
+          logger.error(
+            `Failed to send reminder to ${tokenData.customerEmail}:`,
+            emailError,
+          );
           failedCount++;
         }
       }

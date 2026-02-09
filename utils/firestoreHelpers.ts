@@ -10,6 +10,8 @@ import {
   doc,
   runTransaction,
   getDoc,
+  updateDoc,
+  deleteDoc,
 } from "firebase/firestore";
 
 // Helper: Build full address string from components
@@ -19,7 +21,7 @@ function buildAddressString(
   type?: "house" | "flat",
   bloc?: string,
   staircase?: string,
-  apartment?: string
+  apartment?: string,
 ): string {
   const parts = [street, number];
   if (type === "flat") {
@@ -40,11 +42,19 @@ function buildMoveDateFields(data: any): Record<string, any> {
     if (data.moveDateMode === "exact" && data.moveDateStart) {
       fields.moveDate = data.moveDateStart;
       fields.moveDateStart = data.moveDateStart;
-    } else if (data.moveDateMode === "range" && data.moveDateStart && data.moveDateEnd) {
+    } else if (
+      data.moveDateMode === "range" &&
+      data.moveDateStart &&
+      data.moveDateEnd
+    ) {
       fields.moveDate = data.moveDateStart; // For backward compatibility
       fields.moveDateStart = data.moveDateStart;
       fields.moveDateEnd = data.moveDateEnd;
-    } else if (data.moveDateMode === "flexible" && data.moveDateStart && data.moveDateFlexDays) {
+    } else if (
+      data.moveDateMode === "flexible" &&
+      data.moveDateStart &&
+      data.moveDateFlexDays
+    ) {
       fields.moveDate = data.moveDateStart;
       fields.moveDateStart = data.moveDateStart;
       fields.moveDateFlexDays = data.moveDateFlexDays;
@@ -88,7 +98,9 @@ function prepareRequestData(data: any): Record<string, any> {
     "mediaUpload",
   ];
   const clean: Record<string, any> = Object.fromEntries(
-    Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
+    Object.entries(data).filter(
+      ([key, v]) => v !== undefined && !excludeFields.includes(key),
+    ),
   );
 
   // Handle move date logic using helper
@@ -103,7 +115,7 @@ function prepareRequestData(data: any): Record<string, any> {
       clean.fromType,
       clean.fromBloc,
       clean.fromStaircase,
-      clean.fromApartment
+      clean.fromApartment,
     );
   }
 
@@ -114,7 +126,7 @@ function prepareRequestData(data: any): Record<string, any> {
       clean.toType,
       clean.toBloc,
       clean.toStaircase,
-      clean.toApartment
+      clean.toApartment,
     );
   }
 
@@ -126,12 +138,14 @@ function prepareRequestData(data: any): Record<string, any> {
  * Requires updated Firestore rules that allow unauthenticated writes with guestEmail.
  */
 export async function createGuestRequest(
-  data: any
+  data: any,
 ): Promise<{ requestId: string; requestCode: string }> {
   const clean = prepareRequestData(data);
 
   // Ensure guest request fields
-  const guestEmail = (data.email || data.customerEmail || "").toLowerCase().trim();
+  const guestEmail = (data.email || data.customerEmail || "")
+    .toLowerCase()
+    .trim();
   if (!guestEmail) {
     throw new Error("Email este obligatoriu");
   }
@@ -148,7 +162,8 @@ export async function createGuestRequest(
     requestCode,
     guestEmail,
     customerId: null,
-    customerName: `${data.contactFirstName || ""} ${data.contactLastName || ""}`.trim(),
+    customerName:
+      `${data.contactFirstName || ""} ${data.contactLastName || ""}`.trim(),
     customerEmail: guestEmail,
     status: "active",
     archived: false,
@@ -177,7 +192,7 @@ export async function getCustomerRequests(customerId: string) {
   const q = query(
     collection(db, "requests"),
     where("customerId", "==", customerId),
-    orderBy("createdAt", "desc")
+    orderBy("createdAt", "desc"),
   );
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -194,9 +209,9 @@ export async function addOffer(requestId: string, data: any) {
   try {
     const reqRef = doc(db, "requests", requestId);
     const snap = await getDoc(reqRef);
-    requestCode = (snap.exists() ? (snap.data() as any).requestCode : undefined) as
-      | string
-      | undefined;
+    requestCode = (
+      snap.exists() ? (snap.data() as any).requestCode : undefined
+    ) as string | undefined;
   } catch {}
 
   await addDoc(collection(db, "requests", requestId, "offers"), {
@@ -208,7 +223,10 @@ export async function addOffer(requestId: string, data: any) {
 }
 
 export async function getOffers(requestId: string) {
-  const q = query(collection(db, "requests", requestId, "offers"), orderBy("createdAt", "desc"));
+  const q = query(
+    collection(db, "requests", requestId, "offers"),
+    orderBy("createdAt", "desc"),
+  );
   const snap = await getDocs(q);
   return snap.docs.map((d) => ({ id: d.id, ...d.data() }));
 }
@@ -218,9 +236,8 @@ export async function getOffers(requestId: string) {
 
 export async function updateRequestStatus(
   requestId: string,
-  status: "active" | "closed" | "paused" | "cancelled"
+  status: "active" | "closed" | "paused" | "cancelled",
 ) {
-  const { doc, updateDoc } = await import("firebase/firestore");
   const requestRef = doc(db, "requests", requestId);
   await updateDoc(requestRef, {
     status,
@@ -229,11 +246,13 @@ export async function updateRequestStatus(
 }
 
 export async function deleteRequest(requestId: string) {
-  const { doc, deleteDoc, getDocs, collection } = await import("firebase/firestore");
-
   // Delete all offers in the subcollection first
-  const offersSnapshot = await getDocs(collection(db, "requests", requestId, "offers"));
-  const deletePromises = offersSnapshot.docs.map((offerDoc) => deleteDoc(offerDoc.ref));
+  const offersSnapshot = await getDocs(
+    collection(db, "requests", requestId, "offers"),
+  );
+  const deletePromises = offersSnapshot.docs.map((offerDoc) =>
+    deleteDoc(offerDoc.ref),
+  );
   await Promise.all(deletePromises);
 
   // Delete the request document
@@ -242,7 +261,6 @@ export async function deleteRequest(requestId: string) {
 }
 
 export async function archiveRequest(requestId: string) {
-  const { doc, updateDoc } = await import("firebase/firestore");
   const requestRef = doc(db, "requests", requestId);
   await updateDoc(requestRef, {
     archived: true,
@@ -251,7 +269,6 @@ export async function archiveRequest(requestId: string) {
 }
 
 export async function unarchiveRequest(requestId: string) {
-  const { doc, updateDoc } = await import("firebase/firestore");
   const requestRef = doc(db, "requests", requestId);
   await updateDoc(requestRef, {
     archived: false,
@@ -260,8 +277,6 @@ export async function unarchiveRequest(requestId: string) {
 }
 
 export async function updateRequest(requestId: string, data: any) {
-  const { doc, updateDoc, getDocs, collection, addDoc } = await import("firebase/firestore");
-
   // Remove any undefined fields and non-serializable fields (File objects, etc.)
   // Note: mediaUrls is allowed (it's an array of strings/URLs)
   const excludeFields = [
@@ -276,7 +291,9 @@ export async function updateRequest(requestId: string, data: any) {
     "mediaUpload",
   ];
   const clean: Record<string, any> = Object.fromEntries(
-    Object.entries(data).filter(([key, v]) => v !== undefined && !excludeFields.includes(key))
+    Object.entries(data).filter(
+      ([key, v]) => v !== undefined && !excludeFields.includes(key),
+    ),
   );
 
   // Handle move date logic using helper
@@ -291,7 +308,7 @@ export async function updateRequest(requestId: string, data: any) {
       clean.fromType,
       clean.fromBloc,
       clean.fromStaircase,
-      clean.fromApartment
+      clean.fromApartment,
     );
   }
 
@@ -302,7 +319,7 @@ export async function updateRequest(requestId: string, data: any) {
       clean.toType,
       clean.toBloc,
       clean.toStaircase,
-      clean.toApartment
+      clean.toApartment,
     );
   }
 
@@ -313,7 +330,9 @@ export async function updateRequest(requestId: string, data: any) {
   });
 
   // Get all companies that have submitted offers for this request
-  const offersSnapshot = await getDocs(collection(db, "requests", requestId, "offers"));
+  const offersSnapshot = await getDocs(
+    collection(db, "requests", requestId, "offers"),
+  );
   const companyIds = new Set<string>();
 
   offersSnapshot.docs.forEach((offerDoc) => {
@@ -341,15 +360,12 @@ export async function updateRequest(requestId: string, data: any) {
 
 // Get all active companies for email notifications
 export async function getAllActiveCompanies() {
-  const q = query(
-    collection(db, "companies"),
-    where("status", "==", "active")
-  );
+  const q = query(collection(db, "companies"), where("status", "==", "active"));
   const snapshot = await getDocs(q);
   return snapshot.docs.map((doc) => ({
     id: doc.id,
     email: doc.data().email,
     companyName: doc.data().companyName,
-    ...doc.data()
+    ...doc.data(),
   }));
 }

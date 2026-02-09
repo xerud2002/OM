@@ -1,23 +1,30 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
-import type { QueryDocumentSnapshot, DocumentData, Transaction } from "firebase-admin/firestore";
+import type {
+  QueryDocumentSnapshot,
+  DocumentData,
+  Transaction,
+} from "firebase-admin/firestore";
 
 /**
  * Auto-refund cron job
- * 
+ *
  * This endpoint processes offers that are 72+ hours old with no customer response.
  * For each qualifying offer:
  * 1. Refunds the credits to the company
  * 2. Marks the offer as "refunded"
  * 3. Creates a transaction record
- * 
+ *
  * Should be called by a cron job (e.g., Vercel Cron, GitHub Actions)
  * Protected by CRON_SECRET header
  */
 
 const REFUND_WINDOW_HOURS = 72;
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse,
+) {
   // Only allow POST requests
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -26,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   // Verify cron secret
   const authHeader = req.headers.authorization;
   const cronSecret = process.env.CRON_SECRET;
-  
+
   if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
     return res.status(401).json({ error: "Unauthorized" });
   }
@@ -47,32 +54,28 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // - Created more than 72 hours ago
     // - Not already refunded
     // - Has costPaid recorded
-    const offersQuery = await db
-      .collectionGroup("offers")
-      .where("status", "==", "pending")
-      .where("refunded", "==", false)
-      .where("createdAt", "<", refundCutoff)
-      .get();
-
-    // Also check offers without refunded field set
-    const offersQueryNoField = await db
+    const offersQueryAll = await db
       .collectionGroup("offers")
       .where("status", "==", "pending")
       .where("createdAt", "<", refundCutoff)
       .get();
 
-    // Combine and deduplicate
+    // Filter out already-refunded offers in code
+    // (Firestore can't query for "field does not exist", so we filter here)
     const allOffers = new Map<string, QueryDocumentSnapshot<DocumentData>>();
-    offersQuery.docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => allOffers.set(doc.id, doc));
-    offersQueryNoField.docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
+    offersQueryAll.docs.forEach((doc: QueryDocumentSnapshot<DocumentData>) => {
       const data = doc.data();
-      // Only add if not already refunded
-      if (data.refunded !== true && !allOffers.has(doc.id)) {
+      if (data.refunded !== true) {
         allOffers.set(doc.id, doc);
       }
     });
 
-    const refundResults: { offerId: string; companyId: string; amount: number; success: boolean }[] = [];
+    const refundResults: {
+      offerId: string;
+      companyId: string;
+      amount: number;
+      success: boolean;
+    }[] = [];
 
     // Process each offer
     for (const [offerId, offerDoc] of Array.from(allOffers)) {
@@ -117,7 +120,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           });
 
           // Create refund transaction record
-          const txRef = db.collection("companies").doc(companyId).collection("transactions").doc();
+          const txRef = db
+            .collection("companies")
+            .doc(companyId)
+            .collection("transactions")
+            .doc();
           transaction.set(txRef, {
             type: "refund",
             amount: costPaid,

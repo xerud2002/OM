@@ -1,5 +1,9 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { XMarkIcon, PaperAirplaneIcon, ShieldCheckIcon } from "@heroicons/react/24/outline";
+import {
+  XMarkIcon,
+  PaperAirplaneIcon,
+  ShieldCheckIcon,
+} from "@heroicons/react/24/outline";
 import { useState } from "react";
 
 type OfferModalProps = {
@@ -26,10 +30,14 @@ export default function OfferModal({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!price) return;
-    await onConfirm(Number(price), message);
-    setPrice("");
-    setMessage("");
-    onClose();
+    try {
+      await onConfirm(Number(price), message);
+      setPrice("");
+      setMessage("");
+      onClose();
+    } catch {
+      // Error handled by caller; keep form open so user can retry
+    }
   };
 
   return (
@@ -69,7 +77,9 @@ export default function OfferModal({
                 </div>
 
                 {/* Title */}
-                <h3 className="mb-2 text-center text-xl font-bold text-gray-900">{title}</h3>
+                <h3 className="mb-2 text-center text-xl font-bold text-gray-900">
+                  {title}
+                </h3>
                 <p className="mb-4 text-center text-sm text-gray-500">
                   Introduceți prețul și un mesaj opțional pentru client.
                 </p>
@@ -84,11 +94,15 @@ export default function OfferModal({
 
                 <div className="space-y-4">
                   <div>
-                    <label className="mb-1.5 block text-sm font-semibold text-gray-700">Preț Ofertă (RON)</label>
+                    <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      Preț Ofertă (RON)
+                    </label>
                     <div className="relative">
                       {!price && (
                         <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
-                          <span className="text-gray-400 font-medium text-sm select-none">Ex: 1500</span>
+                          <span className="text-gray-400 font-medium text-sm select-none">
+                            Ex: 1500
+                          </span>
                         </div>
                       )}
                       <input
@@ -103,11 +117,15 @@ export default function OfferModal({
                   </div>
 
                   <div>
-                    <label className="mb-1.5 block text-sm font-semibold text-gray-700">Mesaj pentru client (Opțional)</label>
+                    <label className="mb-1.5 block text-sm font-semibold text-gray-700">
+                      Mesaj pentru client (Opțional)
+                    </label>
                     <div className="relative">
                       {!message && (
                         <div className="pointer-events-none absolute top-3 left-4 flex items-start">
-                          <span className="text-gray-400 text-sm select-none">Ex: Avem disponibilitate pentru data dorită...</span>
+                          <span className="text-gray-400 text-sm select-none">
+                            Ex: Avem disponibilitate pentru data dorită...
+                          </span>
                         </div>
                       )}
                       <textarea
@@ -124,7 +142,8 @@ export default function OfferModal({
                 <div className="mt-4 flex items-start gap-2 rounded-lg bg-emerald-50 p-3 ring-1 ring-emerald-100">
                   <ShieldCheckIcon className="h-5 w-5 shrink-0 text-emerald-600 mt-0.5" />
                   <p className="text-xs text-emerald-800">
-                    <strong>Protecție refund:</strong> Dacă clientul nu răspunde în 72h, creditele îți sunt returnate automat.
+                    <strong>Protecție refund:</strong> Dacă clientul nu răspunde
+                    în 72h, creditele îți sunt returnate automat.
                   </p>
                 </div>
 
@@ -143,7 +162,7 @@ export default function OfferModal({
                     disabled={isLoading || !price}
                     className="flex-1 rounded-xl bg-blue-600 px-4 py-3 font-semibold text-white transition-all hover:bg-blue-700 hover:shadow-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed"
                   >
-                     {isLoading ? "Se trimite..." : "Trimite Ofertă"}
+                    {isLoading ? "Se trimite..." : "Trimite Ofertă"}
                   </button>
                 </div>
               </form>

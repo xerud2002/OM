@@ -22,7 +22,13 @@ service cloud.firestore {
     match /customers/{customerId} {
       allow read: if isSignedIn() && (request.auth.uid == customerId || isAdmin());
       allow create: if isSignedIn() && request.auth.uid == customerId && canCreateCustomer();
-      allow update: if isSignedIn() && (request.auth.uid == customerId || isAdmin());
+      // Customer can update own profile, but cannot change identity fields
+      allow update: if isSignedIn() && (
+        (request.auth.uid == customerId &&
+          !request.resource.data.diff(resource.data).changedKeys().hasAny(['role', 'uid', 'createdAt'])
+        ) ||
+        isAdmin()
+      );
       allow delete: if isSignedIn() && isAdmin(); // Only admin can delete
     }
 
@@ -33,9 +39,19 @@ service cloud.firestore {
       // List queries restricted to signed-in company owner or admin
       allow list: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
       allow create: if isSignedIn() && request.auth.uid == companyId && canCreateCompany();
-      // Admin can update any company (for verification), company can update own
-      // Company credits updates are allowed for offer placements
-      allow update: if isSignedIn() && (request.auth.uid == companyId || isAdmin());
+      // Admin can update any field (verification, credits, etc.)
+      allow update: if isSignedIn() && isAdmin();
+      // Company can update own profile, but cannot self-inflate credits or change trust fields
+      allow update: if isSignedIn() && request.auth.uid == companyId &&
+        // Cannot change protected identity/trust/rating fields
+        !request.resource.data.diff(resource.data).changedKeys().hasAny([
+          'verificationStatus', 'verified', 'averageRating', 'totalReviews',
+          'role', 'uid', 'walletBalance', 'freeLeadCredits',
+          'welcomeCreditsReceived', 'firstPurchaseBonusAvailable'
+        ]) &&
+        // Credits can only decrease (for offer deductions), never increase
+        (!request.resource.data.diff(resource.data).changedKeys().hasAny(['credits']) ||
+         request.resource.data.credits <= resource.data.credits);
       allow delete: if false; // Prevent deletion
 
       // Company notifications subcollection
@@ -64,8 +80,8 @@ service cloud.firestore {
         allow read: if isSignedIn() && request.auth.uid == companyId;
         // Company can create transaction records (offer placements, credit purchases)
         allow create: if isSignedIn() && 
-          request.auth.uid == companyId;
-          // request.resource.data.keys().hasAll(['type', 'amount', 'createdAt']);
+          request.auth.uid == companyId &&
+          request.resource.data.keys().hasAll(['type', 'amount', 'createdAt']);
         // No updates or deletes allowed
         allow update, delete: if false;
       }
@@ -79,8 +95,8 @@ service cloud.firestore {
       // - For list queries, we also allow any signed-in customer to query (the query itself filters by customerId)
       allow read: if isSignedIn() && (
         isCompany() ||
-        isCustomer() ||
-        resource.data.customerId == request.auth.uid
+        resource.data.customerId == request.auth.uid ||
+        isAdmin()
       );
 
       // Customers can create requests linked to their account
@@ -186,8 +202,9 @@ service cloud.firestore {
 
     // === META COLLECTION (for counters and system data) ===
     match /meta/{docId} {
-      // Allow authenticated users to read and write counters (for request code generation)
-      allow read, write: if docId == 'counters';
+      // Authenticated users can read/write counters (for request code generation)
+      // NOTE: Guest request fallback (client-side) requires auth; primary path uses Admin SDK
+      allow read, write: if isSignedIn() && docId == 'counters';
       // Admin can read and write settings
       allow read, write: if docId == 'settings' && isSignedIn() && isAdmin();
       // Deny all other meta documents
@@ -212,13 +229,17 @@ service cloud.firestore {
       // Public read access to all published reviews
       allow read: if resource.data.status == 'published';
       
-      // Anyone can create a review (guests submit by providing name)
-      allow create: if request.resource.data.keys().hasAll(['companyId', 'customerName', 'rating', 'comment', 'createdAt', 'status']) &&
+      // Anyone can create a review (guests via email link); verify company exists to prevent spam
+      allow create: if 
+        exists(/databases/$(database)/documents/companies/$(request.resource.data.companyId)) &&
+        request.resource.data.keys().hasAll(['companyId', 'customerName', 'rating', 'comment', 'createdAt', 'status']) &&
         request.resource.data.companyId is string &&
         request.resource.data.customerName is string &&
+        request.resource.data.customerName.size() >= 2 &&
         request.resource.data.rating >= 1 &&
         request.resource.data.rating <= 5 &&
         request.resource.data.comment is string &&
+        request.resource.data.comment.size() >= 10 &&
         request.resource.data.status == 'published';
       
       // Admin can update reviews (for moderation)

@@ -67,7 +67,7 @@ export default async function handler(
     );
     const acceptedOfferSnap = await acceptedOfferRef.get();
     if (!acceptedOfferSnap.exists) {
-      return res.status(404).json({ error: "Offer not found" });
+      return res.status(404).json(apiError("Offer not found"));
     }
     const acceptedOfferData = acceptedOfferSnap.data() as OfferDoc;
 
@@ -241,7 +241,7 @@ contact@ofertemutare.ro
               Authorization: `Bearer ${RESEND_API_KEY}`,
             },
             body: JSON.stringify({
-              from: fromAddress,
+              from: `OferteMutare.ro <${fromAddress}>`,
               to: [companyEmail],
               subject: emailSubject,
               html: emailHtml,

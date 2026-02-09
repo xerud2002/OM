@@ -2,7 +2,11 @@
 // Default format: dd-MM-yyyy (zz-ll-an)
 export function formatDateRO(
   input: any,
-  options?: { separator?: string; fallback?: string; month?: "2-digit" | "short" }
+  options?: {
+    separator?: string;
+    fallback?: string;
+    month?: "2-digit" | "short";
+  },
 ): string {
   const sep = options?.separator ?? "-";
   const fallback = options?.fallback ?? "-";
@@ -11,8 +15,16 @@ export function formatDateRO(
 
   // Firestore Timestamp
   try {
-    if (typeof input === "object" && input && typeof input.toDate === "function") {
-  return formatDateRO(input.toDate(), { separator: sep, fallback, month: monthStyle });
+    if (
+      typeof input === "object" &&
+      input &&
+      typeof input.toDate === "function"
+    ) {
+      return formatDateRO(input.toDate(), {
+        separator: sep,
+        fallback,
+        month: monthStyle,
+      });
     }
   } catch {}
 
@@ -26,7 +38,20 @@ export function formatDateRO(
       const [, y, mm, dd] = m;
       if (monthStyle === "short") {
         const monthIdx = Math.max(1, Math.min(12, parseInt(mm, 10))) - 1;
-        const ro = ["Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct", "Noi", "Dec"];
+        const ro = [
+          "Ian",
+          "Feb",
+          "Mar",
+          "Apr",
+          "Mai",
+          "Iun",
+          "Iul",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Noi",
+          "Dec",
+        ];
         return `${dd}${sep}${ro[monthIdx]}${sep}${y}`;
       }
       return `${dd}${sep}${mm}${sep}${y}`;
@@ -41,7 +66,20 @@ export function formatDateRO(
   const mm = String(monthIndex + 1).padStart(2, "0");
   const yyyy = d.getFullYear();
   if (monthStyle === "short") {
-    const ro = ["Ian", "Feb", "Mar", "Apr", "Mai", "Iun", "Iul", "Aug", "Sep", "Oct", "Noi", "Dec"];
+    const ro = [
+      "Ian",
+      "Feb",
+      "Mar",
+      "Apr",
+      "Mai",
+      "Iun",
+      "Iul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Noi",
+      "Dec",
+    ];
     return `${dd}${sep}${ro[monthIndex]}${sep}${yyyy}`;
   }
   return `${dd}${sep}${mm}${sep}${yyyy}`;
@@ -51,11 +89,16 @@ export function formatDateRO(
 // Supports modes: exact, range, flexible, none; falls back to legacy moveDate
 export function formatMoveDateDisplay(
   r: any,
-  opts?: { separator?: string; month?: "2-digit" | "short"; rangeSep?: string; fallback?: string }
+  opts?: {
+    separator?: string;
+    month?: "2-digit" | "short";
+    rangeSep?: string;
+    fallback?: string;
+  },
 ): string {
   const sep = opts?.separator ?? "-";
   const month = opts?.month ?? "short";
-    const rangeSep = opts?.rangeSep ?? " – "; // en dash with spaces
+  const rangeSep = opts?.rangeSep ?? " – "; // en dash with spaces
   const fallback = opts?.fallback ?? "-";
 
   if (!r) return fallback;
@@ -69,7 +112,8 @@ export function formatMoveDateDisplay(
   const mode: string | undefined = r.moveDateMode;
   const start: any = r.moveDateStart ?? r.moveDate; // backward compat
   const end: any = r.moveDateEnd;
-  const flex: number | undefined = typeof r.moveDateFlexDays === "number" ? r.moveDateFlexDays : undefined;
+  const flex: number | undefined =
+    typeof r.moveDateFlexDays === "number" ? r.moveDateFlexDays : undefined;
 
   // Flexible -> compute derived interval around the anchor date
   if (mode === "flexible" && start) {
@@ -81,7 +125,9 @@ export function formatMoveDateDisplay(
           const lo = addDays(base, -f);
           const hi = addDays(base, f);
           return (
-            formatDateRO(lo, { separator: sep, month }) + rangeSep + formatDateRO(hi, { separator: sep, month })
+            formatDateRO(lo, { separator: sep, month }) +
+            rangeSep +
+            formatDateRO(hi, { separator: sep, month })
           );
         }
         // if flex not provided, show the base date
@@ -92,7 +138,11 @@ export function formatMoveDateDisplay(
 
   // Explicit range
   if (mode === "range" && start && end) {
-    return formatDateRO(start, { separator: sep, month }) + rangeSep + formatDateRO(end, { separator: sep, month });
+    return (
+      formatDateRO(start, { separator: sep, month }) +
+      rangeSep +
+      formatDateRO(end, { separator: sep, month })
+    );
   }
 
   // Exact or fallback single date
