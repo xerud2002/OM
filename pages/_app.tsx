@@ -131,7 +131,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <ErrorBoundary>
       {/* Fallback meta for pages that don't set their own <Head> */}
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
         <meta charSet="utf-8" />
         <meta
           name="google-site-verification"

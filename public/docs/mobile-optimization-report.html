@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mobile &amp; Tablet Optimization Report — OferteMutare.ro</title>
+  <style>
+    :root {
+      --emerald: #059669;
+      --emerald-d: #065f46;
+      --emerald-l: #d1fae5;
+      --red: #dc2626;
+      --red-l: #fee2e2;
+      --amber:#d97706;
+      --amber-l:#fef3c7;
+      --blue:#2563eb;
+      --blue-l:#dbeafe;
+      --purple:#7c3aed;
+      --purple-l:#ede9fe;
+      --teal:#0d9488;
+      --teal-l:#ccfbf1;
+      --gray-50:#f9fafb;--gray-100:#f3f4f6;--gray-200:#e5e7eb;--gray-300:#d1d5db;
+      --gray-500:#6b7280;--gray-600:#4b5563;--gray-700:#374151;--gray-800:#1f2937;--gray-900:#111827;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--gray-50);color:var(--gray-800);line-height:1.65;-webkit-font-smoothing:antialiased}
+    .hdr{background:linear-gradient(135deg,#064e3b 0%,var(--emerald) 50%,var(--teal) 100%);color:#fff;padding:3.5rem 2rem 3rem;text-align:center}
+    .hdr h1{font-size:2.2rem;font-weight:800;letter-spacing:-.02em;margin-bottom:.5rem}
+    .hdr p{opacity:.88;font-size:.92rem;max-width:640px;margin:0 auto}
+    .hdr .tag{display:inline-block;margin-top:1rem;background:rgba(255,255,255,.18);padding:.35rem 1.1rem;border-radius:999px;font-size:.78rem;font-weight:600;backdrop-filter:blur(4px)}
+    .cnt{max-width:1000px;margin:0 auto;padding:2.5rem 1.5rem 5rem}
+
+    /* Tabs */
+    .tabs{display:flex;gap:.5rem;margin-bottom:2rem;border-bottom:2px solid var(--gray-200);padding-bottom:0}
+    .tab{padding:.65rem 1.4rem;font-size:.85rem;font-weight:600;border:none;background:none;color:var(--gray-500);cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;transition:all .2s}
+    .tab:hover{color:var(--gray-700)}
+    .tab.active{color:var(--emerald);border-color:var(--emerald)}
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+
+    /* Score row */
+    .scores{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:1rem;margin-bottom:2.5rem}
+    .sc{background:#fff;border-radius:16px;padding:1.3rem;text-align:center;border:1px solid var(--gray-200);box-shadow:0 1px 3px rgba(0,0,0,.04)}
+    .sc .n{font-size:2.4rem;font-weight:800;line-height:1}
+    .sc .l{font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--gray-500);margin-top:.3rem}
+    .sc.g .n{color:var(--emerald)}.sc.a .n{color:var(--amber)}.sc.b .n{color:var(--blue)}.sc.p .n{color:var(--purple)}
+    .pbar{background:var(--gray-200);border-radius:99px;height:8px;overflow:hidden;margin-top:.5rem}
+    .pbar .fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--emerald),var(--teal));transition:width .6s}
+
+    /* Section */
+    .sec{margin-bottom:2.5rem}
+    .sh{display:flex;align-items:center;gap:.75rem;margin-bottom:1.1rem}
+    .sh .ico{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0}
+    .ico.gn{background:var(--emerald-l)}.ico.am{background:var(--amber-l)}.ico.bl{background:var(--blue-l)}.ico.pu{background:var(--purple-l)}.ico.tl{background:var(--teal-l)}.ico.rd{background:var(--red-l)}
+    .sh h2{font-size:1.2rem;font-weight:700;color:var(--gray-900)}
+    .sh h2 small{display:block;font-size:.78rem;font-weight:400;color:var(--gray-500);margin-top:.1rem}
+
+    /* Card */
+    .card{background:#fff;border-radius:12px;border:1px solid var(--gray-200);overflow:hidden;margin-bottom:.7rem;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+    .cb{padding:.9rem 1.15rem}
+    .cb .t{font-weight:600;font-size:.88rem;color:var(--gray-900)}
+    .cb .d{font-size:.8rem;color:var(--gray-600);margin-top:.2rem}
+    .cb code{font-family:'SF Mono',Monaco,'Cascadia Code',monospace;font-size:.76rem;background:var(--gray-100);padding:.15rem .4rem;border-radius:5px;color:var(--gray-700)}
+    .file{display:inline-block;margin-top:.45rem;margin-right:.35rem;font-size:.7rem;font-weight:600;color:var(--blue);background:var(--blue-l);padding:.17rem .5rem;border-radius:6px;font-family:'SF Mono',Monaco,monospace}
+    .badge{display:inline-block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:.18rem .5rem;border-radius:6px;vertical-align:middle;margin-left:.45rem}
+    .badge.done{background:var(--emerald-l);color:#065f46}.badge.high{background:var(--red-l);color:var(--red)}.badge.med{background:var(--amber-l);color:#92400e}.badge.low{background:var(--blue-l);color:#1e40af}
+    .badge.ux{background:var(--purple-l);color:#5b21b6}.badge.pol{background:var(--gray-100);color:var(--gray-600)}.badge.new{background:#dbeafe;color:#1d4ed8}.badge.perf{background:var(--teal-l);color:#0f766e}
+    .badge.tab{background:#fce7f3;color:#9d174d}
+    .sbar{height:4px;border-radius:2px}.sbar.gn{background:var(--emerald)}.sbar.am{background:var(--amber)}.sbar.bl{background:var(--blue)}.sbar.pu{background:var(--purple)}.sbar.tl{background:var(--teal)}
+
+    /* Table */
+    table{width:100%;border-collapse:collapse;font-size:.83rem}
+    th{text-align:left;padding:.7rem 1rem;background:var(--gray-50);font-weight:600;color:var(--gray-600);font-size:.7rem;text-transform:uppercase;letter-spacing:.05em;border-bottom:2px solid var(--gray-200)}
+    td{padding:.7rem 1rem;border-bottom:1px solid var(--gray-100);vertical-align:top}
+    tr:last-child td{border-bottom:none}tr:hover td{background:var(--gray-50)}
+
+    /* File checklist */
+    .fs{margin-bottom:1.8rem}
+    .fh{display:flex;align-items:center;gap:.5rem;padding:.65rem 1rem;background:var(--gray-100);border-radius:10px 10px 0 0;border:1px solid var(--gray-200);border-bottom:none}
+    .fh code{font-size:.8rem;font-weight:600;color:var(--gray-800);font-family:'SF Mono',Monaco,monospace}
+    .fl{border:1px solid var(--gray-200);border-radius:0 0 10px 10px;background:#fff;overflow:hidden}
+    .fi{display:flex;align-items:flex-start;gap:.7rem;padding:.6rem 1rem;font-size:.8rem;border-bottom:1px solid var(--gray-100)}
+    .fi:last-child{border-bottom:none}
+    .ck{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:.68rem;margin-top:1px}
+    .ck.y{background:var(--emerald-l);color:var(--emerald)}.ck.n{background:var(--amber-l);color:var(--amber)}
+
+    /* Feature grid */
+    .fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.7rem;margin-top:.9rem}
+    .fc{background:#fff;border:1px solid var(--gray-200);border-radius:12px;padding:1rem;text-align:center;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+    .fc .em{font-size:1.6rem;margin-bottom:.4rem}
+    .fc .ft{font-weight:700;font-size:.82rem;color:var(--gray-900)}
+    .fc .fd{font-size:.72rem;color:var(--gray-500);margin-top:.2rem}
+
+    /* Breakpoint table */
+    .bpt{overflow-x:auto;margin:1rem 0}
+    .bpt table{min-width:600px}
+    .bpt td,.bpt th{white-space:nowrap;text-align:center}
+    .bpt td:first-child,.bpt th:first-child{text-align:left}
+    .dot{display:inline-block;width:10px;height:10px;border-radius:50%}
+    .dot.y{background:var(--emerald)}.dot.n{background:var(--gray-300)}.dot.p{background:var(--amber)}
+
+    /* Timeline */
+    .tl{position:relative;padding-left:2rem;border-left:3px solid var(--emerald-l);margin:1rem 0}
+    .tl-item{position:relative;padding:.75rem 0 1.2rem;font-size:.83rem}
+    .tl-item::before{content:'';position:absolute;left:-2rem;top:.85rem;width:14px;height:14px;background:var(--emerald);border:3px solid var(--emerald-l);border-radius:50%;transform:translateX(-50%);margin-left:-1.5px}
+    .tl-item .tl-date{font-size:.72rem;font-weight:600;color:var(--gray-500);text-transform:uppercase;letter-spacing:.04em}
+    .tl-item .tl-title{font-weight:600;color:var(--gray-900);margin-top:.15rem}
+    .tl-item .tl-desc{color:var(--gray-600);font-size:.78rem;margin-top:.1rem}
+
+    /* Before/After */
+    .ba{display:grid;grid-template-columns:1fr auto 1fr;gap:.75rem;align-items:center;margin:.6rem 0}
+    .ba .before,.ba .after{padding:.65rem;border-radius:10px;font-size:.78rem;text-align:center;font-weight:500}
+    .ba .before{background:#fee2e2;color:#991b1b;border:1px solid #fecaca}
+    .ba .after{background:#d1fae5;color:#065f46;border:1px solid #a7f3d0}
+    .ba .arrow{font-size:1.3rem;color:var(--gray-400)}
+
+    .ftr{text-align:center;color:var(--gray-500);font-size:.78rem;margin-top:2rem;padding-top:1.5rem;border-top:1px solid var(--gray-200)}
+
+    @media(max-width:768px){
+      .hdr{padding:2rem 1.2rem}
+      .hdr h1{font-size:1.5rem}
+      .cnt{padding:1.2rem 1rem 3rem}
+      .scores{grid-template-columns:repeat(2,1fr)}
+      .tabs{overflow-x:auto;-webkit-overflow-scrolling:touch;flex-wrap:nowrap}
+      .tab{white-space:nowrap;padding:.55rem 1rem;font-size:.8rem}
+      .ba{grid-template-columns:1fr;gap:.35rem}
+      .ba .arrow{transform:rotate(90deg)}
+    }
+    @media(min-width:768px) and (max-width:1024px){
+      .scores{grid-template-columns:repeat(3,1fr)}
+      .fg{grid-template-columns:repeat(3,1fr)}
+    }
+  </style>
+</head>
+<body>
+
+<div class="hdr">
+  <h1>📱 Mobile &amp; Tablet Optimization Report</h1>
+  <p>Audit complet al optimizărilor responsive pentru OferteMutare.ro — telefon, tabletă și desktop.</p>
+  <span class="tag">Generat: 9 Februarie 2026 • Next.js 14 • Tailwind CSS v4</span>
+</div>
+
+<div class="cnt">
+
+  <!-- Tabs -->
+  <div class="tabs" id="tabs">
+    <button class="tab active" data-tab="overview">Sinteză</button>
+    <button class="tab" data-tab="mobile">📱 Mobil</button>
+    <button class="tab" data-tab="tablet">📟 Tabletă</button>
+    <button class="tab" data-tab="chat">💬 Chat</button>
+    <button class="tab" data-tab="files">📂 Per Fișier</button>
+    <button class="tab" data-tab="timeline">📅 Timeline</button>
+  </div>
+
+  <!-- ===== OVERVIEW TAB ===== -->
+  <div class="tab-panel active" id="overview">
+    <div class="scores">
+      <div class="sc g">
+        <div class="n">88%</div>
+        <div class="l">Scor Mobil</div>
+        <div class="pbar"><div class="fill" style="width:88%"></div></div>
+      </div>
+      <div class="sc b">
+        <div class="n">85%</div>
+        <div class="l">Scor Tabletă</div>
+        <div class="pbar"><div class="fill" style="width:85%"></div></div>
+      </div>
+      <div class="sc g">
+        <div class="n">27</div>
+        <div class="l">Realizate ✅</div>
+      </div>
+      <div class="sc a">
+        <div class="n">4</div>
+        <div class="l">De rezolvat ⚠️</div>
+      </div>
+      <div class="sc p">
+        <div class="n">7</div>
+        <div class="l">Sugestii 💡</div>
+      </div>
+    </div>
+
+    <!-- Category progress -->
+    <div class="sec">
+      <div class="sh"><div class="ico gn">📊</div><h2>Progres pe categorie</h2></div>
+      <div class="card">
+        <div class="cb">
+          <div style="display:grid;gap:1rem">
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.3rem"><span style="font-weight:600">Layout &amp; Navigation</span><span style="color:var(--emerald);font-weight:700">95%</span></div>
+              <div class="pbar"><div class="fill" style="width:95%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.3rem"><span style="font-weight:600">Chat &amp; Messaging</span><span style="color:var(--emerald);font-weight:700">90%</span></div>
+              <div class="pbar"><div class="fill" style="width:90%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.3rem"><span style="font-weight:600">Forms &amp; Inputs</span><span style="color:var(--emerald);font-weight:700">85%</span></div>
+              <div class="pbar"><div class="fill" style="width:85%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.3rem"><span style="font-weight:600">Accessibility &amp; UX</span><span style="color:var(--emerald);font-weight:700">80%</span></div>
+              <div class="pbar"><div class="fill" style="width:80%"></div></div>
+            </div>
+            <div>
+              <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:.3rem"><span style="font-weight:600">Performance</span><span style="color:var(--emerald);font-weight:700">88%</span></div>
+              <div class="pbar"><div class="fill" style="width:88%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Breakpoint strategy -->
+    <div class="sec">
+      <div class="sh"><div class="ico bl">🎯</div><h2>Strategia Breakpoints <small>Tailwind CSS — sm: 640px &bull; md: 768px &bull; lg: 1024px &bull; xl: 1280px</small></h2></div>
+      <div class="card bpt">
+        <table>
+          <thead>
+            <tr>
+              <th>Componentă</th>
+              <th>sm: 640px</th>
+              <th>md: 768px</th>
+              <th>lg: 1024px</th>
+              <th>xl: 1280px</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>Navbar (desktop nav)</td><td><span class="dot n"></span></td><td><span class="dot y"></span></td><td><span class="dot y"></span></td><td><span class="dot y"></span></td></tr>
+            <tr><td>DashboardLayout sidebar</td><td><span class="dot n"></span></td><td><span class="dot y"></span> icon</td><td><span class="dot y"></span> full</td><td><span class="dot y"></span> full</td></tr>
+            <tr><td>Customer dashboard grid</td><td><span class="dot n"></span></td><td><span class="dot y"></span> 5/7</td><td><span class="dot y"></span> 4/8</td><td><span class="dot y"></span> 3/9</td></tr>
+            <tr><td>Hero layout</td><td><span class="dot p"></span></td><td><span class="dot y"></span> visible</td><td><span class="dot y"></span> stacked</td><td><span class="dot y"></span></td></tr>
+            <tr><td>Chat modal (customer)</td><td><span class="dot y"></span> 600px</td><td><span class="dot y"></span> 75vh</td><td><span class="dot y"></span></td><td><span class="dot y"></span></td></tr>
+            <tr><td>Chat page (company)</td><td><span class="dot y"></span> 600px</td><td><span class="dot y"></span> calc</td><td><span class="dot y"></span></td><td><span class="dot y"></span></td></tr>
+            <tr><td>RequestsView grid</td><td><span class="dot y"></span> 2col</td><td><span class="dot y"></span></td><td><span class="dot y"></span> 3col</td><td><span class="dot y"></span> 4col</td></tr>
+            <tr><td>Footer grid</td><td><span class="dot y"></span> 2</td><td><span class="dot y"></span> 3</td><td><span class="dot y"></span></td><td><span class="dot y"></span> 6</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:.75rem;color:var(--gray-500);margin-top:.3rem">
+        <span class="dot y" style="vertical-align:middle"></span> = optimizat &nbsp;&nbsp;
+        <span class="dot p" style="vertical-align:middle"></span> = parțial &nbsp;&nbsp;
+        <span class="dot n" style="vertical-align:middle"></span> = fără breakpoint
+      </p>
+    </div>
+  </div>
+
+  <!-- ===== MOBILE TAB ===== -->
+  <div class="tab-panel" id="mobile">
+    <div class="sec">
+      <div class="sh"><div class="ico gn">✅</div><h2>Realizate — Mobil <small>22 optimizări implementate</small></h2></div>
+      <div class="card">
+        <div class="sbar gn"></div>
+        <table>
+          <thead><tr><th style="width:40%">Optimizare</th><th>Fișiere</th><th>Detalii</th></tr></thead>
+          <tbody>
+            <tr><td><strong>MobileHero dedicat</strong> — zero JS, LCP rapid</td><td><span class="file">MobileHero.tsx</span></td><td><code>md:hidden</code> — componenta separată fără animații</td></tr>
+            <tr><td><strong>Sidebar mobil Headless UI</strong></td><td><span class="file">DashboardLayout.tsx</span></td><td>Slide-in cu overlay, animație, buton close</td></tr>
+            <tr><td><strong>Chat fullscreen pe mobil</strong></td><td><span class="file">ChatWindow.tsx</span> <span class="file">customer/dashboard.tsx</span></td><td><code>h-[100dvh]</code> pe mobil, rounded-none</td></tr>
+            <tr><td><strong>Atașamente foto/video/cameră</strong> <span class="badge new">NOU</span></td><td><span class="file">ChatWindow.tsx</span></td><td>Firebase Storage upload, galerie + <code>capture="environment"</code></td></tr>
+            <tr><td><strong>Touch targets 44px min</strong></td><td><span class="file">globals.css</span></td><td>Buttons, links, inputs — minim 44px height</td></tr>
+            <tr><td><strong>Touch feedback (hover:none)</strong></td><td><span class="file">globals.css</span></td><td><code>opacity:0.7; scale(0.98)</code> pe active</td></tr>
+            <tr><td><strong>prefers-reduced-motion</strong></td><td><span class="file">globals.css</span></td><td>Animații dezactivate automat</td></tr>
+            <tr><td><strong>Griduri responsive</strong></td><td><span class="file">RequestsView.tsx</span></td><td><code>grid-cols-1 → sm:2 → lg:3 → xl:4</code></td></tr>
+            <tr><td><strong>Lazy loading componente</strong></td><td><span class="file">index.tsx</span></td><td><code>dynamic()</code> cu skeletoane sub fold</td></tr>
+            <tr><td><strong>Self-hosted Inter font</strong></td><td><span class="file">_app.tsx</span></td><td><code>display:"swap"</code> — fără FOIT, CLS minim</td></tr>
+            <tr><td><strong>Background-attachment fix</strong></td><td><span class="file">globals.css</span></td><td><code>bg-attachment:scroll</code> pe ≤768px</td></tr>
+            <tr><td><strong>Company chat responsive</strong> <span class="badge new">NOU</span></td><td><span class="file">company/chat.tsx</span></td><td>Height 100vh-180px, text compact</td></tr>
+            <tr><td><strong>Company dashboard buttons</strong> <span class="badge new">NOU</span></td><td><span class="file">company/dashboard.tsx</span></td><td>Icon-only pe mobil, labels pe sm:</td></tr>
+            <tr><td><strong>Customer cards responsive</strong></td><td><span class="file">customer/dashboard.tsx</span></td><td><code>flex-col → sm:flex-row</code></td></tr>
+            <tr><td><strong>Viewport meta complet</strong> <span class="badge new">NOU</span></td><td><span class="file">_app.tsx</span></td><td><code>viewport-fit=cover, maximum-scale=5</code></td></tr>
+            <tr><td><strong>Skip navigation (a11y)</strong></td><td><span class="file">_app.tsx</span></td><td><code>sr-only focus:not-sr-only</code></td></tr>
+            <tr><td><strong>Focus-visible outline</strong></td><td><span class="file">globals.css</span></td><td><code>2px solid #10b981</code></td></tr>
+            <tr><td><strong>Date picker responsive</strong></td><td><span class="file">globals.css</span></td><td><code>--rdp-cell-size:36px</code> pe ≤640px</td></tr>
+            <tr><td><strong>Stat grid responsive</strong></td><td><span class="file">DashboardLayout.tsx</span></td><td><code>grid-cols-2 sm:grid-cols-4</code></td></tr>
+            <tr><td><strong>Storage rules for chat</strong> <span class="badge new">NOU</span></td><td><span class="file">storage.rules</span></td><td><code>chats/{requestId}/{offerId}/</code> — 10MB max</td></tr>
+            <tr><td><strong>Print styles</strong></td><td><span class="file">globals.css</span></td><td>Nav/footer ascunse, layout A4</td></tr>
+            <tr><td><strong>Image overflow</strong></td><td><span class="file">globals.css</span></td><td><code>img{max-width:100%}</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Mobile TODO -->
+    <div class="sec">
+      <div class="sh"><div class="ico am">⚠️</div><h2>De rezolvat — Mobil <small>Rămase</small></h2></div>
+
+      <div class="card"><div class="sbar am"></div><div class="cb">
+        <div class="t">1. Infinite scroll pe RequestsView <span class="badge med">MEDIE</span></div>
+        <div class="d">SentinelRef definit dar necablat cu IntersectionObserver. Utilizatorii apasă "Încarcă mai multe" manual.</div>
+        <span class="file">RequestsView.tsx</span>
+      </div></div>
+
+      <div class="card"><div class="sbar am"></div><div class="cb">
+        <div class="t">2. Autocomplete dropdown fără max-height <span class="badge med">MEDIE</span></div>
+        <div class="d">Lista de sugestii locații poate depăși ecranul pe mobil. Necesită <code>max-h-48 overflow-y-auto</code>.</div>
+        <span class="file">HomeRequestForm.tsx</span>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ===== TABLET TAB ===== -->
+  <div class="tab-panel" id="tablet">
+    <div class="sec">
+      <div class="sh"><div class="ico tl">📟</div><h2>Optimizări Tabletă <small>768px — 1024px (iPad, Galaxy Tab, Surface)</small></h2></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Sidebar icon-only pe tabletă <span class="badge done">REALIZAT</span> <span class="badge tab">TABLETĂ</span></div>
+        <div class="d">DashboardLayout arată un sidebar colapsed (64px, doar icoane) la <code>md:</code> (768px), expandându-se la 256px full la <code>lg:</code> (1024px). Include tooltip pe hover (<code>title</code> attr) pentru fiecare nav item.</div>
+        <span class="file">DashboardLayout.tsx</span>
+        <div class="ba">
+          <div class="before">❌ Sidebar complet ascuns sub 1024px<br>Hamburger menu pe tablete</div>
+          <div class="arrow">→</div>
+          <div class="after">✅ Sidebar icon-only la 768px+<br>Full labels la 1024px+</div>
+        </div>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Customer dashboard 2 coloane pe tabletă <span class="badge done">REALIZAT</span> <span class="badge tab">TABLETĂ</span></div>
+        <div class="d">Grid-ul principal trece de la 1 coloană la layout <code>md:grid-cols-12</code> (sidebar 5 + main 7) la 768px, apoi 4/8 la lg: și 3/9 la xl:.</div>
+        <span class="file">customer/dashboard.tsx</span>
+        <div class="ba">
+          <div class="before">❌ Tot conținutul stivuit vertical<br>pe tabletă (single column)</div>
+          <div class="arrow">→</div>
+          <div class="after">✅ Sidebar cereri + oferte side-by-side<br><code>md:col-span-5</code> + <code>md:col-span-7</code></div>
+        </div>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Chat modal mai mare pe tabletă <span class="badge done">REALIZAT</span> <span class="badge tab">TABLETĂ</span></div>
+        <div class="d">Modalul de chat pe customer dashboard crește de la <code>sm:max-w-lg</code> (512px) la <code>md:max-w-2xl</code> (672px) și <code>md:h-[75vh]</code> pe tablete.</div>
+        <span class="file">customer/dashboard.tsx</span>
+        <div class="ba">
+          <div class="before">❌ Modal 512px × 600px pe tabletă<br>Spațiu pierdut lateral + vertical</div>
+          <div class="arrow">→</div>
+          <div class="after">✅ Modal 672px × 75vh pe tabletă<br>Utilizare optimă a ecranului</div>
+        </div>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Chat bubbles mai înguste, media mai mare <span class="badge done">REALIZAT</span> <span class="badge tab">TABLETĂ</span></div>
+        <div class="d">Mesajele din chat au acum <code>md:max-w-[65%]</code> (vs 75% pe sm:). Imaginile și videourile cresc la <code>md:max-h-80</code> (320px) pe tablete.</div>
+        <span class="file">ChatWindow.tsx</span>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Company chat page fills viewport <span class="badge done">REALIZAT</span> <span class="badge tab">TABLETĂ</span></div>
+        <div class="d">Pagina de chat company folosește <code>md:h-[calc(100vh-200px)]</code> pe tablete în loc de fix 600px.</div>
+        <span class="file">company/chat.tsx</span>
+        <div class="ba">
+          <div class="before">❌ Chat fix 600px pe tabletă<br>~300px spațiu gol dedesubt</div>
+          <div class="arrow">→</div>
+          <div class="after">✅ Chat umple viewport-ul<br><code>calc(100vh-200px)</code></div>
+        </div>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Hero heading redimensionat <span class="badge done">REALIZAT</span> <span class="badge tab">TABLETĂ</span></div>
+        <div class="d">H1-ul de pe hero a fost redus de la <code>md:text-5xl</code> (3rem) la <code>md:text-[2.5rem]</code> — potrivit pentru layout-ul stacked la 768px.</div>
+        <span class="file">Hero.tsx</span>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Tablet dialog sizing <span class="badge done">REALIZAT</span> <span class="badge tab">TABLETĂ</span></div>
+        <div class="d">Dialogurile pe tabletă au acum <code>max-width:85vw</code> cu <code>overscroll-behavior-y:contain</code> pentru a preveni scroll-through.</div>
+        <span class="file">globals.css</span>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Theme-color meta tag <span class="badge done">REALIZAT</span></div>
+        <div class="d">Bara de browser (Chrome Android, Safari iOS) afișează acum culoarea brand emerald <code>#059669</code>.</div>
+        <span class="file">_document.tsx</span>
+      </div></div>
+
+      <div class="card"><div class="sbar tl"></div><div class="cb">
+        <div class="t">✅ Safe area + webkit-tap-highlight <span class="badge done">REALIZAT</span></div>
+        <div class="d">Body-ul include acum <code>padding-bottom: env(safe-area-inset-bottom)</code> pentru dispozitive cu notch și <code>-webkit-tap-highlight-color: transparent</code>.</div>
+        <span class="file">globals.css</span>
+      </div></div>
+    </div>
+
+    <!-- Tablet remaining -->
+    <div class="sec">
+      <div class="sh"><div class="ico am">⚠️</div><h2>De rezolvat — Tabletă</h2></div>
+
+      <div class="card"><div class="sbar am"></div><div class="cb">
+        <div class="t">Landscape iPad breakpoint edge case <span class="badge low">SCĂZUTĂ</span></div>
+        <div class="d">iPad landscape este exact 1024px — pe limita breakpoint-ului <code>lg:</code>. Diferite iPad-uri pot fi la 1023px sau 1025px, cauzând flip între layout collapsed/full sidebar. Posibil de rezolvat cu breakpoint custom.</div>
+      </div></div>
+
+      <div class="card"><div class="sbar am"></div><div class="cb">
+        <div class="t">Hero layout stacked pe tabletă <span class="badge low">SCĂZUTĂ</span></div>
+        <div class="d">Hero-ul rămâne stacked (vertical) pe tabletă deoarece <code>lg:flex-row</code> se activează doar la 1024px. La 768-1024px conținutul e centrat cu form dedesubt. Funcțional dar nu ideal.</div>
+        <span class="file">Hero.tsx</span>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- ===== CHAT TAB ===== -->
+  <div class="tab-panel" id="chat">
+    <div class="sec">
+      <div class="sh"><div class="ico gn">📎</div><h2>Funcția de Atașamente Chat <small>Implementat complet — foto, video, cameră</small></h2></div>
+      <div class="fg">
+        <div class="fc"><div class="em">🖼️</div><div class="ft">Foto din galerie</div><div class="fd">JPEG, PNG, WebP, GIF, HEIC — max 10MB</div></div>
+        <div class="fc"><div class="em">🎥</div><div class="ft">Video din galerie</div><div class="fd">MP4, MOV, WebM, 3GPP — max 10MB</div></div>
+        <div class="fc"><div class="em">📷</div><div class="ft">Fotografiază</div><div class="fd">Camera device via <code>capture="environment"</code></div></div>
+        <div class="fc"><div class="em">🔍</div><div class="ft">Lightbox preview</div><div class="fd">Tap pe imagine → fullscreen cu download</div></div>
+        <div class="fc"><div class="em">📊</div><div class="ft">Progress bar upload</div><div class="fd">Indicator vizual în timp real</div></div>
+        <div class="fc"><div class="em">👁️</div><div class="ft">Preview pre-trimitere</div><div class="fd">Thumbnail + nume + dimensiune + cancel</div></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sh"><div class="ico bl">📐</div><h2>Chat sizing pe dispozitive <small>Responsive behavior per context</small></h2></div>
+      <div class="card bpt">
+        <table>
+          <thead><tr><th>Context</th><th>Phone <small>&lt;640px</small></th><th>Phone+ <small>640px</small></th><th>Tablet <small>768px</small></th><th>Desktop <small>1024px+</small></th></tr></thead>
+          <tbody>
+            <tr><td><strong>Customer chat modal</strong></td><td>100dvh fullscreen</td><td>600px × max-w-lg</td><td>75vh × max-w-2xl</td><td>75vh × max-w-2xl</td></tr>
+            <tr><td><strong>Company chat page</strong></td><td>100vh-180px</td><td>600px fixed</td><td>100vh-200px</td><td>100vh-200px</td></tr>
+            <tr><td><strong>Message bubble width</strong></td><td>85%</td><td>75%</td><td>65%</td><td>65%</td></tr>
+            <tr><td><strong>Image/video max-h</strong></td><td>192px</td><td>256px</td><td>320px</td><td>320px</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== FILES TAB ===== -->
+  <div class="tab-panel" id="files">
+    <div class="sec">
+      <div class="sh"><div class="ico gn">📂</div><h2>Status per fișier</h2></div>
+
+      <div class="fs">
+        <div class="fh"><code>components/layout/DashboardLayout.tsx</code> <span class="badge done">COMPLET</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Mobile sidebar Headless UI Dialog + Transition</div>
+          <div class="fi"><span class="ck y">✓</span> Collapsed icon sidebar la <code>md:</code> (768px) — 64px wide</div>
+          <div class="fi"><span class="ck y">✓</span> Full sidebar la <code>lg:</code> (1024px) — 256px wide</div>
+          <div class="fi"><span class="ck y">✓</span> Nav labels <code>hidden lg:inline</code>, tooltips pe md:</div>
+          <div class="fi"><span class="ck y">✓</span> User avatar icon pe md:, full card pe lg:</div>
+          <div class="fi"><span class="ck y">✓</span> Hamburger menu <code>md:hidden</code></div>
+          <div class="fi"><span class="ck y">✓</span> Main content <code>md:pl-16 lg:pl-64</code></div>
+          <div class="fi"><span class="ck y">✓</span> Sticky top bar + stat grid responsive</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>components/chat/ChatWindow.tsx</code> <span class="badge done">COMPLET</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Header <code>px-3 py-2.5 sm:px-6 sm:py-3</code></div>
+          <div class="fi"><span class="ck y">✓</span> Bubbles <code>85% → sm:75% → md:65%</code></div>
+          <div class="fi"><span class="ck y">✓</span> Media <code>max-h-48 sm:max-h-64 md:max-h-80</code></div>
+          <div class="fi"><span class="ck y">✓</span> Attachment picker (foto, video, camera device)</div>
+          <div class="fi"><span class="ck y">✓</span> Upload progress bar + preview pre-trimitere</div>
+          <div class="fi"><span class="ck y">✓</span> Lightbox fullscreen + download button</div>
+          <div class="fi"><span class="ck y">✓</span> Video player inline <code>playsInline</code></div>
+          <div class="fi"><span class="ck y">✓</span> <code>overscroll-contain</code> pe zona de mesaje</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>pages/customer/dashboard.tsx</code> <span class="badge done">COMPLET</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Grid <code>md:grid-cols-12</code> — sidebar 5 + main 7 pe tabletă</div>
+          <div class="fi"><span class="ck y">✓</span> Chat modal <code>md:max-w-2xl md:h-[75vh]</code></div>
+          <div class="fi"><span class="ck y">✓</span> Fullscreen <code>100dvh</code> pe mobil, modal pe sm:+</div>
+          <div class="fi"><span class="ck y">✓</span> OfferCard <code>flex-col → sm:flex-row</code></div>
+          <div class="fi"><span class="ck y">✓</span> Request nav <code>md:max-h-[calc(100vh-280px)]</code></div>
+          <div class="fi"><span class="ck y">✓</span> Contact buttons icon-only pe mobil</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>pages/company/dashboard.tsx</code> <span class="badge done">~95%</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Offer card <code>p-3 sm:p-5</code> responsive</div>
+          <div class="fi"><span class="ck y">✓</span> Contact buttons compact pe mobil (icon-only)</div>
+          <div class="fi"><span class="ck y">✓</span> Route display cu truncate</div>
+          <div class="fi"><span class="ck y">✓</span> Info tip responsive</div>
+          <div class="fi"><span class="ck n">○</span> Lipsă: tab bar orizontal pe mobil/tabletă</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>pages/company/chat.tsx</code> <span class="badge done">COMPLET</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Height <code>100vh-180px → sm:600px → md:calc(100vh-200px)</code></div>
+          <div class="fi"><span class="ck y">✓</span> Header <code>text-lg sm:text-2xl</code></div>
+          <div class="fi"><span class="ck y">✓</span> Back button + status badge compact</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>components/company/RequestsView.tsx</code> <span class="badge done">~90%</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Card grid <code>1 → sm:2 → lg:3 → xl:4</code></div>
+          <div class="fi"><span class="ck y">✓</span> Filtre <code>grid-cols-2 sm:3 lg:6</code></div>
+          <div class="fi"><span class="ck y">✓</span> Touch feedback <code>active:scale-[0.98]</code></div>
+          <div class="fi"><span class="ck n">○</span> Lipsă: infinite scroll (sentinelRef necablat)</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>globals.css</code> <span class="badge done">~95%</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Touch targets 44px</div>
+          <div class="fi"><span class="ck y">✓</span> Touch feedback <code>hover:none</code></div>
+          <div class="fi"><span class="ck y">✓</span> Reduced motion</div>
+          <div class="fi"><span class="ck y">✓</span> Background-attachment fix</div>
+          <div class="fi"><span class="ck y">✓</span> Tablet dialog sizing <code>max-w:85vw</code></div>
+          <div class="fi"><span class="ck y">✓</span> <code>overscroll-behavior-y:contain</code> pe dialogs</div>
+          <div class="fi"><span class="ck y">✓</span> <code>-webkit-tap-highlight-color: transparent</code></div>
+          <div class="fi"><span class="ck y">✓</span> <code>safe-area-inset-bottom</code> padding</div>
+          <div class="fi"><span class="ck y">✓</span> Date picker responsive</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>components/home/Hero.tsx</code> <span class="badge done">COMPLET</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Vizibil de la <code>md:flex</code> (768px)</div>
+          <div class="fi"><span class="ck y">✓</span> H1 scaled: <code>sm:text-4xl md:text-[2.5rem] lg:text-5xl xl:text-6xl</code></div>
+          <div class="fi"><span class="ck y">✓</span> Background blobs responsive</div>
+        </div>
+      </div>
+
+      <div class="fs">
+        <div class="fh"><code>pages/_app.tsx + _document.tsx</code> <span class="badge done">COMPLET</span></div>
+        <div class="fl">
+          <div class="fi"><span class="ck y">✓</span> Viewport: <code>width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover</code></div>
+          <div class="fi"><span class="ck y">✓</span> <code>theme-color #059669</code> meta</div>
+          <div class="fi"><span class="ck y">✓</span> Self-hosted Inter font <code>display:"swap"</code></div>
+          <div class="fi"><span class="ck y">✓</span> Skip navigation link (a11y)</div>
+          <div class="fi"><span class="ck y">✓</span> Preconnects Firebase chain</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== TIMELINE TAB ===== -->
+  <div class="tab-panel" id="timeline">
+    <!-- Timeline -->
+    <div class="sec">
+      <div class="sh"><div class="ico gn">📅</div><h2>Timeline optimizări</h2></div>
+      <div class="tl">
+        <div class="tl-item">
+          <div class="tl-date">Sprint 1-9 • Ian-Feb 2026</div>
+          <div class="tl-title">Fundația responsive</div>
+          <div class="tl-desc">MobileHero, sidebar Headless UI, griduri responsive, touch targets 44px, touch feedback, reduced-motion, lazy loading, self-hosted font, background-attachment fix, print styles.</div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">8 Feb 2026</div>
+          <div class="tl-title">Chat mobile + atașamente</div>
+          <div class="tl-desc">ChatWindow rewrite complet (170→531 linii). Atașamente foto/video/cameră cu Firebase Storage. Chat fullscreen pe mobil. Company chat responsive. Company dashboard contact buttons responsive. Firebase Storage rules. Commit: <code>2c1cd6c</code></div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-date">9 Feb 2026</div>
+          <div class="tl-title">Optimizare tabletă (768-1024px)</div>
+          <div class="tl-desc">DashboardLayout collapsed icon sidebar la md:. Customer dashboard grid 2-col pe tabletă. Chat modal md:max-w-2xl + 75vh. Chat bubbles md:65%. Company chat fills viewport. Hero heading scaled. Tablet dialog sizing. Theme-color meta. Safe-area insets. Webkit-tap-highlight fix. Overscroll-contain.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggestions -->
+    <div class="sec">
+      <div class="sh"><div class="ico pu">💡</div><h2>Sugestii de îmbunătățire <small>Nice-to-have — îmbunătățesc UX semnificativ</small></h2></div>
+
+      <div class="card"><div class="sbar pu"></div><div class="cb">
+        <div class="t">1. Tab bar orizontal pe company dashboard <span class="badge ux">UX</span></div>
+        <div class="d">Tab-urile "Cereri" și "Ofertele Mele" ar trebui să fie într-un tab bar sticky sub header, eliminând nevoia de sidebar pe mobil/tabletă.</div>
+      </div></div>
+      <div class="card"><div class="sbar pu"></div><div class="cb">
+        <div class="t">2. Swipe-to-close pe sidebar mobil <span class="badge ux">UX</span></div>
+        <div class="d">Adăugarea unui swipe-left gesture (touch events / hammer.js) pe sidebar-ul mobil pentru o experiență mai naturală.</div>
+      </div></div>
+      <div class="card"><div class="sbar pu"></div><div class="cb">
+        <div class="t">3. Bottom-sheet filtre pe RequestsView <span class="badge ux">UX</span></div>
+        <div class="d">Cele 6 filtre (județ, oraș, camere, etaj, preț, dată) într-un bottom-sheet drawer pe mobil/tabletă.</div>
+      </div></div>
+      <div class="card"><div class="sbar pu"></div><div class="cb">
+        <div class="t">4. Fullscreen autocomplete pe mobil <span class="badge ux">UX</span></div>
+        <div class="d">Modal fullscreen cu search + scroll de sugestii pentru selectarea locației, mai ușor cu tastatura virtuală.</div>
+      </div></div>
+      <div class="card"><div class="sbar pu"></div><div class="cb">
+        <div class="t">5. PWA — Progressive Web App <span class="badge perf">PERFORMANȚĂ</span></div>
+        <div class="d">Service Worker pentru instalare pe home screen, push notifications, cache offline. Transformă site-ul într-o aplicație nativă.</div>
+      </div></div>
+      <div class="card"><div class="sbar pu"></div><div class="cb">
+        <div class="t">6. Hero side-by-side pe tabletă landscape <span class="badge ux">UX</span></div>
+        <div class="d">Pe tabletă landscape (1024px wide), hero-ul e deja side-by-side. Pe portrait (768px) rămâne stacked — eventual <code>md:flex-row</code> cu form mai compact.</div>
+      </div></div>
+      <div class="card"><div class="sbar pu"></div><div class="cb">
+        <div class="t">7. Orientation media queries <span class="badge pol">POLISH</span></div>
+        <div class="d">Adăugarea <code>@media (orientation: landscape) and (max-height: 500px)</code> pentru telefoane landscape — reduce padding, ascunde elemente secundare.</div>
+      </div></div>
+    </div>
+  </div>
+
+  <div class="ftr">
+    <p><strong>OferteMutare.ro</strong> — Mobile &amp; Tablet Optimization Report</p>
+    <p style="margin-top:.25rem">Generat: 9 Februarie 2026 • Next.js 14.2 • Tailwind CSS v4 • Firebase</p>
+  </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.tab).classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

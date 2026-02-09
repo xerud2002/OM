@@ -257,7 +257,7 @@ export default function ChatWindow({
           <img
             src={attachment.url}
             alt={attachment.name}
-            className="max-h-48 sm:max-h-64 w-auto max-w-full rounded-xl object-cover"
+            className="max-h-48 sm:max-h-64 md:max-h-80 w-auto max-w-full rounded-xl object-cover"
             loading="lazy"
           />
         </button>
@@ -271,7 +271,7 @@ export default function ChatWindow({
             controls
             playsInline
             preload="metadata"
-            className="max-h-48 sm:max-h-64 w-auto max-w-full rounded-xl"
+            className="max-h-48 sm:max-h-64 md:max-h-80 w-auto max-w-full rounded-xl"
           />
         </div>
       );
@@ -328,7 +328,7 @@ export default function ChatWindow({
                 className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 text-sm shadow-sm ${
+                  className={`max-w-[85%] sm:max-w-[75%] md:max-w-[65%] rounded-2xl px-3 py-2 sm:px-4 sm:py-2.5 text-sm shadow-sm ${
                     isMe
                       ? "bg-emerald-600 text-white rounded-br-none"
                       : "bg-white text-slate-900 rounded-bl-none ring-1 ring-slate-200"

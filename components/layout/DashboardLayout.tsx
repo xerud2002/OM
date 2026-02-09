@@ -190,7 +190,7 @@ export default function DashboardLayout({
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
-          className="relative z-50 lg:hidden"
+          className="relative z-50 md:hidden"
           onClose={setSidebarOpen}
         >
           <Transition.Child
@@ -323,21 +323,22 @@ export default function DashboardLayout({
         </Dialog>
       </Transition.Root>
 
-      {/* Desktop sidebar */}
-      <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-64 lg:flex-col">
+      {/* Desktop sidebar — collapsed icon-only at md:, full at lg: */}
+      <div className="hidden md:fixed md:inset-y-0 md:z-50 md:flex md:w-16 md:flex-col lg:w-64">
         <div className={`flex grow flex-col overflow-y-auto ${colors.bg}`}>
           {/* Logo */}
-          <div className="flex h-16 shrink-0 items-center px-6 border-b border-gray-100">
+          <div className="flex h-16 shrink-0 items-center justify-center border-b border-gray-100 px-2 lg:justify-start lg:px-6">
             <Link href="/" className="flex items-center gap-1">
               <span className="text-xl font-bold text-emerald-600">
-                Ofertemutare
+                <span className="hidden lg:inline">Ofertemutare</span>
+                <span className="lg:hidden">OM</span>
               </span>
-              <sup className="text-[10px] font-bold text-gray-400">.ro</sup>
+              <sup className="hidden text-[10px] font-bold text-gray-400 lg:inline">.ro</sup>
             </Link>
           </div>
 
-          {/* User info */}
-          <div className="px-4 py-4">
+          {/* User info — hidden on tablet, visible on desktop */}
+          <div className="hidden px-4 py-4 lg:block">
             <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 p-3">
               <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
                 <UserAvatar role={role} photoURL={user?.photoURL} />
@@ -352,8 +353,14 @@ export default function DashboardLayout({
               </div>
             </div>
           </div>
+          {/* User avatar — tablet collapsed sidebar */}
+          <div className="flex justify-center py-3 lg:hidden">
+            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
+              <UserAvatar role={role} photoURL={user?.photoURL} />
+            </div>
+          </div>
 
-          <nav className="flex flex-1 flex-col px-4">
+          <nav className="flex flex-1 flex-col px-2 lg:px-4">
             <ul role="list" className="flex flex-1 flex-col gap-y-2">
               <li>
                 <ul role="list" className="space-y-1">
@@ -362,7 +369,8 @@ export default function DashboardLayout({
                       <li key={item.name}>
                         <Link
                           href={item.href}
-                          className={`group flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all ${
+                          title={item.name}
+                          className={`group flex items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium transition-all lg:justify-start lg:px-3 ${
                             item.current
                               ? `${NAV_ACTIVE_STYLES[role].container} ${NAV_ACTIVE_STYLES[role].desktopExtra}`
                               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
@@ -372,7 +380,7 @@ export default function DashboardLayout({
                             className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400 group-hover:text-gray-600"}`}
                             aria-hidden="true"
                           />
-                          <span className="flex-1">{item.name}</span>
+                          <span className="hidden flex-1 lg:inline">{item.name}</span>
                         </Link>
                       </li>
                     );
@@ -384,17 +392,19 @@ export default function DashboardLayout({
               <li className="mt-auto pb-4 space-y-1 border-t border-gray-100 pt-4">
                 <Link
                   href="/"
-                  className="group flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                  title="Înapoi la site"
+                  className="group flex items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 lg:justify-start lg:px-3"
                 >
                   <HomeIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600" />
-                  Înapoi la site
+                  <span className="hidden lg:inline">Înapoi la site</span>
                 </Link>
                 <button
                   onClick={handleSignOut}
-                  className="group flex w-full items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600"
+                  title="Deconectare"
+                  className="group flex w-full items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600 lg:justify-start lg:px-3"
                 >
                   <ArrowRightOnRectangleIcon className="h-5 w-5 text-gray-400 group-hover:text-red-500" />
-                  Deconectare
+                  <span className="hidden lg:inline">Deconectare</span>
                 </button>
               </li>
             </ul>
@@ -403,12 +413,12 @@ export default function DashboardLayout({
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-64">
+      <div className="md:pl-16 lg:pl-64">
         {/* Top bar */}
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <button
             type="button"
-            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
+            className="-m-2.5 p-2.5 text-gray-700 md:hidden"
             onClick={() => setSidebarOpen(true)}
           >
             <span className="sr-only">Deschide sidebar</span>
@@ -416,7 +426,7 @@ export default function DashboardLayout({
           </button>
 
           {/* Separator */}
-          <div className="h-6 w-px bg-gray-200 lg:hidden" aria-hidden="true" />
+          <div className="h-6 w-px bg-gray-200 md:hidden" aria-hidden="true" />
 
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
             {/* Search or breadcrumb area */}
@@ -431,7 +441,7 @@ export default function DashboardLayout({
               {headerActions}
 
               {/* Profile dropdown mobile */}
-              <div className="flex items-center gap-3 lg:hidden">
+              <div className="flex items-center gap-3 md:hidden">
                 <div
                   className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r ${colors.accent} text-sm font-bold text-white`}
                 >

@@ -99,7 +99,7 @@ export default function Hero() {
             </div>
 
             {/* Headline - Critical LCP element */}
-            <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl">
+            <h1 className="mb-4 text-3xl leading-[1.15] font-extrabold tracking-tight text-slate-900 sm:mb-6 sm:text-4xl md:text-[2.5rem] lg:text-5xl xl:text-6xl">
               Compară oferte pentru
               <br />
               <span className="relative inline-block">

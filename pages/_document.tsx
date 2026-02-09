@@ -4,6 +4,10 @@ export default function Document() {
   return (
     <Html lang="ro">
       <Head>
+        {/* Theme color for mobile browser chrome */}
+        <meta name="theme-color" content="#059669" />
+        <meta name="theme-color" content="#059669" media="(prefers-color-scheme: light)" />
+
         {/* Favicon - REQUIRED for Google search results */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.webp" />

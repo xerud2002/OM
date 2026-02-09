@@ -13,7 +13,10 @@ body {
   background-attachment: fixed;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
+  /* Safe area padding for notched devices */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 @media (max-width: 768px) {
@@ -242,6 +245,19 @@ img {
     font-size: 1.875rem !important;
     line-height: 1.2 !important;
   }
+}
+
+/* Tablet dialog sizing */
+@media (min-width: 641px) and (max-width: 1024px) {
+  [role="dialog"] {
+    max-width: 85vw !important;
+    margin: 1rem auto !important;
+  }
+}
+
+/* Overscroll containment for modals */
+[role="dialog"] {
+  overscroll-behavior-y: contain;
 }
 
 /* Custom Hero Gradients */

@@ -376,9 +376,9 @@ export default function CustomerDashboard() {
           </div>
         ) : (
           // Main content grid
-          <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 items-start">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-12 items-start">
             {/* Requests sidebar */}
-            <aside className="lg:col-span-4 xl:col-span-3">
+            <aside className="md:col-span-5 lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                 <div className="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white px-4 py-3 sm:px-5 sm:py-4">
                   <div>
@@ -398,7 +398,7 @@ export default function CustomerDashboard() {
                     Nouă
                   </Link>
                 </div>
-                <nav className="max-h-[60vh] lg:max-h-[calc(100vh-320px)] overflow-y-auto p-2 sm:p-3">
+                <nav className="max-h-[60vh] md:max-h-[calc(100vh-280px)] lg:max-h-[calc(100vh-320px)] overflow-y-auto p-2 sm:p-3">
                   <ul className="space-y-2">
                     {requests.map((req) => {
                       const offers = offersByRequest[req.id] || [];
@@ -511,7 +511,7 @@ export default function CustomerDashboard() {
             </aside>
 
             {/* Main content */}
-            <main className="lg:col-span-8 xl:col-span-9">
+            <main className="md:col-span-7 lg:col-span-8 xl:col-span-9">
               {selectedRequest ? (
                 <div className="space-y-4">
                   {/* Offers section */}
@@ -710,7 +710,7 @@ export default function CustomerDashboard() {
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                className="relative h-[100dvh] sm:h-[600px] w-full sm:max-w-lg overflow-hidden rounded-none sm:rounded-2xl bg-white shadow-2xl"
+                className="relative h-[100dvh] sm:h-[600px] md:h-[75vh] w-full sm:max-w-lg md:max-w-2xl overflow-hidden rounded-none sm:rounded-2xl bg-white shadow-2xl"
               >
                 <button
                   onClick={() => setChatOffer(null)}
