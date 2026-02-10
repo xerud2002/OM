@@ -640,25 +640,6 @@ export default function CustomerDashboard() {
                     )}
                   </div>
 
-                  {/* Expandable details */}
-                  <AnimatePresence>
-                    {showDetails && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
-                      >
-                        <div className="p-4 sm:p-6">
-                          <RequestFullDetails
-                            request={selectedRequest}
-                            isOwner={true}
-                          />
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
                   {/* Request summary card (route + status) */}
                   <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
                     <div className="relative overflow-hidden bg-emerald-600 px-4 py-2.5 sm:px-6 sm:py-4">
@@ -753,6 +734,25 @@ export default function CustomerDashboard() {
                       </div>
                     )}
                   </div>
+
+                  {/* Expandable details - opens BELOW the summary card */}
+                  <AnimatePresence>
+                    {showDetails && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
+                      >
+                        <div className="p-4 sm:p-6">
+                          <RequestFullDetails
+                            request={selectedRequest}
+                            isOwner={true}
+                          />
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
                 </div>
               ) : (
                 <div className="flex h-64 items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50">
