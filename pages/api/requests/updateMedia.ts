@@ -3,11 +3,14 @@
 // Requires authentication + ownership verification
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
+import { adminDb } from "@/lib/firebaseAdmin";
 import { apiSuccess, apiError, ErrorCodes } from "@/types/api";
-import { withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, sendAuthError, withErrorHandler } from "@/lib/apiAuth";
 import { logger } from "@/utils/logger";
 import { FieldValue } from "firebase-admin/firestore";
+import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
+
+const isRateLimited = createRateLimiter({ name: "updateMedia", max: 10, windowMs: 60_000 });
 
 export default withErrorHandler(async function handler(
   req: NextApiRequest,
@@ -18,24 +21,18 @@ export default withErrorHandler(async function handler(
     return res.status(405).json(apiError("Method Not Allowed"));
   }
 
-  if (!adminReady) {
-    return res.status(503).json(apiError("Admin not configured"));
+  const clientIp = getClientIp(req);
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json(apiError("Prea multe cereri. Încearcă din nou în curând."));
   }
 
-  // Verify authentication
-  const authHeader = req.headers.authorization || "";
-  const match = authHeader.match(/^Bearer (.+)$/);
-
-  if (!match) {
-    return res
-      .status(401)
-      .json(apiError("Missing Authorization token", ErrorCodes.UNAUTHORIZED));
+  const authResult = await verifyAuth(req);
+  if (!authResult.success) {
+    return sendAuthError(res, authResult);
   }
+  const uid = authResult.uid;
 
   try {
-    const decoded = await adminAuth.verifyIdToken(match[1]);
-    const uid = decoded.uid;
-
     const { requestId, mediaUrls } = req.body || {};
 
     if (!requestId || typeof requestId !== "string") {

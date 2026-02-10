@@ -126,7 +126,7 @@ export default function Navbar() {
         </Link>
 
         {/* === DESKTOP NAV === */}
-        <nav className="hidden items-center space-x-1 md:flex">
+        <nav className="hidden items-center space-x-1 md:flex" aria-label="Navigare principală">
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
@@ -167,6 +167,7 @@ export default function Navbar() {
                 onClick={handleLogout}
                 className="group flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition-all hover:bg-red-50 hover:text-red-600 hover:shadow-md"
                 title="Deconectare"
+                aria-label="Deconectare"
               >
                 <LogOut className="h-4 w-4" />
               </button>
@@ -177,7 +178,9 @@ export default function Navbar() {
         {/* === MOBILE MENU TOGGLE === */}
         <button
           onClick={() => setIsOpen((prev) => !prev)}
-          aria-label="Menu"
+          aria-label={isOpen ? "Închide meniu" : "Deschide meniu"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
           className="flex min-h-12 min-w-12 items-center justify-center rounded-lg p-3 text-emerald-700 transition hover:bg-emerald-50 md:hidden"
         >
           {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
@@ -185,7 +188,13 @@ export default function Navbar() {
       </div>
 
       {/* === MOBILE MENU - CSS animation instead of framer-motion === */}
-      <div
+      <nav
+        id="mobile-menu"
+        role="navigation"
+        aria-label="Meniu mobil"
+        aria-hidden={!isOpen}
+        // @ts-expect-error inert is valid HTML but React types lag behind
+        inert={!isOpen ? "" : undefined}
         className={`transform overflow-hidden border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 md:hidden ${isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
           }`}
       >
@@ -220,7 +229,7 @@ export default function Navbar() {
             </button>
           )}
         </div>
-      </div>
+      </nav>
     </header>
   );
 }

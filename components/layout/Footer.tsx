@@ -70,7 +70,7 @@ const SOCIAL_LINKS = [
 
 export default function Footer() {
   return (
-    <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner">
+    <footer className="relative mt-10 border-t border-gray-200 bg-white text-gray-700 shadow-inner" role="contentinfo" aria-label="Subsol site">
       {/* Main content - using CSS animations instead of framer-motion */}
       <div className="mx-auto grid max-w-7xl grid-cols-1 gap-8 px-4 py-10 sm:grid-cols-2 sm:gap-10 sm:px-6 sm:py-14 md:grid-cols-3 lg:grid-cols-6">
         {/* Logo & about */}
@@ -92,7 +92,7 @@ export default function Footer() {
             {CONTACT_INFO.map(({ icon: Icon, text, label }, i) => (
               <div key={i} className="flex items-center gap-2">
                 <Icon className="h-4 w-4 text-emerald-500" />
-                <a href={`mailto:${text}`} className="hover:text-emerald-600">
+                <a href={`mailto:${text}`} className="hover:text-emerald-600" aria-label="Trimite email la info@ofertemutare.ro">
                   {text}
                 </a>
                 {label && (
@@ -191,7 +191,7 @@ function FooterColumn({
   links: { href: string; label: string }[];
 }) {
   return (
-    <div className="text-center sm:text-left">
+    <nav className="text-center sm:text-left" aria-label={title}>
       <h3 className="mb-3 text-base font-semibold text-emerald-600 sm:mb-4 sm:text-lg">
         {title}
       </h3>
@@ -208,6 +208,6 @@ function FooterColumn({
           </li>
         ))}
       </ul>
-    </div>
+    </nav>
   );
 }

@@ -1,5 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { logger } from "@/utils/logger";
+import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
+
+const isRateLimited = createRateLimiter({ name: "locationSearch", max: 30, windowMs: 60_000 });
 
 // ── In-memory cache (TTL 5 min) ──
 type CacheEntry = { data: LocationResult[]; expiresAt: number };
@@ -39,6 +42,11 @@ export default async function handler(
 ) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const clientIp = getClientIp(req);
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({ error: "Prea multe cereri. Încearcă din nou în curând." });
   }
 
   const { q } = req.query;

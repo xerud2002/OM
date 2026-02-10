@@ -4,6 +4,9 @@ import { FieldValue } from "firebase-admin/firestore";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
+import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
+
+const isRateLimited = createRateLimiter({ name: "chatMessage", max: 15, windowMs: 60_000 });
 
 export default async function handler(
   req: NextApiRequest,
@@ -12,6 +15,11 @@ export default async function handler(
   if (req.method !== "POST") {
     res.setHeader("Allow", ["POST"]);
     return res.status(405).json(apiError("Method Not Allowed"));
+  }
+
+  const clientIp = getClientIp(req);
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json(apiError("Prea multe mesaje. Încearcă din nou în curând."));
   }
 
   const { requestId, offerId, text } = req.body || {};

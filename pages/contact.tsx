@@ -172,6 +172,58 @@ export default function ContactPage() {
           name="twitter:image"
           content="https://ofertemutare.ro/pics/index.webp"
         />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "ContactPage",
+              name: "Contact | OferteMutare.ro",
+              description:
+                "Contactează echipa Ofertemutare Ltd pentru întrebări, suport sau parteneriate. Răspundem în maxim 24 de ore.",
+              url: "https://ofertemutare.ro/contact",
+              mainEntity: {
+                "@type": "LocalBusiness",
+                name: "Ofertemutare Ltd",
+                url: "https://ofertemutare.ro",
+                email: "info@ofertemutare.ro",
+                image: "https://ofertemutare.ro/pics/index.webp",
+                address: {
+                  "@type": "PostalAddress",
+                  addressLocality: "București",
+                  addressCountry: "RO",
+                },
+                openingHoursSpecification: [
+                  {
+                    "@type": "OpeningHoursSpecification",
+                    dayOfWeek: [
+                      "Monday",
+                      "Tuesday",
+                      "Wednesday",
+                      "Thursday",
+                      "Friday",
+                    ],
+                    opens: "09:00",
+                    closes: "18:00",
+                  },
+                  {
+                    "@type": "OpeningHoursSpecification",
+                    dayOfWeek: "Saturday",
+                    opens: "10:00",
+                    closes: "14:00",
+                  },
+                ],
+                priceRange: "$$",
+                areaServed: {
+                  "@type": "Country",
+                  name: "România",
+                },
+              },
+            }),
+          }}
+        />
       </Head>
 
       <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">

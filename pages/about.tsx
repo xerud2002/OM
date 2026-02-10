@@ -131,6 +131,38 @@ export default function AboutPage() {
           name="twitter:image"
           content="https://ofertemutare.ro/pics/team.webp"
         />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "AboutPage",
+              name: "Despre Noi | OferteMutare.ro",
+              description:
+                "Descoperă povestea OferteMutare.ro - platforma care conectează clienții cu firme de mutări verificate din România.",
+              url: "https://ofertemutare.ro/about",
+              mainEntity: {
+                "@type": "Organization",
+                name: "Ofertemutare Ltd",
+                url: "https://ofertemutare.ro",
+                logo: "https://ofertemutare.ro/pics/index.webp",
+                foundingDate: "2024",
+                description:
+                  "Platforma care conectează clienții cu firme de mutări verificate din România. Transparență, siguranță și prețuri corecte.",
+                email: "info@ofertemutare.ro",
+                areaServed: {
+                  "@type": "Country",
+                  name: "România",
+                },
+                sameAs: [
+                  "https://www.facebook.com/profile.php?id=61585990396718",
+                ],
+              },
+            }),
+          }}
+        />
       </Head>
 
       <main className="min-h-screen overflow-x-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50">
