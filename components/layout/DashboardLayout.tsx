@@ -256,7 +256,7 @@ export default function DashboardLayout({
                   {/* User info mobile */}
                   <div className="py-4">
                     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3">
-                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500">
+                      <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-emerald-500 to-teal-500">
                         <UserAvatar role={role} photoURL={user?.photoURL} />
                       </div>
                       <div>
@@ -339,8 +339,8 @@ export default function DashboardLayout({
 
           {/* User info — hidden on tablet, visible on desktop */}
           <div className="hidden px-4 py-4 lg:block">
-            <div className="flex items-center gap-3 rounded-xl bg-gradient-to-r from-gray-50 to-gray-100/50 p-3">
-              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
+            <div className="flex items-center gap-3 rounded-xl bg-linear-to-r from-gray-50 to-gray-100/50 p-3">
+              <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-emerald-500 to-teal-500 shadow-sm">
                 <UserAvatar role={role} photoURL={user?.photoURL} />
               </div>
               <div className="flex-1 min-w-0">
@@ -355,7 +355,7 @@ export default function DashboardLayout({
           </div>
           {/* User avatar — tablet collapsed sidebar */}
           <div className="flex justify-center py-3 lg:hidden">
-            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-emerald-500 to-teal-500 shadow-sm">
+            <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-emerald-500 to-teal-500 shadow-sm">
               <UserAvatar role={role} photoURL={user?.photoURL} />
             </div>
           </div>
@@ -443,7 +443,7 @@ export default function DashboardLayout({
               {/* Profile dropdown mobile */}
               <div className="flex items-center gap-3 md:hidden">
                 <div
-                  className={`flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r ${colors.accent} text-sm font-bold text-white`}
+                  className={`flex h-8 w-8 items-center justify-center rounded-full bg-linear-to-r ${colors.accent} text-sm font-bold text-white`}
                 >
                   {userName.charAt(0).toUpperCase()}
                 </div>

@@ -83,10 +83,10 @@ export default function CookieConsent() {
       role="dialog"
       aria-label="Consimțământ cookie-uri"
       aria-modal="false"
-      className="fixed bottom-0 inset-x-0 z-[9999] animate-slideUp"
+      className="fixed bottom-0 inset-x-0 z-9999 animate-slideUp"
     >
       {/* Backdrop shadow */}
-      <div className="pointer-events-none absolute inset-x-0 bottom-full h-16 bg-gradient-to-t from-black/10 to-transparent" />
+      <div className="pointer-events-none absolute inset-x-0 bottom-full h-16 bg-linear-to-t from-black/10 to-transparent" />
 
       <div className="border-t border-gray-200 bg-white px-4 py-5 shadow-2xl sm:px-6 md:px-8">
         <div className="mx-auto max-w-5xl">
@@ -120,7 +120,7 @@ export default function CookieConsent() {
             </div>
 
             {/* Buttons */}
-            <div className="flex flex-shrink-0 flex-col gap-2 sm:flex-row">
+            <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
               <button
                 onClick={handleRejectAll}
                 className="rounded-lg border border-gray-300 bg-white px-5 py-2.5 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2"

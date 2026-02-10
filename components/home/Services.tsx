@@ -62,7 +62,7 @@ export default function Services() {
   ];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-slate-50/50 to-white py-12 sm:py-20 lg:py-32">
+    <section className="relative overflow-hidden bg-linear-to-b from-white via-slate-50/50 to-white py-12 sm:py-20 lg:py-32">
       {/* Background decoration */}
       <div className="pointer-events-none absolute inset-0">
         <div className="absolute top-1/4 left-0 h-75 w-75 -translate-x-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-125 sm:w-125 sm:blur-[100px]" />
@@ -86,7 +86,7 @@ export default function Services() {
           </div>
           <h2 className="mb-4 text-3xl font-bold tracking-tight text-slate-900 sm:mb-5 sm:text-4xl md:text-5xl">
             Tot ce ai nevoie pentru{" "}
-            <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
               mutare
             </span>
           </h2>
@@ -112,7 +112,7 @@ export default function Services() {
                 className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all duration-300 hover:border-emerald-200 hover:shadow-xl hover:shadow-emerald-100/50 sm:rounded-2xl"
               >
                 {/* Image */}
-                <div className="relative h-20 overflow-visible bg-gradient-to-br from-slate-50 to-slate-100 sm:h-40">
+                <div className="relative h-20 overflow-visible bg-linear-to-br from-slate-50 to-slate-100 sm:h-40">
                   <Image
                     src={service.img}
                     alt={service.title}
@@ -154,7 +154,7 @@ export default function Services() {
                 </div>
 
                 {/* Hover gradient overlay */}
-                <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-emerald-50/0 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="pointer-events-none absolute inset-0 bg-linear-to-t from-emerald-50/0 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
               </motion.div>
             </motion.div>
           ))}

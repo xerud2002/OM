@@ -156,7 +156,7 @@ export default function CompanyChatPage() {
           </div>
 
           {/* Chat area - full height on mobile, fills viewport on tablet */}
-          <div className="h-[calc(100vh-180px)] sm:h-[600px] md:h-[calc(100vh-200px)] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200 bg-white shadow-sm sm:shadow-lg">
+          <div className="h-[calc(100vh-180px)] sm:h-150 md:h-[calc(100vh-200px)] overflow-hidden rounded-xl sm:rounded-2xl border border-gray-200 bg-white shadow-sm sm:shadow-lg">
             {loading ? (
               <div className="flex h-full items-center justify-center">
                 <div className="text-center">

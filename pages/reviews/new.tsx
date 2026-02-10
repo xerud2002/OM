@@ -289,7 +289,7 @@ export default function NewReviewPage() {
         <Head>
           <title>Recenzie trimisă | OferteMutare.ro</title>
         </Head>
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-50">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-emerald-50 to-teal-50">
           <div className="text-center max-w-md mx-auto px-4">
             <div className="bg-white rounded-2xl shadow-xl p-8">
               <div className="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center mx-auto mb-6">
@@ -336,7 +336,7 @@ export default function NewReviewPage() {
         <meta name="robots" content="noindex, nofollow" />
       </Head>
 
-      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-emerald-50/30">
+      <div className="min-h-screen bg-linear-to-br from-gray-50 to-emerald-50/30">
         {/* Header */}
         <header className="bg-white border-b border-gray-100">
           <div className="max-w-3xl mx-auto px-4 py-4">
@@ -352,7 +352,7 @@ export default function NewReviewPage() {
         <main className="max-w-3xl mx-auto px-4 py-8 md:py-12">
           <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
             {/* Header Section */}
-            <div className="bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-8 text-white text-center">
+            <div className="bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-8 text-white text-center">
               <h1 className="text-2xl md:text-3xl font-bold mb-2">
                 Cum a fost experiența ta?
               </h1>
@@ -366,7 +366,7 @@ export default function NewReviewPage() {
               {/* Error display */}
               {error && (
                 <div className="flex items-center gap-3 bg-red-50 text-red-700 px-4 py-3 rounded-lg">
-                  <ExclamationCircleIcon className="h-5 w-5 flex-shrink-0" />
+                  <ExclamationCircleIcon className="h-5 w-5 shrink-0" />
                   <span>{error}</span>
                 </div>
               )}

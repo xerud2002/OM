@@ -324,7 +324,7 @@ export default function CompanyDashboard() {
       >
         {/* Info tip */}
         <div className="mb-4 sm:mb-6 flex items-start gap-2 sm:gap-3 rounded-lg sm:rounded-xl border border-blue-200 bg-blue-50 p-3 sm:p-4">
-          <InformationCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 flex-shrink-0 text-blue-600" />
+          <InformationCircleIcon className="h-4 w-4 sm:h-5 sm:w-5 mt-0.5 shrink-0 text-blue-600" />
           <p className="text-xs sm:text-sm text-blue-800">
             Contactează clientul cât mai repede pentru a verifica informațiile
             declarate și să-ți mărești șansele de a câștiga jobul.

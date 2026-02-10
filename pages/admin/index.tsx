@@ -232,7 +232,7 @@ export default function AdminDashboard() {
                       {/* Company Header */}
                       <div className="flex flex-col gap-4 border-b border-gray-100 bg-gray-50/50 p-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-center gap-3">
-                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 text-lg font-bold text-white shadow">
+                          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-purple-500 to-pink-500 text-lg font-bold text-white shadow">
                             {(company.companyName || company.displayName || "C").charAt(0).toUpperCase()}
                           </div>
                           <div>

@@ -21,11 +21,11 @@ export default function CTASection() {
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
         {/* Gradient orbs */}
-        <div className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-500/20 blur-[80px] sm:h-[600px] sm:w-[600px] sm:blur-[100px]" />
-        <div className="absolute bottom-0 right-1/4 hidden h-[500px] w-[500px] translate-y-1/2 rounded-full bg-sky-500/20 blur-[100px] sm:block" />
+        <div className="absolute left-1/4 top-0 h-100 w-100 -translate-y-1/2 rounded-full bg-emerald-500/20 blur-[80px] sm:h-150 sm:w-[600px] sm:blur-[100px]" />
+        <div className="absolute bottom-0 right-1/4 hidden h-125 w-125 translate-y-1/2 rounded-full bg-sky-500/20 blur-[100px] sm:block" />
 
         {/* Grid pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:40px_40px] sm:bg-[size:60px_60px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-size-[40px_40px] sm:bg-size-[60px_60px]" />
 
         {/* Radial gradient overlay */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(16,185,129,0.15),transparent_70%)]" />
@@ -57,7 +57,7 @@ export default function CTASection() {
           >
             Gata să economisești
             <br />
-            <span className="bg-gradient-to-r from-emerald-400 via-teal-400 to-sky-400 bg-clip-text text-transparent">
+            <span className="bg-linear-to-r from-emerald-400 via-teal-400 to-sky-400 bg-clip-text text-transparent">
               până la 40% la mutare?
             </span>
           </motion.h2>
@@ -87,7 +87,7 @@ export default function CTASection() {
             <motion.div whileTap={{ scale: 0.98 }}>
               <Link
                 href="/customer/dashboard"
-                className="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-5 py-3.5 text-sm font-bold text-white shadow-2xl shadow-emerald-500/30 transition-all hover:shadow-emerald-500/40 sm:gap-3 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
+                className="group inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-5 py-3.5 text-sm font-bold text-white shadow-2xl shadow-emerald-500/30 transition-all hover:shadow-emerald-500/40 sm:gap-3 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
               >
                 <Sparkles className="h-4 w-4 sm:h-6 sm:w-6" />
                 <span className="hidden sm:inline">PRIMEȘTE OFERTE GRATUITE</span>

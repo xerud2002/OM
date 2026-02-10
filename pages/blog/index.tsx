@@ -139,12 +139,12 @@ export default function BlogPage() {
       </Head>
 
       <LayoutWrapper>
-        <div className="min-h-screen bg-gradient-to-b from-slate-50 to-white">
+        <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
           {/* Hero Section */}
           <section className="relative overflow-hidden py-16 sm:py-20">
             <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/4 top-0 h-[400px] w-[400px] -translate-y-1/2 rounded-full bg-emerald-100/40 blur-[100px]" />
-              <div className="absolute bottom-0 right-1/4 h-[300px] w-[300px] translate-y-1/2 rounded-full bg-sky-100/40 blur-[100px]" />
+              <div className="absolute left-1/4 top-0 h-100 w-100 -translate-y-1/2 rounded-full bg-emerald-100/40 blur-[100px]" />
+              <div className="absolute bottom-0 right-1/4 h-75 w-75 translate-y-1/2 rounded-full bg-sky-100/40 blur-[100px]" />
             </div>
 
             <div className="container relative z-10 mx-auto px-4">
@@ -155,7 +155,7 @@ export default function BlogPage() {
                 </div>
                 <h1 className="mb-5 text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
                   Sfaturi pentru o{" "}
-                  <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                  <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                     mutare reușită
                   </span>
                 </h1>
@@ -177,7 +177,7 @@ export default function BlogPage() {
                 <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-xl transition-all hover:shadow-2xl sm:rounded-3xl">
                   <div className="grid gap-0 lg:grid-cols-2">
                     {/* Image */}
-                    <div className="relative h-64 overflow-hidden bg-slate-50 p-6 lg:h-auto lg:min-h-[400px]">
+                    <div className="relative h-64 overflow-hidden bg-slate-50 p-6 lg:h-auto lg:min-h-100">
                       <Image
                         src={featuredPost.image}
                         alt={featuredPost.title}
@@ -302,7 +302,7 @@ export default function BlogPage() {
 
           {/* CTA Section */}
           <section className="container mx-auto px-4 pb-20">
-            <div className="rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-center text-white sm:rounded-3xl sm:p-12">
+            <div className="rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 p-8 text-center text-white sm:rounded-3xl sm:p-12">
               <h2 className="mb-4 text-2xl font-bold sm:text-3xl">Pregătit pentru mutare?</h2>
               <p className="mx-auto mb-6 max-w-xl opacity-90">
                 Completează formularul și primește oferte personalizate de la firme locale. 100%

@@ -122,7 +122,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                         <section className="group relative overflow-hidden rounded-3xl min-h-[85vh] flex flex-col justify-center px-6 md:px-12 max-w-5xl mx-auto">
                             {/* Background: Hidden on mobile (except for color), visible as image on desktop */}
                             <div
-                                className={`absolute inset-0 ${hasHeroImage ? "bg-slate-900" : "bg-gradient-to-r from-green-600 to-blue-600"}`}
+                                className={`absolute inset-0 ${hasHeroImage ? "bg-slate-900" : "bg-linear-to-r from-green-600 to-blue-600"}`}
                                 style={{
                                     backgroundImage: hasHeroImage
                                         ? `linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)), url("${city.heroImage}")`
@@ -175,13 +175,13 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                                     <span className="text-white">Mutări în </span>
                                     <span className="relative inline-block">
                                         <span
-                                            className={`bg-gradient-to-r ${textGradient} bg-clip-text text-transparent`}
+                                            className={`bg-linear-to-r ${textGradient} bg-clip-text text-transparent`}
                                         >
                                             {city.name}
                                         </span>
                                         {/* Decorative underline */}
                                         <span
-                                            className={`absolute -bottom-2 left-0 h-1 w-full bg-gradient-to-r ${textGradient} rounded-full`}
+                                            className={`absolute -bottom-2 left-0 h-1 w-full bg-linear-to-r ${textGradient} rounded-full`}
                                             style={{ opacity: 0.6 }}
                                         />
                                     </span>
@@ -203,7 +203,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                                                 className="w-full h-auto"
                                                 priority
                                             />
-                                            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                                            <div className="absolute bottom-0 left-0 right-0 bg-linear-to-t from-black/80 to-transparent p-4">
                                                 <p className="text-sm font-semibold text-white">{city.landmarks[0]}</p>
                                             </div>
                                         </div>
@@ -280,7 +280,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                     </section>
 
                     {/* Neighborhoods Section */}
-                    <section className="mb-12 rounded-2xl bg-gradient-to-r from-slate-50 to-gray-50 p-8">
+                    <section className="mb-12 rounded-2xl bg-linear-to-r from-slate-50 to-gray-50 p-8">
                         <div className="mb-6 flex items-center gap-3">
                             <Building2 className="h-7 w-7 text-emerald-600" />
                             <h2 className="text-2xl font-bold text-gray-900">
@@ -357,7 +357,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                     </section>
 
                     {/* Pricing Info */}
-                    <section className="mb-12 rounded-2xl bg-gradient-to-r from-emerald-50 to-teal-50 p-8">
+                    <section className="mb-12 rounded-2xl bg-linear-to-r from-emerald-50 to-teal-50 p-8">
                         <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
                             <TrendingDown className="h-7 w-7 text-emerald-600" />
                             Prețuri mutări {city.name} în {currentYear}
@@ -456,7 +456,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                     </section>
 
                     {/* Local Tips */}
-                    <section className="mb-12 rounded-2xl bg-gradient-to-r from-amber-50 to-orange-50 p-8">
+                    <section className="mb-12 rounded-2xl bg-linear-to-r from-amber-50 to-orange-50 p-8">
                         <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
                             <Calendar className="h-7 w-7 text-amber-600" />
                             Sfaturi pentru mutări în {city.name}
@@ -511,7 +511,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                     </section>
 
                     {/* Final CTA */}
-                    <section className="rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-600 p-8 text-center text-white">
+                    <section className="rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 p-8 text-center text-white">
                         <h2 className="mb-4 text-3xl font-bold">Gata să te muți în {city.name}?</h2>
                         <p className="mb-8 text-lg text-emerald-100">
                             Primește 3-5 oferte gratuite în 24h și economisește până la 40% la mutarea ta.

@@ -152,7 +152,7 @@ export default function GhidSchimbareAdresa() {
                     <header className="mb-12 text-center">
                         <h1 className="mb-8 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl px-4">
                             Ghid Acte{" "}
-                            <span className="bg-gradient-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                            <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
                                 Schimbare Adresă {currentYear}
                             </span>
                         </h1>
@@ -180,7 +180,7 @@ export default function GhidSchimbareAdresa() {
 
                     {/* Alert Box */}
                     <div className="mb-12 rounded-xl bg-amber-50 p-6 border border-amber-200 flex gap-4 items-start">
-                        <Warning className="h-8 w-8 text-amber-600 flex-shrink-0" />
+                        <Warning className="h-8 w-8 text-amber-600 shrink-0" />
                         <div>
                             <h3 className="text-lg font-bold text-amber-900">Termen Legal: 15 Zile</h3>
                             <p className="text-amber-800">
@@ -199,7 +199,7 @@ export default function GhidSchimbareAdresa() {
                         <div className="space-y-6">
                             {checklist.map((item, index) => (
                                 <div key={index} className="flex flex-col md:flex-row gap-6 rounded-xl border border-gray-100 bg-white p-6 shadow-sm hover:border-emerald-200 transition-colors">
-                                    <div className="flex bg-slate-50 h-16 w-16 items-center justify-center rounded-full flex-shrink-0">
+                                    <div className="flex bg-slate-50 h-16 w-16 items-center justify-center rounded-full shrink-0">
                                         <item.icon className="h-8 w-8 text-slate-600" />
                                     </div>
                                     <div className="flex-grow">

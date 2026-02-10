@@ -34,8 +34,8 @@ export default function LogoTicker() {
 
         <div className="relative flex w-full flex-col items-center justify-center overflow-hidden">
           {/* Gradient Masks */}
-          <div className="pointer-events-none absolute left-0 z-10 h-full w-20 bg-gradient-to-r from-white to-transparent md:w-40" />
-          <div className="pointer-events-none absolute right-0 z-10 h-full w-20 bg-gradient-to-l from-white to-transparent md:w-40" />
+          <div className="pointer-events-none absolute left-0 z-10 h-full w-20 bg-linear-to-r from-white to-transparent md:w-40" />
+          <div className="pointer-events-none absolute right-0 z-10 h-full w-20 bg-linear-to-l from-white to-transparent md:w-40" />
 
           {/* Marquee Container - CSS Animation */}
           <div className="flex w-full overflow-hidden">
@@ -46,7 +46,7 @@ export default function LogoTicker() {
               {services.map((service, index) => (
                 <div
                   key={index}
-                  className="group flex flex-shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:grayscale-0"
+                  className="group flex shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:grayscale-0"
                 >
                   <service.icon className="h-6 w-6 text-emerald-600 sm:h-8 sm:w-8" />
                   <span className="text-lg font-bold whitespace-nowrap text-slate-700 sm:text-xl">
@@ -64,7 +64,7 @@ export default function LogoTicker() {
               {services.map((service, index) => (
                 <div
                   key={`clone-${index}`}
-                  className="group flex flex-shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:grayscale-0"
+                  className="group flex shrink-0 items-center gap-2 grayscale transition-all duration-300 hover:grayscale-0"
                 >
                   <service.icon className="h-6 w-6 text-emerald-600 sm:h-8 sm:w-8" />
                   <span className="text-lg font-bold whitespace-nowrap text-slate-700 sm:text-xl">

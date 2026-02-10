@@ -612,7 +612,7 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
                     <button
                       type="button"
                       onClick={(e) => { e.preventDefault(); onSubmit(e); }}
-                      className="group flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-8 py-3 text-sm font-bold text-white shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
+                      className="group flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-8 py-3 text-sm font-bold text-white shadow-xl shadow-emerald-500/30 transition-all hover:scale-105"
                     >
                       Trimite Cererea
                       <CheckCircleSolid className="h-4 w-4" />

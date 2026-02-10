@@ -264,7 +264,7 @@ export default function SavingsCalculator() {
           </div>
         </div>
 
-        <div className="overflow-hidden rounded-2xl bg-gradient-to-b from-gray-50 to-white ring-1 ring-gray-200">
+        <div className="overflow-hidden rounded-2xl bg-linear-to-b from-gray-50 to-white ring-1 ring-gray-200">
           <div className="p-6 md:p-8">
             <div className="mb-8 text-center">
               <p className="mb-2 text-sm font-medium uppercase tracking-wider text-gray-500">Buget Estimat</p>

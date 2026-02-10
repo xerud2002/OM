@@ -60,7 +60,7 @@ export default function CerereNoua() {
           <div className="mb-6">
             <h1 className="text-2xl font-bold text-gray-900">
               Cerere{" "}
-              <span className="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">
                 Nouă
               </span>
             </h1>

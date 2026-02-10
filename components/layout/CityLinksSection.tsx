@@ -10,7 +10,7 @@ export default function CityLinksSection() {
   const tier2Cities = cityData.filter((city) => city.tier === 2);
 
   return (
-    <section className="border-t border-gray-200 bg-gradient-to-br from-slate-50 to-gray-50 py-12 sm:py-16">
+    <section className="border-t border-gray-200 bg-linear-to-br from-slate-50 to-gray-50 py-12 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         {/* Header */}
         <div className="mb-8 sm:mb-10 text-center">
@@ -75,7 +75,7 @@ export default function CityLinksSection() {
           </p>
           <Link
             href="/customer/auth"
-            className="inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-sky-500 px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:opacity-95 active:scale-95"
+            className="inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-sky-500 px-5 py-2.5 sm:px-6 sm:py-3 text-sm sm:text-base font-semibold text-white shadow-lg transition-all hover:shadow-xl hover:opacity-95 active:scale-95"
           >
             <MapPin className="h-4 w-4 sm:h-5 sm:w-5" />
             Cere Oferte pentru Orașul Tău

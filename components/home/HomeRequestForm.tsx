@@ -959,7 +959,7 @@ export default function HomeRequestForm() {
 
   // Step 1: FROM Location (county + city + details)
   const renderStep1 = () => (
-    <div className="rounded-xl border border-emerald-200 bg-gradient-to-br from-emerald-50/50 to-white p-4">
+    <div className="rounded-xl border border-emerald-200 bg-linear-to-br from-emerald-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 shadow">
           <MapPin className="h-4 w-4 text-white" />
@@ -1123,7 +1123,7 @@ export default function HomeRequestForm() {
 
   // Step 2: TO Location (county + city + details)
   const renderStep2 = () => (
-    <div className="rounded-xl border border-sky-200 bg-gradient-to-br from-sky-50/50 to-white p-4">
+    <div className="rounded-xl border border-sky-200 bg-linear-to-br from-sky-50/50 to-white p-4">
       <div className="mb-3 flex items-center gap-2">
         <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-sky-500 shadow">
           <Home className="h-4 w-4 text-white" />
@@ -1954,7 +1954,7 @@ export default function HomeRequestForm() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
+              className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
             >
               <Sparkles className="h-5 w-5" />
               {isSubmitting ? "Se procesează..." : "Obține Oferte Gratuite"}
@@ -1973,7 +1973,7 @@ export default function HomeRequestForm() {
       {showSuccessModal &&
         typeof document !== "undefined" &&
         createPortal(
-          <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/50 p-4">
+          <div className="fixed inset-0 z-9999 flex items-center justify-center bg-black/50 p-4">
             <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl">
               {/* Close button */}
               <button

@@ -97,7 +97,7 @@ export default function BuyCredits() {
         <div className="space-y-6 sm:space-y-8">
           {/* First Deposit Hero Banner */}
           {isFirstDeposit && !loading && (
-            <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-orange-500 to-rose-500 p-6 sm:p-8 text-white shadow-lg">
+            <div className="relative overflow-hidden rounded-2xl bg-linear-to-r from-orange-500 to-rose-500 p-6 sm:p-8 text-white shadow-lg">
               <div className="absolute top-0 right-0 -mt-4 -mr-4 h-32 w-32 rounded-full bg-yellow-300/20 blur-2xl" />
               <div className="absolute bottom-0 left-0 -mb-8 -ml-8 h-40 w-40 rounded-full bg-orange-300/20 blur-3xl" />
 
@@ -162,7 +162,7 @@ export default function BuyCredits() {
 
           {/* First Deposit Special Offer */}
           {isFirstDeposit && !loading && !offerExpired && (
-            <div className="relative rounded-2xl border-2 border-amber-300 bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 p-6 sm:p-8 shadow-sm">
+            <div className="relative rounded-2xl border-2 border-amber-300 bg-linear-to-r from-amber-50 via-orange-50 to-amber-50 p-6 sm:p-8 shadow-sm">
               <div className="flex flex-col lg:flex-row gap-6 lg:gap-10 items-center">
                 <div className="flex-1 text-center lg:text-left">
                   {/* Countdown Timer - inline */}
@@ -220,9 +220,9 @@ export default function BuyCredits() {
                 </div>
 
                 <div className="w-full sm:w-auto">
-                  <div className="relative bg-white rounded-2xl p-5 sm:p-6 shadow-xl border border-amber-200 min-w-[240px]">
+                  <div className="relative bg-white rounded-2xl p-5 sm:p-6 shadow-xl border border-amber-200 min-w-60">
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                      <span className="bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase shadow-md">
+                      <span className="bg-linear-to-r from-amber-500 to-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full uppercase shadow-md">
                         +50% Bonus
                       </span>
                     </div>
@@ -258,7 +258,7 @@ export default function BuyCredits() {
                           "_blank",
                         )
                       }
-                      className="mt-5 w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 py-3 px-5 text-center font-bold text-white shadow-lg shadow-amber-500/30 transition hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.98]"
+                      className="mt-5 w-full flex items-center justify-center gap-2 rounded-xl bg-linear-to-r from-amber-500 to-orange-500 py-3 px-5 text-center font-bold text-white shadow-lg shadow-amber-500/30 transition hover:shadow-amber-500/50 hover:scale-[1.02] active:scale-[0.98]"
                     >
                       <RocketLaunchIcon className="h-5 w-5" />
                       Vreau Oferta!
@@ -309,15 +309,15 @@ export default function BuyCredits() {
 
               <ul className="mb-6 space-y-3 text-sm text-gray-600 flex-1">
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>~5 oferte trimise</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Chat nelimitat</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Suport email</span>
                 </li>
               </ul>
@@ -338,7 +338,7 @@ export default function BuyCredits() {
             {/* Pro Pack - Popular */}
             <div className="relative flex flex-col rounded-2xl border-2 border-emerald-500 bg-white p-5 sm:p-6 shadow-xl">
               <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
-                <div className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-emerald-500 to-teal-600 px-4 py-1.5 text-sm font-bold text-white shadow-lg">
+                <div className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-emerald-500 to-teal-600 px-4 py-1.5 text-sm font-bold text-white shadow-lg">
                   <SparklesIcon className="h-4 w-4" />
                   Recomandat
                 </div>
@@ -373,19 +373,19 @@ export default function BuyCredits() {
 
               <ul className="mb-6 space-y-3 text-sm text-gray-600 flex-1">
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>~12 oferte trimise</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Chat nelimitat</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Suport prioritar</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Badge &quot;Partener Verificat&quot;</span>
                 </li>
               </ul>
@@ -397,7 +397,7 @@ export default function BuyCredits() {
                     "_blank",
                   )
                 }
-                className="w-full rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 py-3 text-center font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full rounded-xl bg-linear-to-r from-emerald-500 to-teal-600 py-3 text-center font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-emerald-500/40 hover:scale-[1.02] active:scale-[0.98]"
               >
                 Alege Pro
               </button>
@@ -434,19 +434,19 @@ export default function BuyCredits() {
 
               <ul className="mb-6 space-y-3 text-sm text-gray-600 flex-1">
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>~25 oferte trimise</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Chat nelimitat</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Manager dedicat</span>
                 </li>
                 <li className="flex items-center gap-2.5">
-                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 flex-shrink-0" />
+                  <CheckCircleIcon className="h-5 w-5 text-emerald-500 shrink-0" />
                   <span>Rapoarte lunare</span>
                 </li>
               </ul>
@@ -486,7 +486,7 @@ export default function BuyCredits() {
           </div>
 
           {/* Custom CTA */}
-          <div className="rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 p-6 sm:p-8 text-center text-white">
+          <div className="rounded-2xl bg-linear-to-br from-gray-900 to-gray-800 p-6 sm:p-8 text-center text-white">
             <h2 className="text-xl font-bold">
               Ai nevoie de mai multe credite?
             </h2>

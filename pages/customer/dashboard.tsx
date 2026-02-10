@@ -384,7 +384,7 @@ export default function CustomerDashboard() {
             
             {/* Empty state card */}
             <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
+              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-500 to-teal-500 shadow-xl shadow-emerald-500/30">
                 <InboxIcon className="h-10 w-10 text-white" />
               </div>
               <h3 className="mt-6 text-xl font-bold text-gray-900">
@@ -395,7 +395,7 @@ export default function CustomerDashboard() {
               </p>
               <Link
                 href="/"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
+                className="mt-6 inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
               >
                 <DocumentPlusIcon className="h-5 w-5" />
                 Creează prima cerere
@@ -409,7 +409,7 @@ export default function CustomerDashboard() {
             {/* Requests sidebar */}
             <aside className="md:col-span-5 lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                <div className="flex items-center justify-between border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white px-4 py-3 sm:px-5 sm:py-4">
+                <div className="flex items-center justify-between border-b border-gray-100 bg-linear-to-r from-gray-50 to-white px-4 py-3 sm:px-5 sm:py-4">
                   <div>
                     <h3 className="text-sm font-bold text-gray-900">
                       Cererile tale
@@ -480,7 +480,7 @@ export default function CustomerDashboard() {
                             onClick={() => setSelectedRequestId(req.id)}
                             className={`group relative w-full rounded-xl p-3 sm:p-4 text-left transition-all active:scale-[0.98] ${
                               isSelected
-                                ? "bg-gradient-to-r from-emerald-50 to-teal-50 shadow-sm ring-1 ring-emerald-200"
+                                ? "bg-linear-to-r from-emerald-50 to-teal-50 shadow-sm ring-1 ring-emerald-200"
                                 : "hover:bg-gray-50 active:bg-gray-100"
                             }`}
                           >
@@ -601,7 +601,7 @@ export default function CustomerDashboard() {
 
                     {selectedOffers.length === 0 ? (
                       <div className="p-6 sm:p-10 text-center">
-                        <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-50 to-teal-50">
+                        <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-50 to-teal-50">
                           <svg className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-400" viewBox="0 0 48 48" fill="none">
                             <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" opacity="0.5" />
                             <path d="M16 28l4-4 4 4 8-8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -728,7 +728,7 @@ export default function CustomerDashboard() {
 
                     {/* Actions for closed requests */}
                     {selectedRequest.status === "closed" && (
-                      <div className="p-4 sm:p-6 bg-gradient-to-b from-emerald-50/50 to-white">
+                      <div className="p-4 sm:p-6 bg-linear-to-b from-emerald-50/50 to-white">
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                           <button
                             onClick={() => handleReactivate(selectedRequest.id)}
@@ -781,7 +781,7 @@ export default function CustomerDashboard() {
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                className="relative h-[100dvh] sm:h-[600px] md:h-[75vh] w-full sm:max-w-lg md:max-w-2xl overflow-hidden rounded-none sm:rounded-2xl bg-white shadow-2xl"
+                className="relative h-dvh sm:h-150 md:h-[75vh] w-full sm:max-w-lg md:max-w-2xl overflow-hidden rounded-none sm:rounded-2xl bg-white shadow-2xl"
               >
                 <button
                   onClick={() => setChatOffer(null)}
@@ -956,7 +956,7 @@ function OfferCard({
         </div>
 
         {/* Price and actions */}
-        <div className="flex flex-col items-start sm:items-end gap-3 sm:gap-4 sm:min-w-[180px]">
+        <div className="flex flex-col items-start sm:items-end gap-3 sm:gap-4 sm:min-w-45">
           <div className="sm:text-right">
             <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wider text-gray-400">
               Preț ofertat

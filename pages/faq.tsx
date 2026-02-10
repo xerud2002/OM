@@ -575,12 +575,12 @@ export default function FAQPage() {
         <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
           {/* Header */}
           <div className="mb-12 text-center">
-            <div className="mb-4 inline-flex rounded-full bg-gradient-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
+            <div className="mb-4 inline-flex rounded-full bg-linear-to-r from-emerald-100 to-teal-100 p-3 shadow-sm">
               <HelpCircle className="h-8 w-8 text-emerald-600" />
             </div>
             <h1 className="mb-4 text-3xl font-bold text-slate-900 sm:text-4xl">
               Întrebări{" "}
-              <span className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 px-3 py-1 text-white sm:px-4">
+              <span className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-3 py-1 text-white sm:px-4">
                 Frecvente
               </span>
             </h1>
@@ -591,7 +591,7 @@ export default function FAQPage() {
           </div>
 
           {/* Cities Coverage Badge */}
-          <div className="mb-10 rounded-xl border-2 border-emerald-200 bg-gradient-to-br from-emerald-50 to-teal-50 p-6">
+          <div className="mb-10 rounded-xl border-2 border-emerald-200 bg-linear-to-br from-emerald-50 to-teal-50 p-6">
             <div className="mb-3 flex items-center justify-center gap-2">
               <MapPin className="h-5 w-5 text-emerald-600" />
               <h3 className="text-lg font-bold text-emerald-800">
@@ -661,7 +661,7 @@ export default function FAQPage() {
           </div>
 
           {/* Additional Cities Section for SEO */}
-          <div className="mt-16 rounded-xl bg-gradient-to-br from-slate-50 to-gray-100 p-6 sm:p-8">
+          <div className="mt-16 rounded-xl bg-linear-to-br from-slate-50 to-gray-100 p-6 sm:p-8">
             <h3 className="mb-4 text-center text-lg font-bold text-gray-900 sm:text-xl">
               Servicii Mutări în Toate Orașele României
             </h3>
@@ -685,7 +685,7 @@ export default function FAQPage() {
           </div>
 
           {/* CTA */}
-          <div className="mt-16 rounded-xl bg-gradient-to-r from-emerald-600 to-blue-600 p-6 text-center text-white sm:p-8">
+          <div className="mt-16 rounded-xl bg-linear-to-r from-emerald-600 to-blue-600 p-6 text-center text-white sm:p-8">
             <h3 className="mb-4 text-xl font-bold sm:text-2xl">
               Gata să Începi?
             </h3>

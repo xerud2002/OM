@@ -190,7 +190,7 @@ export default function CompanyProfile() {
             className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm"
           >
             {/* Header Section with Avatar */}
-            <div className="relative bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-600 p-4 sm:p-6">
+            <div className="relative bg-linear-to-r from-emerald-500 via-emerald-600 to-teal-600 p-4 sm:p-6">
               <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                 <div className="flex items-center gap-3 sm:gap-4">
                   {/* Logo/Avatar with upload button */}
@@ -537,7 +537,7 @@ export default function CompanyProfile() {
                   >
                     <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-2xl transition-all">
                       {/* Header */}
-                      <div className="relative bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-5">
+                      <div className="relative bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-5">
                         <button
                           onClick={() => setShowRequestReview(false)}
                           disabled={sendingReview}
@@ -648,7 +648,7 @@ export default function CompanyProfile() {
                               }
                             }}
                             disabled={sendingReview || !reviewEmail || !reviewCustomerName}
-                            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-emerald-500/40 disabled:cursor-not-allowed disabled:opacity-50"
+                            className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-600 to-teal-600 px-6 py-3 font-semibold text-white shadow-lg shadow-emerald-500/25 transition hover:shadow-emerald-500/40 disabled:cursor-not-allowed disabled:opacity-50"
                           >
                             {sendingReview ? (
                               <>

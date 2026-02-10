@@ -72,7 +72,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
 
             <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
               Mutări{" "}
-              <span className="bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
+              <span className="bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 Birouri & Companii
               </span>
             </h1>
@@ -146,7 +146,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
           </section>
 
           {/* What We Move */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-slate-50 to-gray-100 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-slate-50 to-gray-100 p-8">
             <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Package className="h-7 w-7 text-slate-600" />
               Ce transportăm pentru companii
@@ -289,7 +289,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
           </section>
 
           {/* Process */}
-          <section className="mb-12 rounded-2xl bg-gradient-to-r from-emerald-50 to-cyan-50 p-8">
+          <section className="mb-12 rounded-2xl bg-linear-to-r from-emerald-50 to-cyan-50 p-8">
             <h2 className="mb-6 flex items-center gap-3 text-2xl font-bold text-gray-900">
               <Calendar className="h-7 w-7 text-emerald-600" />
               Procesul de relocare corporativă
@@ -347,7 +347,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
           <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Birouri" />
 
           {/* Final CTA */}
-          <section className="rounded-2xl bg-gradient-to-r from-slate-800 to-slate-900 p-8 text-center text-white">
+          <section className="rounded-2xl bg-linear-to-r from-slate-800 to-slate-900 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Relocați biroul în siguranță</h2>
             <p className="mb-8 text-lg text-slate-300">
               Solicită o ofertă personalizată pentru compania ta. Răspundem în maxim 24h.

@@ -281,7 +281,7 @@ function JobCard({
       {/* Notes Section - Always visible, 3 lines fixed */}
       <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs">
         <span className="text-gray-400">Note:</span>
-        <p className={`mt-0.5 line-clamp-3 min-h-[3rem] sm:min-h-[3.75rem] ${r.details ? 'text-gray-700' : 'text-gray-300 italic'}`}>
+        <p className={`mt-0.5 line-clamp-3 min-h-12 sm:min-h-15 ${r.details ? 'text-gray-700' : 'text-gray-300 italic'}`}>
           {r.details || 'Nicio notă adăugată'}
         </p>
       </div>

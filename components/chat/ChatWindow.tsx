@@ -395,7 +395,7 @@ export default function ChatWindow({
                       : "bg-white text-slate-900 rounded-bl-none ring-1 ring-slate-200"
                   }`}
                 >
-                  {msg.text && <p className="text-[13px] sm:text-sm break-words">{msg.text}</p>}
+                  {msg.text && <p className="text-[13px] sm:text-sm wrap-break-word">{msg.text}</p>}
                   {msg.attachment && renderAttachment(msg.attachment)}
                   <p
                     className={`mt-1 text-[9px] sm:text-[10px] ${
@@ -582,7 +582,7 @@ export default function ChatWindow({
       {/* Image lightbox */}
       {lightboxUrl && (
         <div
-          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 p-4"
+          className="fixed inset-0 z-100 flex items-center justify-center bg-black/90 p-4"
           onClick={() => setLightboxUrl(null)}
         >
           <button

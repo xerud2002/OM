@@ -232,7 +232,7 @@ export default function OnboardingWizard({
                 className="space-y-6 py-4"
               >
                 <div className="text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-white shadow-lg">
                     <SparklesIcon className="h-8 w-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
@@ -397,7 +397,7 @@ export default function OnboardingWizard({
                 </div>
 
                 {/* County grid */}
-                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[300px] overflow-y-auto p-1">
+                <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-75 overflow-y-auto p-1">
                   {COUNTIES.map((county) => (
                     <button
                       key={county}
@@ -436,7 +436,7 @@ export default function OnboardingWizard({
                 className="space-y-6 py-4"
               >
                 <div className="text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 text-white shadow-lg">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-white shadow-lg">
                     <RocketLaunchIcon className="h-8 w-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">Ești gata de start!</h2>
@@ -468,7 +468,7 @@ export default function OnboardingWizard({
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 p-4 text-center text-white">
+                <div className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 p-4 text-center text-white">
                   <p className="font-semibold">🎁 Ofertă prima achiziție</p>
                   <p className="text-sm opacity-90 mt-1">
                     199 RON → 300 credite (+50% bonus)
