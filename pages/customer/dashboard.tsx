@@ -112,9 +112,14 @@ export default function CustomerDashboard() {
         return;
       }
 
-      // Ensure customer profile exists
+      // Ensure customer profile exists (skip if user is a company)
       const { doc, getDoc, setDoc, serverTimestamp } =
         await import("firebase/firestore");
+
+      // Guard: if this user is a company, don't create a customer profile
+      const companySnap = await getDoc(doc(db, "companies", u.uid));
+      if (companySnap.exists()) return;
+
       const customerRef = doc(db, "customers", u.uid);
       const customerSnap = await getDoc(customerRef);
 
