@@ -103,9 +103,18 @@ export default function CompanyDashboard() {
     }
   }, [router.query.tab]);
 
-  // Auth listener
+  // Auth listener — refresh token before setting state so downstream queries have valid credentials
   useEffect(() => {
-    const unsub = onAuthChange((user) => setCompany(user));
+    const unsub = onAuthChange(async (user) => {
+      if (user) {
+        try {
+          await user.getIdToken(true);
+        } catch {
+          // Token refresh failed — set user anyway, queries will handle errors
+        }
+      }
+      setCompany(user);
+    });
     return () => unsub();
   }, []);
 
