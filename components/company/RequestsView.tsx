@@ -771,7 +771,27 @@ export default function RequestsView({
 
     setSubmittingOffer(true);
     try {
+      // Force-refresh auth token before write to avoid stale credentials
+      const { getAuth } = await import("firebase/auth");
+      const currentUser = getAuth().currentUser;
+      if (!currentUser) throw "Nu ești autentificat. Re-loghează-te.";
+      await currentUser.getIdToken(true);
+
       const cost = calculateRequestCost(activeOfferRequest);
+
+      // Pre-check: verify request still exists and is active
+      const requestRef = doc(db, "requests", activeOfferRequest.id);
+      const requestSnap = await getDoc(requestRef);
+      if (!requestSnap.exists()) {
+        throw "Cererea nu mai există.";
+      }
+      const requestData = requestSnap.data();
+      if (requestData.archived) {
+        throw "Cererea a fost arhivată.";
+      }
+      if (requestData.status === "closed" || requestData.status === "cancelled") {
+        throw `Cererea este ${requestData.status === "closed" ? "închisă" : "anulată"}.`;
+      }
 
       await runTransaction(db, async (transaction) => {
         const companyRef = doc(db, "companies", company.uid);
@@ -784,13 +804,13 @@ export default function RequestsView({
           throw "Contul tău trebuie să fie verificat (KYC) pentru a trimite oferte.";
         }
 
-        const currentCredits = companyData.credits || 0;
+        const currentCredits = Number(companyData.credits) || 0;
         if (currentCredits < cost) {
           throw `Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${currentCredits}.`;
         }
 
-        // Deduct
-        transaction.update(companyRef, { credits: currentCredits - cost });
+        // Deduct credits (ensure numeric type for Firestore rules compatibility)
+        transaction.update(companyRef, { credits: Math.round(currentCredits - cost) });
 
         // Create Offer
         const offerRef = doc(
@@ -878,7 +898,15 @@ export default function RequestsView({
       checkMyOffers([activeOfferRequest], company.uid);
     } catch (err: any) {
       logger.error("Failed to place offer", err);
-      alert(err.toString() || "Eroare la trimiterea ofertei");
+      let msg = "Eroare la trimiterea ofertei";
+      if (typeof err === "string") {
+        msg = err;
+      } else if (err?.code === "permission-denied" || err?.message?.includes("permissions")) {
+        msg = "Permisiuni insuficiente. Încearcă să te deloghezi și să te loghezi din nou.";
+      } else if (err?.message) {
+        msg = err.message;
+      }
+      alert(msg);
     } finally {
       setSubmittingOffer(false);
       // Modal closes automatically via onConfirm unless we want to keep it open?
