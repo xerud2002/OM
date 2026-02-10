@@ -17,8 +17,6 @@ import {
   doc,
   getDoc,
   where,
-  runTransaction,
-  serverTimestamp,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
@@ -530,8 +528,13 @@ export default function RequestsView({
     [],
   );
 
-  // Initial Load
+  // Initial Load — wait for auth before querying Firestore
   useEffect(() => {
+    if (!company?.uid) {
+      setLoading(false);
+      return;
+    }
+
     const q = query(
       collection(db, "requests"),
       orderBy("createdAt", "desc"),
@@ -771,147 +774,43 @@ export default function RequestsView({
 
     setSubmittingOffer(true);
     try {
-      // Force-refresh auth token before write to avoid stale credentials
+      // Get fresh auth token for API call
       const { getAuth } = await import("firebase/auth");
       const currentUser = getAuth().currentUser;
       if (!currentUser) throw "Nu ești autentificat. Re-loghează-te.";
-      await currentUser.getIdToken(true);
+      const token = await currentUser.getIdToken(true);
 
-      const cost = calculateRequestCost(activeOfferRequest);
-
-      // Pre-check: verify request still exists and is active
-      const requestRef = doc(db, "requests", activeOfferRequest.id);
-      const requestSnap = await getDoc(requestRef);
-      if (!requestSnap.exists()) {
-        throw "Cererea nu mai există.";
-      }
-      const requestData = requestSnap.data();
-      if (requestData.archived) {
-        throw "Cererea a fost arhivată.";
-      }
-      if (requestData.status === "closed" || requestData.status === "cancelled") {
-        throw `Cererea este ${requestData.status === "closed" ? "închisă" : "anulată"}.`;
-      }
-
-      await runTransaction(db, async (transaction) => {
-        const companyRef = doc(db, "companies", company.uid);
-        const companyDoc = await transaction.get(companyRef);
-
-        if (!companyDoc.exists()) throw "Profilul companiei nu a fost găsit.";
-
-        const companyData = companyDoc.data();
-        if (companyData.verificationStatus !== "verified") {
-          throw "Contul tău trebuie să fie verificat (KYC) pentru a trimite oferte.";
-        }
-
-        const currentCredits = Number(companyData.credits) || 0;
-        if (currentCredits < cost) {
-          throw `Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${currentCredits}.`;
-        }
-
-        // Deduct credits (ensure numeric type for Firestore rules compatibility)
-        transaction.update(companyRef, { credits: Math.round(currentCredits - cost) });
-
-        // Create Offer
-        const offerRef = doc(
-          collection(db, "requests", activeOfferRequest.id, "offers"),
-        );
-        const newOfferId = offerRef.id;
-
-        transaction.set(offerRef, {
+      const response = await fetch("/api/offers/place", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
           requestId: activeOfferRequest.id,
-          requestCode:
-            activeOfferRequest.requestCode || activeOfferRequest.id,
-          companyId: company.uid,
-          companyName:
-            companyData.companyName || company.displayName || "Companie",
-          companyLogo: companyData.logoUrl || companyData.photoURL || "/pics/default-company.svg",
-          companyPhone: companyData.phone || null,
-          companyEmail: companyData.email || company.email || null,
-          price: price,
-          message: message,
-          status: "pending",
-          createdAt: serverTimestamp(),
-          costPaid: cost,
-          // Refund tracking
-          refunded: false,
-          refundEligibleAt: new Date(Date.now() + 72 * 60 * 60 * 1000), // 72 hours from now
-        });
-
-        // Record Transaction
-        const txRef = doc(
-          collection(db, "companies", company.uid, "transactions"),
-        );
-        transaction.set(txRef, {
-          type: "offer_placement",
-          amount: -cost,
-          requestId: activeOfferRequest.id,
-          description: `Ofertă pentru cererea ${activeOfferRequest.requestCode || activeOfferRequest.id}`,
-          createdAt: serverTimestamp(),
-        });
-
-        return newOfferId;
+          price,
+          message,
+        }),
       });
 
-      // Send email notification to customer
-      const customerEmail =
-        activeOfferRequest.customerEmail ||
-        activeOfferRequest.guestEmail;
-      if (customerEmail) {
-        try {
-          const response = await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              type: 'newOffer',
-              data: {
-                customerEmail,
-                requestCode:
-                  activeOfferRequest.requestCode || activeOfferRequest.id,
-                requestId: activeOfferRequest.id,
-                companyName: company.displayName || "Companie",
-                companyMessage: message,
-                price: price,
-                fromCity: activeOfferRequest.fromCity,
-                toCity: activeOfferRequest.toCity,
-                moveDate:
-                  activeOfferRequest.moveDate ||
-                  activeOfferRequest.moveDateStart,
-              },
-            }),
-          });
-          if (!response.ok) {
-            logger.error("Offer email API returned error:", await response.text());
-          }
-        } catch (emailErr) {
-          logger.error("Failed to send offer notification email:", emailErr);
-          // Don't fail the whole operation just because email failed
-        }
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw result.error || "Eroare la trimiterea ofertei.";
       }
 
-      // Success
+      // Success — optimistic update
       setHasMineMap((prev) => ({
         ...prev,
-        [activeOfferRequest.id]: { offerId: "temp", status: "pending" },
-      })); // Optimistic update
-      // Refresh actual ID via quick check or just use true for now
+        [activeOfferRequest.id]: { offerId: result.offerId || "temp", status: "pending" },
+      }));
       checkMyOffers([activeOfferRequest], company.uid);
-    } catch (err: any) {
+    } catch (err: unknown) {
       logger.error("Failed to place offer", err);
-      let msg = "Eroare la trimiterea ofertei";
-      if (typeof err === "string") {
-        msg = err;
-      } else if (err?.code === "permission-denied" || err?.message?.includes("permissions")) {
-        msg = "Permisiuni insuficiente. Încearcă să te deloghezi și să te loghezi din nou.";
-      } else if (err?.message) {
-        msg = err.message;
-      }
+      const msg = typeof err === "string" ? err : (err instanceof Error ? err.message : "Eroare la trimiterea ofertei.");
       alert(msg);
     } finally {
       setSubmittingOffer(false);
-      // Modal closes automatically via onConfirm unless we want to keep it open?
-      // OfferModal doesn't have controlled open state exposed but we used onClose in it.
-      // We passed onClose to Modal, which calls setActiveOfferRequest(null).
     }
   };
 
