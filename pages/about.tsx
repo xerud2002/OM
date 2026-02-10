@@ -15,7 +15,6 @@ import {
   BuildingOfficeIcon as Building2,
   HandRaisedIcon as Handshake,
   TrophyIcon as Award,
-  ChatBubbleLeftIcon as Quote,
   StarIcon as Star,
   PhoneIcon as Phone,
 } from "@heroicons/react/24/outline";
@@ -34,29 +33,33 @@ export default function AboutPage() {
       icon: Shield,
       title: "Transparență",
       desc: "Fără costuri ascunse, fără surprize. Toate informațiile sunt clare de la început.",
-      gradient: "from-blue-500 to-indigo-600",
-      bg: "bg-blue-50",
+      gradient: "linear-gradient(to bottom right, #3b82f6, #4f46e5)",
+      hoverGradient: "linear-gradient(to bottom right, rgba(59,130,246,0.05), rgba(79,70,229,0.05))",
+      decorGradient: "linear-gradient(to bottom right, rgba(59,130,246,0.1), rgba(79,70,229,0.1))",
     },
     {
       icon: Heart,
       title: "Încredere",
       desc: "Colaborăm doar cu firme verificate care respectă standarde ridicate de calitate.",
-      gradient: "from-rose-500 to-pink-600",
-      bg: "bg-rose-50",
+      gradient: "linear-gradient(to bottom right, #f43f5e, #db2777)",
+      hoverGradient: "linear-gradient(to bottom right, rgba(244,63,94,0.05), rgba(219,39,119,0.05))",
+      decorGradient: "linear-gradient(to bottom right, rgba(244,63,94,0.1), rgba(219,39,119,0.1))",
     },
     {
       icon: Clock,
       title: "Eficiență",
       desc: "Economisești timp prețios comparând oferte într-un singur loc, rapid și simplu.",
-      gradient: "from-emerald-500 to-teal-600",
-      bg: "bg-emerald-50",
+      gradient: "linear-gradient(to bottom right, #10b981, #0d9488)",
+      hoverGradient: "linear-gradient(to bottom right, rgba(16,185,129,0.05), rgba(13,148,136,0.05))",
+      decorGradient: "linear-gradient(to bottom right, rgba(16,185,129,0.1), rgba(13,148,136,0.1))",
     },
     {
       icon: TrendingUp,
       title: "Economie",
       desc: "Clienții noștri economisesc în medie 40% față de prima ofertă primită.",
-      gradient: "from-amber-500 to-orange-600",
-      bg: "bg-amber-50",
+      gradient: "linear-gradient(to bottom right, #f59e0b, #ea580c)",
+      hoverGradient: "linear-gradient(to bottom right, rgba(245,158,11,0.05), rgba(234,88,12,0.05))",
+      decorGradient: "linear-gradient(to bottom right, rgba(245,158,11,0.1), rgba(234,88,12,0.1))",
     },
   ];
 
@@ -82,14 +85,6 @@ export default function AboutPage() {
       desc: "Continuăm să construim încredere între clienți și firme, făcând mutările mai simple și mai sigure pentru toți.",
     },
   ];
-
-  const testimonial = {
-    quote:
-      "Am economisit peste 800 RON și am găsit o firmă excelentă în mai puțin de o zi. Recomand cu căldură!",
-    author: "Maria D.",
-    role: "Client din București",
-    rating: 5,
-  };
 
   return (
     <>
@@ -503,12 +498,14 @@ export default function AboutPage() {
                   >
                     {/* Hover gradient overlay */}
                     <div
-                      className={`absolute inset-0 bg-linear-to-br ${value.gradient} opacity-0 transition-opacity duration-300 group-hover:opacity-5`}
+                      className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 rounded-2xl"
+                      style={{ backgroundImage: value.hoverGradient }}
                     />
 
                     {/* Icon */}
                     <div
-                      className={`mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-linear-to-br ${value.gradient} shadow-lg transition-transform`}
+                      className="mb-5 flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg transition-transform"
+                      style={{ backgroundImage: value.gradient }}
                     >
                       <value.icon className="h-8 w-8 text-white" />
                     </div>
@@ -523,61 +520,13 @@ export default function AboutPage() {
 
                     {/* Decorative corner */}
                     <div
-                      className={`absolute -right-8 -bottom-8 h-24 w-24 rounded-full bg-linear-to-br ${value.gradient} opacity-10 blur-2xl transition-opacity group-hover:opacity-20`}
+                      className="absolute -right-8 -bottom-8 h-24 w-24 rounded-full blur-2xl transition-opacity group-hover:opacity-100"
+                      style={{ backgroundImage: value.decorGradient }}
                     />
                   </motion.div>
                 </motion.div>
               ))}
             </div>
-          </div>
-        </section>
-
-        {/* Testimonial Section - NEW */}
-        <section className="relative py-20 sm:py-28">
-          <div className="container mx-auto px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="relative mx-auto max-w-4xl overflow-hidden rounded-4xl bg-linear-to-br from-emerald-600 via-teal-600 to-sky-600 p-8 shadow-2xl sm:p-14"
-            >
-              {/* Background pattern */}
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-size-[30px_30px]" />
-
-              {/* Decorative elements */}
-              <div className="absolute -top-10 -left-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
-              <div className="absolute -right-10 -bottom-10 h-40 w-40 rounded-full bg-white/10 blur-3xl" />
-
-              <div className="relative text-center">
-                {/* Quote icon */}
-                <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/20 backdrop-blur-sm">
-                  <Quote className="h-8 w-8 text-white" />
-                </div>
-
-                {/* Quote */}
-                <blockquote className="mb-8 text-xl leading-relaxed font-medium text-white sm:text-2xl lg:text-3xl">
-                  &ldquo;{testimonial.quote}&rdquo;
-                </blockquote>
-
-                {/* Rating */}
-                <div className="mb-4 flex items-center justify-center gap-1">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-6 w-6 fill-amber-400 text-amber-400"
-                    />
-                  ))}
-                </div>
-
-                {/* Author */}
-                <div>
-                  <p className="text-lg font-bold text-white">
-                    {testimonial.author}
-                  </p>
-                  <p className="text-white/70">{testimonial.role}</p>
-                </div>
-              </div>
-            </motion.div>
           </div>
         </section>
 
@@ -629,7 +578,14 @@ export default function AboutPage() {
                         desc: "Monitorizăm constant feedback-ul și menținem standarde ridicate. Firmele cu recenzii negative sunt eliminate din platformă.",
                         gradient: "from-amber-500 to-orange-600",
                       },
-                    ].map((item, i) => (
+                    ].map((item, i) => {
+                      const gradientMap: Record<string, string> = {
+                        "from-emerald-500 to-teal-600": "linear-gradient(to bottom right, #10b981, #0d9488)",
+                        "from-sky-500 to-indigo-600": "linear-gradient(to bottom right, #0ea5e9, #4f46e5)",
+                        "from-amber-500 to-orange-600": "linear-gradient(to bottom right, #f59e0b, #ea580c)",
+                      };
+                      const bgGradient = gradientMap[item.gradient] || "linear-gradient(to bottom right, #10b981, #0d9488)";
+                      return (
                       <motion.div
                         key={i}
                         initial={{ opacity: 0, x: -30 }}
@@ -640,7 +596,8 @@ export default function AboutPage() {
                         className="group flex gap-5 rounded-2xl border border-slate-100 bg-white p-5 shadow-md transition-all hover:shadow-xl"
                       >
                         <div
-                          className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-linear-to-br ${item.gradient} shadow-lg transition-transform`}
+                          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl shadow-lg transition-transform"
+                          style={{ backgroundImage: bgGradient }}
                         >
                           <item.icon className="h-7 w-7 text-white" />
                         </div>
@@ -653,7 +610,8 @@ export default function AboutPage() {
                           </p>
                         </div>
                       </motion.div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </motion.div>
 
@@ -700,7 +658,10 @@ export default function AboutPage() {
                       >
                         <div className="rounded-2xl border border-amber-100 bg-white p-4 shadow-xl sm:p-5">
                           <div className="flex items-center gap-3">
-                            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-amber-500 to-orange-600 shadow-lg">
+                            <div
+                              className="flex h-12 w-12 items-center justify-center rounded-xl shadow-lg"
+                              style={{ backgroundImage: "linear-gradient(to bottom right, #f59e0b, #ea580c)" }}
+                            >
                               <Award className="h-6 w-6 text-white" />
                             </div>
                             <div>
