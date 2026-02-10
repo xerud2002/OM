@@ -422,29 +422,54 @@ export default function CustomerDashboard() {
       >
         {requests.length === 0 ? (
           // Welcome state for new users
-          <div className="space-y-6">
+          <div className="space-y-5">
             <CustomerWelcome userName={user?.displayName} />
             
-            {/* Empty state card */}
-            <div className="flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-white p-12 text-center">
-              <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl shadow-xl shadow-emerald-500/30" style={{ backgroundImage: "linear-gradient(to bottom right, #10b981, #14b8a6)" }}>
-                <InboxIcon className="h-10 w-10 text-white" />
+            {/* Empty state card with helpful info */}
+            <div className="overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
+              <div className="flex flex-col items-center justify-center p-8 sm:p-12 text-center">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl shadow-lg shadow-emerald-500/20" style={{ backgroundImage: "linear-gradient(to bottom right, #10b981, #14b8a6)" }}>
+                  <InboxIcon className="h-8 w-8 text-white" />
+                </div>
+                <h3 className="mt-5 text-lg font-bold text-gray-900">
+                  Nu ai încă nicio cerere de mutare
+                </h3>
+                <p className="mt-2 max-w-md text-sm text-gray-500">
+                  Creează o cerere și vei primi oferte de preț de la firme de mutări verificate din zona ta. Compari, discuți pe chat și alegi oferta care ți se potrivește.
+                </p>
+                <Link
+                  href="/"
+                  className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40 active:scale-[0.98]"
+                  style={{ backgroundImage: "linear-gradient(to right, #10b981, #14b8a6)" }}
+                >
+                  <DocumentPlusIcon className="h-5 w-5" />
+                  Creează prima cerere
+                  <ArrowRightIcon className="h-4 w-4" />
+                </Link>
               </div>
-              <h3 className="mt-6 text-xl font-bold text-gray-900">
-                Nu ai încă cereri
-              </h3>
-              <p className="mt-2 max-w-sm text-gray-500">
-                Creează o cerere pentru a primi oferte de la firme de mutări verificate.
-              </p>
-              <Link
-                href="/"
-                className="mt-6 inline-flex items-center gap-2 rounded-xl px-6 py-3 font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:shadow-emerald-500/40"
-                style={{ backgroundImage: "linear-gradient(to right, #10b981, #14b8a6)" }}
-              >
-                <DocumentPlusIcon className="h-5 w-5" />
-                Creează prima cerere
-                <ArrowRightIcon className="h-4 w-4" />
-              </Link>
+
+              {/* FAQ mini section */}
+              <div className="border-t border-gray-100 bg-gray-50/50 px-6 py-5 sm:px-8 sm:py-6">
+                <h4 className="text-sm font-bold text-gray-700 mb-3">Întrebări frecvente</h4>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">Cât costă serviciul?</p>
+                    <p className="mt-0.5 text-xs text-gray-500">Este complet gratuit pentru clienți. Nu plătești nimic pentru a primi oferte.</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">Cât de repede primesc oferte?</p>
+                    <p className="mt-0.5 text-xs text-gray-500">De obicei în primele ore, maxim 24h de la trimiterea cererii.</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">Sunt obligat să accept o ofertă?</p>
+                    <p className="mt-0.5 text-xs text-gray-500">Nu, nu ai nicio obligație. Poți refuza toate ofertele fără niciun cost.</p>
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-gray-800">Cum obțin cel mai bun preț?</p>
+                    <p className="mt-0.5 text-xs text-gray-500">Completează cât mai multe detalii și adaugă poze — firmele oferă prețuri mai exacte.</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         ) : (
