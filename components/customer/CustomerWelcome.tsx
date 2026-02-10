@@ -9,7 +9,6 @@ import {
   CheckBadgeIcon,
   ShieldCheckIcon,
   ArrowRightIcon,
-  GiftIcon,
   LightBulbIcon,
   CameraIcon,
   MapPinIcon,
@@ -26,12 +25,11 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
 
   return (
     <div className="space-y-5">
-      {/* Main welcome banner */}
+      {/* Welcome banner */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="overflow-hidden rounded-2xl p-6 sm:p-8 text-white shadow-lg"
-        style={{ backgroundImage: "linear-gradient(135deg, #059669, #10b981, #0d9488)" }}
+        className="overflow-hidden rounded-2xl bg-linear-to-br from-emerald-600 via-emerald-500 to-teal-500 p-6 sm:p-8 text-white shadow-lg"
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 sm:gap-4">
@@ -40,8 +38,8 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
             </div>
             <div>
               <h2 className="text-xl sm:text-2xl font-bold">Bine ai venit, {firstName}! 👋</h2>
-              <p className="mt-1 text-emerald-100 text-sm sm:text-base">
-                Primește oferte personalizate de la firme de mutări verificate — gratuit și fără obligații.
+              <p className="mt-1 text-sm sm:text-base text-emerald-100">
+                Primește oferte personalizate de la firme verificate — gratuit și fără obligații.
               </p>
             </div>
           </div>
@@ -55,98 +53,61 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
           )}
         </div>
 
-        {/* How it works - steps */}
-        <div className="mt-6 grid gap-3 sm:gap-4 sm:grid-cols-3">
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="flex items-start gap-3 rounded-xl bg-white/10 p-4 backdrop-blur-sm"
-          >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 text-sm font-bold">
-              1
-            </div>
-            <div>
-              <h3 className="font-semibold">Descrie mutarea</h3>
-              <p className="mt-0.5 text-sm text-emerald-100">
-                Completezi detaliile mutării tale — durează doar 2 minute.
-              </p>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="flex items-start gap-3 rounded-xl bg-white/10 p-4 backdrop-blur-sm"
-          >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 text-sm font-bold">
-              2
-            </div>
-            <div>
-              <h3 className="font-semibold">Primești oferte</h3>
-              <p className="mt-0.5 text-sm text-emerald-100">
-                Firmele verificate analizează cererea și îți trimit prețuri ferme.
-              </p>
-            </div>
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="flex items-start gap-3 rounded-xl bg-white/10 p-4 backdrop-blur-sm"
-          >
-            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 text-sm font-bold">
-              3
-            </div>
-            <div>
-              <h3 className="font-semibold">Alegi cea mai bună</h3>
-              <p className="mt-0.5 text-sm text-emerald-100">
-                Compari prețuri, recenzii și alegi firma care ți se potrivește.
-              </p>
-            </div>
-          </motion.div>
+        {/* How it works */}
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+          {[
+            { step: 1, title: "Descrie mutarea", desc: "Completezi detaliile mutării — durează doar 2 minute." },
+            { step: 2, title: "Primești oferte", desc: "Firmele verificate analizează cererea și trimit prețuri ferme." },
+            { step: 3, title: "Alegi cea mai bună", desc: "Compari prețuri, recenzii și alegi firma potrivită." },
+          ].map((item) => (
+            <motion.div
+              key={item.step}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: item.step * 0.1 }}
+              className="flex items-start gap-3 rounded-xl bg-white/10 p-4 backdrop-blur-sm"
+            >
+              <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/25 text-sm font-bold">
+                {item.step}
+              </div>
+              <div>
+                <h3 className="font-semibold">{item.title}</h3>
+                <p className="mt-0.5 text-sm text-emerald-100">{item.desc}</p>
+              </div>
+            </motion.div>
+          ))}
         </div>
 
-        {/* Benefits pills */}
-        <div className="mt-5 flex flex-wrap gap-2 sm:gap-3">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm backdrop-blur-sm">
-            <GiftIcon className="h-4 w-4" />
-            100% Gratuit
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm backdrop-blur-sm">
-            <ClockIcon className="h-4 w-4" />
-            Oferte în max. 24h
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm backdrop-blur-sm">
-            <ShieldCheckIcon className="h-4 w-4" />
-            Firme verificate
-          </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-sm backdrop-blur-sm">
-            <CheckBadgeIcon className="h-4 w-4" />
-            Fără obligații
-          </span>
-        </div>
-
-        {/* CTA */}
-        <div className="mt-6">
+        {/* Benefits + CTA inline */}
+        <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div className="flex flex-wrap gap-2">
+            {[
+              { icon: ClockIcon, label: "Oferte în max. 24h" },
+              { icon: ShieldCheckIcon, label: "Firme verificate" },
+              { icon: CheckBadgeIcon, label: "Fără obligații" },
+            ].map((b) => (
+              <span key={b.label} className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1.5 text-xs sm:text-sm backdrop-blur-sm">
+                <b.icon className="h-3.5 w-3.5" />
+                {b.label}
+              </span>
+            ))}
+          </div>
           <Link
-            href="/"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-6 py-3 font-semibold text-emerald-700 shadow-sm transition-all hover:bg-emerald-50 hover:shadow-md active:scale-[0.98]"
+            href="/customer/cerere-noua"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-2.5 font-semibold text-emerald-700 shadow-sm transition-all hover:bg-emerald-50 hover:shadow-md active:scale-[0.98] shrink-0"
           >
             <DocumentPlusIcon className="h-5 w-5" />
-            Trimite prima cerere
+            Creează cerere
             <ArrowRightIcon className="h-4 w-4" />
           </Link>
         </div>
       </motion.div>
 
-      {/* Tips card - advising accurate info for better pricing */}
+      {/* Tips for better pricing */}
       <motion.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3 }}
+        transition={{ delay: 0.35 }}
         className="rounded-2xl border border-amber-200 bg-amber-50 p-5 sm:p-6"
       >
         <div className="flex items-center gap-2.5 mb-4">
@@ -154,40 +115,49 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
             <LightBulbIcon className="h-5 w-5 text-amber-600" />
           </div>
           <div>
-            <h3 className="font-bold text-gray-900">Sfat: Detaliile contează!</h3>
-            <p className="text-sm text-amber-700">Cu cât oferi mai multe informații, cu atât prețul va fi mai aproape de realitate.</p>
+            <h3 className="font-bold text-gray-900">Cum obții cel mai bun preț?</h3>
+            <p className="text-sm text-amber-700">Cu cât oferi mai multe detalii, cu atât prețul primit va fi mai aproape de cel real.</p>
           </div>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <div className="flex items-start gap-2.5 rounded-xl bg-white p-3 shadow-sm">
-            <MapPinIcon className="mt-0.5 h-5 w-5 shrink-0 text-emerald-500" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Adrese exacte</p>
-              <p className="mt-0.5 text-xs text-gray-500">Strada, număr, etaj, scara — firmele calculează distanța și efortul</p>
+          {[
+            { icon: MapPinIcon, color: "text-emerald-500", title: "Adrese exacte", desc: "Strada, număr, etaj, scara — firmele calculează distanța și efortul" },
+            { icon: CubeIcon, color: "text-blue-500", title: "Lista obiectelor", desc: "Menționează mobilierul mare, electrocasnicele și obiectele fragile" },
+            { icon: CameraIcon, color: "text-purple-500", title: "Adaugă poze", desc: "Fotografiile ajută firmele să estimeze volumul mult mai precis" },
+            { icon: ClockIcon, color: "text-orange-500", title: "Data flexibilă?", desc: "Dacă ai flexibilitate, menționează — poți primi prețuri mai bune" },
+          ].map((tip) => (
+            <div key={tip.title} className="flex items-start gap-2.5 rounded-xl bg-white p-3 shadow-sm">
+              <tip.icon className={`mt-0.5 h-5 w-5 shrink-0 ${tip.color}`} />
+              <div>
+                <p className="text-sm font-semibold text-gray-800">{tip.title}</p>
+                <p className="mt-0.5 text-xs text-gray-500">{tip.desc}</p>
+              </div>
             </div>
-          </div>
-          <div className="flex items-start gap-2.5 rounded-xl bg-white p-3 shadow-sm">
-            <CubeIcon className="mt-0.5 h-5 w-5 shrink-0 text-blue-500" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Lista obiectelor</p>
-              <p className="mt-0.5 text-xs text-gray-500">Menționează mobilierul mare, electrocasnicele și obiectele fragile</p>
+          ))}
+        </div>
+      </motion.div>
+
+      {/* FAQ */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.45 }}
+        className="rounded-2xl border border-gray-200 bg-white p-5 sm:p-6"
+      >
+        <h4 className="text-sm font-bold text-gray-700 mb-3">Întrebări frecvente</h4>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {[
+            { q: "Cât costă serviciul?", a: "Este complet gratuit pentru clienți. Nu plătești nimic pentru a primi oferte." },
+            { q: "Cât de repede primesc oferte?", a: "De obicei în primele ore, maxim 24h de la trimiterea cererii." },
+            { q: "Sunt obligat să accept o ofertă?", a: "Nu, nu ai nicio obligație. Poți refuza toate ofertele fără cost." },
+            { q: "Cum obțin prețuri mai exacte?", a: "Completează cât mai multe detalii și adaugă fotografii ale obiectelor." },
+          ].map((faq) => (
+            <div key={faq.q}>
+              <p className="text-sm font-medium text-gray-800">{faq.q}</p>
+              <p className="mt-0.5 text-xs text-gray-500">{faq.a}</p>
             </div>
-          </div>
-          <div className="flex items-start gap-2.5 rounded-xl bg-white p-3 shadow-sm">
-            <CameraIcon className="mt-0.5 h-5 w-5 shrink-0 text-purple-500" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Adaugă poze</p>
-              <p className="mt-0.5 text-xs text-gray-500">Fotografiile ajută firmele să estimeze volumul mult mai precis</p>
-            </div>
-          </div>
-          <div className="flex items-start gap-2.5 rounded-xl bg-white p-3 shadow-sm">
-            <ClockIcon className="mt-0.5 h-5 w-5 shrink-0 text-orange-500" />
-            <div>
-              <p className="text-sm font-semibold text-gray-800">Data flexibilă?</p>
-              <p className="mt-0.5 text-xs text-gray-500">Dacă ai flexibilitate, menționează — poți primi prețuri mai bune</p>
-            </div>
-          </div>
+          ))}
         </div>
       </motion.div>
     </div>
