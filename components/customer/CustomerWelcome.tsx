@@ -39,7 +39,7 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
             <div>
               <h2 className="text-xl sm:text-2xl font-bold">Bine ai venit, {firstName}! 👋</h2>
               <p className="mt-1 text-sm sm:text-base text-emerald-100">
-                Primește oferte personalizate de la firme verificate — gratuit și fără obligații.
+                Primește oferte personalizate de la firme verificate, gratuit și fără obligații.
               </p>
             </div>
           </div>
@@ -56,7 +56,7 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
         {/* How it works */}
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           {[
-            { step: 1, title: "Descrie mutarea", desc: "Completezi detaliile mutării — durează doar 2 minute." },
+            { step: 1, title: "Descrie mutarea", desc: "Completezi detaliile mutării, durează doar 2 minute." },
             { step: 2, title: "Primești oferte", desc: "Firmele verificate analizează cererea și trimit prețuri ferme." },
             { step: 3, title: "Alegi cea mai bună", desc: "Compari prețuri, recenzii și alegi firma potrivită." },
           ].map((item) => (
@@ -122,10 +122,10 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: MapPinIcon, color: "text-emerald-500", title: "Adrese exacte", desc: "Strada, număr, etaj, scara — firmele calculează distanța și efortul" },
+            { icon: MapPinIcon, color: "text-emerald-500", title: "Adrese exacte", desc: "Strada, număr, etaj, scara. Firmele calculează distanța și efortul" },
             { icon: CubeIcon, color: "text-blue-500", title: "Lista obiectelor", desc: "Menționează mobilierul mare, electrocasnicele și obiectele fragile" },
             { icon: CameraIcon, color: "text-purple-500", title: "Adaugă poze", desc: "Fotografiile ajută firmele să estimeze volumul mult mai precis" },
-            { icon: ClockIcon, color: "text-orange-500", title: "Data flexibilă?", desc: "Dacă ai flexibilitate, menționează — poți primi prețuri mai bune" },
+            { icon: ClockIcon, color: "text-orange-500", title: "Data flexibilă?", desc: "Dacă ai flexibilitate, menționează. Poți primi prețuri mai bune" },
           ].map((tip) => (
             <div key={tip.title} className="flex items-start gap-2.5 rounded-xl bg-white p-3 shadow-sm">
               <tip.icon className={`mt-0.5 h-5 w-5 shrink-0 ${tip.color}`} />
