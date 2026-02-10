@@ -917,193 +917,209 @@ export default function RequestsView({
 
   return (
     <div>
-      {/* Filter Bar */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        {/* Filter Toggle Button */}
-        <button
-          onClick={() => setShowFilters(!showFilters)}
-          className={`flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition ${
-            showFilters || activeFiltersCount > 0
-              ? "border-blue-500 bg-blue-50 text-blue-700"
-              : "border-gray-200 bg-white text-gray-700 hover:bg-gray-50"
-          }`}
-        >
-          <FunnelIcon className="h-4 w-4" />
-          <span>Filtre</span>
-          {activeFiltersCount > 0 && (
-            <span className="flex h-5 w-5 items-center justify-center rounded-full bg-blue-600 text-xs text-white">
-              {activeFiltersCount}
-            </span>
+      {/* Top Bar: Search + Sort + Filter Toggle */}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        {/* Search - always visible */}
+        <div className="relative min-w-50 flex-1">
+          <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Caută oraș sau cod cerere..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-8 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery("")}
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            >
+              <XMarkIcon className="h-4 w-4" />
+            </button>
           )}
-          {showFilters ? (
-            <ChevronUpIcon className="h-4 w-4" />
-          ) : (
-            <ChevronDownIcon className="h-4 w-4" />
-          )}
-        </button>
+        </div>
 
         {/* Sort */}
         <select
           value={sortBy}
           onChange={(e) => setSortBy(e.target.value as "date-desc" | "date-asc")}
           aria-label="Sortare cereri"
-          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
+          className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
         >
           <option value="date-desc">Cele mai noi</option>
           <option value="date-asc">Cele mai vechi</option>
         </select>
+
+        {/* Filter Toggle */}
+        <button
+          onClick={() => setShowFilters(!showFilters)}
+          className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition ${
+            showFilters || activeFiltersCount > 0
+              ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+              : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
+          }`}
+        >
+          <FunnelIcon className="h-4 w-4" />
+          <span className="hidden sm:inline">Filtre</span>
+          {activeFiltersCount > 0 && (
+            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-600 px-1 text-xs text-white">
+              {activeFiltersCount}
+            </span>
+          )}
+          {showFilters ? (
+            <ChevronUpIcon className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronDownIcon className="h-3.5 w-3.5" />
+          )}
+        </button>
       </div>
 
-      {/* Expandable Filter Panel */}
+      {/* Compact Expandable Filters */}
       <AnimatePresence>
         {showFilters && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="mb-4 overflow-hidden"
+            transition={{ duration: 0.15 }}
+            className="mb-3 overflow-hidden"
           >
-            <div className="rounded-xl border border-gray-200 bg-gray-50 p-4">
-              {/* Search */}
-              <div className="mb-4">
-                <label className="mb-1.5 block text-xs font-medium text-gray-600">
-                  Căutare
-                </label>
-                <div className="relative">
-                  <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-                  <input
-                    type="text"
-                    placeholder="Caută după oraș sau cod cerere..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-10 pr-4 text-sm focus:border-blue-500 focus:outline-none"
-                  />
-                  {searchQuery && (
-                    <button
-                      onClick={() => setSearchQuery("")}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                    >
-                      <XMarkIcon className="h-4 w-4" />
-                    </button>
-                  )}
-                </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <select
+                value={filterService}
+                onChange={(e) => setFilterService(e.target.value)}
+                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+                  filterService ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                }`}
+              >
+                <option value="">Serviciu: Toate</option>
+                <option value="moving">Transport</option>
+                <option value="packing">Ambalare</option>
+                <option value="disassembly">Demontare</option>
+                <option value="storage">Depozitare</option>
+                <option value="piano">Pian</option>
+                <option value="cleanout">Debarasare</option>
+              </select>
+
+              <select
+                value={filterPropertyType}
+                onChange={(e) => setFilterPropertyType(e.target.value as any)}
+                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+                  filterPropertyType ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                }`}
+              >
+                <option value="">Proprietate: Oricare</option>
+                <option value="apartment">Apartament</option>
+                <option value="house">Casă</option>
+              </select>
+
+              <select
+                value={filterElevator}
+                onChange={(e) => setFilterElevator(e.target.value as any)}
+                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+                  filterElevator ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                }`}
+              >
+                <option value="">Lift: Oricare</option>
+                <option value="yes">Cu lift</option>
+                <option value="no">Fără lift</option>
+              </select>
+
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value as any)}
+                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+                  filterStatus ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                }`}
+              >
+                <option value="">Status: Toate</option>
+                <option value="available">Disponibile</option>
+                <option value="offered">Ofertate de mine</option>
+              </select>
+
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-gray-500">De la</span>
+                <input
+                  type="date"
+                  value={filterDateFrom}
+                  onChange={(e) => setFilterDateFrom(e.target.value)}
+                  className={`rounded-lg border px-2.5 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+                    filterDateFrom ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                  }`}
+                />
+                <span className="text-xs text-gray-500">până la</span>
+                <input
+                  type="date"
+                  value={filterDateTo}
+                  onChange={(e) => setFilterDateTo(e.target.value)}
+                  className={`rounded-lg border px-2.5 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+                    filterDateTo ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                  }`}
+                />
               </div>
 
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
-                {/* Service Type */}
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
-                    Serviciu
-                  </label>
-                  <select
-                    value={filterService}
-                    onChange={(e) => setFilterService(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                  >
-                    <option value="">Toate serviciile</option>
-                    <option value="moving">Transport</option>
-                    <option value="packing">Ambalare</option>
-                    <option value="disassembly">Demontare</option>
-                    <option value="storage">Depozitare</option>
-                    <option value="piano">Pian</option>
-                    <option value="cleanout">Debarasare</option>
-                  </select>
-                </div>
-
-                {/* Property Type */}
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
-                    Tip proprietate
-                  </label>
-                  <select
-                    value={filterPropertyType}
-                    onChange={(e) =>
-                      setFilterPropertyType(e.target.value as any)
-                    }
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                  >
-                    <option value="">Oricare</option>
-                    <option value="apartment">Apartament</option>
-                    <option value="house">Casă</option>
-                  </select>
-                </div>
-
-                {/* Elevator */}
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
-                    Lift
-                  </label>
-                  <select
-                    value={filterElevator}
-                    onChange={(e) => setFilterElevator(e.target.value as any)}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                  >
-                    <option value="">Oricare</option>
-                    <option value="yes">Cu lift</option>
-                    <option value="no">Fără lift</option>
-                  </select>
-                </div>
-
-                {/* Status */}
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
-                    Status ofertă
-                  </label>
-                  <select
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value as any)}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                  >
-                    <option value="">Toate</option>
-                    <option value="available">Disponibile</option>
-                    <option value="offered">Ofertate de mine</option>
-                  </select>
-                </div>
-
-                {/* Date From */}
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
-                    Data mutării de la
-                  </label>
-                  <input
-                    type="date"
-                    value={filterDateFrom}
-                    onChange={(e) => setFilterDateFrom(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                  />
-                </div>
-
-                {/* Date To */}
-                <div>
-                  <label className="mb-1.5 block text-xs font-medium text-gray-600">
-                    Data mutării până la
-                  </label>
-                  <input
-                    type="date"
-                    value={filterDateTo}
-                    onChange={(e) => setFilterDateTo(e.target.value)}
-                    className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Clear Filters */}
               {activeFiltersCount > 0 && (
-                <div className="mt-4 flex justify-end">
-                  <button
-                    onClick={clearAllFilters}
-                    className="flex items-center gap-1 text-sm text-gray-500 hover:text-gray-700"
-                  >
-                    <XMarkIcon className="h-4 w-4" />
-                    Șterge toate filtrele
-                  </button>
-                </div>
+                <button
+                  onClick={clearAllFilters}
+                  className="ml-auto flex items-center gap-1 rounded-lg px-2.5 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                >
+                  <XMarkIcon className="h-3.5 w-3.5" />
+                  Resetează
+                </button>
               )}
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Active Filter Chips */}
+      {activeFiltersCount > 0 && !showFilters && (
+        <div className="mb-3 flex flex-wrap items-center gap-1.5">
+          <span className="text-xs text-gray-400 mr-1">Filtre active:</span>
+          {searchQuery && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              &quot;{searchQuery}&quot;
+              <button onClick={() => setSearchQuery("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+            </span>
+          )}
+          {filterService && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              {{moving:"Transport",packing:"Ambalare",disassembly:"Demontare",storage:"Depozitare",piano:"Pian",cleanout:"Debarasare"}[filterService] || filterService}
+              <button onClick={() => setFilterService("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+            </span>
+          )}
+          {filterPropertyType && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              {filterPropertyType === "apartment" ? "Apartament" : "Casă"}
+              <button onClick={() => setFilterPropertyType("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+            </span>
+          )}
+          {filterElevator && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              {filterElevator === "yes" ? "Cu lift" : "Fără lift"}
+              <button onClick={() => setFilterElevator("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+            </span>
+          )}
+          {filterStatus && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              {filterStatus === "available" ? "Disponibile" : "Ofertate de mine"}
+              <button onClick={() => setFilterStatus("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+            </span>
+          )}
+          {(filterDateFrom || filterDateTo) && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              {filterDateFrom && filterDateTo ? `${filterDateFrom} - ${filterDateTo}` : filterDateFrom ? `De la ${filterDateFrom}` : `Până la ${filterDateTo}`}
+              <button onClick={() => { setFilterDateFrom(""); setFilterDateTo(""); }} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+            </span>
+          )}
+          <button
+            onClick={clearAllFilters}
+            className="text-xs text-gray-400 hover:text-gray-600 ml-1"
+          >
+            Șterge tot
+          </button>
+        </div>
+      )}
 
       {loading ? (
         <div className="flex justify-center py-12">

@@ -9,7 +9,6 @@ import {
   updateProfile,
   sendPasswordResetEmail,
   fetchSignInMethodsForEmail,
-  EmailAuthProvider,
   GoogleAuthProvider,
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
@@ -83,7 +82,7 @@ export function isLogoutInProgress() {
 // Welcome credits for new companies:
 // 50 credits = 1 free offer to test the platform
 // This creates scarcity and urgency to purchase more
-const COMPANY_WELCOME_CREDITS = 50;
+const COMPANY_WELCOME_CREDITS = 100;
 
 export async function ensureUserProfile(u: User, role: UserRole) {
   const col = COLLECTIONS[role];
@@ -150,7 +149,7 @@ export async function getUserRole(u: User): Promise<UserRole | "admin" | null> {
   try {
     const admin = await getDoc(doc(db, COLLECTIONS.admin, u.uid));
     if (admin.exists()) return "admin";
-  } catch (err) {
+  } catch {
     // If permission denied (e.g. rules not updated yet), ignore and proceed
     // This prevents the app from crashing/showing error toast just for checking admin
   }

@@ -42,6 +42,10 @@ body {
   @apply bg-linear-to-br from-emerald-600 via-emerald-500 to-teal-500;
 }
 
+.gradient-emerald-icon {
+  @apply bg-linear-to-br from-emerald-400 to-teal-500;
+}
+
 .gradient-emerald-light {
   @apply bg-linear-to-br from-emerald-50 to-teal-50;
 }

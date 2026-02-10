@@ -40,6 +40,7 @@ import {
   InformationCircleIcon,
   TruckIcon,
   ChatBubbleLeftRightIcon,
+  RocketLaunchIcon,
 } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 import LoadingSpinner, {
@@ -282,6 +283,14 @@ export default function CompanyDashboard() {
   // Header actions (credits + notifications)
   const headerActions = (
     <div className="flex items-center gap-3">
+      <button
+        onClick={() => setShowOnboarding(true)}
+        title="Ghid de start"
+        className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-100"
+      >
+        <RocketLaunchIcon className="h-4 w-4" />
+        <span className="hidden sm:inline">Ghid de start</span>
+      </button>
       {company && <CreditBalance companyId={company.uid} />}
       {company && <NotificationBell companyId={company.uid} />}
     </div>

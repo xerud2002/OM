@@ -139,7 +139,7 @@ function UserAvatar({ role, photoURL }: { role: DashboardRole; photoURL?: string
     return <Image src={photoURL} alt={role === "company" ? "Logo" : "Avatar"} width={40} height={40} className="h-full w-full rounded-full object-cover" />;
   }
   if (role === "company") {
-    return <Image src="/pics/default-company.svg" alt="Logo" width={40} height={40} className="h-full w-full object-cover" />;
+    return <Image src="/pics/default-company.svg" alt="Logo" width={40} height={40} className="h-full w-full rounded-full object-cover" />;
   }
   if (role === "customer") {
     return <UserCircleIcon className="h-5 w-5 text-white" />;

@@ -122,7 +122,7 @@ export default function CerereNoua() {
 
                 {/* Form body */}
                 <div className="p-5">
-                  <HomeRequestForm />
+                  <HomeRequestForm user={user} />
                 </div>
               </div>
             </div>

@@ -661,7 +661,12 @@ function InlineRangeCalendar({
   );
 }
 
-export default function HomeRequestForm() {
+interface HomeRequestFormProps {
+  /** When provided (e.g. from customer dashboard), auto-fills contact fields */
+  user?: { displayName?: string; email?: string; phoneNumber?: string } | null;
+}
+
+export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps = {}) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -724,6 +729,26 @@ export default function HomeRequestForm() {
       }
     }
   }, []);
+
+  // Auto-fill contact fields from authenticated user (customer dashboard)
+  useEffect(() => {
+    if (!authUser) return;
+    setForm((prev) => {
+      const updates: Partial<FormShape> = {};
+      if (!prev.contactFirstName && !prev.contactLastName && authUser.displayName) {
+        const parts = authUser.displayName.trim().split(/\s+/);
+        updates.contactFirstName = parts[0] || "";
+        updates.contactLastName = parts.slice(1).join(" ") || "";
+      }
+      if (!prev.email && authUser.email) {
+        updates.email = authUser.email;
+      }
+      if (!prev.phone && authUser.phoneNumber) {
+        updates.phone = authUser.phoneNumber;
+      }
+      return Object.keys(updates).length > 0 ? { ...prev, ...updates } : prev;
+    });
+  }, [authUser]);
 
   // Save form to localStorage on change
   useEffect(() => {

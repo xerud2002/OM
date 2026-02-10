@@ -70,7 +70,7 @@ export default function OnboardingWizard({
     companyData?.serviceCounties || []
   );
 
-  const credits = companyData?.credits || 50;
+  const credits = companyData?.credits || 100;
 
   const toggleCounty = (county: string) => {
     setSelectedCounties((prev) =>
@@ -119,6 +119,10 @@ export default function OnboardingWizard({
       // Save profile data
       if (!companyName) {
         toast.error("Te rugăm să introduci numele firmei");
+        return;
+      }
+      if (!phone.trim()) {
+        toast.error("Te rugăm să introduci numărul de telefon");
         return;
       }
       await saveProgress(3, { companyName, phone, description });
@@ -232,7 +236,7 @@ export default function OnboardingWizard({
                 className="space-y-6 py-4"
               >
                 <div className="text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-white shadow-lg">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full gradient-emerald-icon text-white shadow-lg">
                     <SparklesIcon className="h-8 w-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">
@@ -250,10 +254,10 @@ export default function OnboardingWizard({
                     </div>
                     <div>
                       <h3 className="font-semibold text-emerald-900">
-                        {credits} credite cadou!
+                        🎁 100 credite cadou la verificare!
                       </h3>
                       <p className="text-sm text-emerald-700">
-                        Ai primit {credits} credite pentru a trimite prima ta ofertă gratuit.
+                        Verifică-ți contul și primești 100 credite gratuit ca să testezi platforma fără risc.
                       </p>
                     </div>
                   </div>
@@ -263,9 +267,9 @@ export default function OnboardingWizard({
                       <CurrencyDollarIcon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-blue-900">Plătești doar pentru rezultate</h3>
+                      <h3 className="font-semibold text-blue-900">Zero costuri fixe, plătești per ofertă</h3>
                       <p className="text-sm text-blue-700">
-                        Costul per ofertă: 30-50 credite (în funcție de zonă). 1 credit = 1 RON.
+                        Fără abonamente sau taxe lunare. Plătești doar când trimiți o ofertă și este vizualizată de client, începând de la 20 credite.
                       </p>
                     </div>
                   </div>
@@ -275,9 +279,9 @@ export default function OnboardingWizard({
                       <ShieldCheckIcon className="h-5 w-5" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-amber-900">Protecție refund</h3>
+                      <h3 className="font-semibold text-amber-900">Banii tăi sunt protejați</h3>
                       <p className="text-sm text-amber-700">
-                        Dacă clientul nu răspunde în 72h, primești creditele înapoi automat.
+                        Dacă clientul nu vizualizează oferta ta, creditele îți vor fi restituite.
                       </p>
                     </div>
                   </div>
@@ -285,7 +289,7 @@ export default function OnboardingWizard({
 
                 <div className="rounded-lg bg-gray-50 p-4 text-center">
                   <p className="text-sm text-gray-600">
-                    <strong>Cum funcționează:</strong> Clienții trimit cereri → Tu trimiți ofertă cu preț → Clientul acceptă → Faci jobul! 💪
+                    <strong>Simplu ca 1-2-3:</strong> Clientul trimite cererea → Tu trimiți oferta cu prețul tău → Clientul acceptă → Faci jobul! 💪
                   </p>
                 </div>
               </motion.div>
@@ -321,7 +325,7 @@ export default function OnboardingWizard({
 
                   <div>
                     <label className="mb-1.5 block text-sm font-semibold text-gray-700">
-                      Telefon de contact
+                      Telefon de contact <span className="text-red-500">*</span>
                     </label>
                     <input
                       type="tel"
@@ -436,12 +440,12 @@ export default function OnboardingWizard({
                 className="space-y-6 py-4"
               >
                 <div className="text-center">
-                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-emerald-400 to-teal-500 text-white shadow-lg">
+                  <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full gradient-emerald-icon text-white shadow-lg">
                     <RocketLaunchIcon className="h-8 w-8" />
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900">Ești gata de start!</h2>
                   <p className="mt-2 text-gray-600">
-                    Profilul tău este configurat. Acum poți vedea cererile și trimite oferte.
+                    Profilul tău este configurat. Acum poți vedea cererile.
                   </p>
                 </div>
 
@@ -468,8 +472,8 @@ export default function OnboardingWizard({
                   </div>
                 </div>
 
-                <div className="rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 p-4 text-center text-white">
-                  <p className="font-semibold">🎁 Ofertă prima achiziție</p>
+                <div className="rounded-xl gradient-emerald-r p-4 text-center text-white">
+                  <p className="font-semibold"> Ofertă prima achiziție</p>
                   <p className="text-sm opacity-90 mt-1">
                     199 RON → 300 credite (+50% bonus)
                   </p>
