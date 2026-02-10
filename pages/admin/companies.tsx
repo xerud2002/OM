@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { logger } from "@/utils/logger";
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -76,6 +76,31 @@ export default function AdminCompanies() {
         verified: true,
         verifiedAt: serverTimestamp(),
       });
+
+      // Auto-create 5-star welcome review (only if company has no reviews yet)
+      try {
+        const companySnap = await getDoc(doc(db, "companies", companyId));
+        const data = companySnap.data();
+        if (!data?.totalReviews || data.totalReviews === 0) {
+          await addDoc(collection(db, "reviews"), {
+            companyId,
+            requestId: null,
+            customerName: "Echipa Ofertemutare",
+            customerId: "system",
+            rating: 5,
+            comment: "Vă mulțumim că v-ați înscris pe platforma noastră! Vă urăm mult succes și spor la câștiguri! 🚚",
+            createdAt: serverTimestamp(),
+            status: "published",
+            isWelcomeReview: true,
+          });
+          await updateDoc(doc(db, "companies", companyId), {
+            averageRating: 5.0,
+            totalReviews: 1,
+          });
+        }
+      } catch (reviewErr) {
+        logger.warn("Could not create welcome review:", reviewErr);
+      }
     } catch (err) {
       logger.error("Failed to verify", err);
       alert("Eroare la verificare");

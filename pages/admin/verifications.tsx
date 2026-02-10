@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { logger } from "@/utils/logger";
-import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "firebase/firestore";
+import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, addDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/services/firebase";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
@@ -51,6 +51,27 @@ export default function AdminVerifications() {
         verifiedAt: serverTimestamp(),
         rejectionReason: null
       });
+
+      // Auto-create 5-star welcome review from platform
+      try {
+        await addDoc(collection(db, "reviews"), {
+          companyId,
+          requestId: null,
+          customerName: "Echipa Ofertemutare",
+          customerId: "system",
+          rating: 5,
+          comment: "Vă mulțumim că v-ați înscris pe platforma noastră! Vă urăm mult succes și spor la câștiguri! 🚚",
+          createdAt: serverTimestamp(),
+          status: "published",
+          isWelcomeReview: true,
+        });
+        await updateDoc(doc(db, "companies", companyId), {
+          averageRating: 5.0,
+          totalReviews: 1,
+        });
+      } catch (reviewErr) {
+        logger.warn("Could not create welcome review:", reviewErr);
+      }
     } catch (e) {
       logger.error("Failed to approve verification", e);
       alert("Eroare la aprovare");
