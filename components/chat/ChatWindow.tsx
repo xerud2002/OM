@@ -6,7 +6,6 @@ import {
   query,
   orderBy,
   onSnapshot,
-  addDoc,
   serverTimestamp,
   limitToLast,
   doc,
@@ -260,20 +259,27 @@ export default function ChatWindow({
         setUploadProgress(0);
       }
 
-      const msgData: Record<string, unknown> = {
-        text: text || "",
-        senderId: auth.currentUser.uid,
-        senderRole: currentUserRole,
-        createdAt: serverTimestamp(),
-      };
-      if (attachment) {
-        msgData.attachment = attachment;
-      }
+      // Send via server API to bypass Firestore rules
+      const token = await auth.currentUser.getIdToken();
+      const response = await fetch("/api/chat/send", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          requestId,
+          offerId,
+          text: text || "",
+          senderRole: currentUserRole,
+          attachment: attachment || undefined,
+        }),
+      });
 
-      await addDoc(
-        collection(db, "requests", requestId, "offers", offerId, "messages"),
-        msgData
-      );
+      if (!response.ok) {
+        const result = await response.json();
+        throw new Error(result.error || "Eroare la trimiterea mesajului");
+      }
     } catch (err) {
       logger.error("Error sending message:", err);
       import("sonner").then(({ toast }) =>
