@@ -29,7 +29,7 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
-        className="overflow-hidden rounded-2xl bg-linear-to-br from-emerald-600 via-emerald-500 to-teal-500 p-6 sm:p-8 text-white shadow-lg"
+        className="overflow-hidden rounded-2xl gradient-emerald p-6 sm:p-8 text-white shadow-lg"
       >
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3 sm:gap-4">

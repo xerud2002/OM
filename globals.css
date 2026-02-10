@@ -37,6 +37,27 @@ body {
   @apply inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-400 px-5 py-2 font-medium text-emerald-700 transition-all hover:bg-emerald-50;
 }
 
+/* Reusable gradient backgrounds */
+.gradient-emerald {
+  @apply bg-linear-to-br from-emerald-600 via-emerald-500 to-teal-500;
+}
+
+.gradient-emerald-light {
+  @apply bg-linear-to-br from-emerald-50 to-teal-50;
+}
+
+.gradient-emerald-r {
+  @apply bg-linear-to-r from-emerald-500 to-teal-500;
+}
+
+.gradient-gray-r {
+  @apply bg-linear-to-r from-gray-50 to-white;
+}
+
+.gradient-emerald-b {
+  @apply bg-linear-to-b from-emerald-50/50 to-white;
+}
+
 input:not([type="checkbox"]):not([type="radio"]),
 select,
 textarea {

@@ -428,7 +428,7 @@ export default function CustomerDashboard() {
             {/* Requests sidebar */}
             <aside className="md:col-span-5 lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                <div className="flex items-center justify-between border-b border-gray-100 bg-linear-to-r from-gray-50 to-white px-4 py-3 sm:px-5 sm:py-4">
+                <div className="flex items-center justify-between border-b border-gray-100 gradient-gray-r px-4 py-3 sm:px-5 sm:py-4">
                   <div>
                     <h3 className="text-sm font-bold text-gray-900">
                       Cererile tale
@@ -499,7 +499,7 @@ export default function CustomerDashboard() {
                             onClick={() => setSelectedRequestId(req.id)}
                             className={`group relative w-full rounded-xl p-3 sm:p-4 text-left transition-all active:scale-[0.98] ${
                               isSelected
-                                ? "bg-linear-to-r from-emerald-50 to-teal-50 shadow-sm ring-1 ring-emerald-200"
+                                ? "gradient-emerald-light shadow-sm ring-1 ring-emerald-200"
                                 : "hover:bg-gray-50 active:bg-gray-100"
                             }`}
                           >
@@ -620,7 +620,7 @@ export default function CustomerDashboard() {
 
                     {selectedOffers.length === 0 ? (
                       <div className="p-6 sm:p-10 text-center">
-                        <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl bg-linear-to-br from-emerald-50 to-teal-50">
+                        <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl gradient-emerald-light">
                           <svg className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-400" viewBox="0 0 48 48" fill="none">
                             <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" opacity="0.5" />
                             <path d="M16 28l4-4 4 4 8-8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -729,7 +729,7 @@ export default function CustomerDashboard() {
 
                     {/* Actions for closed requests */}
                     {selectedRequest.status === "closed" && (
-                      <div className="p-4 sm:p-6 bg-linear-to-b from-emerald-50/50 to-white">
+                      <div className="p-4 sm:p-6 gradient-emerald-b">
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                           <button
                             onClick={() => handleReactivate(selectedRequest.id)}
