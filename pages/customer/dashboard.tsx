@@ -623,7 +623,7 @@ export default function CustomerDashboard() {
                         </div>
                       </div>
                     ) : (
-                      <div className="divide-y divide-gray-100">
+                      <div className="grid grid-cols-1 gap-4 p-4 sm:grid-cols-2 xl:grid-cols-3">
                         {selectedOffers.map((offer, idx) => (
                           <OfferCard
                             key={offer.id}
@@ -878,142 +878,120 @@ function OfferCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className={`relative p-4 sm:p-6 transition-colors ${
-        isDeclined
-          ? "bg-gray-50/50"
-          : isAccepted
-            ? "bg-emerald-50/30"
-            : "hover:bg-gray-50/50"
+      className={`relative flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-md ${
+        isAccepted
+          ? "border-emerald-200 ring-2 ring-emerald-500/20"
+          : isDeclined
+            ? "border-gray-200 opacity-70"
+            : "border-gray-200"
       }`}
     >
-      {/* Accepted indicator */}
-      {isAccepted && (
-        <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500" />
-      )}
+      {/* Top status bar */}
+      <div className={`h-1 w-full ${
+        isAccepted ? "bg-emerald-500" : isDeclined ? "bg-gray-300" : "bg-blue-500"
+      }`} />
 
-      <div className="flex flex-col gap-4 sm:gap-5 sm:flex-row sm:items-start sm:justify-between">
-        {/* Company info */}
-        <div className="flex items-start gap-3 sm:gap-4">
-          {/* Logo column with contact info */}
-          <div className="flex flex-col items-center gap-2">
-            <div
-              className={`relative flex h-12 w-12 sm:h-14 sm:w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl sm:rounded-2xl shadow-lg ${
-                isAccepted
-                  ? "shadow-emerald-500/30 ring-2 ring-emerald-500"
-                  : isDeclined
-                    ? "shadow-gray-400/30"
-                    : "shadow-blue-500/30"
-              }`}
-            >
-              {offer.companyLogo ? (
-                <Image
-                  src={offer.companyLogo}
-                  alt={offer.companyName || "Logo companie"}
-                  width={56}
-                  height={56}
-                  className="h-full w-full object-cover"
-                />
-              ) : (
-                <Image
-                  src="/pics/default-company.svg"
-                  alt="Logo companie"
-                  width={56}
-                  height={56}
-                  className={`h-full w-full object-cover ${isDeclined ? "opacity-50 grayscale" : ""}`}
-                />
-              )}
-              {isAccepted && (
-                <div className="absolute -bottom-1 -right-1 rounded-full bg-white p-0.5">
-                  <CheckCircleSolid className="h-4 w-4 sm:h-5 sm:w-5 text-emerald-500" />
-                </div>
-              )}
-            </div>
+      {/* Card body */}
+      <div className="flex flex-1 flex-col p-4">
+        {/* Logo + Company name */}
+        <div className="mb-3 flex items-center gap-3">
+          <div
+            className={`relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-sm ${
+              isAccepted
+                ? "ring-2 ring-emerald-500"
+                : isDeclined
+                  ? "grayscale"
+                  : ""
+            }`}
+          >
+            <Image
+              src={offer.companyLogo || "/pics/default-company.svg"}
+              alt={offer.companyName || "Logo companie"}
+              width={40}
+              height={40}
+              className="h-full w-full object-cover"
+            />
+            {isAccepted && (
+              <div className="absolute -bottom-0.5 -right-0.5 rounded-full bg-white p-0.5">
+                <CheckCircleSolid className="h-3.5 w-3.5 text-emerald-500" />
+              </div>
+            )}
           </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <p
-                className={`text-base sm:text-lg font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}
-              >
-                {offer.companyName}
-              </p>
-              {isAccepted && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-emerald-700">
-                  Acceptată
-                </span>
-              )}
-              {isDeclined && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 text-[10px] sm:text-xs font-semibold text-gray-500">
-                  Refuzată
-                </span>
-              )}
-            </div>
-            <p className="mt-0.5 text-xs sm:text-sm text-gray-500">
+          <div className="min-w-0 flex-1">
+            <p className={`truncate text-sm font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}>
+              {offer.companyName}
+            </p>
+            <p className="text-xs text-gray-500">
               {offer.createdAt?.toDate?.()
-                ? `Primită pe ${formatDateRO(offer.createdAt, { month: "short" })}`
+                ? formatDateRO(offer.createdAt, { month: "short" })
                 : "Ofertă nouă"}
             </p>
           </div>
+          {isAccepted && (
+            <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+              Acceptată
+            </span>
+          )}
+          {isDeclined && (
+            <span className="shrink-0 rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-semibold text-gray-500">
+              Refuzată
+            </span>
+          )}
         </div>
 
-        {/* Price and actions */}
-        <div className="flex flex-col items-start sm:items-end gap-3 sm:gap-4 sm:min-w-45">
-          <div className="sm:text-right">
-            <p className="text-[10px] sm:text-xs font-medium uppercase tracking-wider text-gray-400">
-              Preț ofertat
-            </p>
-            <p
-              className={`mt-0.5 sm:mt-1 text-3xl sm:text-4xl font-bold ${
-                isAccepted
-                  ? "text-emerald-600"
-                  : isDeclined
-                    ? "text-gray-400"
-                    : "text-gray-900"
-              }`}
-            >
-              {offer.price}
-              <span className="ml-1 text-base sm:text-lg font-medium text-gray-400">
-                lei
-              </span>
-            </p>
-          </div>
+        {/* Price - centered, prominent */}
+        <div className="mb-4 text-center">
+          <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
+            Preț ofertat
+          </p>
+          <p
+            className={`mt-0.5 text-2xl font-bold ${
+              isAccepted
+                ? "text-emerald-600"
+                : isDeclined
+                  ? "text-gray-400"
+                  : "text-gray-900"
+            }`}
+          >
+            {offer.price}
+            <span className="ml-1 text-sm font-medium text-gray-400">lei</span>
+          </p>
+        </div>
 
+        {/* Actions - at the bottom */}
+        <div className="mt-auto space-y-2">
           {isPending && (
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
+            <div className="flex gap-2">
               <button
                 onClick={() => onAccept(requestId, offer.id)}
-                className="inline-flex items-center justify-center gap-1.5 sm:gap-2 rounded-xl bg-emerald-600 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-emerald-500/20 transition hover:bg-emerald-700 active:bg-emerald-800"
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
               >
-                <CheckCircleIcon className="h-4 w-4" />
+                <CheckCircleIcon className="h-3.5 w-3.5" />
                 Acceptă
               </button>
               <button
                 onClick={() => onDecline(requestId, offer.id)}
-                className="inline-flex items-center justify-center rounded-xl border border-gray-200 bg-white px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-medium text-gray-600 transition hover:bg-gray-50 active:bg-gray-100"
+                className="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
               >
                 Refuză
               </button>
-              <ContactButtons offer={offer} onChat={onChat} variant="pending" hasUnread={hasUnread} />
             </div>
           )}
 
           {isAccepted && (
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
-              <Link
-                href={`/reviews/new?company=${offer.companyId}&request=${requestId}`}
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg sm:rounded-xl bg-amber-500 px-3 py-2 sm:px-4 sm:py-2.5 text-xs sm:text-sm font-semibold text-white shadow-sm shadow-amber-500/20 transition hover:bg-amber-600 active:bg-amber-700"
-              >
-                <StarIcon className="h-4 w-4" />
-                Lasă un review
-              </Link>
-              <ContactButtons offer={offer} onChat={onChat} variant="accepted" hasUnread={hasUnread} />
-            </div>
+            <Link
+              href={`/reviews/new?company=${offer.companyId}&request=${requestId}`}
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-amber-600"
+            >
+              <StarIcon className="h-3.5 w-3.5" />
+              Lasă un review
+            </Link>
           )}
 
-          {isDeclined && (
-            <div className="flex flex-wrap gap-2 w-full sm:w-auto sm:justify-end">
-              <ContactButtons offer={offer} onChat={onChat} variant="declined" hasUnread={hasUnread} />
-            </div>
-          )}
+          {/* Contact buttons row */}
+          <div className="flex items-center justify-center gap-1.5">
+            <ContactButtons offer={offer} onChat={onChat} variant={isAccepted ? "accepted" : isDeclined ? "declined" : "pending"} hasUnread={hasUnread} />
+          </div>
         </div>
       </div>
     </motion.div>

@@ -196,17 +196,13 @@ export default function CompanyProfile() {
                   {/* Logo/Avatar with upload button */}
                   <div className="relative group">
                     <div className="flex h-14 w-14 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white/20 text-xl font-bold text-white backdrop-blur-sm sm:h-20 sm:w-20 sm:text-2xl">
-                      {profile?.logoUrl ? (
-                        <Image
-                          src={profile.logoUrl}
-                          alt="Logo companie"
-                          width={80}
-                          height={80}
-                          className="h-full w-full object-cover"
-                        />
-                      ) : (
-                        (profile?.companyName || company?.displayName || "C").charAt(0).toUpperCase()
-                      )}
+                      <Image
+                        src={profile?.logoUrl || "/pics/default-company.svg"}
+                        alt="Logo companie"
+                        width={80}
+                        height={80}
+                        className="h-full w-full object-cover"
+                      />
                     </div>
                     {/* Upload button overlay */}
                     <button

@@ -394,213 +394,168 @@ export default function CompanyDashboard() {
                 <LoadingSpinner size="lg" color="blue" />
               </LoadingContainer>
             ) : filteredOffers.length > 0 ? (
-              <div className="space-y-4">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
                 {filteredOffers.map((offer, i) => (
                   <motion.div
                     key={offer.id}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: i * 0.03 }}
-                    className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition hover:shadow-md"
+                    className={`flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-md ${
+                      offer.status === "accepted"
+                        ? "border-emerald-200"
+                        : offer.status === "rejected" || offer.status === "declined"
+                          ? "border-gray-200 opacity-70"
+                          : "border-gray-200"
+                    }`}
                   >
-                    <div className="flex">
-                      {/* Status bar */}
-                      <div
-                        className={`w-1 ${
-                          offer.status === "accepted"
-                            ? "bg-emerald-500"
-                            : offer.status === "rejected" ||
-                                offer.status === "declined"
-                              ? "bg-red-500"
-                              : "bg-amber-500"
-                        }`}
-                      />
+                    {/* Top status bar */}
+                    <div
+                      className={`h-1 w-full ${
+                        offer.status === "accepted"
+                          ? "bg-emerald-500"
+                          : offer.status === "rejected" || offer.status === "declined"
+                            ? "bg-red-500"
+                            : "bg-amber-500"
+                      }`}
+                    />
 
-                      <div className="flex-1 p-3 sm:p-5">
-                        {/* Route */}
-                        {(offer.fromCity || offer.toCity) && (
-                          <div className="mb-2 sm:mb-3 flex items-center gap-2 text-sm sm:text-base font-bold text-gray-800">
-                            <TruckIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-blue-500 shrink-0" />
-                            <span className="truncate">{offer.fromCity || "—"}</span>
-                            <span className="text-gray-400">→</span>
-                            <span className="truncate">{offer.toCity || "—"}</span>
-                          </div>
-                        )}
-
-                        {/* Header */}
-                        <div className="mb-2 sm:mb-3 flex flex-wrap items-start justify-between gap-2 sm:gap-3">
-                          <div className="flex items-center gap-2">
-                            <span className="rounded-lg bg-gray-100 px-3 py-1 text-sm font-bold text-gray-700">
-                              {offer.requestCode ||
-                                `REQ-${String(offer.requestId).slice(0, 6).toUpperCase()}`}
-                            </span>
-                            <span
-                              className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-xs font-semibold ${
-                                offer.status === "accepted"
-                                  ? "bg-emerald-100 text-emerald-700"
-                                  : offer.status === "rejected" ||
-                                      offer.status === "declined"
-                                    ? "bg-red-100 text-red-700"
-                                    : "bg-amber-100 text-amber-700"
-                              }`}
-                            >
-                              {offer.status === "accepted" && (
-                                <CheckCircleIcon className="h-3.5 w-3.5" />
-                              )}
-                              {(offer.status === "rejected" ||
-                                offer.status === "declined") && (
-                                <XCircleIcon className="h-3.5 w-3.5" />
-                              )}
-                              {(!offer.status ||
-                                offer.status === "pending") && (
-                                <ClockIcon className="h-3.5 w-3.5" />
-                              )}
-                              {offer.status === "accepted"
-                                ? "Acceptată"
-                                : offer.status === "rejected"
-                                  ? "Respinsă"
-                                  : offer.status === "declined"
-                                    ? "Declinată"
-                                    : "În așteptare"}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5">
-                            <ArrowTrendingUpIcon className="h-4 w-4 text-blue-600" />
-                            <span className="text-lg font-bold text-blue-700">
-                              {offer.price ?? "—"} lei
-                            </span>
-                          </div>
+                    <div className="flex flex-1 flex-col p-4">
+                      {/* Route */}
+                      {(offer.fromCity || offer.toCity) && (
+                        <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-gray-800">
+                          <TruckIcon className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                          <span className="truncate">{offer.fromCity || "—"}</span>
+                          <span className="text-gray-400">→</span>
+                          <span className="truncate">{offer.toCity || "—"}</span>
                         </div>
+                      )}
 
-                        {/* Message */}
-                        {offer.message && (
-                          <p className="mb-4 rounded-lg bg-gray-50 p-3 text-sm text-gray-600 line-clamp-2">
-                            {offer.message}
-                          </p>
-                        )}
+                      {/* Request code + Status badge */}
+                      <div className="mb-3 flex flex-wrap items-center gap-1.5">
+                        <span className="rounded bg-gray-100 px-2 py-0.5 text-xs font-bold text-gray-700">
+                          {offer.requestCode ||
+                            `REQ-${String(offer.requestId).slice(0, 6).toUpperCase()}`}
+                        </span>
+                        <span
+                          className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-semibold ${
+                            offer.status === "accepted"
+                              ? "bg-emerald-100 text-emerald-700"
+                              : offer.status === "rejected" || offer.status === "declined"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-amber-100 text-amber-700"
+                          }`}
+                        >
+                          {offer.status === "accepted" && <CheckCircleIcon className="h-3 w-3" />}
+                          {(offer.status === "rejected" || offer.status === "declined") && <XCircleIcon className="h-3 w-3" />}
+                          {(!offer.status || offer.status === "pending") && <ClockIcon className="h-3 w-3" />}
+                          {offer.status === "accepted" ? "Acceptată" : offer.status === "rejected" ? "Respinsă" : offer.status === "declined" ? "Declinată" : "În așteptare"}
+                        </span>
+                      </div>
 
-                        {/* Actions */}
+                      {/* Price - centered */}
+                      <div className="mb-3 text-center">
+                        <div className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5">
+                          <ArrowTrendingUpIcon className="h-4 w-4 text-blue-600" />
+                          <span className="text-lg font-bold text-blue-700">
+                            {offer.price ?? "—"} lei
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* Message */}
+                      {offer.message && (
+                        <p className="mb-3 rounded-lg bg-gray-50 p-2.5 text-xs text-gray-600 line-clamp-2">
+                          {offer.message}
+                        </p>
+                      )}
+
+                      {/* Actions */}
+                      <div className="mt-auto">
                         {editingId === offer.id ? (
-                          <div className="space-y-3 rounded-lg border border-blue-200 bg-blue-50/50 p-4">
-                            <div className="grid gap-3 sm:grid-cols-2">
-                              <div>
-                                <label className="mb-1 block text-xs font-semibold text-gray-700">
-                                  Preț (lei)
-                                </label>
-                                <input
-                                  type="number"
-                                  value={editPrice}
-                                  onChange={(e) => setEditPrice(e.target.value)}
-                                  className="w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
-                                />
-                              </div>
-                              <div>
-                                <label className="mb-1 block text-xs font-semibold text-gray-700">
-                                  Mesaj
-                                </label>
-                                <textarea
-                                  value={editMessage}
-                                  onChange={(e) =>
-                                    setEditMessage(e.target.value)
-                                  }
-                                  className="w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-blue-500 focus:outline-none"
-                                  rows={2}
-                                />
-                              </div>
+                          <div className="space-y-2 rounded-lg border border-blue-200 bg-blue-50/50 p-3">
+                            <div>
+                              <label className="mb-1 block text-[10px] font-semibold text-gray-700">Preț (lei)</label>
+                              <input
+                                type="number"
+                                value={editPrice}
+                                onChange={(e) => setEditPrice(e.target.value)}
+                                className="w-full rounded-lg border border-gray-200 p-2 text-sm focus:border-blue-500 focus:outline-none"
+                              />
                             </div>
-                            <div className="flex flex-wrap gap-2">
+                            <div>
+                              <label className="mb-1 block text-[10px] font-semibold text-gray-700">Mesaj</label>
+                              <textarea
+                                value={editMessage}
+                                onChange={(e) => setEditMessage(e.target.value)}
+                                className="w-full rounded-lg border border-gray-200 p-2 text-sm focus:border-blue-500 focus:outline-none"
+                                rows={2}
+                              />
+                            </div>
+                            <div className="flex flex-wrap gap-1.5">
                               <button
                                 onClick={async () => {
                                   setSavingId(offer.id);
-                                  await updateOffer(offer, {
-                                    price: Number(editPrice),
-                                    message: editMessage,
-                                  });
+                                  await updateOffer(offer, { price: Number(editPrice), message: editMessage });
                                   setSavingId(null);
                                   setEditingId(null);
                                 }}
                                 disabled={savingId === offer.id}
-                                className="inline-flex items-center gap-1.5 rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
+                                className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
                               >
-                                <CheckIcon className="h-4 w-4" />
-                                {savingId === offer.id
-                                  ? "Se salvează..."
-                                  : "Salvează"}
+                                <CheckIcon className="h-3.5 w-3.5" />
+                                {savingId === offer.id ? "Se salvează..." : "Salvează"}
                               </button>
-                              <button
-                                onClick={() => setEditingId(null)}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                              >
-                                <XMarkIcon className="h-4 w-4" />
+                              <button onClick={() => setEditingId(null)} className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50">
+                                <XMarkIcon className="h-3.5 w-3.5" />
                                 Anulează
                               </button>
-                              <button
-                                onClick={() => setWithdrawOffer(offer)}
-                                className="inline-flex items-center gap-1.5 rounded-lg border border-red-300 bg-white px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50"
-                              >
-                                <TrashIcon className="h-4 w-4" />
+                              <button onClick={() => setWithdrawOffer(offer)} className="inline-flex items-center gap-1 rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50">
+                                <TrashIcon className="h-3.5 w-3.5" />
                                 Retrage
                               </button>
                             </div>
                           </div>
                         ) : (
-                          <div className="flex flex-wrap items-center gap-2 border-t border-gray-100 pt-4">
+                          <div className="space-y-2 border-t border-gray-100 pt-3">
                             {(!offer.status || offer.status === "pending") && (
-                              <>
+                              <div className="flex gap-1.5">
                                 <button
                                   onClick={() => {
                                     setEditingId(offer.id);
                                     setEditPrice(String(offer.price ?? ""));
                                     setEditMessage(offer.message ?? "");
                                   }}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-2 text-xs sm:text-sm font-medium text-blue-700 hover:bg-blue-100"
+                                  className="inline-flex flex-1 items-center justify-center gap-1 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 text-xs font-medium text-blue-700 hover:bg-blue-100"
                                 >
-                                  <PencilIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                                  <PencilIcon className="h-3.5 w-3.5" />
                                   Editează
                                 </button>
                                 <button
                                   onClick={() => setWithdrawOffer(offer)}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-red-200 bg-white px-3 py-2 text-xs sm:text-sm font-medium text-red-600 hover:bg-red-50"
+                                  className="inline-flex items-center justify-center gap-1 rounded-lg border border-red-200 bg-white px-2.5 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
                                 >
-                                  <TrashIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+                                  <TrashIcon className="h-3.5 w-3.5" />
                                   Retrage
                                 </button>
-                              </>
-                            )}
-
-                            {/* Customer contact buttons - always show (Chat is always available) */}
-                              <div className="ml-auto flex flex-wrap items-center gap-2">
-                                <span className="hidden sm:inline text-xs text-gray-400">
-                                  Contactează clientul:
-                                </span>
-                                {offer.customerPhone && (
-                                  <a
-                                    href={`tel:${offer.customerPhone}`}
-                                    className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-emerald-700 transition hover:bg-emerald-100"
-                                    title={offer.customerPhone}
-                                  >
-                                    <PhoneIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                                    <span className="hidden sm:inline">Sună</span>
-                                  </a>
-                                )}
-                                <button
-                                  onClick={() => router.push(`/company/chat?requestId=${offer.requestId}&offerId=${offer.id}`)}
-                                  className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-purple-700 transition hover:bg-purple-100"
-                                >
-                                  <ChatBubbleLeftRightIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                                  Chat
-                                </button>
-                                {offer.customerEmail && (
-                                  <a
-                                    href={`mailto:${offer.customerEmail}`}
-                                    className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-2.5 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-blue-700 transition hover:bg-blue-100"
-                                    title={offer.customerEmail}
-                                  >
-                                    <EnvelopeIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                                    <span className="hidden sm:inline">Email</span>
-                                  </a>
-                                )}
                               </div>
+                            )}
+                            <div className="flex items-center justify-center gap-1.5">
+                              <span className="text-[10px] text-gray-400">Contactează:</span>
+                              {offer.customerPhone && (
+                                <a href={`tel:${offer.customerPhone}`} className="inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 p-1.5 text-emerald-700 transition hover:bg-emerald-100" title={offer.customerPhone}>
+                                  <PhoneIcon className="h-3.5 w-3.5" />
+                                </a>
+                              )}
+                              <button onClick={() => router.push(`/company/chat?requestId=${offer.requestId}&offerId=${offer.id}`)} className="inline-flex items-center justify-center rounded-lg border border-purple-200 bg-purple-50 p-1.5 text-purple-700 transition hover:bg-purple-100">
+                                <ChatBubbleLeftRightIcon className="h-3.5 w-3.5" />
+                              </button>
+                              {offer.customerEmail && (
+                                <a href={`mailto:${offer.customerEmail}`} className="inline-flex items-center justify-center rounded-lg border border-blue-200 bg-blue-50 p-1.5 text-blue-700 transition hover:bg-blue-100" title={offer.customerEmail}>
+                                  <EnvelopeIcon className="h-3.5 w-3.5" />
+                                </a>
+                              )}
+                            </div>
                           </div>
                         )}
                       </div>

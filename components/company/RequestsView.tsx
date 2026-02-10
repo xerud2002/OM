@@ -805,7 +805,7 @@ export default function RequestsView({
           companyId: company.uid,
           companyName:
             companyData.companyName || company.displayName || "Companie",
-          companyLogo: companyData.logoUrl || companyData.photoURL || null,
+          companyLogo: companyData.logoUrl || companyData.photoURL || "/pics/default-company.svg",
           companyPhone: companyData.phone || null,
           companyEmail: companyData.email || company.email || null,
           price: price,
