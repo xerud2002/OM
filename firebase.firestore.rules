@@ -178,7 +178,7 @@ service cloud.firestore {
           ) && 
           request.resource.data.senderId == request.auth.uid &&
           request.resource.data.keys().hasAll(['text','senderId','senderRole','createdAt']) &&
-          request.resource.data.keys().hasOnly(['text','senderId','senderRole','createdAt']);
+          request.resource.data.keys().hasOnly(['text','senderId','senderRole','createdAt','attachment']);
           // No client updates/deletes to messages
           allow update, delete: if false;
         }
