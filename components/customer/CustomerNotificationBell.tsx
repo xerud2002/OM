@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BellIcon as Bell,
@@ -41,6 +42,7 @@ export default function CustomerNotificationBell({
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [showDropdown, setShowDropdown] = useState(false);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (!customerId) {
@@ -223,7 +225,12 @@ export default function CustomerNotificationBell({
                   <div className="divide-y divide-gray-100">
                     {/* Show unread chats summary if any */}
                     {unreadChats > 0 && (
-                      <div className="flex items-start gap-3 bg-blue-50/50 px-4 py-3">
+                      <button
+                        onClick={() => {
+                          setShowDropdown(false);
+                          router.push("/customer/dashboard");
+                        }}
+                        className="flex w-full items-start gap-3 bg-blue-50/50 px-4 py-3 text-left transition-colors hover:bg-blue-100/50">
                         <div className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-blue-100">
                           <MessageSquare className="h-4 w-4 text-blue-600" />
                         </div>
@@ -239,16 +246,23 @@ export default function CustomerNotificationBell({
                           </p>
                         </div>
                         <div className="h-2 w-2 shrink-0 rounded-full bg-blue-500" />
-                      </div>
+                      </button>
                     )}
 
                     {/* Regular notifications */}
                     {notifications.map((notification) => (
-                      <div
+                      <button
                         key={notification.id}
-                        className={`group relative px-4 py-3 transition-colors hover:bg-gray-50 ${
-                          !notification.read ? "bg-emerald-50/30" : ""
-                        }`}
+                        onClick={() => {
+                          if (!notification.read) markAsRead(notification.id);
+                          setShowDropdown(false);
+                          if (notification.requestId) {
+                            const query: Record<string, string> = { requestId: notification.requestId };
+                            if (notification.offerId) query.openChat = notification.offerId;
+                            router.push({ pathname: "/customer/dashboard", query });
+                          }
+                        }}
+                        className={`group relative w-full px-4 py-3 text-left transition-colors hover:bg-gray-50 ${!notification.read ? "bg-emerald-50/30" : ""}`}
                       >
                         <div className="flex items-start gap-3">
                           <div className="mt-0.5">
@@ -286,7 +300,7 @@ export default function CustomerNotificationBell({
                             </div>
                           </div>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 )}

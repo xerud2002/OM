@@ -30,6 +30,15 @@ service cloud.firestore {
         isAdmin()
       );
       allow delete: if isSignedIn() && isAdmin(); // Only admin can delete
+
+      // Customer notifications subcollection
+      match /notifications/{notificationId} {
+        allow read: if isSignedIn() && request.auth.uid == customerId;
+        // Customer can only mark notifications as read
+        allow update: if isSignedIn() && request.auth.uid == customerId
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['read']);
+        allow create, delete: if false; // Created by server only
+      }
     }
 
     // === COMPANIES COLLECTION ===

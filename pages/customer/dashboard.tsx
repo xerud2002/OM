@@ -8,6 +8,7 @@ import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import CustomerWelcome from "@/components/customer/CustomerWelcome";
 import CustomerNotificationBell from "@/components/customer/CustomerNotificationBell";
+import SearchInput from "@/components/ui/SearchInput";
 import {
   InboxIcon,
   CheckCircleIcon,
@@ -25,6 +26,7 @@ import {
   StarIcon,
   Cog6ToothIcon,
   DocumentTextIcon,
+  FunnelIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import type { User } from "firebase/auth";
@@ -80,6 +82,10 @@ export default function CustomerDashboard() {
   const [chatOffer, setChatOffer] = useState<Offer | null>(null);
   const [showDetails, setShowDetails] = useState(false);
   const offerUnsubsRef = useRef<Array<() => void>>([]);
+
+  // Filters
+  const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "accepted" | "closed">("all");
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
@@ -186,10 +192,19 @@ export default function CustomerDashboard() {
 
     // Check for requestId in URL query
     const queryRequestId = router.query.requestId as string;
+    const openChatOfferId = router.query.openChat as string;
     if (queryRequestId) {
       const requestFromQuery = requests.find((r) => r.id === queryRequestId);
       if (requestFromQuery) {
         setSelectedRequestId(queryRequestId);
+        // Auto-open chat if offerId provided
+        if (openChatOfferId) {
+          const offers = offersByRequest[queryRequestId] || [];
+          const targetOffer = offers.find((o) => o.id === openChatOfferId);
+          if (targetOffer) {
+            handleOpenChat(targetOffer);
+          }
+        }
         // Clear the query parameter from URL without refresh
         router.replace("/customer/dashboard", undefined, { shallow: true });
         return;
@@ -202,6 +217,14 @@ export default function CustomerDashboard() {
     setSelectedRequestId((prev) => prev || withOffers || requests[0].id);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [requests, offersByRequest, router.query.requestId]);
+
+  // Filtered requests
+  const filteredRequests = requests.filter((req) => {
+    const q = searchQuery.toLowerCase();
+    const matchesSearch = !q || req.fromCity?.toLowerCase().includes(q) || req.toCity?.toLowerCase().includes(q);
+    const matchesStatus = statusFilter === "all" || req.status === statusFilter;
+    return matchesSearch && matchesStatus;
+  });
 
   const selectedRequest = requests.find((r) => r.id === selectedRequestId);
   const selectedOffers = selectedRequestId
@@ -404,9 +427,39 @@ export default function CustomerDashboard() {
                     Nouă
                   </Link>
                 </div>
-                <nav className="max-h-[60vh] md:max-h-[calc(100vh-280px)] lg:max-h-[calc(100vh-320px)] overflow-y-auto p-2 sm:p-3">
+                {/* Filter bar */}
+                <div className="border-b border-gray-100 px-3 py-2 sm:px-4 sm:py-3 space-y-2">
+                  <SearchInput
+                    value={searchQuery}
+                    onChange={setSearchQuery}
+                    placeholder="Caută oraș..."
+                    className="[&_input]:w-full [&_input]:sm:w-full"
+                  />
+                  <div className="flex items-center gap-2">
+                    <FunnelIcon className="h-3.5 w-3.5 text-gray-400 shrink-0" />
+                    <select
+                      value={statusFilter}
+                      onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+                      className="w-full rounded-md border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-700 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+                    >
+                      <option value="all">Toate statusurile</option>
+                      <option value="active">Activă</option>
+                      <option value="accepted">Acceptată</option>
+                      <option value="closed">Finalizată</option>
+                    </select>
+                  </div>
+                </div>
+
+                <nav className="max-h-[50vh] md:max-h-[calc(100vh-380px)] lg:max-h-[calc(100vh-420px)] overflow-y-auto p-2 sm:p-3">
+                  {filteredRequests.length === 0 ? (
+                    <div className="py-6 text-center">
+                      <FunnelIcon className="mx-auto h-8 w-8 text-gray-300" />
+                      <p className="mt-2 text-sm text-gray-500">Nicio cerere găsită</p>
+                      <button onClick={() => { setSearchQuery(""); setStatusFilter("all"); }} className="mt-1 text-xs text-emerald-600 hover:underline">Resetează filtrele</button>
+                    </div>
+                  ) : (
                   <ul className="space-y-2">
-                    {requests.map((req) => {
+                    {filteredRequests.map((req) => {
                       const offers = offersByRequest[req.id] || [];
                       const isSelected = selectedRequestId === req.id;
                       const hasNewOffers = offers.some(
@@ -512,6 +565,7 @@ export default function CustomerDashboard() {
                       );
                     })}
                   </ul>
+                  )}
                 </nav>
               </div>
             </aside>
