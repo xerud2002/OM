@@ -135,8 +135,8 @@ const NAV_ACTIVE_STYLES: Record<DashboardRole, { container: string; icon: string
 };
 
 function UserAvatar({ role, photoURL }: { role: DashboardRole; photoURL?: string }) {
-  if (role === "company" && photoURL) {
-    return <Image src={photoURL} alt="Logo" width={40} height={40} className="h-full w-full object-cover" />;
+  if (photoURL && (role === "company" || role === "customer")) {
+    return <Image src={photoURL} alt={role === "company" ? "Logo" : "Avatar"} width={40} height={40} className="h-full w-full rounded-full object-cover" />;
   }
   if (role === "company") {
     return <Image src="/pics/default-company.svg" alt="Logo" width={40} height={40} className="h-full w-full object-cover" />;
@@ -429,12 +429,8 @@ export default function DashboardLayout({
           <div className="h-6 w-px bg-gray-200 md:hidden" aria-hidden="true" />
 
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
-            {/* Search or breadcrumb area */}
-            <div className="flex flex-1 items-center">
-              <h1 className="text-lg font-semibold text-gray-900">
-                {navWithCurrent.find((n) => n.current)?.name || "Dashboard"}
-              </h1>
-            </div>
+            {/* Spacer */}
+            <div className="flex flex-1 items-center" />
 
             {/* Right side actions */}
             <div className="flex items-center gap-x-4 lg:gap-x-6">
