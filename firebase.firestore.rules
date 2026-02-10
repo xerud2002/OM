@@ -182,6 +182,20 @@ service cloud.firestore {
           // No client updates/deletes to messages
           allow update, delete: if false;
         }
+
+        // === TYPING INDICATORS SUBCOLLECTION ===
+        match /typing/{role} {
+          // Both parties can read typing indicators
+          allow read: if isSignedIn() && (
+            get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid ||
+            get(/databases/$(database)/documents/requests/$(requestId)/offers/$(offerId)).data.companyId == request.auth.uid
+          );
+          // Either party can write/delete their own typing indicator (role == "customer" or "company")
+          allow write: if isSignedIn() && (
+            (role == 'customer' && get(/databases/$(database)/documents/requests/$(requestId)).data.customerId == request.auth.uid) ||
+            (role == 'company' && get(/databases/$(database)/documents/requests/$(requestId)/offers/$(offerId)).data.companyId == request.auth.uid)
+          );
+        }
       }
     }
 

@@ -135,7 +135,8 @@ export default function NewReviewPage() {
           const reviewsQuery = query(
             collection(db, "reviews"),
             where("companyId", "==", companyId),
-            where("requestId", "==", requestId)
+            where("requestId", "==", requestId),
+            where("status", "==", "published")
           );
           const reviewsSnapshot = await getDocs(reviewsQuery);
           if (!reviewsSnapshot.empty) {

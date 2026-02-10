@@ -24,7 +24,8 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
     <motion.div
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="mb-6 overflow-hidden rounded-2xl bg-linear-to-br from-emerald-500 via-emerald-600 to-teal-600 p-6 text-white shadow-lg"
+      className="mb-6 overflow-hidden rounded-2xl p-6 text-white shadow-lg"
+      style={{ backgroundImage: "linear-gradient(to bottom right, #10b981, #059669, #0d9488)" }}
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
