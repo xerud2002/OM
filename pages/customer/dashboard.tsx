@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -37,11 +37,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/services/firebase";
 import {
   collection,
+  doc,
+  getDoc,
   query,
   where,
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
+import StarRating from "@/components/reviews/StarRating";
 import { onAuthChange } from "@/utils/firebaseHelpers";
 import { useUnreadMessages, countUnreadForRequest } from "@/hooks/useUnreadMessages";
 
@@ -86,6 +89,12 @@ export default function CustomerDashboard() {
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "active" | "accepted" | "closed">("all");
+
+  // Company ratings cache
+  const [companyRatings, setCompanyRatings] = useState<
+    Record<string, { averageRating: number; totalReviews: number }>
+  >({});
+  const fetchedCompanyIds = useRef<Set<string>>(new Set());
 
   // Helper: check if a request has an accepted offer
   const hasAcceptedOffer = (requestId: string) => {
@@ -227,9 +236,43 @@ export default function CustomerDashboard() {
   });
 
   const selectedRequest = requests.find((r) => r.id === selectedRequestId);
-  const selectedOffers = selectedRequestId
-    ? offersByRequest[selectedRequestId] || []
-    : [];
+  const selectedOffers = useMemo(
+    () => (selectedRequestId ? offersByRequest[selectedRequestId] || [] : []),
+    [selectedRequestId, offersByRequest],
+  );
+
+  // Fetch company ratings for visible offers
+  useEffect(() => {
+    const companyIds = selectedOffers
+      .map((o) => o.companyId)
+      .filter((id) => id && !fetchedCompanyIds.current.has(id));
+    if (companyIds.length === 0) return;
+    companyIds.forEach((id) => fetchedCompanyIds.current.add(id));
+    Promise.all(
+      companyIds.map(async (id) => {
+        try {
+          const snap = await getDoc(doc(db, "companies", id));
+          if (snap.exists()) {
+            const d = snap.data();
+            return {
+              id,
+              averageRating: d.averageRating || 0,
+              totalReviews: d.totalReviews || 0,
+            };
+          }
+        } catch {}
+        return { id, averageRating: 0, totalReviews: 0 };
+      }),
+    ).then((results) => {
+      setCompanyRatings((prev) => {
+        const next = { ...prev };
+        results.forEach((r) => {
+          next[r.id] = { averageRating: r.averageRating, totalReviews: r.totalReviews };
+        });
+        return next;
+      });
+    });
+  }, [selectedOffers]);
 
   // Track unread chat messages
   const requestIdsList = requests.map((r) => r.id);
@@ -634,6 +677,7 @@ export default function CustomerDashboard() {
                             onDecline={handleDecline}
                             onChat={() => handleOpenChat(offer)}
                             hasUnread={unreadOffers.has(offer.id)}
+                            rating={companyRatings[offer.companyId]}
                           />
                         ))}
                       </div>
@@ -860,6 +904,7 @@ function OfferCard({
   onDecline,
   onChat,
   hasUnread,
+  rating,
 }: {
   offer: Offer;
   requestId: string;
@@ -868,10 +913,13 @@ function OfferCard({
   onDecline: (reqId: string, offerId: string) => Promise<void>;
   onChat: () => void;
   hasUnread?: boolean;
+  rating?: { averageRating: number; totalReviews: number };
 }) {
   const isAccepted = offer.status === "accepted";
   const isDeclined = offer.status === "declined";
   const isPending = offer.status === "pending" || !offer.status;
+
+  const companyProfileHref = `/reviews/new?company=${offer.companyId}&request=${requestId}`;
 
   return (
     <motion.div
@@ -895,8 +943,9 @@ function OfferCard({
       <div className="flex flex-1 flex-col p-4">
         {/* Logo + Company name */}
         <div className="mb-3 flex items-center gap-3">
-          <div
-            className={`relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-sm ${
+          <Link
+            href={companyProfileHref}
+            className={`relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-sm transition hover:opacity-80 ${
               isAccepted
                 ? "ring-2 ring-emerald-500"
                 : isDeclined
@@ -916,16 +965,29 @@ function OfferCard({
                 <CheckCircleSolid className="h-3.5 w-3.5 text-emerald-500" />
               </div>
             )}
-          </div>
+          </Link>
           <div className="min-w-0 flex-1">
-            <p className={`truncate text-sm font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}>
-              {offer.companyName}
-            </p>
+            <Link href={companyProfileHref} className="group">
+              <p className={`truncate text-sm font-bold transition group-hover:text-emerald-600 ${isDeclined ? "text-gray-500" : "text-gray-900"}`}>
+                {offer.companyName}
+              </p>
+            </Link>
             <p className="text-xs text-gray-500">
               {offer.createdAt?.toDate?.()
                 ? formatDateRO(offer.createdAt, { month: "short" })
                 : "Ofertă nouă"}
             </p>
+            {/* Star rating */}
+            {rating && (
+              <div className="mt-0.5 flex items-center gap-1">
+                <StarRating rating={rating.averageRating} size="sm" />
+                <span className="text-[10px] text-gray-400">
+                  {rating.averageRating > 0
+                    ? `${rating.averageRating.toFixed(1)} (${rating.totalReviews})`
+                    : "Fără recenzii"}
+                </span>
+              </div>
+            )}
           </div>
           {isAccepted && (
             <span className="shrink-0 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
