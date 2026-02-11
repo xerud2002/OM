@@ -58,7 +58,6 @@ export type FormShape = {
   contactFirstName?: string;
   contactLastName?: string;
   acceptedTerms?: boolean;
-  itemsList?: string; // Added for HomeRequestForm
 };
 
 type Props = {

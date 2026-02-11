@@ -101,7 +101,6 @@ export type MovingRequest = {
   phoneVerified?: boolean; // New
   emailVerified?: boolean; // New
   budgetEstimate?: number;
-  needPacking?: boolean;
   hasElevator?: boolean;
   // Services
   serviceMoving?: boolean;

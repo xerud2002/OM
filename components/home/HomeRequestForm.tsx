@@ -709,7 +709,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
     servicePiano: false,
     serviceFewItems: false,
     mediaUpload: "later",
-    itemsList: "",
     acceptedTerms: false,
     details: "",
   });
