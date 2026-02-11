@@ -232,7 +232,7 @@ const formatYMD = (d: Date) => {
 };
 
 const STORAGE_KEY = "homeRequestForm";
-const TOTAL_STEPS = 7;
+const TOTAL_STEPS = 6;
 
 // Inline Calendar Component
 function InlineCalendar({
@@ -794,13 +794,11 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
   };
 
   const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
+    async (e?: React.FormEvent) => {
+      if (e) e.preventDefault();
 
-      // Only submit if we're on the last step (prevents Enter key submission on other steps)
+      // Only submit if we're on the last step
       if (currentStep !== TOTAL_STEPS) {
-        // If not on last step, just advance to next step
-        await nextStep();
         return;
       }
 
@@ -943,7 +941,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         setIsSubmitting(false);
       }
     },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [form, currentStep],
   );
 
@@ -970,6 +967,15 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
       if (Object.keys(errs).length > 0) {
         setFieldErrors((prev) => ({ ...prev, ...errs }));
         toast.error("Completează câmpurile obligatorii marcate cu roșu.");
+        return;
+      }
+    }
+
+    // Validate step 4 before moving to step 5
+    if (currentStep === 4) {
+      if (!form.details || form.details.trim().length < 50) {
+        setFieldErrors((prev) => ({ ...prev, details: true }));
+        toast.error("Adaugă cel puțin 50 de caractere în câmpul de detalii.");
         return;
       }
     }
@@ -1409,8 +1415,8 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
             },
             {
               value: "transport",
-              label: "Doar transport",
-              desc: "Fără muncitori, doar vehicul",
+              label: "Doar câteva lucruri",
+              desc: "Am o lista",
             },
           ].map((opt) => (
             <label
@@ -1473,7 +1479,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
             {[
               {
                 key: "servicePacking",
-                label: "Ambalare profesională",
+                label: "Împachetare profesională",
                 desc: "Noi împachetăm tot",
               },
               {
@@ -1517,93 +1523,31 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
 
       <div>
         <label className="mb-1 block text-sm font-medium text-gray-700">
-          Detalii (opțional)
+          Detalii
         </label>
         <textarea
           value={form.details || ""}
           onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
-          rows={2}
-          placeholder="Obiecte speciale, acces dificil..."
-          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
+          rows={3}
+          minLength={50}
+          placeholder="Descrie ce trebuie mutat: mobilier, electrocasnice, cutii, obiecte fragile, acces dificil..."
+          className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none ${
+            fieldErrors.details ? "border-red-400" : "border-gray-200"
+          }`}
         />
-      </div>
-    </div>
-  );
-
-  // Step 5: Survey Type
-  const renderStep5 = () => (
-    <div className="space-y-4">
-      <div className="rounded-xl border border-gray-200 bg-white p-4">
-        <div className="mb-3 flex items-center gap-2">
-          <svg
-            className="h-5 w-5 text-emerald-600"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
-            />
-          </svg>
-          <span className="font-semibold text-gray-800">Tip evaluare *</span>
-        </div>
-        <p className="mb-3 text-xs text-gray-500">
-          Cum preferi să primești oferta?
-        </p>
-
-        <div className="grid grid-cols-1 gap-2">
-          {[
-            {
-              value: "in-person",
-              label: "Evaluare la fața locului",
-              desc: "Un specialist vine să evalueze volumul",
-            },
-            {
-              value: "video",
-              label: "Video-evaluare",
-              desc: "Consultație video pentru estimare",
-            },
-            {
-              value: "quick-estimate",
-              label: "Estimare rapidă",
-              desc: "Ofertă bazată pe informații",
-            },
-          ].map((opt) => (
-            <label
-              key={opt.value}
-              className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
-                form.surveyType === opt.value
-                  ? "border-emerald-500 bg-emerald-50"
-                  : "border-gray-200 hover:border-emerald-200"
-              }`}
-            >
-              <input
-                type="radio"
-                name="surveyType"
-                value={opt.value}
-                checked={form.surveyType === opt.value}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, surveyType: e.target.value as any }))
-                }
-                className="h-4 w-4 border-gray-300 text-emerald-600 focus:ring-emerald-500"
-              />
-              <div>
-                <span className="text-sm font-medium text-gray-800">
-                  {opt.label}
-                </span>
-                <span className="block text-xs text-gray-500">{opt.desc}</span>
-              </div>
-            </label>
-          ))}
+        <div className="mt-1 flex items-center justify-between text-xs">
+          <span className={`${
+            (form.details?.length || 0) < 50 ? "text-red-500" : "text-green-600"
+          }`}>
+            {form.details?.length || 0}/50 caractere minim
+          </span>
         </div>
       </div>
     </div>
   );
 
-  // Step 6: Media Upload
-  const renderStep6 = () => {
+  // Step 5: Media Upload
+  const renderStep5 = () => {
     const handleAddFiles = (list: FileList | null) => {
       if (!list) return;
       const newFiles = Array.from(list);
@@ -1660,11 +1604,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 value: "later",
                 label: "Primește link",
                 desc: "Vei primi un email cu link de încărcare",
-              },
-              {
-                value: "list",
-                label: "Am o listă de lucruri",
-                desc: "Scrie ce ai de mutat (listă de obiecte)",
               },
             ].map((opt) => (
               <label
@@ -1772,27 +1711,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               </p>
             </div>
           )}
-
-          {/* Items list textarea when "list" is selected */}
-          {form.mediaUpload === "list" && (
-            <div className="mt-4">
-              <label className="mb-2 block text-sm font-medium text-gray-700">
-                Lista de lucruri de mutat
-              </label>
-              <textarea
-                value={form.itemsList || ""}
-                onChange={(e) =>
-                  setForm((s) => ({ ...s, itemsList: e.target.value }))
-                }
-                placeholder="Ex: canapea 3 locuri, dulap dormitor, masă sufragerie, 10 cutii cărți..."
-                rows={4}
-                className="w-full rounded-lg border border-gray-300 p-3 text-sm focus:border-emerald-500 focus:ring-emerald-500"
-              />
-              <p className="mt-1 text-xs text-gray-500">
-                Scrie obiectele principale pe care le ai de mutat
-              </p>
-            </div>
-          )}
         </div>
         <p className="text-center text-xs text-gray-500">
           Fotografiile ajută firmele să estimeze mai exact volumul și costul
@@ -1802,8 +1720,8 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
     );
   };
 
-  // Step 7: Contact
-  const renderStep7 = () => (
+  // Step 6: Contact
+  const renderStep6 = () => (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
@@ -1932,10 +1850,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
   return (
     <div className="mx-auto w-full max-w-md">
       <form
-        onSubmit={handleSubmit}
+        onSubmit={(e) => e.preventDefault()}
         onKeyDown={(e) => {
-          // Prevent Enter key from submitting the form - only allow button click
-          if (e.key === "Enter" && e.target instanceof HTMLInputElement) {
+          // Prevent Enter key from submitting the form on any element
+          if (e.key === "Enter") {
             e.preventDefault();
           }
         }}
@@ -1952,7 +1870,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           {currentStep === 4 && renderStep4()}
           {currentStep === 5 && renderStep5()}
           {currentStep === 6 && renderStep6()}
-          {currentStep === 7 && renderStep7()}
         </div>
 
         {/* Navigation */}
@@ -1977,7 +1894,8 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
             </button>
           ) : (
             <button
-              type="submit"
+              type="button"
+              onClick={handleSubmit}
               disabled={isSubmitting}
               className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
             >

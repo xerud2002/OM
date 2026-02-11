@@ -1198,4 +1198,134 @@ export const emailTemplates = {
     </html>
   `;
   },
+
+  mediaUploadLink: (
+    name: string,
+    requestCode: string,
+    uploadLink: string,
+  ) => {
+    name = escapeHtml(name);
+    requestCode = escapeHtml(requestCode);
+    uploadLink = escapeHtml(uploadLink);
+    return `
+    <!DOCTYPE html>
+    <html lang="ro">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { 
+            padding: 48px 40px 40px; 
+            background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+            border-bottom: 3px solid #10b981;
+          }
+          .header h1 { 
+            color: white; 
+            font-size: 24px; 
+            font-weight: 600; 
+            letter-spacing: -0.5px;
+            margin: 0;
+          }
+          .header .subtitle {
+            color: #d1fae5;
+            font-size: 15px;
+            margin-top: 8px;
+          }
+          .content { padding: 40px; }
+          .greeting { font-size: 16px; margin-bottom: 24px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+          .cta {
+            display: inline-block;
+            background: linear-gradient(135deg, #059669 0%, #0d9488 100%);
+            color: white !important;
+            font-size: 16px;
+            font-weight: 600;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            margin: 8px 0 32px;
+          }
+          .highlight { 
+            background: #ecfdf5; 
+            border-left: 3px solid #10b981; 
+            padding: 20px; 
+            margin: 32px 0;
+            border-radius: 4px;
+          }
+          .highlight p { color: #065f46; font-size: 15px; font-weight: 500; margin: 0; }
+          .note { 
+            color: #6b7280; 
+            font-size: 13px; 
+            margin-top: 24px; 
+            line-height: 1.6;
+          }
+          .footer { 
+            padding: 32px 40px; 
+            background: #f9fafb; 
+            border-top: 1px solid #e5e7eb;
+            text-align: center;
+          }
+          .footer-brand { 
+            font-size: 15px; 
+            font-weight: 600; 
+            color: #111827; 
+            margin-bottom: 8px;
+          }
+          .footer-text { 
+            color: #6b7280; 
+            font-size: 13px; 
+            line-height: 1.6;
+          }
+          .footer a { color: #059669; text-decoration: none; }
+          .footer a:hover { text-decoration: underline; }
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>Încarcă Fotografii</h1>
+              <div class="subtitle">Cererea #${requestCode}</div>
+            </div>
+            <div class="content">
+              <div class="greeting">Bună ${name},</div>
+              <div class="message">
+                Ai ales să adaugi fotografii sau videoclipuri mai târziu pentru cererea ta de mutare. Folosește butonul de mai jos pentru a încărca fișierele — acestea ajută firmele să-ți facă oferte mai precise.
+              </div>
+              
+              <div style="text-align: center;">
+                <a href="${uploadLink}" class="cta">📸 Încarcă Fotografii / Video</a>
+              </div>
+              
+              <div class="highlight">
+                <p>Pozele cu obiectele de mutat ajută firmele să estimeze mai exact volumul și costul mutării tale.</p>
+              </div>
+              
+              <div class="note">
+                Link-ul este valabil 7 zile. Dacă ai nevoie de un link nou, contactează-ne la info@ofertemutare.ro.
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+  },
 };

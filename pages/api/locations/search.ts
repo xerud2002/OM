@@ -51,7 +51,7 @@ export default async function handler(
 
   const { q } = req.query;
 
-  if (!q || typeof q !== "string" || q.length < 2) {
+  if (!q || typeof q !== "string" || q.length < 4) {
     return res.status(200).json([]);
   }
 

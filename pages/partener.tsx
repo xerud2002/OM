@@ -545,7 +545,7 @@ export default function PartenerPage({
 
                   {/* Services requested */}
                   <div className="mt-3 flex flex-wrap gap-1.5">
-                    {["Transport", "Ambalare", "Demontare"].map((s) => (
+                    {["Transport", "Împachetare", "Demontare"].map((s) => (
                       <span
                         key={s}
                         className="rounded-full bg-blue-50 px-2.5 py-1 text-xs font-medium text-blue-700"
@@ -670,7 +670,7 @@ export default function PartenerPage({
                         ? formatDate(latestRequest.moveDate)
                         : "15 Feb 2026"
                     }
-                    services={["Transport", "Ambalare"]}
+                    services={["Transport", "Împachetare"]}
                   />
                   <MockJobCard
                     from="Timișoara"
@@ -684,7 +684,7 @@ export default function PartenerPage({
                     to="Sibiu"
                     rooms="4"
                     date="22 Feb 2026"
-                    services={["Transport", "Ambalare", "Depozitare"]}
+                    services={["Transport", "Împachetare", "Depozitare"]}
                   />
                 </div>
               </div>

@@ -3,6 +3,7 @@
 // Links to existing customer account if email matches, or stores email for future linking
 
 import type { NextApiRequest, NextApiResponse } from "next";
+import { randomBytes } from "crypto";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiSuccess, apiError } from "@/types/api";
 import type { CreateGuestRequestInput } from "@/types";
@@ -263,6 +264,54 @@ export default withErrorHandler(async function handler(
     });
 
     await batch.commit();
+
+    // If user chose "later" for media upload, generate token & send upload link email
+    if (data.mediaUpload === "later") {
+      try {
+        const uploadToken = randomBytes(32).toString("hex");
+        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ofertemutare.ro";
+        const uploadLink = `${appUrl}/upload/${uploadToken}`;
+
+        const expiresAt = new Date();
+        expiresAt.setDate(expiresAt.getDate() + 7);
+
+        await adminDb.doc(`uploadTokens/${uploadToken}`).set({
+          requestId: requestRef.id,
+          customerEmail: email,
+          customerName,
+          uploadLink,
+          createdAt: new Date().toISOString(),
+          expiresAt: expiresAt.toISOString(),
+          used: false,
+          uploadedAt: null,
+        });
+
+        await adminDb.doc(`requests/${requestRef.id}`).set(
+          { mediaUploadToken: uploadToken },
+          { merge: true },
+        );
+
+        // Send upload link email (fire-and-forget)
+        sendEmail({
+          to: email,
+          subject: `📸 Încarcă fotografii pentru cererea #${requestCode}`,
+          html: emailTemplates.mediaUploadLink(
+            data.contactFirstName,
+            requestCode,
+            uploadLink,
+          ),
+        }).then((r) => {
+          if (r.success) {
+            logger.log(`Sent upload link email to ${email} for ${requestCode}`);
+          } else {
+            logger.error(`Failed to send upload link email to ${email}:`, r.error);
+          }
+        });
+      } catch (uploadErr) {
+        logger.error("Error generating upload link:", uploadErr);
+        // Don't fail the request if upload link generation fails
+      }
+    }
 
     // Send email notifications (async, don't wait)
     // Run in background to avoid slowing down request creation

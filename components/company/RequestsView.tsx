@@ -47,7 +47,7 @@ import type { MovingRequest, CompanyUser } from "@/types";
 // Core services to always display
 const CORE_SERVICES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon }[] = [
   { key: "serviceMoving", label: "Transport", icon: TruckIcon },
-  { key: "servicePacking", label: "Ambalare", icon: ArchiveBoxIcon },
+  { key: "servicePacking", label: "Împachetare", icon: ArchiveBoxIcon },
   { key: "serviceDisassembly", label: "Demontare", icon: WrenchScrewdriverIcon },
   { key: "serviceStorage", label: "Depozitare", icon: HomeModernIcon },
   { key: "serviceCleanout", label: "Debarasare" },
@@ -983,7 +983,7 @@ export default function RequestsView({
           )}
           {filterService && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              {{moving:"Transport",packing:"Ambalare",disassembly:"Demontare",storage:"Depozitare",piano:"Pian",cleanout:"Debarasare"}[filterService] || filterService}
+              {{moving:"Transport",packing:"Împachetare",disassembly:"Demontare",storage:"Depozitare",piano:"Pian",cleanout:"Debarasare"}[filterService] || filterService}
               <button onClick={() => setFilterService("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
             </span>
           )}
@@ -1033,7 +1033,7 @@ export default function RequestsView({
           Momentan nu există cereri noi.
         </motion.p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           <AnimatePresence>
             {sortedRequests.map((r, index) => (
               <motion.div
