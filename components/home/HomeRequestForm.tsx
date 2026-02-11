@@ -4,7 +4,6 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import Link from "next/link";
 import {
-  ArrowRightIcon as ArrowRight,
   MapPinIcon as MapPin,
   HomeIcon as Home,
   SparklesIcon as Sparkles,
@@ -1835,8 +1834,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-4 py-3 font-bold text-white shadow-lg transition hover:from-emerald-600 hover:to-teal-600 disabled:opacity-50"
             >
               <Sparkles className="h-5 w-5" />
-              {isSubmitting ? "Se procesează..." : "Obține Oferte Gratuite"}
-              <ArrowRight className="h-5 w-5" />
+              {isSubmitting ? "Se procesează..." : "Plasează Cererea →"}
             </button>
           )}
         </div>
