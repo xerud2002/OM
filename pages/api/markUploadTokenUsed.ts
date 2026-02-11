@@ -6,12 +6,9 @@ import { withErrorHandler } from "@/lib/apiAuth";
 
 interface UploadTokenData {
   requestId?: string;
+  customerEmail?: string;
   used?: boolean;
   uploadedAt?: string;
-}
-
-interface RequestOwnerData {
-  customerId?: string;
 }
 
 export default withErrorHandler(async function handler(
@@ -43,9 +40,9 @@ export default withErrorHandler(async function handler(
     }
     const idToken = match[1];
     const decoded = await adminAuth.verifyIdToken(idToken);
-    const uid = decoded.uid;
+    const userEmail = decoded.email?.toLowerCase();
 
-    // Load token and verify ownership by matching request's customerId
+    // Load token
     const tokenRef = adminDb.doc(`uploadTokens/${token}`);
     const tokenSnap = await tokenRef.get();
     if (!tokenSnap.exists) {
@@ -62,8 +59,17 @@ export default withErrorHandler(async function handler(
     if (!requestSnap.exists) {
       return res.status(404).json(apiError("Request not found"));
     }
-    const requestData = requestSnap.data() as RequestOwnerData | undefined;
-    if (requestData?.customerId !== uid) {
+    const requestData = requestSnap.data() as Record<string, any>;
+
+    // Verify ownership via customerId OR email match (guest requests have null customerId)
+    const ownsViaId = requestData?.customerId === decoded.uid;
+    const ownsViaEmail =
+      userEmail &&
+      (tokenData?.customerEmail?.toLowerCase() === userEmail ||
+        requestData?.customerEmail?.toLowerCase() === userEmail ||
+        requestData?.guestEmail?.toLowerCase() === userEmail);
+
+    if (!ownsViaId && !ownsViaEmail) {
       return res
         .status(403)
         .json(apiError("Not authorized to mark this token"));

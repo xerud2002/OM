@@ -704,14 +704,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
     phone: "",
     email: "",
     serviceMoving: true,
-    servicePacking: false,
-    serviceDisassembly: false,
-    serviceStorage: false,
     serviceCleanout: false,
     serviceTransportOnly: false,
     servicePiano: false,
     serviceFewItems: false,
-    surveyType: "quick-estimate",
     mediaUpload: "later",
     itemsList: "",
     acceptedTerms: false,
@@ -824,10 +820,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
 
       if (!form.acceptedTerms) errors.push("Acceptă termenii");
 
-      // Validate phone format
-      const phoneClean = (form.phone || "").replace(/\s+/g, "");
-      if (form.phone && !/^07\d{8}$/.test(phoneClean)) {
-        errors.push("Format telefon invalid (07xxxxxxxx)");
+      // Validate phone - must have at least 6 digits
+      const phoneDigits = (form.phone || "").replace(/\D/g, "");
+      if (form.phone && phoneDigits.length < 6) {
+        errors.push("Număr de telefon prea scurt");
       }
 
       // Validate email format
@@ -844,7 +840,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         if (!form.toRooms) errs.toRooms = true;
         if (!form.contactFirstName) errs.contactFirstName = true;
         if (!form.contactLastName) errs.contactLastName = true;
-        if (!form.phone || !/^07\d{8}$/.test(phoneClean)) errs.phone = true;
+        if (!form.phone || phoneDigits.length < 6) errs.phone = true;
         if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = true;
         if (!form.acceptedTerms) errs.acceptedTerms = true;
         setFieldErrors(errs);
@@ -906,14 +902,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           phone: "",
           email: "",
           serviceMoving: true,
-          servicePacking: false,
-          serviceDisassembly: false,
-          serviceStorage: false,
           serviceCleanout: false,
           serviceTransportOnly: false,
           servicePiano: false,
           serviceFewItems: false,
-          surveyType: "quick-estimate",
           mediaUpload: "later",
           acceptedTerms: false,
           details: "",
@@ -1451,8 +1443,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                       ...s,
                       serviceMoving: false,
                       serviceTransportOnly: true,
-                      servicePacking: false,
-                      serviceDisassembly: false,
                     }));
                   }
                 }}
@@ -1466,60 +1456,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           ))}
         </div>
       </div>
-
-      {/* Extra services - only for full move */}
-      {form.serviceMoving && !form.serviceTransportOnly && (
-        <div className="rounded-xl border border-gray-200 bg-white p-4">
-          <div className="mb-3">
-            <span className="font-semibold text-gray-800">Servicii extra</span>
-            <span className="ml-2 text-xs text-gray-500">(opțional)</span>
-          </div>
-
-          <div className="grid grid-cols-1 gap-2">
-            {[
-              {
-                key: "servicePacking",
-                label: "Împachetare profesională",
-                desc: "Noi împachetăm tot",
-              },
-              {
-                key: "serviceDisassembly",
-                label: "Montaj mobilier",
-                desc: "Demontare și remontare",
-              },
-              {
-                key: "serviceStorage",
-                label: "Depozitare",
-                desc: "Stocare temporară",
-              },
-            ].map((svc) => (
-              <label
-                key={svc.key}
-                className={`flex cursor-pointer items-center gap-2 rounded-lg border p-3 transition ${
-                  (form as Record<string, boolean>)[svc.key]
-                    ? "border-emerald-500 bg-emerald-50"
-                    : "border-gray-200 hover:border-emerald-200"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={!!(form as Record<string, boolean>)[svc.key]}
-                  onChange={(e) =>
-                    setForm((s) => ({ ...s, [svc.key]: e.target.checked }))
-                  }
-                  className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-                />
-                <span className="text-sm leading-tight text-gray-700">
-                  {svc.label}
-                  <span className="block text-xs text-gray-500">
-                    {svc.desc}
-                  </span>
-                </span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
 
       <div>
         <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -1776,13 +1712,13 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               Telefon *
             </label>
             <input
-              type="tel"
+              type="text"
               value={form.phone || ""}
               onChange={(e) => {
                 setForm((s) => ({ ...s, phone: e.target.value }));
                 if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.phone; return n; });
               }}
-              placeholder="07xx xxx xxx"
+              placeholder="Număr de telefon"
               className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
                 fieldErrors.phone
                   ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"

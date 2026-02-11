@@ -1328,4 +1328,104 @@ export const emailTemplates = {
     </html>
   `;
   },
+
+  mediaUploadedNotification: (
+    companyName: string,
+    requestCode: string,
+    route: string,
+  ) => {
+    companyName = escapeHtml(companyName);
+    requestCode = escapeHtml(requestCode);
+    route = escapeHtml(route);
+    return `
+    <!DOCTYPE html>
+    <html lang="ro">
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+          * { margin: 0; padding: 0; box-sizing: border-box; }
+          body { 
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7; 
+            color: #1f2937; 
+            background: #f9fafb;
+            -webkit-font-smoothing: antialiased;
+          }
+          .wrapper { padding: 40px 20px; }
+          .container { max-width: 560px; margin: 0 auto; background: white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
+          .header { 
+            padding: 48px 40px 40px; 
+            background: linear-gradient(180deg, #064e3b 0%, #065f46 100%);
+            border-bottom: 3px solid #10b981;
+          }
+          .header h1 { color: white; font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin: 0; }
+          .header .subtitle { color: #d1fae5; font-size: 15px; margin-top: 8px; }
+          .content { padding: 40px; }
+          .greeting { font-size: 16px; color: #111827; font-weight: 500; margin-bottom: 16px; }
+          .message { color: #4b5563; font-size: 15px; margin-bottom: 32px; line-height: 1.6; }
+          .highlight {
+            background: #ecfdf5;
+            border-left: 4px solid #10b981;
+            padding: 16px 20px;
+            margin: 24px 0;
+            border-radius: 0 8px 8px 0;
+          }
+          .highlight p { color: #065f46; font-size: 14px; }
+          .cta { 
+            display: inline-block;
+            background: #064e3b;
+            color: white !important;
+            padding: 16px 40px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 15px;
+            letter-spacing: 0.3px;
+          }
+          .footer { 
+            padding: 32px 40px; 
+            background: #f9fafb; 
+            border-top: 1px solid #e5e7eb; 
+            text-align: center; 
+          }
+          .footer-brand { font-size: 14px; font-weight: 600; color: #064e3b; margin-bottom: 8px; }
+          .footer-text { font-size: 13px; color: #6b7280; }
+          .footer a { color: #059669; text-decoration: none; }
+          .footer a:hover { text-decoration: underline; }
+        </style>
+      </head>
+      <body>
+        <div class="wrapper">
+          <div class="container">
+            <div class="header">
+              <h1>📸 Fotografii Noi Disponibile</h1>
+              <div class="subtitle">Cererea #${requestCode} — ${route}</div>
+            </div>
+            <div class="content">
+              <div class="greeting">Bună ${companyName},</div>
+              <div class="message">
+                Clientul a încărcat fotografii sau videoclipuri noi pentru cererea de mutare <strong>#${requestCode}</strong> (${route}). Verifică imaginile pentru a-ți ajusta oferta dacă este necesar.
+              </div>
+              
+              <div class="highlight">
+                <p>Fotografiile te ajută să estimezi mai precis volumul și complexitatea mutării.</p>
+              </div>
+              
+              <div style="text-align: center; margin: 32px 0;">
+                <a href="https://ofertemutare.ro/company/requests" class="cta">Vezi Cererea</a>
+              </div>
+            </div>
+            <div class="footer">
+              <div class="footer-brand">OferteMutare.ro</div>
+              <div class="footer-text">
+                Asistență: <a href="mailto:info@ofertemutare.ro">info@ofertemutare.ro</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+  },
 };

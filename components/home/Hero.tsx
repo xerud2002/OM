@@ -82,7 +82,7 @@ export default function Hero() {
       </div>
 
       <div className="relative z-10 container mx-auto">
-        <div className="flex flex-col items-center gap-8 sm:gap-10 lg:flex-row lg:items-start lg:justify-center lg:gap-16">
+        <div className="flex flex-col items-center gap-8 sm:gap-10 lg:flex-row lg:items-center lg:justify-center lg:gap-16">
           {/* Text Content - renders immediately without animation delay */}
           <div
             className={`max-w-xl flex-1 text-center transition-all duration-500 lg:text-left ${animationsReady ? "translate-y-0 opacity-100" : "opacity-100"}`}

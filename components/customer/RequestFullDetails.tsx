@@ -13,10 +13,7 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   TruckIcon,
-  ArchiveBoxIcon,
-  Cog6ToothIcon,
   SparklesIcon,
-  BuildingStorefrontIcon,
 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
@@ -246,32 +243,12 @@ export default function RequestFullDetails({
           </div>
         )}
 
-        {/* Survey */}
-        {request.surveyType && (
-          <div className="flex items-start gap-4 rounded-xl border border-gray-100 bg-white p-4 shadow-sm">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-sky-50">
-              <DocumentTextIcon className="h-5 w-5 text-sky-600" />
-            </div>
-            <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-gray-400">Evaluare</h4>
-              <p className="mt-1 text-base font-semibold text-gray-900">
-                {request.surveyType === "in-person"
-                  ? "Vizită la fața locului"
-                  : request.surveyType === "video"
-                    ? "Evaluare video"
-                    : "Estimare rapidă"}
-              </p>
-            </div>
-          </div>
-        )}
+        {/* Survey section removed */}
       </div>
 
       {/* Services */}
       {(request.serviceMoving ||
-        request.servicePacking ||
-        request.serviceDisassembly ||
-        request.serviceCleanout ||
-        request.serviceStorage) && (
+        request.serviceCleanout) && (
           <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50">
@@ -286,28 +263,26 @@ export default function RequestFullDetails({
                   Transport
                 </span>
               )}
-              {request.servicePacking && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700">
-                  <ArchiveBoxIcon className="h-4 w-4" />
-                  Ambalare
-                </span>
-              )}
-              {request.serviceDisassembly && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-1.5 text-sm font-medium text-purple-700">
-                  <Cog6ToothIcon className="h-4 w-4" />
-                  Demontare/Montare
-                </span>
-              )}
               {request.serviceCleanout && (
                 <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700">
                   <SparklesIcon className="h-4 w-4" />
                   Debarasare
                 </span>
               )}
-              {request.serviceStorage && (
+              {request.serviceTransportOnly && (
                 <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700">
-                  <BuildingStorefrontIcon className="h-4 w-4" />
-                  Depozitare
+                  <TruckIcon className="h-4 w-4" />
+                  Doar câteva lucruri
+                </span>
+              )}
+              {request.servicePiano && (
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-1.5 text-sm font-medium text-purple-700">
+                  Pian
+                </span>
+              )}
+              {request.serviceFewItems && (
+                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700">
+                  Doar transport
                 </span>
               )}
             </div>

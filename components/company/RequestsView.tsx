@@ -30,9 +30,6 @@ import {
   ChatBubbleLeftEllipsisIcon,
   CalendarIcon,
   TruckIcon,
-  ArchiveBoxIcon,
-  WrenchScrewdriverIcon,
-  HomeModernIcon,
   PaperAirplaneIcon,
   CheckBadgeIcon,
   MagnifyingGlassIcon,
@@ -47,11 +44,10 @@ import type { MovingRequest, CompanyUser } from "@/types";
 // Core services to always display
 const CORE_SERVICES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon }[] = [
   { key: "serviceMoving", label: "Transport", icon: TruckIcon },
-  { key: "servicePacking", label: "Împachetare", icon: ArchiveBoxIcon },
-  { key: "serviceDisassembly", label: "Demontare", icon: WrenchScrewdriverIcon },
-  { key: "serviceStorage", label: "Depozitare", icon: HomeModernIcon },
   { key: "serviceCleanout", label: "Debarasare" },
-  { key: "serviceTransportOnly", label: "Doar transport" },
+  { key: "serviceTransportOnly", label: "Doar câteva lucruri" },
+  { key: "servicePiano", label: "Pian" },
+  { key: "serviceFewItems", label: "Doar transport" },
 ];
 
 // County abbreviations mapping
@@ -204,8 +200,7 @@ function JobCard({
       </div>
 
       {/* Additional Details */}
-      {(r.specialItems ||
-        r.volumeM3 ||
+      {(r.volumeM3 ||
         r.budgetEstimate) && (
         <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs text-gray-600">
           {r.volumeM3 && (
@@ -220,14 +215,6 @@ function JobCard({
               <span className="font-medium">
                 {r.budgetEstimate} RON
               </span>
-            </div>
-          )}
-          {r.specialItems && (
-            <div className="mb-1">
-              <span className="text-gray-400">Obiecte speciale:</span>
-              <p className="text-gray-700 line-clamp-2">
-                {r.specialItems}
-              </p>
             </div>
           )}
         </div>
@@ -666,12 +653,6 @@ export default function RequestsView({
         switch (filterService) {
           case "moving":
             return r.serviceMoving;
-          case "packing":
-            return r.servicePacking;
-          case "disassembly":
-            return r.serviceDisassembly;
-          case "storage":
-            return r.serviceStorage;
           case "piano":
             return r.servicePiano;
           case "cleanout":
@@ -893,9 +874,6 @@ export default function RequestsView({
               >
                 <option value="">Serviciu: Toate</option>
                 <option value="moving">Transport</option>
-                <option value="packing">Ambalare</option>
-                <option value="disassembly">Demontare</option>
-                <option value="storage">Depozitare</option>
                 <option value="piano">Pian</option>
                 <option value="cleanout">Debarasare</option>
               </select>

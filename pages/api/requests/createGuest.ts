@@ -17,10 +17,10 @@ import { withErrorHandler } from "@/lib/apiAuth";
 // Rate limiter: max 5 requests per minute per IP
 const isRateLimited = createRateLimiter({ name: "createGuest", max: 5, windowMs: 60_000 });
 
-// Validate Romanian phone number format
+// Validate phone number - at least 6 digits (mobile or landline)
 function isValidPhone(phone: string): boolean {
-  const cleaned = phone.replace(/\s+/g, "");
-  return /^07\d{8}$/.test(cleaned);
+  const digits = phone.replace(/\D/g, "");
+  return digits.length >= 6;
 }
 
 // Validate email format
@@ -86,7 +86,7 @@ export default withErrorHandler(async function handler(
     if (!data.acceptedTerms) errors.push("Acceptă termenii");
 
     if (data.phone && !isValidPhone(data.phone)) {
-      errors.push("Format telefon invalid (07xxxxxxxx)");
+      errors.push("Număr de telefon prea scurt");
     }
 
     if (data.email && !isValidEmail(data.email)) {
@@ -98,7 +98,6 @@ export default withErrorHandler(async function handler(
     if (data.contactLastName && data.contactLastName.length > 100) errors.push("Numele este prea lung (max 100)");
     if (data.email && data.email.length > 254) errors.push("Email-ul este prea lung");
     if (data.details && data.details.length > 5000) errors.push("Detaliile sunt prea lungi (max 5000)");
-    if (data.specialItems && data.specialItems.length > 1000) errors.push("Descrierea obiectelor speciale e prea lungă (max 1000)");
     if (data.fromStreet && data.fromStreet.length > 200) errors.push("Adresa plecare prea lungă (max 200)");
     if (data.toStreet && data.toStreet.length > 200) errors.push("Adresa destinație prea lungă (max 200)");
 

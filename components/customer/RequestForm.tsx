@@ -9,8 +9,6 @@ import {
   CubeIcon,
   UserIcon,
   LockClosedIcon,
-  VideoCameraIcon,
-  BoltIcon,
   CloudArrowUpIcon,
   EnvelopeIcon,
   XMarkIcon
@@ -45,10 +43,7 @@ export type FormShape = {
   email?: string;
   details?: string;
   serviceMoving?: boolean;
-  servicePacking?: boolean;
-  serviceDisassembly?: boolean;
   serviceCleanout?: boolean;
-  serviceStorage?: boolean;
   serviceTransportOnly?: boolean;
 
   servicePiano?: boolean; // Added
@@ -64,7 +59,6 @@ export type FormShape = {
   contactLastName?: string;
   acceptedTerms?: boolean;
   itemsList?: string; // Added for HomeRequestForm
-  surveyType?: "in-person" | "video" | "quick-estimate";
 };
 
 type Props = {
@@ -313,11 +307,10 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
             { id: 'serviceMoving', label: 'Mutare', icon: TruckIcon },
-            { id: 'servicePacking', label: 'Împachetare', icon: CubeIcon },
-            { id: 'serviceDisassembly', label: 'Demontare', icon: CubeIcon },
-            { id: 'serviceCleanout', label: 'Debarasare', icon: CheckCircleIcon }, // Added Cleanout
-            { id: 'serviceStorage', label: 'Depozitare', icon: HomeIcon },
-            { id: 'serviceTransportOnly', label: 'Doar Transport', icon: TruckIcon },
+            { id: 'serviceCleanout', label: 'Debarasare', icon: CheckCircleIcon },
+            { id: 'serviceTransportOnly', label: 'Doar câteva lucruri', icon: TruckIcon },
+            { id: 'servicePiano', label: 'Pian', icon: CubeIcon },
+            { id: 'serviceFewItems', label: 'Doar Transport', icon: TruckIcon },
           ].map(s => (
             <label key={s.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all ${(form as any)[s.id] ? 'border-purple-500 bg-purple-50 ring-1 ring-purple-500' : 'border-gray-200 bg-white hover:bg-gray-50'
               }`}>
@@ -328,67 +321,6 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
               <span className={`text-sm font-medium ${(form as any)[s.id] ? 'text-purple-900' : 'text-gray-700'}`}>{s.label}</span>
             </label>
           ))}
-        </div>
-      </div>
-
-      {/* Survey Type */}
-      <div className="rounded-xl border border-yellow-100 bg-yellow-50/50 p-4">
-        <label className="mb-3 block text-sm font-semibold text-gray-900">Survey și estimare <span className="text-red-500">*</span></label>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-          <button
-            type="button"
-            onClick={() => setForm(s => ({ ...s, surveyType: 'in-person' }))}
-            className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${form.surveyType === 'in-person'
-              ? 'border-yellow-500 bg-yellow-50 ring-1 ring-yellow-500'
-              : 'border-gray-200 bg-white hover:border-yellow-300'
-              }`}
-          >
-            <div className={`rounded-lg p-2 ${form.surveyType === 'in-person' ? 'bg-yellow-200 text-yellow-800' : 'bg-gray-100 text-gray-500'}`}>
-              <UserIcon className="h-6 w-6" />
-            </div>
-            <div className="text-left">
-              <p className="font-bold text-gray-900">Survey la fața locului</p>
-              <p className="text-xs text-gray-500">Un reprezentant va veni să evalueze bunurile</p>
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setForm(s => ({ ...s, surveyType: 'video' }))}
-            className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${form.surveyType === 'video'
-              ? 'border-yellow-500 bg-yellow-50 ring-1 ring-yellow-500'
-              : 'border-gray-200 bg-white hover:border-yellow-300'
-              }`}
-          >
-            <div className={`rounded-lg p-2 ${form.surveyType === 'video' ? 'bg-yellow-200 text-yellow-800' : 'bg-gray-100 text-gray-500'}`}>
-              <VideoCameraIcon className="h-6 w-6" />
-            </div>
-            <div className="text-left">
-              <p className="font-bold text-gray-900">Survey video</p>
-              <p className="text-xs text-gray-500">Evaluare online rapidă</p>
-            </div>
-          </button>
-
-          <button
-            type="button"
-            onClick={() => setForm(s => ({ ...s, surveyType: 'quick-estimate' }))}
-            className={`relative flex flex-col items-start gap-2 rounded-xl border p-4 transition-all ${form.surveyType === 'quick-estimate'
-              ? 'border-yellow-500 bg-yellow-50 ring-1 ring-yellow-500'
-              : 'border-gray-200 bg-white hover:border-yellow-300'
-              }`}
-          >
-            <div className={`rounded-lg p-2 ${form.surveyType === 'quick-estimate' ? 'bg-yellow-200 text-yellow-800' : 'bg-gray-100 text-gray-500'}`}>
-              <BoltIcon className="h-6 w-6" />
-            </div>
-            <div className="text-left">
-              <p className="font-bold text-gray-900">Estimare rapidă</p>
-              <p className="text-xs text-gray-500">Ofertă estimativă pe baza informațiilor</p>
-            </div>
-          </button>
-        </div>
-        <div className="mt-3 flex items-start gap-2 rounded-lg bg-yellow-100 p-3 text-xs text-yellow-800">
-          <CheckCircleSolid className="h-5 w-5 shrink-0 text-yellow-600" />
-          <p>Recomandăm un survey pentru o ofertă precisă. Un survey ne ajută să determinăm mărimea vehiculului necesar și numărul de oameni pentru mutare.</p>
         </div>
       </div>
 

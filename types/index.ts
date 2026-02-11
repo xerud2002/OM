@@ -103,19 +103,13 @@ export type MovingRequest = {
   budgetEstimate?: number;
   needPacking?: boolean;
   hasElevator?: boolean;
-  specialItems?: string;
   // Services
   serviceMoving?: boolean;
-  servicePacking?: boolean;
-  serviceDisassembly?: boolean;
   serviceCleanout?: boolean;
-  serviceStorage?: boolean;
   // Additional service options
   serviceTransportOnly?: boolean; // Doar transport (fără încărcare/descărcare)
   servicePiano?: boolean; // Mutare pian
   serviceFewItems?: boolean; // Câteva lucruri
-  // Survey & Estimate
-  surveyType?: "in-person" | "video" | "quick-estimate";
   // Media upload
   mediaUpload?: "now" | "later";
   mediaUploadToken?: string;
@@ -192,10 +186,7 @@ export type CreateGuestRequestInput = {
   moveDateFlexDays?: number;
   // Services
   serviceMoving?: boolean;
-  servicePacking?: boolean;
-  serviceDisassembly?: boolean;
   serviceCleanout?: boolean;
-  serviceStorage?: boolean;
   serviceTransportOnly?: boolean;
   servicePiano?: boolean;
   serviceFewItems?: boolean;
@@ -203,8 +194,6 @@ export type CreateGuestRequestInput = {
   details?: string;
   volumeM3?: number;
   furniture?: string;
-  specialItems?: string;
-  surveyType?: "in-person" | "video" | "quick-estimate";
   mediaUpload?: "now" | "later";
   mediaFiles?: File[];
   fromCityManual?: string;
