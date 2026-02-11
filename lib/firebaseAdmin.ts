@@ -4,7 +4,6 @@ import { logger } from "@/utils/logger";
 
 // Use global to persist state across hot-reloads in development
 declare global {
-  // eslint-disable-next-line no-var
   var _firebaseAdminHasCredentials: boolean | undefined;
 }
 
