@@ -104,11 +104,7 @@ export type MovingRequest = {
   hasElevator?: boolean;
   // Services
   serviceMoving?: boolean;
-  serviceCleanout?: boolean;
-  // Additional service options
-  serviceTransportOnly?: boolean; // Doar transport (fără încărcare/descărcare)
-  servicePiano?: boolean; // Mutare pian
-  serviceFewItems?: boolean; // Câteva lucruri
+  serviceTransportOnly?: boolean;
   // Media upload
   mediaUpload?: "now" | "later";
   mediaUploadToken?: string;
@@ -185,10 +181,7 @@ export type CreateGuestRequestInput = {
   moveDateFlexDays?: number;
   // Services
   serviceMoving?: boolean;
-  serviceCleanout?: boolean;
   serviceTransportOnly?: boolean;
-  servicePiano?: boolean;
-  serviceFewItems?: boolean;
   // Other
   details?: string;
   volumeM3?: number;

@@ -13,7 +13,6 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   TruckIcon,
-  SparklesIcon,
 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
@@ -247,42 +246,25 @@ export default function RequestFullDetails({
       </div>
 
       {/* Services */}
-      {(request.serviceMoving ||
-        request.serviceCleanout) && (
+      {(request.serviceMoving || request.serviceTransportOnly) && (
           <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50">
                 <WrenchScrewdriverIcon className="h-5 w-5 text-orange-600" />
               </div>
-              <h3 className="text-lg font-semibold text-gray-900">Servicii Solicitate</h3>
+              <h3 className="text-lg font-semibold text-gray-900">Tip Serviciu</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {request.serviceMoving && (
                 <span className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700">
                   <TruckIcon className="h-4 w-4" />
-                  Transport
-                </span>
-              )}
-              {request.serviceCleanout && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-sm font-medium text-emerald-700">
-                  <SparklesIcon className="h-4 w-4" />
-                  Debarasare
+                  Mutare completă
                 </span>
               )}
               {request.serviceTransportOnly && (
                 <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700">
                   <TruckIcon className="h-4 w-4" />
                   Doar câteva lucruri
-                </span>
-              )}
-              {request.servicePiano && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-purple-200 bg-purple-50 px-3 py-1.5 text-sm font-medium text-purple-700">
-                  Pian
-                </span>
-              )}
-              {request.serviceFewItems && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-amber-200 bg-amber-50 px-3 py-1.5 text-sm font-medium text-amber-700">
-                  Doar transport
                 </span>
               )}
             </div>

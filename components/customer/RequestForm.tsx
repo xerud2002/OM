@@ -6,7 +6,6 @@ import {
   CalendarIcon,
   ChevronRightIcon,
   CheckCircleIcon,
-  CubeIcon,
   UserIcon,
   LockClosedIcon,
   CloudArrowUpIcon,
@@ -43,11 +42,7 @@ export type FormShape = {
   email?: string;
   details?: string;
   serviceMoving?: boolean;
-  serviceCleanout?: boolean;
   serviceTransportOnly?: boolean;
-
-  servicePiano?: boolean; // Added
-  serviceFewItems?: boolean; // Added
   mediaUpload?: "now" | "later" | "none" | "list"; // Added list option
   mediaFiles?: File[];
   moveDateMode?: "exact" | "range" | "none" | "flexible" | "urgent";
@@ -305,11 +300,8 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
         <p className="mb-3 text-xs text-gray-500">Selectează serviciile de care ai nevoie</p>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { id: 'serviceMoving', label: 'Mutare', icon: TruckIcon },
-            { id: 'serviceCleanout', label: 'Debarasare', icon: CheckCircleIcon },
+            { id: 'serviceMoving', label: 'Mutare completă', icon: TruckIcon },
             { id: 'serviceTransportOnly', label: 'Doar câteva lucruri', icon: TruckIcon },
-            { id: 'servicePiano', label: 'Pian', icon: CubeIcon },
-            { id: 'serviceFewItems', label: 'Doar Transport', icon: TruckIcon },
           ].map(s => (
             <label key={s.id} className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all ${(form as any)[s.id] ? 'border-purple-500 bg-purple-50 ring-1 ring-purple-500' : 'border-gray-200 bg-white hover:bg-gray-50'
               }`}>

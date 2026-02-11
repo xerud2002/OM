@@ -43,11 +43,8 @@ import type { MovingRequest, CompanyUser } from "@/types";
 
 // Core services to always display
 const CORE_SERVICES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon }[] = [
-  { key: "serviceMoving", label: "Transport", icon: TruckIcon },
-  { key: "serviceCleanout", label: "Debarasare" },
+  { key: "serviceMoving", label: "Mutare completă", icon: TruckIcon },
   { key: "serviceTransportOnly", label: "Doar câteva lucruri" },
-  { key: "servicePiano", label: "Pian" },
-  { key: "serviceFewItems", label: "Doar transport" },
 ];
 
 // County abbreviations mapping
@@ -653,10 +650,8 @@ export default function RequestsView({
         switch (filterService) {
           case "moving":
             return r.serviceMoving;
-          case "piano":
-            return r.servicePiano;
-          case "cleanout":
-            return r.serviceCleanout;
+          case "transport":
+            return r.serviceTransportOnly;
           default:
             return true;
         }
@@ -873,9 +868,8 @@ export default function RequestsView({
                 }`}
               >
                 <option value="">Serviciu: Toate</option>
-                <option value="moving">Transport</option>
-                <option value="piano">Pian</option>
-                <option value="cleanout">Debarasare</option>
+                <option value="moving">Mutare completă</option>
+                <option value="transport">Doar câteva lucruri</option>
               </select>
 
               <select
