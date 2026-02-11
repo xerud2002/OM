@@ -87,6 +87,7 @@ export default function CustomerDashboard() {
   const [detailModalRequestId, setDetailModalRequestId] = useState<string | null>(null);
   const detailModalRequest = requests.find((r) => r.id === detailModalRequestId);
   const offerUnsubsRef = useRef<Array<() => void>>([]);
+  const requestsUnsubRef = useRef<(() => void) | null>(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
@@ -110,6 +111,11 @@ export default function CustomerDashboard() {
     const unsubAuth = onAuthChange(async (u: User | null) => {
       setUser(u);
       if (!u) {
+        // Unsubscribe all Firestore listeners before clearing state
+        requestsUnsubRef.current?.();
+        requestsUnsubRef.current = null;
+        offerUnsubsRef.current.forEach(unsub => unsub());
+        offerUnsubsRef.current = [];
         setRequests([]);
         setOffersByRequest({});
         return;
@@ -149,7 +155,10 @@ export default function CustomerDashboard() {
         orderBy("createdAt", "desc"),
       );
 
-      const unsubRequests = onSnapshot(
+      // Clean up any previous request listener
+      requestsUnsubRef.current?.();
+
+      requestsUnsubRef.current = onSnapshot(
         q,
         (snap) => {
           const reqs = snap.docs.map(
@@ -189,14 +198,15 @@ export default function CustomerDashboard() {
         },
       );
 
-      return () => {
-        unsubRequests();
-        offerUnsubsRef.current.forEach(unsub => unsub());
-        offerUnsubsRef.current = [];
-      };
     });
 
-    return () => unsubAuth();
+    return () => {
+      unsubAuth();
+      requestsUnsubRef.current?.();
+      requestsUnsubRef.current = null;
+      offerUnsubsRef.current.forEach(unsub => unsub());
+      offerUnsubsRef.current = [];
+    };
   }, []);
 
   // Select request from URL query parameter or first request with offers

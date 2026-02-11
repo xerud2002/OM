@@ -251,8 +251,10 @@ export default function CustomerNotificationBell({
 
                     {/* Regular notifications */}
                     {notifications.map((notification) => (
-                      <button
+                      <div
                         key={notification.id}
+                        role="button"
+                        tabIndex={0}
                         onClick={() => {
                           if (!notification.read) markAsRead(notification.id);
                           setShowDropdown(false);
@@ -262,7 +264,13 @@ export default function CustomerNotificationBell({
                             router.push({ pathname: "/customer/dashboard", query });
                           }
                         }}
-                        className={`group relative w-full px-4 py-3 text-left transition-colors hover:bg-gray-50 ${!notification.read ? "bg-emerald-50/30" : ""}`}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            e.currentTarget.click();
+                          }
+                        }}
+                        className={`group relative w-full cursor-pointer px-4 py-3 text-left transition-colors hover:bg-gray-50 ${!notification.read ? "bg-emerald-50/30" : ""}`}
                       >
                         <div className="flex items-start gap-3">
                           <div className="mt-0.5">
@@ -300,7 +308,7 @@ export default function CustomerNotificationBell({
                             </div>
                           </div>
                         </div>
-                      </button>
+                      </div>
                     ))}
                   </div>
                 )}
