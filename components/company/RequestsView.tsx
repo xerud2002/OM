@@ -32,7 +32,6 @@ import {
   TruckIcon,
   PaperAirplaneIcon,
   CheckBadgeIcon,
-  MagnifyingGlassIcon,
   FunnelIcon,
   XMarkIcon,
   ChevronDownIcon,
@@ -42,10 +41,6 @@ import {
 import type { MovingRequest, CompanyUser } from "@/types";
 
 // Core services to always display
-const CORE_SERVICES: { key: keyof MovingRequest; label: string; icon?: typeof TruckIcon }[] = [
-  { key: "serviceMoving", label: "Mutare completă", icon: TruckIcon },
-  { key: "serviceTransportOnly", label: "Doar câteva lucruri" },
-];
 
 // County abbreviations mapping
 const COUNTY_ABBREV: Record<string, string> = {
@@ -240,24 +235,19 @@ function JobCard({
         </div>
       )}
 
-      {/* Services - Always show all core services */}
+      {/* Service type - show only what the client selected */}
       <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 border-t border-gray-100 px-3 sm:px-4 py-2">
-        {CORE_SERVICES.map((s) => {
-          const isSelected = !!r[s.key];
+        {(() => {
+          const service = r.serviceTransportOnly
+            ? { label: "Doar câteva lucruri", icon: TruckIcon }
+            : { label: "Mutare completă", icon: TruckIcon };
           return (
-            <span 
-              key={s.key} 
-              className={`flex items-center gap-0.5 sm:gap-1 rounded px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium ${
-                isSelected 
-                  ? 'bg-emerald-50 text-emerald-700' 
-                  : 'bg-red-50 text-red-400'
-              }`}
-            >
-              {s.icon && <s.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />}
-              {s.label}
+            <span className="flex items-center gap-0.5 sm:gap-1 rounded bg-blue-50 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-blue-700">
+              <service.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
+              {service.label}
             </span>
           );
-        })}
+        })()}
       </div>
 
       {/* Notes Section - Always visible, 3 lines fixed */}
@@ -347,7 +337,6 @@ export default function RequestsView({
 
   // Filter State
   const [showFilters, setShowFilters] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
   const [filterService, setFilterService] = useState<string>("");
   const [filterElevator, setFilterElevator] = useState<"" | "yes" | "no">("");
   const [filterPropertyType, setFilterPropertyType] = useState<
@@ -633,17 +622,6 @@ export default function RequestsView({
   const sortedRequests = useMemo(() => {
     let arr = [...combinedRequests];
 
-    // Apply filters
-    if (searchQuery.trim()) {
-      const q = searchQuery.toLowerCase();
-      arr = arr.filter((r) => {
-        const fromCity = (r.fromCity || "").toLowerCase();
-        const toCity = (r.toCity || "").toLowerCase();
-        const code = (r.requestCode || r.id).toLowerCase();
-        return fromCity.includes(q) || toCity.includes(q) || code.includes(q);
-      });
-    }
-
     // Filter by service
     if (filterService) {
       arr = arr.filter((r) => {
@@ -705,7 +683,6 @@ export default function RequestsView({
   }, [
     combinedRequests,
     sortBy,
-    searchQuery,
     filterService,
     filterElevator,
     filterPropertyType,
@@ -717,7 +694,6 @@ export default function RequestsView({
 
   const activeFiltersCount = useMemo(() => {
     let count = 0;
-    if (searchQuery) count++;
     if (filterService) count++;
     if (filterElevator) count++;
     if (filterPropertyType) count++;
@@ -725,7 +701,6 @@ export default function RequestsView({
     if (filterStatus) count++;
     return count;
   }, [
-    searchQuery,
     filterService,
     filterElevator,
     filterPropertyType,
@@ -735,7 +710,6 @@ export default function RequestsView({
   ]);
 
   const clearAllFilters = () => {
-    setSearchQuery("");
     setFilterService("");
     setFilterElevator("");
     setFilterPropertyType("");
@@ -792,28 +766,8 @@ export default function RequestsView({
 
   return (
     <div>
-      {/* Top Bar: Search + Sort + Filter Toggle */}
+      {/* Top Bar: Sort + Filter Toggle */}
       <div className="mb-3 flex flex-wrap items-center gap-2">
-        {/* Search - always visible */}
-        <div className="relative min-w-50 flex-1">
-          <MagnifyingGlassIcon className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-          <input
-            type="text"
-            placeholder="Caută oraș sau cod cerere..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-lg border border-gray-200 bg-white py-2 pl-9 pr-8 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            >
-              <XMarkIcon className="h-4 w-4" />
-            </button>
-          )}
-        </div>
-
         {/* Sort */}
         <select
           value={sortBy}
@@ -947,15 +901,9 @@ export default function RequestsView({
       {activeFiltersCount > 0 && !showFilters && (
         <div className="mb-3 flex flex-wrap items-center gap-1.5">
           <span className="text-xs text-gray-400 mr-1">Filtre active:</span>
-          {searchQuery && (
-            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              &quot;{searchQuery}&quot;
-              <button onClick={() => setSearchQuery("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
-            </span>
-          )}
           {filterService && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              {{moving:"Transport",packing:"Împachetare",disassembly:"Demontare",storage:"Depozitare",piano:"Pian",cleanout:"Debarasare"}[filterService] || filterService}
+              {{moving:"Mutare completă",transport:"Doar câteva lucruri"}[filterService] || filterService}
               <button onClick={() => setFilterService("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
             </span>
           )}
