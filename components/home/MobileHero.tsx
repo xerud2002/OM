@@ -1,5 +1,3 @@
-"use client";
-
 import dynamic from "next/dynamic";
 import {
   CheckCircleIcon,
@@ -41,13 +39,18 @@ function TrustIndicators() {
 
 export default function MobileHero() {
   return (
-    <section id="request-form" className="relative overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-8 md:hidden">
+    <section
+      id="request-form"
+      className="relative overflow-hidden bg-linear-to-br from-slate-50 via-white to-emerald-50/30 px-4 pt-20 pb-8 md:hidden"
+    >
       <div className="relative z-10 mx-auto max-w-lg">
         {/* Badge - pure HTML, no JS */}
         <div className="mb-3 flex justify-center">
           <div className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50/50 px-3 py-1.5 shadow-sm">
             <span className="h-2 w-2 rounded-full bg-emerald-500" />
-            <span className="text-xs font-semibold text-emerald-700">Compară oferte gratuit</span>
+            <span className="text-xs font-semibold text-emerald-700">
+              Compară oferte gratuit
+            </span>
           </div>
         </div>
 
@@ -61,8 +64,14 @@ export default function MobileHero() {
         {/* Subheadline - same as desktop */}
         <p className="mx-auto mb-3 text-center text-sm leading-relaxed text-slate-600">
           Găsește firma de mutări perfectă,{" "}
-          <span className="font-semibold text-slate-900">fără zeci de telefoane</span>. Compară
-          prețurile și <span className="font-semibold text-emerald-600">ia cea mai bună decizie</span>.
+          <span className="font-semibold text-slate-900">
+            fără zeci de telefoane
+          </span>
+          . Compară prețurile și{" "}
+          <span className="font-semibold text-emerald-600">
+            ia cea mai bună decizie
+          </span>
+          .
         </p>
 
         {/* Trust Indicators - same as desktop */}
@@ -71,7 +80,9 @@ export default function MobileHero() {
         {/* Form Section */}
         <div className="rounded-2xl border border-slate-200/80 bg-white/95 p-4 shadow-xl shadow-slate-200/50 backdrop-blur-sm">
           <div className="mb-3 text-center">
-            <h2 className="text-base font-bold text-gray-800">Completează în 2 minute</h2>
+            <h2 className="text-base font-bold text-gray-800">
+              Completează în 2 minute
+            </h2>
             <p className="text-xs text-gray-500">Primești 3-5 oferte în 24h</p>
           </div>
           <HomeRequestForm />
@@ -80,5 +91,3 @@ export default function MobileHero() {
     </section>
   );
 }
-
-

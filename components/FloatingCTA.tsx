@@ -1,5 +1,3 @@
-"use client";
-
 import { motion } from "framer-motion";
 import { ArrowRightIcon as ArrowRight } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
@@ -75,10 +73,8 @@ export default function FloatingCTA() {
       className="fixed right-6 bottom-6 z-40 flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-5 py-3 font-bold text-white shadow-2xl transition-all hover:shadow-emerald-400/50 md:hidden"
       aria-label="Primește oferte gratuite"
     >
-      🎁 Primește Oferte
+      📋 Primește Oferte
       <ArrowRight className="h-5 w-5" />
     </motion.button>
   );
 }
-
-

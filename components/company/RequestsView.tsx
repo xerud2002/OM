@@ -77,9 +77,9 @@ function JobCard({
 }: {
   request: MovingRequest;
   hasMine: false | { offerId: string; status: string };
-  // eslint-disable-next-line no-unused-vars
+   
   onOfferClick: (r: MovingRequest) => void;
-  // eslint-disable-next-line no-unused-vars
+   
   onChatClick?: (requestId: string, offerId: string) => void;
   unreadOfferIds?: Set<string>;
 }) {

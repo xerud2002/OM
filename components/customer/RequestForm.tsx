@@ -133,7 +133,7 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
   };
 
   // Jump to step (only if unlocked) - disabled, kept for future use
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const handleJumpToStep = (stepId: number) => {
     if (stepId <= currentStep) {
       const target = stepRefs.current[stepId - 1];
@@ -146,7 +146,7 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
 
   // --- RENDER HELPERS ---
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+   
   const renderStepStatus = (stepId: number) => {
     if (stepId < currentStep) return "completed";
     if (stepId === currentStep) return "current";

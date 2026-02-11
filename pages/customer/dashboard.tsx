@@ -20,6 +20,7 @@ import {
   ChevronRightIcon,
   GiftIcon,
   PhoneIcon,
+  EyeIcon,
   EnvelopeIcon,
   DocumentPlusIcon,
   StarIcon,
@@ -83,6 +84,8 @@ export default function CustomerDashboard() {
   );
   const [chatOffer, setChatOffer] = useState<Offer | null>(null);
   const [showDetails, setShowDetails] = useState(false);
+  const [detailModalRequestId, setDetailModalRequestId] = useState<string | null>(null);
+  const detailModalRequest = requests.find((r) => r.id === detailModalRequestId);
   const offerUnsubsRef = useRef<Array<() => void>>([]);
 
   // Filters
@@ -452,13 +455,7 @@ export default function CustomerDashboard() {
                   </Link>
                 </div>
                 {/* Filter bar */}
-                <div className="border-b border-gray-100 px-3 py-2 sm:px-4 sm:py-3 space-y-2">
-                  <SearchInput
-                    value={searchQuery}
-                    onChange={setSearchQuery}
-                    placeholder="Caută oraș..."
-                    className="[&_input]:w-full [&_input]:sm:w-full"
-                  />
+                <div className="border-b border-gray-100 px-3 py-2 sm:px-4 sm:py-3">
                   <div className="flex items-center gap-2">
                     <FunnelIcon className="h-3.5 w-3.5 text-gray-400 shrink-0" />
                     <select
@@ -570,18 +567,30 @@ export default function CustomerDashboard() {
                                     Fără oferte
                                   </span>
                                 )}
-                                <span
-                                  className={`shrink-0 rounded-full px-1.5 py-0.5 sm:px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
-                                    req.status === "closed" ||
-                                    req.status === "accepted"
-                                      ? "bg-emerald-100 text-emerald-700"
-                                      : req.status === "active"
-                                        ? "bg-blue-100 text-blue-700"
-                                        : "bg-gray-100 text-gray-500"
-                                  }`}
-                                >
-                                  {getStatusLabel(req.status)}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      setDetailModalRequestId(req.id);
+                                    }}
+                                    className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+                                  >
+                                    <EyeIcon className="h-3 w-3" />
+                                    Detalii
+                                  </button>
+                                  <span
+                                    className={`shrink-0 rounded-full px-1.5 py-0.5 sm:px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
+                                      req.status === "closed" ||
+                                      req.status === "accepted"
+                                        ? "bg-emerald-100 text-emerald-700"
+                                        : req.status === "active"
+                                          ? "bg-blue-100 text-blue-700"
+                                          : "bg-gray-100 text-gray-500"
+                                    }`}
+                                  >
+                                    {getStatusLabel(req.status)}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </button>
@@ -665,76 +674,10 @@ export default function CustomerDashboard() {
                     )}
                   </div>
 
-                  {/* Request summary card (route + status) */}
-                  <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                    <div className="relative overflow-hidden bg-emerald-600 px-4 py-2.5 sm:px-6 sm:py-4">
-                      <div className="relative flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
-                        <div className="flex items-center gap-3 sm:gap-4">
-                          <div className="flex h-10 w-10 sm:h-14 sm:w-14 items-center justify-center rounded-xl sm:rounded-2xl bg-white/20">
-                            <TruckIcon className="h-5 w-5 sm:h-7 sm:w-7 text-white" />
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <h2 className="text-base sm:text-xl font-bold text-white truncate">
-                              {selectedRequest.fromCity} →{" "}
-                              {selectedRequest.toCity}
-                            </h2>
-                            <p className="mt-0.5 text-xs sm:text-sm text-white/80">
-                              {selectedRequest.requestCode ||
-                                `#${selectedRequest.id.slice(0, 8)}`}
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="flex items-center gap-2 sm:gap-3">
-                          <button
-                            onClick={() => setShowDetails(!showDetails)}
-                            className="inline-flex items-center gap-1.5 sm:gap-2 rounded-lg sm:rounded-xl bg-white/20 px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold text-white transition hover:bg-white/30 active:bg-white/40"
-                          >
-                            {showDetails
-                              ? "Ascunde"
-                              : "Detalii"}
-                            <ChevronRightIcon
-                              className={`h-3.5 w-3.5 sm:h-4 sm:w-4 transition-transform ${showDetails ? "rotate-90" : ""}`}
-                            />
-                          </button>
-                          <span
-                            className={`inline-flex items-center gap-1 sm:gap-1.5 rounded-full px-2.5 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm font-semibold ${
-                              hasAcceptedOffer(selectedRequest.id)
-                                ? "bg-white text-emerald-700"
-                                : selectedRequest.status === "active"
-                                  ? "bg-white/20 text-white"
-                                  : "bg-white/20 text-white"
-                            }`}
-                          >
-                            {hasAcceptedOffer(selectedRequest.id) && (
-                              <CheckCircleSolid className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                            )}
-                            {selectedRequest.status === "active" &&
-                              !hasAcceptedOffer(selectedRequest.id) && (
-                                <ClockIcon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                              )}
-                            <span className="hidden sm:inline">
-                              {hasAcceptedOffer(selectedRequest.id)
-                                ? "Ofertă Acceptată"
-                                : selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id)
-                                  ? "În Așteptare"
-                                  : getStatusLabel(selectedRequest.status)}
-                            </span>
-                            <span className="sm:hidden">
-                              {hasAcceptedOffer(selectedRequest.id)
-                                ? "Acceptată"
-                                : selectedRequest.status === "active" && !hasAcceptedOffer(selectedRequest.id)
-                                  ? "Așteptare"
-                                  : getStatusLabel(selectedRequest.status)}
-                            </span>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Actions for closed requests */}
-                    {selectedRequest.status === "closed" && (
-                      <div className="p-4 sm:p-6 gradient-emerald-b">
+                  {/* Actions for closed requests */}
+                  {selectedRequest.status === "closed" && (
+                    <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+                      <div className="p-4 sm:p-6">
                         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
                           <button
                             onClick={() => handleReactivate(selectedRequest.id)}
@@ -757,27 +700,8 @@ export default function CustomerDashboard() {
                           </button>
                         </div>
                       </div>
-                    )}
-                  </div>
-
-                  {/* Expandable details - opens BELOW the summary card */}
-                  <AnimatePresence>
-                    {showDetails && (
-                      <motion.div
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"
-                      >
-                        <div className="p-4 sm:p-6">
-                          <RequestFullDetails
-                            request={selectedRequest}
-                            isOwner={true}
-                          />
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="flex h-64 items-center justify-center rounded-2xl border-2 border-dashed border-gray-200 bg-gray-50">
@@ -792,6 +716,51 @@ export default function CustomerDashboard() {
             </main>
           </div>
         )}
+
+        {/* Request Details Modal */}
+        <AnimatePresence>
+          {detailModalRequest && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+              onClick={() => setDetailModalRequestId(null)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                className="relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setDetailModalRequestId(null)}
+                  className="absolute right-3 top-3 rounded-full bg-gray-100 p-2 text-gray-600 transition hover:bg-gray-200"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+                <div className="mb-4 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+                    <TruckIcon className="h-5 w-5 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-gray-900">
+                      {detailModalRequest.fromCity} → {detailModalRequest.toCity}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {detailModalRequest.requestCode || `#${detailModalRequest.id.slice(0, 8)}`}
+                    </p>
+                  </div>
+                </div>
+                <RequestFullDetails
+                  request={detailModalRequest}
+                  isOwner={true}
+                />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Chat Modal */}
         <AnimatePresence>

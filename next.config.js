@@ -40,9 +40,6 @@ const nextConfig = {
     ],
   },
 
-  // Enable SWC minification for faster builds
-  swcMinify: true,
-
   // Compress pages for better performance
   compress: true,
 
@@ -262,6 +259,9 @@ const nextConfig = {
       },
     ];
   },
+
+  // Turbopack config (Next.js 16 default bundler)
+  turbopack: {},
 
   // Webpack configuration for better development experience
   webpack: (config, { dev, isServer }) => {

@@ -9,7 +9,7 @@ import { useState } from "react";
 type OfferModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  // eslint-disable-next-line no-unused-vars
+   
   onConfirm: (price: number, message: string) => Promise<void>;
   title?: string;
   isLoading?: boolean;

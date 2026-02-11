@@ -13,7 +13,17 @@ import "../globals.css";
 import "react-day-picker/dist/style.css";
 
 // Web Vitals reporting - sends LCP, FID, CLS, INP, TTFB to GA4
-export function reportWebVitals({ id, name, label, value }: { id: string; name: string; label: string; value: number }) {
+export function reportWebVitals({
+  id,
+  name,
+  label,
+  value,
+}: {
+  id: string;
+  name: string;
+  label: string;
+  value: number;
+}) {
   if (typeof window !== "undefined" && "gtag" in window) {
     (window as any).gtag("event", name, {
       event_category: label === "web-vital" ? "Web Vitals" : "Next.js Metric",
@@ -26,7 +36,7 @@ export function reportWebVitals({ id, name, label, value }: { id: string; name: 
 
 // Dev error suppressor loaded only in development (tree-shaken in production)
 if (process.env.NODE_ENV === "development") {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
+   
   require("@/utils/devErrorSuppressor");
 }
 import { pageView } from "@/utils/analytics";
@@ -42,24 +52,10 @@ const inter = Inter({
 
 import ErrorBoundary from "@/components/ErrorBoundary";
 
-// Lazy load layout components to reduce initial bundle
-const Navbar = dynamic(() => import("@/components/layout/Navbar"), {
-  ssr: true,
-  loading: () => (
-    <header className="fixed top-0 left-0 z-50 w-full bg-white/60 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
-        <div className="text-2xl font-bold text-emerald-700">OferteMutare</div>
-      </div>
-    </header>
-  ),
-});
-
-const Footer = dynamic(() => import("@/components/layout/Footer"), {
-  ssr: true,
-  loading: () => (
-    <footer className="mt-10 border-t border-gray-200 bg-white py-14" />
-  ),
-});
+// Layout components imported statically to avoid hydration mismatch
+// (dynamic + ssr:true + loading skeleton causes server/client HTML divergence)
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
 
 // Lazy load non-critical components
 const FloatingCTA = dynamic(() => import("@/components/FloatingCTA"), {
@@ -143,7 +139,10 @@ export default function App({ Component, pageProps }: AppProps) {
     <ErrorBoundary>
       {/* Fallback meta for pages that don't set their own <Head> */}
       <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover"
+        />
         <meta charSet="utf-8" />
         <meta
           name="google-site-verification"
