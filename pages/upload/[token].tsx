@@ -3,9 +3,8 @@ import { useRouter } from "next/router";
 import LayoutWrapper from "@/components/layout/Layout";
 import { ArrowUpTrayIcon as Upload, CheckCircleIcon as CheckCircle, XCircleIcon as XCircle, ArrowPathIcon as Loader2, VideoCameraIcon as FileVideo } from "@heroicons/react/24/outline";
 import { toast } from "sonner";
-import { storage, db, auth } from "@/services/firebase";
+import { storage, auth } from "@/services/firebase";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, updateDoc, arrayUnion } from "firebase/firestore";
 import Link from "next/link";
 import { onAuthStateChanged, User } from "firebase/auth";
 import { logger } from "@/utils/logger";
@@ -172,13 +171,7 @@ export default function UploadMediaPage() {
         });
       }
 
-      // Update request document with media URLs
-      const requestRef = doc(db, "requests", tokenData.requestId);
-      await updateDoc(requestRef, {
-        mediaUrls: arrayUnion(...uploadedUrls),
-      });
-
-      // Mark token as used via secure API (Admin SDK)
+      // Update request document with media URLs + mark token as used via secure API (Admin SDK)
       try {
         const idToken = await auth.currentUser?.getIdToken();
         const resp = await fetch("/api/markUploadTokenUsed", {
@@ -187,15 +180,17 @@ export default function UploadMediaPage() {
             "Content-Type": "application/json",
             Authorization: `Bearer ${idToken}`,
           },
-          body: JSON.stringify({ token }),
+          body: JSON.stringify({ token, mediaUrls: uploadedUrls }),
         });
         if (!resp.ok) {
           const data = await resp.json().catch(() => ({}));
           throw new Error(data.error || `HTTP ${resp.status}`);
         }
       } catch (e: any) {
-        logger.error("Failed to mark token used:", e?.message || e);
-        toast.error("Nu am putut marca link-ul ca folosit.");
+        logger.error("Failed to save upload:", e?.message || e);
+        toast.error("Eroare la salvarea fi\u0219ierelor. Te rug\u0103m s\u0103 \u00eencerci din nou.");
+        setUploading(false);
+        return;
       }
 
       // Notify companies with offers

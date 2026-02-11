@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminAuth, adminReady } from "@/lib/firebaseAdmin";
+import { FieldValue } from "firebase-admin/firestore";
 import { logger } from "@/utils/logger";
 import { apiError, apiSuccess } from "@/types/api";
 import { withErrorHandler } from "@/lib/apiAuth";
@@ -20,7 +21,7 @@ export default withErrorHandler(async function handler(
     return res.status(405).json(apiError("Method Not Allowed"));
   }
 
-  const { token } = req.body || {};
+  const { token, mediaUrls } = req.body || {};
   if (!token || typeof token !== "string") {
     return res.status(400).json(apiError("Missing required field: token"));
   }
@@ -73,6 +74,16 @@ export default withErrorHandler(async function handler(
       return res
         .status(403)
         .json(apiError("Not authorized to mark this token"));
+    }
+
+    // Save uploaded media URLs to the request document (Admin SDK bypasses rules)
+    if (Array.isArray(mediaUrls) && mediaUrls.length > 0) {
+      const validUrls = mediaUrls.filter((u: unknown) => typeof u === "string" && u.startsWith("https://"));
+      if (validUrls.length > 0) {
+        await requestRef.update({
+          mediaUrls: FieldValue.arrayUnion(...validUrls),
+        });
+      }
     }
 
     await tokenRef.set(
