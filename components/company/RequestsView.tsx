@@ -294,18 +294,18 @@ function JobCard({
             {hasMine.status === "accepted" ? (
               <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
                 <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                ACCEPTAT
+                Ofertă Acceptată
               </span>
             ) : hasMine.status === "declined" ||
               hasMine.status === "rejected" ? (
               <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-red-600">
                 <XMarkIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                REFUZAT
+                Ofertă Refuzată
               </span>
             ) : (
               <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-emerald-700">
                 <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                OFERTAT
+                Ofertă Plasată
               </span>
             )}
             {hasMine.offerId && onChatClick && (
