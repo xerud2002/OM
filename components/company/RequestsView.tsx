@@ -326,33 +326,25 @@ function JobCard({
                 )}
               </button>
             )}
+            {r.phone && (
+              <a
+                href={`tel:${r.phone}`}
+                className="rounded-lg bg-blue-50 p-1.5 sm:p-2 text-blue-600 hover:bg-blue-100 transition active:scale-95"
+                title={r.phone}
+              >
+                <PhoneIcon className="h-4 w-4" />
+              </a>
+            )}
+            {(r.customerEmail || r.guestEmail) && (
+              <a
+                href={`mailto:${r.customerEmail || r.guestEmail}`}
+                className="rounded-lg bg-purple-50 p-1.5 sm:p-2 text-purple-600 hover:bg-purple-100 transition active:scale-95"
+                title={r.customerEmail || r.guestEmail}
+              >
+                <EnvelopeIcon className="h-4 w-4" />
+              </a>
+            )}
           </div>
-
-          {/* Contact info */}
-          {(r.phone || r.customerEmail || r.guestEmail) && (
-            <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
-              {r.phone && (
-                <a
-                  href={`tel:${r.phone}`}
-                  className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-600 hover:text-blue-600 transition"
-                  title={r.phone}
-                >
-                  <PhoneIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                  <span>{r.phone}</span>
-                </a>
-              )}
-              {(r.customerEmail || r.guestEmail) && (
-                <a
-                  href={`mailto:${r.customerEmail || r.guestEmail}`}
-                  className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-600 hover:text-blue-600 transition truncate max-w-[180px]"
-                  title={r.customerEmail || r.guestEmail}
-                >
-                  <EnvelopeIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0" />
-                  <span className="truncate">{r.customerEmail || r.guestEmail}</span>
-                </a>
-              )}
-            </div>
-          )}
           </>
         ) : (
           <button
