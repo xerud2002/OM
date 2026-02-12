@@ -507,9 +507,12 @@ export default function CustomerDashboard() {
 
                       return (
                         <li key={req.id}>
-                          <button
+                          <div
+                            role="button"
+                            tabIndex={0}
                             onClick={() => setSelectedRequestId(req.id)}
-                            className={`group relative w-full rounded-xl p-3 sm:p-4 text-left transition-all active:scale-[0.98] ${
+                            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setSelectedRequestId(req.id); }}
+                            className={`group relative w-full cursor-pointer rounded-xl p-3 sm:p-4 text-left transition-all active:scale-[0.98] ${
                               isSelected
                                 ? "gradient-emerald-light shadow-sm ring-1 ring-emerald-200"
                                 : "hover:bg-gray-50 active:bg-gray-100"
@@ -603,7 +606,7 @@ export default function CustomerDashboard() {
                                 </div>
                               </div>
                             </div>
-                          </button>
+                          </div>
                         </li>
                       );
                     })}
