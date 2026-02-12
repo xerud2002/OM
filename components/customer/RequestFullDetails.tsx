@@ -13,6 +13,8 @@ import {
   CheckCircleIcon,
   XCircleIcon,
   TruckIcon,
+  PlayIcon,
+  PhotoIcon,
 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
@@ -291,59 +293,82 @@ export default function RequestFullDetails({
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <div className="mb-4 flex items-center gap-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-amber-50">
-              <CubeIcon className="h-5 w-5 text-amber-600" />
+              <PhotoIcon className="h-5 w-5 text-amber-600" />
             </div>
             <h3 className="text-lg font-semibold text-gray-900">Poze & Video ({localMediaUrls.length})</h3>
           </div>
 
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
-            {localMediaUrls.map((url, index) => (
-              <div
-                key={url}
-                className="group relative aspect-square overflow-hidden rounded-xl border border-gray-200 bg-gray-50 transition-all hover:border-sky-400 hover:shadow-lg hover:shadow-sky-100"
-              >
-                <Image
-                  src={url}
-                  alt={`Media ${index + 1}`}
-                  fill
-                  sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 200px"
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  loading="lazy"
-                  quality={75}
-                />
+            {localMediaUrls.map((url, index) => {
+              const isVideo = /\.(mp4|mov|webm|avi|mkv)(\?|$)/i.test(url) || url.includes("%2F") && /\.(mp4|mov|webm|avi|mkv)(%|&|$)/i.test(url);
 
-                {/* Overlay actions */}
-                <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
+              return (
+                <div
+                  key={url}
+                  className="group relative aspect-square overflow-hidden rounded-xl border border-gray-200 bg-gray-50 transition-all hover:border-sky-400 hover:shadow-lg hover:shadow-sky-100"
+                >
+                  {isVideo ? (
+                    <>
+                      <video
+                        src={url}
+                        className="h-full w-full object-cover"
+                        muted
+                        playsInline
+                        preload="metadata"
+                        onMouseEnter={(e) => (e.target as HTMLVideoElement).play().catch(() => {})}
+                        onMouseLeave={(e) => { const v = e.target as HTMLVideoElement; v.pause(); v.currentTime = 0; }}
+                      />
+                      <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur-sm transition-opacity group-hover:opacity-0">
+                          <PlayIcon className="h-5 w-5" />
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <Image
+                      src={url}
+                      alt={`Media ${index + 1}`}
+                      fill
+                      sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 200px"
+                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                      quality={75}
+                    />
+                  )}
 
-                <a
-                  href={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="absolute inset-0"
-                  aria-label={`Deschide media ${index + 1}`}
-                />
+                  {/* Overlay actions */}
+                  <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
 
-                {isOwner && (
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      e.preventDefault();
-                      setDeleteMediaUrl(url);
-                    }}
-                    disabled={deletingUrl === url}
-                    title="Șterge imagine"
-                    className="absolute top-2 right-2 z-20 hidden h-8 w-8 items-center justify-center rounded-full bg-white/90 text-red-500 shadow-sm backdrop-blur-sm transition-all hover:bg-red-500 hover:text-white group-hover:flex disabled:cursor-wait"
-                  >
-                    {deletingUrl === url ? (
-                      <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    ) : (
-                      <TrashIcon className="h-4 w-4" />
-                    )}
-                  </button>
-                )}
-              </div>
-            ))}
+                  <a
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="absolute inset-0 z-10"
+                    aria-label={`Deschide ${isVideo ? "video" : "imagine"} ${index + 1}`}
+                  />
+
+                  {isOwner && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setDeleteMediaUrl(url);
+                      }}
+                      disabled={deletingUrl === url}
+                      title="Șterge fișier"
+                      className="absolute top-2 right-2 z-20 hidden h-8 w-8 items-center justify-center rounded-full bg-white/90 text-red-500 shadow-sm backdrop-blur-sm transition-all hover:bg-red-500 hover:text-white group-hover:flex disabled:cursor-wait"
+                    >
+                      {deletingUrl === url ? (
+                        <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+                      ) : (
+                        <TrashIcon className="h-4 w-4" />
+                      )}
+                    </button>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}
