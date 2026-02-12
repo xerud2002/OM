@@ -314,7 +314,7 @@ function JobCard({
             {hasMine.offerId && onChatClick && (
               <button
                 onClick={() => onChatClick(r.id, hasMine.offerId)}
-                className="relative rounded-lg bg-emerald-600 p-1.5 sm:p-2 text-white shadow-sm hover:bg-emerald-700 transition active:scale-95"
+                className="relative rounded-lg bg-emerald-50 p-1.5 sm:p-2 text-emerald-600 hover:bg-emerald-100 transition active:scale-95"
                 title="Chat"
               >
                 <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
