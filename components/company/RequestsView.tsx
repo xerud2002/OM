@@ -278,35 +278,30 @@ function JobCard({
         </p>
       </div>
 
-      {/* Detail Button */}
-      <div className="border-t border-gray-100 px-3 sm:px-4 py-2 flex justify-center">
-        <button
-          onClick={() => onDetailClick?.(r)}
-          className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
-        >
-          <EyeIcon className="h-3.5 w-3.5" />
-          Detalii
-        </button>
-      </div>
-
-      {/* Action Button */}
-      <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2">
+      {/* Detail + Status Row */}
+      <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3">
         {hasMine ? (
-          <>
-          <div className="flex items-center justify-center gap-2">
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            <button
+              onClick={() => onDetailClick?.(r)}
+              className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+            >
+              <EyeIcon className="h-3.5 w-3.5" />
+              Detalii
+            </button>
             {hasMine.status === "accepted" ? (
-              <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
+              <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
                 <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 Ofertă Acceptată
               </span>
             ) : hasMine.status === "declined" ||
               hasMine.status === "rejected" ? (
-              <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-red-600">
+              <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-red-600">
                 <XMarkIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 Ofertă Refuzată
               </span>
             ) : (
-              <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
+              <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
                 <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 Ofertă Plasată
               </span>
@@ -345,8 +340,17 @@ function JobCard({
               </a>
             )}
           </div>
-          </>
         ) : (
+          <div className="flex flex-col gap-2">
+            <div className="flex justify-center">
+              <button
+                onClick={() => onDetailClick?.(r)}
+                className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+              >
+                <EyeIcon className="h-3.5 w-3.5" />
+                Detalii
+              </button>
+            </div>
           <button
             onClick={() => onOfferClick(r)}
             className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-blue-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
@@ -357,6 +361,7 @@ function JobCard({
               {cost}
             </span>
           </button>
+          </div>
         )}
       </div>
     </div>
