@@ -138,8 +138,15 @@ function JobCard({
           <CalendarIcon className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
           <span>
             {(() => {
+              const mode = r.moveDateMode;
               const d = formatMoveDateDisplay(r as any, { month: "short" });
-              return d && d !== "-" ? d : "Flexibil";
+              const hasDate = d && d !== "-";
+              if (mode === "flexible") return hasDate ? `Flexibil · ${d}` : "Flexibil";
+              if (mode === "exact") return hasDate ? `Dată fixă · ${d}` : "Dată fixă";
+              if (mode === "range") return hasDate ? `${d}` : "Interval";
+              if (mode === "none") return "Fără dată";
+              // legacy fallback
+              return hasDate ? d : "Flexibil";
             })()}
           </span>
         </div>

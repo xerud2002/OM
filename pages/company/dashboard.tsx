@@ -3,7 +3,6 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import NotificationBell from "@/components/company/NotificationBell";
 import OnboardingWizard from "@/components/company/OnboardingWizard";
 import { db } from "@/services/firebase";
 import { onAuthChange } from "@/utils/firebaseHelpers";
@@ -301,7 +300,6 @@ export default function CompanyDashboard() {
         <span className="hidden sm:inline">Ghid de start</span>
       </button>
       {company && <CreditBalance companyId={company.uid} />}
-      {company && <NotificationBell companyId={company.uid} />}
     </div>
   );
 

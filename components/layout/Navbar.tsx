@@ -11,17 +11,7 @@ import {
 import { useRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
 import type { UserRole } from "@/types";
-import dynamic from "next/dynamic";
 import { trackCTAClick } from "@/utils/analytics";
-
-// Lazy load Firebase helpers to reduce initial bundle
-const NotificationBell = dynamic(
-  () => import("@/components/company/NotificationBell"),
-  {
-    ssr: false,
-    loading: () => null,
-  },
-);
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -170,11 +160,6 @@ export default function Navbar() {
             </button>
           ) : (
             <div className="flex items-center gap-2">
-              {/* Notification Bell for Companies */}
-              {userRole === "company" && user?.uid && (
-                <NotificationBell companyId={user.uid} />
-              )}
-
               {/* Smart Dashboard Link */}
               <Link
                 href={
