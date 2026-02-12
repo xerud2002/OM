@@ -40,7 +40,7 @@ echo -e "${GREEN}✅ Code updated${NC}"
 
 # Step 2: Install dependencies
 echo -e "${YELLOW}📦 Installing dependencies...${NC}"
-npm ci --production=false
+npm install
 echo -e "${GREEN}✅ Dependencies installed${NC}"
 
 # Step 3: Build the application
