@@ -281,6 +281,7 @@ function JobCard({
       {/* Detail + Status Row */}
       <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3">
         {hasMine ? (
+          <>
           <div className="flex flex-wrap items-center justify-center gap-2">
             <button
               onClick={() => onDetailClick?.(r)}
@@ -306,6 +307,18 @@ function JobCard({
                 Ofertă Plasată
               </span>
             )}
+          </div>
+          {/* Contact icons row: phone - chat - email */}
+          <div className="flex items-center justify-center gap-2 mt-2">
+            {r.phone && (
+              <a
+                href={`tel:${r.phone}`}
+                className="rounded-lg bg-blue-50 p-1.5 sm:p-2 text-blue-600 hover:bg-blue-100 transition active:scale-95"
+                title={r.phone}
+              >
+                <PhoneIcon className="h-4 w-4" />
+              </a>
+            )}
             {hasMine.offerId && onChatClick && (
               <button
                 onClick={() => onChatClick(r.id, hasMine.offerId)}
@@ -321,15 +334,6 @@ function JobCard({
                 )}
               </button>
             )}
-            {r.phone && (
-              <a
-                href={`tel:${r.phone}`}
-                className="rounded-lg bg-blue-50 p-1.5 sm:p-2 text-blue-600 hover:bg-blue-100 transition active:scale-95"
-                title={r.phone}
-              >
-                <PhoneIcon className="h-4 w-4" />
-              </a>
-            )}
             {(r.customerEmail || r.guestEmail) && (
               <a
                 href={`mailto:${r.customerEmail || r.guestEmail}`}
@@ -340,6 +344,7 @@ function JobCard({
               </a>
             )}
           </div>
+          </>
         ) : (
           <div className="flex flex-col gap-2">
             <div className="flex justify-center">
