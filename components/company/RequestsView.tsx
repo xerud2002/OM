@@ -303,7 +303,7 @@ function JobCard({
                 Ofertă Refuzată
               </span>
             ) : (
-              <span className="flex items-center gap-1 rounded-lg bg-emerald-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-emerald-700">
+              <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
                 <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                 Ofertă Plasată
               </span>
