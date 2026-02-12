@@ -36,6 +36,14 @@ import {
   CurrencyDollarIcon,
   ClockIcon,
   NoSymbolIcon,
+  WalletIcon,
+  EnvelopeIcon,
+  KeyIcon,
+  CommandLineIcon,
+  FaceSmileIcon,
+  MegaphoneIcon,
+  RectangleStackIcon,
+  SignalIcon,
 } from "@heroicons/react/24/outline";
 import { logout } from "@/utils/firebaseHelpers";
 
@@ -129,6 +137,14 @@ const defaultNavigation: Record<DashboardRole, NavItem[]> = {
     { name: "Spam", href: "/admin/duplicates", icon: NoSymbolIcon },
     { name: "Audit Log", href: "/admin/audit", icon: ClipboardDocumentCheckIcon },
     { name: "Sistem", href: "/admin/system", icon: ServerIcon },
+    { name: "Tranzacții", href: "/admin/transactions", icon: WalletIcon },
+    { name: "Email Campanii", href: "/admin/email-campaigns", icon: EnvelopeIcon },
+    { name: "Roluri Admin", href: "/admin/roles", icon: KeyIcon },
+    { name: "Cron Jobs", href: "/admin/cron-jobs", icon: CommandLineIcon },
+    { name: "Satisfacție", href: "/admin/satisfaction", icon: FaceSmileIcon },
+    { name: "Marketing", href: "/admin/marketing", icon: MegaphoneIcon },
+    { name: "Bulk Ops", href: "/admin/bulk-operations", icon: RectangleStackIcon },
+    { name: "API Analytics", href: "/admin/api-analytics", icon: SignalIcon },
     { name: "Setări", href: "/admin/settings", icon: Cog6ToothIcon },
   ],
 };

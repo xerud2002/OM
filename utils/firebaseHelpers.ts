@@ -13,6 +13,7 @@ import {
 } from "firebase/auth";
 import { doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import { generateDeviceFingerprint } from "@/utils/deviceFingerprint";
 import { auth, db, storage } from "@/services/firebase";
 import type { UserRole, CustomerProfile, CompanyProfile } from "@/types";
 import {
@@ -161,7 +162,6 @@ export async function getUserRole(u: User): Promise<UserRole | "admin" | null> {
 // ---- Fraud detection: device fingerprint tracking (fire-and-forget)
 async function trackDeviceFingerprint(user: User, event: "register" | "login", role: string) {
   try {
-    const { generateDeviceFingerprint } = await import("@/utils/deviceFingerprint");
     const fingerprint = await generateDeviceFingerprint();
     const token = await user.getIdToken();
     fetch("/api/fraud/track", {
