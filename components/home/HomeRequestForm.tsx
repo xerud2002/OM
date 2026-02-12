@@ -1102,7 +1102,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                     <option value="">-</option>
                     <option value="Demisol">Demisol</option>
                     <option value="Parter">Parter</option>
-                    {[...Array(20)].map((_, i) => (
+                    {[...Array(10)].map((_, i) => (
                       <option key={i + 1} value={String(i + 1)}>
                         {i + 1}
                       </option>
@@ -1266,7 +1266,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                     <option value="">-</option>
                     <option value="Demisol">Demisol</option>
                     <option value="Parter">Parter</option>
-                    {[...Array(20)].map((_, i) => (
+                    {[...Array(10)].map((_, i) => (
                       <option key={i + 1} value={String(i + 1)}>
                         {i + 1}
                       </option>
