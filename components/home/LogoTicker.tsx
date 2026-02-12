@@ -38,7 +38,7 @@ export default function LogoTicker() {
           <div className="pointer-events-none absolute right-0 z-10 h-full w-20 bg-linear-to-l from-white to-transparent md:w-40" />
 
           {/* Marquee Container - CSS Animation */}
-          <div className="flex w-full overflow-hidden">
+          <div className="flex w-full overflow-hidden gap-12 sm:gap-24">
             <div
               className="animate-marquee flex shrink-0 items-center gap-12 sm:gap-24"
               style={{ animationDuration: "40s" }}
