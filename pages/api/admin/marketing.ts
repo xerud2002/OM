@@ -18,11 +18,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const ts = data.createdAt?.toDate ? data.createdAt.toDate() : data.createdAt?._seconds ? new Date(data.createdAt._seconds * 1000) : null;
     return {
       id: d.id,
-      source: data.leadSource || data.source || "direct",
+      source: (typeof data.leadSource === "object" && data.leadSource?.channel)
+        ? data.leadSource.channel
+        : (typeof data.leadSource === "string" ? data.leadSource : null)
+          || data.source || "direct",
       utmSource: data.utmSource || "",
       utmMedium: data.utmMedium || "",
       utmCampaign: data.utmCampaign || "",
-      landingPage: data.landingPage || data.referrer || "",
+      landingPage: (typeof data.leadSource === "object" && data.leadSource?.landingPage)
+        ? data.leadSource.landingPage
+        : (data.landingPage || data.referrer || ""),
       status: data.status || "",
       hasOffer: !!data.offersCount || data.status === "offered" || data.status === "accepted",
       isAccepted: data.status === "accepted" || data.status === "completed",
