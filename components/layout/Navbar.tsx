@@ -3,9 +3,10 @@ import Link from "next/link";
 import {
   Bars3Icon as Menu,
   XMarkIcon as X,
-  PhoneIcon as PhoneCall,
   ArrowRightOnRectangleIcon as LogOut,
   UserIcon as User,
+  CalculatorIcon,
+  WrenchScrewdriverIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
@@ -63,7 +64,6 @@ export default function Navbar() {
     };
 
     // Use interaction-based loading for maximum LCP performance
-    // Firebase only loads when user clicks, scrolls, or touches the page
     import("@/utils/interactionLoader").then(({ loadOnInteraction }) => {
       loadOnInteraction(loadAuth);
     });
@@ -92,10 +92,13 @@ export default function Navbar() {
     setUser(null);
   };
 
+  // Primary nav links (high-value pages)
   const navLinks = [
-    { href: "/blog", label: "Blog" },
-    { href: "/partener", label: "Devino Partener" },
+    { href: "/servicii", label: "Servicii", icon: WrenchScrewdriverIcon },
+    { href: "/calculator", label: "Calculator", icon: CalculatorIcon },
+    { href: "/about", label: "Despre Noi" },
     { href: "/contact", label: "Contact" },
+    { href: "/blog", label: "Blog" },
   ];
 
   return (
@@ -113,54 +116,60 @@ export default function Navbar() {
           aria-label="Acasă"
           className="-ml-2 flex items-center select-none"
         >
-          {/* Desktop Logo */}
-          <div className="hidden sm:block">
-            <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-2xl font-bold text-transparent md:text-3xl">
-              <span className="tracking-tight">Oferte</span>
-              <span className="text-emerald-500">mutare</span>
-              <span className="align-top text-xs text-emerald-600">.ro</span>
-            </div>
-          </div>
-
-          {/* Mobile Logo */}
-          <div className="block sm:hidden">
-            <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent">
-              <span className="tracking-tight">Oferte</span>
-              <span className="text-emerald-500">mutare</span>
-              <span className="align-top text-xs text-emerald-600">.ro</span>
-            </div>
+          <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent sm:text-2xl md:text-3xl">
+            <span className="tracking-tight">Oferte</span>
+            <span className="text-emerald-500">mutare</span>
+            <span className="align-top text-[9px] text-emerald-600 sm:text-xs">.ro</span>
           </div>
         </Link>
 
         {/* === DESKTOP NAV === */}
         <nav
-          className="hidden items-center space-x-1 md:flex"
+          className="hidden items-center gap-1 lg:flex"
           aria-label="Navigare principală"
         >
           {navLinks.map(({ href, label }) => (
             <Link
               key={href}
               href={href}
-              className={`flex min-h-12 min-w-12 items-center justify-center rounded-full px-5 py-3 font-medium transition-all duration-300 ${
-                pathname === href
+              className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+                pathname === href || pathname.startsWith(href + "/")
                   ? "bg-emerald-50 text-emerald-700"
-                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+                  : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
               }`}
             >
               {label}
             </Link>
           ))}
+        </nav>
+
+        {/* === RIGHT SIDE ACTIONS === */}
+        <div className="hidden items-center gap-2 lg:flex">
+          {/* Devino Partener — secondary, for companies */}
+          <Link
+            href="/partener"
+            className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${
+              pathname === "/partener"
+                ? "text-emerald-700"
+                : "text-gray-500 hover:text-emerald-600"
+            }`}
+          >
+            Devino Partener
+          </Link>
+
+          {/* Separator */}
+          <div className="mx-1 h-5 w-px bg-gray-200" />
 
           {!user ? (
             <button
               onClick={handleGetOffers}
-              aria-label="Contul Meu"
-              className="ml-3 inline-flex min-h-12 items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-3 font-bold text-white shadow-lg transition-all hover:shadow-xl"
+              aria-label="Obține Oferte Gratuite"
+              className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md active:scale-[0.98]"
             >
-              <User className="h-4 w-4" /> Contul Meu
+              Obține Oferte
             </button>
           ) : (
-            <div className="ml-3 flex items-center gap-3">
+            <div className="flex items-center gap-2">
               {/* Notification Bell for Companies */}
               {userRole === "company" && user?.uid && (
                 <NotificationBell companyId={user.uid} />
@@ -173,16 +182,16 @@ export default function Navbar() {
                     ? "/company/dashboard"
                     : "/customer/dashboard"
                 }
-                className="flex items-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-4 py-2 font-semibold text-white shadow-md transition-all"
+                className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700"
               >
                 <User className="h-4 w-4" />
-                <span className="max-w-35 truncate">Contul Meu</span>
+                <span className="max-w-28 truncate">Contul Meu</span>
               </Link>
 
-              {/* Explicit Logout Button */}
+              {/* Logout */}
               <button
                 onClick={handleLogout}
-                className="group flex h-10 w-10 items-center justify-center rounded-full border border-gray-200 bg-white text-gray-500 shadow-sm transition-all hover:bg-red-50 hover:text-red-600 hover:shadow-md"
+                className="flex h-9 w-9 items-center justify-center rounded-full border border-gray-200 text-gray-400 transition-all hover:bg-red-50 hover:text-red-500 hover:border-red-200"
                 title="Deconectare"
                 aria-label="Deconectare"
               >
@@ -190,21 +199,31 @@ export default function Navbar() {
               </button>
             </div>
           )}
-        </nav>
+        </div>
 
-        {/* === MOBILE MENU TOGGLE === */}
-        <button
-          onClick={() => setIsOpen((prev) => !prev)}
-          aria-label={isOpen ? "Închide meniu" : "Deschide meniu"}
-          aria-expanded={isOpen}
-          aria-controls="mobile-menu"
-          className="flex min-h-12 min-w-12 items-center justify-center rounded-lg p-3 text-emerald-700 transition hover:bg-emerald-50 md:hidden"
-        >
-          {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-        </button>
+        {/* === MOBILE: CTA + HAMBURGER === */}
+        <div className="flex items-center gap-2 lg:hidden">
+          {!user && (
+            <button
+              onClick={handleGetOffers}
+              className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 sm:text-sm"
+            >
+              Obține Oferte
+            </button>
+          )}
+          <button
+            onClick={() => setIsOpen((prev) => !prev)}
+            aria-label={isOpen ? "Închide meniu" : "Deschide meniu"}
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition hover:bg-gray-100"
+          >
+            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
       </div>
 
-      {/* === MOBILE MENU - CSS animation instead of framer-motion === */}
+      {/* === MOBILE MENU === */}
       <nav
         id="mobile-menu"
         role="navigation"
@@ -212,40 +231,65 @@ export default function Navbar() {
         aria-hidden={!isOpen}
         // @ts-expect-error inert is valid HTML but React types lag behind
         inert={!isOpen ? "" : undefined}
-        className={`transform overflow-hidden border-t border-emerald-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 md:hidden ${
-          isOpen ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+        className={`transform overflow-hidden border-t border-gray-100 bg-white/95 shadow-lg backdrop-blur-xl transition-all duration-300 lg:hidden ${
+          isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"
         }`}
       >
-        <div className="flex flex-col space-y-1 px-3 py-2 md:px-6 md:py-4">
-          {navLinks.map(({ href, label }) => (
+        <div className="flex flex-col px-4 py-3">
+          {navLinks.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
               href={href}
               onClick={() => setIsOpen(false)}
-              className={`flex min-h-12 items-center rounded-lg px-4 py-3 font-medium transition-all ${
-                pathname === href
+              className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+                pathname === href || pathname.startsWith(href + "/")
                   ? "bg-emerald-50 text-emerald-700"
-                  : "text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+                  : "text-gray-700 hover:bg-gray-50"
               }`}
             >
+              {Icon && <Icon className="h-4.5 w-4.5 text-gray-400" />}
               {label}
             </Link>
           ))}
 
-          <button
-            onClick={handleGetOffers}
-            className="mt-3 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-linear-to-r from-emerald-500 to-sky-500 px-6 py-3 font-semibold text-white shadow-md transition-all hover:shadow-lg"
+          {/* Separator */}
+          <div className="my-2 border-t border-gray-100" />
+
+          <Link
+            href="/partener"
+            onClick={() => setIsOpen(false)}
+            className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium transition-all ${
+              pathname === "/partener"
+                ? "bg-emerald-50 text-emerald-700"
+                : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
+            }`}
           >
-            <PhoneCall className="h-4 w-4" /> Obține Oferte
-          </button>
+            Devino Partener
+          </Link>
 
           {user && (
-            <button
-              onClick={handleLogout}
-              className="mt-3 flex min-h-12 items-center justify-center gap-2 rounded-full border border-gray-200 px-5 py-3 text-gray-700 transition-all hover:bg-emerald-50"
-            >
-              <LogOut className="h-4 w-4" /> Deconectare
-            </button>
+            <>
+              <Link
+                href={
+                  userRole === "company"
+                    ? "/company/dashboard"
+                    : "/customer/dashboard"
+                }
+                onClick={() => setIsOpen(false)}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-emerald-700 hover:bg-emerald-50"
+              >
+                <User className="h-4 w-4" />
+                Contul Meu
+              </Link>
+
+              <button
+                onClick={() => { handleLogout(); setIsOpen(false); }}
+                className="flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium text-red-500 hover:bg-red-50"
+              >
+                <LogOut className="h-4 w-4" />
+                Deconectare
+              </button>
+            </>
           )}
         </div>
       </nav>
