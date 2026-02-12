@@ -117,7 +117,7 @@ export default function GhidSchimbareAdresa() {
                 />
                 <meta property="og:type" content="article" />
                 <meta property="og:url" content="https://ofertemutare.ro/articole/schimbare-adresa-documente" />
-                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.webp" />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/blog/schimbare-adresa-documente.webp" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://ofertemutare.ro/articole/schimbare-adresa-documente" />
                 <meta name="twitter:title" content={`Ghid Schimbare Adresă ${currentYear}`} />
@@ -125,7 +125,7 @@ export default function GhidSchimbareAdresa() {
                     name="twitter:description"
                     content="Lista completă de documente pentru schimbarea buletinului și a adresei după mutare."
                 />
-                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/guide-banner-v2.webp" />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/blog/schimbare-adresa-documente.webp" />
                 <script
                     type="application/ld+json"
                     dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -137,7 +137,7 @@ export default function GhidSchimbareAdresa() {
         title="Acte Necesare Schimbare Adresă/Domiciliu {currentYear} | Ghid Complet"
         description="Articol despre mutări"
         datePublished="2026-02-02"
-        image="https://ofertemutare.ro/pics/blog/guide-banner-v2.webp"
+        image="https://ofertemutare.ro/pics/blog/schimbare-adresa-documente.webp"
       />
       <BreadcrumbSchema
         items={[
@@ -163,10 +163,10 @@ export default function GhidSchimbareAdresa() {
             ]} />
                         <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
-                                src="/pics/blog/guide-banner-v2.webp"
-                                alt="Acte Schimbare Adresa"
+                                src="/pics/blog/schimbare-adresa-documente.webp"
+                                alt="Ghid schimbare adresă și acte necesare după mutare"
                                 width={1200}
-                                height={675}
+                                height={1200}
                                 className="h-auto w-full"
                                 priority
                                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 90vw, 1000px"

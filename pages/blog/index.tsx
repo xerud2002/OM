@@ -17,7 +17,7 @@ const blogPosts = [
     category: "Ghid Birocrație",
     readTime: "5 min",
     date: "22 Ian 2026",
-    image: "/pics/blog/guide-banner-v2.webp",
+    image: "/pics/blog/schimbare-adresa-documente.webp",
     gradient: "linear-gradient(to right, #f59e0b, #d97706)",
     link: "/articole/schimbare-adresa-documente",
   },
