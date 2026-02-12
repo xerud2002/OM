@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, Fragment } from "react";
+import React, { useState, Fragment, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import Head from "next/head";
 import { useRouter } from "next/router";
 import { Dialog, Transition } from "@headlessui/react";
 import {
@@ -44,6 +45,7 @@ import {
   MegaphoneIcon,
   RectangleStackIcon,
   SignalIcon,
+  ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
 import { logout } from "@/utils/firebaseHelpers";
 
@@ -208,6 +210,34 @@ export default function DashboardLayout({
 }: DashboardLayoutProps) {
   const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+
+  // Register admin PWA service worker + install prompt
+  useEffect(() => {
+    if (role !== "admin" || typeof window === "undefined") return;
+
+    // Register service worker scoped to /admin/
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker
+        .register("/admin-sw.js", { scope: "/admin/" })
+        .catch(() => {});
+    }
+
+    // Capture the beforeinstallprompt event for the install button
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setInstallPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, [role]);
+
+  const handleInstall = async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    const result = await installPrompt.userChoice;
+    if (result.outcome === "accepted") setInstallPrompt(null);
+  };
 
   const nav = navigation || defaultNavigation[role];
   const colors = roleColors[role];
@@ -234,6 +264,16 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Admin PWA manifest */}
+      {role === "admin" && (
+        <Head>
+          <link rel="manifest" href="/admin/manifest.json" />
+          <meta name="theme-color" content="#7c3aed" />
+          <meta name="apple-mobile-web-app-capable" content="yes" />
+          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+          <meta name="apple-mobile-web-app-title" content="OM Admin" />
+        </Head>
+      )}
       {/* Mobile sidebar */}
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
@@ -482,6 +522,18 @@ export default function DashboardLayout({
 
             {/* Right side actions */}
             <div className="flex items-center gap-x-4 lg:gap-x-6">
+              {/* PWA Install button — admin only */}
+              {role === "admin" && installPrompt && (
+                <button
+                  onClick={handleInstall}
+                  className="hidden items-center gap-1.5 rounded-lg bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-700 transition-colors hover:bg-purple-100 sm:inline-flex"
+                  title="Instalează aplicația Admin"
+                >
+                  <ArrowDownTrayIcon className="h-4 w-4" />
+                  <span className="hidden lg:inline">Instalează App</span>
+                </button>
+              )}
+
               {headerActions}
 
               {/* Profile dropdown mobile */}

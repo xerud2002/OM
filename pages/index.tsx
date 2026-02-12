@@ -21,18 +21,23 @@ const LogoTicker = dynamic(() => import("@/components/home/LogoTicker"), {
 
 const ClientAccount = dynamic(() => import("@/components/home/ClientAccount"), {
   loading: () => <div className="min-h-125" />,
+  ssr: false,
 });
 const Services = dynamic(() => import("@/components/home/Services"), {
   loading: () => <div className="min-h-150" />,
+  ssr: false,
 });
 const Articles = dynamic(() => import("@/components/blog/Articles"), {
   loading: () => <div className="min-h-100" />,
+  ssr: false,
 });
 const PartnerSection = dynamic(() => import("@/components/home/PartnerSection"), {
   loading: () => <div className="min-h-125" />,
+  ssr: false,
 });
 const Testimonials = dynamic(() => import("@/components/home/Testimonials"), {
   loading: () => <div className="min-h-125" />,
+  ssr: false,
 });
 import { SERVICE_FAQS } from "@/data/faqData";
 
@@ -48,9 +53,11 @@ const faqSchemaItems = SERVICE_FAQS.general.map((faq) => ({
 
 const CTASection = dynamic(() => import("@/components/home/CTASection"), {
   loading: () => <div className="min-h-75" />,
+  ssr: false,
 });
 const FAQSection = dynamic(() => import("@/components/content/FAQSection"), {
   loading: () => <div className="min-h-100" />,
+  ssr: false,
 });
 
 const CityLinksSection = dynamic(() => import("@/components/layout/CityLinksSection"), {
