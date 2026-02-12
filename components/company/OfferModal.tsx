@@ -142,8 +142,9 @@ export default function OfferModal({
                 <div className="mt-4 flex items-start gap-2 rounded-lg bg-emerald-50 p-3 ring-1 ring-emerald-100">
                   <ShieldCheckIcon className="h-5 w-5 shrink-0 text-emerald-600 mt-0.5" />
                   <p className="text-xs text-emerald-800">
-                    <strong>Protecție refund:</strong> Dacă clientul nu răspunde
-                    în 72h, creditele îți sunt returnate automat.
+                    <strong>Protecție refund:</strong> Dacă clientul nu
+                    vizualizează oferta în 72h, creditele îți sunt returnate
+                    automat.
                   </p>
                 </div>
 
