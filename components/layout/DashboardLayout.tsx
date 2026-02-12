@@ -51,6 +51,13 @@ import { logout } from "@/utils/firebaseHelpers";
 
 export type DashboardRole = "customer" | "company" | "admin";
 
+// PWA config per role (module-level constant to avoid useEffect dep issues)
+const pwaConfig: Record<DashboardRole, { sw: string; scope: string; manifest: string; theme: string; title: string }> = {
+  admin: { sw: "/admin-sw.js", scope: "/admin/", manifest: "/admin/manifest.json", theme: "#7c3aed", title: "OM Admin" },
+  customer: { sw: "/customer-sw.js", scope: "/customer/", manifest: "/customer/manifest.json", theme: "#059669", title: "OM Client" },
+  company: { sw: "/company-sw.js", scope: "/company/", manifest: "/company/manifest.json", theme: "#059669", title: "OM Companie" },
+};
+
 interface NavItem {
   name: string;
   href: string;
@@ -212,18 +219,15 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
 
-  // Register admin PWA service worker + install prompt
+  // Register PWA service worker + install prompt for all dashboard roles
   useEffect(() => {
-    if (role !== "admin" || typeof window === "undefined") return;
+    if (typeof window === "undefined") return;
 
-    // Register service worker scoped to /admin/
+    const { sw, scope } = pwaConfig[role];
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker
-        .register("/admin-sw.js", { scope: "/admin/" })
-        .catch(() => {});
+      navigator.serviceWorker.register(sw, { scope }).catch(() => {});
     }
 
-    // Capture the beforeinstallprompt event for the install button
     const handler = (e: Event) => {
       e.preventDefault();
       setInstallPrompt(e);
@@ -264,16 +268,14 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Admin PWA manifest */}
-      {role === "admin" && (
-        <Head>
-          <link rel="manifest" href="/admin/manifest.json" />
-          <meta name="theme-color" content="#7c3aed" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-          <meta name="apple-mobile-web-app-title" content="OM Admin" />
-        </Head>
-      )}
+      {/* PWA manifest for all dashboard roles */}
+      <Head>
+        <link rel="manifest" href={pwaConfig[role].manifest} />
+        <meta name="theme-color" content={pwaConfig[role].theme} />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+        <meta name="apple-mobile-web-app-title" content={pwaConfig[role].title} />
+      </Head>
       {/* Mobile sidebar */}
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
@@ -522,12 +524,16 @@ export default function DashboardLayout({
 
             {/* Right side actions */}
             <div className="flex items-center gap-x-4 lg:gap-x-6">
-              {/* PWA Install button — admin only */}
-              {role === "admin" && installPrompt && (
+              {/* PWA Install button — all dashboard roles */}
+              {installPrompt && (
                 <button
                   onClick={handleInstall}
-                  className="hidden items-center gap-1.5 rounded-lg bg-purple-50 px-3 py-1.5 text-xs font-medium text-purple-700 transition-colors hover:bg-purple-100 sm:inline-flex"
-                  title="Instalează aplicația Admin"
+                  className={`hidden items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors sm:inline-flex ${
+                    role === "admin"
+                      ? "bg-purple-50 text-purple-700 hover:bg-purple-100"
+                      : "bg-emerald-50 text-emerald-700 hover:bg-emerald-100"
+                  }`}
+                  title="Instalează aplicația"
                 >
                   <ArrowDownTrayIcon className="h-4 w-4" />
                   <span className="hidden lg:inline">Instalează App</span>
