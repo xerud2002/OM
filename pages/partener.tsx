@@ -236,7 +236,7 @@ function MockJobCard({
             </div>
           </div>
           {/* Services */}
-          <div className="mb-3 flex min-h-[22px] flex-wrap gap-1">
+          <div className="mb-3 flex min-h-5.5 flex-wrap gap-1">
             {services.map((s) => (
               <span
                 key={s}
@@ -412,9 +412,9 @@ export default function PartenerPage({
       </Head>
 
       {/* ═══════════ HERO ═══════════ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-emerald-900 py-20 lg:py-28">
+      <section className="relative overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-emerald-900 py-20 lg:py-28">
         {/* Decorative grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-size-[40px_40px]" />
         <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
         <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
 
@@ -428,7 +428,7 @@ export default function PartenerPage({
               </div>
               <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
                 Primește Cereri.{" "}
-                <span className="bg-gradient-to-r from-emerald-300 to-sky-300 bg-clip-text text-transparent">
+                <span className="bg-linear-to-r from-emerald-300 to-sky-300 bg-clip-text text-transparent">
                   Trimite Oferte.
                 </span>{" "}
                 Crește Afacerea.
@@ -476,7 +476,7 @@ export default function PartenerPage({
             {/* Right – Live request card (hero mock) */}
             <div className="hidden lg:block">
               <div className="relative">
-                <div className="absolute -inset-3 rounded-3xl bg-gradient-to-br from-emerald-500/20 to-blue-500/20 blur-xl" />
+                <div className="absolute -inset-3 rounded-3xl bg-linear-to-br from-emerald-500/20 to-blue-500/20 blur-xl" />
                 <div className="relative rounded-2xl border border-white/10 bg-white p-6 shadow-2xl">
                   {/* Fake notification header */}
                   <div className="mb-5 flex items-center gap-3">
@@ -585,7 +585,7 @@ export default function PartenerPage({
       </section>
 
       {/* ═══════════ DASHBOARD PREVIEW ═══════════ */}
-      <section className="bg-gradient-to-b from-gray-50 to-white py-20">
+      <section className="bg-linear-to-b from-gray-50 to-white py-20">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-12 text-center">
             <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
@@ -606,7 +606,7 @@ export default function PartenerPage({
             {/* Top bar */}
             <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-3 sm:px-6">
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-emerald-500 to-sky-500" />
+                <div className="h-8 w-8 rounded-lg bg-linear-to-br from-emerald-500 to-sky-500" />
                 <span className="text-sm font-bold text-gray-700">
                   Firma Ta de Mutări
                 </span>
@@ -829,8 +829,8 @@ export default function PartenerPage({
       </section>
 
       {/* ═══════════ FINAL CTA ═══════════ */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-600 to-blue-600 py-20">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-[size:32px_32px]" />
+      <section className="relative overflow-hidden bg-linear-to-br from-emerald-600 to-blue-600 py-20">
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-size-[32px_32px]" />
         <div className="relative mx-auto max-w-4xl px-4 text-center">
           <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
             Gata să Crești Afacerea?

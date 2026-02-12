@@ -12,7 +12,7 @@ import {
 // Lazy load the form for better LCP
 const HomeRequestForm = dynamic(() => import("./HomeRequestForm"), {
   loading: () => (
-    <div className="mx-auto h-[420px] w-full max-w-md animate-pulse rounded-2xl border border-gray-200 bg-white/50" />
+    <div className="mx-auto h-105 w-full max-w-md animate-pulse rounded-2xl border border-gray-200 bg-white/50" />
   ),
   ssr: false,
 });
@@ -153,7 +153,7 @@ export default function Hero() {
           </div>
 
           {/* Form Section */}
-          <div className="w-full max-w-md lg:w-[420px] lg:shrink-0">
+          <div className="w-full max-w-md lg:w-105 lg:shrink-0">
             <div className="rounded-2xl border border-slate-200/80 bg-white/90 p-5 shadow-2xl shadow-slate-200/50 backdrop-blur-sm sm:rounded-3xl sm:p-6">
               <div className="mb-4 text-center">
                 <h2 className="text-lg font-bold text-gray-800 sm:text-xl">
