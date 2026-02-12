@@ -66,7 +66,10 @@ service cloud.firestore {
       // Company notifications subcollection
       match /notifications/{notificationId} {
         allow read: if isSignedIn() && request.auth.uid == companyId;
-        allow write: if false; // Created by server or Cloud Functions
+        // Company can only mark notifications as read
+        allow update: if isSignedIn() && request.auth.uid == companyId
+          && request.resource.data.diff(resource.data).changedKeys().hasOnly(['read']);
+        allow create, delete: if false; // Created by server only
       }
 
       // Company payments subcollection
