@@ -22,17 +22,26 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
 
   const company = { id: companyDoc.id, ...companyDoc.data() };
 
-  const [offersSnap, reviewsSnap] = await Promise.all([
-    adminDb.collectionGroup("offers").where("companyId", "==", id).limit(100).get(),
-    adminDb.collection("reviews").where("companyId", "==", id).limit(50).get(),
-  ]);
+  let offers: any[] = [];
+  let reviews: any[] = [];
 
-  const offers = offersSnap.docs
-    .map((d) => ({ id: d.id, ...d.data() }))
-    .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
-  const reviews = reviewsSnap.docs
-    .map((d) => ({ id: d.id, ...d.data() }))
-    .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
+  try {
+    const offersSnap = await adminDb.collectionGroup("offers").where("companyId", "==", id).limit(100).get();
+    offers = offersSnap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
+  } catch (e: any) {
+    console.error("[companies/[id]] offers query error:", e?.message || e);
+  }
+
+  try {
+    const reviewsSnap = await adminDb.collection("reviews").where("companyId", "==", id).limit(50).get();
+    reviews = reviewsSnap.docs
+      .map((d) => ({ id: d.id, ...d.data() }))
+      .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
+  } catch (e: any) {
+    console.error("[companies/[id]] reviews query error:", e?.message || e);
+  }
 
   const acceptedOffers = offers.filter((o: any) => o.status === "accepted" || o.accepted);
   const acceptanceRate = offers.length > 0 ? Math.round((acceptedOffers.length / offers.length) * 100) : 0;
