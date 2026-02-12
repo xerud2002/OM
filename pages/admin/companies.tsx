@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { logger } from "@/utils/logger";
 import { collection, query, orderBy, onSnapshot, doc, updateDoc, addDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/services/firebase";
@@ -7,17 +8,13 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
+import DataTable, { Column } from "@/components/admin/DataTable";
+import ExportButton from "@/components/admin/ExportButton";
 import {
   CheckCircleIcon,
-  BuildingOfficeIcon,
-  EnvelopeIcon,
-  PhoneIcon,
-  MapPinIcon,
+  EyeIcon,
 } from "@heroicons/react/24/outline";
 import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
-import SearchInput from "@/components/ui/SearchInput";
-import { getVerificationStatusBadge } from "@/components/ui/StatusBadge";
-import EmptyState from "@/components/ui/EmptyState";
 
 interface Company {
   id: string;
@@ -30,45 +27,41 @@ interface Company {
   verificationStatus?: "pending" | "verified" | "rejected" | "none";
   verified?: boolean;
   createdAt?: any;
+  averageRating?: number;
+  totalReviews?: number;
+  creditBalance?: number;
+}
+
+function fmtDate(ts: any) {
+  if (!ts) return "—";
+  const d = ts.toDate ? ts.toDate() : ts._seconds ? new Date(ts._seconds * 1000) : new Date(ts);
+  return format(d, "d MMM yyyy", { locale: ro });
 }
 
 export default function AdminCompanies() {
   const { dashboardUser } = useAuth();
+  const router = useRouter();
   const [companies, setCompanies] = useState<Company[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "verified" | "pending" | "rejected">("all");
 
   useEffect(() => {
     const q = query(collection(db, "companies"), orderBy("createdAt", "desc"));
-    
     const unsub = onSnapshot(q, (snapshot) => {
       const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Company));
       setCompanies(data);
       setLoading(false);
     });
-
     return () => unsub();
   }, []);
 
-  const filteredCompanies = companies.filter((c) => {
-    const searchLower = search.toLowerCase();
-    const matchesSearch =
-      c.companyName?.toLowerCase().includes(searchLower) ||
-      c.displayName?.toLowerCase().includes(searchLower) ||
-      c.email?.toLowerCase().includes(searchLower) ||
-      c.cif?.includes(search);
-
-    const matchesStatus =
-      statusFilter === "all" ||
-      (statusFilter === "verified" && c.verificationStatus === "verified") ||
-      (statusFilter === "pending" && c.verificationStatus === "pending") ||
-      (statusFilter === "rejected" && c.verificationStatus === "rejected");
-
-    return matchesSearch && matchesStatus;
+  const filtered = statusFilter === "all" ? companies : companies.filter((c) => {
+    if (statusFilter === "verified") return c.verificationStatus === "verified" || c.verified;
+    return c.verificationStatus === statusFilter;
   });
 
-  const handleVerify = async (companyId: string) => {
+  const handleVerify = async (e: React.MouseEvent, companyId: string) => {
+    e.stopPropagation();
     if (!window.confirm("Marchează ca verificat?")) return;
     try {
       await updateDoc(doc(db, "companies", companyId), {
@@ -76,8 +69,6 @@ export default function AdminCompanies() {
         verified: true,
         verifiedAt: serverTimestamp(),
       });
-
-      // Auto-create 5-star welcome review (only if company has no reviews yet)
       try {
         const companySnap = await getDoc(doc(db, "companies", companyId));
         const data = companySnap.data();
@@ -93,10 +84,7 @@ export default function AdminCompanies() {
             status: "published",
             isWelcomeReview: true,
           });
-          await updateDoc(doc(db, "companies", companyId), {
-            averageRating: 5.0,
-            totalReviews: 1,
-          });
+          await updateDoc(doc(db, "companies", companyId), { averageRating: 5.0, totalReviews: 1 });
         }
       } catch (reviewErr) {
         logger.warn("Could not create welcome review:", reviewErr);
@@ -107,148 +95,114 @@ export default function AdminCompanies() {
     }
   };
 
-  const handleUnverify = async (companyId: string) => {
-    if (!window.confirm("Anulează verificarea?")) return;
-    try {
-      await updateDoc(doc(db, "companies", companyId), {
-        verificationStatus: "none",
-        verified: false,
-        verifiedAt: null,
-      });
-    } catch (err) {
-      logger.error("Failed to unverify", err);
-      alert("Eroare");
-    }
-  };
+  const columns: Column<Company>[] = [
+    {
+      key: "companyName",
+      label: "Companie",
+      sortable: true,
+      render: (c) => (
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-linear-to-br from-purple-500 to-pink-500 text-sm font-bold text-white">
+            {(c.companyName || c.displayName || "C").charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900">{c.companyName || c.displayName || "—"}</p>
+            {c.cif && <p className="text-xs text-gray-400 font-mono">CIF: {c.cif}</p>}
+          </div>
+        </div>
+      ),
+      getValue: (c) => c.companyName || c.displayName || "",
+    },
+    { key: "email", label: "Email", sortable: true },
+    { key: "city", label: "Oraș", sortable: true, render: (c) => <span>{c.city || "—"}</span> },
+    {
+      key: "verificationStatus",
+      label: "Status",
+      sortable: true,
+      render: (c) => {
+        const v = c.verificationStatus === "verified" || c.verified;
+        const p = c.verificationStatus === "pending";
+        return (
+          <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${v ? "bg-green-100 text-green-700" : p ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-500"}`}>
+            {v ? "✓ Verificată" : p ? "⏳ Pending" : c.verificationStatus || "—"}
+          </span>
+        );
+      },
+      getValue: (c) => c.verificationStatus === "verified" || c.verified ? "verified" : c.verificationStatus || "none",
+    },
+    {
+      key: "averageRating",
+      label: "Rating",
+      sortable: true,
+      render: (c) => <span className="font-medium">{c.averageRating ? `⭐ ${c.averageRating.toFixed(1)}` : "—"}</span>,
+    },
+    {
+      key: "createdAt",
+      label: "Înregistrat",
+      sortable: true,
+      render: (c) => <span className="text-gray-500">{fmtDate(c.createdAt)}</span>,
+      getValue: (c) => c.createdAt?.toDate ? c.createdAt.toDate().getTime() : c.createdAt?._seconds ? c.createdAt._seconds * 1000 : 0,
+    },
+    {
+      key: "actions" as any,
+      label: "Acțiuni",
+      render: (c) => (
+        <div className="flex items-center gap-2">
+          <button onClick={() => router.push(`/admin/companies/${c.id}`)} className="rounded-lg p-1.5 text-gray-400 hover:bg-purple-50 hover:text-purple-600" title="Detalii">
+            <EyeIcon className="h-4 w-4" />
+          </button>
+          {!(c.verificationStatus === "verified" || c.verified) && (
+            <button onClick={(e) => handleVerify(e, c.id)} className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-2 py-1 text-xs font-medium text-white hover:bg-emerald-700">
+              <CheckCircleIcon className="h-3.5 w-3.5" /> Verifică
+            </button>
+          )}
+        </div>
+      ),
+    },
+  ];
+
+  const statusTabs = [
+    { key: "all", label: "Toate", count: companies.length },
+    { key: "verified", label: "Verificate", count: companies.filter((c) => c.verificationStatus === "verified" || c.verified).length },
+    { key: "pending", label: "Pending", count: companies.filter((c) => c.verificationStatus === "pending").length },
+    { key: "rejected", label: "Respinse", count: companies.filter((c) => c.verificationStatus === "rejected").length },
+  ];
 
   return (
     <RequireRole allowedRole="admin">
       <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
-          {/* Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Companii</h1>
               <p className="text-gray-500">Gestionează companiile de mutări</p>
             </div>
-            <div className="flex flex-col gap-3 sm:flex-row">
-              {/* Status filter */}
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value as any)}
-                className="rounded-lg border border-gray-200 px-3 py-2 text-sm focus:border-purple-500 focus:outline-none"
-              >
-                <option value="all">Toate</option>
-                <option value="verified">Verificate</option>
-                <option value="pending">În așteptare</option>
-                <option value="rejected">Respinse</option>
-              </select>
-              {/* Search */}
-              <SearchInput
-                value={search}
-                onChange={setSearch}
-                placeholder="Caută companii..."
-                focusColor="purple"
-              />
-            </div>
+            <ExportButton data={filtered} filename="companii" />
           </div>
 
-          {/* Grid */}
+          {/* Status tabs */}
+          <div className="flex gap-1 rounded-lg border border-gray-200 bg-gray-50 p-1">
+            {statusTabs.map((t) => (
+              <button
+                key={t.key}
+                onClick={() => setStatusFilter(t.key as any)}
+                className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${statusFilter === t.key ? "bg-white text-purple-700 shadow-sm" : "text-gray-500 hover:text-gray-700"}`}
+              >
+                {t.label} ({t.count})
+              </button>
+            ))}
+          </div>
+
           {loading ? (
-            <LoadingContainer>
-              <LoadingSpinner size="lg" color="purple" />
-            </LoadingContainer>
-          ) : filteredCompanies.length === 0 ? (
-            <EmptyState
-              icon={BuildingOfficeIcon}
-              title={search || statusFilter !== "all" ? "Nu s-au găsit companii" : "Nu există companii înregistrate"}
-              description={search ? `Nu s-au găsit rezultate pentru "${search}"` : undefined}
-              variant="dashed"
-            />
+            <LoadingContainer><LoadingSpinner size="lg" color="purple" /></LoadingContainer>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredCompanies.map((company) => (
-                <div
-                  key={company.id}
-                  className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm transition hover:shadow-md"
-                >
-                  {/* Header */}
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-linear-to-br from-purple-500 to-pink-500 text-lg font-bold text-white">
-                        {(company.companyName || company.displayName || "C").charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <h3 className="font-bold text-gray-900">
-                          {company.companyName || company.displayName || "Companie"}
-                        </h3>
-                        {company.cif && (
-                          <p className="text-xs font-mono text-gray-500">CIF: {company.cif}</p>
-                        )}
-                      </div>
-                    </div>
-                    {getVerificationStatusBadge(
-                      company.verificationStatus === "verified" || company.verified
-                        ? "verified"
-                        : company.verificationStatus || "none"
-                    )}
-                  </div>
-
-                  {/* Contact info */}
-                  <div className="mt-4 space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-gray-600">
-                      <EnvelopeIcon className="h-4 w-4 text-gray-400" />
-                      {company.email}
-                    </div>
-                    {company.phone && (
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <PhoneIcon className="h-4 w-4 text-gray-400" />
-                        {company.phone}
-                      </div>
-                    )}
-                    {company.city && (
-                      <div className="flex items-center gap-2 text-gray-600">
-                        <MapPinIcon className="h-4 w-4 text-gray-400" />
-                        {company.city}
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Footer */}
-                  <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-4">
-                    <span className="text-xs text-gray-500">
-                      {company.createdAt?.toDate
-                        ? format(company.createdAt.toDate(), "d MMM yyyy", { locale: ro })
-                        : "N/A"}
-                    </span>
-                    <div className="flex gap-2">
-                      {company.verificationStatus === "verified" || company.verified ? (
-                        <button
-                          onClick={() => handleUnverify(company.id)}
-                          className="rounded-lg px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
-                        >
-                          Anulează
-                        </button>
-                      ) : (
-                        <button
-                          onClick={() => handleVerify(company.id)}
-                          className="inline-flex items-center gap-1 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-emerald-700"
-                        >
-                          <CheckCircleIcon className="h-4 w-4" />
-                          Verifică
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <DataTable
+              data={filtered}
+              columns={columns}
+              searchPlaceholder="Caută companii..."
+              onRowClick={(c) => router.push(`/admin/companies/${c.id}`)}
+            />
           )}
-
-          {/* Count */}
-          <p className="text-sm text-gray-500">
-            Total: {filteredCompanies.length} companii
-          </p>
         </div>
       </DashboardLayout>
     </RequireRole>

@@ -7,15 +7,14 @@ import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
 import { format } from "date-fns";
 import { ro } from "date-fns/locale";
+import { useRouter } from "next/router";
+import DataTable, { Column } from "@/components/admin/DataTable";
+import ExportButton from "@/components/admin/ExportButton";
 import {
   TrashIcon,
-  EnvelopeIcon,
-  CalendarIcon,
+  EyeIcon,
   UserIcon,
 } from "@heroicons/react/24/outline";
-import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
-import SearchInput from "@/components/ui/SearchInput";
-import EmptyState from "@/components/ui/EmptyState";
 
 interface Customer {
   id: string;
@@ -27,30 +26,18 @@ interface Customer {
 
 export default function AdminUsers() {
   const { dashboardUser } = useAuth();
+  const router = useRouter();
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
     const q = query(collection(db, "customers"), orderBy("createdAt", "desc"));
-    
     const unsub = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Customer));
-      setCustomers(data);
+      setCustomers(snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Customer)));
       setLoading(false);
     });
-
     return () => unsub();
   }, []);
-
-  const filteredCustomers = customers.filter((c) => {
-    const searchLower = search.toLowerCase();
-    return (
-      c.email?.toLowerCase().includes(searchLower) ||
-      c.displayName?.toLowerCase().includes(searchLower) ||
-      c.phone?.includes(search)
-    );
-  });
 
   const handleDelete = async (customerId: string) => {
     if (!window.confirm("Ești sigur că vrei să ștergi acest utilizator?")) return;
@@ -62,109 +49,76 @@ export default function AdminUsers() {
     }
   };
 
+  const columns: Column<Customer>[] = [
+    {
+      key: "displayName",
+      label: "Utilizator",
+      sortable: true,
+      render: (row) => (
+        <div className="flex items-center gap-3">
+          <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-sm font-bold text-blue-700">
+            {(row.displayName || row.email || "U").charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p className="font-medium text-gray-900">{row.displayName || "Fără nume"}</p>
+            <p className="text-xs text-gray-400">{row.id.slice(0, 8)}...</p>
+          </div>
+        </div>
+      ),
+    },
+    { key: "email", label: "Email", sortable: true },
+    { key: "phone", label: "Telefon", render: (row) => <span className="text-gray-600">{row.phone || "—"}</span> },
+    {
+      key: "createdAt",
+      label: "Înregistrat",
+      sortable: true,
+      render: (row) => (
+        <span className="text-sm text-gray-500">
+          {row.createdAt?.toDate ? format(row.createdAt.toDate(), "d MMM yyyy", { locale: ro }) : "N/A"}
+        </span>
+      ),
+      getValue: (row) => row.createdAt?.toDate?.()?.getTime() || 0,
+    },
+    {
+      key: "actions",
+      label: "Acțiuni",
+      width: "100px",
+      render: (row) => (
+        <div className="flex items-center gap-1">
+          <button onClick={() => router.push(`/admin/users/${row.id}`)} className="rounded-lg p-1.5 text-blue-600 hover:bg-blue-50" title="Vezi profil">
+            <EyeIcon className="h-4 w-4" />
+          </button>
+          <button onClick={() => handleDelete(row.id)} className="rounded-lg p-1.5 text-red-600 hover:bg-red-50" title="Șterge">
+            <TrashIcon className="h-4 w-4" />
+          </button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <RequireRole allowedRole="admin">
       <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
-          {/* Header */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <h1 className="text-2xl font-bold text-gray-900">Utilizatori</h1>
-              <p className="text-gray-500">Gestionează utilizatorii platformei</p>
+              <p className="text-gray-500">{customers.length} utilizatori înregistrați</p>
             </div>
-            <SearchInput
-              value={search}
-              onChange={setSearch}
-              placeholder="Caută utilizatori..."
-              focusColor="purple"
-            />
+            <ExportButton data={customers.map((c) => ({ id: c.id, email: c.email, name: c.displayName || "", phone: c.phone || "" }))} filename="utilizatori" />
           </div>
 
-          {/* Table */}
-          <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
-            {loading ? (
-              <LoadingContainer>
-                <LoadingSpinner size="lg" color="purple" />
-              </LoadingContainer>
-            ) : filteredCustomers.length === 0 ? (
-              <EmptyState
-                icon={UserIcon}
-                title={search ? "Nu s-au găsit utilizatori" : "Nu există utilizatori înregistrați"}
-                description={search ? `Nu s-au găsit rezultate pentru "${search}"` : undefined}
-              />
-            ) : (
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Utilizator
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Contact
-                    </th>
-                    <th className="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Înregistrat
-                    </th>
-                    <th className="px-6 py-3 text-right text-xs font-semibold uppercase tracking-wider text-gray-500">
-                      Acțiuni
-                    </th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200 bg-white">
-                  {filteredCustomers.map((customer) => (
-                    <tr key={customer.id} className="hover:bg-gray-50">
-                      <td className="whitespace-nowrap px-6 py-4">
-                        <div className="flex items-center gap-3">
-                          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-100 text-sm font-bold text-emerald-700">
-                            {(customer.displayName || customer.email || "U").charAt(0).toUpperCase()}
-                          </div>
-                          <div>
-                            <p className="font-medium text-gray-900">
-                              {customer.displayName || "Fără nume"}
-                            </p>
-                            <p className="text-sm text-gray-500">{customer.id.slice(0, 8)}...</p>
-                          </div>
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        <div className="space-y-1">
-                          <div className="flex items-center gap-2 text-sm text-gray-600">
-                            <EnvelopeIcon className="h-4 w-4" />
-                            {customer.email}
-                          </div>
-                          {customer.phone && (
-                            <div className="text-sm text-gray-500">{customer.phone}</div>
-                          )}
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4">
-                        <div className="flex items-center gap-2 text-sm text-gray-500">
-                          <CalendarIcon className="h-4 w-4" />
-                          {customer.createdAt?.toDate
-                            ? format(customer.createdAt.toDate(), "d MMM yyyy", { locale: ro })
-                            : "N/A"}
-                        </div>
-                      </td>
-                      <td className="whitespace-nowrap px-6 py-4 text-right">
-                        <button
-                          onClick={() => handleDelete(customer.id)}
-                          className="rounded-lg p-2 text-red-600 hover:bg-red-50"
-                          title="Șterge"
-                        >
-                          <TrashIcon className="h-5 w-5" />
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </div>
-
-          {/* Count */}
-          <p className="text-sm text-gray-500">
-            Total: {filteredCustomers.length} utilizatori
-          </p>
+          <DataTable
+            data={customers}
+            columns={columns}
+            searchKeys={["email", "displayName", "phone"]}
+            searchPlaceholder="Caută utilizatori..."
+            loading={loading}
+            emptyIcon={UserIcon}
+            emptyMessage="Nu există utilizatori"
+            onRowClick={(row) => router.push(`/admin/users/${row.id}`)}
+            pageSize={20}
+          />
         </div>
       </DashboardLayout>
     </RequireRole>

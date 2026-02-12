@@ -20,6 +20,22 @@ import {
   ChartBarIcon,
   ShieldCheckIcon,
   CreditCardIcon,
+  ShieldExclamationIcon,
+  ClipboardDocumentCheckIcon,
+  TagIcon,
+  StarIcon,
+  BanknotesIcon,
+  MapIcon,
+  TrophyIcon,
+  BoltIcon,
+  BellIcon,
+  NewspaperIcon,
+  DocumentChartBarIcon,
+  ServerIcon,
+  ChatBubbleLeftRightIcon,
+  CurrencyDollarIcon,
+  ClockIcon,
+  NoSymbolIcon,
 } from "@heroicons/react/24/outline";
 import { logout } from "@/utils/firebaseHelpers";
 
@@ -96,7 +112,22 @@ const defaultNavigation: Record<DashboardRole, NavItem[]> = {
     { name: "Utilizatori", href: "/admin/users", icon: UsersIcon },
     { name: "Companii", href: "/admin/companies", icon: BuildingOfficeIcon },
     { name: "Cereri", href: "/admin/requests", icon: DocumentTextIcon },
-    { name: "Verificări", href: "/admin/verifications", icon: ShieldCheckIcon },
+    { name: "Oferte", href: "/admin/offers", icon: TagIcon },
+    { name: "Recenzii", href: "/admin/reviews", icon: StarIcon },
+    { name: "Financiar", href: "/admin/financial", icon: BanknotesIcon },
+    { name: "Geografie", href: "/admin/geography", icon: MapIcon },
+    { name: "Clasament", href: "/admin/rankings", icon: TrophyIcon },
+    { name: "Activitate", href: "/admin/activity", icon: BoltIcon },
+    { name: "Chat", href: "/admin/chats", icon: ChatBubbleLeftRightIcon },
+    { name: "Notificări", href: "/admin/notifications", icon: BellIcon },
+    { name: "Articole", href: "/admin/articles", icon: NewspaperIcon },
+    { name: "Rapoarte", href: "/admin/reports", icon: DocumentChartBarIcon },
+    { name: "Prețuri", href: "/admin/pricing", icon: CurrencyDollarIcon },
+    { name: "SLA", href: "/admin/sla", icon: ClockIcon },
+    { name: "Fraud Flags", href: "/admin/fraud-flags", icon: ShieldExclamationIcon },
+    { name: "Spam", href: "/admin/duplicates", icon: NoSymbolIcon },
+    { name: "Audit Log", href: "/admin/audit", icon: ClipboardDocumentCheckIcon },
+    { name: "Sistem", href: "/admin/system", icon: ServerIcon },
     { name: "Setări", href: "/admin/settings", icon: Cog6ToothIcon },
   ],
 };
@@ -485,7 +516,7 @@ export default function DashboardLayout({
 
         {/* Page content */}
         <main className="py-4">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${role === "admin" ? "max-w-full" : "max-w-7xl"}`}>
             {children || (
               <div className="space-y-4 animate-pulse">
                 <div className="h-8 w-48 rounded-lg bg-gray-200" />

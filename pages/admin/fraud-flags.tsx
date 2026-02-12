@@ -283,7 +283,7 @@ export default function AdminFraudFlags() {
                     >
                       {/* Severity badge */}
                       <span
-                        className={`flex-shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold ${sev.color}`}
+                        className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-bold ${sev.color}`}
                       >
                         {sev.icon} {sev.label}
                       </span>
@@ -305,13 +305,13 @@ export default function AdminFraudFlags() {
 
                       {/* Status badge */}
                       <span
-                        className={`flex-shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium ${stat.color}`}
+                        className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium ${stat.color}`}
                       >
                         {stat.label}
                       </span>
 
                       {/* Date */}
-                      <span className="flex-shrink-0 text-xs text-gray-400">
+                      <span className="shrink-0 text-xs text-gray-400">
                         {flag.createdAt
                           ? format(new Date(flag.createdAt), "dd MMM yyyy HH:mm", { locale: ro })
                           : "—"}
@@ -422,7 +422,7 @@ export default function AdminFraudFlags() {
                                   key={i}
                                   className="flex items-start gap-2 text-xs text-gray-600"
                                 >
-                                  <ExclamationTriangleIcon className="mt-0.5 h-3.5 w-3.5 flex-shrink-0 text-orange-400" />
+                                  <ExclamationTriangleIcon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-orange-400" />
                                   {r}
                                 </li>
                               ))}

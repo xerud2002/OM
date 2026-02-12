@@ -12,6 +12,9 @@ import {
   BellIcon,
   EnvelopeIcon,
   ShieldCheckIcon,
+  ClockIcon,
+  GlobeAltIcon,
+  UserGroupIcon,
 } from "@heroicons/react/24/outline";
 import ToggleSwitch from "@/components/ui/ToggleSwitch";
 import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
@@ -23,6 +26,19 @@ interface PlatformSettings {
   maintenanceMode: boolean;
   emailNotifications: boolean;
   adminEmail: string;
+  // Advanced settings
+  autoApproveRequests: boolean;
+  maxOffersPerRequest: number;
+  requestExpirationDays: number;
+  minOfferPrice: number;
+  maxOfferPrice: number;
+  seoTitle: string;
+  seoDescription: string;
+  supportPhone: string;
+  supportEmail: string;
+  companyTrialDays: number;
+  enableChat: boolean;
+  enableReviews: boolean;
 }
 
 const defaultSettings: PlatformSettings = {
@@ -32,6 +48,18 @@ const defaultSettings: PlatformSettings = {
   maintenanceMode: false,
   emailNotifications: true,
   adminEmail: "admin@ofertemutare.ro",
+  autoApproveRequests: false,
+  maxOffersPerRequest: 10,
+  requestExpirationDays: 30,
+  minOfferPrice: 100,
+  maxOfferPrice: 50000,
+  seoTitle: "Ofertemutare.ro - Compară oferte de mutări",
+  seoDescription: "Platforma nr.1 din România pentru compararea ofertelor de mutări. Economisește timp și bani!",
+  supportPhone: "",
+  supportEmail: "support@ofertemutare.ro",
+  companyTrialDays: 7,
+  enableChat: true,
+  enableReviews: true,
 };
 
 export default function AdminSettings() {
@@ -191,18 +219,137 @@ export default function AdminSettings() {
                   </div>
                 </div>
 
-                <div className="flex items-center justify-between rounded-lg border border-red-200 bg-red-50 p-4">
-                  <div>
-                    <p className="font-medium text-red-900">Mod mentenanță</p>
-                    <p className="text-sm text-red-700">
-                      Când este activ, utilizatorii văd o pagină de mentenanță
-                    </p>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between rounded-lg border border-red-200 bg-red-50 p-4">
+                    <div>
+                      <p className="font-medium text-red-900">Mod mentenanță</p>
+                      <p className="text-sm text-red-700">
+                        Când este activ, utilizatorii văd o pagină de mentenanță
+                      </p>
+                    </div>
+                    <ToggleSwitch
+                      checked={settings.maintenanceMode}
+                      onChange={(checked) => handleChange("maintenanceMode", checked)}
+                      color="red"
+                    />
                   </div>
-                  <ToggleSwitch
-                    checked={settings.maintenanceMode}
-                    onChange={(checked) => handleChange("maintenanceMode", checked)}
-                    color="red"
-                  />
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">Auto-aprobare cereri</p>
+                      <p className="text-sm text-gray-500">Cererile noi sunt aprobate automat</p>
+                    </div>
+                    <ToggleSwitch
+                      checked={settings.autoApproveRequests}
+                      onChange={(checked) => handleChange("autoApproveRequests", checked)}
+                      color="purple"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">Chat activ</p>
+                      <p className="text-sm text-gray-500">Permite chat între companii și clienți</p>
+                    </div>
+                    <ToggleSwitch
+                      checked={settings.enableChat}
+                      onChange={(checked) => handleChange("enableChat", checked)}
+                      color="purple"
+                    />
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-gray-900">Recenzii active</p>
+                      <p className="text-sm text-gray-500">Permite lăsarea de recenzii</p>
+                    </div>
+                    <ToggleSwitch
+                      checked={settings.enableReviews}
+                      onChange={(checked) => handleChange("enableReviews", checked)}
+                      color="purple"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Limits Section */}
+              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-orange-100">
+                    <ClockIcon className="h-5 w-5 text-orange-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-gray-900">Limite & Expirări</h2>
+                    <p className="text-sm text-gray-500">Parametri de funcționare</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Max oferte/cerere</label>
+                    <input type="number" value={settings.maxOffersPerRequest} onChange={(e) => handleChange("maxOffersPerRequest", Number(e.target.value))} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Expirare cerere (zile)</label>
+                    <input type="number" value={settings.requestExpirationDays} onChange={(e) => handleChange("requestExpirationDays", Number(e.target.value))} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Preț minim ofertă (RON)</label>
+                    <input type="number" value={settings.minOfferPrice} onChange={(e) => handleChange("minOfferPrice", Number(e.target.value))} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Preț maxim ofertă (RON)</label>
+                    <input type="number" value={settings.maxOfferPrice} onChange={(e) => handleChange("maxOfferPrice", Number(e.target.value))} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Support Section */}
+              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100">
+                    <UserGroupIcon className="h-5 w-5 text-indigo-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-gray-900">Suport & Contact</h2>
+                    <p className="text-sm text-gray-500">Informații de contact afișate utilizatorilor</p>
+                  </div>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Email suport</label>
+                    <input type="email" value={settings.supportEmail} onChange={(e) => handleChange("supportEmail", e.target.value)} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Telefon suport</label>
+                    <input type="text" value={settings.supportPhone} onChange={(e) => handleChange("supportPhone", e.target.value)} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" placeholder="07xx xxx xxx" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Perioadă trial companie (zile)</label>
+                    <input type="number" value={settings.companyTrialDays} onChange={(e) => handleChange("companyTrialDays", Number(e.target.value))} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
+                </div>
+              </div>
+
+              {/* SEO Section */}
+              <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-teal-100">
+                    <GlobeAltIcon className="h-5 w-5 text-teal-600" />
+                  </div>
+                  <div>
+                    <h2 className="font-bold text-gray-900">SEO</h2>
+                    <p className="text-sm text-gray-500">Titlu și descriere meta default</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Titlu SEO</label>
+                    <input type="text" value={settings.seoTitle} onChange={(e) => handleChange("seoTitle", e.target.value)} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-gray-700">Descriere SEO</label>
+                    <textarea value={settings.seoDescription} onChange={(e) => handleChange("seoDescription", e.target.value)} rows={3} className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-purple-500 focus:outline-none" />
+                  </div>
                 </div>
               </div>
 

@@ -514,7 +514,7 @@ export default function AdminRequests() {
                                   {getChannelLabel(request.leadSource.channel)}
                                 </span>
                                 {request.leadSource.utm_campaign && (
-                                  <span className="text-[10px] text-gray-400 truncate max-w-[120px]" title={request.leadSource.utm_campaign}>
+                                  <span className="text-[10px] text-gray-400 truncate max-w-30" title={request.leadSource.utm_campaign}>
                                     {request.leadSource.utm_campaign}
                                   </span>
                                 )}
