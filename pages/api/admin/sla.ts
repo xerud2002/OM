@@ -25,14 +25,17 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
 
   const requests = reqSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
 
-  // Fetch recent offers
+  // Fetch recent offers (collectionGroup — filter + sort in-memory)
   const offerSnap = await db.collectionGroup("offers")
-    .where("createdAt", ">=", thirtyDaysAgo)
-    .orderBy("createdAt", "desc")
     .limit(1000)
     .get();
 
-  const offers = offerSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
+  const offers = (offerSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[])
+    .filter((o: any) => {
+      const ts = o.createdAt?._seconds || 0;
+      return ts >= thirtyDaysAgo.seconds;
+    })
+    .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
 
   // 1. Onboarding funnel — companies
   const compSnap = await db.collection("companies")

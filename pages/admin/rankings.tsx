@@ -67,7 +67,7 @@ export default function AdminRankings() {
       render: (c) => (
         <div className="flex items-center gap-2">
           <div className="h-2 w-16 overflow-hidden rounded-full bg-gray-200">
-            <div className="h-full rounded-full bg-linear-to-r from-purple-500 to-pink-500" style={{ width: `${Math.min(c.score * 10, 100)}%` }} />
+            <div className="h-full rounded-full bg-linear-to-r from-purple-500 to-pink-500" style={{ width: `${Math.min((c.score / 5) * 100, 100)}%` }} />
           </div>
           <span className="text-sm font-bold text-purple-700">{c.score}</span>
         </div>

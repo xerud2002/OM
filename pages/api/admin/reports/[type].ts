@@ -67,8 +67,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (type === "offers") {
-    const snap = await adminDb.collectionGroup("offers").orderBy("createdAt", "desc").limit(500).get();
-    const data = snap.docs.map((d) => {
+    const snap = await adminDb.collectionGroup("offers").limit(500).get();
+    const sortedDocs = snap.docs.sort((a, b) => (b.data().createdAt?._seconds || 0) - (a.data().createdAt?._seconds || 0));
+    const data = sortedDocs.map((d) => {
       const o = d.data();
       return {
         id: d.id,

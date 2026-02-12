@@ -3,7 +3,6 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -29,16 +28,16 @@ function fmtDate(ts: any) {
 export default function AdminUserDetail() {
   const router = useRouter();
   const { id } = router.query;
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (!id) return;
+    if (!id || !user) return;
     (async () => {
       try {
-        const token = await getAuth().currentUser?.getIdToken();
+        const token = await user.getIdToken();
         const res = await fetch(`/api/admin/users/${id}`, { headers: { Authorization: `Bearer ${token}` } });
         const json = await res.json();
         if (json.success) setData(json.data);
@@ -46,7 +45,7 @@ export default function AdminUserDetail() {
       } catch { setError("Eroare de rețea"); }
       finally { setLoading(false); }
     })();
-  }, [id]);
+  }, [id, user]);
 
   return (
     <RequireRole allowedRole="admin">

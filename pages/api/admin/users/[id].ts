@@ -22,9 +22,15 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
 
   const userData = { id: userDoc.id, ...userDoc.data() };
 
-  // Get user's requests
-  const requestsSnap = await adminDb.collection("requests").where("userId", "==", id).orderBy("createdAt", "desc").limit(50).get();
-  const requests = requestsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  // Get user's requests (sort in-memory to avoid composite index dependency)
+  const requestsSnap = await adminDb.collection("requests").where("customerId", "==", id).limit(50).get();
+  const requests = requestsSnap.docs
+    .map((d) => ({ id: d.id, ...d.data() }))
+    .sort((a: any, b: any) => {
+      const ta = a.createdAt?._seconds || 0;
+      const tb = b.createdAt?._seconds || 0;
+      return tb - ta;
+    });
 
   // Get offers for those requests
   const requestIds = requests.map((r) => r.id);

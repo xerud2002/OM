@@ -15,11 +15,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const limit = Math.min(Number(req.query.limit) || 200, 500);
   const offersSnap = await adminDb
     .collectionGroup("offers")
-    .orderBy("createdAt", "desc")
     .limit(limit)
     .get();
 
-  const offers = offersSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const offers = offersSnap.docs
+    .map((d) => ({ id: d.id, ...d.data() }))
+    .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
 
   // Batch-fetch company names for all unique companyIds
   const companyIds = Array.from(new Set(offers.map((o: any) => o.companyId).filter(Boolean)));

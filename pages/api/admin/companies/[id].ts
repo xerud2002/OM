@@ -23,12 +23,16 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
   const company = { id: companyDoc.id, ...companyDoc.data() };
 
   const [offersSnap, reviewsSnap] = await Promise.all([
-    adminDb.collectionGroup("offers").where("companyId", "==", id).orderBy("createdAt", "desc").limit(100).get(),
-    adminDb.collection("reviews").where("companyId", "==", id).orderBy("createdAt", "desc").limit(50).get(),
+    adminDb.collectionGroup("offers").where("companyId", "==", id).limit(100).get(),
+    adminDb.collection("reviews").where("companyId", "==", id).limit(50).get(),
   ]);
 
-  const offers = offersSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
-  const reviews = reviewsSnap.docs.map((d) => ({ id: d.id, ...d.data() }));
+  const offers = offersSnap.docs
+    .map((d) => ({ id: d.id, ...d.data() }))
+    .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
+  const reviews = reviewsSnap.docs
+    .map((d) => ({ id: d.id, ...d.data() }))
+    .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
 
   const acceptedOffers = offers.filter((o: any) => o.status === "accepted" || o.accepted);
   const acceptanceRate = offers.length > 0 ? Math.round((acceptedOffers.length / offers.length) * 100) : 0;

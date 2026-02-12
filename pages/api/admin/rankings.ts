@@ -34,9 +34,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     const acceptanceRate = offers.total > 0 ? Math.round((offers.accepted / offers.total) * 100) : 0;
     const verified = data.verificationStatus === "verified" || data.verified;
 
-    // Composite score: rating(40%) + acceptanceRate(30%) + volume(20%) + verified(10%)
-    const volumeScore = Math.min(offers.total / 10, 10); // max 10 pts for 100+ offers
-    const score = (rating * 2 * 0.4) + (acceptanceRate / 10 * 0.3) + (volumeScore * 0.2) + (verified ? 1 : 0);
+    // Composite score (max 5): rating(40%) + acceptanceRate(30%) + volume(20%) + verified(10%)
+    const ratingNorm = rating / 5; // 0-1
+    const acceptNorm = acceptanceRate / 100; // 0-1
+    const volumeNorm = Math.min(offers.total / 100, 1); // 0-1, cap at 100 offers
+    const verifiedNorm = verified ? 1 : 0;
+    const score = 5 * (ratingNorm * 0.4 + acceptNorm * 0.3 + volumeNorm * 0.2 + verifiedNorm * 0.1);
 
     return {
       id: d.id,

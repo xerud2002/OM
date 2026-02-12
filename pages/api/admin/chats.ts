@@ -16,13 +16,17 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   // Use collectionGroup to query all messages across the hierarchy
   const messagesSnap = await adminDb
     .collectionGroup("messages")
-    .orderBy("createdAt", "desc")
     .limit(200)
     .get();
 
+  // Sort in-memory by createdAt desc
+  const sortedDocs = messagesSnap.docs.sort(
+    (a, b) => (b.data().createdAt?._seconds || 0) - (a.data().createdAt?._seconds || 0)
+  );
+
   // Group messages into conversations by their parent offer path
   const conversationMap = new Map<string, any>();
-  for (const doc of messagesSnap.docs) {
+  for (const doc of sortedDocs) {
     const data = doc.data();
     // Path: requests/{rid}/offers/{oid}/messages/{mid}
     const pathParts = doc.ref.path.split("/");
