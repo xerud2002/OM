@@ -99,6 +99,18 @@ const blogPosts = [
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
   },
   {
+    slug: "mutare-fara-lift",
+    title: "Mutare la Etaj fără Lift — Soluții și Costuri 2026",
+    excerpt:
+      "Cât costă în plus o mutare fără lift? Tabel cu prețuri per etaj, soluții practice (lift exterior, demontare mobilă) și sfaturi de economisire.",
+    category: "Ghid Practic",
+    readTime: "6 min",
+    date: "12 Feb 2026",
+    image: "/pics/blog/mutare-fara-lift.webp",
+    gradient: "linear-gradient(to right, #0ea5e9, #2563eb)",
+    link: "/articole/mutare-fara-lift",
+  },
+  {
     slug: "sfaturi-mutari",
     title: "50+ Sfaturi Expert Pentru Mutări în România",
     excerpt:
