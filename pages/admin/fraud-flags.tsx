@@ -178,7 +178,7 @@ export default function AdminFraudFlags() {
                 Fraud Detection
               </h1>
               <p className="mt-1 text-sm text-gray-500">
-                Detectare conturi multiple de pe același device sau IP
+                Detectare conturi multiple de pe același device sau IP și cereri duplicate
               </p>
             </div>
           </div>
@@ -362,11 +362,13 @@ export default function AdminFraudFlags() {
                             </div>
                           </div>
 
-                          {/* Linked Accounts */}
+                          {/* Linked Accounts / Requests */}
                           <div className="rounded-lg border border-gray-200 bg-white p-3">
                             <div className="mb-2 flex items-center gap-2 text-sm font-medium text-gray-700">
                               <UserGroupIcon className="h-4 w-4" />
-                              Conturi Legate ({flag.linkedAccounts.length})
+                              {flag.flaggedUid?.startsWith("guest:") || flag.reasons.some(r => r.includes("cereri de mutare"))
+                                ? `Cereri Legate (${flag.linkedAccounts.length})`
+                                : `Conturi Legate (${flag.linkedAccounts.length})`}
                             </div>
                             <div className="space-y-1">
                               {flag.linkedAccounts.map((uid) => (

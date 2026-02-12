@@ -221,6 +221,57 @@ export default withErrorHandler(async function handler(
     // NOTE: Company notifications (in-app + email) are deferred until admin approval
     // See /api/admin/approve-request.ts
 
+    // ── Fraud detection: flag >2 requests from same email in one day ──
+    setImmediate(async () => {
+      try {
+        const now = new Date();
+        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
+
+        const todayRequests = await adminDb
+          .collection("requests")
+          .where("customerEmail", "==", email)
+          .where("createdAt", ">=", startOfDay)
+          .where("createdAt", "<", endOfDay)
+          .get();
+
+        if (todayRequests.size > 2) {
+          const dateStr = now.toISOString().slice(0, 10);
+          const safeEmail = email.replace(/[^a-zA-Z0-9]/g, "_");
+          const flagDocId = `dup-req-${safeEmail}-${dateStr}`;
+          const flagRef = adminDb.collection("fraudFlags").doc(flagDocId);
+          const requestIds = todayRequests.docs.map((d) => d.id);
+
+          await flagRef.set(
+            {
+              flaggedUid: customerId || `guest:${email}`,
+              flaggedEmail: email,
+              flaggedRole: "customer",
+              linkedAccounts: requestIds,
+              fingerprint: null,
+              ip: clientIp,
+              reasons: [
+                `${todayRequests.size} cereri de mutare create în aceeași zi (${dateStr}) de ${email}`,
+              ],
+              severity: todayRequests.size >= 5 ? "high" : "medium",
+              status: "pending",
+              reviewedBy: null,
+              reviewedAt: null,
+              notes: null,
+              createdAt: FieldValue.serverTimestamp(),
+            },
+            { merge: true },
+          );
+
+          logger.log(
+            `Fraud flag: ${email} created ${todayRequests.size} requests on ${dateStr}`,
+          );
+        }
+      } catch (flagErr) {
+        logger.error("Error checking duplicate requests:", flagErr);
+      }
+    });
+
     // If user chose "later" for media upload, generate token & send upload link email
     if (data.mediaUpload === "later") {
       try {
