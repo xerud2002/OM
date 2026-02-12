@@ -18,6 +18,22 @@
       ]
     },
     {
+      "collectionGroup": "requests",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "adminApproved", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "offers",
+      "queryScope": "COLLECTION_GROUP",
+      "fields": [
+        { "fieldPath": "companyId", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "offers",
       "queryScope": "COLLECTION_GROUP",
       "fields": [
@@ -30,7 +46,22 @@
       "collectionGroup": "offers",
       "queryScope": "COLLECTION_GROUP",
       "fields": [
-        { "fieldPath": "companyId", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "companies",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "verificationStatus", "order": "ASCENDING" },
+        { "fieldPath": "verificationSubmittedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "companies",
+      "queryScope": "COLLECTION",
+      "fields": [
         { "fieldPath": "createdAt", "order": "DESCENDING" }
       ]
     },
@@ -43,19 +74,19 @@
       ]
     },
     {
+      "collectionGroup": "notifications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "type", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
       "collectionGroup": "messages",
       "queryScope": "COLLECTION_GROUP",
       "fields": [
         { "fieldPath": "senderId", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
-      ]
-    },
-    {
-      "collectionGroup": "companies",
-      "queryScope": "COLLECTION",
-      "fields": [
-        { "fieldPath": "verificationStatus", "order": "ASCENDING" },
-        { "fieldPath": "verificationSubmittedAt", "order": "DESCENDING" }
       ]
     },
     {
@@ -76,11 +107,43 @@
       ]
     },
     {
-      "collectionGroup": "requests",
+      "collectionGroup": "fraudFlags",
       "queryScope": "COLLECTION",
       "fields": [
-        { "fieldPath": "adminApproved", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
         { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "fraudFlags",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "severity", "order": "ASCENDING" },
+        { "fieldPath": "createdAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "fraudFlags",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "flaggedUid", "order": "ASCENDING" },
+        { "fieldPath": "linkedAccounts", "arrayConfig": "CONTAINS" }
+      ]
+    },
+    {
+      "collectionGroup": "deviceFingerprints",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "fingerprint", "order": "ASCENDING" },
+        { "fieldPath": "uid", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "deviceFingerprints",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "ips", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "uid", "order": "ASCENDING" }
       ]
     },
     {
