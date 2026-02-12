@@ -218,51 +218,8 @@ export default withErrorHandler(async function handler(
 
     const requestRef = await adminDb.collection("requests").add(requestData);
 
-    // Notify companies about the new request (create notifications)
-    // Get all verified companies
-    const companiesSnapshot = await adminDb.collection("companies").get();
-    const batch = adminDb.batch();
-
-    // Filter companies by service zone (county matching)
-    const requestCounty = (clean.fromCounty || "").toLowerCase().trim();
-    const relevantCompanies = companiesSnapshot.docs.filter((companyDoc) => {
-      const companyData = companyDoc.data();
-      // If company has no service zones configured, notify them (backwards compatible)
-      const serviceCounties: string[] = companyData.serviceCounties || [];
-      const serviceAreas: string[] = companyData.serviceAreas || [];
-      if (serviceCounties.length === 0 && serviceAreas.length === 0)
-        return true;
-      // Check if the request's county matches any of the company's service counties
-      const matchesCounty = serviceCounties.some(
-        (c: string) => c.toLowerCase().trim() === requestCounty,
-      );
-      // Also check service areas (cities)
-      const requestCity = (clean.fromCity || "").toLowerCase().trim();
-      const matchesCity = serviceAreas.some(
-        (a: string) => a.toLowerCase().trim() === requestCity,
-      );
-      return matchesCounty || matchesCity;
-    });
-
-    relevantCompanies.forEach((companyDoc) => {
-      const notificationRef = adminDb
-        .collection("companies")
-        .doc(companyDoc.id)
-        .collection("notifications")
-        .doc();
-
-      batch.set(notificationRef, {
-        type: "new_request",
-        requestId: requestRef.id,
-        requestCode,
-        fromCity: clean.fromCity,
-        toCity: clean.toCity,
-        read: false,
-        createdAt: FieldValue.serverTimestamp(),
-      });
-    });
-
-    await batch.commit();
+    // NOTE: Company notifications (in-app + email) are deferred until admin approval
+    // See /api/admin/approve-request.ts
 
     // If user chose "later" for media upload, generate token & send upload link email
     if (data.mediaUpload === "later") {
@@ -312,11 +269,9 @@ export default withErrorHandler(async function handler(
       }
     }
 
-    // Send email notifications (async, don't wait)
-    // Run in background to avoid slowing down request creation
+    // Send confirmation email to customer (async, don't wait)
     setImmediate(async () => {
       try {
-        // 1. Send confirmation email to customer
         const confirmResult = await sendEmail({
           to: email,
           subject: `✅ Cererea ta de mutare #${requestCode} a fost înregistrată`,
@@ -338,32 +293,8 @@ export default withErrorHandler(async function handler(
             confirmResult.error,
           );
         }
-
-        // 2. Send notifications to relevant companies (zone-filtered)
-        const emailPromises = relevantCompanies.map(async (companyDoc) => {
-          const companyData = companyDoc.data();
-          if (!companyData.email) return; // Skip if no email
-
-          await sendEmail({
-            to: companyData.email,
-            subject: `🚚 Cerere nouă de mutare disponibilă - ${requestCode}`,
-            html: emailTemplates.newRequestNotification(
-              requestCode,
-              `${clean.fromCity}, ${clean.fromCounty}`,
-              `${clean.toCity}, ${clean.toCounty}`,
-              clean.moveDate || "Nedefinită",
-              clean.furniture || "Nedefinit",
-            ),
-          });
-        });
-
-        await Promise.allSettled(emailPromises);
-        logger.log(
-          `Sent email notifications to ${relevantCompanies.length}/${companiesSnapshot.docs.length} companies for ${requestCode}`,
-        );
       } catch (emailError) {
-        logger.error("Error sending email notifications:", emailError);
-        // Don't fail the request if emails fail
+        logger.error("Error sending confirmation email:", emailError);
       }
     });
 

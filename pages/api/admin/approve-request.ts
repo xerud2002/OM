@@ -8,6 +8,7 @@ import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { FieldValue } from "firebase-admin/firestore";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
+import { sendEmail, emailTemplates } from "@/services/email";
 
 export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "PATCH") {
@@ -70,6 +71,88 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
   logger.log(
     `[Admin] Request ${requestId} updated: creditCost=${updates.adminCreditCost ?? "unchanged"}, approved=${updates.adminApproved ?? "unchanged"} by ${authResult.uid}`,
   );
+
+  // When approving, send notifications + emails to relevant companies
+  if (updates.adminApproved === true) {
+    const requestData = requestSnap.data() as Record<string, any>;
+    const requestCode = requestData.requestCode || requestId;
+    const fromCity = requestData.fromCity || "";
+    const toCity = requestData.toCity || "";
+    const fromCounty = requestData.fromCounty || "";
+    const toCounty = requestData.toCounty || "";
+    const moveDate = requestData.moveDate || "Nedefinită";
+    const furniture = requestData.furniture || "Nedefinit";
+
+    setImmediate(async () => {
+      try {
+        // Get all companies and filter by service zone
+        const companiesSnapshot = await adminDb.collection("companies").get();
+        const requestCounty = fromCounty.toLowerCase().trim();
+        const requestCity = fromCity.toLowerCase().trim();
+
+        const relevantCompanies = companiesSnapshot.docs.filter((companyDoc) => {
+          const companyData = companyDoc.data();
+          const serviceCounties: string[] = companyData.serviceCounties || [];
+          const serviceAreas: string[] = companyData.serviceAreas || [];
+          if (serviceCounties.length === 0 && serviceAreas.length === 0) return true;
+          const matchesCounty = serviceCounties.some(
+            (c: string) => c.toLowerCase().trim() === requestCounty,
+          );
+          const matchesCity = serviceAreas.some(
+            (a: string) => a.toLowerCase().trim() === requestCity,
+          );
+          return matchesCounty || matchesCity;
+        });
+
+        // Create in-app notifications
+        const batch = adminDb.batch();
+        relevantCompanies.forEach((companyDoc) => {
+          const notificationRef = adminDb
+            .collection("companies")
+            .doc(companyDoc.id)
+            .collection("notifications")
+            .doc();
+          batch.set(notificationRef, {
+            type: "new_request",
+            requestId,
+            requestCode,
+            fromCity,
+            toCity,
+            read: false,
+            createdAt: FieldValue.serverTimestamp(),
+          });
+        });
+        await batch.commit();
+
+        // Send emails to companies
+        const emailPromises = relevantCompanies.map(async (companyDoc) => {
+          const companyData = companyDoc.data();
+          if (!companyData.email) return;
+          // Respect company notification preferences
+          if (companyData.newRequestNotifications === false) return;
+
+          await sendEmail({
+            to: companyData.email,
+            subject: `🚚 Cerere nouă de mutare disponibilă - ${requestCode}`,
+            html: emailTemplates.newRequestNotification(
+              requestCode,
+              `${fromCity}, ${fromCounty}`,
+              `${toCity}, ${toCounty}`,
+              moveDate,
+              furniture,
+            ),
+          });
+        });
+
+        await Promise.allSettled(emailPromises);
+        logger.log(
+          `[Admin] Sent ${relevantCompanies.length} company notifications for approved request ${requestCode}`,
+        );
+      } catch (notifError) {
+        logger.error("Error sending approval notifications:", notifError);
+      }
+    });
+  }
 
   return res.status(200).json(apiSuccess({
     requestId,
