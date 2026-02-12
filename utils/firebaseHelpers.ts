@@ -158,6 +158,25 @@ export async function getUserRole(u: User): Promise<UserRole | "admin" | null> {
   return null;
 }
 
+// ---- Fraud detection: device fingerprint tracking (fire-and-forget)
+async function trackDeviceFingerprint(user: User, event: "register" | "login", role: string) {
+  try {
+    const { generateDeviceFingerprint } = await import("@/utils/deviceFingerprint");
+    const fingerprint = await generateDeviceFingerprint();
+    const token = await user.getIdToken();
+    fetch("/api/fraud/track", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ fingerprint, event, role }),
+    }).catch(() => {}); // truly fire-and-forget
+  } catch {
+    // Non-critical — never block auth flow
+  }
+}
+
 // ---- Sign in / Sign up
 
 export async function loginWithGoogle(role: UserRole) {
@@ -170,6 +189,9 @@ export async function loginWithGoogle(role: UserRole) {
     setUserId(cred.user.uid);
     setUserProperties({ user_role: role as any });
     trackLogin("google", role as any);
+
+    // Fraud tracking (fire-and-forget)
+    trackDeviceFingerprint(cred.user, "login", role);
 
     return cred.user;
   } catch (error: any) {
@@ -212,6 +234,9 @@ export async function registerWithEmail(
   setUserProperties({ user_role: role as any });
   trackSignUp("email", role as any);
 
+  // Fraud tracking on registration (fire-and-forget)
+  trackDeviceFingerprint(user, "register", role);
+
   return user;
 }
 
@@ -228,6 +253,9 @@ export async function loginWithEmail(
     setUserProperties({ user_role: detectedRole as any });
     trackLogin("email", detectedRole as any);
   }
+
+  // Fraud tracking (fire-and-forget)
+  trackDeviceFingerprint(user, "login", detectedRole || "unknown");
 
   return user;
 }

@@ -1,0 +1,1474 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard Plan — Ofertemutare.ro</title>
+  <style>
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #ede9fe;
+      --purple-dark: #5b21b6;
+      --pink: #ec4899;
+      --green: #10b981;
+      --green-light: #d1fae5;
+      --blue: #3b82f6;
+      --blue-light: #dbeafe;
+      --orange: #f59e0b;
+      --orange-light: #fef3c7;
+      --red: #ef4444;
+      --red-light: #fee2e2;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-300: #d1d5db;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-700: #374151;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+    }
+
+    /* Hero */
+    .hero {
+      background: linear-gradient(135deg, var(--purple) 0%, var(--pink) 100%);
+      color: white;
+      padding: 60px 24px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: rotate 30s linear infinite;
+    }
+    @keyframes rotate { to { transform: rotate(360deg); } }
+    .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 12px; position: relative; }
+    .hero p { font-size: 1.1rem; opacity: 0.9; max-width: 600px; margin: 0 auto; position: relative; }
+    .hero .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 9999px;
+      padding: 6px 16px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 16px;
+      position: relative;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    /* Nav */
+    .nav-bar {
+      background: white;
+      border-bottom: 1px solid var(--gray-200);
+      padding: 0 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .nav-inner {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      justify-content: center;
+    }
+    .nav-inner::-webkit-scrollbar { display: none; }
+    .nav-link {
+      padding: 12px 14px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--gray-500);
+      text-decoration: none;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+    }
+    .nav-link:hover { color: var(--purple); border-color: var(--purple-light); }
+
+    /* Main */
+    .container { max-width: 1400px; margin: 0 auto; padding: 40px 24px 80px; }
+
+    /* Phase */
+    .phase { margin-bottom: 48px; scroll-margin-top: 60px; }
+    .phase-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 2px solid var(--gray-200);
+    }
+    .phase-number {
+      flex-shrink: 0;
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: white;
+    }
+    .phase-header h2 { font-size: 1.5rem; font-weight: 700; color: var(--gray-900); }
+    .phase-header .phase-desc { font-size: 0.9rem; color: var(--gray-500); margin-top: 2px; }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 24px;
+      transition: all 0.2s;
+    }
+    .card:hover {
+      border-color: var(--purple);
+      box-shadow: 0 4px 24px rgba(124, 58, 237, 0.08);
+      transform: translateY(-2px);
+    }
+    .card-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+      margin-bottom: 12px;
+    }
+    .card h3 { font-size: 1rem; font-weight: 700; color: var(--gray-900); margin-bottom: 6px; }
+    .card p { font-size: 0.85rem; color: var(--gray-500); line-height: 1.5; }
+
+    /* Features */
+    .features { margin-top: 12px; }
+    .features li {
+      list-style: none;
+      padding: 4px 0;
+      font-size: 0.82rem;
+      color: var(--gray-600);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .features li::before {
+      content: '\2713';
+      color: var(--green);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* Tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .tag-api { background: var(--blue-light); color: var(--blue); }
+    .tag-page { background: var(--purple-light); color: var(--purple); }
+    .tag-component { background: var(--green-light); color: var(--green); }
+    .tag-new { background: var(--orange-light); color: var(--orange); }
+    .tag-upgrade { background: var(--red-light); color: var(--red); }
+    .tag-done { background: var(--green-light); color: var(--green); }
+    .tag-wip { background: var(--orange-light); color: var(--orange); }
+    .tag-planned { background: var(--gray-100); color: var(--gray-500); }
+
+    /* Phase status badges */
+    .phase-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 12px;
+      border-radius: 9999px;
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin-left: auto;
+    }
+    .phase-status.done { background: var(--green-light); color: var(--green); }
+    .phase-status.planned { background: var(--gray-100); color: var(--gray-500); }
+
+    /* Progress bar */
+    .progress-wrap {
+      margin-top: 24px;
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--gray-700);
+      margin-bottom: 10px;
+    }
+    .progress-bar {
+      height: 12px;
+      background: var(--gray-200);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+      border-radius: 6px;
+      transition: width 0.5s ease;
+    }
+
+    /* Tables */
+    .file-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 16px;
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+    }
+    .file-table th {
+      background: var(--gray-100);
+      text-align: left;
+      padding: 10px 16px;
+      font-weight: 600;
+      color: var(--gray-700);
+      border-bottom: 1px solid var(--gray-200);
+    }
+    .file-table td {
+      padding: 8px 16px;
+      border-bottom: 1px solid var(--gray-100);
+      color: var(--gray-600);
+    }
+    .file-table tr:last-child td { border-bottom: none; }
+    .file-table tbody tr:nth-child(even) td { background: var(--gray-50); }
+    .file-table code {
+      background: var(--gray-100);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace;
+      color: var(--purple-dark);
+    }
+
+    /* Tech */
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .tech-item {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+    .tech-item .emoji { font-size: 1.8rem; margin-bottom: 6px; }
+    .tech-item h4 { font-size: 0.85rem; font-weight: 700; color: var(--gray-800); }
+    .tech-item p { font-size: 0.75rem; color: var(--gray-500); margin-top: 2px; }
+
+    /* Summary */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 24px;
+    }
+    .summary-box {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+    }
+    .summary-box .number {
+      font-size: 2rem;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--purple), var(--pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .summary-box .label { font-size: 0.8rem; color: var(--gray-500); margin-top: 4px; }
+
+    /* Verify */
+    .verify-section {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: 16px;
+      padding: 32px;
+      margin-top: 24px;
+    }
+    .verify-section h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; }
+    .verify-list li {
+      list-style: none;
+      padding: 8px 0;
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      border-bottom: 1px solid var(--gray-100);
+    }
+    .verify-list li:last-child { border-bottom: none; }
+    .verify-list li::before { content: '\1F50D'; flex-shrink: 0; }
+
+    /* Colors */
+    .bg-purple { background: var(--purple); }
+    .bg-blue { background: var(--blue); }
+    .bg-green { background: var(--green); }
+    .bg-orange { background: var(--orange); }
+    .bg-pink { background: var(--pink); }
+    .bg-red { background: var(--red); }
+    .bg-gray { background: var(--gray-600); }
+    .icon-purple { background: var(--purple-light); }
+    .icon-blue { background: var(--blue-light); }
+    .icon-green { background: var(--green-light); }
+    .icon-orange { background: var(--orange-light); }
+    .icon-red { background: var(--red-light); }
+
+    /* Large screen optimization */
+    @media (min-width: 1200px) {
+      .card-grid { grid-template-columns: repeat(3, 1fr); }
+      .summary-grid { grid-template-columns: repeat(6, 1fr); }
+      .tech-grid { grid-template-columns: repeat(6, 1fr); }
+      .nav-link { padding: 12px 12px; font-size: 0.78rem; }
+      .file-table { min-width: 700px; }
+    }
+    @media (min-width: 1600px) {
+      .container { max-width: 1500px; }
+      .nav-inner { max-width: 1500px; }
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 1.8rem; }
+      .card-grid { grid-template-columns: 1fr; }
+      .phase-header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .summary-grid { grid-template-columns: repeat(2, 1fr); }
+      .phase-status { margin-left: 0; }
+    }
+    @media print {
+      .nav-bar { display: none; }
+      .hero { padding: 30px 24px 40px; }
+      .card:hover { transform: none; box-shadow: none; }
+      body { background: white; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="badge">Plan Complet de Implementare</div>
+  <h1>Admin Dashboard Professional</h1>
+  <p>Plan complet pentru dashboard-ul de administrare al platformei Ofertemutare.ro &mdash; 24 faze, 60+ fisiere</p>
+</div>
+
+<div class="nav-bar">
+  <div class="nav-inner">
+    <a class="nav-link" href="#overview">Rezumat</a>
+    <a class="nav-link" href="#tech">Tech Stack</a>
+    <a class="nav-link" href="#phase0">Fundatie</a>
+    <a class="nav-link" href="#phase1">Overview</a>
+    <a class="nav-link" href="#phase2">Utilizatori</a>
+    <a class="nav-link" href="#phase3">Companii</a>
+    <a class="nav-link" href="#phase4">Oferte</a>
+    <a class="nav-link" href="#phase5">Review-uri</a>
+    <a class="nav-link" href="#phase6">Financiar</a>
+    <a class="nav-link" href="#phase7">Geografie</a>
+    <a class="nav-link" href="#phase8">Clasament</a>
+    <a class="nav-link" href="#phase9">Activity</a>
+    <a class="nav-link" href="#phase10">Audit</a>
+    <a class="nav-link" href="#phase11">Notificari</a>
+    <a class="nav-link" href="#phase12">Blog</a>
+    <a class="nav-link" href="#phase13">Rapoarte</a>
+    <a class="nav-link" href="#phase14">Setari</a>
+    <a class="nav-link" href="#phase15">Sistem</a>
+    <a class="nav-link" href="#phase16">Fraud</a>
+    <a class="nav-link" href="#phase17">Pricing</a>
+    <a class="nav-link" href="#phase18">Lead Source</a>
+    <a class="nav-link" href="#phase19">Chat</a>
+    <a class="nav-link" href="#phase20">Suspend&#259;ri</a>
+    <a class="nav-link" href="#phase21">Pricing Dinamic</a>
+    <a class="nav-link" href="#phase22">Anti-Spam</a>
+    <a class="nav-link" href="#phase23">SLA</a>
+    <a class="nav-link" href="#files">Fisiere</a>
+    <a class="nav-link" href="#verify">Verificare</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- OVERVIEW -->
+  <section id="overview" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-purple">&sum;</div>
+      <div>
+        <h2>Rezumat Proiect</h2>
+        <div class="phase-desc">Rebuild complet al dashboard-ului admin cu functionalitati profesionale</div>
+      </div>
+    </div>
+    <div class="summary-grid">
+      <div class="summary-box"><div class="number">24</div><div class="label">Faze de implementare</div></div>
+      <div class="summary-box"><div class="number">22</div><div class="label">Pagini admin</div></div>
+      <div class="summary-box"><div class="number">30+</div><div class="label">API Endpoints</div></div>
+      <div class="summary-box"><div class="number">14</div><div class="label">Componente reutilizabile</div></div>
+      <div class="summary-box"><div class="number">60+</div><div class="label">Fisiere noi</div></div>
+      <div class="summary-box"><div class="number">6</div><div class="label">Colectii Firestore noi</div></div>
+    </div>
+    <div class="progress-wrap">
+      <div class="progress-label"><span>Progres implementare</span><span>3 / 24 faze complete (12.5%)</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:12.5%"></div></div>
+    </div>
+  </section>
+
+  <!-- TECH -->
+  <section id="tech" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-blue">&cog;</div>
+      <div>
+        <h2>Stiva Tehnologica</h2>
+        <div class="phase-desc">Librarii si tehnologii folosite</div>
+      </div>
+    </div>
+    <div class="tech-grid">
+      <div class="tech-item"><div class="emoji">&amp;#x269B;&#xFE0F;</div><h4>Next.js 16</h4><p>Pages Router + API Routes</p></div>
+      <div class="tech-item"><div class="emoji">&#x1F4CA;</div><h4>Recharts</h4><p>Grafice interactive (NOU)</p></div>
+      <div class="tech-item"><div class="emoji">&#x1F525;</div><h4>Firebase + Admin SDK</h4><p>Firestore, Auth, Storage</p></div>
+      <div class="tech-item"><div class="emoji">&#x1F3A8;</div><h4>Tailwind CSS 4</h4><p>Utility-first styling</p></div>
+      <div class="tech-item"><div class="emoji">&#x2728;</div><h4>Framer Motion</h4><p>Animatii fluide</p></div>
+      <div class="tech-item"><div class="emoji">&#x1F4E7;</div><h4>Resend</h4><p>Email tranzactional</p></div>
+    </div>
+  </section>
+
+  <!-- PHASE 0 -->
+  <section id="phase0" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-gray">0</div>
+      <div><h2>Fundatie</h2><div class="phase-desc">Componente reutilizabile, middleware admin, structura de baza</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F4E6;</div>
+        <h3>Instalare Recharts</h3>
+        <p>Adaugare librarie de charting pentru toate graficele din dashboard.</p>
+        <div class="tags"><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F512;</div>
+        <h3>Middleware <code>requireAdmin()</code></h3>
+        <p>Middleware API care verifica Firebase token + existenta documentului <code>admins/{uid}</code>.</p>
+        <ul class="features">
+          <li>Verificare JWT via Admin SDK</li>
+          <li>Check existenta document admin</li>
+          <li>Returnare 403 daca nu e admin</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F9E9;</div>
+        <h3>Componente Admin Reutilizabile</h3>
+        <p>Set de componente folosite in toate paginile admin.</p>
+        <ul class="features">
+          <li><strong>StatCard</strong> &mdash; KPI cu icon, valoare, trend, sparkline</li>
+          <li><strong>ChartCard</strong> &mdash; Wrapper Recharts cu titlu, loading state</li>
+          <li><strong>DataTable</strong> &mdash; Tabel sortabil, paginat, cu search si actiuni</li>
+          <li><strong>DateRangeFilter</strong> &mdash; Selector perioada (azi/7z/30z/custom)</li>
+          <li><strong>ExportButton</strong> &mdash; Export CSV/JSON din orice set de date</li>
+          <li><strong>AuditLogger</strong> &mdash; Utility logare actiuni admin in Firestore</li>
+        </ul>
+        <div class="tags"><span class="tag tag-component">COMPONENTE</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F4D0;</div>
+        <h3>Update DashboardLayout</h3>
+        <p>Extindere navigare admin cu grupuri: Principala, Management, Analiza, Sistem.</p>
+        <ul class="features">
+          <li>Navigare grupata cu subtitluri</li>
+          <li>14 link-uri noi in sidebar</li>
+          <li>Accent culoare purple (existent)</li>
+        </ul>
+        <div class="tags"><span class="tag tag-upgrade">UPGRADE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 1 -->
+  <section id="phase1" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-purple">1</div>
+      <div><h2>Overview Dashboard</h2><div class="phase-desc">Pagina principala cu KPIs, trenduri, grafice si actiuni rapide</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F4C8;</div>
+        <h3>8 KPI Cards</h3>
+        <p>Carduri cu valoare, trend comparativ cu luna anterioara, sparkline integrat.</p>
+        <ul class="features">
+          <li>Total Cereri (+ trend %)</li>
+          <li>Cereri Active acum</li>
+          <li>Total Companii</li>
+          <li>Companii Verificate</li>
+          <li>Total Clienti</li>
+          <li>Oferte Plasate (luna curenta)</li>
+          <li>Rata de Acceptare Oferte (%)</li>
+          <li>Venituri Credite (luna curenta)</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-upgrade">REBUILD</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F4CA;</div>
+        <h3>Grafice &amp; Vizualizari</h3>
+        <p>Sectiune de charts cu date pe ultimele 30 de zile.</p>
+        <ul class="features">
+          <li><strong>Line Chart</strong> &mdash; Cereri noi/zi, 30 zile vs perioada anterioara</li>
+          <li><strong>Pie Chart</strong> &mdash; "Mutare completa" vs "Doar cateva lucruri"</li>
+          <li><strong>Bar Chart</strong> &mdash; Top 5 rute (ex: Bucuresti&rarr;Cluj)</li>
+          <li><strong>Funnel Chart</strong> &mdash; Cereri &rarr; Oferte &rarr; Acceptate</li>
+        </ul>
+        <div class="tags"><span class="tag tag-component">RECHARTS</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-orange">&#x26A1;</div>
+        <h3>Quick Actions &amp; Mini Feed</h3>
+        <p>Panoul de actiuni rapide si activitate recenta.</p>
+        <ul class="features">
+          <li>Verificari in asteptare (cu buton &rarr; pagina verificari)</li>
+          <li>Cereri fara oferte de &gt;48h</li>
+          <li>Companii neverificate recent</li>
+          <li>Ultimele 10 actiuni live pe platforma</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F50C;</div>
+        <h3>API: <code>/api/admin/stats</code></h3>
+        <p>Endpoint server-side care returneaza toate KPI-urile agregate.</p>
+        <ul class="features">
+          <li>Contorizare pe colectii cu getCountFromServer</li>
+          <li>Trend comparativ 30z vs 30z anterioare</li>
+          <li>Top rute, distributie servicii</li>
+          <li>Funnel de conversie oferte</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">GET</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 2 -->
+  <section id="phase2" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-blue">2</div>
+      <div><h2>Management Utilizatori</h2><div class="phase-desc">Tabel avansat + pagina de detalii per utilizator</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F465;</div>
+        <h3>Upgrade <code>users.tsx</code></h3>
+        <p>Inlocuire tabel simplu cu DataTable profesional.</p>
+        <ul class="features">
+          <li>Paginare server-side</li>
+          <li>Coloane sortabile (nume, email, data)</li>
+          <li>Actiuni in masa (delete, export)</li>
+          <li>Badge-uri verified telefon/email</li>
+          <li>Buton "Vezi profil" &rarr; drill-down</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-upgrade">UPGRADE</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F50E;</div>
+        <h3>User Detail: <code>users/[id].tsx</code></h3>
+        <p>Pagina de profil complet al clientului.</p>
+        <ul class="features">
+          <li>Card profil (nume, email, telefon, data inregistrarii)</li>
+          <li>Toate cererile facute (cu status, date)</li>
+          <li>Toate ofertele primite per cerere</li>
+          <li>Link-uri spre conversatii chat</li>
+          <li>Timeline completa activitate</li>
+          <li>Actiuni: dezactivare, stergere, impersonare</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 3 -->
+  <section id="phase3" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-green">3</div>
+      <div><h2>Management Companii</h2><div class="phase-desc">Tabel avansat + pagina detalii companie + merge verificari</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F3E2;</div>
+        <h3>Upgrade <code>companies.tsx</code></h3>
+        <p>Imbunatatire cu DataTable, verificare inline, coloane avansate.</p>
+        <ul class="features">
+          <li>DataTable cu sortare dupa rating, reviews, data</li>
+          <li>Coloana balanta wallet + nr oferte</li>
+          <li>Verificare queue inline (tab/filtru)</li>
+          <li>Merge cu verifications.tsx (eliminare duplicat)</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-upgrade">UPGRADE</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F50E;</div>
+        <h3>Company Detail: <code>companies/[id].tsx</code></h3>
+        <p>Profil complet al companiei cu performanta si financiar.</p>
+        <ul class="features">
+          <li>Profil companie (CIF, contact, documente cu preview)</li>
+          <li>Metrici: oferte totale, rata accept, pret mediu, rating</li>
+          <li>Istoric credite/wallet (din transactions subcollection)</li>
+          <li>Toate ofertele plasate cross-requests</li>
+          <li>Review-uri primite cu moderare</li>
+          <li>Actiuni: verifica, credite+/-, suspenda, sterge</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 4 -->
+  <section id="phase4" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-orange">4</div>
+      <div><h2>Management Oferte</h2><div class="phase-desc">Vedere cross-platform a tuturor ofertelor din platforma</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F4B0;</div>
+        <h3>Pagina Oferte: <code>offers.tsx</code></h3>
+        <p>Tabel cu toate ofertele din platforma, join cu companii si cereri.</p>
+        <ul class="features">
+          <li>DataTable: ID oferta, companie, ruta cerere, pret, status, data</li>
+          <li>Filtrare pe status (pending/accepted/declined/rejected)</li>
+          <li>View detalii oferta + mesaje chat</li>
+          <li>Actiuni admin: force-accept, force-decline, refund credite</li>
+          <li>Stats panel: total oferte azi, pret mediu, rata acceptare</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 5 -->
+  <section id="phase5" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-pink">5</div>
+      <div><h2>Moderare Review-uri</h2><div class="phase-desc">Publicare, ascundere, editare review-uri pe platforma</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x2B50;</div>
+        <h3>Pagina Review-uri: <code>reviews.tsx</code></h3>
+        <p>Toate review-urile cu filtrare si moderare.</p>
+        <ul class="features">
+          <li>Tabel: companie, client, rating, comentariu, data</li>
+          <li>Filtrare pe rating (1-5), status (published/hidden), welcome flag</li>
+          <li>Actiuni: publica, ascunde, editeaza, sterge</li>
+          <li>Highlight automat review-uri suspecte (1 stea, foarte scurte)</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 6 -->
+  <section id="phase6" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-green">6</div>
+      <div><h2>Dashboard Financiar</h2><div class="phase-desc">Venituri, credite, tranzactii, balante companii</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F4B3;</div>
+        <h3>Pagina Financiar: <code>financial.tsx</code></h3>
+        <p>Dashboard complet cu metrici financiare.</p>
+        <ul class="features">
+          <li><strong>KPIs:</strong> Credite totale vandute, venituri estimat, trend lunar</li>
+          <li><strong>Line Chart:</strong> Credite cumparate vs consumate in timp</li>
+          <li><strong>Tabel:</strong> Companii cu balanta wallet, total cheltuit, ultima achizitie</li>
+          <li><strong>Transaction log:</strong> Lista agregata din toate companiile</li>
+          <li><strong>Free trial:</strong> Companii in trial, date expirare</li>
+          <li>Link rapid catre setari credite</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API x2</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 7 -->
+  <section id="phase7" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-blue">7</div>
+      <div><h2>Analiza Geografica</h2><div class="phase-desc">Heatmap pe judete, top orase, top rute, coverage gaps</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F5FA;&#xFE0F;</div>
+        <h3>Harta Romaniei: <code>CountyHeatmap.tsx</code></h3>
+        <p>SVG interactiv al Romaniei colorat dupa densitatea cererilor per judet.</p>
+        <ul class="features">
+          <li>Componenta SVG custom cu pathuri pentru toate 41 judete + Bucuresti</li>
+          <li>Gradient de culori dupa nr. cereri (alb &rarr; mov intens)</li>
+          <li>Tooltip la hover cu detalii judet</li>
+          <li>Toggle: cereri origine vs. destinatie</li>
+        </ul>
+        <div class="tags"><span class="tag tag-component">COMPONENTA</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F4CD;</div>
+        <h3>Pagina Geografie: <code>geography.tsx</code></h3>
+        <p>Analiza completa a distributiei geografice.</p>
+        <ul class="features">
+          <li>Heatmap judete (componenta de mai sus)</li>
+          <li>Top 20 orase origine + top 20 destinatie</li>
+          <li>Top 30 rute (de la &rarr; la) cu nr. cereri</li>
+          <li>Coverage gaps: judete/orase cu 0 cereri sau 0 companii</li>
+          <li>Overlay companii pe harta</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 8 -->
+  <section id="phase8" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-orange">8</div>
+      <div><h2>Clasament Companii</h2><div class="phase-desc">Performanta, ranking, comparatie</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F3C6;</div>
+        <h3>Pagina Rankings: <code>rankings.tsx</code></h3>
+        <p>Leaderboard complet cu scor compozit.</p>
+        <ul class="features">
+          <li>Tabel cu toate companiile rankat dupa scor compozit (rating &times; oferte &times; accept rate)</li>
+          <li>Sortare dupa: rating, oferte plasate, rata acceptare, timp raspuns, reviews</li>
+          <li>Indicatori trend (&uarr;/&darr; fata de luna anterioara)</li>
+          <li>Medalii: Top 3 primesc &#x1F947;&#x1F948;&#x1F949;</li>
+          <li>Grafic comparativ (selecteaza 2-3 companii)</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 9 -->
+  <section id="phase9" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-purple">9</div>
+      <div><h2>Activity Feed Live</h2><div class="phase-desc">Flux de activitate in timp real pe platforma</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F4E1;</div>
+        <h3>Pagina Activitate: <code>activity.tsx</code></h3>
+        <p>Feed real-time cu toate evenimentele din platforma.</p>
+        <ul class="features">
+          <li>Real-time via Firestore <code>onSnapshot</code></li>
+          <li>Tipuri: cerere creata, oferta plasata, oferta acceptata/refuzata, companie inregistrata, verificare, review, media uploadat</li>
+          <li>Color-coded pe tip cu iconuri diferite</li>
+          <li>Filtrare per tip eveniment</li>
+          <li>Auto-scroll cu toggle "Pauza live"</li>
+          <li>Click pe eveniment &rarr; navigare la pagina admin relevanta</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-component">REAL-TIME</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 10 -->
+  <section id="phase10" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-gray">10</div>
+      <div><h2>Log Actiuni Admin</h2><div class="phase-desc">Audit trail complet al tuturor actiunilor administrative</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F4CB;</div>
+        <h3>Colectie Firestore: <code>adminAuditLog</code></h3>
+        <p>Colectie noua pentru inregistrarea tuturor actiunilor admin.</p>
+        <ul class="features">
+          <li>Campuri: adminUid, action, targetCollection, targetId, details, timestamp</li>
+          <li>Reguli Firestore: doar admin poate citi, doar server poate scrie</li>
+        </ul>
+        <div class="tags"><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F50D;</div>
+        <h3>Pagina Audit: <code>audit.tsx</code></h3>
+        <p>Vizualizare si cautare in log-ul de actiuni.</p>
+        <ul class="features">
+          <li>Tabel paginat cu toate actiunile admin</li>
+          <li>Filtrare pe tip actiune, admin, perioada</li>
+          <li>Detalii expandabile per actiune</li>
+          <li>Export audit trail</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F527;</div>
+        <h3>Instrumentare Actiuni Existente</h3>
+        <p>Adaugare logging in toate paginile admin existente.</p>
+        <ul class="features">
+          <li>Verificare/respingere companie &rarr; log</li>
+          <li>Stergere utilizator &rarr; log</li>
+          <li>Schimbare setari &rarr; log</li>
+          <li>Moderare review &rarr; log</li>
+          <li>Orice actiune admin &rarr; log</li>
+        </ul>
+        <div class="tags"><span class="tag tag-upgrade">UPGRADE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 11 -->
+  <section id="phase11" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-pink">11</div>
+      <div><h2>Notificari &amp; Email in Masa</h2><div class="phase-desc">Trimitere notificari si campanii email catre utilizatori</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x1F4E8;</div>
+        <h3>Pagina Notificari: <code>notifications.tsx</code></h3>
+        <p>Sistem complet de notificari si email campaigns.</p>
+        <ul class="features">
+          <li><strong>Email campanie:</strong> Compunere cu preview HTML, selectare audienta</li>
+          <li><strong>Audienta:</strong> Toti clientii, toate companiile, segment specific</li>
+          <li><strong>In-app notificari:</strong> Trimitere in subcollection notifications</li>
+          <li><strong>Template-uri predefinite:</strong> Update platforma, Feature nou, Mentenanta</li>
+          <li>Istoric trimiteri cu status</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API x2</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 12 -->
+  <section id="phase12" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-blue">12</div>
+      <div><h2>Management Blog/Articole</h2><div class="phase-desc">CRUD articole, SEO metadata, preview</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F4DD;</div>
+        <h3>Pagina Articole: <code>articles.tsx</code></h3>
+        <p>Sistem complet de management continut blog.</p>
+        <ul class="features">
+          <li>Lista articole din colectia <code>articles</code></li>
+          <li>Status: draft &rarr; published &rarr; archived</li>
+          <li>Create/edit cu editor rich text sau markdown</li>
+          <li>SEO metadata: titlu, descriere, slug</li>
+          <li>Preview inainte de publicare</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 13 -->
+  <section id="phase13" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-green">13</div>
+      <div><h2>Rapoarte &amp; Export</h2><div class="phase-desc">Rapoarte predefinite, export CSV/JSON, custom report builder</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F4D1;</div>
+        <h3>Pagina Rapoarte: <code>reports.tsx</code></h3>
+        <p>Generare si export rapoarte despre platforma.</p>
+        <ul class="features">
+          <li><strong>Raport lunar cereri:</strong> Nr cereri, status, rute, servicii</li>
+          <li><strong>Raport financiar:</strong> Venituri, credite, tranzactii</li>
+          <li><strong>Raport companii:</strong> Performanta, verificari, activitate</li>
+          <li><strong>Raport clienti:</strong> Inregistrari, cereri, conversii</li>
+          <li>Selector perioada pentru fiecare raport</li>
+          <li>Preview ca tabel &rarr; export CSV sau JSON</li>
+          <li><strong>Custom report builder:</strong> Alege colectia, campurile, filtrele &rarr; generare</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 14 -->
+  <section id="phase14" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-orange">14</div>
+      <div><h2>Setari Avansate</h2><div class="phase-desc">Setari grupate, noi parametri, istoric modificari</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-orange">&#x2699;&#xFE0F;</div>
+        <h3>Upgrade <code>settings.tsx</code></h3>
+        <p>Setari grupate pe categorii cu functionalitati noi.</p>
+        <ul class="features">
+          <li><strong>General:</strong> Maintenance mode, email notificari</li>
+          <li><strong>Credite:</strong> creditPrice, creditsPerContact, welcomeCredits</li>
+          <li><strong>Limita:</strong> maxOffersPerRequest, autoRefundDays, trialDurationDays</li>
+          <li><strong>Email:</strong> adminEmail, test email button</li>
+          <li>Istoric modificari setari (din audit log)</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-upgrade">UPGRADE</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 15 -->
+  <section id="phase15" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-red">15</div>
+      <div><h2>System Health</h2><div class="phase-desc">Monitorizare sanatate platforma, API-uri, cron jobs</div></div>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x1F3E5;</div>
+        <h3>Pagina Sistem: <code>system.tsx</code></h3>
+        <p>Monitorizarea sanatatii si starii platformei.</p>
+        <ul class="features">
+          <li><strong>API health:</strong> Ping toate endpoint-urile, status grid (verde/rosu)</li>
+          <li><strong>Firestore:</strong> Nr. documente per colectie</li>
+          <li><strong>Erori recente:</strong> Ultimele 20 erori server (din systemLogs)</li>
+          <li><strong>Cron status:</strong> Data ultimei rulari auto-refund, upload reminders</li>
+          <li><strong>Environment:</strong> Node, Next.js version, deploy timestamp</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 16 -->
+  <section id="phase16" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-red">16</div>
+      <div><h2>Fraud Detection &amp; Multi-Account Flags</h2><div class="phase-desc">Detectare conturi multiple de pe acelasi device sau IP, fingerprinting, review admin</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x1F6E1;&#xFE0F;</div>
+        <h3>Device Fingerprinting</h3>
+        <p>Utilitar client-side care genereaza un hash unic pe baza caracteristicilor browser-ului si device-ului.</p>
+        <ul class="features">
+          <li><strong>Screen:</strong> Rezolutie, color depth, pixel ratio</li>
+          <li><strong>WebGL:</strong> GPU vendor &amp; renderer</li>
+          <li><strong>Canvas:</strong> Rendering differences per device</li>
+          <li><strong>Navigator:</strong> Language, platform, cores, RAM</li>
+          <li><strong>Fonts:</strong> Font width probe (8 test fonts)</li>
+          <li><strong>Touch:</strong> Touch support, max touch points</li>
+          <li><strong>Hash:</strong> SHA-256 via SubtleCrypto</li>
+        </ul>
+        <div class="tags"><span class="tag tag-component">UTILITAR</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F4E1;</div>
+        <h3>API: <code>/api/fraud/track</code></h3>
+        <p>Endpoint server-side care inregistreaza fingerprint + IP la fiecare login/register.</p>
+        <ul class="features">
+          <li><strong>IP tracking:</strong> x-forwarded-for, x-real-ip, socket IP</li>
+          <li><strong>Auto-flag:</strong> Detectie automata daca acelasi fingerprint/IP apare la alt cont</li>
+          <li><strong>Severity:</strong> low (1 link), medium (2), high (3+)</li>
+          <li><strong>Cross-ref:</strong> Flag-uri create bidirectional intre conturile legate</li>
+          <li><strong>Fire-and-forget:</strong> Nu blocheaza flow-ul de autentificare</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">POST</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F50D;</div>
+        <h3>API: <code>/api/admin/fraud-flags</code></h3>
+        <p>Endpoint admin pentru listare si management flag-uri de fraud.</p>
+        <ul class="features">
+          <li><strong>GET:</strong> Listare paginata cu filtre (status, severity)</li>
+          <li><strong>PATCH:</strong> Update status: reviewed, dismissed, confirmed</li>
+          <li><strong>Enrichment:</strong> User info, toate IP-urile, event count</li>
+          <li><strong>Stats:</strong> Pending, confirmed, total counts</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">GET/PATCH</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F6A9;</div>
+        <h3>Pagina Admin: <code>fraud-flags.tsx</code></h3>
+        <p>Dashboard complet de fraud detection cu filtre, detalii si actiuni.</p>
+        <ul class="features">
+          <li><strong>Stat cards:</strong> Pending, confirmed, total flags</li>
+          <li><strong>Filters:</strong> Status (pending/reviewed/dismissed/confirmed) + Severity</li>
+          <li><strong>Expand:</strong> Detalii complete: fingerprint, IP-uri, conturi legate, reasons</li>
+          <li><strong>Actions:</strong> Confirma fraud / Reviewuit / Respinge cu note</li>
+          <li><strong>Timeline:</strong> Reviewer, data review, note</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-new">NOU &#x2705;</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F517;</div>
+        <h3>Integrare in Auth Flow</h3>
+        <p>Tracking-ul este integrat direct in functiile de autentificare existente.</p>
+        <ul class="features">
+          <li><strong>loginWithGoogle:</strong> Track la fiecare login Google</li>
+          <li><strong>registerWithEmail:</strong> Track + auto-flag la register</li>
+          <li><strong>loginWithEmail:</strong> Track la fiecare login email</li>
+          <li><strong>Non-blocking:</strong> Fire-and-forget, nu afecteaza UX</li>
+        </ul>
+        <div class="tags"><span class="tag tag-upgrade">UPGRADE</span><span class="tag tag-new">NOU &#x2705;</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 17 -->
+  <section id="phase17" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-green">17</div>
+      <div><h2>Request Pricing &amp; Admin Approval</h2><div class="phase-desc">Cereri invizibile firmelor pana la setare manuala pret credite si aprobare admin</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F4B0;</div>
+        <h3>Admin Approval Gate</h3>
+        <p>Cererile noi nu apar in dashboard-ul companiilor pana cand adminul nu seteaza pretul si aproba cererea.</p>
+        <ul class="features">
+          <li><strong>adminApproved:</strong> Flag boolean pe fiecare cerere (default: false/undefined)</li>
+          <li><strong>adminCreditCost:</strong> Cost manual in credite setat de admin, suprascrie formula automata</li>
+          <li><strong>Server-side gate:</strong> API offers/place blocheaza trimitere oferta pe cereri neaprobate</li>
+          <li><strong>Client-side filter:</strong> RequestsView ascunde cererile neaprobate din dashboard companie</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">API</span><span class="tag tag-new">NOU &#x2705;</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x270F;&#xFE0F;</div>
+        <h3>Inline Credit Cost Editor</h3>
+        <p>Admin poate edita costul in credite direct din tabelul de cereri, chiar si dupa aprobare.</p>
+        <ul class="features">
+          <li><strong>Inline edit:</strong> Click pe creion → input number → save/approve</li>
+          <li><strong>Auto vs Manual:</strong> Badge (auto) pentru pret calculat automat, (manual) pentru pret setat de admin</li>
+          <li><strong>Enter/Escape:</strong> Keyboard shortcuts pentru salvare/anulare</li>
+          <li><strong>Combined action:</strong> La prima editare, save-ul seteaza pretul SI aproba cererea simultan</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">UI</span><span class="tag tag-new">NOU &#x2705;</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F4CA;</div>
+        <h3>Admin Requests Dashboard Upgrade</h3>
+        <p>Pagina admin/requests.tsx complet refacuta cu functionalitati de pricing si aprobare.</p>
+        <ul class="features">
+          <li><strong>Stat cards:</strong> Neaprobate / Aprobate / Total cereri</li>
+          <li><strong>Filter tabs:</strong> Toate / Neaprobate (count) / Aprobate (count)</li>
+          <li><strong>Coloana Aprobare:</strong> Badge verde ✅ Aprobata / galben ⏳ Neaprobata</li>
+          <li><strong>Coloana Cost:</strong> Valoare + (auto/manual) + buton editare</li>
+          <li><strong>Actiuni:</strong> Buton Aproba (verde) / Retrage (galben) + status change + delete</li>
+          <li><strong>Row highlight:</strong> Background galben subtil pentru cereri neaprobate</li>
+        </ul>
+        <div class="tags"><span class="tag tag-upgrade">UPGRADE &#x2705;</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F512;</div>
+        <h3>API: approve-request</h3>
+        <p>Endpoint dedicat pentru aprobare cereri si setare cost credite.</p>
+        <ul class="features">
+          <li><strong>PATCH</strong> /api/admin/approve-request</li>
+          <li><strong>Body:</strong> { requestId, creditCost?, approved? }</li>
+          <li><strong>Validare:</strong> Admin role check, requestId exists, creditCost >= 0</li>
+          <li><strong>Updates:</strong> adminCreditCost, adminApproved, approvedBy, approvedAt</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">API</span><span class="tag tag-new">NOU &#x2705;</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 18 -->
+  <section id="phase18" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-blue">18</div>
+      <div><h2>Lead Source &amp; ROI Tracking</h2><div class="phase-desc">Atribuire sursa lead (UTM, ads, organic), tracking ROI per canal de achizitie</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F4E1;</div>
+        <h3>Utilitar: <code>leadSource.ts</code></h3>
+        <p>Captura automata a parametrilor UTM, gclid, fbclid, referrer si landing page la prima vizita.</p>
+        <ul class="features">
+          <li><strong>captureLeadSource():</strong> Captura UTM params + referrer, stocare in sessionStorage</li>
+          <li><strong>getLeadSource():</strong> Returneaza datele capturate pentru injectare in formular</li>
+          <li><strong>getChannelLabel():</strong> Label uman per canal (Google Ads, Organic, Direct, etc.)</li>
+          <li><strong>getChannelColor():</strong> Clase Tailwind colorate per tip canal</li>
+          <li><strong>detectChannel():</strong> Auto-detectie: google_ads, facebook_ads, organic, direct, referral</li>
+        </ul>
+        <div class="tags"><span class="tag tag-component">UTILITAR</span><span class="tag tag-new">NOU &#x2705;</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F517;</div>
+        <h3>Integrare App &amp; Formular</h3>
+        <p>Captura automata la mount si injectare date sursa in cererea trimisa.</p>
+        <ul class="features">
+          <li><strong>_app.tsx:</strong> <code>captureLeadSource()</code> apelat in useEffect la mount</li>
+          <li><strong>HomeRequestForm.tsx:</strong> Lead source injectat in body la submit via async import</li>
+          <li><strong>types/index.ts:</strong> Camp <code>leadSource</code> adaugat pe MovingRequest &amp; CreateGuestRequestInput</li>
+          <li><strong>Campos:</strong> utm_source, utm_medium, utm_campaign, utm_term, utm_content, gclid, fbclid, referrer, landingPage, channel, capturedAt</li>
+        </ul>
+        <div class="tags"><span class="tag tag-upgrade">UPGRADE &#x2705;</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F4CA;</div>
+        <h3>Coloana &ldquo;Sursa&rdquo; in Admin Requests</h3>
+        <p>Afisare sursa lead cu badge colorat per canal si numele campaniei.</p>
+        <ul class="features">
+          <li><strong>Badge colorat:</strong> Verde (Organic), Albastru (Google Ads), Violet (Facebook Ads), Gri (Direct)</li>
+          <li><strong>Campanie:</strong> Subtitlu cu utm_campaign daca exista</li>
+          <li><strong>Fallback:</strong> &ldquo;&mdash;&rdquo; daca nu exista date de sursa</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">UI</span><span class="tag tag-upgrade">UPGRADE &#x2705;</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 19 -->
+  <section id="phase19" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-pink">19</div>
+      <div><h2>Chat Monitoring &amp; Disputes</h2><div class="phase-desc">Monitorizare conversatii, interventie in dispute, flag mesaje neadecvate</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x1F4AC;</div>
+        <h3>Pagina Admin: <code>chats.tsx</code></h3>
+        <p>Monitorizare centralizata a tuturor conversatiilor active pe platforma.</p>
+        <ul class="features">
+          <li><strong>Lista chat-uri:</strong> Toate conversatiile active cu participanti, nr mesaje, ultima activitate</li>
+          <li><strong>Filtrare:</strong> Cu flag-uri (reportat), fara raspuns &gt;24h, pe companie/client</li>
+          <li><strong>Preview:</strong> Vizualizare completa a conversatiei fara a afecta statusul</li>
+          <li><strong>Interventie:</strong> Trimitere mesaj admin in conversatie</li>
+          <li><strong>Flag:</strong> Marcare mesaje neadecvate, notificare participanti</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F50C;</div>
+        <h3>API: <code>/api/admin/chats</code></h3>
+        <p>Endpoint admin pentru listare si management conversatii.</p>
+        <ul class="features">
+          <li><strong>GET:</strong> Lista paginata cu filtre (activ, reportat, fara raspuns)</li>
+          <li><strong>GET /[id]:</strong> Detalii conversatie cu toate mesajele</li>
+          <li><strong>POST:</strong> Trimitere mesaj admin in conversatie</li>
+          <li><strong>PATCH:</strong> Flag/unflag mesaje neadecvate</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">GET/POST/PATCH</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 20 -->
+  <section id="phase20" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-red">20</div>
+      <div><h2>Company Suspension &amp; Ban</h2><div class="phase-desc">Suspendare temporara sau ban permanent companii, cu motiv si audit trail</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x1F6AB;</div>
+        <h3>Actiuni Suspendare / Ban</h3>
+        <p>Admin poate suspenda (temporar, cu durata) sau ban-a (permanent) o companie.</p>
+        <ul class="features">
+          <li><strong>Suspendare:</strong> Temporara cu motiv + durata (7z/14z/30z/custom)</li>
+          <li><strong>Ban:</strong> Permanent cu motiv, ireversibil fara interventie manuala</li>
+          <li><strong>Efect:</strong> Compania nu poate vedea cereri, trimite oferte, sau primi mesaje</li>
+          <li><strong>Notificare:</strong> Email automat catre companie cu motivul si durata</li>
+          <li><strong>Unsuspend:</strong> Auto la expirare sau manual de admin</li>
+          <li><strong>UI:</strong> Butoane in pagina companies.tsx si companies/[id].tsx</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">UI</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F50C;</div>
+        <h3>API: <code>/api/admin/suspend-company</code></h3>
+        <p>Endpoint dedicat pentru management suspendari si ban-uri.</p>
+        <ul class="features">
+          <li><strong>PATCH:</strong> Body { companyId, action: suspend|unsuspend|ban, reason, duration? }</li>
+          <li><strong>Validare:</strong> Admin role check, companyId exists</li>
+          <li><strong>Efect server-side:</strong> Blocheaza offers/place API pentru companii suspendate</li>
+          <li><strong>Audit:</strong> Logare actiune in adminAuditLog</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">PATCH</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 21 -->
+  <section id="phase21" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-orange">21</div>
+      <div><h2>Dynamic Pricing Tiers</h2><div class="phase-desc">Configurare dinamica a preturilor pe credite per zona, serviciu, sezon si volum</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F4B0;</div>
+        <h3>UI Configurare Preturi</h3>
+        <p>Sectiune in setarile admin pentru configurare granulara a preturilor pe credite.</p>
+        <ul class="features">
+          <li><strong>Zone tiers:</strong> Tier 1 (Bucuresti, Cluj, Timisoara), Tier 2, Tier 3 cu preturi editabile</li>
+          <li><strong>Serviciu:</strong> Multiplicator per tip serviciu (complet, partial, doar transport)</li>
+          <li><strong>Sezon:</strong> Markup sezonier configurable (vara +20%, iarna -10%)</li>
+          <li><strong>Volum:</strong> Discount progresiv la cumpararea de credite in bulk</li>
+          <li><strong>Preview:</strong> Simulare pret final inainte de salvare</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">UI</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F50C;</div>
+        <h3>API: <code>/api/admin/pricing-config</code></h3>
+        <p>Endpoint pentru citire si salvare configuratie preturi.</p>
+        <ul class="features">
+          <li><strong>GET:</strong> Configuratia curenta de pricing tiers</li>
+          <li><strong>PATCH:</strong> Update tier-uri, multiplicatori, discount-uri</li>
+          <li><strong>Stocare:</strong> Colectie <code>pricingConfig</code> in Firestore</li>
+          <li><strong>Integrare:</strong> <code>costCalculator.ts</code> citeste config dinamic in loc de hardcoded</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">GET/PATCH</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 22 -->
+  <section id="phase22" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-gray">22</div>
+      <div><h2>Duplicate &amp; Spam Detection</h2><div class="phase-desc">Detectie automata cereri duplicate, spam, si pattern-uri suspecte</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F50D;</div>
+        <h3>Auto-Detect Duplicates</h3>
+        <p>Job programat care identifica cereri duplicate sau spam automat.</p>
+        <ul class="features">
+          <li><strong>Matching:</strong> Aceeasi ruta + data similara (&plusmn;3 zile) de la acelasi telefon/email in 48h</li>
+          <li><strong>Pattern:</strong> Mai mult de 5 cereri de la aceeasi IP in 24h</li>
+          <li><strong>Auto-flag:</strong> Creare flag fraud cu severity bazat pe nr pattern-uri</li>
+          <li><strong>Admin alert:</strong> Notificare in dashboard pentru review manual</li>
+        </ul>
+        <div class="tags"><span class="tag tag-component">CRON</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F50C;</div>
+        <h3>API: <code>/api/cron/detect-duplicates</code></h3>
+        <p>Cron job programat pentru scanare periodica a cererilor noi.</p>
+        <ul class="features">
+          <li><strong>Schedule:</strong> Rulare la fiecare 6 ore</li>
+          <li><strong>Scan window:</strong> Ultimele 24h de cereri</li>
+          <li><strong>Output:</strong> Flag-uri create in colectia fraudFlags</li>
+          <li><strong>Dedup:</strong> Nu creeaza flag-uri duplicate pentru aceleasi cereri</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">POST</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 23 -->
+  <section id="phase23" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-purple">23</div>
+      <div><h2>SLA Monitoring &amp; Onboarding Funnel</h2><div class="phase-desc">Monitorizare timpi de raspuns admin, funnel onboarding companii</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F3AF;</div>
+        <h3>Company Onboarding Funnel</h3>
+        <p>Vizualizare drop-off la fiecare pas din procesul de onboarding al companiilor.</p>
+        <ul class="features">
+          <li><strong>Pasi:</strong> Register &rarr; Verify Email &rarr; Complete Profile &rarr; Upload Docs &rarr; First Credits &rarr; First Offer</li>
+          <li><strong>Funnel chart:</strong> Vizualizare procentaj conversie intre pasi</li>
+          <li><strong>Drop-off alerts:</strong> Companii blocate la un pas mai mult de 7 zile</li>
+          <li><strong>Actiuni:</strong> Email reminder automat + link direct catre pasul urmator</li>
+        </ul>
+        <div class="tags"><span class="tag tag-component">RECHARTS</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-orange">&#x23F1;&#xFE0F;</div>
+        <h3>SLA Monitoring</h3>
+        <p>Monitorizare timpi de raspuns admin pentru operatiuni critice.</p>
+        <ul class="features">
+          <li><strong>Timp aprobare cereri:</strong> Medie, mediana, max (target: &lt;2h)</li>
+          <li><strong>Timp verificare companii:</strong> Medie timp de la upload docs la verificare</li>
+          <li><strong>Timp raspuns support:</strong> Medie timp raspuns la mesaje flagged</li>
+          <li><strong>Alert:</strong> Notificare cand SLA-ul este depasit</li>
+          <li><strong>Dashboard:</strong> Panel cu gauge charts pentru fiecare SLA metric</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">UI</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILES -->
+  <section id="files" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-purple">&#x1F4C1;</div>
+      <div><h2>Lista Completa Fisiere</h2><div class="phase-desc">Toate fisierele noi si modificate</div></div>
+    </div>
+
+    <h3 style="margin:16px 0 8px;font-size:1rem;color:var(--gray-700);">Componente Admin Noi</h3>
+    <table class="file-table">
+      <thead><tr><th>Fisier</th><th>Scop</th></tr></thead>
+      <tbody>
+        <tr><td><code>components/admin/StatCard.tsx</code></td><td>KPI card cu trend &amp; sparkline</td></tr>
+        <tr><td><code>components/admin/ChartCard.tsx</code></td><td>Wrapper Recharts cu titlu, loading</td></tr>
+        <tr><td><code>components/admin/DataTable.tsx</code></td><td>Tabel sortabil, paginat, cu search &amp; actiuni</td></tr>
+        <tr><td><code>components/admin/DateRangeFilter.tsx</code></td><td>Selector perioada (azi / 7z / 30z / custom)</td></tr>
+        <tr><td><code>components/admin/ExportButton.tsx</code></td><td>Export CSV / JSON</td></tr>
+        <tr><td><code>components/admin/AuditLogger.ts</code></td><td>Utility logging actiuni admin</td></tr>
+        <tr><td><code>components/admin/CountyHeatmap.tsx</code></td><td>SVG interactiv harta Romaniei</td></tr>
+        <tr><td><code>components/admin/ActivityFeed.tsx</code></td><td>Feed real-time cu evenimentele platformei</td></tr>
+        <tr><td><code>components/admin/FunnelChart.tsx</code></td><td>Grafic conversie funnel</td></tr>
+        <tr><td><code>utils/deviceFingerprint.ts</code></td><td>Client-side device fingerprinting (SHA-256)</td></tr>
+        <tr><td><code>utils/leadSource.ts</code></td><td>UTM capture, channel detection, lead source tracking</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin:24px 0 8px;font-size:1rem;color:var(--gray-700);">Pagini Admin (Noi &amp; Rebuild)</h3>
+    <table class="file-table">
+      <thead><tr><th>Fisier</th><th>Scop</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>pages/admin/index.tsx</code></td><td>Overview cu KPIs &amp; grafice</td><td><span class="tag tag-upgrade">REBUILD</span></td></tr>
+        <tr><td><code>pages/admin/users.tsx</code></td><td>Lista utilizatori avansata</td><td><span class="tag tag-upgrade">UPGRADE</span></td></tr>
+        <tr><td><code>pages/admin/users/[id].tsx</code></td><td>Detalii utilizator drill-down</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/companies.tsx</code></td><td>Lista companii + verificari</td><td><span class="tag tag-upgrade">UPGRADE</span></td></tr>
+        <tr><td><code>pages/admin/companies/[id].tsx</code></td><td>Detalii companie drill-down</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/requests.tsx</code></td><td>Management cereri + pricing &amp; approval</td><td><span class="tag tag-upgrade">UPGRADE &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/offers.tsx</code></td><td>Management oferte cross-platform</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/reviews.tsx</code></td><td>Moderare review-uri</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/financial.tsx</code></td><td>Dashboard financiar</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/geography.tsx</code></td><td>Analiza geografica + heatmap</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/rankings.tsx</code></td><td>Clasament companii performance</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/activity.tsx</code></td><td>Activity feed real-time</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/audit.tsx</code></td><td>Log actiuni admin</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/notifications.tsx</code></td><td>Notificari &amp; email campanii</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/articles.tsx</code></td><td>Management blog/articole</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/reports.tsx</code></td><td>Rapoarte &amp; export</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/settings.tsx</code></td><td>Setari avansate grupate</td><td><span class="tag tag-upgrade">UPGRADE</span></td></tr>
+        <tr><td><code>pages/admin/system.tsx</code></td><td>System health monitor</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>pages/admin/fraud-flags.tsx</code></td><td>Fraud detection &amp; multi-account flags</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/chats.tsx</code></td><td>Monitorizare chat-uri &amp; interventie dispute</td><td><span class="tag tag-new">NOU</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin:24px 0 8px;font-size:1rem;color:var(--gray-700);">API Endpoints Admin</h3>
+    <table class="file-table">
+      <thead><tr><th>Fisier</th><th>Metoda</th><th>Scop</th></tr></thead>
+      <tbody>
+        <tr><td><code>pages/api/admin/stats.ts</code></td><td>GET</td><td>KPI-uri agregate + trenduri</td></tr>
+        <tr><td><code>pages/api/admin/users/[id].ts</code></td><td>GET</td><td>Profil utilizator agregat</td></tr>
+        <tr><td><code>pages/api/admin/companies/[id].ts</code></td><td>GET</td><td>Profil companie + performanta</td></tr>
+        <tr><td><code>pages/api/admin/offers.ts</code></td><td>GET</td><td>Oferte paginat cu join</td></tr>
+        <tr><td><code>pages/api/admin/reviews.ts</code></td><td>GET/PATCH/DELETE</td><td>Moderare review-uri</td></tr>
+        <tr><td><code>pages/api/admin/financial.ts</code></td><td>GET</td><td>Stats financiare agregate</td></tr>
+        <tr><td><code>pages/api/admin/transactions.ts</code></td><td>GET</td><td>Tranzactii cross-companie paginat</td></tr>
+        <tr><td><code>pages/api/admin/geography.ts</code></td><td>GET</td><td>Agregari pe judete/orase/rute</td></tr>
+        <tr><td><code>pages/api/admin/rankings.ts</code></td><td>GET</td><td>Scoruri companii calculate</td></tr>
+        <tr><td><code>pages/api/admin/audit.ts</code></td><td>GET/POST</td><td>Citire/scriere audit log</td></tr>
+        <tr><td><code>pages/api/admin/send-notification.ts</code></td><td>POST</td><td>Trimitere notificari in-app</td></tr>
+        <tr><td><code>pages/api/admin/send-email-campaign.ts</code></td><td>POST</td><td>Email campaign batch</td></tr>
+        <tr><td><code>pages/api/admin/articles.ts</code></td><td>GET/POST/PATCH/DELETE</td><td>CRUD articole</td></tr>
+        <tr><td><code>pages/api/admin/reports/[type].ts</code></td><td>GET</td><td>Generare rapoarte per tip</td></tr>
+        <tr><td><code>pages/api/admin/system.ts</code></td><td>GET</td><td>Health checks platforma</td></tr>
+        <tr><td><code>pages/api/fraud/track.ts</code></td><td>POST</td><td>Inregistrare fingerprint + IP per user</td></tr>
+        <tr><td><code>pages/api/admin/fraud-flags.ts</code></td><td>GET/PATCH</td><td>Listare &amp; management fraud flags</td></tr>
+        <tr><td><code>pages/api/admin/approve-request.ts</code></td><td>PATCH</td><td>Aprobare cereri &amp; setare cost credite</td></tr>
+        <tr><td><code>pages/api/admin/chats.ts</code></td><td>GET/POST/PATCH</td><td>Listare, interventie &amp; flag conversatii</td></tr>
+        <tr><td><code>pages/api/admin/suspend-company.ts</code></td><td>PATCH</td><td>Suspendare / ban companii</td></tr>
+        <tr><td><code>pages/api/admin/pricing-config.ts</code></td><td>GET/PATCH</td><td>Configurare dinamica preturi credite</td></tr>
+        <tr><td><code>pages/api/cron/detect-duplicates.ts</code></td><td>POST</td><td>Detectie automata cereri duplicate &amp; spam</td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin:24px 0 8px;font-size:1rem;color:var(--gray-700);">Colectii Firestore Noi</h3>
+    <table class="file-table">
+      <thead><tr><th>Colectie</th><th>Campuri principale</th></tr></thead>
+      <tbody>
+        <tr><td><code>adminAuditLog</code></td><td>adminUid, action, targetCollection, targetId, details, timestamp</td></tr>
+        <tr><td><code>systemLogs</code></td><td>level, message, source, timestamp, details</td></tr>
+        <tr><td><code>deviceFingerprints</code></td><td>uid, email, role, fingerprint, ips[], lastIp, firstSeen, lastSeen, eventCount</td></tr>
+        <tr><td><code>fraudFlags</code></td><td>flaggedUid, flaggedEmail, linkedAccounts[], fingerprint, ip, reasons[], severity, status, reviewedBy, notes, createdAt</td></tr>
+        <tr><td><code>suspensions</code></td><td>companyId, action (suspend/ban), reason, duration, adminUid, createdAt, expiresAt</td></tr>
+        <tr><td><code>pricingConfig</code></td><td>tiers[], serviceModifiers, seasonalMarkup, volumeDiscounts, effectiveFrom, updatedBy</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- VERIFY -->
+  <section id="verify" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-green">&#x2713;</div>
+      <div><h2>Verificare &amp; Testare</h2><div class="phase-desc">Cum verificam ca totul functioneaza</div></div>
+    </div>
+    <div class="verify-section">
+      <h3>Pasi de Verificare</h3>
+      <ul class="verify-list">
+        <li>Build trece dupa fiecare faza (<code>npx next build</code>)</li>
+        <li>Toate paginile admin protejate cu <code>&lt;RequireRole allowedRole="admin"&gt;</code></li>
+        <li>Toate API routes verifica rolul admin via <code>requireAdmin()</code> middleware</li>
+        <li>Login ca admin &rarr; navigare pe fiecare pagina &rarr; verificare incarcare date</li>
+        <li>Test export: download CSV din pagina rapoarte</li>
+        <li>Test audit: actiuni admin &rarr; verificare aparitie in audit log</li>
+        <li>Test notificari: trimitere email test catre o singura adresa</li>
+        <li>Test responsive: verificare pe mobile, tablet, desktop</li>
+        <li>Test heatmap: hover pe judete, verificare tooltip</li>
+        <li>Test real-time: activity feed se actualizeaza la noi cereri/oferte</li>
+      </ul>
+    </div>
+    <div class="verify-section" style="margin-top:16px;">
+      <h3>Decizii Tehnice</h3>
+      <ul class="verify-list">
+        <li><strong>Recharts</strong> peste Chart.js/Nivo &mdash; cea mai buna integrare React, composable, lightweight</li>
+        <li><strong>Agregare server-side</strong> peste client-side &mdash; evita incarcarea tuturor documentelor, performanta mai buna</li>
+        <li><strong>SVG custom heatmap</strong> peste Google Maps &mdash; fara dependente externe, rapid, tematic</li>
+        <li><strong>Layout existent reutilizat</strong> &mdash; DashboardLayout extins cu navigare grupata, nu inlocuit</li>
+        <li><strong>adminAuditLog</strong> ca colectie Firestore noua pentru tracking actiuni admin</li>
+        <li><strong>Accent purple</strong> &mdash; consistent cu branding-ul admin existent</li>
+      </ul>
+    </div>
+  </section>
+
+</div>
+
+<div style="background:var(--gray-900);color:white;text-align:center;padding:32px 24px;">
+  <p style="font-size:0.85rem;opacity:0.7;">Ofertemutare.ro &mdash; Admin Dashboard Plan</p>
+  <p style="font-size:0.75rem;opacity:0.4;margin-top:8px;">Actualizat: Februarie 2026 &bull; 24 faze &bull; 60+ fisiere &bull; Next.js + Firebase + Recharts</p>
+</div>
+
+</body>
+</html>

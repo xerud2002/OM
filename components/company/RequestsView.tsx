@@ -519,6 +519,8 @@ export default function RequestsView({
         const list = snapshot.docs
           .map((doc) => ({ id: doc.id, ...doc.data() }) as MovingRequest)
           .filter((req) => {
+            // Only show admin-approved requests to companies
+            if (!req.adminApproved) return false;
             const isVisible =
               !req.status ||
               req.status === "active" ||
@@ -563,6 +565,8 @@ export default function RequestsView({
       const list = snap.docs
         .map((d) => ({ id: d.id, ...d.data() }) as MovingRequest)
         .filter((req) => {
+          // Only show admin-approved requests to companies
+          if (!req.adminApproved) return false;
           const isVisible =
             !req.status ||
             req.status === "active" ||

@@ -850,7 +850,16 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         const response = await fetch("/api/requests/createGuest", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(form),
+          body: JSON.stringify({
+            ...form,
+            ...(await (async () => {
+              try {
+                const { getLeadSource } = await import("@/utils/leadSource");
+                const ls = getLeadSource();
+                return ls ? { leadSource: ls } : {};
+              } catch { return {}; }
+            })()),
+          }),
         });
 
         if (response.ok) {

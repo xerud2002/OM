@@ -60,6 +60,11 @@ const TIER2_COUNTIES = new Set([
 export function calculateRequestCost(request: any): number {
   if (!request) return DEFAULT_COST;
 
+  // If admin has manually set a credit cost, always use that
+  if (typeof request.adminCreditCost === "number" && request.adminCreditCost > 0) {
+    return request.adminCreditCost;
+  }
+
   const fromCity = request.fromCity?.trim() || "";
   const toCity = request.toCity?.trim() || "";
   const fromCounty = request.fromCounty?.trim() || "";

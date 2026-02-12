@@ -70,6 +70,11 @@ export default async function handler(
       ));
     }
 
+    // Verify request has been approved by admin
+    if (!requestData.adminApproved) {
+      return res.status(400).json(apiError("Această cerere nu a fost încă aprobată de admin."));
+    }
+
     // 3. Check if company already has an offer on this request
     const existingOffers = await adminDb
       .collection(`requests/${requestId}/offers`)

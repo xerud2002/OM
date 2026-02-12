@@ -112,6 +112,23 @@ export type MovingRequest = {
   createdAt: Timestamp;
   status?: "active" | "closed" | "paused" | "cancelled" | "accepted" | "pending";
   archived?: boolean;
+  // Admin pricing & approval
+  adminApproved?: boolean; // Must be true for request to appear in company dashboard
+  adminCreditCost?: number; // Manually set credit cost (overrides auto-calculation)
+  // Lead source tracking
+  leadSource?: {
+    utm_source?: string;
+    utm_medium?: string;
+    utm_campaign?: string;
+    utm_term?: string;
+    utm_content?: string;
+    gclid?: string;
+    fbclid?: string;
+    referrer?: string;
+    landingPage?: string;
+    channel: "google_ads" | "facebook_ads" | "organic" | "direct" | "referral" | "other";
+    capturedAt: string;
+  };
 };
 
 export type Offer = {
@@ -190,4 +207,6 @@ export type CreateGuestRequestInput = {
   mediaFiles?: File[];
   fromCityManual?: string;
   toCityManual?: string;
+  // Lead source (auto-injected at submit time)
+  leadSource?: Record<string, any>;
 };

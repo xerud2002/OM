@@ -40,6 +40,7 @@ if (process.env.NODE_ENV === "development") {
   require("@/utils/devErrorSuppressor");
 }
 import { pageView } from "@/utils/analytics";
+import { captureLeadSource } from "@/utils/leadSource";
 
 // Self-hosted Inter font with optimal loading strategy
 const inter = Inter({
@@ -103,6 +104,11 @@ export default function App({ Component, pageProps }: AppProps) {
     router.pathname.startsWith("/customer") ||
     router.pathname.startsWith("/company") ||
     router.pathname.startsWith("/admin");
+
+  // Capture UTM / lead source on first page load
+  useEffect(() => {
+    captureLeadSource();
+  }, []);
 
   // Track page views on route change (GA4 handles initial page view automatically)
   useEffect(() => {

@@ -271,6 +271,16 @@ service cloud.firestore {
       allow delete: if false;
     }
 
+    // === FRAUD DETECTION (server-side only via Admin SDK) ===
+    // deviceFingerprints: stores device fingerprint + IP per user
+    match /deviceFingerprints/{docId} {
+      allow read, write: if false; // Admin SDK bypasses rules
+    }
+    // fraudFlags: stores multi-account fraud flags
+    match /fraudFlags/{flagId} {
+      allow read, write: if false; // Admin SDK bypasses rules
+    }
+
     // Deny everything else by default
     match /{document=**} {
       allow read, write: if false;
