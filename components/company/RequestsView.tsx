@@ -38,6 +38,8 @@ import {
   ChevronUpIcon,
   EyeIcon,
   PlayIcon,
+  PhoneIcon,
+  EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 
@@ -290,6 +292,7 @@ function JobCard({
       {/* Action Button */}
       <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2">
         {hasMine ? (
+          <>
           <div className="flex items-center justify-center gap-2">
             {hasMine.status === "accepted" ? (
               <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
@@ -324,6 +327,33 @@ function JobCard({
               </button>
             )}
           </div>
+
+          {/* Contact info */}
+          {(r.phone || r.customerEmail || r.guestEmail) && (
+            <div className="flex flex-wrap items-center justify-center gap-2 mt-1">
+              {r.phone && (
+                <a
+                  href={`tel:${r.phone}`}
+                  className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-600 hover:text-blue-600 transition"
+                  title={r.phone}
+                >
+                  <PhoneIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                  <span>{r.phone}</span>
+                </a>
+              )}
+              {(r.customerEmail || r.guestEmail) && (
+                <a
+                  href={`mailto:${r.customerEmail || r.guestEmail}`}
+                  className="flex items-center gap-1 text-[10px] sm:text-xs text-gray-600 hover:text-blue-600 transition truncate max-w-[180px]"
+                  title={r.customerEmail || r.guestEmail}
+                >
+                  <EnvelopeIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0" />
+                  <span className="truncate">{r.customerEmail || r.guestEmail}</span>
+                </a>
+              )}
+            </div>
+          )}
+          </>
         ) : (
           <button
             onClick={() => onOfferClick(r)}
