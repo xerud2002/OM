@@ -190,7 +190,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https: http:",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://*.firebaseio.com https://*.cloudfunctions.net https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.resend.com wss://*.firebaseio.com",
+              "connect-src 'self' https://*.googleapis.com https://*.google-analytics.com https://*.analytics.google.com https://apis.google.com https://*.firebaseio.com https://*.cloudfunctions.net https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://api.resend.com wss://*.firebaseio.com",
               "frame-src 'self' https://*.firebaseapp.com https://accounts.google.com",
               "object-src 'none'",
               "base-uri 'self'",
