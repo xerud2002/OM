@@ -42,6 +42,7 @@ import {
   EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
+import counties from "@/counties";
 
 const RequestFullDetails = dynamic(
   () => import("@/components/customer/RequestFullDetails"),
@@ -409,6 +410,7 @@ export default function RequestsView({
   const [filterStatus, setFilterStatus] = useState<
     "" | "available" | "offered"
   >("");
+  const [filterCounty, setFilterCounty] = useState<string>("");
 
   // Modal State
   const [activeOfferRequest, setActiveOfferRequest] =
@@ -721,6 +723,13 @@ export default function RequestsView({
       });
     }
 
+    // Filter by county
+    if (filterCounty) {
+      arr = arr.filter((r) => {
+        return r.fromCounty === filterCounty || r.toCounty === filterCounty;
+      });
+    }
+
     // Filter by move date range
     if (filterDateFrom || filterDateTo) {
       arr = arr.filter((r) => {
@@ -752,6 +761,7 @@ export default function RequestsView({
     filterService,
     filterElevator,
     filterPropertyType,
+    filterCounty,
     filterDateFrom,
     filterDateTo,
     filterStatus,
@@ -763,6 +773,7 @@ export default function RequestsView({
     if (filterService) count++;
     if (filterElevator) count++;
     if (filterPropertyType) count++;
+    if (filterCounty) count++;
     if (filterDateFrom || filterDateTo) count++;
     if (filterStatus) count++;
     return count;
@@ -770,6 +781,7 @@ export default function RequestsView({
     filterService,
     filterElevator,
     filterPropertyType,
+    filterCounty,
     filterDateFrom,
     filterDateTo,
     filterStatus,
@@ -779,6 +791,7 @@ export default function RequestsView({
     setFilterService("");
     setFilterElevator("");
     setFilterPropertyType("");
+    setFilterCounty("");
     setFilterDateFrom("");
     setFilterDateTo("");
     setFilterStatus("");
@@ -917,6 +930,19 @@ export default function RequestsView({
               </select>
 
               <select
+                value={filterCounty}
+                onChange={(e) => setFilterCounty(e.target.value)}
+                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+                  filterCounty ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                }`}
+              >
+                <option value="">Județ: Toate</option>
+                {counties.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+
+              <select
                 value={filterStatus}
                 onChange={(e) => setFilterStatus(e.target.value as any)}
                 className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
@@ -983,6 +1009,12 @@ export default function RequestsView({
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
               {filterElevator === "yes" ? "Cu lift" : "Fără lift"}
               <button onClick={() => setFilterElevator("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+            </span>
+          )}
+          {filterCounty && (
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
+              {filterCounty}
+              <button onClick={() => setFilterCounty("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
             </span>
           )}
           {filterStatus && (
