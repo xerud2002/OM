@@ -2,14 +2,9 @@
 // Admin endpoint: aggregated user profile
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiError, apiSuccess } from "@/types/api";
-
-async function requireAdmin(uid: string): Promise<boolean> {
-  const doc = await adminDb.collection("admins").doc(uid).get();
-  return doc.exists;
-}
 
 export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET") return res.status(405).json(apiError("Method not allowed"));
@@ -41,7 +36,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
       chunks.push(requestIds.slice(i, i + 30));
     }
     for (const chunk of chunks) {
-      const offersSnap = await adminDb.collection("offers").where("requestId", "in", chunk).get();
+      const offersSnap = await adminDb.collectionGroup("offers").where("requestId", "in", chunk).get();
       offers.push(...offersSnap.docs.map((d) => ({ id: d.id, ...d.data() })));
     }
   }

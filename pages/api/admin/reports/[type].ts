@@ -1,12 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
-
-async function requireAdmin(uid: string) {
-  const snap = await adminDb.collection("admins").doc(uid).get();
-  return snap.exists;
-}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") return res.status(405).json(apiError("Method not allowed"));
@@ -72,7 +67,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   }
 
   if (type === "offers") {
-    const snap = await adminDb.collection("offers").orderBy("createdAt", "desc").limit(500).get();
+    const snap = await adminDb.collectionGroup("offers").orderBy("createdAt", "desc").limit(500).get();
     const data = snap.docs.map((d) => {
       const o = d.data();
       return {

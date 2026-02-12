@@ -3,14 +3,9 @@
 // GET: Returns KPIs, trends, and chart data
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiError, apiSuccess } from "@/types/api";
-
-async function requireAdmin(uid: string): Promise<boolean> {
-  const adminDoc = await adminDb.collection("admins").doc(uid).get();
-  return adminDoc.exists;
-}
 
 function daysAgo(n: number): Date {
   const d = new Date();
@@ -60,7 +55,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
     adminDb.collection("companies").where("verificationStatus", "==", "verified").get(),
     adminDb.collection("companies").where("verificationStatus", "==", "pending").get(),
     adminDb.collection("requests").get(),
-    adminDb.collection("offers").get(),
+    adminDb.collectionGroup("offers").get(),
     adminDb.collection("reviews").get(),
     adminDb.collection("fraudFlags").where("status", "==", "pending").get(),
   ]);

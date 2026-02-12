@@ -1,12 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
-
-async function requireAdmin(uid: string) {
-  const snap = await adminDb.collection("admins").doc(uid).get();
-  return snap.exists;
-}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "GET") return res.status(405).json(apiError("Method not allowed"));
@@ -17,32 +12,50 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const uid = authResult.uid;
   if (!(await requireAdmin(uid))) return res.status(403).json(apiError("Unauthorized"));
 
-  // Get recent chats / conversations
-  const chatsSnap = await adminDb.collection("chats").orderBy("lastMessageAt", "desc").limit(100).get();
+  // Messages are stored at requests/{rid}/offers/{oid}/messages/
+  // Use collectionGroup to query all messages across the hierarchy
+  const messagesSnap = await adminDb
+    .collectionGroup("messages")
+    .orderBy("createdAt", "desc")
+    .limit(200)
+    .get();
 
-  const chats = chatsSnap.docs.map((d) => {
-    const data = d.data();
-    return {
-      id: d.id,
-      participants: data.participants || [],
-      companyId: data.companyId || "",
-      companyName: data.companyName || "",
-      customerId: data.customerId || "",
-      customerName: data.customerName || "",
-      lastMessage: data.lastMessage || "",
-      lastMessageAt: data.lastMessageAt,
-      messageCount: data.messageCount || 0,
-      requestId: data.requestId || "",
-      status: data.status || "active",
-    };
-  });
+  // Group messages into conversations by their parent offer path
+  const conversationMap = new Map<string, any>();
+  for (const doc of messagesSnap.docs) {
+    const data = doc.data();
+    // Path: requests/{rid}/offers/{oid}/messages/{mid}
+    const pathParts = doc.ref.path.split("/");
+    const requestId = pathParts[1] || "";
+    const offerId = pathParts[3] || "";
+    const conversationKey = `${requestId}_${offerId}`;
+
+    if (!conversationMap.has(conversationKey)) {
+      conversationMap.set(conversationKey, {
+        id: conversationKey,
+        requestId,
+        offerId,
+        companyId: data.companyId || "",
+        companyName: data.companyName || "",
+        customerId: data.customerId || "",
+        customerName: data.customerName || "",
+        lastMessage: data.text || data.message || "",
+        lastMessageAt: data.createdAt,
+        messageCount: 0,
+        status: "active",
+      });
+    }
+    conversationMap.get(conversationKey).messageCount++;
+  }
+
+  const chats = Array.from(conversationMap.values());
 
   // Stats
   const total = chats.length;
-  const active = chats.filter((c) => c.status === "active").length;
+  const active = chats.filter((c: any) => c.status === "active").length;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayChats = chats.filter((c) => {
+  const todayChats = chats.filter((c: any) => {
     const ts = c.lastMessageAt?._seconds ? new Date(c.lastMessageAt._seconds * 1000) : null;
     return ts && ts >= today;
   }).length;

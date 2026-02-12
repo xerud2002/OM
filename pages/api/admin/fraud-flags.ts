@@ -3,15 +3,10 @@
 // GET: list flags with filters | PATCH: update flag status
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { FieldValue } from "firebase-admin/firestore";
 import { apiError, ErrorCodes } from "@/types/api";
-
-async function requireAdmin(uid: string): Promise<boolean> {
-  const adminDoc = await adminDb.collection("admins").doc(uid).get();
-  return adminDoc.exists;
-}
 
 export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse) => {
   if (!adminReady) {

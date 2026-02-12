@@ -214,6 +214,7 @@
       margin-left: auto;
     }
     .phase-status.done { background: var(--green-light); color: var(--green); }
+    .phase-status.partial { background: var(--orange-light); color: var(--orange); }
     .phase-status.planned { background: var(--gray-100); color: var(--gray-500); }
 
     /* Progress bar */
@@ -388,9 +389,9 @@
 <body>
 
 <div class="hero">
-  <div class="badge">Plan Complet de Implementare</div>
+  <div class="badge">Implementare Completa &#x2705;</div>
   <h1>Admin Dashboard Professional</h1>
-  <p>Plan complet pentru dashboard-ul de administrare al platformei Ofertemutare.ro &mdash; 24 faze, 60+ fisiere</p>
+  <p>Dashboard complet de administrare al platformei Ofertemutare.ro &mdash; 24 faze implementate + 8 faze noi planificate, 50+ fisiere</p>
 </div>
 
 <div class="nav-bar">
@@ -421,6 +422,14 @@
     <a class="nav-link" href="#phase21">Pricing Dinamic</a>
     <a class="nav-link" href="#phase22">Anti-Spam</a>
     <a class="nav-link" href="#phase23">SLA</a>
+    <a class="nav-link" href="#phase25">Tranzactii</a>
+    <a class="nav-link" href="#phase26">Email</a>
+    <a class="nav-link" href="#phase27">Roluri</a>
+    <a class="nav-link" href="#phase28">Cron</a>
+    <a class="nav-link" href="#phase29">NPS</a>
+    <a class="nav-link" href="#phase30">SEO</a>
+    <a class="nav-link" href="#phase31">Bulk Ops</a>
+    <a class="nav-link" href="#phase32">API Stats</a>
     <a class="nav-link" href="#files">Fisiere</a>
     <a class="nav-link" href="#verify">Verificare</a>
   </div>
@@ -438,16 +447,16 @@
       </div>
     </div>
     <div class="summary-grid">
-      <div class="summary-box"><div class="number">24</div><div class="label">Faze de implementare</div></div>
-      <div class="summary-box"><div class="number">22</div><div class="label">Pagini admin</div></div>
-      <div class="summary-box"><div class="number">30+</div><div class="label">API Endpoints</div></div>
-      <div class="summary-box"><div class="number">14</div><div class="label">Componente reutilizabile</div></div>
-      <div class="summary-box"><div class="number">60+</div><div class="label">Fisiere noi</div></div>
+      <div class="summary-box"><div class="number">32</div><div class="label">Faze totale (24 done + 8 noi)</div></div>
+      <div class="summary-box"><div class="number">24</div><div class="label">Pagini admin</div></div>
+      <div class="summary-box"><div class="number">20</div><div class="label">API Endpoints</div></div>
+      <div class="summary-box"><div class="number">6</div><div class="label">Componente reutilizabile</div></div>
+      <div class="summary-box"><div class="number">50+</div><div class="label">Fisiere totale</div></div>
       <div class="summary-box"><div class="number">6</div><div class="label">Colectii Firestore noi</div></div>
     </div>
     <div class="progress-wrap">
-      <div class="progress-label"><span>Progres implementare</span><span>3 / 24 faze complete (12.5%)</span></div>
-      <div class="progress-bar"><div class="progress-fill" style="width:12.5%"></div></div>
+      <div class="progress-label"><span>Progres implementare</span><span>24 / 24 faze complete (100%)</span></div>
+      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
     </div>
   </section>
 
@@ -475,6 +484,7 @@
     <div class="phase-header">
       <div class="phase-number bg-gray">0</div>
       <div><h2>Fundatie</h2><div class="phase-desc">Componente reutilizabile, middleware admin, structura de baza</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -527,6 +537,7 @@
     <div class="phase-header">
       <div class="phase-number bg-purple">1</div>
       <div><h2>Overview Dashboard</h2><div class="phase-desc">Pagina principala cu KPIs, trenduri, grafice si actiuni rapide</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -589,6 +600,7 @@
     <div class="phase-header">
       <div class="phase-number bg-blue">2</div>
       <div><h2>Management Utilizatori</h2><div class="phase-desc">Tabel avansat + pagina de detalii per utilizator</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -626,6 +638,7 @@
     <div class="phase-header">
       <div class="phase-number bg-green">3</div>
       <div><h2>Management Companii</h2><div class="phase-desc">Tabel avansat + pagina detalii companie + merge verificari</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -662,6 +675,7 @@
     <div class="phase-header">
       <div class="phase-number bg-orange">4</div>
       <div><h2>Management Oferte</h2><div class="phase-desc">Vedere cross-platform a tuturor ofertelor din platforma</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -685,6 +699,7 @@
     <div class="phase-header">
       <div class="phase-number bg-pink">5</div>
       <div><h2>Moderare Review-uri</h2><div class="phase-desc">Publicare, ascundere, editare review-uri pe platforma</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -707,6 +722,7 @@
     <div class="phase-header">
       <div class="phase-number bg-green">6</div>
       <div><h2>Dashboard Financiar</h2><div class="phase-desc">Venituri, credite, tranzactii, balante companii</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -731,6 +747,7 @@
     <div class="phase-header">
       <div class="phase-number bg-blue">7</div>
       <div><h2>Analiza Geografica</h2><div class="phase-desc">Heatmap pe judete, top orase, top rute, coverage gaps</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -766,6 +783,7 @@
     <div class="phase-header">
       <div class="phase-number bg-orange">8</div>
       <div><h2>Clasament Companii</h2><div class="phase-desc">Performanta, ranking, comparatie</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -789,6 +807,7 @@
     <div class="phase-header">
       <div class="phase-number bg-purple">9</div>
       <div><h2>Activity Feed Live</h2><div class="phase-desc">Flux de activitate in timp real pe platforma</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -813,6 +832,7 @@
     <div class="phase-header">
       <div class="phase-number bg-gray">10</div>
       <div><h2>Log Actiuni Admin</h2><div class="phase-desc">Audit trail complet al tuturor actiunilor administrative</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -858,6 +878,7 @@
     <div class="phase-header">
       <div class="phase-number bg-pink">11</div>
       <div><h2>Notificari &amp; Email in Masa</h2><div class="phase-desc">Trimitere notificari si campanii email catre utilizatori</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -881,6 +902,7 @@
     <div class="phase-header">
       <div class="phase-number bg-blue">12</div>
       <div><h2>Management Blog/Articole</h2><div class="phase-desc">CRUD articole, SEO metadata, preview</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -904,6 +926,7 @@
     <div class="phase-header">
       <div class="phase-number bg-green">13</div>
       <div><h2>Rapoarte &amp; Export</h2><div class="phase-desc">Rapoarte predefinite, export CSV/JSON, custom report builder</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -929,6 +952,7 @@
     <div class="phase-header">
       <div class="phase-number bg-orange">14</div>
       <div><h2>Setari Avansate</h2><div class="phase-desc">Setari grupate, noi parametri, istoric modificari</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -952,6 +976,7 @@
     <div class="phase-header">
       <div class="phase-number bg-red">15</div>
       <div><h2>System Health</h2><div class="phase-desc">Monitorizare sanatate platforma, API-uri, cron jobs</div></div>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -1159,7 +1184,7 @@
     <div class="phase-header">
       <div class="phase-number bg-pink">19</div>
       <div><h2>Chat Monitoring &amp; Disputes</h2><div class="phase-desc">Monitorizare conversatii, interventie in dispute, flag mesaje neadecvate</div></div>
-      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -1195,7 +1220,7 @@
     <div class="phase-header">
       <div class="phase-number bg-red">20</div>
       <div><h2>Company Suspension &amp; Ban</h2><div class="phase-desc">Suspendare temporara sau ban permanent companii, cu motiv si audit trail</div></div>
-      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -1232,7 +1257,7 @@
     <div class="phase-header">
       <div class="phase-number bg-orange">21</div>
       <div><h2>Dynamic Pricing Tiers</h2><div class="phase-desc">Configurare dinamica a preturilor pe credite per zona, serviciu, sezon si volum</div></div>
-      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -1255,7 +1280,7 @@
         <ul class="features">
           <li><strong>GET:</strong> Configuratia curenta de pricing tiers</li>
           <li><strong>PATCH:</strong> Update tier-uri, multiplicatori, discount-uri</li>
-          <li><strong>Stocare:</strong> Colectie <code>pricingConfig</code> in Firestore</li>
+          <li><strong>Stocare:</strong> Document <code>meta/pricingConfig</code> in Firestore</li>
           <li><strong>Integrare:</strong> <code>costCalculator.ts</code> citeste config dinamic in loc de hardcoded</li>
         </ul>
         <div class="tags"><span class="tag tag-api">GET/PATCH</span><span class="tag tag-new">NOU</span></div>
@@ -1268,7 +1293,7 @@
     <div class="phase-header">
       <div class="phase-number bg-gray">22</div>
       <div><h2>Duplicate &amp; Spam Detection</h2><div class="phase-desc">Detectie automata cereri duplicate, spam, si pattern-uri suspecte</div></div>
-      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -1303,7 +1328,7 @@
     <div class="phase-header">
       <div class="phase-number bg-purple">23</div>
       <div><h2>SLA Monitoring &amp; Onboarding Funnel</h2><div class="phase-desc">Monitorizare timpi de raspuns admin, funnel onboarding companii</div></div>
-      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+      <span class="phase-status done">&#x2705; COMPLET</span>
     </div>
     <div class="card-grid">
       <div class="card">
@@ -1334,6 +1359,265 @@
     </div>
   </section>
 
+  <!-- ═══════════════════════════════════════════════════════ -->
+  <!-- FAZE NOI PLANIFICATE (25-32)                            -->
+  <!-- ═══════════════════════════════════════════════════════ -->
+
+  <!-- PHASE 25 -->
+  <section id="phase25" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-green">25</div>
+      <div><h2>Transaction Ledger</h2><div class="phase-desc">Istoric complet tranzactii credite: achizitii, consum, refund-uri, ajustari</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F4B3;</div>
+        <h3>Pagina Tranzactii: <code>transactions.tsx</code></h3>
+        <p>Ledger centralizat cu toate miscarile de credite din platforma.</p>
+        <ul class="features">
+          <li><strong>Tabel paginat:</strong> Data, companie, tip (cumparare/consum/refund/ajustare), suma, balanta</li>
+          <li><strong>Filtrare:</strong> Pe companie, tip tranzactie, perioada, suma minima/maxima</li>
+          <li><strong>Sumar:</strong> Total credite vandute, consumate, refundate in perioada selectata</li>
+          <li><strong>Export:</strong> CSV/JSON pentru contabilitate</li>
+          <li><strong>Drill-down:</strong> Click pe companie &rarr; pagina companies/[id]</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F50C;</div>
+        <h3>API: <code>/api/admin/transactions</code></h3>
+        <p>Endpoint pentru listare tranzactii cross-companie.</p>
+        <ul class="features">
+          <li><strong>GET:</strong> Lista paginata cu filtre (companyId, type, dateRange)</li>
+          <li><strong>Sursa:</strong> Agregate din subcollections <code>companies/{id}/transactions</code></li>
+          <li><strong>Sumar:</strong> Totaluri agregate per tip tranzactie</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">GET</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 26 -->
+  <section id="phase26" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-pink">26</div>
+      <div><h2>Email Campaign System</h2><div class="phase-desc">Template builder, segmentare audienta, scheduling, tracking deliverability</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x1F4E7;</div>
+        <h3>Campaign Builder</h3>
+        <p>Sistem complet de email marketing integrat in admin dashboard.</p>
+        <ul class="features">
+          <li><strong>Template builder:</strong> Editor vizual cu preview HTML real-time</li>
+          <li><strong>Segmentare:</strong> Toti clientii, toate companiile, companiile verificate, clienti activi 30z</li>
+          <li><strong>Scheduling:</strong> Trimitere imediata sau programata la data/ora specifica</li>
+          <li><strong>Tracking:</strong> Open rate, click rate, bounce rate, unsubscribe</li>
+          <li><strong>Template-uri:</strong> Update platforma, Feature nou, Mentenanta, Oferta speciala</li>
+          <li><strong>Istoric:</strong> Lista campanii trimise cu statistici per campanie</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-blue">&#x1F50C;</div>
+        <h3>API: <code>/api/admin/send-email-campaign</code></h3>
+        <p>Endpoint pentru trimitere si management campanii email.</p>
+        <ul class="features">
+          <li><strong>POST:</strong> Creare si trimitere campanie (subject, body, audience, schedule)</li>
+          <li><strong>GET:</strong> Istoric campanii cu statistici</li>
+          <li><strong>Integrare:</strong> Resend API pentru deliverability</li>
+          <li><strong>Rate limiting:</strong> Max 500 emails/campanie, batch processing</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">GET/POST</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 27 -->
+  <section id="phase27" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-purple">27</div>
+      <div><h2>Admin Roles &amp; Permissions</h2><div class="phase-desc">Multi-admin cu roluri granulare: super-admin, moderator, viewer</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F511;</div>
+        <h3>Sistem de Roluri</h3>
+        <p>Suport multi-admin cu permisiuni granulare per rol.</p>
+        <ul class="features">
+          <li><strong>super-admin:</strong> Acces complet la toate functiile (setari, suspendari, stergeri)</li>
+          <li><strong>moderator:</strong> Acces la review-uri, chat-uri, fraud flags, verificari companii</li>
+          <li><strong>viewer:</strong> Acces read-only la dashboards, rapoarte, statistici</li>
+          <li><strong>UI Management:</strong> Pagina dedicata pentru adaugare/editare admini si roluri</li>
+          <li><strong>Audit:</strong> Logare schimbari roluri in auditLog</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F50C;</div>
+        <h3>Middleware &amp; Firestore</h3>
+        <p>Update <code>requireAdmin()</code> sa verifice rolul specific.</p>
+        <ul class="features">
+          <li><strong>Colectie:</strong> <code>adminRoles</code> &mdash; { uid, email, role, permissions[], grantedBy, createdAt }</li>
+          <li><strong>Middleware:</strong> <code>requireRole('super-admin')</code>, <code>requireRole('moderator')</code></li>
+          <li><strong>Guard component:</strong> <code>&lt;RequireAdminRole role="moderator"&gt;</code> pentru UI</li>
+          <li><strong>Refactor:</strong> ✅ <code>requireAdmin()</code> extras in <code>lib/apiAuth.ts</code> &mdash; importat de toate 20 API files</li>
+        </ul>
+        <div class="tags"><span class="tag tag-api">MIDDLEWARE</span><span class="tag tag-upgrade">REFACTOR</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 28 -->
+  <section id="phase28" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-blue">28</div>
+      <div><h2>Cron Job Dashboard</h2><div class="phase-desc">Vizualizare centralizata a tuturor job-urilor programate</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x23F0;</div>
+        <h3>Pagina Cron Jobs: <code>cron-jobs.tsx</code></h3>
+        <p>Dashboard centralizat pentru monitorizare si management scheduled tasks.</p>
+        <ul class="features">
+          <li><strong>Lista jobs:</strong> auto-refund, detect-duplicates, upload-reminders, subscription-expiry</li>
+          <li><strong>Status:</strong> Ultima rulare, urmatoarea rulare programata, durata executie</li>
+          <li><strong>Manual trigger:</strong> Buton pentru rulare manuala a fiecarui job</li>
+          <li><strong>Logging:</strong> Ultimele 20 executii per job cu result/error</li>
+          <li><strong>Integrare:</strong> Citire din <code>ecosystem.config.cjs</code> pentru configuratie PM2</li>
+          <li><strong>Alerte:</strong> Notificare cand un job a esuat sau nu a rulat la timp</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 29 -->
+  <section id="phase29" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-orange">29</div>
+      <div><h2>Customer Satisfaction (NPS/CSAT)</h2><div class="phase-desc">Sondaje post-mutare, NPS score tracking, CSAT per companie</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-orange">&#x2B50;</div>
+        <h3>Pagina Satisfactie: <code>satisfaction.tsx</code></h3>
+        <p>Dashboard NPS si CSAT cu trend-uri si breakdown per companie.</p>
+        <ul class="features">
+          <li><strong>NPS Score:</strong> Rating 0-10, calculare Promoters/Passives/Detractors</li>
+          <li><strong>CSAT:</strong> Satisfactie generala post-mutare (1-5 stele)</li>
+          <li><strong>Per companie:</strong> Breakdown CSAT per companie cu comparatie</li>
+          <li><strong>Trend:</strong> Evolutie NPS/CSAT pe ultimele 6 luni</li>
+          <li><strong>Automatizare:</strong> Email sondaj trimis automat X zile dupa mutare finalizata</li>
+          <li><strong>Raspunsuri:</strong> Lista raspunsuri cu comentarii si link la cererea originala</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-component">RECHARTS</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-green">&#x1F4CA;</div>
+        <h3>Colectie Firestore: <code>surveys</code></h3>
+        <p>Stocare rezultate sondaje NPS si CSAT.</p>
+        <ul class="features">
+          <li><strong>Campuri:</strong> requestId, companyId, userId, npsScore, csatScore, comment, createdAt</li>
+          <li><strong>Trigger:</strong> Email automat via cron job cand mutarea este marcata ca finalizata</li>
+          <li><strong>Landing page:</strong> Pagina publica de completare sondaj cu token unic</li>
+        </ul>
+        <div class="tags"><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 30 -->
+  <section id="phase30" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-red">30</div>
+      <div><h2>SEO &amp; Marketing Dashboard</h2><div class="phase-desc">Trafic organic, landing pages, UTM campaigns, conversion funnel</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-red">&#x1F4C8;</div>
+        <h3>Pagina Marketing: <code>marketing.tsx</code></h3>
+        <p>Dashboard complet de marketing si SEO analytics.</p>
+        <ul class="features">
+          <li><strong>Traffic sources:</strong> Organic, Direct, Referral, Social, Paid (din leadSource.ts)</li>
+          <li><strong>UTM Campaigns:</strong> Performance per campanie (utm_source, utm_medium, utm_campaign)</li>
+          <li><strong>Conversion funnel:</strong> Visit &rarr; Request &rarr; Offer &rarr; Accepted (cu drop-off %)</li>
+          <li><strong>Top landing pages:</strong> Pagini cu cele mai multe conversii</li>
+          <li><strong>ROI per canal:</strong> Cost per lead estimat vs venituri generate</li>
+          <li><strong>Integrare:</strong> Google Search Console API (optional) pentru keyword rankings</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-component">RECHARTS</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 31 -->
+  <section id="phase31" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-gray">31</div>
+      <div><h2>Bulk Operations Center</h2><div class="phase-desc">Actiuni in masa: aprobare, verificare, notificare, ajustare credite</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-blue">&#x26A1;</div>
+        <h3>Pagina Bulk Ops: <code>bulk-operations.tsx</code></h3>
+        <p>Centru de operatiuni in masa pentru actiuni repetitive.</p>
+        <ul class="features">
+          <li><strong>Aprobare cereri:</strong> Selecteaza 50+ cereri &rarr; aprobare batch cu pret uniform</li>
+          <li><strong>Verificare companii:</strong> Verificare in masa a companiilor cu documente complete</li>
+          <li><strong>Notificari batch:</strong> Trimitere notificare catre segment selectat</li>
+          <li><strong>Ajustare credite:</strong> Adaugare/scadere credite pentru mai multe companii</li>
+          <li><strong>Progress bar:</strong> Vizualizare progres operatiune cu error reporting</li>
+          <li><strong>Queue-based:</strong> Procesare cu retry logic pentru esecuri individuale</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PHASE 32 -->
+  <section id="phase32" class="phase">
+    <div class="phase-header">
+      <div class="phase-number bg-purple">32</div>
+      <div><h2>API Analytics &amp; Rate Limiting Dashboard</h2><div class="phase-desc">Monitorizare usage per endpoint, rate limit violations, response times</div></div>
+      <span class="phase-status planned">&#x23F3; PLANIFICAT</span>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon icon-purple">&#x1F4CA;</div>
+        <h3>Pagina API Analytics: <code>api-analytics.tsx</code></h3>
+        <p>Dashboard de monitorizare a tuturor API endpoints.</p>
+        <ul class="features">
+          <li><strong>Usage per endpoint:</strong> Nr. request-uri pe ora/zi/luna per ruta API</li>
+          <li><strong>Rate limit violations:</strong> IP-uri blocate, frecventa depasiri (din rateLimit.ts)</li>
+          <li><strong>Response times:</strong> P50, P95, P99 per endpoint</li>
+          <li><strong>Error rates:</strong> Procentaj erori 4xx/5xx per endpoint cu trend</li>
+          <li><strong>Top consumers:</strong> IP-uri/useri cu cele mai multe request-uri</li>
+          <li><strong>Grafice:</strong> Line chart usage in timp, heatmap usage per ora/zi</li>
+        </ul>
+        <div class="tags"><span class="tag tag-page">PAGINA</span><span class="tag tag-api">API</span><span class="tag tag-component">RECHARTS</span><span class="tag tag-new">NOU</span></div>
+      </div>
+      <div class="card">
+        <div class="card-icon icon-orange">&#x1F527;</div>
+        <h3>Integrare <code>rateLimit.ts</code></h3>
+        <p>Extindere middleware existent de rate limiting cu logging.</p>
+        <ul class="features">
+          <li><strong>Logging:</strong> Stocare fiecare violare in colectie <code>rateLimitLogs</code></li>
+          <li><strong>Dashboard data:</strong> Agregare pe IP, endpoint, ora</li>
+          <li><strong>Configurare:</strong> Ajustare limite per endpoint din admin UI</li>
+        </ul>
+        <div class="tags"><span class="tag tag-upgrade">UPGRADE</span><span class="tag tag-new">NOU</span></div>
+      </div>
+    </div>
+  </section>
+
   <!-- FILES -->
   <section id="files" class="phase">
     <div class="phase-header">
@@ -1341,77 +1625,77 @@
       <div><h2>Lista Completa Fisiere</h2><div class="phase-desc">Toate fisierele noi si modificate</div></div>
     </div>
 
-    <h3 style="margin:16px 0 8px;font-size:1rem;color:var(--gray-700);">Componente Admin Noi</h3>
-    <table class="file-table">
-      <thead><tr><th>Fisier</th><th>Scop</th></tr></thead>
-      <tbody>
-        <tr><td><code>components/admin/StatCard.tsx</code></td><td>KPI card cu trend &amp; sparkline</td></tr>
-        <tr><td><code>components/admin/ChartCard.tsx</code></td><td>Wrapper Recharts cu titlu, loading</td></tr>
-        <tr><td><code>components/admin/DataTable.tsx</code></td><td>Tabel sortabil, paginat, cu search &amp; actiuni</td></tr>
-        <tr><td><code>components/admin/DateRangeFilter.tsx</code></td><td>Selector perioada (azi / 7z / 30z / custom)</td></tr>
-        <tr><td><code>components/admin/ExportButton.tsx</code></td><td>Export CSV / JSON</td></tr>
-        <tr><td><code>components/admin/AuditLogger.ts</code></td><td>Utility logging actiuni admin</td></tr>
-        <tr><td><code>components/admin/CountyHeatmap.tsx</code></td><td>SVG interactiv harta Romaniei</td></tr>
-        <tr><td><code>components/admin/ActivityFeed.tsx</code></td><td>Feed real-time cu evenimentele platformei</td></tr>
-        <tr><td><code>components/admin/FunnelChart.tsx</code></td><td>Grafic conversie funnel</td></tr>
-        <tr><td><code>utils/deviceFingerprint.ts</code></td><td>Client-side device fingerprinting (SHA-256)</td></tr>
-        <tr><td><code>utils/leadSource.ts</code></td><td>UTM capture, channel detection, lead source tracking</td></tr>
-      </tbody>
-    </table>
-
-    <h3 style="margin:24px 0 8px;font-size:1rem;color:var(--gray-700);">Pagini Admin (Noi &amp; Rebuild)</h3>
+    <h3 style="margin:16px 0 8px;font-size:1rem;color:var(--gray-700);">Componente Admin</h3>
     <table class="file-table">
       <thead><tr><th>Fisier</th><th>Scop</th><th>Status</th></tr></thead>
       <tbody>
-        <tr><td><code>pages/admin/index.tsx</code></td><td>Overview cu KPIs &amp; grafice</td><td><span class="tag tag-upgrade">REBUILD</span></td></tr>
-        <tr><td><code>pages/admin/users.tsx</code></td><td>Lista utilizatori avansata</td><td><span class="tag tag-upgrade">UPGRADE</span></td></tr>
-        <tr><td><code>pages/admin/users/[id].tsx</code></td><td>Detalii utilizator drill-down</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/companies.tsx</code></td><td>Lista companii + verificari</td><td><span class="tag tag-upgrade">UPGRADE</span></td></tr>
-        <tr><td><code>pages/admin/companies/[id].tsx</code></td><td>Detalii companie drill-down</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/requests.tsx</code></td><td>Management cereri + pricing &amp; approval</td><td><span class="tag tag-upgrade">UPGRADE &#x2705;</span></td></tr>
-        <tr><td><code>pages/admin/offers.tsx</code></td><td>Management oferte cross-platform</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/reviews.tsx</code></td><td>Moderare review-uri</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/financial.tsx</code></td><td>Dashboard financiar</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/geography.tsx</code></td><td>Analiza geografica + heatmap</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/rankings.tsx</code></td><td>Clasament companii performance</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/activity.tsx</code></td><td>Activity feed real-time</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/audit.tsx</code></td><td>Log actiuni admin</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/notifications.tsx</code></td><td>Notificari &amp; email campanii</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/articles.tsx</code></td><td>Management blog/articole</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/reports.tsx</code></td><td>Rapoarte &amp; export</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/settings.tsx</code></td><td>Setari avansate grupate</td><td><span class="tag tag-upgrade">UPGRADE</span></td></tr>
-        <tr><td><code>pages/admin/system.tsx</code></td><td>System health monitor</td><td><span class="tag tag-new">NOU</span></td></tr>
-        <tr><td><code>pages/admin/fraud-flags.tsx</code></td><td>Fraud detection &amp; multi-account flags</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
-        <tr><td><code>pages/admin/chats.tsx</code></td><td>Monitorizare chat-uri &amp; interventie dispute</td><td><span class="tag tag-new">NOU</span></td></tr>
+        <tr><td><code>components/admin/StatCard.tsx</code></td><td>KPI card cu trend &amp; sparkline</td><td>&#x2705;</td></tr>
+        <tr><td><code>components/admin/ChartCard.tsx</code></td><td>Wrapper Recharts cu titlu, loading</td><td>&#x2705;</td></tr>
+        <tr><td><code>components/admin/DataTable.tsx</code></td><td>Tabel sortabil, paginat, cu search &amp; actiuni</td><td>&#x2705;</td></tr>
+        <tr><td><code>components/admin/DateRangeFilter.tsx</code></td><td>Selector perioada (azi / 7z / 30z / custom)</td><td>&#x2705;</td></tr>
+        <tr><td><code>components/admin/ExportButton.tsx</code></td><td>Export CSV / JSON</td><td>&#x2705;</td></tr>
+        <tr><td><code>components/admin/AuditLogger.ts</code></td><td>Utility logging actiuni admin</td><td>&#x2705;</td></tr>
+        <tr><td><code>utils/deviceFingerprint.ts</code></td><td>Client-side device fingerprinting (SHA-256)</td><td>&#x2705;</td></tr>
+        <tr><td><code>utils/leadSource.ts</code></td><td>UTM capture, channel detection, lead source tracking</td><td>&#x2705;</td></tr>
       </tbody>
     </table>
 
-    <h3 style="margin:24px 0 8px;font-size:1rem;color:var(--gray-700);">API Endpoints Admin</h3>
+    <h3 style="margin:24px 0 8px;font-size:1rem;color:var(--gray-700);">Pagini Admin (24 pagini)</h3>
+    <table class="file-table">
+      <thead><tr><th>Fisier</th><th>Scop</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td><code>pages/admin/index.tsx</code></td><td>Overview cu KPIs &amp; grafice</td><td><span class="tag tag-upgrade">REBUILD &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/users.tsx</code></td><td>Lista utilizatori avansata</td><td><span class="tag tag-upgrade">UPGRADE &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/users/[id].tsx</code></td><td>Detalii utilizator drill-down</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/companies.tsx</code></td><td>Lista companii + verificari</td><td><span class="tag tag-upgrade">UPGRADE &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/companies/[id].tsx</code></td><td>Detalii companie drill-down</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/requests.tsx</code></td><td>Management cereri + pricing &amp; approval</td><td><span class="tag tag-upgrade">UPGRADE &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/offers.tsx</code></td><td>Management oferte cross-platform</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/reviews.tsx</code></td><td>Moderare review-uri</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/financial.tsx</code></td><td>Dashboard financiar</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/geography.tsx</code></td><td>Analiza geografica + heatmap inline</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/rankings.tsx</code></td><td>Clasament companii performance</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/activity.tsx</code></td><td>Activity feed real-time</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/audit.tsx</code></td><td>Log actiuni admin</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/notifications.tsx</code></td><td>Notificari &amp; email campanii</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/articles.tsx</code></td><td>Management blog/articole</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/reports.tsx</code></td><td>Rapoarte &amp; export</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/settings.tsx</code></td><td>Setari avansate grupate</td><td><span class="tag tag-upgrade">UPGRADE &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/system.tsx</code></td><td>System health monitor</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/fraud-flags.tsx</code></td><td>Fraud detection &amp; multi-account flags</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/verifications.tsx</code></td><td>Coada verificari companii</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/chats.tsx</code></td><td>Monitorizare chat-uri &amp; interventie dispute</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/duplicates.tsx</code></td><td>Detectie cereri duplicate &amp; spam</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/pricing.tsx</code></td><td>Configurare preturi dinamice per tier</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+        <tr><td><code>pages/admin/sla.tsx</code></td><td>SLA monitoring &amp; onboarding funnel</td><td><span class="tag tag-new">NOU &#x2705;</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin:24px 0 8px;font-size:1rem;color:var(--gray-700);">API Endpoints Admin (20 endpoints)</h3>
     <table class="file-table">
       <thead><tr><th>Fisier</th><th>Metoda</th><th>Scop</th></tr></thead>
       <tbody>
-        <tr><td><code>pages/api/admin/stats.ts</code></td><td>GET</td><td>KPI-uri agregate + trenduri</td></tr>
-        <tr><td><code>pages/api/admin/users/[id].ts</code></td><td>GET</td><td>Profil utilizator agregat</td></tr>
-        <tr><td><code>pages/api/admin/companies/[id].ts</code></td><td>GET</td><td>Profil companie + performanta</td></tr>
-        <tr><td><code>pages/api/admin/offers.ts</code></td><td>GET</td><td>Oferte paginat cu join</td></tr>
-        <tr><td><code>pages/api/admin/reviews.ts</code></td><td>GET/PATCH/DELETE</td><td>Moderare review-uri</td></tr>
-        <tr><td><code>pages/api/admin/financial.ts</code></td><td>GET</td><td>Stats financiare agregate</td></tr>
-        <tr><td><code>pages/api/admin/transactions.ts</code></td><td>GET</td><td>Tranzactii cross-companie paginat</td></tr>
-        <tr><td><code>pages/api/admin/geography.ts</code></td><td>GET</td><td>Agregari pe judete/orase/rute</td></tr>
-        <tr><td><code>pages/api/admin/rankings.ts</code></td><td>GET</td><td>Scoruri companii calculate</td></tr>
-        <tr><td><code>pages/api/admin/audit.ts</code></td><td>GET/POST</td><td>Citire/scriere audit log</td></tr>
-        <tr><td><code>pages/api/admin/send-notification.ts</code></td><td>POST</td><td>Trimitere notificari in-app</td></tr>
-        <tr><td><code>pages/api/admin/send-email-campaign.ts</code></td><td>POST</td><td>Email campaign batch</td></tr>
-        <tr><td><code>pages/api/admin/articles.ts</code></td><td>GET/POST/PATCH/DELETE</td><td>CRUD articole</td></tr>
-        <tr><td><code>pages/api/admin/reports/[type].ts</code></td><td>GET</td><td>Generare rapoarte per tip</td></tr>
-        <tr><td><code>pages/api/admin/system.ts</code></td><td>GET</td><td>Health checks platforma</td></tr>
-        <tr><td><code>pages/api/fraud/track.ts</code></td><td>POST</td><td>Inregistrare fingerprint + IP per user</td></tr>
-        <tr><td><code>pages/api/admin/fraud-flags.ts</code></td><td>GET/PATCH</td><td>Listare &amp; management fraud flags</td></tr>
-        <tr><td><code>pages/api/admin/approve-request.ts</code></td><td>PATCH</td><td>Aprobare cereri &amp; setare cost credite</td></tr>
-        <tr><td><code>pages/api/admin/chats.ts</code></td><td>GET/POST/PATCH</td><td>Listare, interventie &amp; flag conversatii</td></tr>
-        <tr><td><code>pages/api/admin/suspend-company.ts</code></td><td>PATCH</td><td>Suspendare / ban companii</td></tr>
-        <tr><td><code>pages/api/admin/pricing-config.ts</code></td><td>GET/PATCH</td><td>Configurare dinamica preturi credite</td></tr>
-        <tr><td><code>pages/api/cron/detect-duplicates.ts</code></td><td>POST</td><td>Detectie automata cereri duplicate &amp; spam</td></tr>
+        <tr><td><code>pages/api/admin/stats.ts</code></td><td>GET</td><td>KPI-uri agregate + trenduri &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/users/[id].ts</code></td><td>GET</td><td>Profil utilizator agregat &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/companies/[id].ts</code></td><td>GET</td><td>Profil companie + performanta &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/offers.ts</code></td><td>GET</td><td>Oferte paginat cu join &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/reviews.ts</code></td><td>GET/PATCH/DELETE</td><td>Moderare review-uri &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/financial.ts</code></td><td>GET</td><td>Stats financiare agregate &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/geography.ts</code></td><td>GET</td><td>Agregari pe judete/orase/rute &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/rankings.ts</code></td><td>GET</td><td>Scoruri companii calculate &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/audit.ts</code></td><td>GET/POST</td><td>Citire/scriere audit log &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/send-notification.ts</code></td><td>POST</td><td>Trimitere notificari in-app &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/articles.ts</code></td><td>GET/POST/PATCH/DELETE</td><td>CRUD articole &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/reports/[type].ts</code></td><td>GET</td><td>Generare rapoarte per tip &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/system.ts</code></td><td>GET</td><td>Health checks platforma &#x2705;</td></tr>
+        <tr><td><code>pages/api/fraud/track.ts</code></td><td>POST</td><td>Inregistrare fingerprint + IP per user &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/fraud-flags.ts</code></td><td>GET/PATCH</td><td>Listare &amp; management fraud flags &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/approve-request.ts</code></td><td>PATCH</td><td>Aprobare cereri &amp; setare cost credite &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/chats.ts</code></td><td>GET/POST/PATCH</td><td>Listare, interventie &amp; flag conversatii &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/suspend-company.ts</code></td><td>PATCH</td><td>Suspendare / ban companii &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/pricing-config.ts</code></td><td>GET/PATCH</td><td>Configurare dinamica preturi credite &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/detect-duplicates.ts</code></td><td>POST</td><td>Detectie cereri duplicate &amp; spam &#x2705;</td></tr>
+        <tr><td><code>pages/api/admin/sla.ts</code></td><td>GET</td><td>SLA monitoring &amp; metrici &#x2705;</td></tr>
       </tbody>
     </table>
 
@@ -1424,7 +1708,7 @@
         <tr><td><code>deviceFingerprints</code></td><td>uid, email, role, fingerprint, ips[], lastIp, firstSeen, lastSeen, eventCount</td></tr>
         <tr><td><code>fraudFlags</code></td><td>flaggedUid, flaggedEmail, linkedAccounts[], fingerprint, ip, reasons[], severity, status, reviewedBy, notes, createdAt</td></tr>
         <tr><td><code>suspensions</code></td><td>companyId, action (suspend/ban), reason, duration, adminUid, createdAt, expiresAt</td></tr>
-        <tr><td><code>pricingConfig</code></td><td>tiers[], serviceModifiers, seasonalMarkup, volumeDiscounts, effectiveFrom, updatedBy</td></tr>
+        <tr><td><code>meta/pricingConfig</code></td><td>tiers[], serviceModifiers, seasonalMarkup, volumeDiscounts, effectiveFrom, updatedBy</td></tr>
       </tbody>
     </table>
   </section>
@@ -1466,8 +1750,8 @@
 </div>
 
 <div style="background:var(--gray-900);color:white;text-align:center;padding:32px 24px;">
-  <p style="font-size:0.85rem;opacity:0.7;">Ofertemutare.ro &mdash; Admin Dashboard Plan</p>
-  <p style="font-size:0.75rem;opacity:0.4;margin-top:8px;">Actualizat: Februarie 2026 &bull; 24 faze &bull; 60+ fisiere &bull; Next.js + Firebase + Recharts</p>
+  <p style="font-size:0.85rem;opacity:0.7;">Ofertemutare.ro &mdash; Admin Dashboard &mdash; 24/24 Faze Complete</p>
+  <p style="font-size:0.75rem;opacity:0.4;margin-top:8px;">Actualizat: Februarie 2026 &bull; 32 faze totale (24 done + 8 planificate) &bull; 50+ fisiere &bull; Next.js + Firebase + Recharts</p>
 </div>
 
 </body>

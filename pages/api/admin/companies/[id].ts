@@ -2,14 +2,9 @@
 // Admin endpoint: aggregated company profile
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiError, apiSuccess } from "@/types/api";
-
-async function requireAdmin(uid: string): Promise<boolean> {
-  const doc = await adminDb.collection("admins").doc(uid).get();
-  return doc.exists;
-}
 
 export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "GET") return res.status(405).json(apiError("Method not allowed"));
@@ -28,7 +23,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
   const company = { id: companyDoc.id, ...companyDoc.data() };
 
   const [offersSnap, reviewsSnap] = await Promise.all([
-    adminDb.collection("offers").where("companyId", "==", id).orderBy("createdAt", "desc").limit(100).get(),
+    adminDb.collectionGroup("offers").where("companyId", "==", id).orderBy("createdAt", "desc").limit(100).get(),
     adminDb.collection("reviews").where("companyId", "==", id).orderBy("createdAt", "desc").limit(50).get(),
   ]);
 

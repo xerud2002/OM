@@ -1,13 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { FieldValue } from "firebase-admin/firestore";
-
-async function requireAdmin(uid: string) {
-  const snap = await adminDb.collection("admins").doc(uid).get();
-  return snap.exists;
-}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!adminReady) return res.status(503).json(apiError("Firebase not ready"));

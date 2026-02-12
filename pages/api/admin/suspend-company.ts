@@ -1,13 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { FieldValue } from "firebase-admin/firestore";
-
-async function requireAdmin(uid: string) {
-  const snap = await adminDb.collection("admins").doc(uid).get();
-  return snap.exists;
-}
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "PATCH") return res.status(405).json(apiError("Method not allowed"));

@@ -281,6 +281,17 @@ service cloud.firestore {
       allow read, write: if false; // Admin SDK bypasses rules
     }
 
+    // === ADMIN COLLECTIONS (server-side only via Admin SDK) ===
+    match /adminAuditLog/{docId} {
+      allow read, write: if false; // Admin SDK bypasses rules
+    }
+    match /systemLogs/{docId} {
+      allow read, write: if false; // Admin SDK bypasses rules
+    }
+    match /suspensions/{docId} {
+      allow read, write: if false; // Admin SDK bypasses rules
+    }
+
     // Deny everything else by default
     match /{document=**} {
       allow read, write: if false;

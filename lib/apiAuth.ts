@@ -2,7 +2,7 @@
 // Shared authentication middleware for API routes
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { adminAuth, adminReady } from "@/lib/firebaseAdmin";
+import { adminAuth, adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { apiError, ErrorCodes } from "@/types/api";
 import { logCritical, logger } from "@/utils/logger";
 
@@ -135,4 +135,13 @@ export function withErrorHandler(
       }
     }
   };
+}
+
+/**
+ * Check if the authenticated user is an admin.
+ * Looks up the uid in the `admins` Firestore collection.
+ */
+export async function requireAdmin(uid: string): Promise<boolean> {
+  const snap = await adminDb.collection("admins").doc(uid).get();
+  return snap.exists;
 }

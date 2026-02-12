@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { withErrorHandler, verifyAuth } from "@/lib/apiAuth";
+import { withErrorHandler, verifyAuth, requireAdmin } from "@/lib/apiAuth";
 import { apiSuccess, apiError } from "@/types/api";
 import { Timestamp } from "firebase-admin/firestore";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
@@ -10,8 +10,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
   const authResult = await verifyAuth(req);
   if (!authResult.success) return res.status(authResult.status).json(apiError(authResult.error));
   const uid = authResult.uid;
-  const adminDoc = await adminDb.doc(`admins/${uid}`).get();
-  if (!adminDoc.exists) return res.status(403).json(apiError("Forbidden"));
+  if (!(await requireAdmin(uid))) return res.status(403).json(apiError("Forbidden"));
 
   const db = adminDb;
   const now = Date.now();
@@ -27,7 +26,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
   const requests = reqSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
 
   // Fetch recent offers
-  const offerSnap = await db.collection("offers")
+  const offerSnap = await db.collectionGroup("offers")
     .where("createdAt", ">=", thirtyDaysAgo)
     .orderBy("createdAt", "desc")
     .limit(1000)

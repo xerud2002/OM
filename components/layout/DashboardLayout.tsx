@@ -111,6 +111,7 @@ const defaultNavigation: Record<DashboardRole, NavItem[]> = {
     { name: "Dashboard", href: "/admin", icon: ChartBarIcon },
     { name: "Utilizatori", href: "/admin/users", icon: UsersIcon },
     { name: "Companii", href: "/admin/companies", icon: BuildingOfficeIcon },
+    { name: "Verificări", href: "/admin/verifications", icon: ShieldCheckIcon },
     { name: "Cereri", href: "/admin/requests", icon: DocumentTextIcon },
     { name: "Oferte", href: "/admin/offers", icon: TagIcon },
     { name: "Recenzii", href: "/admin/reviews", icon: StarIcon },

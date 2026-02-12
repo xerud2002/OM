@@ -3,16 +3,11 @@
 // PATCH: { requestId, creditCost, approved? }
 
 import type { NextApiRequest, NextApiResponse } from "next";
-import { verifyAuth, withErrorHandler } from "@/lib/apiAuth";
+import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { FieldValue } from "firebase-admin/firestore";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
-
-async function requireAdmin(uid: string): Promise<boolean> {
-  const adminDoc = await adminDb.collection("admins").doc(uid).get();
-  return adminDoc.exists;
-}
 
 export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method !== "PATCH") {

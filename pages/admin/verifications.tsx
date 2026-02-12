@@ -22,7 +22,7 @@ export default function AdminVerifications() {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<string | null>(null);
   const [rejectReason, setRejectReason] = useState("");
-  const [rejectingId, setRejectingId] = useState<string | null>(null);;
+  const [rejectingId, setRejectingId] = useState<string | null>(null);
 
   useEffect(() => {
     // Listen for pending verifications
