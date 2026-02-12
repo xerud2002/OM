@@ -57,11 +57,9 @@ import ErrorBoundary from "@/components/ErrorBoundary";
 // Navbar: static import required for hydration match
 import Navbar from "@/components/layout/Navbar";
 
-// Footer: deferred — below the fold, not needed for FCP/LCP
-const Footer = dynamic(() => import("@/components/layout/Footer"), {
-  ssr: true,
-  loading: () => <footer className="min-h-80 bg-gray-900" />,
-});
+// Footer: static import required for hydration match
+// (dynamic + ssr:true + loading skeleton causes server/client HTML divergence)
+import Footer from "@/components/layout/Footer";
 
 // Lazy load non-critical components
 const FloatingCTA = dynamic(() => import("@/components/FloatingCTA"), {
