@@ -48,6 +48,8 @@ import {
   ArrowDownTrayIcon,
 } from "@heroicons/react/24/outline";
 import { logout } from "@/utils/firebaseHelpers";
+import { useAuth } from "@/hooks/useAuth";
+import { useAdminBadges } from "@/hooks/useAdminBadges";
 
 export type DashboardRole = "customer" | "company" | "admin";
 
@@ -219,6 +221,10 @@ export default function DashboardLayout({
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [installPrompt, setInstallPrompt] = useState<any>(null);
 
+  // Sidebar badges for admin (pending counts)
+  const { user: firebaseUser } = useAuth();
+  const adminBadges = useAdminBadges(role, firebaseUser);
+
   // Register PWA service worker + install prompt for all dashboard roles
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -380,7 +386,12 @@ export default function DashboardLayout({
                                     className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400"}`}
                                     aria-hidden="true"
                                   />
-                                  {item.name}
+                                  <span className="flex-1">{item.name}</span>
+                                  {adminBadges[item.href.split("?")[0]] > 0 && (
+                                    <span className="ml-auto inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+                                      {adminBadges[item.href.split("?")[0]]}
+                                    </span>
+                                  )}
                                 </Link>
                               </li>
                             );
@@ -460,17 +471,29 @@ export default function DashboardLayout({
                         <Link
                           href={item.href}
                           title={item.name}
-                          className={`group flex items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium transition-all lg:justify-start lg:px-3 ${
+                          className={`group relative flex items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium transition-all lg:justify-start lg:px-3 ${
                             item.current
                               ? `${NAV_ACTIVE_STYLES[role].container} ${NAV_ACTIVE_STYLES[role].desktopExtra}`
                               : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
                           }`}
                         >
-                          <item.icon
-                            className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400 group-hover:text-gray-600"}`}
-                            aria-hidden="true"
-                          />
+                          <span className="relative">
+                            <item.icon
+                              className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400 group-hover:text-gray-600"}`}
+                              aria-hidden="true"
+                            />
+                            {/* Dot badge on collapsed tablet sidebar */}
+                            {adminBadges[item.href.split("?")[0]] > 0 && (
+                              <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white lg:hidden" />
+                            )}
+                          </span>
                           <span className="hidden flex-1 lg:inline">{item.name}</span>
+                          {/* Number badge on expanded desktop sidebar */}
+                          {adminBadges[item.href.split("?")[0]] > 0 && (
+                            <span className="ml-auto hidden h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white lg:inline-flex">
+                              {adminBadges[item.href.split("?")[0]]}
+                            </span>
+                          )}
                         </Link>
                       </li>
                     );
