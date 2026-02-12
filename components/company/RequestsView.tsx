@@ -36,7 +36,14 @@ import {
   XMarkIcon,
   ChevronDownIcon,
   ChevronUpIcon,
+  EyeIcon,
 } from "@heroicons/react/24/outline";
+import dynamic from "next/dynamic";
+
+const RequestFullDetails = dynamic(
+  () => import("@/components/customer/RequestFullDetails"),
+  { ssr: false }
+);
 
 import type { MovingRequest, CompanyUser } from "@/types";
 
@@ -61,6 +68,7 @@ function JobCard({
   hasMine,
   onOfferClick,
   onChatClick,
+  onDetailClick,
   unreadOfferIds,
 }: {
   request: MovingRequest;
@@ -69,6 +77,7 @@ function JobCard({
   onOfferClick: (r: MovingRequest) => void;
    
   onChatClick?: (requestId: string, offerId: string) => void;
+  onDetailClick?: (r: MovingRequest) => void;
   unreadOfferIds?: Set<string>;
 }) {
   const r = request;
@@ -258,6 +267,17 @@ function JobCard({
         </p>
       </div>
 
+      {/* Detail Button */}
+      <div className="border-t border-gray-100 px-3 sm:px-4 py-2 flex justify-center">
+        <button
+          onClick={() => onDetailClick?.(r)}
+          className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+        >
+          <EyeIcon className="h-3.5 w-3.5" />
+          Detalii
+        </button>
+      </div>
+
       {/* Action Button */}
       <div className="px-3 sm:px-4 pb-3 sm:pb-4 pt-2">
         {hasMine ? (
@@ -334,6 +354,7 @@ export default function RequestsView({
     Record<string, false | { offerId: string; status: string }>
   >({});
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
+  const [detailRequest, setDetailRequest] = useState<MovingRequest | null>(null);
 
   // Filter State
   const [showFilters, setShowFilters] = useState(false);
@@ -971,6 +992,7 @@ export default function RequestsView({
                   request={r}
                   hasMine={hasMineMap[r.id] ?? false}
                   onOfferClick={(req) => setActiveOfferRequest(req)}
+                  onDetailClick={(req) => setDetailRequest(req)}
                   onChatClick={(reqId, offerId) => {
                     // Clear unread and persist read timestamp
                     markOfferAsRead(offerId);
@@ -1001,6 +1023,42 @@ export default function RequestsView({
           </button>
         </div>
       )}
+
+      {/* Request Detail Modal */}
+      <AnimatePresence>
+        {detailRequest && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            onClick={() => setDetailRequest(null)}
+          >
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 20 }}
+              className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <div>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    {detailRequest.fromCity} → {detailRequest.toCity}
+                  </h2>
+                  <p className="text-sm text-gray-500">
+                    {detailRequest.requestCode || `#${detailRequest.id.slice(0, 8)}`}
+                  </p>
+                </div>
+                <button onClick={() => setDetailRequest(null)} className="rounded-full p-1 hover:bg-gray-100">
+                  <XMarkIcon className="h-5 w-5 text-gray-400" />
+                </button>
+              </div>
+              <RequestFullDetails request={detailRequest} isOwner={false} />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Offer Modal */}
       <OfferModal
