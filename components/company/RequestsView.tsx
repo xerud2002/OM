@@ -34,8 +34,6 @@ import {
   CheckBadgeIcon,
   FunnelIcon,
   XMarkIcon,
-  ChevronDownIcon,
-  ChevronUpIcon,
   EyeIcon,
   PlayIcon,
   PhoneIcon,
@@ -860,9 +858,9 @@ export default function RequestsView({
 
         {/* Filter Toggle */}
         <button
-          onClick={() => setShowFilters(!showFilters)}
+          onClick={() => setShowFilters(true)}
           className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-sm font-medium transition ${
-            showFilters || activeFiltersCount > 0
+            activeFiltersCount > 0
               ? "border-emerald-500 bg-emerald-50 text-emerald-700"
               : "border-gray-200 bg-white text-gray-600 hover:bg-gray-50"
           }`}
@@ -874,123 +872,164 @@ export default function RequestsView({
               {activeFiltersCount}
             </span>
           )}
-          {showFilters ? (
-            <ChevronUpIcon className="h-3.5 w-3.5" />
-          ) : (
-            <ChevronDownIcon className="h-3.5 w-3.5" />
-          )}
         </button>
       </div>
 
-      {/* Compact Expandable Filters */}
+      {/* Filters Modal */}
       <AnimatePresence>
         {showFilters && (
           <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="mb-3 overflow-hidden"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+            onClick={() => setShowFilters(false)}
           >
-            <div className="flex flex-wrap items-center gap-2">
-              <select
-                value={filterService}
-                onChange={(e) => setFilterService(e.target.value)}
-                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
-                  filterService ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
-                }`}
-              >
-                <option value="">Serviciu: Toate</option>
-                <option value="moving">Mutare completă</option>
-                <option value="transport">Doar câteva lucruri</option>
-              </select>
-
-              <select
-                value={filterPropertyType}
-                onChange={(e) => setFilterPropertyType(e.target.value as any)}
-                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
-                  filterPropertyType ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
-                }`}
-              >
-                <option value="">Proprietate: Oricare</option>
-                <option value="apartment">Apartament</option>
-                <option value="house">Casă</option>
-              </select>
-
-              <select
-                value={filterElevator}
-                onChange={(e) => setFilterElevator(e.target.value as any)}
-                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
-                  filterElevator ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
-                }`}
-              >
-                <option value="">Lift: Oricare</option>
-                <option value="yes">Cu lift</option>
-                <option value="no">Fără lift</option>
-              </select>
-
-              <select
-                value={filterCounty}
-                onChange={(e) => setFilterCounty(e.target.value)}
-                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
-                  filterCounty ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
-                }`}
-              >
-                <option value="">Județ: Toate</option>
-                {counties.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
-
-              <select
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value as any)}
-                className={`rounded-lg border px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
-                  filterStatus ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
-                }`}
-              >
-                <option value="">Status: Toate</option>
-                <option value="available">Disponibile</option>
-                <option value="offered">Ofertate de mine</option>
-              </select>
-
-              <div className="flex items-center gap-1.5">
-                <span className="text-xs text-gray-500">De la</span>
-                <input
-                  type="date"
-                  value={filterDateFrom}
-                  onChange={(e) => setFilterDateFrom(e.target.value)}
-                  className={`rounded-lg border px-2.5 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
-                    filterDateFrom ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
-                  }`}
-                />
-                <span className="text-xs text-gray-500">până la</span>
-                <input
-                  type="date"
-                  value={filterDateTo}
-                  onChange={(e) => setFilterDateTo(e.target.value)}
-                  className={`rounded-lg border px-2.5 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
-                    filterDateTo ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
-                  }`}
-                />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ duration: 0.15 }}
+              className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-5 flex items-center justify-between">
+                <h3 className="text-lg font-semibold text-gray-800">Filtre</h3>
+                <button
+                  onClick={() => setShowFilters(false)}
+                  className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
               </div>
 
-              {activeFiltersCount > 0 && (
+              <div className="flex flex-col gap-4">
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Serviciu</label>
+                  <select
+                    value={filterService}
+                    onChange={(e) => setFilterService(e.target.value)}
+                    className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
+                      filterService ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                    }`}
+                  >
+                    <option value="">Toate</option>
+                    <option value="moving">Mutare completă</option>
+                    <option value="transport">Doar câteva lucruri</option>
+                  </select>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-gray-600">Proprietate</label>
+                    <select
+                      value={filterPropertyType}
+                      onChange={(e) => setFilterPropertyType(e.target.value as any)}
+                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
+                        filterPropertyType ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                      }`}
+                    >
+                      <option value="">Oricare</option>
+                      <option value="apartment">Apartament</option>
+                      <option value="house">Casă</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-1.5 block text-sm font-medium text-gray-600">Lift</label>
+                    <select
+                      value={filterElevator}
+                      onChange={(e) => setFilterElevator(e.target.value as any)}
+                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
+                        filterElevator ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                      }`}
+                    >
+                      <option value="">Oricare</option>
+                      <option value="yes">Cu lift</option>
+                      <option value="no">Fără lift</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Județ</label>
+                  <select
+                    value={filterCounty}
+                    onChange={(e) => setFilterCounty(e.target.value)}
+                    className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
+                      filterCounty ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                    }`}
+                  >
+                    <option value="">Toate</option>
+                    {counties.map((c) => (
+                      <option key={c} value={c}>{c}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Status</label>
+                  <select
+                    value={filterStatus}
+                    onChange={(e) => setFilterStatus(e.target.value as any)}
+                    className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
+                      filterStatus ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                    }`}
+                  >
+                    <option value="">Toate</option>
+                    <option value="available">Disponibile</option>
+                    <option value="offered">Ofertate de mine</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Perioadă mutare</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="date"
+                      value={filterDateFrom}
+                      onChange={(e) => setFilterDateFrom(e.target.value)}
+                      placeholder="De la"
+                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
+                        filterDateFrom ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                      }`}
+                    />
+                    <input
+                      type="date"
+                      value={filterDateTo}
+                      onChange={(e) => setFilterDateTo(e.target.value)}
+                      placeholder="Până la"
+                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
+                        filterDateTo ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 flex items-center gap-3">
+                {activeFiltersCount > 0 && (
+                  <button
+                    onClick={clearAllFilters}
+                    className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  >
+                    Resetează tot
+                  </button>
+                )}
                 <button
-                  onClick={clearAllFilters}
-                  className="ml-auto flex items-center gap-1 rounded-lg px-2.5 py-2 text-sm text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                  onClick={() => setShowFilters(false)}
+                  className="ml-auto rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700"
                 >
-                  <XMarkIcon className="h-3.5 w-3.5" />
-                  Resetează
+                  Aplică filtre{activeFiltersCount > 0 ? ` (${activeFiltersCount})` : ""}
                 </button>
-              )}
-            </div>
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
 
       {/* Active Filter Chips */}
-      {activeFiltersCount > 0 && !showFilters && (
+      {activeFiltersCount > 0 && (
         <div className="mb-3 flex flex-wrap items-center gap-1.5">
           <span className="text-xs text-gray-400 mr-1">Filtre active:</span>
           {filterService && (
