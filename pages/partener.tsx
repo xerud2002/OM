@@ -412,7 +412,7 @@ export default function PartenerPage({
       </Head>
 
       {/* ═══════════ HERO ═══════════ */}
-      <section className="relative overflow-hidden bg-linear-to-br from-slate-900 via-slate-800 to-emerald-900 py-20 lg:py-28">
+      <section className="relative overflow-hidden py-20 lg:py-28" style={{ background: "linear-gradient(to bottom right, #0f172a, #1e293b, #064e3b)" }}>
         {/* Decorative grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-size-[40px_40px]" />
         <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
@@ -422,18 +422,18 @@ export default function PartenerPage({
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left – Text */}
             <div className="text-center lg:text-left">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium text-emerald-300 backdrop-blur-sm">
+              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium backdrop-blur-sm" style={{ color: "#6ee7b7" }}>
                 <Truck className="h-4 w-4" />
                 Pentru Firme de Mutări
               </div>
-              <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl" style={{ color: "#ffffff" }}>
                 Primește Cereri.{" "}
-                <span className="bg-linear-to-r from-emerald-300 to-sky-300 bg-clip-text text-transparent">
+                <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(to right, #6ee7b7, #7dd3fc)" }}>
                   Trimite Oferte.
                 </span>{" "}
                 Crește Afacerea.
               </h1>
-              <p className="mb-8 text-lg leading-relaxed text-slate-200 md:text-xl">
+              <p className="mb-8 text-lg leading-relaxed md:text-xl" style={{ color: "#e2e8f0" }}>
                 Dashboard-ul tău complet pentru a gestiona cereri de mutare, a
                 trimite oferte și a comunica direct cu clienții – totul dintr-un
                 singur loc.
@@ -457,7 +457,7 @@ export default function PartenerPage({
               </div>
 
               {/* Trust row */}
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-300 lg:justify-start">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm lg:justify-start" style={{ color: "#cbd5e1" }}>
                 <span className="flex items-center gap-1.5">
                   <CheckCircle className="h-4 w-4 text-emerald-400" /> Gratuit
                   la înregistrare
@@ -476,7 +476,7 @@ export default function PartenerPage({
             {/* Right – Live request card (hero mock) */}
             <div className="hidden lg:block">
               <div className="relative">
-                <div className="absolute -inset-3 rounded-3xl bg-linear-to-br from-emerald-500/20 to-blue-500/20 blur-xl" />
+                <div className="absolute -inset-3 rounded-3xl blur-xl" style={{ background: "linear-gradient(to bottom right, rgba(16,185,129,0.2), rgba(59,130,246,0.2))" }} />
                 <div className="relative rounded-2xl border border-white/10 bg-white p-6 shadow-2xl">
                   {/* Fake notification header */}
                   <div className="mb-5 flex items-center gap-3">
@@ -585,7 +585,7 @@ export default function PartenerPage({
       </section>
 
       {/* ═══════════ DASHBOARD PREVIEW ═══════════ */}
-      <section className="bg-linear-to-b from-gray-50 to-white py-20">
+      <section className="py-20" style={{ background: "linear-gradient(to bottom, #f9fafb, #ffffff)" }}>
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-12 text-center">
             <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-blue-100 px-3 py-1 text-xs font-bold text-blue-700">
@@ -606,7 +606,7 @@ export default function PartenerPage({
             {/* Top bar */}
             <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-3 sm:px-6">
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-lg bg-linear-to-br from-emerald-500 to-sky-500" />
+                <div className="h-8 w-8 rounded-lg" style={{ background: "linear-gradient(to bottom right, #10b981, #0ea5e9)" }} />
                 <span className="text-sm font-bold text-gray-700">
                   Firma Ta de Mutări
                 </span>
@@ -829,13 +829,16 @@ export default function PartenerPage({
       </section>
 
       {/* ═══════════ FINAL CTA ═══════════ */}
-      <section className="relative overflow-hidden bg-linear-to-br from-emerald-600 to-blue-600 py-20">
+      <section
+        className="relative overflow-hidden py-20"
+        style={{ background: "linear-gradient(to bottom right, #059669, #2563eb)" }}
+      >
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.05)_1px,transparent_1px)] bg-size-[32px_32px]" />
         <div className="relative mx-auto max-w-4xl px-4 text-center">
-          <h2 className="mb-4 text-3xl font-bold text-white md:text-4xl">
+          <h2 className="mb-4 text-3xl font-bold md:text-4xl" style={{ color: "#ffffff" }}>
             Gata să Crești Afacerea?
           </h2>
-          <p className="mb-8 text-lg text-emerald-100">
+          <p className="mb-8 text-lg" style={{ color: "#d1fae5" }}>
             Înregistrarea durează sub 2 minute. Primești 50 credite gratuit și
             poți trimite prima ofertă imediat!
           </p>
