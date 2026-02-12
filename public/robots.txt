@@ -1,5 +1,5 @@
 # robots.txt for ofertemutare.ro
-# Updated: February 1, 2026
+# Updated: February 12 2026
 
 User-agent: *
 Allow: /
@@ -21,10 +21,9 @@ User-agent: anthropic-ai
 Disallow: /
 
 # Block private/authenticated pages
-Disallow: /customer/dashboard
-Disallow: /customer/settings
-Disallow: /company/dashboard
-Disallow: /company/profile
+Disallow: /admin/
+Disallow: /customer/
+Disallow: /company/
 Disallow: /upload/
 
 # Block API routes

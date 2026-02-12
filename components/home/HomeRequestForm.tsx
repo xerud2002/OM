@@ -155,7 +155,7 @@ function LocationAutocomplete({
   return (
     <div ref={containerRef} className="relative">
       {label && (
-        <label className="mb-1 block text-xs font-medium text-gray-600">
+        <label className={`mb-1 block text-xs font-medium ${hasError ? "text-red-600" : "text-gray-600"}`}>
           {label}
         </label>
       )}
@@ -172,10 +172,11 @@ function LocationAutocomplete({
           aria-controls={listboxId}
           aria-activedescendant={activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined}
           aria-autocomplete="list"
+          aria-invalid={hasError}
           aria-label={label || placeholder || "Caută oraș sau localitate"}
           className={`w-full rounded-lg border bg-white px-3 py-2 pr-8 text-sm focus:outline-none ${
             hasError
-              ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+              ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
               : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
           } ${
             value.city && value.county ? "text-gray-900" : "text-gray-700"
@@ -191,6 +192,10 @@ function LocationAutocomplete({
           </button>
         )}
       </div>
+
+      {hasError && (
+        <p className="mt-1 text-xs font-medium text-red-600">Câmp obligatoriu</p>
+      )}
 
       {/* Dropdown */}
       {showDropdown && (suggestions.length > 0 || isLoading) && (
@@ -1036,7 +1041,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">
+                <label className={`mb-1 block text-xs font-medium ${fieldErrors.fromRooms ? "text-red-600" : "text-gray-600"}`}>
                   Nr. Camere *
                 </label>
                 <select
@@ -1045,9 +1050,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                     setForm((s) => ({ ...s, fromRooms: e.target.value }));
                     if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.fromRooms; return n; });
                   }}
+                  aria-invalid={!!fieldErrors.fromRooms}
                   className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
                     fieldErrors.fromRooms
-                      ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
                       : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                   }`}
                 >
@@ -1058,6 +1064,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                   <option value="4">4</option>
                   <option value="5+">5+</option>
                 </select>
+                {fieldErrors.fromRooms && <p className="mt-1 text-xs font-medium text-red-600">Selectează nr. camere</p>}
               </div>
               {form.fromType === "house" && (
                 <div>
@@ -1198,7 +1205,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">
+                <label className={`mb-1 block text-xs font-medium ${fieldErrors.toRooms ? "text-red-600" : "text-gray-600"}`}>
                   Nr. Camere *
                 </label>
                 <select
@@ -1207,9 +1214,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                     setForm((s) => ({ ...s, toRooms: e.target.value }));
                     if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.toRooms; return n; });
                   }}
+                  aria-invalid={!!fieldErrors.toRooms}
                   className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
                     fieldErrors.toRooms
-                      ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                      ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
                       : "border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
                   }`}
                 >
@@ -1220,6 +1228,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                   <option value="4">4</option>
                   <option value="5+">5+</option>
                 </select>
+                {fieldErrors.toRooms && <p className="mt-1 text-xs font-medium text-red-600">Selectează nr. camere</p>}
               </div>
               {form.toType === "house" && (
                 <div>
@@ -1459,17 +1468,21 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
       </div>
 
       <div>
-        <label className="mb-1 block text-sm font-medium text-gray-700">
-          Detalii
+        <label className={`mb-1 block text-sm font-medium ${fieldErrors.details ? "text-red-600" : "text-gray-700"}`}>
+          Detalii *
         </label>
         <textarea
           value={form.details || ""}
-          onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
+          onChange={(e) => {
+            setForm((s) => ({ ...s, details: e.target.value }));
+            if (e.target.value.trim().length >= 50) setFieldErrors((prev) => { const n = { ...prev }; delete n.details; return n; });
+          }}
           rows={3}
           minLength={50}
+          aria-invalid={!!fieldErrors.details}
           placeholder="Descrie ce trebuie mutat: mobilier, electrocasnice, cutii, obiecte fragile, acces dificil..."
           className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none ${
-            fieldErrors.details ? "border-red-400" : "border-gray-200"
+            fieldErrors.details ? "border-red-500 ring-2 ring-red-500/20" : "border-gray-200"
           }`}
         />
         <div className="mt-1 flex items-center justify-between text-xs">
@@ -1671,7 +1684,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">
+              <label className={`mb-1 block text-xs font-medium ${fieldErrors.contactFirstName ? "text-red-600" : "text-gray-600"}`}>
                 Prenume *
               </label>
               <input
@@ -1681,15 +1694,16 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                   if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.contactFirstName; return n; });
                 }}
                 placeholder="Ion"
+                aria-invalid={!!fieldErrors.contactFirstName}
                 className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
                   fieldErrors.contactFirstName
-                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
                     : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                 }`}
               />
             </div>
             <div>
-              <label className="mb-1 block text-xs font-medium text-gray-600">
+              <label className={`mb-1 block text-xs font-medium ${fieldErrors.contactLastName ? "text-red-600" : "text-gray-600"}`}>
                 Nume *
               </label>
               <input
@@ -1699,9 +1713,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                   if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.contactLastName; return n; });
                 }}
                 placeholder="Popescu"
+                aria-invalid={!!fieldErrors.contactLastName}
                 className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
                   fieldErrors.contactLastName
-                    ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                    ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
                     : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                 }`}
               />
@@ -1709,7 +1724,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">
+            <label className={`mb-1 block text-xs font-medium ${fieldErrors.phone ? "text-red-600" : "text-gray-600"}`}>
               Telefon *
             </label>
             <input
@@ -1720,16 +1735,17 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.phone; return n; });
               }}
               placeholder="Număr de telefon"
+              aria-invalid={!!fieldErrors.phone}
               className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
                 fieldErrors.phone
-                  ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                  ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
                   : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
               }`}
             />
           </div>
 
           <div>
-            <label className="mb-1 block text-xs font-medium text-gray-600">
+            <label className={`mb-1 block text-xs font-medium ${fieldErrors.email ? "text-red-600" : "text-gray-600"}`}>
               Email *
             </label>
             <input
@@ -1740,9 +1756,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.email; return n; });
               }}
               placeholder="exemplu@email.com"
+              aria-invalid={!!fieldErrors.email}
               className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
                 fieldErrors.email
-                  ? "border-red-400 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
+                  ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
                   : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
               }`}
             />

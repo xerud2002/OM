@@ -1,8 +1,10 @@
 // pages/sitemap.xml.ts
-// Dynamic sitemap generation — auto-includes all static pages + blog articles
+// Dynamic sitemap generation — auto-includes all static pages + dynamic city/route pages + blog articles
 import type { GetServerSidePropsContext } from "next";
 import fs from "fs";
 import path from "path";
+import { getAllCitySlugs } from "@/utils/citySlugData";
+import { getAllRoutePaths } from "@/utils/routeData";
 
 const SITE_URL = "https://ofertemutare.ro";
 const EXCLUDED_PATTERNS = [
@@ -23,7 +25,9 @@ function getStaticPages(): string[] {
   function walk(dir: string, prefix: string) {
     const entries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of entries) {
-      if (entry.name.startsWith("_") || entry.name.startsWith("[")) continue;
+      if (entry.name.startsWith("_")) continue;
+      // Skip dynamic route folders/files — we handle them separately below
+      if (entry.name.startsWith("[")) continue;
       const fullPath = path.join(dir, entry.name);
       const routePath = prefix + "/" + entry.name;
 
@@ -46,12 +50,52 @@ function getStaticPages(): string[] {
   return pages;
 }
 
+function getDynamicPages(): string[] {
+  const dynamicPages: string[] = [];
+
+  // City pages: /mutari/[from] — 41 cities
+  const citySlugs = getAllCitySlugs();
+  for (const slug of citySlugs) {
+    dynamicPages.push(`/mutari/${slug}`);
+  }
+
+  // Route pages: /mutari/[from]/[to] — ~150 routes
+  const routePaths = getAllRoutePaths();
+  for (const rp of routePaths) {
+    dynamicPages.push(`/mutari/${rp.params.from}/${rp.params.to}`);
+  }
+
+  return dynamicPages;
+}
+
 function generateSitemap(pages: string[]): string {
   const now = new Date().toISOString().split("T")[0];
 
   const urls = pages.map((page) => {
-    const priority = page === "/" ? "1.0" : page.split("/").length <= 2 ? "0.8" : "0.6";
-    const changefreq = page === "/" ? "daily" : "weekly";
+    // City pages get high priority (important SEO landing pages)
+    const isCityPage = /^\/mutari\/[^/]+$/.test(page);
+    const isRoutePage = /^\/mutari\/[^/]+\/[^/]+$/.test(page);
+
+    let priority: string;
+    let changefreq: string;
+
+    if (page === "/") {
+      priority = "1.0";
+      changefreq = "daily";
+    } else if (isCityPage) {
+      priority = "0.9";
+      changefreq = "weekly";
+    } else if (isRoutePage) {
+      priority = "0.8";
+      changefreq = "weekly";
+    } else if (page.split("/").length <= 2) {
+      priority = "0.8";
+      changefreq = "weekly";
+    } else {
+      priority = "0.6";
+      changefreq = "monthly";
+    }
+
     return `  <url>
     <loc>${SITE_URL}${page}</loc>
     <lastmod>${now}</lastmod>
@@ -67,8 +111,10 @@ ${urls.join("\n")}
 }
 
 export async function getServerSideProps({ res }: GetServerSidePropsContext) {
-  const pages = getStaticPages();
-  const sitemap = generateSitemap(pages);
+  const staticPages = getStaticPages();
+  const dynamicPages = getDynamicPages();
+  const allPages = [...staticPages, ...dynamicPages];
+  const sitemap = generateSitemap(allPages);
 
   res.setHeader("Content-Type", "text/xml");
   res.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=600");
