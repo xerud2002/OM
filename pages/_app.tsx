@@ -7,10 +7,11 @@ import { useRouter } from "next/router";
 import { Inter } from "next/font/google";
 import { loadGoogleAnalytics } from "@/utils/interactionLoader";
 import { hasConsent } from "@/utils/cookies";
-import { CONSENT_EVENT } from "@/components/CookieConsent";
+// Inline the event name to avoid importing the full CookieConsent module
+const CONSENT_EVENT = "om:consent-update";
 // Vercel Analytics removed - site is self-hosted on VPS, not Vercel
 import "../globals.css";
-import "react-day-picker/dist/style.css";
+// react-day-picker CSS removed — custom InlineCalendar uses Tailwind, not rdp styles
 
 // Web Vitals reporting - sends LCP, FID, CLS, INP, TTFB to GA4
 export function reportWebVitals({
@@ -53,10 +54,14 @@ const inter = Inter({
 
 import ErrorBoundary from "@/components/ErrorBoundary";
 
-// Layout components imported statically to avoid hydration mismatch
-// (dynamic + ssr:true + loading skeleton causes server/client HTML divergence)
+// Navbar: static import required for hydration match
 import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
+
+// Footer: deferred — below the fold, not needed for FCP/LCP
+const Footer = dynamic(() => import("@/components/layout/Footer"), {
+  ssr: true,
+  loading: () => <footer className="min-h-80 bg-gray-900" />,
+});
 
 // Lazy load non-critical components
 const FloatingCTA = dynamic(() => import("@/components/FloatingCTA"), {
@@ -156,15 +161,7 @@ export default function App({ Component, pageProps }: AppProps) {
         />
 
         {/* Preconnect moved to _document.tsx */}
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-
-        <link
-          rel="icon"
-          href="/favicon-32x32.webp"
-          type="image/png"
-          sizes="32x32"
-        />
-        <link rel="icon" href="/logo.webp" type="image/webp" sizes="any" />
+        {/* dns-prefetch and favicon already in _document.tsx */}
         <title>OferteMutare.ro | Oferte de la firme de mutări verificate</title>
         <meta
           name="description"

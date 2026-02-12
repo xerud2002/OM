@@ -47,11 +47,11 @@
     "vitest": "^4.0.18"
   },
   "browserslist": [
-    "Chrome >= 90",
-    "Firefox >= 90",
-    "Safari >= 15",
-    "Edge >= 90",
-    "iOS >15",
+    "Chrome >= 96",
+    "Firefox >= 96",
+    "Safari >= 15.4",
+    "Edge >= 96",
+    "iOS >= 15.4",
     "not dead",
     "not op_mini all"
   ],
