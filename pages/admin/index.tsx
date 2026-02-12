@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { collection, query, where, orderBy, onSnapshot, doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db } from "@/services/firebase";
-import { getAuth } from "firebase/auth";
+
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { onAuthChange } from "@/utils/firebaseHelpers";
@@ -90,8 +90,8 @@ export default function AdminDashboard() {
     setStatsLoading(true);
     setStatsError("");
     try {
-      const auth = getAuth();
-      const token = await auth.currentUser?.getIdToken();
+      if (!user) return;
+      const token = await user.getIdToken();
       if (!token) return;
 
       const res = await fetch("/api/admin/stats", {
@@ -109,7 +109,7 @@ export default function AdminDashboard() {
     } finally {
       setStatsLoading(false);
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (user) fetchStats();

@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -23,19 +22,20 @@ function formatUptime(seconds: number) {
 }
 
 export default function AdminSystem() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchHealth = useCallback(async () => {
+    if (!user) return;
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user.getIdToken();
       const res = await fetch("/api/admin/system", { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (json.success) setData(json.data);
     } catch {}
     finally { setLoading(false); }
-  }, []);
+  }, [user]);
 
   useEffect(() => { fetchHealth(); }, [fetchHealth]);
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -17,21 +16,22 @@ import {
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 
 export default function AdminGeography() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) return;
     (async () => {
       try {
-        const token = await getAuth().currentUser?.getIdToken();
+        const token = await user.getIdToken();
         const res = await fetch("/api/admin/geography", { headers: { Authorization: `Bearer ${token}` } });
         const json = await res.json();
         if (json.success) setData(json.data);
       } catch {}
       finally { setLoading(false); }
     })();
-  }, []);
+  }, [user]);
 
   const routeCols: Column<any>[] = [
     { key: "route", label: "Rută", sortable: true, render: (r) => <span className="font-medium">{r.route}</span> },

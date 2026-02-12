@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,15 +31,16 @@ interface Chat {
 }
 
 export default function AdminChats() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [chats, setChats] = useState<Chat[]>([]);
   const [stats, setStats] = useState({ total: 0, active: 0, todayActive: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!user) return;
     (async () => {
       try {
-        const token = await getAuth().currentUser?.getIdToken();
+        const token = await user.getIdToken();
         const res = await fetch("/api/admin/chats", { headers: { Authorization: `Bearer ${token}` } });
         const json = await res.json();
         if (json.success) {
@@ -50,7 +50,7 @@ export default function AdminChats() {
       } catch {}
       finally { setLoading(false); }
     })();
-  }, []);
+  }, [user]);
 
   const columns: Column<Chat>[] = [
     {

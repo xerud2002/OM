@@ -1,5 +1,4 @@
-import { useState, useEffect } from "react";
-import { getAuth } from "firebase/auth";
+import { useState, useEffect, useCallback } from "react";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -16,7 +15,7 @@ function fmtDate(ts: any) {
 }
 
 export default function AdminNotifications() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [target, setTarget] = useState<"all-companies" | "all-customers" | "single">("all-companies");
   const [targetId, setTargetId] = useState("");
   const [title, setTitle] = useState("");
@@ -26,24 +25,25 @@ export default function AdminNotifications() {
   const [history, setHistory] = useState<any[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
 
-  const fetchHistory = async () => {
+  const fetchHistory = useCallback(async () => {
+    if (!user) return;
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user.getIdToken();
       const res = await fetch("/api/admin/send-notification", { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (json.success) setHistory(json.data.notifications);
     } catch {}
     finally { setLoadingHistory(false); }
-  };
+  }, [user]);
 
-  useEffect(() => { fetchHistory(); }, []);
+  useEffect(() => { fetchHistory(); }, [fetchHistory]);
 
   const handleSend = async () => {
     if (!title.trim() || !message.trim()) return;
     setSending(true);
     setResult(null);
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user?.getIdToken();
       const res = await fetch("/api/admin/send-notification", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },

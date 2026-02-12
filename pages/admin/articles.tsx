@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -36,7 +35,7 @@ interface Article {
 }
 
 export default function AdminArticles() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState<Article | null>(null);
@@ -44,19 +43,20 @@ export default function AdminArticles() {
   const [form, setForm] = useState({ title: "", slug: "", excerpt: "", content: "", status: "draft", category: "" });
 
   const fetchArticles = useCallback(async () => {
+    if (!user) return;
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user.getIdToken();
       const res = await fetch("/api/admin/articles", { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (json.success) setArticles(json.data.articles);
     } catch {}
     finally { setLoading(false); }
-  }, []);
+  }, [user]);
 
   useEffect(() => { fetchArticles(); }, [fetchArticles]);
 
   const apiCall = async (method: string, body: any) => {
-    const token = await getAuth().currentUser?.getIdToken();
+    const token = await user?.getIdToken();
     const res = await fetch("/api/admin/articles", {
       method,
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },

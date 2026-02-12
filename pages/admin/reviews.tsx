@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -36,14 +35,15 @@ interface Review {
 }
 
 export default function AdminReviews() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [stats, setStats] = useState({ total: 0, published: 0, hidden: 0, welcome: 0 });
   const [loading, setLoading] = useState(true);
 
   const fetchReviews = useCallback(async () => {
+    if (!user) return;
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user.getIdToken();
       const res = await fetch("/api/admin/reviews", { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (json.success) {
@@ -52,12 +52,12 @@ export default function AdminReviews() {
       }
     } catch {}
     finally { setLoading(false); }
-  }, []);
+  }, [user]);
 
   useEffect(() => { fetchReviews(); }, [fetchReviews]);
 
   const apiAction = async (method: string, body: any) => {
-    const token = await getAuth().currentUser?.getIdToken();
+    const token = await user?.getIdToken();
     await fetch("/api/admin/reviews", {
       method,
       headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },

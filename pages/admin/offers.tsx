@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -36,16 +35,17 @@ interface Offer {
 }
 
 export default function AdminOffers() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [offers, setOffers] = useState<Offer[]>([]);
   const [stats, setStats] = useState({ total: 0, accepted: 0, declined: 0, pending: 0 });
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState<"all" | "accepted" | "declined" | "pending">("all");
 
   useEffect(() => {
+    if (!user) return;
     (async () => {
       try {
-        const token = await getAuth().currentUser?.getIdToken();
+        const token = await user.getIdToken();
         const res = await fetch("/api/admin/offers", { headers: { Authorization: `Bearer ${token}` } });
         const json = await res.json();
         if (json.success) {
@@ -55,7 +55,7 @@ export default function AdminOffers() {
       } catch {}
       finally { setLoading(false); }
     })();
-  }, []);
+  }, [user]);
 
   const filtered = statusFilter === "all" ? offers : offers.filter((o) => {
     if (statusFilter === "accepted") return o.status === "accepted" || o.accepted;

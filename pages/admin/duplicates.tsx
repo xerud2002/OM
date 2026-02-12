@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,14 +13,15 @@ import {
 } from "@heroicons/react/24/outline";
 
 export default function AdminDuplicates() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const runDetection = async () => {
+    if (!user) return;
     setLoading(true);
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user.getIdToken();
       const res = await fetch("/api/admin/detect-duplicates", {
         method: "POST",
         headers: { Authorization: `Bearer ${token}` },

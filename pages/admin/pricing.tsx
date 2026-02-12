@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -20,7 +19,7 @@ interface PricingTier {
 }
 
 export default function AdminPricing() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [tiers, setTiers] = useState<PricingTier[]>([]);
   const [basePrice, setBasePrice] = useState(5);
   const [bulkDiscountEnabled, setBulkDiscountEnabled] = useState(true);
@@ -28,9 +27,10 @@ export default function AdminPricing() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
+    if (!user) return;
     (async () => {
       try {
-        const token = await getAuth().currentUser?.getIdToken();
+        const token = await user.getIdToken();
         const res = await fetch("/api/admin/pricing-config", { headers: { Authorization: `Bearer ${token}` } });
         const json = await res.json();
         if (json.success) {
@@ -41,12 +41,12 @@ export default function AdminPricing() {
       } catch {}
       finally { setLoading(false); }
     })();
-  }, []);
+  }, [user]);
 
   const handleSave = async () => {
     setSaving(true);
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user?.getIdToken();
       const res = await fetch("/api/admin/pricing-config", {
         method: "PATCH",
         headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },

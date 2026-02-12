@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -23,7 +22,7 @@ const reportTypes = [
 ];
 
 export default function AdminReports() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [loadingType, setLoadingType] = useState<string | null>(null);
   const [reportData, setReportData] = useState<any[] | null>(null);
   const [activeType, setActiveType] = useState<string | null>(null);
@@ -33,7 +32,7 @@ export default function AdminReports() {
     setReportData(null);
     setActiveType(null);
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user?.getIdToken();
       const res = await fetch(`/api/admin/reports/${type}`, { headers: { Authorization: `Bearer ${token}` } });
       const json = await res.json();
       if (json.success) {

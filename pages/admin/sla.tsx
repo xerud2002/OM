@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-import { getAuth } from "firebase/auth";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,14 +26,15 @@ import {
 } from "recharts";
 
 export default function AdminSLA() {
-  const { dashboardUser } = useAuth();
+  const { user, dashboardUser } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
   const load = useCallback(async () => {
+    if (!user) return;
     setLoading(true);
     try {
-      const token = await getAuth().currentUser?.getIdToken();
+      const token = await user.getIdToken();
       const res = await fetch("/api/admin/sla", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -42,7 +42,7 @@ export default function AdminSLA() {
       if (json.success) setData(json.data);
     } catch {}
     finally { setLoading(false); }
-  }, []);
+  }, [user]);
 
   useEffect(() => { load(); }, [load]);
 
