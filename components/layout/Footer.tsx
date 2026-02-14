@@ -12,6 +12,7 @@ const CONTACT_INFO = [
 const USEFUL_LINKS = [
   { href: "/about", label: "Despre noi" },
   { href: "/contact", label: "Contact" },
+  { href: "/reviews/new", label: "Lasă o recenzie" },
   { href: "/customer/auth", label: "Autentificare client" },
   { href: "/partener", label: "Devino partener" },
 ];
