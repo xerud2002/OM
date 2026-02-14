@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { doc, updateDoc, serverTimestamp } from "firebase/firestore";
 import { db, auth } from "@/services/firebase";
-import { uploadUserFile } from "@/utils/firebaseHelpers";
+import { uploadUserFile } from "@/services/firebaseHelpers";
 import { logger } from "@/utils/logger";
 import {
   CheckBadgeIcon as Verified,

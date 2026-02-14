@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { onAuthChange, getUserRole, isLogoutInProgress } from "@/utils/firebaseHelpers";
+import { onAuthChange, getUserRole, isLogoutInProgress } from "@/services/firebaseHelpers";
 import { toast } from "sonner";
 import { logger } from "@/utils/logger";
 

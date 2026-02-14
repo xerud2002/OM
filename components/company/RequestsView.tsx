@@ -20,7 +20,7 @@ import {
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
 import { formatMoveDateDisplay } from "@/utils/date";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange } from "@/services/firebaseHelpers";
 import { calculateRequestCost } from "@/utils/costCalculator";
 import OfferModal from "@/components/company/OfferModal";
 import { logger } from "@/utils/logger";
@@ -40,7 +40,7 @@ import {
   EnvelopeIcon,
 } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
-import counties from "@/counties";
+import counties from "@/data/counties";
 
 const RequestFullDetails = dynamic(
   () => import("@/components/customer/RequestFullDetails"),

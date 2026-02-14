@@ -80,7 +80,7 @@ export default function CustomerAuthPage() {
   const handleGoogleLogin = async () => {
     try {
       setLoading(true);
-      const mod = await import("@/utils/firebaseHelpers");
+      const mod = await import("@/services/firebaseHelpers");
       const user = await mod.loginWithGoogle("customer");
 
       // Handle popup blocked/cancelled case
@@ -104,7 +104,7 @@ export default function CustomerAuthPage() {
       // If role conflict occurred, attempt to detect existing role and redirect
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {
-          const mod = await import("@/utils/firebaseHelpers");
+          const mod = await import("@/services/firebaseHelpers");
           const current = auth.currentUser;
           const role = current ? await mod.getUserRole(current) : null;
           if (role === "company") {
@@ -129,7 +129,7 @@ export default function CustomerAuthPage() {
     setLoading(true);
 
     try {
-      const mod = await import("@/utils/firebaseHelpers");
+      const mod = await import("@/services/firebaseHelpers");
       let user;
       if (isLogin) {
         user = await mod.loginWithEmail({ email, password });
@@ -152,7 +152,7 @@ export default function CustomerAuthPage() {
     } catch (err: any) {
       if (err?.code === "ROLE_CONFLICT" || (err?.message || "").includes("registered as")) {
         try {
-          const mod = await import("@/utils/firebaseHelpers");
+          const mod = await import("@/services/firebaseHelpers");
           const current = auth.currentUser;
           const role = current ? await mod.getUserRole(current) : null;
           if (role === "company") {
@@ -176,7 +176,7 @@ export default function CustomerAuthPage() {
     if (!email) return setMessage("Introdu adresa de email pentru resetare.");
     setLoading(true);
     try {
-      const mod = await import("@/utils/firebaseHelpers");
+      const mod = await import("@/services/firebaseHelpers");
       await mod.resetPassword(email);
       setMessage("✉️ Email de resetare trimis cu succes! Verifică și folderul Spam.");
     } catch (err: any) {

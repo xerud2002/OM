@@ -1,4 +1,4 @@
-// utils/firebaseHelpers.ts
+// services/firebaseHelpers.ts
 import {
   User,
   onAuthStateChanged,

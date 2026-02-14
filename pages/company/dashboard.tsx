@@ -5,7 +5,7 @@ import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import OnboardingWizard from "@/components/company/OnboardingWizard";
 import { db } from "@/services/firebase";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange } from "@/services/firebaseHelpers";
 import { logger } from "@/utils/logger";
 import {
   collectionGroup,

@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { trackCalculatorUsage } from "@/utils/analytics";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import counties from "@/counties";
-import cities from "@/cities";
+import counties from "@/data/counties";
+import cities from "@/data/cities";
 
 export default function SavingsCalculator() {
   const [propertyType, setPropertyType] = useState<"apartament" | "casa" | "birou">("apartament");

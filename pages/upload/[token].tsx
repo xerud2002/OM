@@ -43,7 +43,7 @@ export default function UploadMediaPage() {
 
     const validateToken = async () => {
       try {
-        const resp = await fetch(`/api/validateUploadToken?token=${token}`);
+        const resp = await fetch(`/api/upload/validate?token=${token}`);
         const data = await resp.json();
         setTokenData(data);
       } catch (err) {
@@ -174,7 +174,7 @@ export default function UploadMediaPage() {
       // Update request document with media URLs + mark token as used via secure API (Admin SDK)
       try {
         const idToken = await auth.currentUser?.getIdToken();
-        const resp = await fetch("/api/markUploadTokenUsed", {
+        const resp = await fetch("/api/upload/mark-used", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -213,7 +213,7 @@ export default function UploadMediaPage() {
         return;
       }
       const idToken = await currentUser.getIdToken();
-      const resp = await fetch("/api/notifyCompaniesOnUpload", {
+      const resp = await fetch("/api/upload/notify", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

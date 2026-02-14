@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 import { useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
-import { onAuthChange, logout } from "@/utils/firebaseHelpers";
+import { onAuthChange, logout } from "@/services/firebaseHelpers";
 import { useRouter } from "next/router";
 
 export default function ClientAccount() {

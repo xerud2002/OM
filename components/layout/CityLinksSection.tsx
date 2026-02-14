@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { MapPinIcon as MapPin } from "@heroicons/react/24/outline";
-import { cityData } from "@/utils/citySlugData";
+import { cityData } from "@/data/geo/citySlugData";
 
 export default function CityLinksSection() {
   // Group cities by tier for better organization

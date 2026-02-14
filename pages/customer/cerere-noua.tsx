@@ -2,7 +2,7 @@ import dynamic from "next/dynamic";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import RequireRole from "@/components/auth/RequireRole";
 import { useEffect, useState } from "react";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange } from "@/services/firebaseHelpers";
 import {
   DocumentTextIcon,
   DocumentPlusIcon,

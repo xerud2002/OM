@@ -14,8 +14,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { toast } from "sonner";
-import counties from "@/counties";
-import cities from "@/cities";
+import counties from "@/data/counties";
+import cities from "@/data/cities";
 
 // Types (kept inline or imported)
 export type FormShape = {

@@ -6,7 +6,7 @@ import { apiError, apiSuccess } from "@/types/api";
 const CRON_JOBS = [
   { id: "auto-refund", name: "Auto Refund", description: "Refund credite pentru oferte expirate", endpoint: "/api/cron/auto-refund", schedule: "Zilnic la 02:00" },
   { id: "detect-duplicates", name: "Detectie Duplicate", description: "Scanare cereri duplicate și spam", endpoint: "/api/admin/detect-duplicates", schedule: "La fiecare 6 ore" },
-  { id: "upload-reminders", name: "Reminder Upload", description: "Reminder pentru upload media", endpoint: "/api/sendUploadReminders", schedule: "Zilnic la 10:00" },
+  { id: "upload-reminders", name: "Reminder Upload", description: "Reminder pentru upload media", endpoint: "/api/upload/remind", schedule: "Zilnic la 10:00" },
 ];
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {

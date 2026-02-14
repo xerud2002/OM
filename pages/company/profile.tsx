@@ -2,7 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import RequireRole from "@/components/auth/RequireRole";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange } from "@/services/firebaseHelpers";
 import { db, auth, storage } from "@/services/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL} from "firebase/storage";

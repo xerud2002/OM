@@ -11,7 +11,7 @@ import {
     ArrowRightIcon as ArrowRight,
     ArrowsRightLeftIcon as Swap,
 } from "@heroicons/react/24/outline";
-import { getAllRoutePaths, getRouteData, RouteData } from "@/utils/routeData";
+import { getAllRoutePaths, getRouteData, RouteData } from "@/data/geo/routeData";
 import { BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 
 interface RoutePageProps {

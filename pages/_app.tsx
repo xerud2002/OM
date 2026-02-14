@@ -10,7 +10,7 @@ import { hasConsent } from "@/utils/cookies";
 // Inline the event name to avoid importing the full CookieConsent module
 const CONSENT_EVENT = "om:consent-update";
 // Vercel Analytics removed - site is self-hosted on VPS, not Vercel
-import "../globals.css";
+import "../styles/globals.css";
 // react-day-picker CSS removed — custom InlineCalendar uses Tailwind, not rdp styles
 
 // Web Vitals reporting - sends LCP, FID, CLS, INP, TTFB to GA4

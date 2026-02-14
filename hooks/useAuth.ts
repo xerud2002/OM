@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange } from "@/services/firebaseHelpers";
 import type { User } from "firebase/auth";
 
 // Type compatible with DashboardLayout's user prop

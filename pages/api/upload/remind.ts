@@ -9,7 +9,7 @@ import { apiError, apiSuccess } from "@/types/api";
  * Rulează periodic (cron job) pentru a verifica token-uri create acum 3+ zile și nefolosite
  *
  * USAGE:
- * - Setează un cron job care apelează: GET /api/sendUploadReminders
+ * - Setează un cron job care apelează: GET /api/upload/remind
  * - Sau rulează manual pentru testare
  */
 export default async function handler(

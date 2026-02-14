@@ -1,4 +1,4 @@
-// utils/cities.ts
+// data/cities.ts
 // Lista completă orașe România grupate pe județe
 // sursa: INS, Wikipedia, listă localități oficiale
 

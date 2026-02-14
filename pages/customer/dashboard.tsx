@@ -45,7 +45,7 @@ import {
   onSnapshot,
 } from "firebase/firestore";
 import StarRating from "@/components/reviews/StarRating";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange } from "@/services/firebaseHelpers";
 import { useUnreadMessages, countUnreadForRequest } from "@/hooks/useUnreadMessages";
 
 // Lazy load heavy components

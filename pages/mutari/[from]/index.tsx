@@ -18,7 +18,7 @@ import {
     CalendarIcon as Calendar,
     ArrowTrendingDownIcon as TrendingDown,
 } from "@heroicons/react/24/outline";
-import { getCityBySlug, getAllCitySlugs, CityData, cityData } from "@/utils/citySlugData";
+import { getCityBySlug, getAllCitySlugs, CityData, cityData } from "@/data/geo/citySlugData";
 import { LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 
 interface CityPageProps {

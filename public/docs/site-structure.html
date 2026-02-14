@@ -686,17 +686,12 @@
     <div class="section-header" onclick="toggleSection(this)">
       <span class="section-icon">⚡</span>
       <span class="section-title">API — Root Endpoints</span>
-      <span class="section-count">7</span>
+      <span class="section-count">2</span>
       <span class="section-toggle">▼</span>
     </div>
     <div class="section-body">
       <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/health</span><span class="page-label">Health check <span class="badge badge-api">GET</span></span></div>
       <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/send-email</span><span class="page-label">Email sender <span class="badge badge-api">POST</span></span></div>
-      <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/generateUploadLink</span><span class="page-label">Upload link gen <span class="badge badge-api">POST</span></span></div>
-      <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/validateUploadToken</span><span class="page-label">Token validator <span class="badge badge-api">POST</span></span></div>
-      <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/markUploadTokenUsed</span><span class="page-label">Mark token used <span class="badge badge-api">POST</span></span></div>
-      <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/sendUploadReminders</span><span class="page-label">Upload reminders <span class="badge badge-api">POST</span></span></div>
-      <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/notifyCompaniesOnUpload</span><span class="page-label">Upload notify <span class="badge badge-api">POST</span></span></div>
     </div>
   </div>
 
@@ -746,7 +741,7 @@
     <div class="section-header" onclick="toggleSection(this)">
       <span class="section-icon">📡</span>
       <span class="section-title">API — Domain Endpoints</span>
-      <span class="section-count">11</span>
+      <span class="section-count">16</span>
       <span class="section-toggle">▼</span>
     </div>
     <div class="section-body">
@@ -764,6 +759,14 @@
         <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/requests/updateMedia</span><span class="page-label">Update media</span></div>
       </div>
       <div class="sub-group">
+        <div class="sub-group-title">Upload (5)</div>
+        <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/upload/generate</span><span class="page-label">Generate link</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/upload/validate</span><span class="page-label">Validate token</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/upload/mark-used</span><span class="page-label">Mark used</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/upload/remind</span><span class="page-label">Send reminders</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/upload/notify</span><span class="page-label">Notify companies</span></div>
+      </div>
+      <div class="sub-group">
         <div class="sub-group-title">Other (4)</div>
         <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/chat/send</span><span class="page-label">Chat message</span></div>
         <div class="page-item"><span class="page-dot" style="background:var(--orange)"></span><span class="page-path">/api/fraud/track</span><span class="page-label">Fraud tracking</span></div>
@@ -778,7 +781,7 @@
     <div class="section-header" onclick="toggleSection(this)">
       <span class="section-icon">🧩</span>
       <span class="section-title">Components Architecture</span>
-      <span class="section-count">14 groups</span>
+      <span class="section-count">13 groups</span>
       <span class="section-toggle">▼</span>
     </div>
     <div class="section-body">
@@ -810,17 +813,19 @@
     <div class="section-body">
       <div class="sub-group">
         <div class="sub-group-title">Data Files</div>
-        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">utils/citySlugData.ts</span><span class="page-label">41 cities (T1+T2)</span></div>
-        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">utils/routeData.ts</span><span class="page-label">152 routes + pricing</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">data/geo/citySlugData.ts</span><span class="page-label">41 cities (T1+T2)</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">data/geo/routeData.ts</span><span class="page-label">152 routes + pricing</span></div>
         <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">data/faqData.ts</span><span class="page-label">FAQ content</span></div>
-        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">cities.ts</span><span class="page-label">City list (reference)</span></div>
-        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">counties.ts</span><span class="page-label">County list (reference)</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">data/cities.ts</span><span class="page-label">City list (reference)</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">data/counties.ts</span><span class="page-label">County list (reference)</span></div>
       </div>
       <div class="sub-group">
         <div class="sub-group-title">Services &amp; Utils</div>
         <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">services/firebase.ts</span><span class="page-label">Firebase client SDK</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">services/firebaseHelpers.ts</span><span class="page-label">Firebase client helpers</span></div>
         <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">services/email.ts</span><span class="page-label">Email service</span></div>
         <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">lib/firebaseAdmin.ts</span><span class="page-label">Firebase Admin SDK</span></div>
+        <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">lib/firestoreHelpers.ts</span><span class="page-label">Firestore helpers (server)</span></div>
         <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">lib/rateLimit.ts</span><span class="page-label">Rate limiter</span></div>
         <div class="page-item"><span class="page-dot" style="background:var(--text-muted)"></span><span class="page-path">lib/apiAuth.ts</span><span class="page-label">API authentication</span></div>
       </div>

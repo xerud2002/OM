@@ -12,6 +12,7 @@ yarn-error.log*
 pnpm-debug.log*
 *.log
 build-output.txt
+lint_errors.txt
 
 # Environment files
 .env

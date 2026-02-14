@@ -3,7 +3,7 @@ import { ArrowRightIcon as ArrowRight } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
-import { onAuthChange } from "@/utils/firebaseHelpers";
+import { onAuthChange } from "@/services/firebaseHelpers";
 import { trackCTAClick } from "@/utils/analytics";
 
 export default function FloatingCTA() {

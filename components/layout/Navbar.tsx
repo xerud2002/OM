@@ -37,7 +37,7 @@ export default function Navbar() {
       if (!mounted) return;
       try {
         const { onAuthChange, getUserRole } =
-          await import("@/utils/firebaseHelpers");
+          await import("@/services/firebaseHelpers");
         unsub = onAuthChange(async (u) => {
           if (!mounted) return;
           setUser(u);
@@ -77,7 +77,7 @@ export default function Navbar() {
 
   const handleLogout = async () => {
     router.push("/");
-    const { logout } = await import("@/utils/firebaseHelpers");
+    const { logout } = await import("@/services/firebaseHelpers");
     await logout();
     setUser(null);
   };

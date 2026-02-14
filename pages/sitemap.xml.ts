@@ -3,8 +3,8 @@
 import type { GetServerSidePropsContext } from "next";
 import fs from "fs";
 import path from "path";
-import { getAllCitySlugs } from "@/utils/citySlugData";
-import { getAllRoutePaths } from "@/utils/routeData";
+import { getAllCitySlugs } from "@/data/geo/citySlugData";
+import { getAllRoutePaths } from "@/data/geo/routeData";
 
 const SITE_URL = "https://ofertemutare.ro";
 const EXCLUDED_PATTERNS = [
