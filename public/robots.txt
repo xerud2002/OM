@@ -1,24 +1,8 @@
 # robots.txt for ofertemutare.ro
-# Updated: February 12 2026
+# Updated: February 14 2026
 
 User-agent: *
 Allow: /
-
-# Block AI Bots (protect content from training)
-User-agent: GPTBot
-Disallow: /
-
-User-agent: Google-Extended
-Disallow: /
-
-User-agent: CCBot
-Disallow: /
-
-User-agent: ChatGPT-User
-Disallow: /
-
-User-agent: anthropic-ai
-Disallow: /
 
 # Block private/authenticated pages
 Disallow: /admin/
@@ -36,6 +20,46 @@ Disallow: /404
 
 # Crawl delay (polite crawling)
 Crawl-delay: 1
+
+# ─── Block AI Training Bots ───
+User-agent: GPTBot
+Disallow: /
+
+User-agent: ChatGPT-User
+Disallow: /
+
+User-agent: Google-Extended
+Disallow: /
+
+User-agent: anthropic-ai
+Disallow: /
+
+User-agent: ClaudeBot
+Disallow: /
+
+User-agent: CCBot
+Disallow: /
+
+User-agent: Bytespider
+Disallow: /
+
+User-agent: PerplexityBot
+Disallow: /
+
+User-agent: Applebot-Extended
+Disallow: /
+
+User-agent: Meta-ExternalAgent
+Disallow: /
+
+User-agent: Amazonbot
+Disallow: /
+
+User-agent: Cohere-ai
+Disallow: /
+
+User-agent: FacebookBot
+Disallow: /
 
 # Sitemap location
 Sitemap: https://ofertemutare.ro/sitemap.xml

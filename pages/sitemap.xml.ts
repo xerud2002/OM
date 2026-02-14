@@ -72,9 +72,11 @@ function generateSitemap(pages: string[]): string {
   const now = new Date().toISOString().split("T")[0];
 
   const urls = pages.map((page) => {
-    // City pages get high priority (important SEO landing pages)
     const isCityPage = /^\/mutari\/[^/]+$/.test(page);
     const isRoutePage = /^\/mutari\/[^/]+\/[^/]+$/.test(page);
+    const isServicePage = /^\/servicii\//.test(page);
+    const isArticlePage = /^\/articole\//.test(page);
+    const isSpecialtyPage = /^\/mutari\/(tipuri|specializate)\//.test(page);
 
     let priority: string;
     let changefreq: string;
@@ -88,6 +90,18 @@ function generateSitemap(pages: string[]): string {
     } else if (isRoutePage) {
       priority = "0.8";
       changefreq = "weekly";
+    } else if (isServicePage) {
+      // Service pages are money pages — high priority
+      priority = "0.8";
+      changefreq = "weekly";
+    } else if (isSpecialtyPage) {
+      // Specialty move types (apartments, offices, pianos, students)
+      priority = "0.8";
+      changefreq = "weekly";
+    } else if (isArticlePage) {
+      // Blog articles — important for organic traffic
+      priority = "0.7";
+      changefreq = "monthly";
     } else if (page.split("/").length <= 2) {
       priority = "0.8";
       changefreq = "weekly";
