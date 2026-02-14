@@ -69,10 +69,10 @@ export default function CalculatorPage() {
   return (
     <>
       <Head>
-        <title>{`Calculator Cost Mutare ${currentYear} - Estimare Preț Instantanee | OferteMutare.ro`}</title>
+        <title>{`Calculator Cost Mutare ${currentYear} | Estimare Instantă`}</title>
         <meta
           name="description"
-          content={`Calculează gratuit costul estimat al mutării tale în ${currentYear}. Instrument online pentru estimarea bugetului necesar în funcție de tip locuință, număr camere și locație. Rezultat instant!`}
+          content={`Calculează gratuit costul mutării tale în ${currentYear}. Estimare online bazată pe tip locuință, număr camere și locație. Rezultat instant!`}
         />
         <meta
           name="keywords"

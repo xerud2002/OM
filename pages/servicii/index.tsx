@@ -51,9 +51,6 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
   return (
     <>
       <Head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-
         <title>{`Servicii Mutare ${currentYear} | Împachetare, Montaj, Depozitare`}</title>
         <meta
           name="description"
@@ -72,6 +69,46 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
         <meta property="og:locale" content="ro_RO" />
 
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/servicii" />
+        <meta name="twitter:title" content={`Servicii Mutare ${currentYear}`} />
+        <meta name="twitter:description" content="Servicii complete: împachetare, montaj, depozitare. Oferte gratuite!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              serviceType: "Servicii Complementare Mutări",
+              provider: {
+                "@type": "Organization",
+                name: "OferteMutare.ro",
+                url: "https://ofertemutare.ro",
+                logo: "https://ofertemutare.ro/pics/index.webp",
+              },
+              areaServed: {
+                "@type": "Country",
+                name: "România",
+              },
+              description: "Servicii complete pentru mutare: împachetare, montaj mobilă, materiale, depozitare. Oferte de la firme verificate.",
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Acasă", item: "https://ofertemutare.ro" },
+                { "@type": "ListItem", position: 2, name: "Servicii" },
+              ],
+            }),
+          }}
+        />
       </Head>
 
       <LayoutWrapper>
@@ -83,7 +120,7 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
           </div>
 
           <div className="relative mx-auto max-w-6xl px-4 text-center">
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Servicii Complete{" "}
               <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 de Mutare

@@ -97,17 +97,17 @@ export default function HomePage() {
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Twitter */}
-        <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://ofertemutare.ro" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro" />
         <meta
-          property="twitter:title"
+          name="twitter:title"
           content="Compara Oferte pentru Mutarea Ta | Economisești 40%"
         />
         <meta
-          property="twitter:description"
+          name="twitter:description"
           content="🚚 Compară oferte de la firme verificate în 24h. Gratuit, rapid, sigur!"
         />
-        <meta property="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Structured Data - Schema.org for Rich Results */}
 
@@ -373,13 +373,6 @@ export default function HomePage() {
               "@type": "LocalBusiness",
               "@id": "https://ofertemutare.ro/#business",
               name: "OferteMutare.ro",
-              aggregateRating: {
-                "@type": "AggregateRating",
-                ratingValue: "4.8",
-                reviewCount: "127",
-                bestRating: "5",
-                worstRating: "1",
-              },
             }),
           }}
         />

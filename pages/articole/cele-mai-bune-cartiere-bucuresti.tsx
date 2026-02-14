@@ -176,8 +176,8 @@ export default function ArticleCartiereBucuresti() {
 
             
       <ArticleSchema
-        title="Top 10 Cartiere București pentru Relocare {currentYear}"
-        description="Articol despre mutări"
+        title={`Top 10 Cartiere București pentru Relocare ${currentYear}`}
+        description={`Descoperă cele mai bune zone de locuit în București în ${currentYear}. Analizăm prețuri, parcuri și transport pentru Aviației, Titan, Drumul Taberei și altele.`}
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.webp"
       />
@@ -185,7 +185,7 @@ export default function ArticleCartiereBucuresti() {
         items={[
           { name: "Acasă", url: "/" },
           { name: "Articole", url: "/articole" },
-          { name: "Top 10 Cartiere București pentru Relocare {currentYear}" },
+          { name: `Top 10 Cartiere București pentru Relocare ${currentYear}` },
         ]}
       />
       <LayoutWrapper>

@@ -40,6 +40,11 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
           content="Relocare firme profesionale. Transport echipamente IT, zero downtime!"
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/mutari/tipuri/birouri" />
+        <meta name="twitter:title" content={`Mutări Birouri și Companii ${currentYear}`} />
+        <meta name="twitter:description" content="Relocare firme profesionale. Transport echipamente IT, zero downtime!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       {/* Schema Markup */}
@@ -70,7 +75,7 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
               <span className="text-sm font-medium text-slate-300">Servicii B2B • Corporativ</span>
             </div>
 
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Mutări{" "}
               <span className="bg-linear-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
                 Birouri & Companii

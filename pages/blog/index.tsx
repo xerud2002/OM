@@ -64,6 +64,7 @@ const blogPosts = [
     date: "14 Ian 2026",
     image: "/pics/blog/moving-cost-2026.webp",
     gradient: "linear-gradient(to right, #059669, #34d399)",
+    link: "/articole/cat-costa-mutarea-2026",
   },
   {
     slug: "impachetare",
@@ -75,6 +76,7 @@ const blogPosts = [
     date: "12 Ian 2026",
     image: "/pics/blog/packing-fragile.webp",
     gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",
+    link: "/servicii/impachetare/profesionala",
   },
   {
     slug: "pregatire",
@@ -86,6 +88,7 @@ const blogPosts = [
     date: "10 Ian 2026",
     image: "/pics/blog/moving-prep.webp",
     gradient: "linear-gradient(to right, #10b981, #0d9488)",
+    link: "/articole/pregatire",
   },
   {
     slug: "evaluare-mutare",
@@ -97,6 +100,7 @@ const blogPosts = [
     date: "08 Ian 2026",
     image: "/pics/blog/video-survey-v2.webp",
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
+    link: "/articole/evaluare-mutare",
   },
   {
     slug: "mutare-fara-lift",
@@ -121,6 +125,7 @@ const blogPosts = [
     image: "/pics/blog/guide-banner-v2.webp",
     gradient: "linear-gradient(to right, #f97316, #ef4444)",
     featured: true,
+    link: "/articole/sfaturi-mutari",
   },
 ];
 
@@ -148,6 +153,32 @@ export default function BlogPage() {
         />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro/blog" />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/blog" />
+        <meta name="twitter:title" content="Blog | Sfaturi pentru Mutări" />
+        <meta name="twitter:description" content="Articole utile și ghiduri practice pentru o mutare reușită în România." />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "CollectionPage",
+              name: "Blog | Sfaturi și Ghiduri pentru Mutări",
+              description: "Articole utile, sfaturi practice și ghiduri complete pentru o mutare reușită.",
+              url: "https://ofertemutare.ro/blog",
+              publisher: {
+                "@type": "Organization",
+                name: "OferteMutare.ro",
+                url: "https://ofertemutare.ro",
+                logo: "https://ofertemutare.ro/pics/index.webp",
+              },
+            }),
+          }}
+        />
       </Head>
 
       <LayoutWrapper>
@@ -183,7 +214,7 @@ export default function BlogPage() {
           {featuredPost && (
             <section className="container mx-auto px-4 pb-12">
               <Link
-                href={featuredPost.link || `/articles/${featuredPost.slug}`}
+                href={featuredPost.link || `/articole/${featuredPost.slug}`}
                 className="group block"
               >
                 <div className="relative overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-xl transition-all hover:shadow-2xl sm:rounded-3xl">
@@ -248,7 +279,7 @@ export default function BlogPage() {
 
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {regularPosts.map((post, idx) => {
-                const href = post.link ? post.link : `/articles/${post.slug}`;
+                const href = post.link ? post.link : `/articole/${post.slug}`;
                 return (
                   <Link key={idx} href={href} className="group block">
                     <article className="relative flex h-full flex-col overflow-hidden rounded-xl border border-slate-200/50 bg-white shadow-lg transition-all hover:border-emerald-200 hover:shadow-xl sm:rounded-2xl">

@@ -33,6 +33,11 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
         <meta property="og:title" content={`Demontare și Montare Mobilă ${currentYear}`} />
         <meta property="og:description" content="Servicii profesionale de demontare și montare mobilier în toată România!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/servicii/montaj/mobila" />
+        <meta name="twitter:title" content={`Demontare și Montare Mobilă ${currentYear}`} />
+        <meta name="twitter:description" content="Servicii profesionale de demontare și montare mobilier în toată România!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       {/* Schema Markup */}
@@ -56,7 +61,7 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
               </span>
             </div>
 
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Demontare &{" "}
               <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Montare Mobilă

@@ -102,8 +102,8 @@ export default function ArticleCostMutare() {
 
             
       <ArticleSchema
-        title="Cât Costă o Mutare în România {currentYear} | Prețuri Reale"
-        description="Articol despre mutări"
+        title={`Cât Costă o Mutare în România ${currentYear} | Prețuri Reale`}
+        description={`Analiză completă prețuri mutări ${currentYear}: costuri mobilă, cutii, transport. Vezi cât costă să te muți în București, Cluj sau Timișoara cu o firmă profesionistă.`}
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/moving-cost-2026.webp"
       />
@@ -111,7 +111,7 @@ export default function ArticleCostMutare() {
         items={[
           { name: "Acasă", url: "/" },
           { name: "Articole", url: "/articole" },
-          { name: "Cât Costă o Mutare în România {currentYear} | Prețuri Reale" },
+          { name: `Cât Costă o Mutare în România ${currentYear} | Prețuri Reale` },
         ]}
       />
       <LayoutWrapper>

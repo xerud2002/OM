@@ -20,7 +20,7 @@ export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
         <title>{`Depozitare Mobilă și Bunuri ${currentYear} | Storage Securizat`}</title>
         <meta
           name="description"
-          content="Servicii depozitare mobilă și bunuri în România. Spații securizate, monitorizate 24/7, climatiz ate. De la 150 lei/lună. Depozitare pe termen scurt sau lung!"
+          content="Servicii depozitare mobilă și bunuri în România. Spații securizate, monitorizate 24/7, climatizate. De la 150 lei/lună. Depozitare pe termen scurt sau lung!"
         />
         <meta
           name="keywords"
@@ -33,6 +33,11 @@ export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
         <meta property="og:title" content={`Depozitare Mobilă ${currentYear}`} />
         <meta property="og:description" content="Spații securizate pentru depozitare mobilă și bunuri!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/servicii/depozitare" />
+        <meta name="twitter:title" content={`Depozitare Mobilă ${currentYear}`} />
+        <meta name="twitter:description" content="Spații securizate pentru depozitare mobilă și bunuri!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       {/* Schema Markup */}
@@ -54,7 +59,7 @@ export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
               <span className="text-amber-100 text-sm font-medium">Servicii Storage • Depozitare</span>
             </div>
 
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Depozitare{" "}
               <span className="bg-linear-to-r from-yellow-300 to-yellow-100 bg-clip-text text-transparent">
                 Mobilă & Bunuri

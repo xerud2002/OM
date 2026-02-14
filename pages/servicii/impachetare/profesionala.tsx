@@ -33,6 +33,11 @@ export default function ImpachetareProfesionalaPage({ currentYear }: Impachetare
         <meta property="og:title" content={`Împachetare Profesională ${currentYear}`} />
         <meta property="og:description" content="Servicii complete de împachetare pentru mutări. Materiale premium!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/packing1.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/servicii/impachetare/profesionala" />
+        <meta name="twitter:title" content={`Împachetare Profesională ${currentYear}`} />
+        <meta name="twitter:description" content="Servicii complete de împachetare pentru mutări. Materiale premium!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/packing1.webp" />
       </Head>
 
       {/* Schema Markup */}
@@ -56,7 +61,7 @@ export default function ImpachetareProfesionalaPage({ currentYear }: Impachetare
               </span>
             </div>
 
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Împachetare{" "}
               <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Profesională

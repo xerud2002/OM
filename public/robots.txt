@@ -25,6 +25,7 @@ Disallow: /admin/
 Disallow: /customer/
 Disallow: /company/
 Disallow: /upload/
+Disallow: /docs/
 
 # Block API routes
 Disallow: /api/

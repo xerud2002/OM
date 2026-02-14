@@ -20,7 +20,7 @@ export default function ArticleSurvey() {
           name="keywords"
           content="survey mutări, vizită fizică mutare, survey video, estimare ofertă mutare, evaluare volume, preț exact mutare, cum se face survey, mutare online"
         />
-        <meta property="og:title" content="Tipuri de Survey Pentru Mutări: Ghid Complet 2025" />
+        <meta property="og:title" content="Tipuri de Survey Pentru Mutări: Ghid Complet 2026" />
         <meta
           property="og:description"
           content="Compară cele 3 tipuri de survey la mutări și alege cel mai potrivit pentru tine: vizită fizică, video call sau estimare rapidă."
@@ -32,7 +32,7 @@ export default function ArticleSurvey() {
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/articole/evaluare-mutare" />
-        <meta name="twitter:title" content="Tipuri de Survey Pentru Mutări: Ghid Complet 2025" />
+        <meta name="twitter:title" content="Tipuri de Survey Pentru Mutări: Ghid Complet 2026" />
         <meta
           name="twitter:description"
           content="Compară cele 3 tipuri de survey la mutări și alege cel mai potrivit pentru tine."

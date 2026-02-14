@@ -409,6 +409,36 @@ export default function PartenerPage({
         />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://ofertemutare.ro/partener" />
+        <meta property="og:url" content="https://ofertemutare.ro/partener" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Devino Partener | OferteMutare.ro - Firme de Mutări" />
+        <meta property="og:description" content="Înscrie-ți firma de mutări pe OferteMutare.ro și primește cereri de la clienți verificați. Fără abonamente, plătești doar pentru succes." />
+        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/partener" />
+        <meta name="twitter:title" content="Devino Partener | OferteMutare.ro" />
+        <meta name="twitter:description" content="Înscrie-ți firma de mutări și primește cereri de la clienți verificați. Fără abonamente!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "WebPage",
+              name: "Devino Partener | OferteMutare.ro",
+              description: "Înscrie-ți firma de mutări pe OferteMutare.ro și primește cereri de la clienți verificați.",
+              url: "https://ofertemutare.ro/partener",
+              publisher: {
+                "@type": "Organization",
+                name: "OferteMutare.ro",
+                url: "https://ofertemutare.ro",
+                logo: "https://ofertemutare.ro/pics/index.webp",
+              },
+            }),
+          }}
+        />
       </Head>
 
       {/* ═══════════ HERO ═══════════ */}

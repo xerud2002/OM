@@ -375,7 +375,7 @@ export default function ContactPage() {
                 >
                   <div className="relative">
                     {/* Decorative frame */}
-                    <div className="absolute -inset-4 rounded-[2rem] bg-linear-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
+                    <div className="absolute -inset-4 rounded-4xl bg-linear-to-br from-emerald-200/50 via-teal-100/30 to-sky-200/50 blur-2xl" />
 
                     <div className="relative overflow-hidden rounded-3xl border border-slate-100 bg-white p-8 shadow-2xl sm:p-10">
                       {/* Decorative orbs */}

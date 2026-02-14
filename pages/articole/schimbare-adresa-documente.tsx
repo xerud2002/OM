@@ -134,8 +134,8 @@ export default function GhidSchimbareAdresa() {
 
             
       <ArticleSchema
-        title="Acte Necesare Schimbare Adresă/Domiciliu {currentYear} | Ghid Complet"
-        description="Articol despre mutări"
+        title={`Acte Necesare Schimbare Adresă/Domiciliu ${currentYear} | Ghid Complet`}
+        description={`Ghid complet ${currentYear} pentru schimbarea adresei în buletin. Lista de acte necesare la evidența populației, taxe locale și utilități.`}
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/schimbare-adresa-documente.webp"
       />
@@ -143,7 +143,7 @@ export default function GhidSchimbareAdresa() {
         items={[
           { name: "Acasă", url: "/" },
           { name: "Articole", url: "/articole" },
-          { name: "Acte Necesare Schimbare Adresă/Domiciliu {currentYear} | Ghid Complet" },
+          { name: `Acte Necesare Schimbare Adresă/Domiciliu ${currentYear} | Ghid Complet` },
         ]}
       />
       <LayoutWrapper>
@@ -202,7 +202,7 @@ export default function GhidSchimbareAdresa() {
                                     <div className="flex bg-slate-50 h-16 w-16 items-center justify-center rounded-full shrink-0">
                                         <item.icon className="h-8 w-8 text-slate-600" />
                                     </div>
-                                    <div className="flex-grow">
+                                    <div className="grow">
                                         <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
                                             <h3 className="text-xl font-bold text-slate-900">{item.title}</h3>
                                             <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase ${item.priority === "Urgent" ? "bg-red-100 text-red-700" :

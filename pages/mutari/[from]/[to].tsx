@@ -12,6 +12,7 @@ import {
     ArrowsRightLeftIcon as Swap,
 } from "@heroicons/react/24/outline";
 import { getAllRoutePaths, getRouteData, RouteData } from "@/utils/routeData";
+import { BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 
 interface RoutePageProps {
     routeData: RouteData;
@@ -36,7 +37,46 @@ export default function RoutePage({ routeData, formattedDate }: RoutePageProps) 
                 <meta property="og:title" content={title} />
                 <meta property="og:description" content={description} />
                 <meta property="og:type" content="website" />
+                <meta property="og:url" content={`https://ofertemutare.ro/mutari/${fromCity.slug}/${toCity.slug}`} />
+                <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+                <meta name="twitter:card" content="summary_large_image" />
+                <meta name="twitter:url" content={`https://ofertemutare.ro/mutari/${fromCity.slug}/${toCity.slug}`} />
+                <meta name="twitter:title" content={title} />
+                <meta name="twitter:description" content={description} />
+                <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+                {/* JSON-LD Structured Data */}
+                <script
+                  type="application/ld+json"
+                  dangerouslySetInnerHTML={{
+                    __html: JSON.stringify({
+                      "@context": "https://schema.org",
+                      "@type": "Service",
+                      serviceType: `Transport Mobilă ${fromCity.name} - ${toCity.name}`,
+                      provider: {
+                        "@type": "Organization",
+                        name: "OferteMutare.ro",
+                        url: "https://ofertemutare.ro",
+                        logo: "https://ofertemutare.ro/pics/index.webp",
+                      },
+                      areaServed: [
+                        { "@type": "City", name: fromCity.name },
+                        { "@type": "City", name: toCity.name },
+                      ],
+                      description: description,
+                    }),
+                  }}
+                />
             </Head>
+
+            <BreadcrumbSchema
+              items={[
+                { name: "Acasă", url: "/" },
+                { name: "Mutări", url: "/mutari" },
+                { name: fromCity.name, url: `/mutari/${fromCity.slug}` },
+                { name: toCity.name },
+              ]}
+            />
 
             <LayoutWrapper>
                 <div className="bg-slate-50 pb-16">

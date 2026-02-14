@@ -51,7 +51,7 @@ export default function GuideCluj() {
     return (
         <>
             <Head>
-                <title>Ghid Mutare Cluj-Napoca {currentYear}: Cartiere, Prețuri și Sfaturi | OferteMutare.ro</title>
+                <title>Ghid Mutare Cluj-Napoca {currentYear}: Prețuri și Sfaturi</title>
                 <meta
                     name="description"
                     content={`Ghid complet pentru mutarea în Cluj-Napoca în ${currentYear}. Află prețurile reale, cele mai bune cartiere (Gheorgheni, Zorilor) și sfaturi pentru studenți.`}
@@ -91,8 +91,8 @@ export default function GuideCluj() {
 
             
       <ArticleSchema
-        title="Ghid Mutare Cluj-Napoca {currentYear}: Cartiere, Prețuri și Sfaturi"
-        description="Articol despre mutări"
+        title={`Ghid Mutare Cluj-Napoca ${currentYear}: Cartiere, Prețuri și Sfaturi`}
+        description={`Ghid complet pentru mutarea în Cluj-Napoca în ${currentYear}. Află prețurile reale, cele mai bune cartiere (Gheorgheni, Zorilor) și sfaturi pentru studenți.`}
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/cluj-guide-2026.webp"
       />
@@ -100,7 +100,7 @@ export default function GuideCluj() {
         items={[
           { name: "Acasă", url: "/" },
           { name: "Articole", url: "/articole" },
-          { name: "Ghid Mutare Cluj-Napoca {currentYear}: Cartiere, Prețuri și Sfaturi" },
+          { name: `Ghid Mutare Cluj-Napoca ${currentYear}: Cartiere, Prețuri și Sfaturi` },
         ]}
       />
       <LayoutWrapper>

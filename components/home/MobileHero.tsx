@@ -55,11 +55,11 @@ export default function MobileHero() {
         </div>
 
         {/* Headline - LCP Element - PURE HTML, no icons */}
-        <h1 className="mb-2 text-center text-2xl font-extrabold tracking-tight text-slate-900">
+        <div role="heading" aria-level={1} className="mb-2 text-center text-2xl font-extrabold tracking-tight text-slate-900">
           Compară oferte pentru
           <br />
           <span className="text-emerald-600">mutarea ta</span>
-        </h1>
+        </div>
 
         {/* Subheadline - same as desktop */}
         <p className="mx-auto mb-3 text-center text-sm leading-relaxed text-slate-600">

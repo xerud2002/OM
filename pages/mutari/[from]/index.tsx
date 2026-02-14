@@ -19,6 +19,7 @@ import {
     ArrowTrendingDownIcon as TrendingDown,
 } from "@heroicons/react/24/outline";
 import { getCityBySlug, getAllCitySlugs, CityData, cityData } from "@/utils/citySlugData";
+import { LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
 
 interface CityPageProps {
     city: CityData;
@@ -94,6 +95,15 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
                 <meta name="twitter:description" content={city.metaDescription} />
                 <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
             </Head>
+
+            <LocalBusinessSchema city={city.name} serviceName={"Servicii Mutări " + city.name} />
+            <BreadcrumbSchema
+              items={[
+                { name: "Acasă", url: "/" },
+                { name: "Mutări", url: "/mutari" },
+                { name: city.name },
+              ]}
+            />
 
             <LayoutWrapper>
                 {/* Hero Section - Image background on desktop, gradient on mobile */}

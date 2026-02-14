@@ -97,7 +97,7 @@ export default function ArticleMutareFaraLift() {
     return (
         <>
             <Head>
-                <title>Mutare la Etaj fără Lift — Soluții și Costuri {currentYear} | Ghid Complet</title>
+                <title>Mutare fără Lift — Soluții și Costuri {currentYear}</title>
                 <meta
                     name="description"
                     content={`Ghid complet ${currentYear} pentru mutări la bloc fără lift. Costuri per etaj, soluții (lift exterior, demontare mobilă), sfaturi practice și prețuri reale.`}

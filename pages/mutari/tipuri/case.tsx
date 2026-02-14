@@ -62,6 +62,8 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
           name="twitter:description"
           content="Servicii complete de mutări case și vile. Primește oferte gratuite!"
         />
+        <meta name="twitter:url" content="https://ofertemutare.ro/mutari/tipuri/case" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       {/* Schema Markup */}
@@ -92,7 +94,7 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
               </span>
             </div>
 
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Mutări{" "}
               <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Case și Vile

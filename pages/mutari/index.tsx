@@ -53,9 +53,6 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
   return (
     <>
       <Head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        
         <title>Servicii Mutări {currentYear} | Toate Tipurile de Mutări</title>
         <meta
           name="description"
@@ -75,8 +72,46 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
         <meta property="og:site_name" content="OferteMutare.ro" />
         
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/mutari" />
         <meta name="twitter:title" content={`Servicii Mutări ${currentYear}`} />
         <meta name="twitter:description" content="Toate tipurile de mutări. Oferte gratuite!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+
+        {/* JSON-LD Structured Data */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "Service",
+              serviceType: "Servicii Mutări România",
+              provider: {
+                "@type": "Organization",
+                name: "OferteMutare.ro",
+                url: "https://ofertemutare.ro",
+                logo: "https://ofertemutare.ro/pics/index.webp",
+              },
+              areaServed: {
+                "@type": "Country",
+                name: "România",
+              },
+              description: "Găsește firma perfectă pentru mutarea ta. Apartamente, case, birouri, studenți. 3-5 oferte GRATUITE în 24h.",
+            }),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              "@context": "https://schema.org",
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Acasă", item: "https://ofertemutare.ro" },
+                { "@type": "ListItem", position: 2, name: "Mutări" },
+              ],
+            }),
+          }}
+        />
       </Head>
 
       <LayoutWrapper>
@@ -88,7 +123,7 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
           </div>
 
           <div className="relative mx-auto max-w-6xl px-4 text-center">
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Servicii Complete de{" "}
               <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Mutări

@@ -36,6 +36,11 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
           content="Transport specializat pentru piane. Echipe cu experiență!"
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/mutari/specializate/piane" />
+        <meta name="twitter:title" content={`Mutări Piane ${currentYear}`} />
+        <meta name="twitter:description" content="Transport specializat pentru piane. Echipe cu experiență!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Service Schema with Pricing */}
         <script
@@ -131,7 +136,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
               </span>
             </div>
 
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Mutări{" "}
               <span className="bg-linear-to-r from-amber-400 to-yellow-300 bg-clip-text text-transparent">
                 Piane

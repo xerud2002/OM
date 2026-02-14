@@ -51,7 +51,7 @@ export default function GuideBucuresti() {
     return (
         <>
             <Head>
-                <title>Ghid Complet Mutare București {currentYear}: Cartiere, Prețuri și Sfaturi | OferteMutare.ro</title>
+                <title>Ghid Mutare București {currentYear}: Prețuri și Sfaturi</title>
                 <meta
                     name="description"
                     content={`Tot ce trebuie să știi despre mutarea în București în ${currentYear}. Ghid pe sectoare, prețuri actualizate, sfaturi parcare și transport.`}
@@ -91,8 +91,8 @@ export default function GuideBucuresti() {
 
             
       <ArticleSchema
-        title="Ghid Complet Mutare București {currentYear}: Cartiere, Prețuri și Sfaturi"
-        description="Articol despre mutări"
+        title={`Ghid Complet Mutare București ${currentYear}: Cartiere, Prețuri și Sfaturi`}
+        description={`Tot ce trebuie să știi despre mutarea în București în ${currentYear}. Ghid pe sectoare, prețuri actualizate, sfaturi parcare și transport.`}
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/bucharest-guide-2026.webp"
       />
@@ -100,7 +100,7 @@ export default function GuideBucuresti() {
         items={[
           { name: "Acasă", url: "/" },
           { name: "Articole", url: "/articole" },
-          { name: "Ghid Complet Mutare București {currentYear}: Cartiere, Prețuri și Sfaturi" },
+          { name: `Ghid Complet Mutare București ${currentYear}: Cartiere, Prețuri și Sfaturi` },
         ]}
       />
       <LayoutWrapper>

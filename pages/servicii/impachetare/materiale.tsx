@@ -30,6 +30,11 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
         <meta property="og:title" content={`Materiale Împachetare ${currentYear}`} />
         <meta property="og:description" content="Cutii, bubble wrap, folie - tot ce ai nevoie pentru mutare!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/servicii/impachetare/materiale" />
+        <meta name="twitter:title" content={`Materiale Împachetare ${currentYear}`} />
+        <meta name="twitter:description" content="Cutii, bubble wrap, folie - tot ce ai nevoie pentru mutare!" />
+        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
       </Head>
 
       <LocalBusinessSchema serviceName="Materiale Împachetare" />
@@ -51,7 +56,7 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
               </span>
             </div>
 
-            <h1 className="mb-6 text-2xl md:text-4xl font-extrabold !text-white md:text-5xl lg:text-6xl">
+            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
               Materiale{" "}
               <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
                 Împachetare

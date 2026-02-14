@@ -510,6 +510,7 @@ export default function FAQPage() {
 
         {/* Twitter */}
         <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:url" content="https://ofertemutare.ro/faq" />
         <meta
           name="twitter:title"
           content="FAQ Mutări România → Prețuri, Proces, Firme Verificate"

@@ -75,7 +75,7 @@ export default function AboutPage() {
       desc: "Peste 15 ani de experiență în mutări naționale ne-au arătat cât de greu este să găsești clienți și firme de încredere.",
     },
     {
-      year: "2025",
+      year: "2026",
       title: "Soluția: Ofertemutare.ro",
       desc: "Am creat o platformă care aduce împreună clienții și companiile de transport, cu transparență totală.",
     },
@@ -95,7 +95,7 @@ export default function AboutPage() {
         <meta name="author" content="Ofertemutare Ltd" />
         <meta
           name="description"
-          content="Descoperă povestea OferteMutare.ro, operată de Ofertemutare Ltd - platforma care conectează clienții cu firme de mutări verificate din România. Transparență, siguranță și prețuri corecte."
+          content="Povestea OferteMutare.ro, operată de Ofertemutare Ltd — platforma care conectează clienții cu firme de mutări verificate din România. Transparență și prețuri corecte."
         />
         <meta
           name="keywords"
@@ -143,7 +143,7 @@ export default function AboutPage() {
                 name: "Ofertemutare Ltd",
                 url: "https://ofertemutare.ro",
                 logo: "https://ofertemutare.ro/pics/index.webp",
-                foundingDate: "2024",
+                foundingDate: "2026",
                 description:
                   "Platforma care conectează clienții cu firme de mutări verificate din România. Transparență, siguranță și prețuri corecte.",
                 email: "info@ofertemutare.ro",
