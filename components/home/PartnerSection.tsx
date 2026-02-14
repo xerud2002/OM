@@ -35,7 +35,7 @@ export default function PartnerSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-[2rem]"
+            className="overflow-hidden rounded-2xl border border-slate-200/50 bg-white shadow-2xl shadow-slate-200/50 sm:rounded-4xl"
           >
             <div className="grid lg:grid-cols-2">
               {/* Left - Image */}
@@ -47,7 +47,7 @@ export default function PartnerSection() {
                 className="relative order-2 lg:order-1"
               >
                 <div className="absolute inset-0 bg-linear-to-br from-emerald-50 via-sky-50 to-purple-50" />
-                <div className="relative flex h-full min-h-[280px] items-center justify-center p-6 sm:min-h-100 sm:p-8 lg:p-12">
+                <div className="relative flex h-full min-h-70 items-center justify-center p-6 sm:min-h-100 sm:p-8 lg:p-12">
                   <div className="relative">
                     <div className="absolute -inset-4 rounded-3xl bg-linear-to-r from-emerald-500/20 to-sky-500/20 blur-2xl" />
                     <Image

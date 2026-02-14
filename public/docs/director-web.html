@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OferteMutare.ro — Kit Înregistrare Directoare Web România</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.6; }
+        
+        .container { max-width: 1100px; margin: 0 auto; padding: 20px; }
+        
+        /* Header */
+        .header { background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 100%); color: white; padding: 40px 0; margin-bottom: 30px; }
+        .header h1 { font-size: 28px; margin-bottom: 8px; }
+        .header p { color: #94a3b8; font-size: 15px; }
+        .header .logo-url { color: #34d399; font-weight: 600; }
+        
+        /* Navigation */
+        .nav { position: sticky; top: 0; background: white; border-bottom: 1px solid #e2e8f0; padding: 12px 0; z-index: 100; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+        .nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 20px; display: flex; flex-wrap: wrap; gap: 6px; }
+        .nav a { text-decoration: none; color: #475569; font-size: 13px; padding: 4px 10px; border-radius: 6px; background: #f1f5f9; transition: all 0.2s; white-space: nowrap; }
+        .nav a:hover { background: #10b981; color: white; }
+        
+        /* Sections */
+        section { background: white; border-radius: 12px; padding: 28px; margin-bottom: 24px; border: 1px solid #e2e8f0; }
+        section h2 { font-size: 22px; color: #0f172a; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 2px solid #10b981; display: flex; align-items: center; gap: 10px; }
+        section h3 { font-size: 16px; color: #334155; margin: 18px 0 8px; }
+        
+        /* Text blocks */
+        .text-block { position: relative; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin-bottom: 14px; cursor: pointer; transition: border-color 0.2s; }
+        .text-block:hover { border-color: #10b981; }
+        .text-block .label { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+        .text-block .label span:first-child { font-size: 12px; font-weight: 700; color: #10b981; text-transform: uppercase; letter-spacing: 0.5px; }
+        .text-block .char-count { font-size: 11px; color: #94a3b8; background: #f1f5f9; padding: 2px 8px; border-radius: 100px; }
+        .text-block .content { font-size: 15px; color: #1e293b; }
+        .text-block .copy-hint { position: absolute; top: 8px; right: 8px; font-size: 11px; color: #94a3b8; opacity: 0; transition: opacity 0.2s; }
+        .text-block:hover .copy-hint { opacity: 1; }
+        .text-block.copied { border-color: #10b981; background: #ecfdf5; }
+        
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+        th { background: #0f172a; color: white; padding: 10px 14px; text-align: left; font-size: 13px; }
+        td { padding: 10px 14px; border-bottom: 1px solid #f1f5f9; }
+        tr:nth-child(even) td { background: #f8fafc; }
+        
+        /* Tags */
+        .tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0; }
+        .tag { background: #f1f5f9; color: #475569; padding: 4px 12px; border-radius: 100px; font-size: 13px; border: 1px solid #e2e8f0; cursor: pointer; transition: all 0.2s; }
+        .tag:hover { background: #10b981; color: white; border-color: #10b981; }
+        
+        /* Grid */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+        @media (max-width: 768px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+        
+        /* Info cards */
+        .info-card { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 14px; }
+        .info-card .card-label { font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .info-card .card-value { font-size: 15px; color: #0f172a; font-weight: 600; word-break: break-all; }
+        .info-card .card-value a { color: #10b981; text-decoration: none; }
+        
+        /* Badge */
+        .badge { display: inline-block; padding: 3px 10px; border-radius: 100px; font-size: 12px; font-weight: 600; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-amber { background: #fef3c7; color: #92400e; }
+        
+        /* Bullet list */
+        .bullet-list { list-style: none; padding: 0; }
+        .bullet-list li { padding: 6px 0 6px 24px; position: relative; font-size: 14px; color: #475569; }
+        .bullet-list li::before { content: "✓"; position: absolute; left: 0; color: #10b981; font-weight: 700; }
+        
+        /* Categories */
+        .category-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0; }
+        .category-item .num { background: #0f172a; color: white; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; flex-shrink: 0; }
+        .category-item .cat-text { font-size: 14px; color: #334155; }
+        .category-item .cat-en { font-size: 12px; color: #94a3b8; }
+        
+        /* Print styles */
+        @media print {
+            .nav { position: static; box-shadow: none; }
+            .text-block { break-inside: avoid; }
+            section { break-inside: avoid; }
+            .copy-hint { display: none !important; }
+        }
+        
+        /* Toast */
+        .toast { position: fixed; bottom: 20px; right: 20px; background: #0f172a; color: white; padding: 10px 20px; border-radius: 8px; font-size: 14px; opacity: 0; transition: opacity 0.3s; pointer-events: none; z-index: 200; }
+        .toast.show { opacity: 1; }
+
+        .section-note { background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 12px 16px; font-size: 13px; color: #92400e; margin-bottom: 16px; }
+        .divider { border: none; border-top: 1px dashed #e2e8f0; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <p class="logo-url">🚚 ofertemutare.ro</p>
+        <h1>Kit Înregistrare Directoare Web România</h1>
+        <p>Texte optimizate SEO, descrieri la diferite lungimi, cuvinte cheie și categorii — gata de copiat pentru orice director web românesc.</p>
+        <p style="margin-top:8px;font-size:13px;color:#64748b;">Generat: Februarie 2026 &nbsp;|&nbsp; Click pe orice bloc de text pentru a-l copia</p>
+    </div>
+</div>
+
+<nav class="nav">
+    <div class="nav-inner">
+        <a href="#identitate">Identitate</a>
+        <a href="#titluri">Titluri</a>
+        <a href="#descrieri">Descrieri</a>
+        <a href="#descrieri-en">Descrieri EN</a>
+        <a href="#cuvinte-cheie">Cuvinte Cheie</a>
+        <a href="#categorii">Categorii</a>
+        <a href="#servicii">Servicii</a>
+        <a href="#acoperire">Acoperire Geografică</a>
+        <a href="#social-proof">Statistici</a>
+        <a href="#imagini">Imagini & Logo</a>
+        <a href="#tehnic">Detalii Tehnice</a>
+    </div>
+</nav>
+
+<div class="container">
+
+    <!-- ============================================================ -->
+    <!-- IDENTITATE BUSINESS -->
+    <!-- ============================================================ -->
+    <section id="identitate">
+        <h2>🏢 Identitate Business</h2>
+        <div class="grid-3">
+            <div class="info-card">
+                <div class="card-label">Nume Brand</div>
+                <div class="card-value">OferteMutare.ro</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Entitate Juridică</div>
+                <div class="card-value">Ofertemutare Ltd</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Website</div>
+                <div class="card-value"><a href="https://ofertemutare.ro" target="_blank">https://ofertemutare.ro</a></div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Email General</div>
+                <div class="card-value">info@ofertemutare.ro</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Facebook</div>
+                <div class="card-value"><a href="https://www.facebook.com/profile.php?id=61585990396718" target="_blank">Facebook Page</a></div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Locație</div>
+                <div class="card-value">București, România</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Program Suport</div>
+                <div class="card-value">L-V: 9-18, S: 10-14</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Limbă</div>
+                <div class="card-value">Română (ro-RO)</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Anul Înființării</div>
+                <div class="card-value">2024</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TITLURI -->
+    <!-- ============================================================ -->
+    <section id="titluri">
+        <h2>📝 Titluri (Variante la Diferite Lungimi)</h2>
+        <div class="section-note">Directoarele web au limite diferite pentru titlu: unele acceptă 30 caractere, altele 100+. Alege varianta care se potrivește.</div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Ultra-Scurt (30 car.)</span><span class="char-count">28 car.</span></div>
+            <div class="content">OferteMutare.ro — Mutări RO</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Scurt (50 car.)</span><span class="char-count">48 car.</span></div>
+            <div class="content">OferteMutare.ro — Compară Oferte de Mutări</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Mediu (70 car.)</span><span class="char-count">62 car.</span></div>
+            <div class="content">OferteMutare.ro — Compară Oferte de Mutări din Toată România</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Standard (80 car.)</span><span class="char-count">78 car.</span></div>
+            <div class="content">OferteMutare.ro — Platformă Gratuită de Comparare Oferte Mutări România</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Lung (100 car.)</span><span class="char-count">95 car.</span></div>
+            <div class="content">OferteMutare.ro — Compară Gratuit Oferte de la Firme de Mutări Verificate din România</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Complet (120+ car.)</span><span class="char-count">119 car.</span></div>
+            <div class="content">OferteMutare.ro — Platformă Gratuită de Comparare Oferte Mutări 2026 | Firme Verificate, Prețuri Corecte, Fără Obligații</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- DESCRIERI RO -->
+    <!-- ============================================================ -->
+    <section id="descrieri">
+        <h2>📋 Descrieri în Română (Diferite Lungimi)</h2>
+        <div class="section-note">Majoritatea directoarelor cer descrieri între 150-500 caractere. Am pregătit variante de la 80 la 1500+ caractere. Click pe orice bloc pentru copiere.</div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Micro — 1 propoziție</span><span class="char-count">93 car.</span></div>
+            <div class="content">Platformă online gratuită pentru compararea ofertelor de mutări de la firme verificate din România.</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Scurtă — 160 car. (Meta Description)</span><span class="char-count">158 car.</span></div>
+            <div class="content">OferteMutare.ro conectează clienții cu firme de mutări verificate din România. Completezi un formular, primești 3-5 oferte gratuite în 24h și economisești până la 40%.</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Medie — 250 car.</span><span class="char-count">249 car.</span></div>
+            <div class="content">OferteMutare.ro este o platformă 100% gratuită care conectează clienții cu firme de mutări verificate din toată România. Completezi un singur formular în 2 minute și primești 3-5 oferte personalizate în 24 de ore. Compari prețuri transparent, fără obligații, și economisești în medie 40% față de prima ofertă primită.</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Standard — 500 car.</span><span class="char-count">498 car.</span></div>
+            <div class="content">OferteMutare.ro este platforma nr. 1 din România pentru compararea ofertelor de mutări. Serviciul nostru este 100% gratuit pentru clienți: completezi un singur formular online în doar 2 minute și primești 3-5 oferte personalizate de la firme de mutări verificate, în maxim 24 de ore. Acoperim toate tipurile de mutări — apartamente, case, birouri, mutări studențești și transporturi specializate (piane, obiecte grele). Oferim și servicii conexe: împachetare profesională, montaj mobilă, depozitare securizată și debarasare. Cu peste 50 de firme partenere și acoperire în 250+ orașe din toate cele 42 de județe, OferteMutare.ro te ajută să economisești timp și bani.</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Lungă — 750 car.</span><span class="char-count">746 car.</span></div>
+            <div class="content">OferteMutare.ro este platforma lider din România pentru compararea ofertelor de mutări, creată cu scopul de a elimina stresul și costurile nejustificate din procesul de mutare. Serviciul este 100% gratuit pentru clienți: completezi un singur formular online în doar 2 minute, iar în maxim 24 de ore primești 3-5 oferte personalizate de la firme de mutări verificate riguros. Fiecare firmă parteneră trece printr-un proces de verificare care include documente legale, asigurare și recenzii reale de la clienți anteriori. Platforma acoperă toate tipurile de mutări: apartamente (garsoniere până la 4+ camere), case și vile, birouri și sedii de firmă, mutări studențești, precum și transporturi specializate pentru piane, seifuri sau obiecte foarte grele. Pe lângă mutări, oferim acces la servicii conexe: împachetare profesională cu materiale premium, montaj și demontaj mobilă, depozitare în spații securizate și climatizate, precum și debarasare ecologică a mobilierului vechi. Cu peste 50 de firme partenere active în 250+ orașe din toate cele 42 de județe ale României, clienții noștri economisesc în medie 40% comparând ofertele într-un singur loc.</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Completă — 1500+ car.</span><span class="char-count">1547 car.</span></div>
+            <div class="content">OferteMutare.ro este cea mai completă platformă din România dedicată comparării ofertelor de mutări. Am creat acest serviciu dintr-o frustrare comună: cât de greu era să găsești o firmă de mutări de încredere la un preț corect. Platforma noastră pune în legătură directă clienții cu firmele de mutări verificate, eliminând intermediarii și costurile nejustificate.
+
+Cum funcționează:
+1. Completezi un formular online simplu în doar 2 minute — specifici tipul mutării, adresele, data dorită și bunurile principale.
+2. Cererea ta este trimisă simultan către firmele de mutări verificate din zona ta.
+3. În maxim 24 de ore primești 3-5 oferte personalizate direct pe email și în contul tău.
+4. Compari prețuri, recenzii și servicii incluse, apoi alegi oferta care ți se potrivește.
+
+Serviciul este 100% gratuit pentru clienți, fără obligații și fără costuri ascunse.
+
+Tipuri de mutări acoperite:
+• Mutări apartamente — de la garsoniere la apartamente cu 4+ camere (250-1.500 RON)
+• Mutări case și vile — echipe de 4-6 persoane, camioane mari (800-3.000 RON)
+• Mutări birouri — relocări complete cu zero downtime, inclusiv weekend și noapte
+• Mutări studenți — pachete speciale cu prețuri reduse (250-600 RON)
+• Mutări specializate — piane, seifuri, obiecte de artă, echipamente industriale
+
+Servicii suplimentare disponibile prin platformă:
+• Împachetare profesională cu materiale premium (150-1.200 RON)
+• Montaj și demontaj mobilă, inclusiv IKEA și mobilier custom (80-1.200 RON)
+• Depozitare în spații securizate, monitorizate 24/7, climatizate (de la 150 RON/lună)
+• Debarasare și evacuare mobilă veche cu reciclare ecologică (de la 150 RON)
+
+Acoperire națională: 250+ orașe din toate cele 42 de județe ale României, cu prezență puternică în București, Cluj-Napoca, Timișoara, Iași, Brașov și Constanța. Peste 50 de firme partenere verificate, rating mediu 4.8/5 din 127 recenzii.</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- DESCRIERI EN -->
+    <!-- ============================================================ -->
+    <section id="descrieri-en">
+        <h2>🇬🇧 Descrieri în Engleză (pentru directoare internaționale)</h2>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Short — 160 chars</span><span class="char-count">159 chars</span></div>
+            <div class="content">OferteMutare.ro is Romania's free moving quote comparison platform. Fill one form, get 3-5 quotes from verified movers in 24h, and save up to 40% on your move.</div>
+            <span class="copy-hint">Click to copy</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Medium — 350 chars</span><span class="char-count">347 chars</span></div>
+            <div class="content">OferteMutare.ro is Romania's leading free platform for comparing moving quotes. Clients fill out a single online form in 2 minutes and receive 3-5 personalized quotes from verified moving companies within 24 hours. The platform covers apartment, house, office, and student moves, plus additional services like professional packing, furniture assembly, storage, and old furniture disposal.</div>
+            <span class="copy-hint">Click to copy</span>
+        </div>
+
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Long — 500 chars</span><span class="char-count">496 chars</span></div>
+            <div class="content">OferteMutare.ro is Romania's #1 free moving quote comparison platform, connecting clients with 50+ verified moving companies across 250+ cities in all 42 counties. Clients complete a simple 2-minute form and receive 3-5 personalized quotes within 24 hours — no obligations, no hidden costs. The platform covers all moving types (apartments, houses, offices, students, specialized transport) and offers supplementary services: professional packing, furniture assembly, climate-controlled storage, and eco-friendly disposal. Average customer saving: 40%.</div>
+            <span class="copy-hint">Click to copy</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- CUVINTE CHEIE -->
+    <!-- ============================================================ -->
+    <section id="cuvinte-cheie">
+        <h2>🔑 Cuvinte Cheie / Keywords</h2>
+
+        <h3>Principale (Primary)</h3>
+        <div class="tags">
+            <span class="tag" onclick="copyTag(this)">firme de mutări</span>
+            <span class="tag" onclick="copyTag(this)">oferte mutare</span>
+            <span class="tag" onclick="copyTag(this)">mutări România</span>
+            <span class="tag" onclick="copyTag(this)">transport mobilă</span>
+            <span class="tag" onclick="copyTag(this)">servicii mutare</span>
+            <span class="tag" onclick="copyTag(this)">comparare oferte mutare</span>
+            <span class="tag" onclick="copyTag(this)">firme mutări verificate</span>
+            <span class="tag" onclick="copyTag(this)">platformă mutări</span>
+        </div>
+
+        <h3>Secundare (Secondary)</h3>
+        <div class="tags">
+            <span class="tag" onclick="copyTag(this)">mutări apartamente</span>
+            <span class="tag" onclick="copyTag(this)">mutări case</span>
+            <span class="tag" onclick="copyTag(this)">mutări birouri</span>
+            <span class="tag" onclick="copyTag(this)">mutări studenți</span>
+            <span class="tag" onclick="copyTag(this)">mutări piane</span>
+            <span class="tag" onclick="copyTag(this)">împachetare profesională</span>
+            <span class="tag" onclick="copyTag(this)">montaj mobilă</span>
+            <span class="tag" onclick="copyTag(this)">depozitare mobilă</span>
+            <span class="tag" onclick="copyTag(this)">debarasare mobilă</span>
+            <span class="tag" onclick="copyTag(this)">materiale ambalare</span>
+        </div>
+
+        <h3>Long-Tail</h3>
+        <div class="tags">
+            <span class="tag" onclick="copyTag(this)">cât costă mutarea 2026</span>
+            <span class="tag" onclick="copyTag(this)">preț mutare București</span>
+            <span class="tag" onclick="copyTag(this)">firme mutări Cluj-Napoca</span>
+            <span class="tag" onclick="copyTag(this)">firme mutări Timișoara</span>
+            <span class="tag" onclick="copyTag(this)">mutare ieftină</span>
+            <span class="tag" onclick="copyTag(this)">calculator cost mutare</span>
+            <span class="tag" onclick="copyTag(this)">estimare preț mutare online</span>
+            <span class="tag" onclick="copyTag(this)">mutare fără lift preț</span>
+            <span class="tag" onclick="copyTag(this)">mutare la etaj fără lift</span>
+            <span class="tag" onclick="copyTag(this)">sfaturi mutare apartament</span>
+            <span class="tag" onclick="copyTag(this)">pregătire mutare</span>
+            <span class="tag" onclick="copyTag(this)">schimbare adresă documente</span>
+        </div>
+
+        <h3>Geo-Keywords (pentru directoare locale)</h3>
+        <div class="tags">
+            <span class="tag" onclick="copyTag(this)">mutări București</span>
+            <span class="tag" onclick="copyTag(this)">mutări Cluj-Napoca</span>
+            <span class="tag" onclick="copyTag(this)">mutări Timișoara</span>
+            <span class="tag" onclick="copyTag(this)">mutări Iași</span>
+            <span class="tag" onclick="copyTag(this)">mutări Brașov</span>
+            <span class="tag" onclick="copyTag(this)">mutări Constanța</span>
+            <span class="tag" onclick="copyTag(this)">mutări Craiova</span>
+            <span class="tag" onclick="copyTag(this)">mutări Galați</span>
+            <span class="tag" onclick="copyTag(this)">mutări Oradea</span>
+            <span class="tag" onclick="copyTag(this)">mutări Ploiești</span>
+            <span class="tag" onclick="copyTag(this)">mutări Sibiu</span>
+            <span class="tag" onclick="copyTag(this)">mutări Arad</span>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Câmp Keywords (copiere totală, separate prin virgulă)</h3>
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Keywords — Comma Separated</span><span class="char-count">~450 car.</span></div>
+            <div class="content">firme de mutări, oferte mutare, mutări România, transport mobilă, servicii mutare, comparare oferte mutare, firme mutări verificate, platformă mutări, mutări apartamente, mutări case, mutări birouri, mutări studenți, împachetare profesională, montaj mobilă, depozitare mobilă, debarasare mobilă, calculator cost mutare, preț mutare, mutări București, mutări Cluj-Napoca, mutări Timișoara, mutări Iași, mutări Brașov, mutări Constanța, mutare ieftină, mutare la etaj, mutare fără lift</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- CATEGORII -->
+    <!-- ============================================================ -->
+    <section id="categorii">
+        <h2>📂 Categorii Sugerate pentru Directoare</h2>
+        <div class="section-note">Selectează categoriile relevante din directorul respectiv. Mai jos sunt sugestii ordonate după relevanță, cu variante în română și engleză.</div>
+
+        <div class="grid-2">
+            <div class="category-item">
+                <span class="num">1</span>
+                <div>
+                    <div class="cat-text">Servicii de Transport / Mutări</div>
+                    <div class="cat-en">Transport & Moving Services</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">2</span>
+                <div>
+                    <div class="cat-text">Servicii Online / Platforme Online</div>
+                    <div class="cat-en">Online Services / Online Platforms</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">3</span>
+                <div>
+                    <div class="cat-text">Comparatoare de Prețuri</div>
+                    <div class="cat-en">Price Comparison</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">4</span>
+                <div>
+                    <div class="cat-text">Servicii Imobiliare</div>
+                    <div class="cat-en">Real Estate Services</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">5</span>
+                <div>
+                    <div class="cat-text">Servicii pentru Locuințe / Case</div>
+                    <div class="cat-en">Home Services</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">6</span>
+                <div>
+                    <div class="cat-text">Transport Mobilier</div>
+                    <div class="cat-en">Furniture Transport</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">7</span>
+                <div>
+                    <div class="cat-text">Servicii Business / Relocări Firme</div>
+                    <div class="cat-en">Business Services / Corporate Relocations</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">8</span>
+                <div>
+                    <div class="cat-text">Depozitare / Self Storage</div>
+                    <div class="cat-en">Storage Services</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">9</span>
+                <div>
+                    <div class="cat-text">Directoare Firme / Marketplace</div>
+                    <div class="cat-en">Business Directory / Marketplace</div>
+                </div>
+            </div>
+            <div class="category-item">
+                <span class="num">10</span>
+                <div>
+                    <div class="cat-text">Servicii Studenți</div>
+                    <div class="cat-en">Student Services</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SERVICII -->
+    <!-- ============================================================ -->
+    <section id="servicii">
+        <h2>🔧 Lista Servicii (pentru câmpul „Servicii Oferite")</h2>
+
+        <div class="grid-2">
+            <div>
+                <h3>Tipuri de Mutări</h3>
+                <ul class="bullet-list">
+                    <li>Mutări apartamente (garsoniere → 4+ camere)</li>
+                    <li>Mutări case și vile</li>
+                    <li>Mutări birouri și sedii de firmă</li>
+                    <li>Mutări studenți (cămine, garsoniere)</li>
+                    <li>Mutări specializate (piane, seifuri, obiecte artă)</li>
+                    <li>Mutări locale și interurbane</li>
+                    <li>Mutări etaj fără lift</li>
+                </ul>
+            </div>
+            <div>
+                <h3>Servicii Suplimentare</h3>
+                <ul class="bullet-list">
+                    <li>Împachetare profesională cu materiale premium</li>
+                    <li>Materiale de ambalare (cutii, folie bulină, stretch)</li>
+                    <li>Montaj și demontaj mobilă (IKEA + custom)</li>
+                    <li>Depozitare securizată, climatizată, monitorizată 24/7</li>
+                    <li>Debarasare și evacuare mobilă veche</li>
+                    <li>Calculator online estimare cost mutare</li>
+                    <li>Comparare gratuită oferte de la firme verificate</li>
+                </ul>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Servicii — Text pentru Copiere Directă</h3>
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Format Bullet</span><span class="char-count">copiat ca text</span></div>
+            <div class="content">• Comparare gratuită oferte mutări
+• Mutări apartamente, case, vile
+• Mutări birouri și relocări corporate
+• Mutări studenți (prețuri reduse)
+• Transporturi specializate (piane, seifuri)
+• Împachetare profesională cu materiale premium
+• Montaj și demontaj mobilă
+• Depozitare securizată și climatizată
+• Debarasare și reciclare mobilă veche
+• Calculator online cost mutare
+• Acoperire națională: 250+ orașe, 42 județe</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- ACOPERIRE GEOGRAFICA -->
+    <!-- ============================================================ -->
+    <section id="acoperire">
+        <h2>🗺️ Acoperire Geografică</h2>
+        
+        <div class="info-card" style="margin-bottom: 16px;">
+            <div class="card-label">Acoperire</div>
+            <div class="card-value">Națională — 250+ orașe din toate cele 42 de județe ale României + București</div>
+        </div>
+
+        <h3>Orașe Principale (pentru câmpul „Zonă Deservită")</h3>
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Top 20 Orașe</span><span class="char-count">listă</span></div>
+            <div class="content">București, Cluj-Napoca, Timișoara, Iași, Brașov, Constanța, Craiova, Galați, Oradea, Ploiești, Sibiu, Bacău, Suceava, Arad, Pitești, Târgu Mureș, Baia Mare, Satu Mare, Bistrița, Botoșani</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+
+        <h3>Toate Județele</h3>
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>42 Județe (Separate prin virgulă)</span><span class="char-count">listă completă</span></div>
+            <div class="content">Alba, Arad, Argeș, Bacău, Bihor, Bistrița-Năsăud, Botoșani, Brașov, Brăila, București, Buzău, Caraș-Severin, Cluj, Constanța, Covasna, Dâmbovița, Dolj, Galați, Giurgiu, Gorj, Harghita, Hunedoara, Ialomița, Iași, Ilfov, Maramureș, Mehedinți, Mureș, Neamț, Olt, Prahova, Satu Mare, Sălaj, Sibiu, Suceava, Teleorman, Timiș, Tulcea, Vaslui, Vâlcea, Vrancea</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- SOCIAL PROOF -->
+    <!-- ============================================================ -->
+    <section id="social-proof">
+        <h2>📊 Statistici & Social Proof</h2>
+        <div class="section-note">Folosește aceste cifre în descrieri sau în câmpuri speciale ale directoarelor (ex: „De ce să ne alegeți").</div>
+        
+        <div class="grid-3">
+            <div class="info-card">
+                <div class="card-label">Rating</div>
+                <div class="card-value">⭐ 4.8 / 5</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Recenzii</div>
+                <div class="card-value">127 recenzii</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Firme Partenere</div>
+                <div class="card-value">50+ firme verificate</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Orașe Acoperite</div>
+                <div class="card-value">250+ orașe</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Județe</div>
+                <div class="card-value">42 județe</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Economie Medie</div>
+                <div class="card-value">40% economie</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Nr. Oferte Primite</div>
+                <div class="card-value">3-5 oferte în 24h</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Timp Completare</div>
+                <div class="card-value">2 minute</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Cost pentru Clienți</div>
+                <div class="card-value">100% GRATUIT</div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Text „De Ce Să Ne Alegeți" (pentru directoare)</h3>
+        <div class="text-block" onclick="copyBlock(this)">
+            <div class="label"><span>Avantaje — Format Text</span><span class="char-count">~400 car.</span></div>
+            <div class="content">De ce OferteMutare.ro?
+
+✓ 100% gratuit pentru clienți — fără costuri ascunse, fără obligații
+✓ 3-5 oferte personalizate în maxim 24 de ore
+✓ Doar firme de mutări verificate riguros (documente, asigurare, recenzii)
+✓ Economie medie de 40% față de prima ofertă primită
+✓ Acoperire națională: 250+ orașe din 42 de județe
+✓ Rating mediu 4.8/5 din 127 recenzii reale
+✓ Formular simplu — doar 2 minute pentru completare
+✓ Suport dedicat L-V: 9-18, S: 10-14</div>
+            <span class="copy-hint">Click pentru copiere</span>
+        </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- IMAGINI & LOGO -->
+    <!-- ============================================================ -->
+    <section id="imagini">
+        <h2>🖼️ Imagini & Logo (URL-uri directe)</h2>
+        <div class="section-note">Copiază URL-urile direct pentru câmpurile de logo/imagine din directoare. Toate imaginile sunt în format WebP optimizat.</div>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Imagine</th>
+                    <th>URL</th>
+                    <th>Utilizare</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Logo Principal</strong></td>
+                    <td><code style="font-size:13px;word-break:break-all;">https://ofertemutare.ro/logo.webp</code></td>
+                    <td><span class="badge badge-green">Logo Director</span></td>
+                </tr>
+                <tr>
+                    <td><strong>OG Image (Share)</strong></td>
+                    <td><code style="font-size:13px;word-break:break-all;">https://ofertemutare.ro/pics/index.webp</code></td>
+                    <td><span class="badge badge-blue">Imagine Principală</span></td>
+                </tr>
+                <tr>
+                    <td><strong>Favicon</strong></td>
+                    <td><code style="font-size:13px;word-break:break-all;">https://ofertemutare.ro/favicon.ico</code></td>
+                    <td><span class="badge badge-amber">Favicon</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- DETALII TEHNICE -->
+    <!-- ============================================================ -->
+    <section id="tehnic">
+        <h2>⚙️ Detalii Tehnice</h2>
+
+        <div class="grid-2">
+            <div class="info-card">
+                <div class="card-label">URL Canonical</div>
+                <div class="card-value"><a href="https://ofertemutare.ro">https://ofertemutare.ro</a></div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Limbă Site</div>
+                <div class="card-value">ro-RO (Română)</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Tip Platformă</div>
+                <div class="card-value">Marketplace / Comparator Prețuri</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">HTTPS</div>
+                <div class="card-value">✅ Da (SSL activ)</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Mobile Friendly</div>
+                <div class="card-value">✅ Da (Responsive)</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">GDPR Compliant</div>
+                <div class="card-value">✅ Da</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Schema.org</div>
+                <div class="card-value">Organization, LocalBusiness, Service, FAQPage, WebSite, Article</div>
+            </div>
+            <div class="info-card">
+                <div class="card-label">Sitemap</div>
+                <div class="card-value"><a href="https://ofertemutare.ro/sitemap.xml">sitemap.xml</a></div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Pagini Cheie (pentru câmpuri „Link-uri" în directoare)</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Pagină</th>
+                    <th>URL</th>
+                    <th>Descriere Scurtă</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Pagina Principală</td>
+                    <td><code>https://ofertemutare.ro/</code></td>
+                    <td>Formular cerere oferte + prezentare platformă</td>
+                </tr>
+                <tr>
+                    <td>Despre Noi</td>
+                    <td><code>https://ofertemutare.ro/about</code></td>
+                    <td>Povestea, misiunea și valorile OferteMutare.ro</td>
+                </tr>
+                <tr>
+                    <td>Contact</td>
+                    <td><code>https://ofertemutare.ro/contact</code></td>
+                    <td>Formular contact, email, program suport</td>
+                </tr>
+                <tr>
+                    <td>Servicii</td>
+                    <td><code>https://ofertemutare.ro/servicii</code></td>
+                    <td>Toate serviciile: împachetare, montaj, depozitare</td>
+                </tr>
+                <tr>
+                    <td>Tipuri Mutări</td>
+                    <td><code>https://ofertemutare.ro/mutari</code></td>
+                    <td>Apartamente, case, birouri, studenți, piane</td>
+                </tr>
+                <tr>
+                    <td>Calculator Cost</td>
+                    <td><code>https://ofertemutare.ro/calculator</code></td>
+                    <td>Estimare online cost mutare</td>
+                </tr>
+                <tr>
+                    <td>Devino Partener</td>
+                    <td><code>https://ofertemutare.ro/partener</code></td>
+                    <td>Înscriere firme de mutări pe platformă</td>
+                </tr>
+                <tr>
+                    <td>Blog / Articole</td>
+                    <td><code>https://ofertemutare.ro/blog</code></td>
+                    <td>Ghiduri, sfaturi și costuri mutări</td>
+                </tr>
+                <tr>
+                    <td>Recenzii</td>
+                    <td><code>https://ofertemutare.ro/reviews</code></td>
+                    <td>Recenzii clienți verificați</td>
+                </tr>
+                <tr>
+                    <td>FAQ</td>
+                    <td><code>https://ofertemutare.ro/faq</code></td>
+                    <td>Întrebări frecvente despre platformă</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- DIRECTOARE ROMANESTI POPULARE -->
+    <!-- ============================================================ -->
+    <section id="directoare">
+        <h2>📌 Directoare Web Românești Populare</h2>
+        <div class="section-note">Lista principalelor directoare web româneșți unde poți înregistra site-ul. Bifează pe măsură ce completezi.</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:30px;">✓</th>
+                    <th>Director</th>
+                    <th>URL</th>
+                    <th>Tip</th>
+                    <th>Note</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><input type="checkbox"></td><td><strong>123.ro</strong></td><td>https://www.123.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director web generalist, popular</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Cylex.ro</strong></td><td>https://www.cylex.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director firme cu pagină de prezentare</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Firme.info</strong></td><td>https://www.firme.info</td><td><span class="badge badge-green">Gratuit</span></td><td>Director firme, integrare CUI</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>HotFrog.ro</strong></td><td>https://www.hotfrog.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director business local</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>iAgora.ro</strong></td><td>https://www.iagora.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Catalog online cu categorii</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>YellowPages.ro</strong></td><td>https://www.yellowpages.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Pagini Aurii online</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Einformatii.ro</strong></td><td>https://www.einformatii.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director cu date fiscale firme</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Catalog-Firme.ro</strong></td><td>https://www.catalog-firme.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Catalog firme pe categorii</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>RomaniaBusiness.com</strong></td><td>https://www.romaniabusiness.com</td><td><span class="badge badge-blue">Freemium</span></td><td>Director business cu focus B2B</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Bizoo.ro</strong></td><td>https://www.bizoo.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Produse și servicii business</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Yelp.ro</strong></td><td>https://www.yelp.com/romania</td><td><span class="badge badge-green">Gratuit</span></td><td>Recenzii și listări business</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Google Business Profile</strong></td><td>https://business.google.com</td><td><span class="badge badge-green">Gratuit</span></td><td>Esențial! Google Maps + Search</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Bing Places</strong></td><td>https://www.bingplaces.com</td><td><span class="badge badge-green">Gratuit</span></td><td>Bing Maps business listing</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Apple Maps Connect</strong></td><td>https://mapsconnect.apple.com</td><td><span class="badge badge-green">Gratuit</span></td><td>Apple Maps business listing</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>DirWeb.ro</strong></td><td>https://www.dirweb.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director web românesc cu PageRank</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Cautam.ro</strong></td><td>https://www.cautam.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director și motor căutare RO</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>WebDirector.ro</strong></td><td>https://www.webdirector.ro</td><td><span class="badge badge-blue">Freemium</span></td><td>Director web cu listări premium</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>LinksRo.ro</strong></td><td>https://www.linksro.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director link-uri și site-uri</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>Director.co.ro</strong></td><td>https://director.co.ro</td><td><span class="badge badge-green">Gratuit</span></td><td>Director web generalist</td></tr>
+                <tr><td><input type="checkbox"></td><td><strong>TopFirme.com</strong></td><td>https://www.topfirme.com</td><td><span class="badge badge-green">Gratuit</span></td><td>Top firme România pe domenii</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast">✓ Copiat în clipboard!</div>
+
+<script>
+    function copyBlock(el) {
+        const text = el.querySelector('.content').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            el.classList.add('copied');
+            showToast();
+            setTimeout(() => el.classList.remove('copied'), 1500);
+        });
+    }
+
+    function copyTag(el) {
+        const text = el.innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            el.style.background = '#10b981';
+            el.style.color = 'white';
+            el.style.borderColor = '#10b981';
+            showToast();
+            setTimeout(() => {
+                el.style.background = '';
+                el.style.color = '';
+                el.style.borderColor = '';
+            }, 1000);
+        });
+    }
+
+    function showToast() {
+        const toast = document.getElementById('toast');
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1500);
+    }
+
+    // Save checkbox state to localStorage
+    document.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
+        const key = 'dir-check-' + i;
+        cb.checked = localStorage.getItem(key) === 'true';
+        cb.addEventListener('change', () => localStorage.setItem(key, cb.checked));
+    });
+</script>
+
+</body>
+</html>

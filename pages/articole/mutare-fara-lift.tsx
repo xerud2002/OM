@@ -265,7 +265,7 @@ export default function ArticleMutareFaraLift() {
                                     <div className="flex bg-slate-50 h-16 w-16 items-center justify-center rounded-full shrink-0">
                                         <item.icon className="h-8 w-8 text-slate-600" />
                                     </div>
-                                    <div className="flex-grow">
+                                    <div className="grow">
                                         <h3 className="text-xl font-bold text-slate-900 mb-2">{item.title}</h3>
                                         <p className="text-gray-600 mb-3">{item.desc}</p>
                                         <div className="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">

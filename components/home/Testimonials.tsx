@@ -52,7 +52,7 @@ export default function Testimonials() {
     <section className="relative overflow-hidden bg-linear-to-b from-white via-emerald-50/30 to-white py-12 sm:py-20 lg:py-32">
       {/* Background Elements */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="absolute left-1/4 top-0 h-100 w-100 -translate-y-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-150 sm:w-[600px] sm:blur-[100px]" />
+        <div className="absolute left-1/4 top-0 h-100 w-100 -translate-y-1/2 rounded-full bg-emerald-100/30 blur-[80px] sm:h-150 sm:w-150 sm:blur-[100px]" />
         <div className="absolute bottom-0 right-1/4 hidden h-125 w-125 translate-y-1/2 rounded-full bg-sky-100/30 blur-[100px] sm:block" />
       </div>
 
