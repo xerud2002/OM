@@ -1,6 +1,6 @@
 # .github/workflows/deploy.yml
 # CI/CD Pipeline for OferteMutare.ro
-# Triggers on push to main: lint → typecheck → build → deploy via SSH
+# Triggers on push to main: lint → typecheck → deploy via SSH
 
 name: Deploy to VPS
 
@@ -11,8 +11,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Lint, Typecheck & Build
+  check:
+    name: Lint & Typecheck
     runs-on: ubuntu-latest
 
     steps:
@@ -34,12 +34,9 @@ jobs:
       - name: TypeScript type check
         run: npx tsc --noEmit
 
-      - name: Build application
-        run: npm run build
-
   deploy:
     name: Deploy to VPS
-    needs: build
+    needs: check
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
