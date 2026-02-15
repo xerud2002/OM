@@ -121,8 +121,8 @@ export default function MaterialeImpachetarePage({ currentYear, reviewStats }: M
                 zgâriat.
               </p>
               <p>
-                Oferim <strong>materiale de calitate profesională</strong> - aceleași pe
-                care le folosesc firmele de mutări. De la cutii cu pereți dubli și tripli,
+                Firmele partenere pun la dispoziție <strong>materiale de calitate profesională</strong> - aceleași pe
+                care le folosesc la mutările clienților. De la cutii cu pereți dubli și tripli,
                 până la bubble wrap gros și folie industrială, ai tot ce îți trebuie pentru
                 o mutare fără griji.
               </p>

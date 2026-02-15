@@ -80,7 +80,7 @@ export default function FAQPage() {
             </>
           ),
           aText:
-            "OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești 3-5 oferte personalizate în 24 ore. Acoperim toate orașele majore (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova, Ploiești, Oradea) și peste 30 de reședințe de județ.",
+            "OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești 3-5 oferte personalizate în 24 ore. Firmele partenere acoperă toate orașele majore (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova, Ploiești, Oradea) și peste 30 de reședințe de județ.",
         },
         {
           q: "Serviciul este cu adevărat gratuit?",
@@ -153,7 +153,7 @@ export default function FAQPage() {
           q: "În ce orașe operați?",
           a: (
             <>
-              Oferim servicii în toată România! Vezi{" "}
+              Firmele partenere acoperă toată România! Vezi{" "}
               <Link
                 href="/mutari"
                 className="text-emerald-600 underline hover:text-emerald-700"
@@ -168,19 +168,19 @@ export default function FAQPage() {
             </>
           ),
           aText:
-            "Oferim servicii în toată România! Orașe majore acoperite: București (toate sectoarele), Cluj-Napoca (Mănăștur, Zorilor, Gheorgheni), Timișoara (Circumvalațiunii, Fabric), Iași (Tatarași, Copou), Constanța (Mamaia, Tomis), Brașov (Tractorul, Noua), Galați, Craiova, Ploiești, Oradea, Brăila, Arad, Pitești, Sibiu, Bacău, Târgu-Mureș, Baia Mare, Buzău, Botoșani, Satu Mare, Suceava, Piatra-Neamț, Drobeta-Turnu Severin, Târgoviște, Focșani, Tulcea, și multe alte orașe.",
+            "Firmele partenere de pe OferteMutare.ro acoperă toată România! Orașe majore acoperite: București (toate sectoarele), Cluj-Napoca (Mănăștur, Zorilor, Gheorgheni), Timișoara (Circumvalațiunii, Fabric), Iași (Tatarăși, Copou), Constanța (Mamaia, Tomis), Brașov (Tractorul, Noua), Galați, Craiova, Ploiești, Oradea, Brăila, Arad, Pitești, Sibiu, Bacău, Târgu-Mureș, Baia Mare, Buzău, Botoșani, Satu Mare, Suceava, Piatra-Neamț, Drobeta-Turnu Severin, Târgoviște, Focșani, Tulcea, și multe alte orașe.",
         },
         {
           q: "Aveți firme verificate în orașele mici sau comune?",
-          a: "Da! Lucrăm cu firme care acoperă și localități mici. Fie că te muți din/în comune din jur (Voluntari, Pipera, Popești-Leordeni, Otopeni, Bragadiru, Pantelimon, Magurele pentru București sau Florești, Apahida, Gilău pentru Cluj), firmele noastre au experiență în mutări inter-județe și din/în localități rurale.",
+          a: "Da! Pe platformă găsești firme care acoperă și localități mici. Fie că te muți din/în comune din jur (Voluntari, Pipera, Popești-Leordeni, Otopeni, Bragadiru, Pantelimon, Magurele pentru București sau Florești, Apahida, Gilău pentru Cluj), firmele partenere au experiență în mutări inter-județe și din/în localități rurale.",
         },
         {
           q: "Organizați mutări între orașe diferite?",
-          a: "Absolut! Mutările inter-urbane sunt specializarea noastră: București-Cluj, București-Iași, Timișoara-București, Cluj-Brașov, Constanța-București, și orice altă combinație între orașe din România. Ofertele includ kilometraj, timp de transport și costuri de drum.",
+          a: "Absolut! Mutările inter-urbane sunt un punct forte al firmelor partenere: București-Cluj, București-Iași, Timișoara-București, Cluj-Brașov, Constanța-București, și orice altă combinație între orașe din România. Ofertele includ kilometraj, timp de transport și costuri de drum.",
         },
         {
           q: "Există zone unde nu puteți ajunge?",
-          a: "Acoperim 99% din România. Pentru zone foarte izolate (munți, cătune accesibile doar cu drumuri forestiere), te rugăm să menționezi detaliile în formular și vom găsi o firmă specializată cu echipament adecvat.",
+          a: "Firmele partenere acoperă 99% din România. Pentru zone foarte izolate (munți, cătune accesibile doar cu drumuri forestiere), te rugăm să menționezi detaliile în formular și vom găsi o firmă specializată cu echipament adecvat.",
         },
       ],
     },
@@ -308,7 +308,7 @@ export default function FAQPage() {
           q: "Puteți muta obiecte foarte grele (piane, trezoruri, seifuri)?",
           a: (
             <>
-              Da, avem firme specializate în{" "}
+              Da, pe platformă găsești firme specializate în{" "}
               <Link
                 href="/mutari/specializate/piane"
                 className="text-emerald-600 underline hover:text-emerald-700"
@@ -321,7 +321,7 @@ export default function FAQPage() {
             </>
           ),
           aText:
-            "Da, avem firme specializate în mutări de obiecte grele. Un pian vertical: +300-600 lei, pian cu coadă: +800-1.500 lei. Trebuie specificat în cerere pentru echipament special.",
+            "Da, pe platformă găsești firme specializate în mutări de obiecte grele. Un pian vertical: +300-600 lei, pian cu coadă: +800-1.500 lei. Trebuie specificat în cerere pentru echipament special.",
         },
         {
           q: "Oferiți depozitare temporară?",
@@ -598,7 +598,7 @@ export default function FAQPage() {
             <div className="mb-3 flex items-center justify-center gap-2">
               <MapPin className="h-5 w-5 text-emerald-600" />
               <h3 className="text-lg font-bold text-emerald-800">
-                Acoperim Toată România
+                Firmele partenere acoperă Toată România
               </h3>
             </div>
             <p className="mb-3 text-center text-sm text-gray-700">
@@ -669,7 +669,7 @@ export default function FAQPage() {
               Servicii Mutări în Toate Orașele României
             </h3>
             <p className="mb-6 text-center text-sm text-gray-600 sm:text-base">
-              Platformă națională de comparare oferte mutări. Acoperim toate
+              Platformă națională de comparare oferte mutări. Firmele partenere acoperă toate
               orașele mari și medii:
             </p>
             <div className="mb-6 grid grid-cols-2 gap-2 sm:grid-cols-3 md:grid-cols-4">

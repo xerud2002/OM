@@ -272,7 +272,7 @@ export default function MutariCasePage({ currentYear, reviewStats }: MutariCaseP
                   <div>
                     <h3 className="font-bold text-gray-900">Echipe mai mari, experiență dovedită</h3>
                     <p className="text-gray-600">
-                      Mutările de case necesită 4-6 persoane. Firmele noastre au echipe pregătite
+                      Mutările de case necesită 4-6 persoane. Firmele partenere au echipe pregătite
                       pentru a gestiona volume mari eficient.
                     </p>
                   </div>

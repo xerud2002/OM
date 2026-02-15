@@ -247,7 +247,7 @@ export default function GhidSchimbareAdresa() {
                     <section className="mt-16 rounded-2xl bg-slate-900 px-6 py-12 text-center text-white">
                         <h2 id="te-ai-ncurcat-n-hrtii" className="mb-4 text-3xl font-bold">Te-ai încurcat în hârtii?</h2>
                         <p className="mb-8 text-slate-300">
-                            Măcar mutarea fizică să fie simplă. Lasă greul în seama noastră.
+                            Măcar mutarea fizică să fie simplă. Compară oferte gratuite de la firme verificate.
                         </p>
                         <Link
                             href="/#request-form"

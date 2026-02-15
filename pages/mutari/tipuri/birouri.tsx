@@ -147,7 +147,7 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
               </p>
               <p>
                 Pe <strong>OferteMutare.ro</strong>, conectăm companiile cu firme de mutări
-                specializate în relocări corporate. Oferim{" "}
+                specializate în relocări corporate. Firmele partenere asigură{" "}
                 <strong>mutări în weekend sau noaptea</strong>
                 pentru zero impact asupra programului de lucru, plus documentație completă și
                 factură fiscală.
@@ -226,7 +226,7 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
               </div>
             </div>
             <p className="mt-4 text-center text-sm text-gray-600">
-              💼 Toate prețurile includ TVA. Oferim factură fiscală și contract B2B.
+              💼 Toate prețurile includ TVA. Firmele partenere oferă factură fiscală și contract B2B.
             </p>
           </section>
 

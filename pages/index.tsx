@@ -238,7 +238,7 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       "@type": "Service",
                       name: "Mutări Apartamente",
                       description:
-                        "Servicii complete de mutare pentru apartamente cu 1-4 camere. Include transport, încărcare, descărcare și protecție mobilier.",
+                        "Servicii de mutare pentru apartamente cu 1-4 camere oferite de firmele partenere. Include transport, încărcare, descărcare și protecție mobilier.",
                       provider: {
                         "@type": "Organization",
                         name: "OferteMutare.ro",
@@ -256,7 +256,7 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       "@type": "Service",
                       name: "Mutări Case și Vile",
                       description:
-                        "Transport profesional pentru case și vile. Echipă extinsă, utilaje specializate pentru volume mari.",
+                        "Transport profesional pentru case și vile, oferit de firmele partenere verificate. Echipe extinse, utilaje specializate pentru volume mari.",
                       provider: {
                         "@type": "Organization",
                         name: "OferteMutare.ro",
@@ -274,7 +274,7 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       "@type": "Service",
                       name: "Mutări Birouri",
                       description:
-                        "Relocare companii și birouri cu minimizarea timpului de downtime. Servicii dedicate business.",
+                        "Firme partenere specializate în relocare companii și birouri cu minimizarea timpului de downtime.",
                       provider: {
                         "@type": "Organization",
                         name: "OferteMutare.ro",
@@ -287,7 +287,7 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       "@type": "Service",
                       name: "Mutări Studenți",
                       description:
-                        "Soluții accesibile pentru mutări mici, cămine și garsoniere. Tarife speciale pentru studenți.",
+                        "Soluții accesibile pentru mutări mici, cămine și garsoniere, oferite de firmele partenere. Tarife speciale pentru studenți.",
                       provider: {
                         "@type": "Organization",
                         name: "OferteMutare.ro",
