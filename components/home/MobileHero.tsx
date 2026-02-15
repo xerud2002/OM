@@ -83,7 +83,7 @@ export default function MobileHero() {
             <h2 className="text-base font-bold text-gray-800">
               Completează în 2 minute
             </h2>
-            <p className="text-xs text-gray-500">Primești 3-5 oferte în 24h</p>
+            <p className="text-xs text-gray-500">Primești până la 5 oferte în 24h</p>
           </div>
           <HomeRequestForm />
         </div>
