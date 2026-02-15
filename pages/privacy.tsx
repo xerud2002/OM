@@ -195,11 +195,23 @@ export default function PrivacyPage() {
                     <li>Pagini vizitate, timp petrecut, link-uri accesate</li>
                     <li>Referrer URL (de unde ai ajuns pe site)</li>
                     <li>Dispozitiv folosit (desktop, mobile, tabletă)</li>
+                    <li>
+                      <strong>Amprentă digitală a dispozitivului:</strong> La
+                      autentificare, colectăm un identificator unic (hash) al
+                      dispozitivului tău, generat din: rezoluția ecranului,
+                      fusul orar, limba browserului, numărul de procesoare și
+                      memoria disponibilă. Acest identificator este folosit
+                      exclusiv pentru prevenirea fraudei și protejarea contului
+                      tău (temei legal: interes legitim, conform Art. 6(1)(f)
+                      GDPR). Hash-ul nu permite reconstituirea datelor
+                      individuale din care a fost generat.
+                    </li>
                   </ul>
                   <p className="mt-2 text-sm text-gray-500">
-                    <strong>Notă:</strong> Aceste date sunt anonimizate și
+                    <strong>Notă:</strong> Datele de navigare sunt anonimizate și
                     folosite doar pentru îmbunătățirea experienței
-                    utilizatorului.
+                    utilizatorului. Amprenta dispozitivului este păstrată doar pe
+                    durata existenței contului tău.
                   </p>
                 </div>
               </div>

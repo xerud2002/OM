@@ -5,18 +5,18 @@
 const isDevelopment = process.env.NODE_ENV === "development";
 
 export const logger = {
-  log: (...args: any[]) => {
+  log: (...args: unknown[]) => {
     if (isDevelopment) {
       console.log(...args);
     }
   },
 
-  warn: (...args: any[]) => {
+  warn: (...args: unknown[]) => {
     // Warnings always logged — important for deprecations and issues
     console.warn(...args);
   },
 
-  error: (...args: any[]) => {
+  error: (...args: unknown[]) => {
     // Errors always logged — PM2 captures stderr for production monitoring
     console.error(...args);
     // In production, you could also send to error tracking service:
@@ -25,7 +25,7 @@ export const logger = {
     // }
   },
 
-  info: (...args: any[]) => {
+  info: (...args: unknown[]) => {
     if (isDevelopment) {
       console.info(...args);
     }
@@ -33,7 +33,7 @@ export const logger = {
 };
 
 // For critical errors that should always be logged
-export const logCritical = (...args: any[]) => {
+export const logCritical = (...args: unknown[]) => {
   console.error(...args);
   // Always send critical errors to monitoring service
   // Sentry.captureException(...args);

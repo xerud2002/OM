@@ -18,7 +18,7 @@ export async function generateDeviceFingerprint(): Promise<string> {
   components.push(navigator.language || "");
   components.push(navigator.platform || "");
   components.push(String(navigator.hardwareConcurrency || 0));
-  components.push(String((navigator as any).deviceMemory || 0));
+  components.push(String((navigator as unknown as { deviceMemory?: number }).deviceMemory || 0));
 
   // 3. Timezone
   try {

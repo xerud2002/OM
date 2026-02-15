@@ -57,7 +57,15 @@ const TIER2_COUNTIES = new Set([
  * @param request - The moving request to price
  * @returns Number of credits required
  */
-export function calculateRequestCost(request: any): number {
+interface RequestForCost {
+  adminCreditCost?: number;
+  fromCity?: string;
+  toCity?: string;
+  fromCounty?: string;
+  toCounty?: string;
+}
+
+export function calculateRequestCost(request: RequestForCost | null | undefined): number {
   if (!request) return DEFAULT_COST;
 
   // If admin has manually set a credit cost, always use that
@@ -92,7 +100,7 @@ export function calculateRequestCost(request: any): number {
 /**
  * Get a human-readable pricing tier for display
  */
-export function getPricingTier(request: any): {
+export function getPricingTier(request: RequestForCost | null | undefined): {
   tier: 1 | 2 | 3;
   cost: number;
   label: string;

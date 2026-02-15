@@ -24,6 +24,8 @@ export default function LoadingSpinner({
 }: LoadingSpinnerProps) {
   return (
     <div
+      role="status"
+      aria-label="Se încarcă"
       className={`animate-spin rounded-full ${sizeClasses[size]} ${colorClasses[color]} ${className}`}
     />
   );

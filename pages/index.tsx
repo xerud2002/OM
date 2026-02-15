@@ -364,18 +364,7 @@ export default function HomePage() {
           }}
         />
 
-        {/* AggregateRating Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              "@id": "https://ofertemutare.ro/#business",
-              name: "OferteMutare.ro",
-            }),
-          }}
-        />
+
       </Head>
 
       {/* ==========================

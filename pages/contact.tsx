@@ -459,10 +459,11 @@ export default function ContactPage() {
                             {/* Name & Email */}
                             <div className="grid gap-4 sm:grid-cols-2">
                               <div>
-                                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                                <label htmlFor="contact-name" className="mb-2 block text-sm font-semibold text-slate-700">
                                   Nume complet *
                                 </label>
                                 <input
+                                  id="contact-name"
                                   type="text"
                                   name="name"
                                   value={formData.name}
@@ -473,10 +474,11 @@ export default function ContactPage() {
                                 />
                               </div>
                               <div>
-                                <label className="mb-2 block text-sm font-semibold text-slate-700">
+                                <label htmlFor="contact-email" className="mb-2 block text-sm font-semibold text-slate-700">
                                   Email *
                                 </label>
                                 <input
+                                  id="contact-email"
                                   type="email"
                                   name="email"
                                   value={formData.email}
@@ -490,10 +492,11 @@ export default function ContactPage() {
 
                             {/* Subject */}
                             <div>
-                              <label className="mb-2 block text-sm font-semibold text-slate-700">
+                              <label htmlFor="contact-subject" className="mb-2 block text-sm font-semibold text-slate-700">
                                 Subiect *
                               </label>
                               <input
+                                id="contact-subject"
                                 type="text"
                                 name="subject"
                                 value={formData.subject}
@@ -506,10 +509,11 @@ export default function ContactPage() {
 
                             {/* Message */}
                             <div>
-                              <label className="mb-2 block text-sm font-semibold text-slate-700">
+                              <label htmlFor="contact-message" className="mb-2 block text-sm font-semibold text-slate-700">
                                 Mesaj *
                               </label>
                               <textarea
+                                id="contact-message"
                                 name="message"
                                 value={formData.message}
                                 onChange={handleChange}
@@ -522,7 +526,7 @@ export default function ContactPage() {
 
                             {/* Error */}
                             {error && (
-                              <div className="flex items-center gap-2 rounded-xl bg-red-50 p-4 text-sm text-red-600">
+                              <div role="alert" aria-live="polite" className="flex items-center gap-2 rounded-xl bg-red-50 p-4 text-sm text-red-600">
                                 <AlertCircle className="h-5 w-5" />
                                 {error}
                               </div>

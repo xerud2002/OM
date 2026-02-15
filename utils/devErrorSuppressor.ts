@@ -6,7 +6,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
   const originalConsoleError = console.error;
   const originalConsoleWarn = console.warn;
 
-  console.error = (...args: any[]) => {
+  console.error = (...args: unknown[]) => {
     const errorMessage = args.join(" ");
 
     // Suppress common development errors that don't affect functionality
@@ -27,7 +27,7 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
     }
   };
 
-  console.warn = (...args: any[]) => {
+  console.warn = (...args: unknown[]) => {
     const warnMessage = args.join(" ");
 
     // Suppress common development warnings

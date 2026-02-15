@@ -1,8 +1,9 @@
 // utils/authErrors.ts
 // Shared Firebase authentication error translations (Romanian)
 
-export const translateFirebaseError = (error: any): string => {
-  const code = error?.code || "";
+export const translateFirebaseError = (error: unknown): string => {
+  const err = error as { code?: string; message?: string } | undefined;
+  const code = err?.code || "";
   const translations: Record<string, string> = {
     // Auth errors
     "auth/invalid-email": "Adresa de email nu este validă.",
@@ -20,9 +21,9 @@ export const translateFirebaseError = (error: any): string => {
     "auth/operation-not-allowed": "Această metodă de autentificare nu este activată.",
     "auth/requires-recent-login": "Te rugăm să te reautentifici pentru această operație.",
     // Custom app errors
-    NEEDS_PASSWORD: error?.message || "Te rugăm să te autentifici cu email și parolă.",
-    USE_GOOGLE: error?.message || "Te rugăm să te autentifici cu Google.",
+    NEEDS_PASSWORD: err?.message || "Te rugăm să te autentifici cu email și parolă.",
+    USE_GOOGLE: err?.message || "Te rugăm să te autentifici cu Google.",
     ROLE_CONFLICT: "Acest cont este deja înregistrat cu un alt tip de utilizator.",
   };
-  return translations[code] || error?.message || "A apărut o eroare neașteptată.";
+  return translations[code] || err?.message || "A apărut o eroare neașteptată.";
 };

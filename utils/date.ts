@@ -1,7 +1,7 @@
 // Global date formatting helpers for RO locale
 // Default format: dd-MM-yyyy (zz-ll-an)
 export function formatDateRO(
-  input: any,
+  input: Date | string | number | { seconds: number; nanoseconds?: number; toDate?: () => Date } | null | undefined,
   options?: {
     separator?: string;
     fallback?: string;
@@ -18,9 +18,10 @@ export function formatDateRO(
     if (
       typeof input === "object" &&
       input &&
-      typeof input.toDate === "function"
+      "toDate" in input &&
+      typeof (input as { toDate: () => Date }).toDate === "function"
     ) {
-      return formatDateRO(input.toDate(), {
+      return formatDateRO((input as { toDate: () => Date }).toDate(), {
         separator: sep,
         fallback,
         month: monthStyle,
@@ -88,7 +89,7 @@ export function formatDateRO(
 // Display a human-friendly move date or interval based on stored fields
 // Supports modes: exact, range, flexible, none; falls back to legacy moveDate
 export function formatMoveDateDisplay(
-  r: any,
+  r: Record<string, unknown> | null | undefined,
   opts?: {
     separator?: string;
     month?: "2-digit" | "short";
@@ -109,9 +110,9 @@ export function formatMoveDateDisplay(
     return d;
   };
 
-  const mode: string | undefined = r.moveDateMode;
-  const start: any = r.moveDateStart ?? r.moveDate; // backward compat
-  const end: any = r.moveDateEnd;
+  const mode: string | undefined = r.moveDateMode as string | undefined;
+  const start = (r.moveDateStart ?? r.moveDate) as string | Date | undefined; // backward compat
+  const end = r.moveDateEnd as string | Date | undefined;
   const flex: number | undefined =
     typeof r.moveDateFlexDays === "number" ? r.moveDateFlexDays : undefined;
 
@@ -147,8 +148,8 @@ export function formatMoveDateDisplay(
 
   // Exact or fallback single date
   if ((mode === "exact" && start) || r.moveDate) {
-    const single = start || r.moveDate;
-    return formatDateRO(single, { separator: sep, month });
+    const single = start || (r.moveDate as string | Date | undefined);
+    return formatDateRO(single as Date | string | undefined, { separator: sep, month });
   }
 
   return fallback;
