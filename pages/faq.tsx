@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import {
   QuestionMarkCircleIcon as HelpCircle,
   CheckIcon as Check,
@@ -573,6 +574,7 @@ export default function FAQPage() {
       </Head>
 
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Întrebări Frecvente" }]} />
         <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6">
           {/* Header */}
           <div className="mb-12 text-center">

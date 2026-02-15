@@ -2,7 +2,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 import {
@@ -138,14 +139,14 @@ export default function ArticleMutareFaraLift() {
                 datePublished="2026-02-12"
                 image="https://ofertemutare.ro/pics/blog/mutare-fara-lift.webp"
             />
-            <BreadcrumbSchema
-                items={[
-                    { name: "Acasă", url: "/" },
-                    { name: "Articole", url: "/articole" },
-                    { name: `Mutare fără Lift — Soluții și Costuri ${currentYear}` },
-                ]}
-            />
             <LayoutWrapper>
+                <Breadcrumbs
+                    items={[
+                        { name: "Acasă", href: "/" },
+                        { name: "Articole", href: "/articole" },
+                        { name: `Mutare fără Lift — Soluții și Costuri ${currentYear}` },
+                    ]}
+                />
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">

@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import {
   UsersIcon as Users,
   ArrowTrendingUpIcon as TrendingUp,
@@ -159,6 +160,8 @@ export default function AboutPage() {
           }}
         />
       </Head>
+
+      <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Despre Noi" }]} />
 
       <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">
         {/* Hero Section - Enhanced with Parallax */}

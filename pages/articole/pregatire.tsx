@@ -2,7 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import { CalendarIcon as Calendar, CheckCircleIcon as CheckCircle, ClockIcon as Clock, HomeIcon as Home, CubeIcon as Package, TruckIcon as Truck, UsersIcon as Users, ExclamationTriangleIcon as AlertTriangle, DocumentTextIcon as FileText, PhoneIcon as Phone } from "@heroicons/react/24/outline";
 
@@ -95,14 +96,14 @@ export default function ArticlePregatire() {
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/index.webp"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Articole", url: "/articole" },
-          { name: "Cum să Te Pregătești pentru Mutare" },
-        ]}
-      />
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Articole", href: "/articole" },
+            { name: "Cum să Te Pregătești pentru Mutare" },
+          ]}
+        />
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">

@@ -122,3 +122,38 @@ export function ArticleSchema({
     </Head>
   );
 }
+
+export function AggregateRatingSchema({
+  ratingValue,
+  reviewCount,
+}: {
+  ratingValue: number;
+  reviewCount: number;
+}) {
+  if (!reviewCount || reviewCount < 1) return null;
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "@id": "https://ofertemutare.ro/#business",
+    name: "OferteMutare.ro",
+    url: "https://ofertemutare.ro",
+    image: "https://ofertemutare.ro/pics/index.webp",
+    aggregateRating: {
+      "@type": "AggregateRating",
+      ratingValue: ratingValue.toFixed(1),
+      reviewCount: reviewCount,
+      bestRating: "5",
+      worstRating: "1",
+    },
+  };
+
+  return (
+    <Head>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+    </Head>
+  );
+}

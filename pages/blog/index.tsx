@@ -2,6 +2,7 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import {
   ClockIcon as Clock,
   CalendarIcon as Calendar,
@@ -182,6 +183,7 @@ export default function BlogPage() {
       </Head>
 
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Blog" }]} />
         <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
           {/* Hero Section */}
           <section className="relative overflow-hidden py-16 sm:py-20">

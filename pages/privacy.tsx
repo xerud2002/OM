@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import {
   ShieldCheckIcon as Shield,
   EyeIcon as Eye,
@@ -52,6 +53,7 @@ export default function PrivacyPage() {
       </Head>
 
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Politica de Confidențialitate" }]} />
         <div className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">

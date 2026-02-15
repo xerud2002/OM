@@ -1,24 +1,23 @@
 # robots.txt for ofertemutare.ro
-# Updated: February 14 2026
+# Updated: February 15, 2026
 
 User-agent: *
 Allow: /
 
-# Block private/authenticated pages
+# Block private/authenticated areas
 Disallow: /admin/
-Disallow: /customer/
 Disallow: /company/
+Disallow: /customer/
 Disallow: /upload/
+Disallow: /reviews/
 Disallow: /docs/
 
-# Block API routes
+# Block API & internal routes
 Disallow: /api/
-
-# Block Next.js internal routes
-Disallow: /_next/
+Disallow: /_next/data/
 Disallow: /404
 
-# Crawl delay (polite crawling)
+# Crawl delay (respected by Bing/Yandex)
 Crawl-delay: 1
 
 # ─── Block AI Training Bots ───

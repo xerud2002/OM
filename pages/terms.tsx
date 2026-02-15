@@ -1,6 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import { DocumentTextIcon as FileText } from "@heroicons/react/24/outline";
 
 export default function TermsPage() {
@@ -46,6 +47,7 @@ export default function TermsPage() {
       </Head>
 
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Termeni și Condiții" }]} />
         <div className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">

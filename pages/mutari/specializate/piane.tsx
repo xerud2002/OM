@@ -3,15 +3,18 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { BreadcrumbSchema, FAQPageSchema } from "@/components/seo/SchemaMarkup";
+import { FAQPageSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { SERVICE_FAQS } from "@/data/faqData";
 import { MusicalNoteIcon as Music, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CurrencyDollarIcon as DollarSign, StarIcon as Star, ExclamationTriangleIcon as AlertTriangle, CubeIcon as Package, HeartIcon as Heart, TrophyIcon as Award } from "@heroicons/react/24/outline";
 
 interface MutariPianePageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
+export default function MutariPianePage({ currentYear, reviewStats }: MutariPianePageProps) {
   const faqItems = SERVICE_FAQS.piane;
 
   return (
@@ -111,16 +114,18 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
       </Head>
 
       <FAQPageSchema faqs={faqItems} />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Mutări", url: "/mutari" },
-          { name: "Specializate", url: "/mutari/specializate" },
-          { name: "Piane" },
-        ]}
-      />
-
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Mutări", href: "/mutari" },
+            { name: "Specializate", href: "/mutari/specializate" },
+            { name: "Piane" },
+          ]}
+        />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-slate py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -378,10 +383,13 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
 }
 
 export const getStaticProps: GetStaticProps<MutariPianePageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

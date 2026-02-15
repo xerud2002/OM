@@ -3,15 +3,18 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { FAQPageSchema, LocalBusinessSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { SERVICE_FAQS } from "@/data/faqData";
 import { TrashIcon as Trash2, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, CurrencyDollarIcon as DollarSign, StarIcon as Star, CubeIcon as Package, HomeIcon as Sofa, ArrowPathIcon as Recycle } from "@heroicons/react/24/outline";
 
 interface DebarasarePageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
+export default function DebarasarePage({ currentYear, reviewStats }: DebarasarePageProps) {
   const faqItems = SERVICE_FAQS.debarasare;
 
   return (
@@ -43,9 +46,11 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
       {/* Schema Markup */}
       <FAQPageSchema faqs={faqItems} />
       <LocalBusinessSchema serviceName="Debarasare Mobilă și Gunoi" />
-      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Debarasare" }]} />
-
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Servicii", href: "/servicii" }, { name: "Debarasare" }]} />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-green py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -226,10 +231,13 @@ export default function DebarasarePage({ currentYear }: DebarasarePageProps) {
 }
 
 export const getStaticProps: GetStaticProps<DebarasarePageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

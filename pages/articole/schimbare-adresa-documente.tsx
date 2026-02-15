@@ -2,7 +2,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 import {
@@ -139,14 +140,14 @@ export default function GhidSchimbareAdresa() {
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/schimbare-adresa-documente.webp"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Articole", url: "/articole" },
-          { name: `Acte Necesare Schimbare Adresă/Domiciliu ${currentYear} | Ghid Complet` },
-        ]}
-      />
       <LayoutWrapper>
+                <Breadcrumbs
+                  items={[
+                    { name: "Acasă", href: "/" },
+                    { name: "Articole", href: "/articole" },
+                    { name: `Acte Necesare Schimbare Adresă/Domiciliu ${currentYear} | Ghid Complet` },
+                  ]}
+                />
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">

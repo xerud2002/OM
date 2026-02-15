@@ -3,15 +3,18 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { FAQPageSchema, LocalBusinessSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { SERVICE_FAQS } from "@/data/faqData";
 import { WrenchScrewdriverIcon as Wrench, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, CurrencyDollarIcon as DollarSign, StarIcon as Star, HomeIcon as Sofa, HomeIcon as Bed, ArchiveBoxIcon as Box, Squares2X2Icon as Layers, ExclamationCircleIcon as AlertCircle, BoltIcon as Zap } from "@heroicons/react/24/outline";
 
 interface DemontareMontareMobilaPageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function DemontareMontareMobilaPage({ currentYear }: DemontareMontareMobilaPageProps) {
+export default function DemontareMontareMobilaPage({ currentYear, reviewStats }: DemontareMontareMobilaPageProps) {
   const faqItems = SERVICE_FAQS.montaj;
 
   return (
@@ -43,9 +46,11 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
       {/* Schema Markup */}
       <FAQPageSchema faqs={faqItems} />
       <LocalBusinessSchema serviceName="Demontare și Montare Mobilă" />
-      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Montaj Mobilă" }]} />
-
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Servicii", href: "/servicii" }, { name: "Montaj Mobilă" }]} />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-cyan py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -354,10 +359,13 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
 }
 
 export const getStaticProps: GetStaticProps<DemontareMontareMobilaPageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

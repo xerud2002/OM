@@ -2,13 +2,17 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { ArrowRightIcon as ArrowRight, MapPinIcon as MapPin } from "@heroicons/react/24/outline";
 
 interface MutariIndexPageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
+export default function MutariIndexPage({ currentYear, reviewStats }: MutariIndexPageProps) {
 
   const mutariTypes = [
     {
@@ -99,22 +103,13 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
             }),
           }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Acasă", item: "https://ofertemutare.ro" },
-                { "@type": "ListItem", position: 2, name: "Mutări" },
-              ],
-            }),
-          }}
-        />
       </Head>
 
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Mutări" }]} />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero */}
         <section className="relative overflow-hidden bg-gradient-mutari py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -233,10 +228,13 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
 }
 
 export const getStaticProps: GetStaticProps<MutariIndexPageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

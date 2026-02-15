@@ -1,7 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 import {
@@ -50,14 +51,14 @@ export default function GuideMutare() {
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/index.webp"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Articole", url: "/articole" },
-          { name: "Ghid Complet Mutare Locuință" },
-        ]}
-      />
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Articole", href: "/articole" },
+            { name: "Ghid Complet Mutare Locuință" },
+          ]}
+        />
         <div className="mx-auto max-w-6xl px-4 py-12">
           {/* Header */}
           <div className="mb-12 text-center">

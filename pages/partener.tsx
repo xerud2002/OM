@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import { logger } from "@/utils/logger";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import {
   CheckCircleIcon as CheckCircle,
   UsersIcon as Users,
@@ -440,6 +441,8 @@ export default function PartenerPage({
           }}
         />
       </Head>
+
+      <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Devino Partener" }]} />
 
       {/* ═══════════ HERO ═══════════ */}
       <section className="relative overflow-hidden py-20 lg:py-28" style={{ background: "linear-gradient(to bottom right, #0f172a, #1e293b, #064e3b)" }}>

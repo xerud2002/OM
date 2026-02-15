@@ -2,7 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 import { VideoCameraIcon as Video, HomeIcon as Home, BoltIcon as Zap, ShieldCheckIcon as Shield, CheckCircleIcon as CheckCircle, XCircleIcon as XCircle, ExclamationCircleIcon as AlertCircle, CameraIcon as Camera, PhoneIcon as Phone, DocumentTextIcon as FileText } from "@heroicons/react/24/outline";
@@ -48,14 +49,14 @@ export default function ArticleSurvey() {
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/index.webp"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Articole", url: "/articole" },
-          { name: "Survey Mutări: Fizic vs. Video vs. Estimare" },
-        ]}
-      />
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Articole", href: "/articole" },
+            { name: "Survey Mutări: Fizic vs. Video vs. Estimare" },
+          ]}
+        />
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">

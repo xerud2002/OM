@@ -1,5 +1,9 @@
 import Head from "next/head";
 import dynamic from "next/dynamic";
+import { GetStaticProps } from "next";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 
 // MobileHero is critical for LCP on mobile - import statically for SSR
 import MobileHero from "@/components/home/MobileHero";
@@ -65,7 +69,11 @@ const CityLinksSection = dynamic(() => import("@/components/layout/CityLinksSect
   ssr: true,
 });
 
-export default function HomePage() {
+interface HomePageProps {
+  reviewStats: { ratingValue: number; reviewCount: number };
+}
+
+export default function HomePage({ reviewStats }: HomePageProps) {
   return (
     <>
       {/* ==========================
@@ -333,24 +341,7 @@ export default function HomePage() {
           }}
         />
 
-        {/* BreadcrumbList Schema */}
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                {
-                  "@type": "ListItem",
-                  position: 1,
-                  name: "Acasă",
-                  item: "https://ofertemutare.ro",
-                },
-              ],
-            }),
-          }}
-        />
+        {/* BreadcrumbList + FAQPage Schemas rendered by components below */}
 
         {/* FAQPage Schema */}
         <script
@@ -366,6 +357,11 @@ export default function HomePage() {
 
 
       </Head>
+
+      <Breadcrumbs items={[{ name: "Acasă", href: "/" }]} schemaOnly />
+      {reviewStats.reviewCount > 0 && (
+        <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+      )}
 
       {/* ==========================
           🔹 Page Sections
@@ -401,3 +397,10 @@ export default function HomePage() {
   );
 }
 
+export const getStaticProps: GetStaticProps<HomePageProps> = async () => {
+  const reviewStats = await getReviewStats();
+  return {
+    props: { reviewStats },
+    revalidate: 3600,
+  };
+};

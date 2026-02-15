@@ -2,7 +2,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 import {
@@ -107,14 +108,14 @@ export default function ArticleCostMutare() {
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/moving-cost-2026.webp"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Articole", url: "/articole" },
-          { name: `Cât Costă o Mutare în România ${currentYear} | Prețuri Reale` },
-        ]}
-      />
       <LayoutWrapper>
+                <Breadcrumbs
+                  items={[
+                    { name: "Acasă", href: "/" },
+                    { name: "Articole", href: "/articole" },
+                    { name: `Cât Costă o Mutare în România ${currentYear} | Prețuri Reale` },
+                  ]}
+                />
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">

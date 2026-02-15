@@ -2,6 +2,7 @@ import Head from "next/head";
 import { useState, useRef } from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Link from "next/link";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import {
   EnvelopeIcon as Mail,
   MapPinIcon as MapPin,
@@ -225,6 +226,8 @@ export default function ContactPage() {
           }}
         />
       </Head>
+
+      <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Contact" }]} />
 
       <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">
         {/* Hero Section */}

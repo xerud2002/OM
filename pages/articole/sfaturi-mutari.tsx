@@ -2,7 +2,8 @@ import Head from "next/head";
 import Image from "next/image";
 import Link from "next/link";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 import { CurrencyDollarIcon as DollarSign, ClockIcon as Clock, ShieldCheckIcon as Shield, LightBulbIcon as Lightbulb, CheckCircleIcon as CheckCircle, ExclamationTriangleIcon as AlertTriangle, ArrowTrendingDownIcon as TrendingDown, CalendarIcon as Calendar, UsersIcon as Users, CubeIcon as Package, TruckIcon as Truck, HomeIcon as Home, StarIcon as Star, ChatBubbleLeftRightIcon as MessageCircle } from "@heroicons/react/24/outline";
@@ -48,14 +49,14 @@ export default function ArticleTips() {
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/index.webp"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Articole", url: "/articole" },
-          { name: "50+ Sfaturi Expert Pentru Mutări | Trucuri & Economii" },
-        ]}
-      />
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Articole", href: "/articole" },
+            { name: "50+ Sfaturi Expert Pentru Mutări | Trucuri & Economii" },
+          ]}
+        />
         <article className="mx-auto max-w-4xl px-4 py-12">
           {/* Header */}
           <header className="mb-12 text-center">

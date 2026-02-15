@@ -3,15 +3,18 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { FAQPageSchema, LocalBusinessSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { SERVICE_FAQS } from "@/data/faqData";
 import { CubeIcon as Package, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, ArchiveBoxIcon as Box, SparklesIcon as Sparkles, ClockIcon as Clock, CurrencyDollarIcon as DollarSign, StarIcon as Star, Squares2X2Icon as Layers, HeartIcon as Heart, ExclamationTriangleIcon as AlertTriangle, BeakerIcon as Wine, PhotoIcon as Frame } from "@heroicons/react/24/outline";
 
 interface ImpachetareProfesionalaPageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function ImpachetareProfesionalaPage({ currentYear }: ImpachetareProfesionalaPageProps) {
+export default function ImpachetareProfesionalaPage({ currentYear, reviewStats }: ImpachetareProfesionalaPageProps) {
   const faqItems = SERVICE_FAQS.impachetare;
 
   return (
@@ -43,9 +46,11 @@ export default function ImpachetareProfesionalaPage({ currentYear }: Impachetare
       {/* Schema Markup */}
       <FAQPageSchema faqs={faqItems} />
       <LocalBusinessSchema serviceName="Împachetare Profesională" />
-      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Împachetare Profesională" }]} />
-
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Servicii", href: "/servicii" }, { name: "Împachetare Profesională" }]} />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-rose py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -348,10 +353,13 @@ export default function ImpachetareProfesionalaPage({ currentYear }: Impachetare
 }
 
 export const getStaticProps: GetStaticProps<ImpachetareProfesionalaPageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

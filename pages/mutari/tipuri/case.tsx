@@ -3,14 +3,17 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { FAQPageSchema, LocalBusinessSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { HomeIcon as Home, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CubeIcon as Package, UsersIcon as Users, CurrencyDollarIcon as DollarSign, HomeIcon as Sofa, KeyIcon as Key, HeartIcon as Heart, StarIcon as Star } from "@heroicons/react/24/outline";
 
 interface MutariCasePageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
+export default function MutariCasePage({ currentYear, reviewStats }: MutariCasePageProps) {
 
   const faqItems = [
     {
@@ -69,16 +72,18 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
       {/* Schema Markup */}
       <FAQPageSchema faqs={faqItems} />
       <LocalBusinessSchema serviceName="Mutări Case și Vile" />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Mutări", url: "/mutari" },
-          { name: "Tipuri", url: "/mutari/tipuri" },
-          { name: "Case" },
-        ]}
-      />
-
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Mutări", href: "/mutari" },
+            { name: "Tipuri", href: "/mutari/tipuri" },
+            { name: "Case" },
+          ]}
+        />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-company py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -354,10 +359,13 @@ export default function MutariCasePage({ currentYear }: MutariCasePageProps) {
 }
 
 export const getStaticProps: GetStaticProps<MutariCasePageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

@@ -12,14 +12,17 @@ import {
     ArrowsRightLeftIcon as Swap,
 } from "@heroicons/react/24/outline";
 import { getAllRoutePaths, getRouteData, RouteData } from "@/data/geo/routeData";
-import { BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 
 interface RoutePageProps {
     routeData: RouteData;
     formattedDate: string;
+    reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function RoutePage({ routeData, formattedDate }: RoutePageProps) {
+export default function RoutePage({ routeData, formattedDate, reviewStats }: RoutePageProps) {
     const { fromCity, toCity, distanceKm, durationHrs, priceEstimate } = routeData;
 
     const title = `Mutări ${fromCity.name} - ${toCity.name} | Preț & Durată | OferteMutare.ro`;
@@ -69,16 +72,18 @@ export default function RoutePage({ routeData, formattedDate }: RoutePageProps) 
                 />
             </Head>
 
-            <BreadcrumbSchema
-              items={[
-                { name: "Acasă", url: "/" },
-                { name: "Mutări", url: "/mutari" },
-                { name: fromCity.name, url: `/mutari/${fromCity.slug}` },
-                { name: toCity.name },
-              ]}
-            />
-
             <LayoutWrapper>
+                <Breadcrumbs
+                  items={[
+                    { name: "Acasă", href: "/" },
+                    { name: "Mutări", href: "/mutari" },
+                    { name: fromCity.name, href: `/mutari/${fromCity.slug}` },
+                    { name: toCity.name },
+                  ]}
+                />
+                {reviewStats.reviewCount > 0 && (
+                  <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+                )}
                 <div className="bg-slate-50 pb-16">
                     {/* Header Section */}
                     <div className="bg-emerald-900 py-12 text-white">
@@ -271,8 +276,9 @@ export const getStaticProps: GetStaticProps<RoutePageProps> = async ({ params })
     return {
         props: {
             routeData,
-            formattedDate: new Date().toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' })
+            formattedDate: new Date().toLocaleDateString('ro-RO', { month: 'long', year: 'numeric' }),
+            reviewStats: await getReviewStats(),
         },
-        revalidate: 60 * 60 * 24 * 7, // Revalidate weekly
+        revalidate: 3600,
     };
 };

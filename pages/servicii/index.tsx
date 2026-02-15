@@ -2,13 +2,17 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { CubeIcon as Package, WrenchScrewdriverIcon as Wrench, BuildingStorefrontIcon as Warehouse, TrashIcon as Trash2, ArrowRightIcon as ArrowRight } from "@heroicons/react/24/outline";
 
 interface ServiciiIndexPageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProps) {
+export default function ServiciiIndexPage({ currentYear, reviewStats }: ServiciiIndexPageProps) {
 
   const servicii = [
     {
@@ -96,22 +100,13 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
             }),
           }}
         />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              "@context": "https://schema.org",
-              "@type": "BreadcrumbList",
-              itemListElement: [
-                { "@type": "ListItem", position: 1, name: "Acasă", item: "https://ofertemutare.ro" },
-                { "@type": "ListItem", position: 2, name: "Servicii" },
-              ],
-            }),
-          }}
-        />
       </Head>
 
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Servicii" }]} />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero */}
         <section className="relative overflow-hidden bg-gradient-brand py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -207,10 +202,13 @@ export default function ServiciiIndexPage({ currentYear }: ServiciiIndexPageProp
 }
 
 export const getStaticProps: GetStaticProps<ServiciiIndexPageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

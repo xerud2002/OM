@@ -19,13 +19,16 @@ import {
     ArrowTrendingDownIcon as TrendingDown,
 } from "@heroicons/react/24/outline";
 import { getCityBySlug, getAllCitySlugs, CityData, cityData } from "@/data/geo/citySlugData";
-import { LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { LocalBusinessSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 
 interface CityPageProps {
     city: CityData;
     prevCity: { slug: string; name: string } | null;
     nextCity: { slug: string; name: string } | null;
     currentYear: number;
+    reviewStats: { ratingValue: number; reviewCount: number };
 }
 
 // Matching text gradients for city names (pairs with hero gradients)
@@ -44,7 +47,7 @@ const textGradients = [
     "from-blue-300 to-indigo-300", // Added for variety
 ];
 
-export default function CityPage({ city, prevCity, nextCity, currentYear }: CityPageProps) {
+export default function CityPage({ city, prevCity, nextCity, currentYear, reviewStats }: CityPageProps) {
     // Use a hash for text gradient to ensure more variety if heroGradients and textGradients have different lengths
     const textGradientIndex =
         city.slug.split("").reduce((acc, char) => acc + char.charCodeAt(0) * 2, 0) %
@@ -97,16 +100,18 @@ export default function CityPage({ city, prevCity, nextCity, currentYear }: City
             </Head>
 
             <LocalBusinessSchema city={city.name} serviceName={"Servicii Mutări " + city.name} />
-            <BreadcrumbSchema
-              items={[
-                { name: "Acasă", url: "/" },
-                { name: "Mutări", url: "/mutari" },
-                { name: city.name },
-              ]}
-            />
-
             <LayoutWrapper>
                 {/* Hero Section - Image background on desktop, gradient on mobile */}
+                <Breadcrumbs
+                  items={[
+                    { name: "Acasă", href: "/" },
+                    { name: "Mutări", href: "/mutari" },
+                    { name: city.name },
+                  ]}
+                />
+                {reviewStats.reviewCount > 0 && (
+                  <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+                )}
                 <div className="container mx-auto px-4 py-8">
                     <div className="relative max-w-6xl mx-auto">
                         {/* Desktop Navigation Arrows (Outside) */}
@@ -622,6 +627,7 @@ export const getStaticProps: GetStaticProps<CityPageProps> = async ({ params }) 
     const nextCity = { slug: cityData[nextIndex].slug, name: cityData[nextIndex].name };
 
     return {
-        props: { city, prevCity, nextCity, currentYear: new Date().getFullYear() },
+        props: { city, prevCity, nextCity, currentYear: new Date().getFullYear(), reviewStats: await getReviewStats() },
+        revalidate: 3600,
     };
 };

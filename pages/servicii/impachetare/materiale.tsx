@@ -2,14 +2,18 @@ import Head from "next/head";
 import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
-import { BreadcrumbSchema, LocalBusinessSchema } from "@/components/seo/SchemaMarkup";
+import { LocalBusinessSchema, FAQPageSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
+import { SERVICE_FAQS } from "@/data/faqData";
 import { ShoppingCartIcon as ShoppingCart, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ArchiveBoxIcon as Box, StopIcon as Circle, CurrencyDollarIcon as DollarSign, StarIcon as Star, CubeIcon as Package, Squares2X2Icon as Layers, ShieldCheckIcon as Shield, SparklesIcon as Sparkles, TruckIcon as Truck } from "@heroicons/react/24/outline";
 
 interface MaterialeImpachetarePageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpachetarePageProps) {
+export default function MaterialeImpachetarePage({ currentYear, reviewStats }: MaterialeImpachetarePageProps) {
 
   return (
     <>
@@ -38,9 +42,12 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
       </Head>
 
       <LocalBusinessSchema serviceName="Materiale Împachetare" />
-      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Împachetare", url: "/servicii/impachetare" }, { name: "Materiale" }]} />
-
+      <FAQPageSchema faqs={SERVICE_FAQS.impachetare} />
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Servicii", href: "/servicii" }, { name: "Împachetare", href: "/servicii/impachetare" }, { name: "Materiale" }]} />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-brand py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -372,10 +379,13 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
 }
 
 export const getStaticProps: GetStaticProps<MaterialeImpachetarePageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

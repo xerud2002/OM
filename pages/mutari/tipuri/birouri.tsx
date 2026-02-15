@@ -6,16 +6,19 @@ import FAQSection from "@/components/content/FAQSection";
 import {
   FAQPageSchema,
   LocalBusinessSchema,
-  BreadcrumbSchema,
+  AggregateRatingSchema,
 } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { SERVICE_FAQS } from "@/data/faqData";
 import { BuildingOffice2Icon as Building, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CubeIcon as Package, ClockIcon as Clock, CurrencyDollarIcon as DollarSign, ComputerDesktopIcon as Monitor, ServerIcon as Server, CalendarIcon as Calendar, UsersIcon as Users, DocumentTextIcon as FileText, BriefcaseIcon as Briefcase, PhoneIcon as Phone } from "@heroicons/react/24/outline";
 
 interface MutariCompaniiPageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPageProps) {
+export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariCompaniiPageProps) {
   const faqItems = SERVICE_FAQS.birouri;
 
   return (
@@ -50,16 +53,18 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
       {/* Schema Markup */}
       <FAQPageSchema faqs={faqItems} />
       <LocalBusinessSchema serviceName="Mutări Birouri și Companii" />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Mutări", url: "/mutari" },
-          { name: "Tipuri", url: "/mutari/tipuri" },
-          { name: "Birouri" },
-        ]}
-      />
-
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Mutări", href: "/mutari" },
+            { name: "Tipuri", href: "/mutari/tipuri" },
+            { name: "Birouri" },
+          ]}
+        />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-slate py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -372,10 +377,13 @@ export default function MutariCompaniiPage({ currentYear }: MutariCompaniiPagePr
 }
 
 export const getStaticProps: GetStaticProps<MutariCompaniiPageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

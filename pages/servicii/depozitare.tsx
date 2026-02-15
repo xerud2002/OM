@@ -3,15 +3,18 @@ import Link from "next/link";
 import { GetStaticProps } from "next";
 import LayoutWrapper from "@/components/layout/Layout";
 import FAQSection from "@/components/content/FAQSection";
-import { FAQPageSchema, LocalBusinessSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { FAQPageSchema, LocalBusinessSchema, AggregateRatingSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
+import { getReviewStats } from "@/lib/firebaseAdmin";
 import { SERVICE_FAQS } from "@/data/faqData";
 import { BuildingStorefrontIcon as Warehouse, CheckCircleIcon as CheckCircle, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, CurrencyDollarIcon as DollarSign, StarIcon as Star, LockClosedIcon as Lock, FireIcon as Thermometer, CameraIcon as Camera, KeyIcon as Key, CalendarIcon as Calendar } from "@heroicons/react/24/outline";
 
 interface DepozitarePageProps {
   currentYear: number;
+  reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
+export default function DepozitarePage({ currentYear, reviewStats }: DepozitarePageProps) {
   const faqItems = SERVICE_FAQS.depozitare;
 
   return (
@@ -43,9 +46,11 @@ export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
       {/* Schema Markup */}
       <FAQPageSchema faqs={faqItems} />
       <LocalBusinessSchema serviceName="Depozitare Mobilă și Bunuri" />
-      <BreadcrumbSchema items={[{ name: "Acasă", url: "/" }, { name: "Servicii", url: "/servicii" }, { name: "Depozitare" }]} />
-
       <LayoutWrapper>
+        <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Servicii", href: "/servicii" }, { name: "Depozitare" }]} />
+        {reviewStats.reviewCount > 0 && (
+          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+        )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-orange py-20">
           <div className="absolute inset-0 overflow-hidden">
@@ -280,10 +285,13 @@ export default function DepozitarePage({ currentYear }: DepozitarePageProps) {
 }
 
 export const getStaticProps: GetStaticProps<DepozitarePageProps> = async () => {
+  const reviewStats = await getReviewStats();
   return {
     props: {
       currentYear: new Date().getFullYear(),
+      reviewStats,
     },
+    revalidate: 3600,
   };
 };
 

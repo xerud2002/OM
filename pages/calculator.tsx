@@ -8,7 +8,8 @@ const SavingsCalculator = dynamic(
   { ssr: false, loading: () => <div className="animate-pulse bg-gray-200 rounded-2xl h-96" /> }
 );
 import CTASection from "@/components/home/CTASection";
-import { BreadcrumbSchema, FAQPageSchema } from "@/components/seo/SchemaMarkup";
+import { FAQPageSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 
@@ -105,28 +106,16 @@ export default function CalculatorPage() {
         />
       </Head>
 
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Calculator Cost Mutare" },
-        ]}
-      />
       <FAQPageSchema faqs={faqs} />
 
       <LayoutWrapper>
+        <Breadcrumbs
+          items={[
+            { name: "Acasă", href: "/" },
+            { name: "Calculator Cost Mutare" },
+          ]}
+        />
         <article className="bg-gray-50">
-          {/* Breadcrumb Navigation */}
-          <div className="mx-auto max-w-5xl px-4 pt-6">
-            <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-sm text-gray-500">
-              <Link href="/" className="hover:text-orange-600 transition-colors">
-                Acasă
-              </Link>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="h-4 w-4">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-              </svg>
-              <span className="font-medium text-gray-900">Calculator Cost Mutare</span>
-            </nav>
-          </div>
 
           {/* Header */}
           <header className="pb-12 pt-8 md:pt-12">

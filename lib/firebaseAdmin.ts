@@ -88,4 +88,27 @@ export const adminDb = admin.firestore();
 export const adminAuth = admin.auth();
 export const adminReady = globalThis._firebaseAdminHasCredentials ?? false;
 
+/** Fetch aggregate review stats for SEO schema. Safe to call at build time. */
+export async function getReviewStats(): Promise<{ ratingValue: number; reviewCount: number }> {
+  if (!adminReady) return { ratingValue: 0, reviewCount: 0 };
+  try {
+    const snap = await adminDb.collection("reviews").where("status", "==", "published").get();
+    if (snap.empty) return { ratingValue: 0, reviewCount: 0 };
+
+    let total = 0;
+    let count = 0;
+    snap.docs.forEach((doc) => {
+      const rating = Number(doc.data().rating);
+      if (rating >= 1 && rating <= 5) { total += rating; count++; }
+    });
+
+    return {
+      ratingValue: count > 0 ? Math.round((total / count) * 10) / 10 : 0,
+      reviewCount: count,
+    };
+  } catch {
+    return { ratingValue: 0, reviewCount: 0 };
+  }
+}
+
 export default admin;

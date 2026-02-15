@@ -2,7 +2,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import LayoutWrapper from "@/components/layout/Layout";
-import { ArticleSchema, BreadcrumbSchema } from "@/components/seo/SchemaMarkup";
+import { ArticleSchema } from "@/components/seo/SchemaMarkup";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import ArticleMetadata from "@/components/content/ArticleMetadata";
 import TableOfContents from "@/components/content/TableOfContents";
 import {
@@ -181,14 +182,14 @@ export default function ArticleCartiereBucuresti() {
         datePublished="2026-02-02"
         image="https://ofertemutare.ro/pics/blog/bucharest-neighborhoods-map.webp"
       />
-      <BreadcrumbSchema
-        items={[
-          { name: "Acasă", url: "/" },
-          { name: "Articole", url: "/articole" },
-          { name: `Top 10 Cartiere București pentru Relocare ${currentYear}` },
-        ]}
-      />
       <LayoutWrapper>
+                <Breadcrumbs
+                  items={[
+                    { name: "Acasă", href: "/" },
+                    { name: "Articole", href: "/articole" },
+                    { name: `Top 10 Cartiere București pentru Relocare ${currentYear}` },
+                  ]}
+                />
                 <article className="mx-auto max-w-4xl px-4 py-12">
                     {/* Header */}
                     <header className="mb-12 text-center">
