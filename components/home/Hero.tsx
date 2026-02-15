@@ -159,7 +159,7 @@ export default function Hero() {
                 <h2 className="text-lg font-bold text-gray-800 sm:text-xl">
                   Completează în 2 minute
                 </h2>
-                <p className="text-sm text-gray-500">Primești 3-5 oferte în 24h</p>
+                <p className="text-sm text-gray-500">Primești până la 5 oferte în 24h</p>
               </div>
               <HomeRequestForm />
             </div>

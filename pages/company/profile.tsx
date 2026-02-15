@@ -391,21 +391,21 @@ export default function CompanyProfile() {
                     <div>
                       <p className="text-sm font-medium text-gray-500">Nume Companie</p>
                       <p className="mt-1 text-base font-semibold text-gray-900">
-                        {profile?.companyName || "—"}
+                        {profile?.companyName || "-"}
                       </p>
                     </div>
 
                     <div>
                       <p className="text-sm font-medium text-gray-500">CIF</p>
                       <p className="mt-1 text-base font-semibold text-gray-900">
-                        {profile?.cif || "—"}
+                        {profile?.cif || "-"}
                       </p>
                     </div>
 
                     <div>
                       <p className="text-sm font-medium text-gray-500">Telefon</p>
                       <p className="mt-1 text-base font-semibold text-gray-900">
-                        {profile?.phone || "—"}
+                        {profile?.phone || "-"}
                       </p>
                     </div>
 
@@ -414,7 +414,7 @@ export default function CompanyProfile() {
                       <p className="mt-1 text-base font-semibold text-gray-900">
                         {profile?.city && profile?.county
                           ? `${profile.city}, ${profile.county}`
-                          : profile?.city || profile?.county || "—"}
+                          : profile?.city || profile?.county || "-"}
                       </p>
                     </div>
                   </div>

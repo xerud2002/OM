@@ -92,8 +92,8 @@ export default function DemontareMontareMobilaPage({ currentYear, reviewStats }:
                 <div className="text-sm text-cyan-100">Scule incluse</div>
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
-                <div className="text-3xl font-bold text-white">100%</div>
-                <div className="text-sm text-cyan-100">Garanție</div>
+                <div className="text-3xl font-bold text-white">✓</div>
+                <div className="text-sm text-cyan-100">Garanție lucrări</div>
               </div>
             </div>
 

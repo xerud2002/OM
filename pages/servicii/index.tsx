@@ -122,7 +122,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
         <title>{`Servicii Mutare ${currentYear} | Împachetare, Montaj, Depozitare, Debarasare`}</title>
         <meta
           name="description"
-          content={`✓ Servicii auxiliare pentru mutare ${currentYear} ✓ Împachetare profesională, montaj mobilă, depozitare securizată, debarasare eco ✓ Oferte de la firme verificate → Compară gratuit!`}
+          content={`Servicii auxiliare pentru mutare ${currentYear}: împachetare profesională, montaj mobilă, depozitare securizată, debarasare eco. Oferte de la firme verificate, compară gratuit.`}
         />
         <meta name="keywords" content="împachetare profesională, montaj mobilă, depozitare mobilă, materiale ambalare, debarasare, servicii mutare auxiliare" />
         <link rel="canonical" href="https://ofertemutare.ro/servicii" />
@@ -151,7 +151,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
               "@type": "Service",
               name: "Servicii Auxiliare pentru Mutări",
               serviceType: "Servicii Complementare Mutări",
-              provider: {
+              broker: {
                 "@type": "Organization",
                 name: "OferteMutare.ro",
                 url: "https://ofertemutare.ro",
@@ -202,7 +202,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
               </span>
             </h1>
             <p className="mb-8 mx-auto max-w-2xl text-lg text-purple-100 md:text-xl">
-              Compară oferte pentru împachetare, montaj mobilă, depozitare și debarasare — servicii oferite de firmele noastre partenere verificate. Prețurile afișate sunt orientative.
+              Compară oferte pentru împachetare, montaj mobilă, depozitare și debarasare, servicii oferite de firmele noastre partenere verificate. Prețurile afișate sunt orientative.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-purple-200">
               <span className="flex items-center gap-1.5"><ShieldCheckIcon className="h-5 w-5 text-green-400" /> Firme verificate</span>
@@ -256,7 +256,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
 
           {/* Bundles */}
           <section className="mb-16">
-            <h2 className="mb-3 text-3xl font-bold text-gray-900">Pachete Combinate — Economie Garantată</h2>
+            <h2 className="mb-3 text-3xl font-bold text-gray-900">Pachete Combinate cu Economie la Pachet</h2>
             <p className="mb-8 max-w-3xl text-gray-600">
               Combinarea serviciilor într-un singur pachet reduce costul total. Firmele oferă reduceri între 15-25% pentru pachete complete față de rezervări individuale.
             </p>
@@ -280,7 +280,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                   <ShieldCheckIcon className="h-6 w-6 text-green-600" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900">50%</div>
+                <div className="text-2xl font-bold text-gray-900">Risc redus</div>
                 <div className="text-sm text-gray-600">Mai puține daune cu ambalare profesională</div>
               </div>
               <div className="text-center">
@@ -357,7 +357,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
           <section className="mb-16 rounded-2xl border-2 border-indigo-200 bg-indigo-50 p-8">
             <h2 className="mb-3 text-2xl font-bold text-gray-900">Cauți și o firmă de mutări?</h2>
             <p className="mb-6 text-gray-600">
-              Compară firme verificate pentru mutare de apartament, casă, birou sau cameră de student. Primești 3-5 oferte gratuite în 24h.
+              Compară firme verificate pentru mutare de apartament, casă, birou sau cameră de student. Primești până la 5 oferte gratuite în 24h.
             </p>
             <Link
               href="/mutari"

@@ -12,7 +12,7 @@ import {
 } from "@/utils/cookies";
 import Link from "next/link";
 
-/** Emitted when consent changes — listeners can react (e.g. load GA). */
+/** Emitted when consent changes - listeners can react (e.g. load GA). */
 export const CONSENT_EVENT = "om:consent-update";
 
 /** Dispatch this event to re-open the cookie banner (e.g. from Footer link). */
@@ -144,7 +144,7 @@ export default function CookieConsent() {
               </h4>
 
               <div className="space-y-3">
-                {/* Necessary — always on */}
+                {/* Necessary - always on */}
                 <label className="flex items-center justify-between rounded-lg bg-white p-3 shadow-sm">
                   <div>
                     <span className="text-sm font-medium text-gray-900">
@@ -170,7 +170,7 @@ export default function CookieConsent() {
                       Analiză
                     </span>
                     <p className="mt-0.5 text-xs text-gray-500">
-                      Google Analytics — ne ajută să înțelegem cum folosești
+                      Google Analytics: ne ajută să înțelegem cum folosești
                       site-ul.
                     </p>
                   </div>
@@ -190,7 +190,7 @@ export default function CookieConsent() {
                     </span>
                     <p className="mt-0.5 text-xs text-gray-500">
                       Cookie-uri pentru publicitate și remarketing (nefolosite
-                      încă — pregătite pentru viitor).
+                      încă, pregătite pentru viitor).
                     </p>
                   </div>
                   <input

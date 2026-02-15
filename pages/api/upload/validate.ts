@@ -75,7 +75,7 @@ export default async function handler(
       });
     }
 
-    // Token is valid — return only non-PII fields
+    // Token is valid - return only non-PII fields
     return res.status(200).json({
       valid: true,
       requestId: tokenData.requestId,

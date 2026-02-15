@@ -59,7 +59,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
     return (
         <>
             <Head>
-                <title>{"Mutări " + city.name + " " + currentYear + " → Oferte Gratuite"}</title>
+                <title>{"Mutări " + city.name + " " + currentYear + " | Oferte Gratuite"}</title>
                 <meta name="description" content={city.metaDescription} />
                 <meta
                     name="keywords"
@@ -83,7 +83,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                 <meta property="og:url" content={"https://ofertemutare.ro/mutari/" + city.slug} />
                 <meta
                     property="og:title"
-                    content={"Mutări " + city.name + " " + currentYear + " | Economisește până la 40%"}
+                    content={"Mutări " + city.name + " " + currentYear + " | Oferte gratuite"}
                 />
                 <meta property="og:description" content={city.metaDescription} />
                 <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
@@ -93,7 +93,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                 <meta name="twitter:url" content={"https://ofertemutare.ro/mutari/" + city.slug} />
                 <meta
                     name="twitter:title"
-                    content={"Mutări " + city.name + " " + currentYear + " | Economisește până la 40%"}
+                    content={"Mutări " + city.name + " " + currentYear + " | Oferte gratuite"}
                 />
                 <meta name="twitter:description" content={city.metaDescription} />
                 <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
@@ -228,12 +228,12 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                                 {/* Stats */}
                                 <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
                                     <div className="rounded-2xl border border-white/20 bg-transparent p-4 text-center transition-transform hover:scale-105">
-                                        <div className="text-3xl font-bold text-white">3-5</div>
+                                        <div className="text-3xl font-bold text-white">Până la 5</div>
                                         <div className="text-sm text-white/90">Oferte în 24h</div>
                                     </div>
                                     <div className="rounded-2xl border border-white/20 bg-transparent p-4 text-center transition-transform hover:scale-105">
-                                        <div className="text-3xl font-bold text-white">40%</div>
-                                        <div className="text-sm text-white/90">Economie medie</div>
+                                        <div className="text-3xl font-bold text-white">Compari</div>
+                                        <div className="text-sm text-white/90">Prețuri și alegi liber</div>
                                     </div>
                                     <div className="rounded-2xl border border-white/20 bg-transparent p-4 text-center transition-transform hover:scale-105">
                                         <div className="text-3xl font-bold text-white">100%</div>
@@ -285,7 +285,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                             {!city.articleIntro && (
                                 <p>
                                     Vestea bună? Pe <strong>OferteMutare.ro</strong> simplifici tot procesul.
-                                    Completezi un singur formular în 3 minute și primești 3-5 oferte personalizate de
+                                    Completezi un singur formular în 3 minute și primești până la 5 oferte personalizate de
                                     la firme verificate din {city.county}. Compari prețurile, citești recenziile și
                                     alegi varianta perfectă pentru tine:{" "}
                                     <strong>100% gratuit, fără obligații</strong>.
@@ -401,7 +401,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                         </div>
                         <p className="mt-6 text-sm text-gray-600">
                             💡 <strong>Sfat:</strong> Compară minimum 3 oferte pentru a găsi cel mai bun raport
-                            calitate-preț. Diferențele pot fi de până la 40%!
+                            calitate-preț. Diferențele de preț pot fi semnificative.
                         </p>
                     </section>
 
@@ -440,7 +440,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                                         <div>
                                             <h3 className="font-bold text-gray-900">Oferte rapide în 24h</h3>
                                             <p className="text-gray-600">
-                                                Primești 3-5 oferte personalizate direct de la firme din {city.name}, fără
+                                                Primești până la 5 oferte personalizate direct de la firme din {city.name}, fără
                                                 să suni sau negociezi.
                                             </p>
                                         </div>
@@ -450,7 +450,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                                         <div>
                                             <h3 className="font-bold text-gray-900">100% gratuit și transparent</h3>
                                             <p className="text-gray-600">
-                                                Serviciul nostru este complet gratuit. Nu există costuri ascunse sau
+                                                Platforma noastră este complet gratuită. Nu există costuri ascunse sau
                                                 obligații.
                                             </p>
                                         </div>
@@ -529,7 +529,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                     <section className="rounded-2xl bg-linear-to-r from-emerald-600 to-teal-600 p-8 text-center text-white">
                         <h2 className="mb-4 text-3xl font-bold">Gata să te muți în {city.name}?</h2>
                         <p className="mb-8 text-lg text-emerald-100">
-                            Primește 3-5 oferte gratuite în 24h și economisește până la 40% la mutarea ta.
+                            Primește până la 5 oferte gratuite în 24h și compară prețuri pentru mutarea ta.
                         </p>
                         <Link
                             href="/customer/auth"
@@ -547,16 +547,14 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify({
                             "@context": "https://schema.org",
-                            "@type": "LocalBusiness",
-                            name: `OferteMutare.ro - Mutări ${city.name}`,
+                            "@type": "Service",
+                            name: `Comparare oferte mutări ${city.name}`,
                             description: city.metaDescription,
                             url: `https://ofertemutare.ro/mutari/${city.slug}`,
-                            image: "https://ofertemutare.ro/pics/index.webp",
-                            address: {
-                                "@type": "PostalAddress",
-                                addressLocality: city.name,
-                                addressRegion: city.county,
-                                addressCountry: "RO",
+                            broker: {
+                                "@type": "Organization",
+                                name: "OferteMutare.ro",
+                                url: "https://ofertemutare.ro",
                             },
                             areaServed: {
                                 "@type": "City",
@@ -566,30 +564,7 @@ export default function CityPage({ city, prevCity, nextCity, currentYear, review
                                     name: city.county,
                                 },
                             },
-                            geo: {
-                                "@type": "GeoCoordinates",
-                                // Coordinates would ideally come from city data, defaulting to center of RO for generic
-                                latitude: "46.0",
-                                longitude: "25.0",
-                            },
-                            openingHoursSpecification: [
-                                {
-                                    "@type": "OpeningHoursSpecification",
-                                    dayOfWeek: [
-                                        "Monday",
-                                        "Tuesday",
-                                        "Wednesday",
-                                        "Thursday",
-                                        "Friday",
-                                        "Saturday",
-                                        "Sunday",
-                                    ],
-                                    opens: "08:00",
-                                    closes: "22:00",
-                                },
-                            ],
-                            serviceType: "Moving Services",
-                            priceRange: "250 RON - 3000 RON",
+                            serviceType: "Platformă comparare oferte mutări",
                         }),
                     }}
                 />

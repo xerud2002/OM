@@ -21,7 +21,7 @@ import {
 import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy, HH:mm", { locale: ro });
 }
@@ -102,7 +102,7 @@ export default function AdminCompanyDetail() {
                 </div>
                 <div className="rounded-xl border border-gray-200 bg-white p-4 text-center shadow-sm">
                   <StarIcon className="mx-auto h-6 w-6 text-yellow-500" />
-                  <p className="mt-2 text-2xl font-bold text-gray-900">{c.averageRating || "—"}</p>
+                  <p className="mt-2 text-2xl font-bold text-gray-900">{c.averageRating || "-"}</p>
                   <p className="text-sm text-gray-500">Rating mediu</p>
                 </div>
                 <div className="rounded-xl border border-gray-200 bg-white p-4 text-center shadow-sm">
@@ -130,8 +130,8 @@ export default function AdminCompanyDetail() {
                     <tbody className="divide-y divide-gray-100">
                       {data.offers.slice(0, 50).map((o: any) => (
                         <tr key={o.id} className="hover:bg-gray-50">
-                          <td className="px-4 py-3 text-sm text-gray-900 font-mono">{o.requestId?.slice(0, 8) || "—"}...</td>
-                          <td className="px-4 py-3 text-sm font-semibold text-gray-900">{o.price ? `${o.price} RON` : "—"}</td>
+                          <td className="px-4 py-3 text-sm text-gray-900 font-mono">{o.requestId?.slice(0, 8) || "-"}...</td>
+                          <td className="px-4 py-3 text-sm font-semibold text-gray-900">{o.price ? `${o.price} RON` : "-"}</td>
                           <td className="px-4 py-3">
                             <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${o.status === "accepted" || o.accepted ? "bg-green-100 text-green-700" : o.status === "declined" ? "bg-red-100 text-red-700" : "bg-gray-100 text-gray-600"}`}>
                               {o.status === "accepted" || o.accepted ? "Acceptată" : o.status === "declined" ? "Refuzată" : o.status || "Trimisă"}
@@ -166,7 +166,7 @@ export default function AdminCompanyDetail() {
                         <span className="text-xs text-gray-400">{fmtDate(r.createdAt)}</span>
                         {r.isWelcomeReview && <span className="rounded-full bg-purple-100 px-2 py-0.5 text-xs text-purple-600">Welcome</span>}
                       </div>
-                      <p className="mt-1 text-sm text-gray-600">{r.comment || "—"}</p>
+                      <p className="mt-1 text-sm text-gray-600">{r.comment || "-"}</p>
                     </div>
                   ))}
                   {data.reviews.length === 0 && (

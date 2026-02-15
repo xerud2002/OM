@@ -70,7 +70,7 @@ export function deleteCookie(name: string, path = "/"): void {
 // ============================================
 
 export interface CookieConsent {
-  /** Essential cookies — always true, cannot be disabled */
+  /** Essential cookies - always true, cannot be disabled */
   necessary: true;
   /** Analytics cookies (Google Analytics, etc.) */
   analytics: boolean;

@@ -47,7 +47,7 @@ export const cityData: CityData[] = [
     landmarks: ["Palatul Parlamentului", "Centrul Vechi", "Parcul Herăstrău"],
     neighborhoods: ["Militari", "Drumul Taberei", "Titan", "Berceni", "Pipera", "Dorobanți"],
     metaDescription:
-      "Servicii de mutări în București ✓ Compară 3-5 oferte gratuite de la firme verificate ✓ Economisește până la 40% ✓ Transport mobilă în toate sectoarele",
+      "Servicii de mutări în București ✓ Compară până la 5 oferte gratuite de la firme verificate ✓ Compară prețuri ✓ Transport mobilă în toate sectoarele",
     heroSubtitle:
       "Capitala României merită firme de mutări de top. Primește oferte personalizate pentru mutarea ta în București.",
     heroImage: "/images/cities/bucuresti.webp",
@@ -76,7 +76,7 @@ export const cityData: CityData[] = [
     landmarks: ["Piața Unirii", "Cetățuia", "Grădina Botanică"],
     neighborhoods: ["Mărăști", "Gheorgheni", "Mănăștur", "Zorilor", "Bună Ziua", "Borhanci"],
     metaDescription:
-      "Mutări în Cluj-Napoca ✓ 3-5 oferte GRATUITE în 24h ✓ Firme verificate ✓ Transport mobilă, împachetare, depozitare ✓ Economisește 40%",
+      "Mutări în Cluj-Napoca ✓ până la 5 oferte gratuite în 24h ✓ Firme verificate ✓ Transport mobilă, împachetare, depozitare ✓ Compară prețuri",
     heroSubtitle:
       "Inima Transilvaniei, centru universitar și IT. Mutări profesionale pentru clujeni exigenți.",
     heroImage: "/images/cities/cluj-napoca.webp",
@@ -134,7 +134,7 @@ export const cityData: CityData[] = [
     landmarks: ["Palatul Culturii", "Grădina Copou", "Universitatea Al.I. Cuza"],
     neighborhoods: ["Copou", "Păcurari", "Alexandru cel Bun", "Galata", "Nicolina", "Tătărași"],
     metaDescription:
-      "Mutări Iași ✓ 3-5 oferte în 24h de la firme locale verificate ✓ 100% gratuit ✓ Transport mobilă în Moldova ✓ Economii până la 40%",
+      "Mutări Iași ✓ până la 5 oferte în 24h de la firme locale verificate ✓ 100% gratuit ✓ Transport mobilă în Moldova ✓ Compară prețuri",
     heroSubtitle: "Capitala Moldovei, oraș universitar. Mutări rapide și sigure pentru ieșeni.",
     heroImage: "/images/cities/iasi.webp",
     articleIntro:
@@ -188,7 +188,7 @@ export const cityData: CityData[] = [
     landmarks: ["Biserica Neagră", "Tâmpa", "Piața Sfatului"],
     neighborhoods: ["Astra", "Tractorul", "Răcădău", "Bartolomeu", "Scriitorilor", "Noua"],
     metaDescription:
-      "Mutări Brașov ✓ Firme verificate pentru transport mobilă ✓ Compară 3-5 oferte GRATUIT ✓ Servicii în tot județul și stațiuni",
+      "Mutări Brașov ✓ Firme verificate pentru transport mobilă ✓ Compară până la 5 oferte gratuit ✓ Servicii în tot județul și stațiuni",
     heroSubtitle: "La poalele Tâmpei, în inima munților. Mutări sigure pentru brașoveni.",
     heroImage: "/images/cities/brasov.webp",
     articleIntro:
@@ -244,7 +244,7 @@ export const cityData: CityData[] = [
     landmarks: ["Dunărea", "Grădina Publică", "Complexul Muzeal"],
     neighborhoods: ["Micro", "Țiglina", "Mazepa", "Dunărea", "Centru", "Siderurgiștilor"],
     metaDescription:
-      "Mutări Galați ✓ Transport mobilă pe Dunăre ✓ Compară oferte gratuite de la firme locale ✓ Economisește până la 40%",
+      "Mutări Galați ✓ Transport mobilă pe Dunăre ✓ Compară oferte gratuite de la firme locale ✓ Compară prețuri",
     heroSubtitle:
       "Oraș portuar pe Dunăre, inimă industrială. Mutări rapide în Galați și împrejurimi.",
     heroImage: "/images/cities/galati.webp",
@@ -300,7 +300,7 @@ export const cityData: CityData[] = [
     landmarks: ["Ceasul din centru", "Parcul Bucov", "Halele Centrale"],
     neighborhoods: ["Nord", "Sud", "Vest", "Malu Roșu", "Bereasca", "9 Mai"],
     metaDescription:
-      "Mutări Ploiești ✓ Transport mobilă în Prahova ✓ Compară 3-5 oferte GRATUIT ✓ Firme verificate pentru mutări sigure",
+      "Mutări Ploiești ✓ Transport mobilă în Prahova ✓ Compară până la 5 oferte gratuit ✓ Firme verificate pentru mutări sigure",
     heroSubtitle:
       "Capitala aurului negru, la porțile munților. Mutări profesionale pentru ploieșteni.",
     heroImage: "/images/cities/ploiesti.webp",
@@ -384,7 +384,7 @@ export const cityData: CityData[] = [
     landmarks: ["Parcul Trivale", "Primărie", "Bascov"],
     neighborhoods: ["Nord", "Sud", "Găvana", "Craiovei", "Exercițiu"],
     metaDescription:
-      "Mutări Pitești ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în tot județul Argeș ✓ Firme verificate ✓ Economisești 40%",
+      "Mutări Pitești ✓ Compară până la 5 oferte gratuite în 24h ✓ Transport mobilă în tot județul Argeș ✓ Firme verificate ✓ Compară și alegi",
     heroSubtitle: "Capitală auto a României, la poalele Carpaților. Mutări rapide în Pitești.",
     heroImage: "/images/cities/pitesti.webp",
     articleIntro:
@@ -411,7 +411,7 @@ export const cityData: CityData[] = [
     landmarks: ["Teatrul Bacovia", "Parcul Cancicov", "Centrul Vechi"],
     neighborhoods: ["Centru", "Ștefan cel Mare", "Cornișa", "Sud", "Miorița"],
     metaDescription:
-      "Mutări Bacău ✓ Compară 3-5 oferte GRATUITE în 24h de la firme locale verificate ✓ Transport mobilă în Moldova ✓ Economisești 40%",
+      "Mutări Bacău ✓ Compară până la 5 oferte gratuite în 24h de la firme locale verificate ✓ Transport mobilă în Moldova ✓ Compară și alegi",
     heroSubtitle: "În inima Moldovei, oraș în dezvoltare. Mutări de calitate pentru băcăuani.",
     heroImage: "/images/cities/bacau.webp",
     articleIntro:
@@ -465,7 +465,7 @@ export const cityData: CityData[] = [
     landmarks: ["Centrul Vechi", "Parcul Mihai Eminescu", "Memorial Eminescu"],
     neighborhoods: ["Centru", "Imparat Traian", "Bucovina", "Plevna"],
     metaDescription:
-      "Mutări Botoșani ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în nordul Moldovei ✓ Firme verificate ✓ Prețuri accesibile",
+      "Mutări Botoșani ✓ Compară până la 5 oferte gratuite în 24h ✓ Transport mobilă în nordul Moldovei ✓ Firme verificate ✓ Prețuri accesibile",
     heroSubtitle: "Plaiuri eminesciene, tradiție și cultură. Mutări profesionale în Botoșani.",
     heroImage: "/images/cities/botosani.webp",
     articleIntro:
@@ -492,7 +492,7 @@ export const cityData: CityData[] = [
     landmarks: ["Faleza Dunării", "Piața Traian", "Teatrul Maria Filotti"],
     neighborhoods: ["Centru", "Viziru", "Radu Negru", "Chercea", "Apollo"],
     metaDescription:
-      "Mutări Brăila ✓ Transport mobilă pe Dunăre ✓ Oferte gratuite în 24h ✓ Firme locale verificate ✓ Economisește până la 40% la servicii de mutare",
+      "Mutări Brăila ✓ Transport mobilă pe Dunăre ✓ Oferte gratuite în 24h ✓ Firme locale verificate ✓ Compară prețuri la servicii de mutare",
     heroSubtitle: "Port dunărean, spirit pescaresc. Mutări de încredere în Brăila.",
     heroImage: "/images/cities/braila.webp",
     articleIntro:
@@ -519,7 +519,7 @@ export const cityData: CityData[] = [
     landmarks: ["Parcul Crâng", "Episcopia", "Centrul Vechi"],
     neighborhoods: ["Centru", "Dorobanți", "Micro 14", "Broșteni"],
     metaDescription:
-      "Servicii mutări Buzău ✓ Transport mobilă în Muntenia ✓ Compară oferte gratuite de la firme verificate ✓ Economisește până la 40% la mutarea ta",
+      "Servicii mutări Buzău ✓ Transport mobilă în Muntenia ✓ Compară oferte gratuite de la firme verificate ✓ Compară prețuri la mutarea ta",
     heroSubtitle: "La răscruce de drumuri, tradiție și modernitate. Mutări sigure în Buzău.",
     heroImage: "/images/cities/buzau.webp",
     articleIntro:
@@ -627,7 +627,7 @@ export const cityData: CityData[] = [
     landmarks: ["Curtea Domnească", "Turnul Chindiei", "Parcul Chindia"],
     neighborhoods: ["Centru", "Micro", "Priseaca", "Matei Voievod"],
     metaDescription:
-      "Servicii mutări Târgoviște ✓ Transport mobilă în Dâmbovița ✓ Compară oferte gratuite ✓ Rute către București ✓ Economisești până la 40%",
+      "Servicii mutări Târgoviște ✓ Transport mobilă în Dâmbovița ✓ Compară oferte gratuite ✓ Rute către București ✓ Compară și alegi",
     heroSubtitle: "Vechea capitală a Țării Românești. Mutări de încredere în Târgoviște.",
     heroImage: "/images/cities/targoviste.webp",
     articleIntro:
@@ -681,7 +681,7 @@ export const cityData: CityData[] = [
     landmarks: ["Turnul lui Ștefan", "Piața Libertății", "Centrul Vechi"],
     neighborhoods: ["Centru", "Vasile Alecsandri", "Săsar", "Ferneziu", "Firiza"],
     metaDescription:
-      "Firme mutări Baia Mare ✓ Transport mobilă în Maramureș ✓ Compară oferte gratuite în 24h ✓ Expertiză teren montan ✓ Economisești până la 40%",
+      "Firme mutări Baia Mare ✓ Transport mobilă în Maramureș ✓ Compară oferte gratuite în 24h ✓ Expertiză teren montan ✓ Compară și alegi",
     heroSubtitle: "Poartă către Maramureșul tradițional. Mutări de calitate în Baia Mare.",
     heroImage: "/images/cities/baia-mare.webp",
     articleIntro:
@@ -735,7 +735,7 @@ export const cityData: CityData[] = [
     landmarks: ["Palatul Culturii", "Cetatea Medievală", "Grădina Zoo"],
     neighborhoods: ["Centru", "Tudor", "Cornișa", "Unirii", "7 Noiembrie"],
     metaDescription:
-      "Servicii mutări Târgu Mureș ✓ Transport mobilă în Transilvania ✓ Compară oferte gratuite ✓ Servicii bilingve ✓ Economisești până la 40%",
+      "Servicii mutări Târgu Mureș ✓ Transport mobilă în Transilvania ✓ Compară oferte gratuite ✓ Servicii bilingve ✓ Compară și alegi",
     heroSubtitle: "Capitală culturală în inima țării. Mutări profesionale în Târgu Mureș.",
     heroImage: "/images/cities/targu-mures.webp",
     articleIntro:
@@ -816,7 +816,7 @@ export const cityData: CityData[] = [
     landmarks: ["Turnul Pompierilor", "Parcul Vasile Lucaciu", "Centrul Vechi"],
     neighborhoods: ["Centru", "Carpați", "Micro 17", "Solidarității"],
     metaDescription:
-      "Mutări Satu Mare ✓ Compară 3-5 oferte GRATUITE în 24h ✓ Transport mobilă în nord-vest ✓ Firme verificate ✓ Economisești 40%",
+      "Mutări Satu Mare ✓ Compară până la 5 oferte gratuite în 24h ✓ Transport mobilă în nord-vest ✓ Firme verificate ✓ Compară și alegi",
     heroSubtitle: "În țara Oașului, la granița cu Ungaria. Mutări profesionale în Satu Mare.",
     heroImage: "/images/cities/satu-mare.webp",
     articleIntro:
@@ -870,7 +870,7 @@ export const cityData: CityData[] = [
     landmarks: ["Piața Mare", "Podul Minciunilor", "Casele cu Ochi"],
     neighborhoods: ["Centru Istoric", "Hipodrom", "Cibin", "Ștrand", "Turnișor"],
     metaDescription:
-      "Mutări Sibiu ✓ Transport mobilă în Transilvania ✓ Oferte gratuite de la firme verificate ✓ Economisește 40%",
+      "Mutări Sibiu ✓ Transport mobilă în Transilvania ✓ Oferte gratuite de la firme verificate ✓ Compară prețuri",
     heroSubtitle: "Bijuterie medievală, Capitală Culturală Europeană. Mutări premium în Sibiu.",
     heroImage: "/images/cities/sibiu.webp",
     articleIntro:

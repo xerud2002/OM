@@ -89,8 +89,8 @@ export default function ImpachetareProfesionalaPage({ currentYear, reviewStats }
                 <div className="text-sm text-rose-100">Durată medie</div>
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
-                <div className="text-3xl font-bold text-white">100%</div>
-                <div className="text-sm text-rose-100">Asigurare</div>
+                <div className="text-3xl font-bold text-white">✓</div>
+                <div className="text-sm text-rose-100">Asigurare inclusă</div>
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
                 <div className="text-3xl font-bold text-white">✓</div>
@@ -221,10 +221,10 @@ export default function ImpachetareProfesionalaPage({ currentYear, reviewStats }
                   <CheckCircle className="h-5 w-5 text-green-600" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Zero stres, zero daune</h3>
+                  <h3 className="font-bold text-gray-900">Stres minim, risc redus de daune</h3>
                   <p className="text-gray-600">
                     Firmele specializate din rețeaua noastră știu exact cum să ambaleze fiecare 
-                    tip de obiect. Rata daunelor este sub 1% la împachetare profesională vs. 15-20% la DIY.
+                    tip de obiect. Împachetarea profesională reduce semnificativ riscul de deteriorare față de ambalarea pe cont propriu.
                   </p>
                 </div>
               </div>

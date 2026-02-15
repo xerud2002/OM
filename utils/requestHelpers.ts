@@ -15,7 +15,7 @@ export function isValidRoPhone(phone: string): boolean {
 
 /**
  * Build full address string from components.
- * Pure function — no Firebase dependency.
+ * Pure function - no Firebase dependency.
  */
 export function buildAddressString(
   street?: string,

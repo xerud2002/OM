@@ -1,5 +1,5 @@
 // pages/sitemap.xml.ts
-// Dynamic sitemap generation — auto-includes all static pages + dynamic city/route pages + blog articles
+// Dynamic sitemap generation - auto-includes all static pages + dynamic city/route pages + blog articles
 // Serves at /sitemap.xml via getServerSideProps (cached 1 hour)
 import type { GetServerSidePropsContext } from "next";
 import fs from "fs";
@@ -35,7 +35,7 @@ function getStaticPages(): SitemapEntry[] {
     const dirEntries = fs.readdirSync(dir, { withFileTypes: true });
     for (const entry of dirEntries) {
       if (entry.name.startsWith("_")) continue;
-      // Skip dynamic route folders/files — handled separately below
+      // Skip dynamic route folders/files - handled separately below
       if (entry.name.startsWith("[")) continue;
       const fullPath = path.join(dir, entry.name);
       const routePath = prefix + "/" + entry.name;
@@ -86,13 +86,13 @@ function getDynamicPages(): SitemapEntry[] {
   const now = new Date().toISOString().split("T")[0];
   const entries: SitemapEntry[] = [];
 
-  // City pages: /mutari/[from] — 41 cities
+  // City pages: /mutari/[from] - 41 cities
   const citySlugs = getAllCitySlugs();
   for (const slug of citySlugs) {
     entries.push({ loc: `/mutari/${slug}`, lastmod: now, priority: "0.9" });
   }
 
-  // Route pages: /mutari/[from]/[to] — ~150 routes
+  // Route pages: /mutari/[from]/[to] - ~150 routes
   const routePaths = getAllRoutePaths();
   for (const rp of routePaths) {
     entries.push({

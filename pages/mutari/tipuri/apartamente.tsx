@@ -18,7 +18,7 @@ export default function MutariApartamentePage({ currentYear, reviewStats }: Muta
   const faqItems = [
     {
       question: "Cât costă o mutare de apartament în România?",
-      answer: "Prețurile variază între 400-2.500 lei în funcție de mărimea apartamentului (garsonieră până la 4+ camere), etaj, existența liftului și distanța de parcurs. Pe platformă primești 3-5 oferte GRATUITE pentru a compara prețurile.",
+      answer: "Prețurile variază între 400-2.500 lei în funcție de mărimea apartamentului (garsonieră până la 4+ camere), etaj, existența liftului și distanța de parcurs. Pe platformă primești până la 5 oferte gratuite pentru a compara prețurile.",
     },
     {
       question: "Cât durează o mutare de apartament?",
@@ -42,10 +42,10 @@ export default function MutariApartamentePage({ currentYear, reviewStats }: Muta
     <>
       <Head>
         {/* SEO Title - optimized for CTR */}
-        <title>{`Mutări Apartamente ${currentYear} → Economisești 40%`}</title>
+        <title>{`Mutări Apartamente ${currentYear} | Compară oferte gratuit`}</title>
         <meta
           name="description"
-          content="✓ 3-5 oferte GRATUITE în 24h de la firme verificate ✓ Compară prețuri și economisești până la 40% ✓ Garsoniere până la 4+ camere → Găsește oferta perfectă!"
+          content="Până la 5 oferte gratuite în 24h de la firme verificate. Compară prețuri pentru garsoniere până la 4+ camere. Găsește oferta potrivită!"
         />
         <meta
           name="keywords"
@@ -59,10 +59,10 @@ export default function MutariApartamentePage({ currentYear, reviewStats }: Muta
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro/mutari/tipuri/apartamente" />
-        <meta property="og:title" content={`🏠 Mutări Apartamente ${currentYear} | Economisește 40%`} />
+        <meta property="og:title" content={`Mutări Apartamente ${currentYear} | Oferte gratuite`} />
         <meta
           property="og:description"
-          content="✓ 3-5 oferte GRATUITE ✓ Economisești 40% ✓ Garsoniere până la 4+ camere"
+          content="Până la 5 oferte gratuite. Garsoniere până la 4+ camere. Compară prețuri."
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
         <meta property="og:image:width" content="1200" />
@@ -73,8 +73,8 @@ export default function MutariApartamentePage({ currentYear, reviewStats }: Muta
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/mutari/tipuri/apartamente" />
-        <meta name="twitter:title" content={`🏠 Mutări Apartamente ${currentYear}`} />
-        <meta name="twitter:description" content="✓ 3-5 oferte GRATUITE în 24h ✓ Economisești 40%" />
+        <meta name="twitter:title" content={`Mutări Apartamente ${currentYear}`} />
+        <meta name="twitter:description" content="Până la 5 oferte gratuite în 24h de la firme verificate." />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
 
         {/* Additional SEO */}
@@ -128,12 +128,12 @@ export default function MutariApartamentePage({ currentYear, reviewStats }: Muta
             {/* Stats */}
             <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
-                <div className="text-3xl font-bold text-white">3-5</div>
+                <div className="text-3xl font-bold text-white">Până la 5</div>
                 <div className="text-sm text-purple-100">Oferte în 24h</div>
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
-                <div className="text-3xl font-bold text-white">40%</div>
-                <div className="text-sm text-purple-100">Economie medie</div>
+                <div className="text-3xl font-bold text-white">100%</div>
+                <div className="text-sm text-purple-100">Gratuit pe platformă</div>
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
                 <div className="text-3xl font-bold text-white">2-4h</div>
@@ -172,7 +172,7 @@ export default function MutariApartamentePage({ currentYear, reviewStats }: Muta
               </p>
               <p>
                 Pe <strong>OferteMutare.ro</strong> simplifici totul: completezi un formular în 3 minute
-                și primești 3-5 oferte personalizate de la firme verificate. Compari prețurile, verifici
+                și primești până la 5 oferte personalizate de la firme verificate. Compari prețurile, verifici
                 recenziile și alegi firma potrivită &ndash; <strong>100% gratuit, fără obligații</strong>.
               </p>
             </div>
@@ -329,7 +329,7 @@ export default function MutariApartamentePage({ currentYear, reviewStats }: Muta
               Gata să îți muți apartamentul?
             </h2>
             <p className="mb-8 text-lg text-purple-100">
-              Primește 3-5 oferte gratuite în 24h și economisește până la 40%.
+              Primește până la 5 oferte gratuite în 24h. Compară și alege ce ți se potrivește.
             </p>
             <Link
               href="/#request-form"

@@ -34,7 +34,7 @@ export function LocalBusinessSchema({ city, serviceName }: { city?: string; serv
     "@context": "https://schema.org",
     "@type": "Service",
     serviceType: serviceName,
-    provider: {
+    broker: {
       "@type": "Organization",
       name: "OferteMutare.ro",
       url: "https://ofertemutare.ro",
@@ -134,7 +134,7 @@ export function AggregateRatingSchema({
 
   const schema = {
     "@context": "https://schema.org",
-    "@type": "LocalBusiness",
+    "@type": "Organization",
     "@id": "https://ofertemutare.ro/#business",
     name: "OferteMutare.ro",
     url: "https://ofertemutare.ro",

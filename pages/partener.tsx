@@ -127,9 +127,9 @@ const steps = [
 ];
 
 const stats = [
-  { value: "500+", label: "Mutări Realizate" },
-  { value: "50+", label: "Firme Partenere" },
-  { value: "4.9/5", label: "Rating Mediu" },
+  { value: "Zeci", label: "Firme Partenere" },
+  { value: "Rapid", label: "Conectare cu Clienți" },
+  { value: "0 lei", label: "Abonament Lunar" },
   { value: "24h", label: "Timp Răspuns" },
 ];
 
@@ -406,7 +406,7 @@ export default function PartenerPage({
         <title>Devino Partener | OferteMutare.ro - Firme de Mutări</title>
         <meta
           name="description"
-          content="Înscrie-ți firma de mutări pe OferteMutare.ro și primește cereri de la clienți verificați. Fără abonamente, plătești doar pentru succes. Creștere garantată!"
+          content="Înscrie-ți firma de mutări pe OferteMutare.ro și primește cereri de la clienți verificați. Fără abonamente, plătești doar pentru succes."
         />
         <meta name="robots" content="index, follow" />
         <link rel="canonical" href="https://ofertemutare.ro/partener" />

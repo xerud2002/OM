@@ -13,7 +13,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy", { locale: ro });
 }

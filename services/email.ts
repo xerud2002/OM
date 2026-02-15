@@ -856,7 +856,7 @@ export const emailTemplates = {
               </div>
               
               <div class="note">
-                Fiecare cerere este o oportunitate de învățare. Menține-ți standardele înalte și continuă să oferi servicii de calitate — următoarea poate fi a ta.
+                Fiecare cerere este o oportunitate de învățare. Menține-ți standardele înalte și continuă să oferi servicii de calitate. Următoarea poate fi a ta.
               </div>
 
               <div class="cta-wrapper">
@@ -1301,7 +1301,7 @@ export const emailTemplates = {
             <div class="content">
               <div class="greeting">Bună ${name},</div>
               <div class="message">
-                Ai ales să adaugi fotografii sau videoclipuri mai târziu pentru cererea ta de mutare. Folosește butonul de mai jos pentru a încărca fișierele — acestea ajută firmele să-ți facă oferte mai precise.
+                Ai ales să adaugi fotografii sau videoclipuri mai târziu pentru cererea ta de mutare. Folosește butonul de mai jos pentru a încărca fișierele. Acestea ajută firmele să-ți facă oferte mai precise.
               </div>
               
               <div style="text-align: center;">
@@ -1400,7 +1400,7 @@ export const emailTemplates = {
           <div class="container">
             <div class="header">
               <h1>📸 Fotografii Noi Disponibile</h1>
-              <div class="subtitle">Cererea #${requestCode} — ${route}</div>
+              <div class="subtitle">Cererea #${requestCode} - ${route}</div>
             </div>
             <div class="content">
               <div class="greeting">Bună ${companyName},</div>

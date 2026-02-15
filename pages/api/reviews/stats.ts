@@ -7,7 +7,7 @@ const isRateLimited = createRateLimiter({ name: "reviewStats", max: 30, windowMs
 
 /**
  * Public API: Returns aggregate review statistics.
- * No auth required — data is used for SEO structured data.
+ * No auth required - data is used for SEO structured data.
  * GET /api/reviews/stats → { ratingValue: number, reviewCount: number }
  */
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {

@@ -105,7 +105,7 @@ const blogPosts = [
   },
   {
     slug: "mutare-fara-lift",
-    title: "Mutare la Etaj fără Lift — Soluții și Costuri 2026",
+    title: "Mutare la Etaj fără Lift: Soluții și Costuri 2026",
     excerpt:
       "Cât costă în plus o mutare fără lift? Tabel cu prețuri per etaj, soluții practice (lift exterior, demontare mobilă) și sfaturi de economisire.",
     category: "Ghid Practic",

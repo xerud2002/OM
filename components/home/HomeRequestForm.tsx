@@ -1902,7 +1902,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               {/* Message */}
               <div className="mb-6 rounded-lg bg-emerald-50 p-4 text-center">
                 <p className="text-sm text-gray-700">
-                  <strong>Vei primi 3-5 oferte în maxim 24h</strong> de la firme
+                  <strong>Vei primi până la 5 oferte în maxim 24h</strong> de la firme
                   de mutări verificate.
                 </p>
                 <p className="mt-2 text-sm text-gray-600">

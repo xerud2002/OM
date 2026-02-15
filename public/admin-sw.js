@@ -1,5 +1,5 @@
 // Service Worker for OferteMutare Admin Dashboard PWA
-// Scope: /admin/ only — does NOT affect the public site
+// Scope: /admin/ only - does NOT affect the public site
 
 const CACHE_NAME = "om-admin-v1";
 const SHELL_ASSETS = [
@@ -39,7 +39,7 @@ self.addEventListener("fetch", (event) => {
   // Skip non-GET requests (POST, PUT, DELETE for API calls)
   if (event.request.method !== "GET") return;
 
-  // Skip Firebase/external requests — let them pass through
+  // Skip Firebase/external requests - let them pass through
   if (url.origin !== self.location.origin) return;
 
   // API routes: network-only (always fresh data)

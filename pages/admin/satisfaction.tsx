@@ -18,7 +18,7 @@ import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 
 function fmtDate(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return format(new Date(iso), "d MMM yyyy", { locale: ro });
 }
 
@@ -42,18 +42,18 @@ export default function AdminSatisfaction() {
 
   const surveyCols: Column<any>[] = [
     { key: "createdAt", label: "Data", sortable: true, render: (r) => <span className="text-sm text-gray-500">{fmtDate(r.createdAt)}</span> },
-    { key: "userName", label: "Client", sortable: true, render: (r) => <span className="font-medium">{r.userName || "—"}</span> },
-    { key: "companyName", label: "Companie", sortable: true, render: (r) => <span className="text-sm">{r.companyName || "—"}</span> },
+    { key: "userName", label: "Client", sortable: true, render: (r) => <span className="font-medium">{r.userName || "-"}</span> },
+    { key: "companyName", label: "Companie", sortable: true, render: (r) => <span className="text-sm">{r.companyName || "-"}</span> },
     { key: "npsScore", label: "NPS", sortable: true, render: (r) => {
-      if (r.npsScore === null) return <span className="text-gray-400">—</span>;
+      if (r.npsScore === null) return <span className="text-gray-400">-</span>;
       const color = r.npsScore >= 9 ? "text-green-600" : r.npsScore >= 7 ? "text-yellow-600" : "text-red-600";
       return <span className={`font-bold ${color}`}>{r.npsScore}</span>;
     }},
     { key: "csatScore", label: "CSAT", sortable: true, render: (r) => {
-      if (r.csatScore === null) return <span className="text-gray-400">—</span>;
+      if (r.csatScore === null) return <span className="text-gray-400">-</span>;
       return <span className="font-bold text-purple-600">{r.csatScore} ⭐</span>;
     }},
-    { key: "comment", label: "Comentariu", render: (r) => <span className="text-sm text-gray-500 truncate max-w-xs block">{r.comment || "—"}</span> },
+    { key: "comment", label: "Comentariu", render: (r) => <span className="text-sm text-gray-500 truncate max-w-xs block">{r.comment || "-"}</span> },
   ];
 
   const companyCols: Column<any>[] = [

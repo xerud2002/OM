@@ -133,7 +133,7 @@ export default function AdminMarketing() {
               </div>
 
               {/* Monthly trend */}
-              <ChartCard title="Trend lunar" subtitle="Cereri, oferte, acceptări — ultimele 6 luni">
+              <ChartCard title="Trend lunar" subtitle="Cereri, oferte, acceptări - ultimele 6 luni">
                 <ResponsiveContainer width="100%" height={300}>
                   <LineChart data={data.monthlyTrend}>
                     <CartesianGrid strokeDasharray="3 3" vertical={false} />

@@ -73,7 +73,7 @@ export default function ArticleMutareFaraLift() {
             title: "Demontare & Remontare Mobilă",
             icon: Wrench,
             desc: "Orice piesă care nu trece prin ușa scării se demontează. Firmele profesioniste vin cu scule electrice și etichetează fiecare șurub. Costul mediu: 200-500 RON pentru un apartament cu 2 camere.",
-            tip: "Fotografiază fiecare pas al demontării pe telefon — ajută enorm la remontare.",
+            tip: "Fotografiază fiecare pas al demontării pe telefon. Ajută enorm la remontare.",
         },
         {
             title: "Lift Exterior (Macara Mobilă)",
@@ -85,7 +85,7 @@ export default function ArticleMutareFaraLift() {
             title: "Cărucior Electric de Scări",
             icon: Truck,
             desc: "Echipament specializat care urcă obiecte grele (mașini de spălat, frigidere) pe scări, treaptă cu treaptă. Reduce efortul și riscul de accidentări. Majoritatea firmelor profesioniste au unul.",
-            tip: "Întreabă firma dacă dispune de cărucior electric — nu toate au acest echipament.",
+            tip: "Întreabă firma dacă dispune de cărucior electric, nu toate au acest echipament.",
         },
         {
             title: "Echipă Suplimentară",
@@ -98,7 +98,7 @@ export default function ArticleMutareFaraLift() {
     return (
         <>
             <Head>
-                <title>{`Mutare fără Lift — Soluții și Costuri ${currentYear}`}</title>
+                <title>{`Mutare fără Lift: Soluții și Costuri ${currentYear}`}</title>
                 <meta
                     name="description"
                     content={`Ghid complet ${currentYear} pentru mutări la bloc fără lift. Costuri per etaj, soluții (lift exterior, demontare mobilă), sfaturi practice și prețuri reale.`}
@@ -121,7 +121,7 @@ export default function ArticleMutareFaraLift() {
                 <link rel="canonical" href="https://ofertemutare.ro/articole/mutare-fara-lift" />
                 <meta name="twitter:card" content="summary_large_image" />
                 <meta name="twitter:url" content="https://ofertemutare.ro/articole/mutare-fara-lift" />
-                <meta name="twitter:title" content={`Mutare fără Lift ${currentYear} — Soluții și Costuri`} />
+                <meta name="twitter:title" content={`Mutare fără Lift ${currentYear}: Soluții și Costuri`} />
                 <meta
                     name="twitter:description"
                     content="Ghid detaliat cu costuri per etaj, soluții practice și sfaturi pentru mutări la bloc fără lift."
@@ -134,7 +134,7 @@ export default function ArticleMutareFaraLift() {
             </Head>
 
             <ArticleSchema
-                title={`Mutare la Etaj fără Lift — Soluții și Costuri ${currentYear}`}
+                title={`Mutare la Etaj fără Lift: Soluții și Costuri ${currentYear}`}
                 description="Ghid complet pentru mutări la bloc fără lift cu prețuri reale per etaj și soluții practice."
                 datePublished="2026-02-12"
                 image="https://ofertemutare.ro/pics/blog/mutare-fara-lift.webp"
@@ -144,7 +144,7 @@ export default function ArticleMutareFaraLift() {
                     items={[
                         { name: "Acasă", href: "/" },
                         { name: "Articole", href: "/articole" },
-                        { name: `Mutare fără Lift — Soluții și Costuri ${currentYear}` },
+                        { name: `Mutare fără Lift: Soluții și Costuri ${currentYear}` },
                     ]}
                 />
                 <article className="mx-auto max-w-4xl px-4 py-12">
@@ -172,7 +172,7 @@ export default function ArticleMutareFaraLift() {
                         <div className="mb-6 overflow-hidden rounded-2xl shadow-xl">
                             <Image
                                 src="/pics/blog/mutare-fara-lift.webp"
-                                alt="Mutare la etaj fără lift — muncitori cară mobilă pe scări"
+                                alt="Mutare la etaj fără lift, muncitori cară mobilă pe scări"
                                 width={1200}
                                 height={1200}
                                 className="h-auto w-full"
@@ -181,7 +181,7 @@ export default function ArticleMutareFaraLift() {
                             />
                         </div>
                         <p className="mx-auto max-w-2xl text-lg text-gray-600">
-                            Locuiești la etaj într-un bloc fără lift? Nu ești singur — peste 40% din blocurile
+                            Locuești la etaj într-un bloc fără lift? Nu ești singur: peste 40% din blocurile
                             din România nu au lift. Află exact cât costă, ce soluții există și cum eviți surprizele.
                         </p>
                     </header>
@@ -315,7 +315,7 @@ export default function ArticleMutareFaraLift() {
                                     <div>
                                         <h3 className="font-bold text-slate-900 mb-1">Alege ziua potrivită</h3>
                                         <p className="text-gray-600 text-sm">
-                                            Marți-Joi sunt cele mai ieftine zile. Evită finalul de lună și weekendul —
+                                            Marți-Joi sunt cele mai ieftine zile. Evită finalul de lună și weekendul,
                                             firmele au cerere mai mare și prețuri cu 20-30% mai mari.
                                         </p>
                                     </div>
@@ -346,7 +346,7 @@ export default function ArticleMutareFaraLift() {
                                 <Currency className="mt-1 h-8 w-8 shrink-0 text-emerald-600" />
                                 <div>
                                     <h3 className="mb-3 text-xl font-bold text-slate-900">
-                                        Apartament 2 camere, Etaj 4 fără lift — București
+                                        Apartament 2 camere, Etaj 4 fără lift, București
                                     </h3>
                                     <div className="space-y-2 text-gray-700 mb-4">
                                         <p>📦 Mobilă standard: dormitor, living, bucătărie (frigider, mașină spălat)</p>

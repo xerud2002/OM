@@ -16,7 +16,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy, HH:mm", { locale: ro });
 }
@@ -75,14 +75,14 @@ export default function AdminOffers() {
       label: "Rută",
       render: (o) => o.requestRoute ? (
         <span className="text-sm">{o.requestRoute.from} → {o.requestRoute.to}</span>
-      ) : <span className="text-gray-400">—</span>,
+      ) : <span className="text-gray-400">-</span>,
       getValue: (o) => o.requestRoute ? `${o.requestRoute.from} ${o.requestRoute.to}` : "",
     },
     {
       key: "price",
       label: "Preț",
       sortable: true,
-      render: (o) => <span className="font-semibold">{o.price ? `${o.price} RON` : "—"}</span>,
+      render: (o) => <span className="font-semibold">{o.price ? `${o.price} RON` : "-"}</span>,
     },
     {
       key: "status",

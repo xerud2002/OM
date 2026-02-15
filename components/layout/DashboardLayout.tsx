@@ -424,7 +424,7 @@ export default function DashboardLayout({
         </Dialog>
       </Transition.Root>
 
-      {/* Desktop sidebar — collapsed icon-only at md:, full at lg: */}
+      {/* Desktop sidebar - collapsed icon-only at md:, full at lg: */}
       <div className="hidden md:fixed md:inset-y-0 md:z-50 md:flex md:w-16 md:flex-col lg:w-64">
         <div className={`flex grow flex-col overflow-y-auto ${colors.bg}`}>
           {/* Logo */}
@@ -438,7 +438,7 @@ export default function DashboardLayout({
             </Link>
           </div>
 
-          {/* User info — hidden on tablet, visible on desktop */}
+          {/* User info - hidden on tablet, visible on desktop */}
           <div className="hidden px-4 py-4 lg:block">
             <div className="flex items-center gap-3 rounded-xl bg-linear-to-r from-gray-50 to-gray-100/50 p-3">
               <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-emerald-500 to-teal-500 shadow-sm">
@@ -454,7 +454,7 @@ export default function DashboardLayout({
               </div>
             </div>
           </div>
-          {/* User avatar — tablet collapsed sidebar */}
+          {/* User avatar - tablet collapsed sidebar */}
           <div className="flex justify-center py-3 lg:hidden">
             <div className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-linear-to-br from-emerald-500 to-teal-500 shadow-sm">
               <UserAvatar role={role} photoURL={user?.photoURL} />
@@ -547,7 +547,7 @@ export default function DashboardLayout({
 
             {/* Right side actions */}
             <div className="flex items-center gap-x-4 lg:gap-x-6">
-              {/* PWA Install button — all dashboard roles */}
+              {/* PWA Install button - all dashboard roles */}
               {installPrompt && (
                 <button
                   onClick={handleInstall}

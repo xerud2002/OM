@@ -110,16 +110,16 @@ function JobCard({
           <span className="text-[9px] sm:text-[10px] text-gray-400">
             {(() => {
               const ts = r.createdAt;
-              if (!ts) return "—";
+              if (!ts) return "-";
               let d: Date;
               if (ts.toDate) {
                 d = ts.toDate();
               } else if (ts.seconds) {
                 d = new Date(ts.seconds * 1000);
               } else {
-                return "—";
+                return "-";
               }
-              if (isNaN(d.getTime())) return "—";
+              if (isNaN(d.getTime())) return "-";
               return (
                 d.toLocaleDateString("ro-RO", {
                   day: "2-digit",
@@ -570,7 +570,7 @@ export default function RequestsView({
     [],
   );
 
-  // Initial Load — wait for auth before querying Firestore
+  // Initial Load - wait for auth before querying Firestore
   useEffect(() => {
     if (!company?.uid) {
       setLoading(false);
@@ -833,7 +833,7 @@ export default function RequestsView({
         throw result.error || "Eroare la trimiterea ofertei.";
       }
 
-      // Success — optimistic update
+      // Success - optimistic update
       setHasMineMap((prev) => ({
         ...prev,
         [activeOfferRequest.id]: { offerId: result.data?.offerId || "temp", status: "pending" },

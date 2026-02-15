@@ -16,7 +16,7 @@ import { format } from "date-fns";
 import { ro } from "date-fns/locale";
 
 function fmtDate(iso: string | null) {
-  if (!iso) return "—";
+  if (!iso) return "-";
   return format(new Date(iso), "d MMM yyyy, HH:mm", { locale: ro });
 }
 
@@ -65,13 +65,13 @@ export default function AdminTransactions() {
 
   const cols: Column<any>[] = [
     { key: "createdAt", label: "Data", sortable: true, render: (r) => <span className="text-sm text-gray-500">{fmtDate(r.createdAt)}</span> },
-    { key: "companyName", label: "Companie", sortable: true, render: (r) => <span className="font-medium text-gray-900">{r.companyName || r.companyId || "—"}</span> },
+    { key: "companyName", label: "Companie", sortable: true, render: (r) => <span className="font-medium text-gray-900">{r.companyName || r.companyId || "-"}</span> },
     { key: "type", label: "Tip", sortable: true, render: (r) => typeBadge(r.type) },
     { key: "amount", label: "Suma", sortable: true, render: (r) => {
       const positive = r.type === "purchase" || r.type === "buy" || r.type === "refund" || r.type === "adjustment";
       return <span className={`font-semibold ${positive ? "text-green-600" : "text-red-600"}`}>{positive ? "+" : "−"}{Math.abs(r.amount)}</span>;
     }},
-    { key: "description", label: "Descriere", render: (r) => <span className="text-sm text-gray-500">{r.description || "—"}</span> },
+    { key: "description", label: "Descriere", render: (r) => <span className="text-sm text-gray-500">{r.description || "-"}</span> },
   ];
 
   const tabs = [

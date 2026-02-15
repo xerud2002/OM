@@ -63,7 +63,7 @@ export default function AdminApiAnalytics() {
     { key: "endpoint", label: "Endpoint", sortable: true, render: (r) => <code className="text-xs">{r.endpoint}</code> },
     { key: "count", label: "Nr. depășiri", sortable: true },
     { key: "timestamp", label: "Ultima", sortable: true, render: (r) => (
-      <span className="text-sm text-gray-500">{r.timestamp ? new Date(r.timestamp).toLocaleString("ro-RO") : "—"}</span>
+      <span className="text-sm text-gray-500">{r.timestamp ? new Date(r.timestamp).toLocaleString("ro-RO") : "-"}</span>
     )},
   ];
 

@@ -1,6 +1,6 @@
 // pages/api/admin/sidebar-badges.ts
 // Lightweight endpoint returning unread/pending counts for admin sidebar badges
-// Designed to be polled every 30-60s — returns only counts, no heavy data
+// Designed to be polled every 30-60s - returns only counts, no heavy data
 
 import type { NextApiRequest, NextApiResponse } from "next";
 import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";

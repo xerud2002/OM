@@ -25,7 +25,7 @@ export function useAdminBadges(role: string, user: User | null): Record<string, 
         setBadges(json.data.badges);
       }
     } catch {
-      // Silently fail — badge is non-critical
+      // Silently fail - badge is non-critical
     }
   }, [user]);
 

@@ -89,7 +89,7 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
     },
     {
       icon: ChatBubbleLeftRightIcon,
-      title: "2. Primești 3-5 oferte",
+      title: "2. Primești până la 5 oferte",
       text: "Firmele verificate din zona ta îți trimit oferte personalizate cu preț, detalii și disponibilitate.",
     },
     {
@@ -104,10 +104,10 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
   return (
     <>
       <Head>
-        <title>{`Mutări ${currentYear} | Apartamente, Case, Birouri, Studenți — Oferte Gratuite`}</title>
+        <title>{`Mutări ${currentYear} | Apartamente, Case, Birouri, Studenți | Oferte Gratuite`}</title>
         <meta
           name="description"
-          content={`✓ Compară firme de mutări verificate în România ${currentYear} ✓ Apartamente, case, birouri, studenți ✓ 3-5 oferte GRATUITE în 24h → Economisești până la 40%!`}
+          content={`Compară firme de mutări verificate în România ${currentYear}. Apartamente, case, birouri, studenți. Până la 5 oferte gratuite în 24h.`}
         />
         <meta name="keywords" content="mutări, firme mutări, oferte mutare, transport mobilă, mutare apartament, mutare casă, mutări ieftine, firme mutări verificate" />
         <link rel="canonical" href="https://ofertemutare.ro/mutari" />
@@ -136,8 +136,8 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
               "@context": "https://schema.org",
               "@type": "Service",
               name: "Servicii de Mutări în România",
-              serviceType: "Transport Mobilă și Mutare Locuință România",
-              provider: {
+              serviceType: "Platformă comparare oferte mutări",
+              broker: {
                 "@type": "Organization",
                 name: "OferteMutare.ro",
                 url: "https://ofertemutare.ro",
@@ -160,7 +160,7 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
                   position: i + 1,
                 })),
               },
-              description: "Platformă de comparare oferte de la firme de mutări verificate. Mutări apartamente, case, birouri și studenți. 3-5 oferte GRATUITE în 24h.",
+              description: "Platformă de comparare oferte de la firme de mutări verificate. Mutări apartamente, case, birouri și studenți. Până la 5 oferte gratuite în 24h.",
             }),
           }}
         />
@@ -188,7 +188,7 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
               </span>
             </h1>
             <p className="mb-8 mx-auto max-w-2xl text-lg text-purple-100 md:text-xl">
-              Alege tipul de mutare, selectează orașul și primești 3-5 oferte gratuite de la firme verificate în maxim 24 de ore.
+              Alege tipul de mutare, selectează orașul și primești până la 5 oferte gratuite de la firme verificate în maxim 24 de ore.
             </p>
             <div className="flex flex-wrap justify-center gap-4 text-sm text-purple-200">
               <span className="flex items-center gap-1.5"><ShieldCheckIcon className="h-5 w-5 text-green-400" /> Firme verificate</span>
@@ -284,7 +284,7 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
             </div>
           </section>
 
-          {/* Why us — social proof + trust */}
+          {/* Why us - social proof + trust */}
           <section className="mb-16 rounded-2xl bg-linear-to-br from-purple-50 to-indigo-50 p-8 md:p-12">
             <h2 className="mb-8 text-center text-3xl font-bold text-gray-900">De ce OferteMutare.ro?</h2>
             <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-4">
@@ -299,15 +299,15 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
                   <ChatBubbleLeftRightIcon className="h-6 w-6 text-blue-600" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900">3-5</div>
+                <div className="text-2xl font-bold text-gray-900">Până la 5</div>
                 <div className="text-sm text-gray-600">Oferte per cerere</div>
               </div>
               <div className="text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-yellow-100">
                   <CurrencyEuroIcon className="h-6 w-6 text-yellow-600" />
                 </div>
-                <div className="text-2xl font-bold text-gray-900">40%</div>
-                <div className="text-sm text-gray-600">Economie medie</div>
+                <div className="text-2xl font-bold text-gray-900">Compari</div>
+                <div className="text-sm text-gray-600">Prețuri și alegi liber</div>
               </div>
               <div className="text-center">
                 <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100">
@@ -343,7 +343,7 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
               ))}
             </div>
             <p className="mt-4 text-sm text-gray-500">
-              Nu ai găsit orașul tău? <Link href="/customer/auth" className="text-purple-600 font-medium hover:underline">Completează formularul</Link> — firmele partenere acoperă și localitățile mai mici.
+              Nu ai găsit orașul tău? <Link href="/customer/auth" className="text-purple-600 font-medium hover:underline">Completează formularul</Link>, firmele partenere acoperă și localitățile mai mici.
             </p>
           </section>
 
@@ -362,7 +362,7 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
               O ofertă completă de mutare trebuie să precizeze clar: <strong>prețul total</strong> (nu doar &ldquo;de la...&rdquo;),
               numărul de mutători, tipul și dimensiunea camionului, <strong>asigurarea bunurilor</strong> pe durata transportului,
               eventuale costuri suplimentare (etaj fără lift, obiecte grele) și intervalul orar. Pe OferteMutare.ro primești
-              3-5 astfel de oferte detaliate, gratuit.
+              până la 5 astfel de oferte detaliate, gratuit.
             </p>
 
             <h3 className="text-xl font-bold text-gray-900 mt-8">Cât costă o mutare în {currentYear}?</h3>
@@ -414,7 +414,7 @@ export default function MutariIndexPage({ currentYear, reviewStats }: MutariInde
           <section className="rounded-2xl bg-linear-to-r from-purple-600 to-violet-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Gata să te muți?</h2>
             <p className="mb-8 mx-auto max-w-xl text-lg text-purple-100">
-              Completează formularul gratuit, primești 3-5 oferte în 24h, alegi cea mai bună și economisești până la 40% față de prețul standard.
+              Completeză formularul gratuit, primești până la 5 oferte în 24h și alegi cea mai bună variantă pentru bugetul tău.
             </p>
             <Link
               href="/customer/auth"

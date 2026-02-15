@@ -33,7 +33,7 @@ function getRange(preset: Preset): DateRange {
   const p = presets.find((pr) => pr.key === preset)!;
 
   if (p.days === null) {
-    // All time — 2 years back
+    // All time - 2 years back
     return { from: new Date(2024, 0, 1), to, label: p.label };
   }
 

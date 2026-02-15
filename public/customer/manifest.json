@@ -1,7 +1,7 @@
 {
   "name": "OferteMutare Client",
   "short_name": "OM Client",
-  "description": "Dashboard client OferteMutare.ro — cererile și ofertele tale",
+  "description": "Dashboard client OferteMutare.ro - cererile și ofertele tale",
   "start_url": "/customer/dashboard",
   "scope": "/customer/",
   "id": "/customer",

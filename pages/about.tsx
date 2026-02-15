@@ -57,7 +57,7 @@ export default function AboutPage() {
     {
       icon: TrendingUp,
       title: "Economie",
-      desc: "Clienții noștri economisesc în medie 40% față de prima ofertă primită.",
+      desc: "Clienții noștri economisesc comparând mai multe oferte într-un singur loc.",
       gradient: "linear-gradient(to bottom right, #f59e0b, #ea580c)",
       hoverGradient: "linear-gradient(to bottom right, rgba(245,158,11,0.05), rgba(234,88,12,0.05))",
       decorGradient: "linear-gradient(to bottom right, rgba(245,158,11,0.1), rgba(234,88,12,0.1))",
@@ -96,7 +96,7 @@ export default function AboutPage() {
         <meta name="author" content="Ofertemutare Ltd" />
         <meta
           name="description"
-          content="Povestea OferteMutare.ro, operată de Ofertemutare Ltd — platforma care conectează clienții cu firme de mutări verificate din România. Transparență și prețuri corecte."
+          content="Povestea OferteMutare.ro, operată de Ofertemutare Ltd, platforma care conectează clienții cu firme de mutări verificate din România. Transparență și prețuri corecte."
         />
         <meta
           name="keywords"

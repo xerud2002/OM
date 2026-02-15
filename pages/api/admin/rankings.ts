@@ -44,7 +44,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
     return {
       id: d.id,
       companyName: data.companyName || data.displayName || d.id,
-      city: data.city || "—",
+      city: data.city || "-",
       rating,
       reviews,
       totalOffers: offers.total,

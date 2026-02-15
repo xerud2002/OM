@@ -101,14 +101,14 @@ export default function CompanyDashboard() {
     }
   }, [router.query.tab]);
 
-  // Auth listener — refresh token before setting state so downstream queries have valid credentials
+  // Auth listener - refresh token before setting state so downstream queries have valid credentials
   useEffect(() => {
     const unsub = onAuthChange(async (user) => {
       if (user) {
         try {
           await user.getIdToken(true);
         } catch {
-          // Token refresh failed — set user anyway, queries will handle errors
+          // Token refresh failed - set user anyway, queries will handle errors
         }
       }
       setCompany(user);
@@ -185,7 +185,7 @@ export default function CompanyDashboard() {
                 };
               }
             } catch {
-              // Silently skip — customer data is optional
+              // Silently skip - customer data is optional
             }
             return offer;
           }),
@@ -459,9 +459,9 @@ export default function CompanyDashboard() {
                       {(offer.fromCity || offer.toCity) && (
                         <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-gray-800">
                           <TruckIcon className="h-3.5 w-3.5 text-blue-500 shrink-0" />
-                          <span className="truncate">{offer.fromCity || "—"}</span>
+                          <span className="truncate">{offer.fromCity || "-"}</span>
                           <span className="text-gray-400">→</span>
-                          <span className="truncate">{offer.toCity || "—"}</span>
+                          <span className="truncate">{offer.toCity || "-"}</span>
                         </div>
                       )}
 
@@ -492,7 +492,7 @@ export default function CompanyDashboard() {
                         <div className="inline-flex items-center gap-1.5 rounded-lg bg-blue-50 px-3 py-1.5">
                           <ArrowTrendingUpIcon className="h-4 w-4 text-blue-600" />
                           <span className="text-lg font-bold text-blue-700">
-                            {offer.price ?? "—"} lei
+                            {offer.price ?? "-"} lei
                           </span>
                         </div>
                       </div>

@@ -33,7 +33,7 @@ interface Company {
 }
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts.toDate ? ts.toDate() : ts._seconds ? new Date(ts._seconds * 1000) : new Date(ts);
   return format(d, "d MMM yyyy", { locale: ro });
 }
@@ -106,7 +106,7 @@ export default function AdminCompanies() {
             {(c.companyName || c.displayName || "C").charAt(0).toUpperCase()}
           </div>
           <div>
-            <p className="font-semibold text-gray-900">{c.companyName || c.displayName || "—"}</p>
+            <p className="font-semibold text-gray-900">{c.companyName || c.displayName || "-"}</p>
             {c.cif && <p className="text-xs text-gray-400 font-mono">CIF: {c.cif}</p>}
           </div>
         </div>
@@ -114,7 +114,7 @@ export default function AdminCompanies() {
       getValue: (c) => c.companyName || c.displayName || "",
     },
     { key: "email", label: "Email", sortable: true },
-    { key: "city", label: "Oraș", sortable: true, render: (c) => <span>{c.city || "—"}</span> },
+    { key: "city", label: "Oraș", sortable: true, render: (c) => <span>{c.city || "-"}</span> },
     {
       key: "verificationStatus",
       label: "Status",
@@ -124,7 +124,7 @@ export default function AdminCompanies() {
         const p = c.verificationStatus === "pending";
         return (
           <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${v ? "bg-green-100 text-green-700" : p ? "bg-yellow-100 text-yellow-700" : "bg-gray-100 text-gray-500"}`}>
-            {v ? "✓ Verificată" : p ? "⏳ Pending" : c.verificationStatus || "—"}
+            {v ? "✓ Verificată" : p ? "⏳ Pending" : c.verificationStatus || "-"}
           </span>
         );
       },
@@ -134,7 +134,7 @@ export default function AdminCompanies() {
       key: "averageRating",
       label: "Rating",
       sortable: true,
-      render: (c) => <span className="font-medium">{c.averageRating ? `⭐ ${c.averageRating.toFixed(1)}` : "—"}</span>,
+      render: (c) => <span className="font-medium">{c.averageRating ? `⭐ ${c.averageRating.toFixed(1)}` : "-"}</span>,
     },
     {
       key: "createdAt",

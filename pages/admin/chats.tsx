@@ -14,7 +14,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy, HH:mm", { locale: ro });
 }
@@ -57,18 +57,18 @@ export default function AdminChats() {
       key: "companyName",
       label: "Companie",
       sortable: true,
-      render: (c) => <span className="font-medium text-gray-900">{c.companyName || "—"}</span>,
+      render: (c) => <span className="font-medium text-gray-900">{c.companyName || "-"}</span>,
     },
     {
       key: "customerName",
       label: "Client",
       sortable: true,
-      render: (c) => <span>{c.customerName || "—"}</span>,
+      render: (c) => <span>{c.customerName || "-"}</span>,
     },
     {
       key: "lastMessage",
       label: "Ultimul mesaj",
-      render: (c) => <p className="max-w-xs truncate text-sm text-gray-500">{c.lastMessage || "—"}</p>,
+      render: (c) => <p className="max-w-xs truncate text-sm text-gray-500">{c.lastMessage || "-"}</p>,
     },
     {
       key: "messageCount",

@@ -14,7 +14,7 @@ export default withErrorHandler(async function handler(
     return res.status(405).json(apiError("Method Not Allowed"));
   }
 
-  // T2 fix: Require INTERNAL_API_SECRET — this is a server-to-server endpoint
+  // T2 fix: Require INTERNAL_API_SECRET - this is a server-to-server endpoint
   const secretCheck = validateInternalSecret(req);
   if (!secretCheck.valid) {
     return res

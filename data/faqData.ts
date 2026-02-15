@@ -5,7 +5,7 @@ export const SERVICE_FAQS = {
   general: [
     {
       question: "Cum primesc ofertele de mutare?",
-      answer: "Completezi formularul simplu în 2 minute. Cererea ta ajunge instant la firmele verificate din zona ta. În maxim 24h primești 3-5 oferte personalizate pe email sau telefon.",
+      answer: "Completezi formularul simplu în 2 minute. Cererea ta ajunge instant la firmele verificate din zona ta. În maxim 24h primești până la 5 oferte personalizate pe email sau telefon.",
     },
     {
       question: "Este acest serviciu gratuit?",
@@ -13,11 +13,11 @@ export const SERVICE_FAQS = {
     },
     {
       question: "Firmele de mutări sunt verificate?",
-      answer: "Absolut. Verificăm legalitatea, experiența și recenziile fiecărei firme partenere. Doar firmele serioase cu rating bun rămân în rețeaua noastră.",
+      answer: "Da. Fiecare firmă de pe platformă trimite certificat de înregistrare (CUI activ) și dovadă de asigurare înainte de a fi acceptată. În plus, monitorizăm recenziile clienților pentru a menține calitatea.",
     },
     {
       question: "Cât timp durează până primesc ofertele?",
-      answer: "Primele oferte pot apărea în câteva minute. Majoritatea clienților primesc toate cele 3-5 oferte în maxim 24 de ore lucrătoare.",
+      answer: "Primele oferte pot apărea în câteva minute. Majoritatea clienților primesc toate ofertele în maxim 24 de ore lucrătoare.",
     },
     {
       question: "Pot refuza toate ofertele dacă nu sunt mulțumit?",

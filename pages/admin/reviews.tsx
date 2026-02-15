@@ -17,7 +17,7 @@ import {
 } from "@heroicons/react/24/outline";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy", { locale: ro });
 }
@@ -109,7 +109,7 @@ export default function AdminReviews() {
     {
       key: "comment",
       label: "Comentariu",
-      render: (r) => <p className="max-w-xs truncate text-sm text-gray-600">{r.comment || "—"}</p>,
+      render: (r) => <p className="max-w-xs truncate text-sm text-gray-600">{r.comment || "-"}</p>,
     },
     {
       key: "status",
@@ -117,7 +117,7 @@ export default function AdminReviews() {
       sortable: true,
       render: (r) => (
         <span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${r.status === "published" ? "bg-green-100 text-green-700" : "bg-gray-100 text-gray-500"}`}>
-          {r.status === "published" ? "Publicat" : r.status || "—"}
+          {r.status === "published" ? "Publicat" : r.status || "-"}
         </span>
       ),
     },

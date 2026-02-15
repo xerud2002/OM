@@ -427,7 +427,7 @@ export default function CustomerDashboard() {
         }
       >
         {requests.length === 0 ? (
-          // Welcome state for new users — all content is in CustomerWelcome
+          // Welcome state for new users - all content is in CustomerWelcome
           <CustomerWelcome userName={user?.displayName} />
         ) : (
           // Main content grid

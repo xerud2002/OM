@@ -28,7 +28,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       });
     }
 
-    const enriched = reviews.map((r: any) => ({ ...r, companyName: companyMap[r.companyId] || "—" }));
+    const enriched = reviews.map((r: any) => ({ ...r, companyName: companyMap[r.companyId] || "-" }));
     const total = enriched.length;
     const published = enriched.filter((r: any) => r.status === "published").length;
     const hidden = enriched.filter((r: any) => r.status === "hidden").length;

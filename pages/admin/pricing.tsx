@@ -150,7 +150,7 @@ export default function AdminPricing() {
                         <span className="text-xs text-gray-500">% disc.</span>
                       </div>
                       <div className="ml-auto text-sm text-gray-500">
-                        {tier.credits > 0 ? `${(tier.price / tier.credits).toFixed(1)} RON/credit` : "—"}
+                        {tier.credits > 0 ? `${(tier.price / tier.credits).toFixed(1)} RON/credit` : "-"}
                       </div>
                       <button onClick={() => removeTier(idx)} className="rounded-lg p-1 text-gray-400 hover:bg-red-50 hover:text-red-600">
                         <TrashIcon className="h-4 w-4" />

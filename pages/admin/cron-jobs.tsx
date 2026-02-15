@@ -115,7 +115,7 @@ export default function AdminCronJobs() {
                           <div key={run.id} className="flex items-center gap-2 text-xs text-gray-500">
                             {statusIcon(run.level)}
                             <span>{fmtDate(run.timestamp)}</span>
-                            <span className="text-gray-400">—</span>
+                            <span className="text-gray-400">-</span>
                             <span className="truncate">{run.message}</span>
                           </div>
                         ))}

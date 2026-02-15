@@ -314,7 +314,7 @@ export default function AdminFraudFlags() {
                       <span className="shrink-0 text-xs text-gray-400">
                         {flag.createdAt
                           ? format(new Date(flag.createdAt), "dd MMM yyyy HH:mm", { locale: ro })
-                          : "—"}
+                          : "-"}
                       </span>
                     </button>
 
@@ -390,7 +390,7 @@ export default function AdminFraudFlags() {
                             <div className="space-y-1 text-xs text-gray-500">
                               <div>
                                 <span className="font-medium text-gray-600">Nume:</span>{" "}
-                                {flag.userName || "—"}
+                                {flag.userName || "-"}
                               </div>
                               <div>
                                 <span className="font-medium text-gray-600">Creat:</span>{" "}
@@ -398,7 +398,7 @@ export default function AdminFraudFlags() {
                                   ? format(new Date(flag.userCreatedAt), "dd MMM yyyy HH:mm", {
                                       locale: ro,
                                     })
-                                  : "—"}
+                                  : "-"}
                               </div>
                               <div>
                                 <span className="font-medium text-gray-600">Ultimul login:</span>{" "}
@@ -406,7 +406,7 @@ export default function AdminFraudFlags() {
                                   ? format(new Date(flag.lastLogin), "dd MMM yyyy HH:mm", {
                                       locale: ro,
                                     })
-                                  : "—"}
+                                  : "-"}
                               </div>
                               <div>
                                 <span className="font-medium text-gray-600">Nr. events:</span>{" "}

@@ -101,7 +101,7 @@ export default function AdminReports() {
                     {reportData.slice(0, 20).map((row, i) => (
                       <tr key={i} className="hover:bg-gray-50">
                         {Object.values(row).map((v: any, j) => (
-                          <td key={j} className="px-3 py-2 text-gray-700 max-w-xs truncate">{String(v ?? "—")}</td>
+                          <td key={j} className="px-3 py-2 text-gray-700 max-w-xs truncate">{String(v ?? "-")}</td>
                         ))}
                       </tr>
                     ))}

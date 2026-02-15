@@ -25,7 +25,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
 
   const requests = reqSnap.docs.map((d) => ({ id: d.id, ...d.data() })) as any[];
 
-  // Fetch recent offers (collectionGroup — filter + sort in-memory)
+  // Fetch recent offers (collectionGroup - filter + sort in-memory)
   const offerSnap = await db.collectionGroup("offers")
     .limit(1000)
     .get();
@@ -37,7 +37,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
     })
     .sort((a: any, b: any) => (b.createdAt?._seconds || 0) - (a.createdAt?._seconds || 0));
 
-  // 1. Onboarding funnel — companies
+  // 1. Onboarding funnel - companies
   const compSnap = await db.collection("companies")
     .where("createdAt", ">=", thirtyDaysAgo)
     .orderBy("createdAt", "desc")
@@ -84,7 +84,7 @@ export default withErrorHandler(async (req: NextApiRequest, res: NextApiResponse
       ? Math.round((requestOfferTimes.reduce((s, v) => s + v, 0) / requestOfferTimes.length) * 10) / 10
       : null;
 
-  // 3. Completion rate — offers accepted / total requests with offers
+  // 3. Completion rate - offers accepted / total requests with offers
   const requestsWithOffers = new Set(offers.map((o: any) => o.requestId)).size;
   const acceptedOffers = offers.filter((o: any) => o.status === "accepted").length;
   const completionRate = requestsWithOffers > 0 ? Math.round((acceptedOffers / requestsWithOffers) * 100) : 0;

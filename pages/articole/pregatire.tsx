@@ -207,7 +207,7 @@ export default function ArticlePregatire() {
                 <li className="flex items-start gap-2">
                   <CheckCircle className="mt-1 h-5 w-5 shrink-0 text-emerald-500" />
                   <span>
-                    <strong>Solicită oferte</strong> &ndash; Pe OferteMutare.ro primești 3-5 oferte
+                    <strong>Solicită oferte</strong> &ndash; Pe OferteMutare.ro primești până la 5 oferte
                     gratuite în 24h, fără obligație de cumpărare.
                   </span>
                 </li>
@@ -676,7 +676,7 @@ export default function ArticlePregatire() {
           <section className="mb-12 rounded-lg bg-emerald-600 p-8 text-center text-white">
             <h2 className="mb-4 text-3xl font-bold">Pregătit să Începi Mutarea?</h2>
             <p className="mb-6 text-lg">
-              Obține 3-5 oferte personalizate de la cele mai bune firme de mutări din România.
+              Obține până la 5 oferte personalizate de la cele mai bune firme de mutări din România.
               Gratuit, fără obligații, răspuns în 24h.
             </p>
             <Link

@@ -40,7 +40,7 @@ export default function MutariCasePage({ currentYear, reviewStats }: MutariCaseP
         <title>{`Mutări Case și Vile ${currentYear} | Transport Mobilă Complet`}</title>
         <meta
           name="description"
-          content="Servicii complete de mutări case și vile în România. Transport mobilă voluminos, grădină, obiecte delicate. Primește 3-5 oferte GRATUITE în 24h!"
+          content="Servicii complete de mutări case și vile în România. Transport mobilă voluminos, grădină, obiecte delicate. Primește până la 5 oferte gratuite în 24h."
         />
         <meta
           name="keywords"
@@ -51,7 +51,7 @@ export default function MutariCasePage({ currentYear, reviewStats }: MutariCaseP
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro/mutari/tipuri/case" />
-        <meta property="og:title" content={`Mutări Case și Vile ${currentYear} | Economisește 40%`} />
+        <meta property="og:title" content={`Mutări Case și Vile ${currentYear} | Oferte gratuite`} />
         <meta
           property="og:description"
           content="Servicii complete de mutări case și vile. Primește oferte gratuite de la firme verificate!"
@@ -114,12 +114,12 @@ export default function MutariCasePage({ currentYear, reviewStats }: MutariCaseP
             {/* Stats */}
             <div className="mb-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
-                <div className="text-3xl font-bold text-white">3-5</div>
+                <div className="text-3xl font-bold text-white">Până la 5</div>
                 <div className="text-sm text-blue-100">Oferte în 24h</div>
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
-                <div className="text-3xl font-bold text-white">40%</div>
-                <div className="text-sm text-blue-100">Economie medie</div>
+                <div className="text-3xl font-bold text-white">Compari</div>
+                <div className="text-sm text-blue-100">Prețuri și alegi liber</div>
               </div>
               <div className="rounded-xl bg-white/10 backdrop-blur-sm p-4 text-center">
                 <div className="text-3xl font-bold text-white">100%</div>
@@ -342,7 +342,7 @@ export default function MutariCasePage({ currentYear, reviewStats }: MutariCaseP
               Gata să îți muți casa?
             </h2>
             <p className="mb-8 text-lg text-blue-100">
-              Primește 3-5 oferte gratuite în 24h de la firme specializate în mutări case și vile.
+              Primește până la 5 oferte gratuite în 24h de la firme specializate în mutări case și vile.
             </p>
             <Link
               href="/#request-form"

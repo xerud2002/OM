@@ -10,7 +10,7 @@ import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner
 import { ClipboardDocumentCheckIcon } from "@heroicons/react/24/outline";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy, HH:mm:ss", { locale: ro });
 }
@@ -76,24 +76,24 @@ export default function AdminAuditLog() {
       key: "adminEmail",
       label: "Admin",
       sortable: true,
-      render: (e) => <span className="text-sm">{e.adminEmail || e.adminUid?.slice(0, 8) || "—"}</span>,
+      render: (e) => <span className="text-sm">{e.adminEmail || e.adminUid?.slice(0, 8) || "-"}</span>,
     },
     {
       key: "targetType",
       label: "Tip țintă",
       sortable: true,
-      render: (e) => <span className="text-xs font-mono bg-gray-100 px-2 py-0.5 rounded">{e.targetType || "—"}</span>,
+      render: (e) => <span className="text-xs font-mono bg-gray-100 px-2 py-0.5 rounded">{e.targetType || "-"}</span>,
     },
     {
       key: "targetId",
       label: "ID țintă",
-      render: (e) => <span className="text-xs font-mono text-gray-500">{e.targetId ? `${e.targetId.slice(0, 12)}...` : "—"}</span>,
+      render: (e) => <span className="text-xs font-mono text-gray-500">{e.targetId ? `${e.targetId.slice(0, 12)}...` : "-"}</span>,
     },
     {
       key: "details" as any,
       label: "Detalii",
       render: (e) => {
-        if (!e.details) return <span className="text-gray-400">—</span>;
+        if (!e.details) return <span className="text-gray-400">-</span>;
         const str = typeof e.details === "string" ? e.details : JSON.stringify(e.details);
         return <span className="max-w-xs truncate text-xs text-gray-500">{str.slice(0, 80)}</span>;
       },

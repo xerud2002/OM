@@ -80,10 +80,10 @@ export default function HomePage({ reviewStats }: HomePageProps) {
           🔹 SEO Meta Tags
       =========================== */}
       <Head>
-        <title>Oferte Mutări România 2026 → Firme Verificate | Economisești 40%</title>
+        <title>Oferte Mutări România 2026 | Compară firme verificate gratuit</title>
         <meta
           name="description"
-          content="🚚 Primești 3-5 oferte GRATUITE în 24h pentru mutare! Compară firme verificate din toată România. Economisești până la 40%, fără obligații!"
+          content="Primești până la 5 oferte gratuite în 24h pentru mutare. Compară firme verificate din toată România, fără obligații."
         />
         <meta
           name="keywords"
@@ -100,7 +100,7 @@ export default function HomePage({ reviewStats }: HomePageProps) {
         />
         <meta
           property="og:description"
-          content="🚚 3-5 oferte GRATUITE în 24h de la cele mai bune firme de mutări! Compară prețuri și economisește până la 40%. Zero obligații!"
+          content="Până la 5 oferte gratuite în 24h de la firme de mutări verificate. Compară prețuri și alege cea mai bună ofertă, fără obligații."
         />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
 
@@ -109,11 +109,11 @@ export default function HomePage({ reviewStats }: HomePageProps) {
         <meta name="twitter:url" content="https://ofertemutare.ro" />
         <meta
           name="twitter:title"
-          content="Compara Oferte pentru Mutarea Ta | Economisești 40%"
+          content="Compară Oferte pentru Mutarea Ta | Firme Verificate"
         />
         <meta
           name="twitter:description"
-          content="🚚 Compară oferte de la firme verificate în 24h. Gratuit, rapid, sigur!"
+          content="Compară oferte de la firme verificate în 24h. Gratuit, rapid, sigur."
         />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
 
@@ -144,42 +144,25 @@ export default function HomePage({ reviewStats }: HomePageProps) {
           }}
         />
 
-        {/* LocalBusiness Schema */}
+        {/* WebApplication Schema - OM is a comparison platform, not a local business */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: JSON.stringify({
               "@context": "https://schema.org",
-              "@type": "LocalBusiness",
-              "@id": "https://ofertemutare.ro/#business",
+              "@type": "WebApplication",
+              "@id": "https://ofertemutare.ro/#webapp",
               name: "OferteMutare.ro",
-              image: "https://ofertemutare.ro/pics/index.webp",
               url: "https://ofertemutare.ro",
-              priceRange: "Lei 250-3000",
-              address: {
-                "@type": "PostalAddress",
-                addressCountry: "RO",
-                addressRegion: "România",
+              applicationCategory: "BusinessApplication",
+              operatingSystem: "Web",
+              description: "Platformă online de comparare oferte de mutări. Conectează clienții cu firme verificate (CUI activ + asigurare) din toată România.",
+              offers: {
+                "@type": "Offer",
+                price: "0",
+                priceCurrency: "RON",
+                description: "Utilizare gratuită pentru clienți",
               },
-              geo: {
-                "@type": "GeoCoordinates",
-                latitude: 45.9432,
-                longitude: 24.9668,
-              },
-              openingHoursSpecification: [
-                {
-                  "@type": "OpeningHoursSpecification",
-                  dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-                  opens: "09:00",
-                  closes: "18:00",
-                },
-                {
-                  "@type": "OpeningHoursSpecification",
-                  dayOfWeek: "Saturday",
-                  opens: "10:00",
-                  closes: "14:00",
-                },
-              ],
             }),
           }}
         />
@@ -192,8 +175,8 @@ export default function HomePage({ reviewStats }: HomePageProps) {
               "@context": "https://schema.org",
               "@type": "Service",
               "@id": "https://ofertemutare.ro/#service",
-              serviceType: "Servicii Mutări și Relocări",
-              provider: {
+              serviceType: "Platformă comparare oferte mutări",
+              broker: {
                 "@type": "Organization",
                 "@id": "https://ofertemutare.ro/#organization",
                 name: "OferteMutare.ro",
@@ -239,10 +222,6 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       name: "Mutări Apartamente",
                       description:
                         "Servicii de mutare pentru apartamente cu 1-4 camere oferite de firmele partenere. Include transport, încărcare, descărcare și protecție mobilier.",
-                      provider: {
-                        "@type": "Organization",
-                        name: "OferteMutare.ro",
-                      },
                     },
                     priceSpecification: {
                       "@type": "PriceSpecification",
@@ -257,10 +236,6 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       name: "Mutări Case și Vile",
                       description:
                         "Transport profesional pentru case și vile, oferit de firmele partenere verificate. Echipe extinse, utilaje specializate pentru volume mari.",
-                      provider: {
-                        "@type": "Organization",
-                        name: "OferteMutare.ro",
-                      },
                     },
                     priceSpecification: {
                       "@type": "PriceSpecification",
@@ -275,10 +250,6 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       name: "Mutări Birouri",
                       description:
                         "Firme partenere specializate în relocare companii și birouri cu minimizarea timpului de downtime.",
-                      provider: {
-                        "@type": "Organization",
-                        name: "OferteMutare.ro",
-                      },
                     },
                   },
                   {
@@ -288,10 +259,6 @@ export default function HomePage({ reviewStats }: HomePageProps) {
                       name: "Mutări Studenți",
                       description:
                         "Soluții accesibile pentru mutări mici, cămine și garsoniere, oferite de firmele partenere. Tarife speciale pentru studenți.",
-                      provider: {
-                        "@type": "Organization",
-                        name: "OferteMutare.ro",
-                      },
                     },
                     priceSpecification: {
                       "@type": "PriceSpecification",
@@ -323,7 +290,7 @@ export default function HomePage({ reviewStats }: HomePageProps) {
               name: "OferteMutare.ro",
               url: "https://ofertemutare.ro",
               description:
-                "Platformă de comparare oferte pentru servicii de mutări în România. Primește 3-5 oferte gratuite în 24h de la firme verificate.",
+                "Platformă de comparare oferte pentru servicii de mutări în România. Primește până la 5 oferte gratuite în 24h de la firme verificate.",
               inLanguage: "ro-RO",
               publisher: {
                 "@type": "Organization",

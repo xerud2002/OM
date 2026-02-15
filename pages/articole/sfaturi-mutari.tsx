@@ -15,7 +15,7 @@ export default function ArticleTips() {
         <title>50+ Sfaturi Expert Pentru Mutări | Trucuri & Economii</title>
         <meta
           name="description"
-          content="Sfaturi pentru mutări 2026: economisești 40%, când e cel mai ieftin, cum eviți greșelile comune. Trucuri de la profesioniști."
+          content="Sfaturi pentru mutări 2026: cum economisești la mutare, când e cel mai ieftin, cum eviți greșelile comune. Trucuri de la profesioniști."
         />
         <meta
           name="keywords"
@@ -224,7 +224,7 @@ export default function ArticleTips() {
                     <p className="mb-2 font-semibold">Pe OferteMutare.ro:</p>
                     <ul className="space-y-1 text-sm">
                       <li>✓ Completezi UN singur formular (3 minute)</li>
-                      <li>✓ Primești 3-5 oferte personalizate în 24h</li>
+                      <li>✓ Primești până la 5 oferte personalizate în 24h</li>
                       <li>✓ 100% gratuit, fără obligație de cumpărare</li>
                       <li>✓ Poți compara prețuri, servicii, recenzii într-un singur loc</li>
                     </ul>
@@ -825,7 +825,7 @@ export default function ArticleTips() {
               <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-6">
                 <h3 className="mb-4 font-semibold text-emerald-800">✅ Cu 1 Lună Înainte</h3>
                 <ul className="space-y-1 text-sm text-gray-700">
-                  <li>☐ Am solicitat 3-5 oferte (pe OferteMutare.ro)</li>
+                  <li>☐ Am solicitat până la 5 oferte (pe OferteMutare.ro)</li>
                   <li>☐ Am făcut survey (fizic sau video)</li>
                   <li>☐ Am rezervat firma și semnat contractul</li>
                   <li>☐ Am sortat și vândut lucruri neutilizate</li>
@@ -877,7 +877,7 @@ export default function ArticleTips() {
               Primește Sfaturi Personalizate și Oferte Gratuite
             </h2>
             <p className="mb-6 text-lg">
-              Completează formularul și primești 3-5 oferte personalizate + ghid complet de la
+              Completează formularul și primești până la 5 oferte personalizate + ghid complet de la
               experți. 100% gratuit, fără obligații.
             </p>
             <Link

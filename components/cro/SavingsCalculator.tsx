@@ -277,7 +277,7 @@ export default function SavingsCalculator() {
                 >
                   {minPrice}
                 </motion.div>
-                <span className="text-2xl font-light text-gray-300 md:text-4xl">—</span>
+                <span className="text-2xl font-light text-gray-300 md:text-4xl">-</span>
                 <motion.div
                   key={`max-${maxPrice}`}
                   initial={{ opacity: 0, y: 10 }}

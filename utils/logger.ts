@@ -12,12 +12,12 @@ export const logger = {
   },
 
   warn: (...args: unknown[]) => {
-    // Warnings always logged — important for deprecations and issues
+    // Warnings always logged - important for deprecations and issues
     console.warn(...args);
   },
 
   error: (...args: unknown[]) => {
-    // Errors always logged — PM2 captures stderr for production monitoring
+    // Errors always logged - PM2 captures stderr for production monitoring
     console.error(...args);
     // In production, you could also send to error tracking service:
     // if (!isDevelopment) {

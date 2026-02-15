@@ -58,7 +58,7 @@ export default function CTASection() {
             Gata să economisești
             <br />
             <span className="bg-linear-to-r from-emerald-400 via-teal-400 to-sky-400 bg-clip-text text-transparent">
-              până la 40% la mutare?
+              la mutarea ta?
             </span>
           </motion.h2>
 
@@ -90,8 +90,8 @@ export default function CTASection() {
                 className="group inline-flex items-center gap-2 rounded-xl bg-linear-to-r from-emerald-500 to-teal-500 px-5 py-3.5 text-sm font-bold text-white shadow-2xl shadow-emerald-500/30 transition-all hover:shadow-emerald-500/40 sm:gap-3 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
               >
                 <Sparkles className="h-4 w-4 sm:h-6 sm:w-6" />
-                <span className="hidden sm:inline">PRIMEȘTE OFERTE GRATUITE</span>
-                <span className="sm:hidden">OFERTE GRATUITE</span>
+                <span className="hidden sm:inline">Primește oferte gratuite</span>
+                <span className="sm:hidden">Oferte gratuite</span>
                 <ArrowRight className="h-5 w-5 transition-transform group-hover:translate-x-1 sm:h-6 sm:w-6" />
               </Link>
             </motion.div>

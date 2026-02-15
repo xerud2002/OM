@@ -173,7 +173,7 @@ async function trackDeviceFingerprint(user: User, event: "register" | "login", r
       body: JSON.stringify({ fingerprint, event, role }),
     }).catch(() => {}); // truly fire-and-forget
   } catch {
-    // Non-critical — never block auth flow
+    // Non-critical - never block auth flow
   }
 }
 

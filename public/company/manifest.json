@@ -1,7 +1,7 @@
 {
   "name": "OferteMutare Companie",
   "short_name": "OM Companie",
-  "description": "Dashboard companie OferteMutare.ro — cereri, oferte și credite",
+  "description": "Dashboard companie OferteMutare.ro - cereri, oferte și credite",
   "start_url": "/company/dashboard",
   "scope": "/company/",
   "id": "/company",

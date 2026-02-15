@@ -43,12 +43,12 @@ const colorMap: Record<string, string> = {
 
 function getLabel(e: ActivityEvent) {
   switch (e.type) {
-    case "request": return `Cerere nouă de la ${e.data.customerName || "client"} — ${e.data.from || ""} → ${e.data.to || ""}`;
-    case "offer": return `Ofertă nouă de la ${e.data.companyName || "companie"} — ${e.data.price ? `${e.data.price} RON` : ""}`;
+    case "request": return `Cerere nouă de la ${e.data.customerName || "client"} - ${e.data.from || ""} → ${e.data.to || ""}`;
+    case "offer": return `Ofertă nouă de la ${e.data.companyName || "companie"} - ${e.data.price ? `${e.data.price} RON` : ""}`;
     case "review": return `Recenzie ${e.data.rating}⭐ de la ${e.data.customerName || "anonim"}`;
-    case "company": return `Companie nouă: ${e.data.companyName || e.data.displayName || "—"}`;
-    case "customer": return `Client nou: ${e.data.displayName || e.data.email || "—"}`;
-    case "verification": return `Verificare: ${e.data.companyName || "companie"} — ${e.data.verificationStatus}`;
+    case "company": return `Companie nouă: ${e.data.companyName || e.data.displayName || "-"}`;
+    case "customer": return `Client nou: ${e.data.displayName || e.data.email || "-"}`;
+    case "verification": return `Verificare: ${e.data.companyName || "companie"} - ${e.data.verificationStatus}`;
     default: return `Eveniment: ${e.type}`;
   }
 }

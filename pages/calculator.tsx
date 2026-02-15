@@ -156,7 +156,7 @@ export default function CalculatorPage() {
                 </h2>
                 <p className="text-gray-700 leading-relaxed mb-4">
                   Calculatorul nostru de mutări este cel mai rapid mod de a afla <strong>cât costă o mutare în România în {currentYear}</strong>. 
-                  Am analizat peste 10.000 de mutări efectuate anul trecut pentru a crea un algoritm care estimează prețul în funcție de trei factori principali: 
+                  Am analizat un volum mare de mutări efectuate anul trecut pentru a crea un algoritm care estimează prețul în funcție de trei factori principali: 
                   tipul proprietății, numărul de camere și județul în care te afli.
                 </p>
                 <p className="text-gray-700 leading-relaxed mb-4">

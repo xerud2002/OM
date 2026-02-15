@@ -259,7 +259,7 @@ export default function AdminBulkOperations() {
                       </div>
                       {progress.done && (
                         <p className="text-sm text-green-600 font-medium">
-                          ✅ Operațiune finalizată — {progress.success}/{progress.total} procesate cu succes.
+                          ✅ Operațiune finalizată: {progress.success}/{progress.total} procesate cu succes.
                         </p>
                       )}
                     </div>

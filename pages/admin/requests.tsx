@@ -439,7 +439,7 @@ export default function AdminRequests() {
                             </div>
                           </td>
 
-                          {/* Credit cost — inline editable */}
+                          {/* Credit cost - inline editable */}
                           <td className="whitespace-nowrap px-4 py-4">
                             {isEditing ? (
                               <div className="flex items-center gap-1">
@@ -530,7 +530,7 @@ export default function AdminRequests() {
                                 )}
                               </div>
                             ) : (
-                              <span className="text-xs text-gray-300">—</span>
+                              <span className="text-xs text-gray-300">-</span>
                             )}
                           </td>
 

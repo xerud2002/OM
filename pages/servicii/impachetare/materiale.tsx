@@ -311,7 +311,7 @@ export default function MaterialeImpachetarePage({ currentYear, reviewStats }: M
                 <div>
                   <h3 className="font-bold text-gray-900">Preț de producător</h3>
                   <p className="text-sm text-gray-600">
-                    Cumperi direct, fără intermediari - economisești 30-40%
+                    Cumperi direct, fără intermediari, la prețuri avantajoase
                   </p>
                 </div>
               </div>

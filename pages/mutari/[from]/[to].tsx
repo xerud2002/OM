@@ -55,8 +55,8 @@ export default function RoutePage({ routeData, formattedDate, reviewStats }: Rou
                     __html: JSON.stringify({
                       "@context": "https://schema.org",
                       "@type": "Service",
-                      serviceType: `Transport Mobilă ${fromCity.name} - ${toCity.name}`,
-                      provider: {
+                      serviceType: `Comparare oferte transport mobilă ${fromCity.name} - ${toCity.name}`,
+                      broker: {
                         "@type": "Organization",
                         name: "OferteMutare.ro",
                         url: "https://ofertemutare.ro",
@@ -99,8 +99,8 @@ export default function RoutePage({ routeData, formattedDate, reviewStats }: Rou
                                     <span className="text-emerald-400">{toCity.name}</span>
                                 </h1>
                                 <p className="text-lg text-emerald-100">
-                                    Servicii rapide și sigure pe ruta {distanceKm} km. Economisește până la 40% prin
-                                    grupaj.
+                                    Servicii rapide și sigure pe ruta {distanceKm} km. Poți economisi prin
+                                    grupaj (spațiu partajat în camion).
                                 </p>
                             </div>
                         </div>

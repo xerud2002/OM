@@ -24,10 +24,10 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
   return (
     <>
       <Head>
-        <title>{`Mutări Birouri ${currentYear} → Relocare Firme`}</title>
+        <title>{`Mutări Birouri ${currentYear} | Relocare Firme`}</title>
         <meta
           name="description"
-          content="Mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier, arhivă. Zero downtime! Primești 3-5 oferte GRATUITE în 24h."
+          content="Mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier, arhivă. Planificare pentru downtime minim. Primești până la 5 oferte gratuite în 24h."
         />
         <meta
           name="keywords"
@@ -89,7 +89,7 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
 
             <p className="mb-8 max-w-2xl text-lg text-slate-300 md:text-xl">
               Relocare profesională pentru firme, birouri și sedii corporate. Transport echipamente
-              IT, mobilier office, arhive. Zero downtime!
+              IT, mobilier office, arhive. Planificare pentru downtime minim.
             </p>
 
             {/* Stats */}
@@ -99,8 +99,8 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                 <div className="text-sm text-slate-300">Disponibilitate</div>
               </div>
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
-                <div className="text-3xl font-bold text-white">0%</div>
-                <div className="text-sm text-slate-300">Downtime</div>
+                <div className="text-3xl font-bold text-white">Minim</div>
+                <div className="text-sm text-slate-300">Downtime planificat</div>
               </div>
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">✓</div>

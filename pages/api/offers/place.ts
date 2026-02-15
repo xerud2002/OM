@@ -149,8 +149,8 @@ export default async function handler(
       try {
         const companyName = companyData.companyName || "Companie";
         const requestCode = requestData.requestCode || requestId;
-        const fromCity = requestData.fromCity || "—";
-        const toCity = requestData.toCity || "—";
+        const fromCity = requestData.fromCity || "-";
+        const toCity = requestData.toCity || "-";
 
         await sendEmail({
           to: customerEmail,
@@ -177,7 +177,7 @@ ${message ? `<div style="background:#f9fafb;border-left:4px solid #10b981;paddin
 <p style="color:#9ca3af;font-size:13px;text-align:center;">Poți accepta, refuza sau discuta cu firma direct din contul tău.</p>
 </td></tr>
 <tr><td style="background:#f9fafb;padding:20px;text-align:center;border-top:1px solid #e5e7eb;">
-<p style="margin:0;color:#9ca3af;font-size:12px;">© OferteMutare.ro — Mutări simple, rapide.</p>
+<p style="margin:0;color:#9ca3af;font-size:12px;">© OferteMutare.ro - Mutări simple, rapide.</p>
 </td></tr>
 </table>
 </td></tr>

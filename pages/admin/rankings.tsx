@@ -80,7 +80,7 @@ export default function AdminRankings() {
       render: (c) => (
         <div className="flex items-center gap-1">
           <StarIcon className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-          <span className="font-medium">{c.rating ? c.rating.toFixed(1) : "—"}</span>
+          <span className="font-medium">{c.rating ? c.rating.toFixed(1) : "-"}</span>
           <span className="text-xs text-gray-400">({c.reviews})</span>
         </div>
       ),

@@ -103,9 +103,9 @@ export default async function handler(
       const price = acceptedOfferData.price || 0;
       const requestCode =
         requestData.requestCode || requestId.substring(0, 8).toUpperCase();
-      const fromCity = requestData.fromCity || "—";
-      const toCity = requestData.toCity || "—";
-      const rooms = requestData.rooms || "—";
+      const fromCity = requestData.fromCity || "-";
+      const toCity = requestData.toCity || "-";
+      const rooms = requestData.rooms || "-";
       const details =
         requestData.details || "Nu au fost furnizate detalii suplimentare.";
 

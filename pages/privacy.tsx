@@ -530,12 +530,12 @@ export default function PrivacyPage() {
                     📊 Cookie-uri de Analiză (opt-in)
                   </h3>
                   <p className="text-sm text-gray-600">
-                    Google Analytics 4 — colectează date anonime despre
+                    Google Analytics 4: colectează date anonime despre
                     vizitatori pentru îmbunătățirea platformei. Se încarcă doar
                     dacă accepți această categorie.
                   </p>
                   <p className="mt-1 text-xs text-gray-400">
-                    Exemplu: <code>_ga</code>, <code>_ga_*</code> — Expirare: 26
+                    Exemplu: <code>_ga</code>, <code>_ga_*</code> - Expirare: 26
                     luni
                   </p>
                 </div>
@@ -545,7 +545,7 @@ export default function PrivacyPage() {
                   </h3>
                   <p className="text-sm text-gray-600">
                     Pentru reclame personalizate și remarketing. Momentan
-                    inactive — vor fi utilizate doar cu consimțământul tău
+                    inactive, vor fi utilizate doar cu consimțământul tău
                     explicit.
                   </p>
                 </div>

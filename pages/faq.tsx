@@ -33,7 +33,7 @@ export default function FAQPage() {
             <>
               OferteMutare.ro este o platformă gratuită care conectează clienții
               cu firme de mutări verificate din România. Completezi un singur
-              formular și primești 3-5 oferte personalizate în 24 ore. Acoperim
+              formular și primești până la 5 oferte personalizate în 24 ore. Acoperim
               toate orașele majore (
               <Link
                 href="/mutari/bucuresti"
@@ -80,7 +80,7 @@ export default function FAQPage() {
             </>
           ),
           aText:
-            "OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești 3-5 oferte personalizate în 24 ore. Firmele partenere acoperă toate orașele majore (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova, Ploiești, Oradea) și peste 30 de reședințe de județ.",
+            "OferteMutare.ro este o platformă gratuită care conectează clienții cu firme de mutări verificate din România. Completezi un singur formular și primești până la 5 oferte personalizate în 24 ore. Firmele partenere acoperă toate orașele majore (București, Cluj-Napoca, Timișoara, Iași, Constanța, Brașov, Galați, Craiova, Ploiești, Oradea) și peste 30 de reședințe de județ.",
         },
         {
           q: "Serviciul este cu adevărat gratuit?",
@@ -88,7 +88,7 @@ export default function FAQPage() {
         },
         {
           q: "Câte oferte voi primi?",
-          a: "De obicei primești între 3-5 oferte de la firme verificate în termen de 24 ore. Numărul depinde de disponibilitatea firmelor în zona ta și complexitatea mutării.",
+          a: "De obicei primești până la 5 oferte de la firme verificate în termen de 24 ore. Numărul depinde de disponibilitatea firmelor în zona ta și complexitatea mutării.",
         },
         {
           q: "Sunt obligat să aleg una din oferte?",
@@ -111,12 +111,12 @@ export default function FAQPage() {
                 formularul
               </Link>{" "}
               cu detalii despre mutare (5 minute), 2) Firmele verificate primesc
-              cererea ta, 3) Primești 3-5 oferte în 24h, 4) Compari și alegi
+              cererea ta, 3) Primești până la 5 oferte în 24h, 4) Compari și alegi
               oferta potrivită, 5) Confirmarea directă cu firma aleasă.
             </>
           ),
           aText:
-            "1) Completezi formularul cu detalii despre mutare (5 minute), 2) Firmele verificate primesc cererea ta, 3) Primești 3-5 oferte în 24h, 4) Compari și alegi oferta potrivită, 5) Confirmarea directă cu firma aleasă.",
+            "1) Completezi formularul cu detalii despre mutare (5 minute), 2) Firmele verificate primesc cererea ta, 3) Primești până la 5 oferte în 24h, 4) Compari și alegi oferta potrivită, 5) Confirmarea directă cu firma aleasă.",
         },
         {
           q: "Ce informații trebuie să furnizez?",

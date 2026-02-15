@@ -67,7 +67,7 @@ export default function AdminUsers() {
       ),
     },
     { key: "email", label: "Email", sortable: true },
-    { key: "phone", label: "Telefon", render: (row) => <span className="text-gray-600">{row.phone || "—"}</span> },
+    { key: "phone", label: "Telefon", render: (row) => <span className="text-gray-600">{row.phone || "-"}</span> },
     {
       key: "createdAt",
       label: "Înregistrat",

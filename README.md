@@ -478,7 +478,7 @@ npm run lint
 
 1. **Hot Reload**: Next.js HMR funcționează out-of-the-box
 2. **Error Suppressor**: `utils/devErrorSuppressor.ts` curăță console-ul în dev (conditional `require()`, tree-shaken din producție)
-3. **Logger**: Folosește `utils/logger.ts` în loc de `console.*` — loguri doar în development
+3. **Logger**: Folosește `utils/logger.ts` în loc de `console.*` - loguri doar în development
 4. **Port**: App rulează pe `:3000` (configurat în `package.json`)
 5. **Firebase Emulators** (opțional):
    ```bash

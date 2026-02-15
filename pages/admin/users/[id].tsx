@@ -20,7 +20,7 @@ import {
 import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy, HH:mm", { locale: ro });
 }
@@ -118,8 +118,8 @@ export default function AdminUserDetail() {
                         const offerCount = data.offers.filter((o: any) => o.requestId === r.id).length;
                         return (
                           <tr key={r.id} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-sm text-gray-900">{r.orasOrigin || r.cityFrom || "—"} → {r.orasDestinatie || r.cityTo || "—"}</td>
-                            <td className="px-4 py-3 text-sm text-gray-600">{r.serviceType || r.tipServiciu || "—"}</td>
+                            <td className="px-4 py-3 text-sm text-gray-900">{r.orasOrigin || r.cityFrom || "-"} → {r.orasDestinatie || r.cityTo || "-"}</td>
+                            <td className="px-4 py-3 text-sm text-gray-600">{r.serviceType || r.tipServiciu || "-"}</td>
                             <td className="px-4 py-3"><span className={`inline-flex rounded-full px-2 py-0.5 text-xs font-semibold ${r.adminApproved ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}`}>{r.adminApproved ? "Aprobată" : "Neaprobată"}</span></td>
                             <td className="px-4 py-3 text-sm text-gray-500">{fmtDate(r.createdAt)}</td>
                             <td className="px-4 py-3 text-sm font-medium text-purple-600">{offerCount}</td>

@@ -50,7 +50,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   const enriched = offers.map((o: any) => ({
     ...o,
-    companyName: companyMap[o.companyId] || "—",
+    companyName: companyMap[o.companyId] || "-",
     requestRoute: requestMap[o.requestId] || null,
   }));
 

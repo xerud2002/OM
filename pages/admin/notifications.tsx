@@ -9,7 +9,7 @@ import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner
 import { BellAlertIcon, PaperAirplaneIcon } from "@heroicons/react/24/outline";
 
 function fmtDate(ts: any) {
-  if (!ts) return "—";
+  if (!ts) return "-";
   const d = ts._seconds ? new Date(ts._seconds * 1000) : ts.toDate ? ts.toDate() : new Date(ts);
   return format(d, "d MMM yyyy, HH:mm", { locale: ro });
 }
@@ -65,7 +65,7 @@ export default function AdminNotifications() {
   const historyCols: Column<any>[] = [
     { key: "title", label: "Titlu", sortable: true, render: (n) => <span className="font-medium">{n.title}</span> },
     { key: "message", label: "Mesaj", render: (n) => <span className="max-w-xs truncate text-sm text-gray-500">{n.message}</span> },
-    { key: "recipientType", label: "Tip", sortable: true, render: (n) => <span className="text-xs capitalize">{n.recipientType || "—"}</span> },
+    { key: "recipientType", label: "Tip", sortable: true, render: (n) => <span className="text-xs capitalize">{n.recipientType || "-"}</span> },
     { key: "createdAt", label: "Data", sortable: true, render: (n) => <span className="text-sm text-gray-500">{fmtDate(n.createdAt)}</span>, getValue: (n) => n.createdAt?._seconds || 0 },
   ];
 

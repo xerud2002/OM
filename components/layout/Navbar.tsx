@@ -135,7 +135,7 @@ export default function Navbar() {
 
         {/* === RIGHT SIDE ACTIONS === */}
         <div className="hidden items-center gap-2 lg:flex">
-          {/* Devino Partener — secondary, for companies */}
+          {/* Devino Partener - secondary, for companies */}
           <Link
             href="/partener"
             className={`rounded-lg px-3.5 py-2 text-sm font-medium transition-all duration-200 ${

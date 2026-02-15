@@ -24,10 +24,10 @@ export default function MutariStudentiPage({ currentYear, reviewStats }: MutariS
   return (
     <>
       <Head>
-        <title>{`Mutări Studenți ${currentYear} → Prețuri de la 250 lei`}</title>
+        <title>{`Mutări Studenți ${currentYear} | Prețuri de la 250 lei`}</title>
         <meta
           name="description"
-          content="Mutări studenți în România de la 250 lei! Transport cămine și garsoniere. Primești 3-5 oferte GRATUITE în 24h. Tarife speciale grupe!"
+          content="Mutări studenți în România de la 250 lei. Transport cămine și garsoniere. Primești până la 5 oferte gratuite în 24h. Tarife speciale grupe."
         />
         <meta
           name="keywords"

@@ -30,10 +30,10 @@ function detectChannel(params: URLSearchParams, referrer: string): LeadSource["c
   if (params.get("fbclid")) return "facebook_ads";
   if (params.get("utm_source")?.toLowerCase() === "facebook" && ["cpc", "paid", "paid_social"].includes(params.get("utm_medium")?.toLowerCase() || "")) return "facebook_ads";
 
-  // Has UTM but not ads — could be organic social, email, etc.
+  // Has UTM but not ads - could be organic social, email, etc.
   if (params.get("utm_source")) return "other";
 
-  // No UTM — check referrer
+  // No UTM - check referrer
   if (!referrer) return "direct";
   try {
     const ref = new URL(referrer);

@@ -196,7 +196,7 @@ export default function DataTable<T extends Record<string, any>>({
                     <td key={col.key} className="whitespace-nowrap px-4 py-3 text-gray-700">
                       {col.render
                         ? col.render(row, page * pageSize + i)
-                        : String(getNestedValue(row, col.key) ?? "—")}
+                        : String(getNestedValue(row, col.key) ?? "-")}
                     </td>
                   ))}
                 </tr>
