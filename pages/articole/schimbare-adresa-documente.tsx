@@ -100,7 +100,7 @@ export default function GhidSchimbareAdresa() {
     return (
         <>
             <Head>
-                <title>Acte Necesare Schimbare Adresă/Domiciliu {currentYear} | Ghid Complet</title>
+                <title>{`Acte Necesare Schimbare Adresă/Domiciliu ${currentYear} | Ghid Complet`}</title>
                 <meta
                     name="description"
                     content={`Ghid complet ${currentYear} pentru schimbarea adresei în buletin. Lista de acte necesare la evidența populației, taxe locale și utilități.`}

@@ -51,7 +51,7 @@ export default function GuideBucuresti() {
     return (
         <>
             <Head>
-                <title>Ghid Mutare București {currentYear}: Prețuri și Sfaturi</title>
+                <title>{`Ghid Mutare București ${currentYear}: Prețuri și Sfaturi`}</title>
                 <meta
                     name="description"
                     content={`Tot ce trebuie să știi despre mutarea în București în ${currentYear}. Ghid pe sectoare, prețuri actualizate, sfaturi parcare și transport.`}

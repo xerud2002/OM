@@ -17,7 +17,7 @@ export default function ImpachetareProfesionalaPage({ currentYear }: Impachetare
   return (
     <>
       <Head>
-        <title>Împachetare Profesională {currentYear} | Servicii Complete de Ambalare</title>
+        <title>{`Împachetare Profesională ${currentYear} | Servicii Complete de Ambalare`}</title>
         <meta
           name="description"
           content="Servicii profesionale de împachetare pentru mutări. Materiale premium, echipe experimentate, protecție maximă pentru bunurile tale. Preț de la 150 lei!"

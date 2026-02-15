@@ -329,7 +329,7 @@ export default function NewReviewPage() {
   return (
     <>
       <Head>
-        <title>Lasă o recenzie pentru {company?.companyName || "companie"} | OferteMutare.ro</title>
+        <title>{`Lasă o recenzie pentru ${company?.companyName || "companie"} | OferteMutare.ro`}</title>
         <meta
           name="description"
           content={`Lasă o recenzie pentru ${company?.companyName}. Părerea ta contează pentru comunitatea OferteMutare.ro`}

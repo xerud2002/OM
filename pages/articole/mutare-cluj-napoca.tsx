@@ -51,7 +51,7 @@ export default function GuideCluj() {
     return (
         <>
             <Head>
-                <title>Ghid Mutare Cluj-Napoca {currentYear}: Prețuri și Sfaturi</title>
+                <title>{`Ghid Mutare Cluj-Napoca ${currentYear}: Prețuri și Sfaturi`}</title>
                 <meta
                     name="description"
                     content={`Ghid complet pentru mutarea în Cluj-Napoca în ${currentYear}. Află prețurile reale, cele mai bune cartiere (Gheorgheni, Zorilor) și sfaturi pentru studenți.`}

@@ -17,7 +17,7 @@ export default function MutariPianePage({ currentYear }: MutariPianePageProps) {
   return (
     <>
       <Head>
-        <title>Mutări Piane {currentYear} | Transport Specializat Piane</title>
+        <title>{`Mutări Piane ${currentYear} | Transport Specializat Piane`}</title>
         <meta
           name="description"
           content="Servicii specializate mutări piane în România. Echipe cu experiență, transport sigur piane verticale și cu coadă. De la 400 lei!"

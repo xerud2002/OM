@@ -62,7 +62,7 @@ export default function ArticleCostMutare() {
     return (
         <>
             <Head>
-                <title>Cât Costă o Mutare în România {currentYear} | Prețuri Reale</title>
+                <title>{`Cât Costă o Mutare în România ${currentYear} | Prețuri Reale`}</title>
                 <meta
                     name="description"
                     content={`Analiză completă prețuri mutări ${currentYear}: costuri mobilă, cutii, transport. Vezi cât costă să te muți în București, Cluj sau Timișoara cu o firmă profesionistă.`}

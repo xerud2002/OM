@@ -53,7 +53,7 @@ export default function MutariIndexPage({ currentYear }: MutariIndexPageProps) {
   return (
     <>
       <Head>
-        <title>Servicii Mutări {currentYear} | Toate Tipurile de Mutări</title>
+        <title>{`Servicii Mutări ${currentYear} | Toate Tipurile de Mutări`}</title>
         <meta
           name="description"
           content="✓ Găsește firma perfectă pentru mutarea ta ✓ Apartamente, case, birouri, studenți ✓ 3-5 oferte GRATUITE în 24h → Compară și economisești 40%!"

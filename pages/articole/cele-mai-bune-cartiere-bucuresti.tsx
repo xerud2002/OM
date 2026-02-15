@@ -142,7 +142,7 @@ export default function ArticleCartiereBucuresti() {
     return (
         <>
             <Head>
-                <title>Top 10 Cartiere București pentru Relocare {currentYear} | OferteMutare.ro</title>
+                <title>{`Top 10 Cartiere București pentru Relocare ${currentYear} | OferteMutare.ro`}</title>
                 <meta
                     name="description"
                     content={`Descoperă cele mai bune zone de locuit în București în ${currentYear}. Analizăm prețuri, parcuri și transport pentru Aviației, Titan, Drumul Taberei și altele.`}

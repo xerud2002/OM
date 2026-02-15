@@ -17,7 +17,7 @@ export default function DemontareMontareMobilaPage({ currentYear }: DemontareMon
   return (
     <>
       <Head>
-        <title>Demontare și Montare Mobilă {currentYear} | Servicii în Toată România</title>
+        <title>{`Demontare și Montare Mobilă ${currentYear} | Servicii în Toată România`}</title>
         <meta
           name="description"
           content="Servicii profesionale de demontare și montare mobilier. Dulapuri, paturi, birouri, bucătării. Echipe experimentate, scule profesionale. De la 80 lei!"

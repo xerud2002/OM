@@ -14,7 +14,7 @@ export default function MaterialeImpachetarePage({ currentYear }: MaterialeImpac
   return (
     <>
       <Head>
-        <title>Materiale Împachetare {currentYear} | Cutii, Bubble Wrap, Folie</title>
+        <title>{`Materiale Împachetare ${currentYear} | Cutii, Bubble Wrap, Folie`}</title>
         <meta
           name="description"
           content="Vânzare materiale profesionale de împachetare: cutii carton rezistente, bubble wrap, folie stretch, hârtie protecție. Preț de producător, livrare rapidă!"
