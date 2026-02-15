@@ -6,6 +6,7 @@ import { db } from "@/services/firebase";
 import { doc, updateDoc } from "firebase/firestore";
 import { toast } from "sonner";
 import { logger } from "@/utils/logger";
+import { isValidRoPhone } from "@/utils/requestHelpers";
 import {
   CheckIcon,
   ArrowRightIcon,
@@ -123,6 +124,10 @@ export default function OnboardingWizard({
       }
       if (!phone.trim()) {
         toast.error("Te rugăm să introduci numărul de telefon");
+        return;
+      }
+      if (!isValidRoPhone(phone)) {
+        toast.error("Numărul de telefon trebuie să fie un număr valid (ex: 07XX XXX XXX)");
         return;
       }
       await saveProgress(3, { companyName, phone, description });

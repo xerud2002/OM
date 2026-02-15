@@ -836,13 +836,14 @@ export default function RequestsView({
       // Success — optimistic update
       setHasMineMap((prev) => ({
         ...prev,
-        [activeOfferRequest.id]: { offerId: result.offerId || "temp", status: "pending" },
+        [activeOfferRequest.id]: { offerId: result.data?.offerId || "temp", status: "pending" },
       }));
       checkMyOffers([activeOfferRequest], company.uid);
     } catch (err: unknown) {
       logger.error("Failed to place offer", err);
       const msg = typeof err === "string" ? err : (err instanceof Error ? err.message : "Eroare la trimiterea ofertei.");
       alert(msg);
+      throw err; // Re-throw so OfferModal keeps the form open for retry
     } finally {
       setSubmittingOffer(false);
     }

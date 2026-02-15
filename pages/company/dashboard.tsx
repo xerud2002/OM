@@ -15,7 +15,6 @@ import {
   onSnapshot,
   doc,
   updateDoc,
-  deleteDoc,
   getDoc,
 } from "firebase/firestore";
 import {
@@ -255,10 +254,29 @@ export default function CompanyDashboard() {
   async function removeOffer(offer: any) {
     try {
       if (!offer?.requestId || !offer?.id) return;
-      const offerRef = doc(db, "requests", offer.requestId, "offers", offer.id);
-      await deleteDoc(offerRef);
-    } catch (e) {
-      logger.error("Failed to delete offer", e);
+      const token = await company.getIdToken();
+      const response = await fetch("/api/offers/withdraw", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          requestId: offer.requestId,
+          offerId: offer.id,
+        }),
+      });
+
+      const result = await response.json();
+      if (!response.ok) {
+        throw new Error(result.error || "Eroare la retragerea ofertei.");
+      }
+
+      // Optimistic removal from local state
+      setOffers((prev) => prev.filter((o) => o.id !== offer.id));
+    } catch (e: unknown) {
+      logger.error("Failed to withdraw offer", e);
+      setOfferError(e instanceof Error ? e.message : "Eroare la retragerea ofertei.");
     }
   }
 

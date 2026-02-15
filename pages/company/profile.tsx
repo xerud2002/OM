@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import StarRating from "@/components/reviews/StarRating";
 import { toast } from "sonner";
 import { logger } from "@/utils/logger";
+import { isValidRoPhone } from "@/utils/requestHelpers";
 import VerificationSection from "@/components/company/VerificationSection";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment } from "react";
@@ -129,6 +130,10 @@ export default function CompanyProfile() {
 
   const handleSave = async () => {
     if (!company?.uid) return;
+    if (phone && !isValidRoPhone(phone)) {
+      toast.error("Numărul de telefon trebuie să fie valid (ex: 07XX XXX XXX)");
+      return;
+    }
     setSaving(true);
 
     try {
