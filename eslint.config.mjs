@@ -15,11 +15,19 @@ const eslintConfig = nextConfig.map((config) => {
   return config;
 });
 
-eslintConfig.push({
-  rules: {
-    "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-unsafe-function-type": "off",
-  },
-});
+// Find the existing typescript-eslint plugin from next config
+const tsPlugin = eslintConfig.find(
+  (c) => c.plugins?.["@typescript-eslint"]
+)?.plugins?.["@typescript-eslint"];
+
+if (tsPlugin) {
+  eslintConfig.push({
+    plugins: { "@typescript-eslint": tsPlugin },
+    rules: {
+      "@typescript-eslint/no-explicit-any": "warn",
+      "@typescript-eslint/no-unsafe-function-type": "off",
+    },
+  });
+}
 
 export default eslintConfig;
