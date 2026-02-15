@@ -31,20 +31,20 @@ apt autoremove -y
 echo -e "${GREEN}[2/15] Actualizez sistemul...${NC}"
 apt update && apt upgrade -y
 
-echo -e "${GREEN}[3/15] Instalez Node.js 18 via nvm...${NC}"
+echo -e "${GREEN}[3/15] Instalez Node.js 20 LTS via nvm...${NC}"
 # Verifică dacă nvm există
 if [ ! -d "$HOME/.nvm" ]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm install 18
-    nvm use 18
-    nvm alias default 18
+    nvm install 20
+    nvm use 20
+    nvm alias default 20
 else
     echo "nvm deja instalat"
     export NVM_DIR="$HOME/.nvm"
     [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-    nvm use 18 2>/dev/null || nvm install 18
+    nvm use 20 2>/dev/null || nvm install 20
 fi
 
 echo -e "${GREEN}Node version: $(node --version)${NC}"

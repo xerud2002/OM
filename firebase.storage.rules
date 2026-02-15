@@ -32,8 +32,8 @@ service firebase.storage {
       // Authenticated users can upload chat attachments
       allow write: if isSignedIn() && isValidSize() && isValidContentType();
       
-      // Only uploader can delete (filename starts with their uid)
-      allow delete: if isSignedIn();
+      // Only uploader can delete (filename must start with their uid)
+      allow delete: if isSignedIn() && filename.matches(request.auth.uid + '.*');
     }
 
     // === REQUEST MEDIA ===

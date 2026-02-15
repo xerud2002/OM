@@ -120,27 +120,6 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
     }
   };
 
-  // Jump to step (only if unlocked) - disabled, kept for future use
-   
-  const handleJumpToStep = (stepId: number) => {
-    if (stepId <= currentStep) {
-      const target = stepRefs.current[stepId - 1];
-      // Determine offset based on screen size (stikcy header etc) - rudimentary
-      if (target) {
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
-      }
-    }
-  };
-
-  // --- RENDER HELPERS ---
-
-   
-  const renderStepStatus = (stepId: number) => {
-    if (stepId < currentStep) return "completed";
-    if (stepId === currentStep) return "current";
-    return "locked";
-  };
-
   // Step 1: Origin
   const renderOrigin = () => (
     <div className="space-y-6">

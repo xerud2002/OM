@@ -2,6 +2,8 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
   enabled: process.env.ANALYZE === "true",
 });
 
+const isDev = process.env.NODE_ENV !== "production";
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -150,11 +152,11 @@ const nextConfig = {
         headers: [
           {
             key: "Cross-Origin-Opener-Policy",
-            value: "unsafe-none",
+            value: "same-origin-allow-popups",
           },
           {
             key: "Cross-Origin-Embedder-Policy",
-            value: "unsafe-none",
+            value: "credentialless",
           },
           {
             key: "X-Content-Type-Options",
@@ -186,7 +188,7 @@ const nextConfig = {
             key: "Content-Security-Policy",
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://apis.google.com https://*.firebaseio.com",
+              "script-src 'self' 'unsafe-inline'" + (isDev ? " 'unsafe-eval'" : "") + " https://www.googletagmanager.com https://www.google-analytics.com https://apis.google.com https://*.firebaseio.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https: http:",
               "font-src 'self' https://fonts.gstatic.com",

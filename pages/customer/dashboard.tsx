@@ -8,16 +8,13 @@ import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import CustomerWelcome from "@/components/customer/CustomerWelcome";
 import CustomerNotificationBell from "@/components/customer/CustomerNotificationBell";
-import SearchInput from "@/components/ui/SearchInput";
 import {
   InboxIcon,
   CheckCircleIcon,
   ChatBubbleBottomCenterTextIcon as MessageSquare,
-  ClockIcon,
   CalendarIcon,
   TruckIcon,
   XMarkIcon,
-  ChevronRightIcon,
   GiftIcon,
   PhoneIcon,
   EyeIcon,
@@ -83,7 +80,6 @@ export default function CustomerDashboard() {
     null,
   );
   const [chatOffer, setChatOffer] = useState<Offer | null>(null);
-  const [showDetails, setShowDetails] = useState(false);
   const [detailModalRequestId, setDetailModalRequestId] = useState<string | null>(null);
   const detailModalRequest = requests.find((r) => r.id === detailModalRequestId);
   const offerUnsubsRef = useRef<Array<() => void>>([]);
@@ -98,13 +94,6 @@ export default function CustomerDashboard() {
     Record<string, { averageRating: number; totalReviews: number }>
   >({});
   const fetchedCompanyIds = useRef<Set<string>>(new Set());
-
-  // Helper: check if a request has an accepted offer
-  const hasAcceptedOffer = (requestId: string) => {
-    return (offersByRequest[requestId] || []).some(
-      (o) => o?.status === "accepted",
-    );
-  };
 
   // Auth & data loading
   useEffect(() => {

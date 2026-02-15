@@ -332,7 +332,6 @@ RESEND_ADMIN_EMAIL=info@ofertemutare.ro
 
 ```env
 INTERNAL_API_SECRET=random_64_char_hex_string
-CRON_SECRET=random_secure_string_for_cron_auth
 CRON_API_KEY=random_secure_string_for_cron_endpoints
 ```
 
@@ -549,7 +548,7 @@ npm run lint
 - ✅ `FIREBASE_ADMIN_*` vars (SECRETE!)
 - ✅ `RESEND_API_KEY`, `RESEND_FROM_EMAIL`, `RESEND_ADMIN_EMAIL`
 - ✅ `INTERNAL_API_SECRET` (64-char hex)
-- ✅ `CRON_SECRET`, `CRON_API_KEY` (pentru CRON endpoints)
+- ✅ `CRON_API_KEY` (pentru CRON endpoints)
 
 ---
 
@@ -627,7 +626,7 @@ Firebase Admin SDK ←→ Firestore/Auth (server-side)
   - `/api/notifyCompaniesOnUpload` → Verify ownership
   - `/api/send-email` → INTERNAL_API_SECRET (public types: contactForm only)
   - `/api/requests/createGuest` → Rate-limited (5 req/min/IP)
-  - `/api/cron/auto-refund` → CRON_SECRET auth
+  - `/api/cron/auto-refund` → CRON_API_KEY auth (x-api-key header)
 
 - **HTTP Security Headers** (next.config.js)
   - Content-Security-Policy (strict whitelist)

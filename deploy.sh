@@ -32,52 +32,71 @@ cd "$APP_DIR" || { echo -e "${RED}❌ Failed to cd to $APP_DIR${NC}"; exit 1; }
 
 echo -e "${YELLOW}📂 Working directory: $(pwd)${NC}"
 
-# Step 1: Pull latest code
+# Step 1: Save current commit for rollback
+PREV_COMMIT=$(git rev-parse HEAD 2>/dev/null || echo "none")
+echo -e "${YELLOW}📌 Current commit: ${PREV_COMMIT}${NC}"
+
+# Step 2: Pull latest code
 echo -e "${YELLOW}📥 Pulling latest code from GitHub...${NC}"
 git fetch origin main
 git reset --hard origin/main
-echo -e "${GREEN}✅ Code updated${NC}"
+NEW_COMMIT=$(git rev-parse HEAD)
+echo -e "${GREEN}✅ Code updated to ${NEW_COMMIT}${NC}"
 
-# Step 2: Install dependencies
+# Step 3: Install dependencies
 echo -e "${YELLOW}📦 Installing dependencies...${NC}"
-npm install
+npm ci --production=false
 echo -e "${GREEN}✅ Dependencies installed${NC}"
 
-# Step 3: Build the application
+# Step 4: Build the application
 echo -e "${YELLOW}🔨 Building application...${NC}"
-npm run build
+if ! npm run build; then
+    echo -e "${RED}❌ Build failed! Rolling back to ${PREV_COMMIT}...${NC}"
+    if [ "$PREV_COMMIT" != "none" ]; then
+        git reset --hard "$PREV_COMMIT"
+        npm ci --production=false
+        npm run build
+        echo -e "${YELLOW}⚠️  Rolled back to previous commit${NC}"
+    fi
+    exit 1
+fi
 echo -e "${GREEN}✅ Build complete${NC}"
 
-# Step 4: Clean up PM2 and restart
-echo -e "${YELLOW}🔄 Restarting application...${NC}"
-
-# Kill any process on port 3000 to prevent conflicts
-PORT_PID=$(lsof -t -i:3000 2>/dev/null || true)
-if [ -n "$PORT_PID" ]; then
-    echo -e "${YELLOW}   Killing process on port 3000 (PID: $PORT_PID)${NC}"
-    kill -9 $PORT_PID 2>/dev/null || true
-    sleep 1
-fi
-
-# Delete all PM2 processes to start fresh
-pm2 delete all 2>/dev/null || true
-sleep 1
-
-# Start the application
-pm2 start ecosystem.config.cjs
-pm2 save
-
-echo -e "${GREEN}✅ Application restarted${NC}"
-
-# Step 5: Wait and verify
-echo -e "${YELLOW}⏳ Waiting for server to start...${NC}"
-sleep 5
-
-# Verify the server is running
-if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 | grep -q "200\|304"; then
-    echo -e "${GREEN}✅ Server is responding on port 3000${NC}"
+# Step 5: Graceful reload via PM2 (zero-downtime rolling restart)
+echo -e "${YELLOW}🔄 Reloading application (zero-downtime)...${NC}"
+if pm2 describe "$APP_NAME" > /dev/null 2>&1; then
+    pm2 reload "$APP_NAME" --update-env
 else
-    echo -e "${YELLOW}⚠️  Server might still be starting...${NC}"
+    pm2 start ecosystem.config.cjs
+fi
+pm2 save
+echo -e "${GREEN}✅ Application reloaded${NC}"
+
+# Step 6: Health check with retry
+echo -e "${YELLOW}⏳ Running health check...${NC}"
+HEALTHY=false
+for i in 1 2 3 4 5; do
+    sleep 3
+    HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 2>/dev/null || echo "000")
+    if [ "$HTTP_CODE" = "200" ] || [ "$HTTP_CODE" = "304" ]; then
+        HEALTHY=true
+        break
+    fi
+    echo -e "${YELLOW}   Attempt $i/5 - status: $HTTP_CODE${NC}"
+done
+
+if [ "$HEALTHY" = true ]; then
+    echo -e "${GREEN}✅ Server is healthy (HTTP $HTTP_CODE)${NC}"
+else
+    echo -e "${RED}❌ Health check failed! Rolling back...${NC}"
+    if [ "$PREV_COMMIT" != "none" ]; then
+        git reset --hard "$PREV_COMMIT"
+        npm ci --production=false
+        npm run build
+        pm2 reload "$APP_NAME" --update-env
+        echo -e "${YELLOW}⚠️  Rolled back to ${PREV_COMMIT}${NC}"
+    fi
+    exit 1
 fi
 
 # Show PM2 status

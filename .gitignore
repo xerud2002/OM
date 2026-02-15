@@ -31,3 +31,6 @@ Thumbs.db
 # Deployment
 .vercel
 .firebase/logs/
+
+# Rate limiter shared store (PM2 cluster)
+.rate-limit/

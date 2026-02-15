@@ -17,7 +17,7 @@ const eslintConfig = nextConfig.map((config) => {
 
 eslintConfig.push({
   rules: {
-    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-explicit-any": "warn",
     "@typescript-eslint/no-unsafe-function-type": "off",
   },
 });

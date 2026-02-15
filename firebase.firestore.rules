@@ -227,9 +227,10 @@ service cloud.firestore {
 
     // === META COLLECTION (for counters and system data) ===
     match /meta/{docId} {
-      // Authenticated users can read/write counters (for request code generation)
-      // NOTE: Guest request fallback (client-side) requires auth; primary path uses Admin SDK
-      allow read, write: if isSignedIn() && docId == 'counters';
+      // Counters: read allowed for authenticated users (request code display);
+      // write restricted to admin (primary writes use Admin SDK which bypasses rules)
+      allow read: if isSignedIn() && docId == 'counters';
+      allow write: if isSignedIn() && isAdmin() && docId == 'counters';
       // Admin can read and write settings
       allow read, write: if docId == 'settings' && isSignedIn() && isAdmin();
       // Deny all other meta documents

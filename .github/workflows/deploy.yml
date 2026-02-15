@@ -52,11 +52,28 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           script: |
             cd /var/www/om
+            PREV_COMMIT=$(git rev-parse HEAD)
             git fetch origin main
             git reset --hard origin/main
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
             npm ci --production=false
-            npm run build
-            pm2 restart om-app --update-env
-            echo "✅ Deploy complete: $(date)"
+            if ! npm run build; then
+              echo "❌ Build failed, rolling back..."
+              git reset --hard "$PREV_COMMIT"
+              npm ci --production=false
+              npm run build
+              exit 1
+            fi
+            pm2 reload om-app --update-env
+            sleep 5
+            HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000)
+            if [ "$HTTP_CODE" != "200" ] && [ "$HTTP_CODE" != "304" ]; then
+              echo "❌ Health check failed ($HTTP_CODE), rolling back..."
+              git reset --hard "$PREV_COMMIT"
+              npm ci --production=false
+              npm run build
+              pm2 reload om-app --update-env
+              exit 1
+            fi
+            echo "✅ Deploy complete: $(date) - HTTP $HTTP_CODE"

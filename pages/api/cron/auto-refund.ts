@@ -18,7 +18,7 @@ import type {
  * 3. Creates a transaction record
  *
  * Should be called by a cron job (e.g., Vercel Cron, GitHub Actions)
- * Protected by CRON_SECRET header
+ * Protected by CRON_API_KEY via x-api-key header
  */
 
 const REFUND_WINDOW_HOURS = 72;
@@ -32,11 +32,11 @@ export default async function handler(
     return res.status(405).json(apiError("Method not allowed"));
   }
 
-  // Verify cron secret
-  const authHeader = req.headers.authorization;
-  const cronSecret = process.env.CRON_SECRET;
+  // Verify cron API key (fail closed – if env var missing, deny all)
+  const apiKey = req.headers["x-api-key"];
+  const cronApiKey = process.env.CRON_API_KEY;
 
-  if (!cronSecret || authHeader !== `Bearer ${cronSecret}`) {
+  if (!cronApiKey || apiKey !== cronApiKey) {
     return res.status(401).json(apiError("Unauthorized"));
   }
 

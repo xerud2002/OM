@@ -57,7 +57,10 @@ export async function logAuditAction(
     });
     return docRef.id;
   } catch (err) {
-    console.error("[AuditLogger] Failed to log action:", err);
+    // Use structured logger instead of console.error
+    if (typeof window !== "undefined") {
+      import("@/utils/logger").then(({ logger }) => logger.error("[AuditLogger] Failed to log action:", err));
+    }
     throw err;
   }
 }

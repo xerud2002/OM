@@ -3,7 +3,7 @@ import { adminDb } from "@/lib/firebaseAdmin";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
-import { sendEmail } from "@/services/email";
+import { sendEmail, escapeHtml } from "@/services/email";
 import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 import { calculateRequestCost } from "@/utils/costCalculator";
 import { FieldValue } from "firebase-admin/firestore";
@@ -26,6 +26,10 @@ export default async function handler(
 
   if (typeof price !== "number" || price <= 0) {
     return res.status(400).json(apiError("Price must be a positive number"));
+  }
+
+  if (message && (typeof message !== "string" || message.length > 5000)) {
+    return res.status(400).json(apiError("Message must be a string of max 5000 characters"));
   }
 
   // Rate limiting
@@ -166,7 +170,7 @@ export default async function handler(
 <tr><td style="padding:30px;">
 <p style="color:#374151;font-size:15px;line-height:1.6;">Bună ziua,</p>
 <p style="color:#374151;font-size:15px;line-height:1.6;"><strong>${companyName}</strong> ți-a trimis o ofertă de <strong>${price} RON</strong> pentru mutarea ta.</p>
-${message ? `<div style="background:#f9fafb;border-left:4px solid #10b981;padding:15px;margin:20px 0;border-radius:0 8px 8px 0;"><p style="margin:0;color:#6b7280;font-size:13px;">Mesajul firmei:</p><p style="margin:5px 0 0;color:#374151;font-size:14px;">${message}</p></div>` : ""}
+${message ? `<div style="background:#f9fafb;border-left:4px solid #10b981;padding:15px;margin:20px 0;border-radius:0 8px 8px 0;"><p style="margin:0;color:#6b7280;font-size:13px;">Mesajul firmei:</p><p style="margin:5px 0 0;color:#374151;font-size:14px;">${escapeHtml(String(message))}</p></div>` : ""}
 <div style="text-align:center;margin:25px 0;">
 <a href="https://ofertemutare.ro/customer/dashboard" style="display:inline-block;background:linear-gradient(135deg,#10b981,#0ea5e9);color:#fff;padding:14px 30px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:15px;">Vezi oferta →</a>
 </div>
