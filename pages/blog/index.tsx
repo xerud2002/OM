@@ -186,22 +186,28 @@ export default function BlogPage() {
         <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Blog" }]} />
         <div className="min-h-screen bg-linear-to-b from-slate-50 to-white">
           {/* Hero Section */}
-          <section className="relative overflow-hidden py-16 sm:py-20">
-            <div className="pointer-events-none absolute inset-0">
-              <div className="absolute left-1/4 top-0 h-100 w-100 -translate-y-1/2 rounded-full bg-emerald-100/40 blur-[100px]" />
-              <div className="absolute bottom-0 right-1/4 h-75 w-75 translate-y-1/2 rounded-full bg-sky-100/40 blur-[100px]" />
-            </div>
+          <section className="relative overflow-hidden bg-white py-16 sm:py-20">
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
             <div className="container relative z-10 mx-auto px-4">
               <div className="mx-auto max-w-3xl text-center">
-                <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-4 py-2">
-                  <BookOpen className="h-4 w-4 text-emerald-600" />
+                <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm">
+                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
+                    <BookOpen className="h-3.5 w-3.5 text-white" />
+                  </span>
                   <span className="text-sm font-semibold text-emerald-700">Blog</span>
                 </div>
-                <h1 className="mb-5 text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 sm:text-5xl">
-                  Sfaturi pentru o{" "}
-                  <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
-                    mutare reușită
+                <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
+                  Sfaturi pentru o
+                  <br />
+                  <span className="relative inline-block">
+                    <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                      mutare reușită
+                    </span>
+                    <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+                      <path d="M2 10C40 4 100 2 150 6C200 10 260 4 298 8" stroke="url(#blogGrad)" strokeWidth="4" strokeLinecap="round" />
+                      <defs><linearGradient id="blogGrad" x1="0" y1="0" x2="300" y2="0"><stop offset="0%" stopColor="#059669" /><stop offset="50%" stopColor="#14b8a6" /><stop offset="100%" stopColor="#0284c7" /></linearGradient></defs>
+                    </svg>
                   </span>
                 </h1>
                 <p className="text-lg text-slate-600">

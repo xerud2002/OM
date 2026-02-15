@@ -445,28 +445,34 @@ export default function PartenerPage({
       <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Devino Partener" }]} />
 
       {/* ═══════════ HERO ═══════════ */}
-      <section className="relative overflow-hidden py-20 lg:py-28" style={{ background: "linear-gradient(to bottom right, #0f172a, #1e293b, #064e3b)" }}>
-        {/* Decorative grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.03)_1px,transparent_1px)] bg-size-[40px_40px]" />
-        <div className="absolute -top-40 right-0 h-96 w-96 rounded-full bg-emerald-500/20 blur-3xl" />
-        <div className="absolute -bottom-20 left-0 h-72 w-72 rounded-full bg-blue-500/10 blur-3xl" />
+      <section className="relative overflow-hidden bg-white py-16 sm:py-20 lg:py-24">
+        {/* Grid pattern */}
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
         <div className="relative mx-auto max-w-7xl px-4">
           <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
             {/* Left – Text */}
             <div className="text-center lg:text-left">
-              <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-4 py-2 text-sm font-medium backdrop-blur-sm" style={{ color: "#6ee7b7" }}>
-                <Truck className="h-4 w-4" />
-                Pentru Firme de Mutări
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
+                  <Truck className="h-3.5 w-3.5 text-white" />
+                </span>
+                <span className="text-sm font-semibold text-emerald-700">Pentru Firme de Mutări</span>
               </div>
-              <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl md:text-5xl lg:text-6xl" style={{ color: "#ffffff" }}>
+              <h1 className="mb-6 text-3xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
                 Primește Cereri.{" "}
-                <span className="bg-clip-text text-transparent" style={{ backgroundImage: "linear-gradient(to right, #6ee7b7, #7dd3fc)" }}>
-                  Trimite Oferte.
-                </span>{" "}
-                Crește Afacerea.
+                <span className="relative inline-block">
+                  <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                    Trimite Oferte.
+                  </span>
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+                    <path d="M2 10C40 4 100 2 150 6C200 10 260 4 298 8" stroke="url(#partenerGrad)" strokeWidth="4" strokeLinecap="round" />
+                    <defs><linearGradient id="partenerGrad" x1="0" y1="0" x2="300" y2="0"><stop offset="0%" stopColor="#059669" /><stop offset="50%" stopColor="#14b8a6" /><stop offset="100%" stopColor="#0284c7" /></linearGradient></defs>
+                  </svg>
+                </span>
+                <br />Crește Afacerea.
               </h1>
-              <p className="mb-8 text-lg leading-relaxed md:text-xl" style={{ color: "#e2e8f0" }}>
+              <p className="mb-8 text-lg leading-relaxed text-slate-600 md:text-xl">
                 Dashboard-ul tău complet pentru a gestiona cereri de mutare, a
                 trimite oferte și a comunica direct cu clienții – totul dintr-un
                 singur loc.
@@ -475,7 +481,7 @@ export default function PartenerPage({
               <div className="flex flex-col gap-4 sm:flex-row sm:justify-center lg:justify-start">
                 <Link
                   href="/company/auth?tab=register"
-                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-emerald-500/30 transition hover:bg-emerald-400 hover:shadow-xl"
+                  className="group inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-600 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-700 hover:shadow-xl"
                 >
                   <Building2 className="h-5 w-5" />
                   Înregistrează Firma
@@ -483,24 +489,24 @@ export default function PartenerPage({
                 </Link>
                 <Link
                   href="/company/auth?tab=login"
-                  className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/20 bg-white/5 px-8 py-4 text-lg font-semibold text-white backdrop-blur-sm transition hover:bg-white/10"
+                  className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-slate-200 px-8 py-4 text-lg font-semibold text-slate-700 transition hover:border-emerald-300 hover:bg-emerald-50"
                 >
                   Am deja cont
                 </Link>
               </div>
 
               {/* Trust row */}
-              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm lg:justify-start" style={{ color: "#cbd5e1" }}>
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-slate-500 lg:justify-start">
                 <span className="flex items-center gap-1.5">
-                  <CheckCircle className="h-4 w-4 text-emerald-400" /> Gratuit
+                  <CheckCircle className="h-4 w-4 text-emerald-500" /> Gratuit
                   la înregistrare
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <Shield className="h-4 w-4 text-emerald-400" /> Fără
+                  <Shield className="h-4 w-4 text-emerald-500" /> Fără
                   abonamente
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <GiftIcon className="h-4 w-4 text-emerald-400" /> 50 credite
+                  <GiftIcon className="h-4 w-4 text-emerald-500" /> 50 credite
                   bonus
                 </span>
               </div>
@@ -509,8 +515,8 @@ export default function PartenerPage({
             {/* Right – Live request card (hero mock) */}
             <div className="hidden lg:block">
               <div className="relative">
-                <div className="absolute -inset-3 rounded-3xl blur-xl" style={{ background: "linear-gradient(to bottom right, rgba(16,185,129,0.2), rgba(59,130,246,0.2))" }} />
-                <div className="relative rounded-2xl border border-white/10 bg-white p-6 shadow-2xl">
+                <div className="absolute -inset-3 rounded-3xl bg-linear-to-br from-emerald-100/60 to-sky-100/60 blur-xl" />
+                <div className="relative rounded-2xl border border-slate-200 bg-white p-6 shadow-2xl">
                   {/* Fake notification header */}
                   <div className="mb-5 flex items-center gap-3">
                     <div className="relative flex h-12 w-12 items-center justify-center rounded-xl bg-emerald-100">

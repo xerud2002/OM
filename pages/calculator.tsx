@@ -118,18 +118,29 @@ export default function CalculatorPage() {
         <article className="bg-gray-50">
 
           {/* Header */}
-          <header className="pb-12 pt-8 md:pt-12">
-            <div className="mx-auto max-w-5xl px-4 text-center">
-              <span className="mb-4 inline-block rounded-full bg-orange-100 px-4 py-1.5 text-sm font-semibold text-orange-700">
-                Actualizat {currentYear}
-              </span>
-              <h1 className="mb-6 text-4xl font-extrabold tracking-tight text-gray-900 md:text-6xl">
-                Calculator Cost Mutare:{" "}
-                <span className="bg-linear-to-r from-orange-600 via-red-500 to-pink-600 bg-clip-text text-transparent">
-                  Estimare Instantanee
+          <header className="relative overflow-hidden bg-white pb-12 pt-8 md:pt-12">
+            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
+            <div className="relative mx-auto max-w-5xl px-4 text-center">
+              <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm">
+                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="h-3.5 w-3.5 text-white"><path strokeLinecap="round" strokeLinejoin="round" d="M15.75 15.75V18m-7.5-6.75h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25v-.008Zm0 2.25h.008v.008H8.25v-.008Zm2.498-6.75h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007v-.008Zm0 2.25h.007v.008h-.007v-.008Zm2.504-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008Zm2.498-6.75h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008v-.008ZM21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" /></svg>
+                </span>
+                <span className="text-sm font-semibold text-emerald-700">Actualizat {currentYear}</span>
+              </div>
+              <h1 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
+                Calculator Cost Mutare
+                <br />
+                <span className="relative inline-block">
+                  <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                    Estimare Instantanee
+                  </span>
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+                    <path d="M2 10C40 4 100 2 150 6C200 10 260 4 298 8" stroke="url(#calcGrad)" strokeWidth="4" strokeLinecap="round" />
+                    <defs><linearGradient id="calcGrad" x1="0" y1="0" x2="300" y2="0"><stop offset="0%" stopColor="#059669" /><stop offset="50%" stopColor="#14b8a6" /><stop offset="100%" stopColor="#0284c7" /></linearGradient></defs>
+                  </svg>
                 </span>
               </h1>
-              <p className="mx-auto max-w-2xl text-lg text-gray-600">
+              <p className="mx-auto max-w-2xl text-lg text-slate-600">
                 Află în 30 de secunde cât te costă să te muți. Calculator gratuit bazat pe prețurile medii din piața din România.
               </p>
               

@@ -188,26 +188,37 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
         <FAQPageSchema faqs={serviciiPageFaqs} />
 
         {/* Hero */}
-        <section className="relative overflow-hidden bg-gradient-brand py-20">
-          <div className="absolute inset-0 overflow-hidden">
-            <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-white/5" />
-            <div className="absolute -bottom-20 -left-20 h-60 w-60 rounded-full bg-white/5" />
-          </div>
+        <section className="relative overflow-hidden bg-white py-16 sm:py-20">
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(16,185,129,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.03)_1px,transparent_1px)] bg-[size:50px_50px]" />
 
           <div className="relative mx-auto max-w-6xl px-4 text-center">
-            <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
-              Servicii Auxiliare{" "}
-              <span className="bg-linear-to-r from-yellow-300 to-orange-300 bg-clip-text text-transparent">
-                pentru Mutare
+            <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-linear-to-r from-emerald-50 to-teal-50 px-5 py-2.5 shadow-sm">
+              <span className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
+                <SparklesIcon className="h-3.5 w-3.5 text-white" />
+              </span>
+              <span className="text-sm font-semibold text-emerald-700">Servicii verificate</span>
+            </div>
+
+            <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
+              Servicii Auxiliare
+              <br />
+              <span className="relative inline-block">
+                <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
+                  pentru Mutare
+                </span>
+                <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+                  <path d="M2 10C40 4 100 2 150 6C200 10 260 4 298 8" stroke="url(#serviciiGrad)" strokeWidth="4" strokeLinecap="round" />
+                  <defs><linearGradient id="serviciiGrad" x1="0" y1="0" x2="300" y2="0"><stop offset="0%" stopColor="#059669" /><stop offset="50%" stopColor="#14b8a6" /><stop offset="100%" stopColor="#0284c7" /></linearGradient></defs>
+                </svg>
               </span>
             </h1>
-            <p className="mb-8 mx-auto max-w-2xl text-lg text-purple-100 md:text-xl">
+            <p className="mb-8 mx-auto max-w-2xl text-lg text-slate-600 md:text-xl">
               Compară oferte pentru împachetare, montaj mobilă, depozitare și debarasare, servicii oferite de firmele noastre partenere verificate. Prețurile afișate sunt orientative.
             </p>
-            <div className="flex flex-wrap justify-center gap-4 text-sm text-purple-200">
-              <span className="flex items-center gap-1.5"><ShieldCheckIcon className="h-5 w-5 text-green-400" /> Firme verificate</span>
-              <span className="flex items-center gap-1.5"><ClockIcon className="h-5 w-5 text-yellow-400" /> Programare flexibilă</span>
-              <span className="flex items-center gap-1.5"><CheckCircleIcon className="h-5 w-5 text-blue-400" /> Prețuri indicative</span>
+            <div className="flex flex-wrap justify-center gap-4 text-sm text-slate-500">
+              <span className="flex items-center gap-1.5"><ShieldCheckIcon className="h-5 w-5 text-emerald-500" /> Firme verificate</span>
+              <span className="flex items-center gap-1.5"><ClockIcon className="h-5 w-5 text-emerald-500" /> Programare flexibilă</span>
+              <span className="flex items-center gap-1.5"><CheckCircleIcon className="h-5 w-5 text-emerald-500" /> Prețuri indicative</span>
             </div>
           </div>
         </section>
