@@ -14,7 +14,7 @@ const articles = [
   {
     title: "Cât Costă o Mutare în România 2026 | Prețuri Reale",
     desc: "Analiză detaliată a costurilor: prețuri pe cameră, distanță și servicii extra. Află cum să obții cel mai bun preț.",
-    link: "/articles/cat-costa-mutarea-2026",
+    link: "/articole/cat-costa-mutarea-2026",
     readTime: "6 min",
     category: "Costuri",
     gradient: "linear-gradient(to right, #059669, #34d399)",
@@ -23,7 +23,7 @@ const articles = [
   {
     title: "Ghid Mutare în Cluj-Napoca 2026",
     desc: "Tot ce trebuie să știi despre viața și mutarea în 'Silicon Valley' de România. Prețuri, zone și logistică pentru IT-iști și studenți.",
-    link: "/guides/mutare-cluj-napoca",
+    link: "/articole/mutare-cluj-napoca",
     readTime: "7 min",
     category: "Ghid Oraș",
     gradient: "linear-gradient(to right, #2563eb, #60a5fa)",
@@ -32,7 +32,7 @@ const articles = [
   {
     title: "Ghid Complet Mutare în București 2026",
     desc: "Cartiere, prețuri și sfaturi practice pentru o mutare fără stres în Capitală. Tot ce trebuie să știi despre logistică și parcare.",
-    link: "/guides/mutare-bucuresti-complet",
+    link: "/articole/mutare-bucuresti-complet",
     readTime: "8 min",
     category: "Ghid Oraș",
     gradient: "linear-gradient(to right, #2563eb, #3b82f6)",
@@ -41,7 +41,7 @@ const articles = [
   {
     title: "Top 5 trucuri pentru împachetarea obiectelor fragile",
     desc: "Află cum să eviți deteriorarea obiectelor tale preferate prin tehnici folosite de profesioniști.",
-    link: "/articles/impachetare",
+    link: "/servicii/impachetare-profesionala",
     readTime: "5 min",
     category: "Împachetare",
     gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",
@@ -50,7 +50,7 @@ const articles = [
   {
     title: "Cum îți pregătești locuința pentru ziua mutării",
     desc: "De la etichetarea cutiilor până la protejarea podelelor, iată cum să ai o zi de mutare organizată.",
-    link: "/articles/pregatire",
+    link: "/articole/pregatire",
     readTime: "7 min",
     category: "Pregătire",
     gradient: "linear-gradient(to right, #10b981, #0d9488)",
@@ -59,7 +59,7 @@ const articles = [
   {
     title: "De ce o vizită virtuală te ajută să primești oferta corectă",
     desc: "Un video call rapid îți oferă o evaluare precisă și te ajută să economisești timp și bani.",
-    link: "/articles/survey",
+    link: "/articole/evaluare-mutare",
     readTime: "4 min",
     category: "Sfaturi",
     gradient: "linear-gradient(to right, #a855f7, #ec4899)",
