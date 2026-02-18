@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OferteMutare.ro — Structura Site (229 URL-uri)</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8fafc; color: #1e293b; padding: 24px; line-height: 1.6; }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    .subtitle { color: #64748b; margin-bottom: 24px; font-size: 14px; }
+    .stats { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 32px; }
+    .stat { background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 16px 20px; min-width: 140px; }
+    .stat-num { font-size: 28px; font-weight: 800; color: #059669; }
+    .stat-label { font-size: 12px; color: #64748b; text-transform: uppercase; letter-spacing: 0.5px; }
+    .section { background: white; border: 1px solid #e2e8f0; border-radius: 12px; margin-bottom: 20px; overflow: hidden; }
+    .section-header { padding: 16px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .section-header:hover { background: #e2e8f0; }
+    .section-title { font-weight: 700; font-size: 16px; }
+    .section-count { background: #059669; color: white; border-radius: 20px; padding: 2px 12px; font-size: 13px; font-weight: 600; }
+    .section-body { padding: 8px 0; }
+    .link-row { display: flex; align-items: center; padding: 8px 20px; border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
+    .link-row:hover { background: #f0fdf4; }
+    .link-row:last-child { border-bottom: none; }
+    .link-num { width: 36px; color: #94a3b8; font-size: 12px; font-weight: 600; flex-shrink: 0; }
+    .link-url { flex: 1; }
+    .link-url a { color: #0f766e; text-decoration: none; font-size: 14px; font-weight: 500; }
+    .link-url a:hover { text-decoration: underline; color: #059669; }
+    .link-priority { width: 50px; text-align: center; font-size: 12px; color: #94a3b8; flex-shrink: 0; }
+    .link-check { width: 32px; text-align: center; flex-shrink: 0; }
+    .link-check input { width: 18px; height: 18px; accent-color: #059669; cursor: pointer; }
+    .legend { margin-bottom: 24px; padding: 16px 20px; background: #fef3c7; border: 1px solid #fde68a; border-radius: 12px; font-size: 13px; }
+    .legend strong { color: #92400e; }
+    .toolbar { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+    .btn { padding: 8px 16px; border-radius: 8px; border: 1px solid #d1d5db; background: white; cursor: pointer; font-size: 13px; font-weight: 600; }
+    .btn:hover { background: #f1f5f9; }
+    .btn-green { background: #059669; color: white; border-color: #059669; }
+    .btn-green:hover { background: #047857; }
+    .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; margin-bottom: 24px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #059669; border-radius: 4px; transition: width 0.3s; }
+    .progress-text { font-size: 13px; color: #64748b; margin-bottom: 8px; }
+    @media (max-width: 640px) {
+      .link-priority { display: none; }
+      .stats { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<h1>OferteMutare.ro — Structura Completă a Site-ului</h1>
+<p class="subtitle">Generat: 18 Februarie 2026 &bull; Total: 229 URL-uri publice indexabile &bull; Bifează paginile indexate</p>
+
+<div class="progress-text">Indexare: <span id="checkedCount">26</span> / 229 pagini (<span id="checkedPercent">11</span>%)</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width: 11%"></div></div>
+
+<div class="toolbar">
+  <button class="btn btn-green" onclick="checkAll()">Bifează Tot</button>
+  <button class="btn" onclick="uncheckAll()">Debifează Tot</button>
+  <button class="btn" onclick="copyUnchecked()">Copiază Ne-indexate</button>
+  <button class="btn" onclick="exportCSV()">Export CSV</button>
+</div>
+
+<div class="legend">
+  <strong>Cum se folosește:</strong> Deschide Google Search Console → URL Inspection. Verifică fiecare URL și bifează-le pe cele indexate. Butoanele de sus te ajută să exporți lista ne-indexatelor.
+</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num">9</div><div class="stat-label">Pagini Statice</div></div>
+  <div class="stat"><div class="stat-num">11</div><div class="stat-label">Articole</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-label">Servicii</div></div>
+  <div class="stat"><div class="stat-num">8</div><div class="stat-label">Mutări Statice</div></div>
+  <div class="stat"><div class="stat-num">41</div><div class="stat-label">Mutări Orașe</div></div>
+  <div class="stat"><div class="stat-num">152</div><div class="stat-label">Mutări Rute</div></div>
+</div>
+
+<!-- ═══════════════════════ STATIC PAGES ═══════════════════════ -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">Pagini Principale</span>
+    <span class="section-count">9</span>
+  </div>
+  <div class="section-body">
+    <div class="link-row"><span class="link-num">1</span><span class="link-url"><a href="https://ofertemutare.ro/" target="_blank">https://ofertemutare.ro/</a></span><span class="link-priority">1.0</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">2</span><span class="link-url"><a href="https://ofertemutare.ro/about" target="_blank">https://ofertemutare.ro/about</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">3</span><span class="link-url"><a href="https://ofertemutare.ro/calculator" target="_blank">https://ofertemutare.ro/calculator</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">4</span><span class="link-url"><a href="https://ofertemutare.ro/contact" target="_blank">https://ofertemutare.ro/contact</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">5</span><span class="link-url"><a href="https://ofertemutare.ro/faq" target="_blank">https://ofertemutare.ro/faq</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">6</span><span class="link-url"><a href="https://ofertemutare.ro/partener" target="_blank">https://ofertemutare.ro/partener</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">7</span><span class="link-url"><a href="https://ofertemutare.ro/privacy" target="_blank">https://ofertemutare.ro/privacy</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">8</span><span class="link-url"><a href="https://ofertemutare.ro/terms" target="_blank">https://ofertemutare.ro/terms</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">9</span><span class="link-url"><a href="https://ofertemutare.ro/blog" target="_blank">https://ofertemutare.ro/blog</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ ARTICOLE ═══════════════════════ -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">Articole</span>
+    <span class="section-count">11</span>
+  </div>
+  <div class="section-body">
+    <div class="link-row"><span class="link-num">10</span><span class="link-url"><a href="https://ofertemutare.ro/articole" target="_blank">https://ofertemutare.ro/articole</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">11</span><span class="link-url"><a href="https://ofertemutare.ro/articole/cat-costa-mutarea-2026" target="_blank">https://ofertemutare.ro/articole/cat-costa-mutarea-2026</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">12</span><span class="link-url"><a href="https://ofertemutare.ro/articole/cele-mai-bune-cartiere-bucuresti" target="_blank">https://ofertemutare.ro/articole/cele-mai-bune-cartiere-bucuresti</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">13</span><span class="link-url"><a href="https://ofertemutare.ro/articole/evaluare-mutare" target="_blank">https://ofertemutare.ro/articole/evaluare-mutare</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">14</span><span class="link-url"><a href="https://ofertemutare.ro/articole/mutare" target="_blank">https://ofertemutare.ro/articole/mutare</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">15</span><span class="link-url"><a href="https://ofertemutare.ro/articole/mutare-bucuresti-complet" target="_blank">https://ofertemutare.ro/articole/mutare-bucuresti-complet</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">16</span><span class="link-url"><a href="https://ofertemutare.ro/articole/mutare-cluj-napoca" target="_blank">https://ofertemutare.ro/articole/mutare-cluj-napoca</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">17</span><span class="link-url"><a href="https://ofertemutare.ro/articole/mutare-fara-lift" target="_blank">https://ofertemutare.ro/articole/mutare-fara-lift</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">18</span><span class="link-url"><a href="https://ofertemutare.ro/articole/pregatire" target="_blank">https://ofertemutare.ro/articole/pregatire</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">19</span><span class="link-url"><a href="https://ofertemutare.ro/articole/schimbare-adresa-documente" target="_blank">https://ofertemutare.ro/articole/schimbare-adresa-documente</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">20</span><span class="link-url"><a href="https://ofertemutare.ro/articole/sfaturi-mutari" target="_blank">https://ofertemutare.ro/articole/sfaturi-mutari</a></span><span class="link-priority">0.7</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ SERVICII ═══════════════════════ -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">Servicii</span>
+    <span class="section-count">8</span>
+  </div>
+  <div class="section-body">
+    <div class="link-row"><span class="link-num">21</span><span class="link-url"><a href="https://ofertemutare.ro/servicii" target="_blank">https://ofertemutare.ro/servicii</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">22</span><span class="link-url"><a href="https://ofertemutare.ro/servicii/debarasare" target="_blank">https://ofertemutare.ro/servicii/debarasare</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">23</span><span class="link-url"><a href="https://ofertemutare.ro/servicii/depozitare" target="_blank">https://ofertemutare.ro/servicii/depozitare</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">24</span><span class="link-url"><a href="https://ofertemutare.ro/servicii/impachetare" target="_blank">https://ofertemutare.ro/servicii/impachetare</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">25</span><span class="link-url"><a href="https://ofertemutare.ro/servicii/impachetare/materiale" target="_blank">https://ofertemutare.ro/servicii/impachetare/materiale</a></span><span class="link-priority">0.6</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">26</span><span class="link-url"><a href="https://ofertemutare.ro/servicii/impachetare/profesionala" target="_blank">https://ofertemutare.ro/servicii/impachetare/profesionala</a></span><span class="link-priority">0.6</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">27</span><span class="link-url"><a href="https://ofertemutare.ro/servicii/montaj" target="_blank">https://ofertemutare.ro/servicii/montaj</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">28</span><span class="link-url"><a href="https://ofertemutare.ro/servicii/montaj/mobila" target="_blank">https://ofertemutare.ro/servicii/montaj/mobila</a></span><span class="link-priority">0.6</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MUTĂRI STATICE ═══════════════════════ -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">Mutări — Tipuri & Specializate</span>
+    <span class="section-count">8</span>
+  </div>
+  <div class="section-body">
+    <div class="link-row"><span class="link-num">29</span><span class="link-url"><a href="https://ofertemutare.ro/mutari" target="_blank">https://ofertemutare.ro/mutari</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">30</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/tipuri" target="_blank">https://ofertemutare.ro/mutari/tipuri</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">31</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/tipuri/apartamente" target="_blank">https://ofertemutare.ro/mutari/tipuri/apartamente</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">32</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/tipuri/birouri" target="_blank">https://ofertemutare.ro/mutari/tipuri/birouri</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">33</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/tipuri/case" target="_blank">https://ofertemutare.ro/mutari/tipuri/case</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">34</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/tipuri/studenti" target="_blank">https://ofertemutare.ro/mutari/tipuri/studenti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">35</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/specializate" target="_blank">https://ofertemutare.ro/mutari/specializate</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">36</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/specializate/piane" target="_blank">https://ofertemutare.ro/mutari/specializate/piane</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MUTĂRI ORAȘE (41) ═══════════════════════ -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">Mutări — Orașe (41 pagini)</span>
+    <span class="section-count">41</span>
+  </div>
+  <div class="section-body">
+    <div class="link-row"><span class="link-num">37</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti" target="_blank">https://ofertemutare.ro/mutari/bucuresti</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">38</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">39</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara" target="_blank">https://ofertemutare.ro/mutari/timisoara</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">40</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi" target="_blank">https://ofertemutare.ro/mutari/iasi</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">41</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta" target="_blank">https://ofertemutare.ro/mutari/constanta</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">42</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov" target="_blank">https://ofertemutare.ro/mutari/brasov</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">43</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova" target="_blank">https://ofertemutare.ro/mutari/craiova</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">44</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati" target="_blank">https://ofertemutare.ro/mutari/galati</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">45</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea" target="_blank">https://ofertemutare.ro/mutari/oradea</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">46</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti" target="_blank">https://ofertemutare.ro/mutari/ploiesti</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">47</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/alba-iulia" target="_blank">https://ofertemutare.ro/mutari/alba-iulia</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">48</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/arad" target="_blank">https://ofertemutare.ro/mutari/arad</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">49</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/pitesti" target="_blank">https://ofertemutare.ro/mutari/pitesti</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">50</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bacau" target="_blank">https://ofertemutare.ro/mutari/bacau</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">51</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bistrita" target="_blank">https://ofertemutare.ro/mutari/bistrita</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">52</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/botosani" target="_blank">https://ofertemutare.ro/mutari/botosani</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">53</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/braila" target="_blank">https://ofertemutare.ro/mutari/braila</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">54</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/buzau" target="_blank">https://ofertemutare.ro/mutari/buzau</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">55</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/resita" target="_blank">https://ofertemutare.ro/mutari/resita</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">56</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/calarasi" target="_blank">https://ofertemutare.ro/mutari/calarasi</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">57</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/sfantu-gheorghe" target="_blank">https://ofertemutare.ro/mutari/sfantu-gheorghe</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">58</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/targoviste" target="_blank">https://ofertemutare.ro/mutari/targoviste</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">59</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/slobozia" target="_blank">https://ofertemutare.ro/mutari/slobozia</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">60</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/baia-mare" target="_blank">https://ofertemutare.ro/mutari/baia-mare</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">61</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/drobeta-turnu-severin" target="_blank">https://ofertemutare.ro/mutari/drobeta-turnu-severin</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">62</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/targu-mures" target="_blank">https://ofertemutare.ro/mutari/targu-mures</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">63</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/piatra-neamt" target="_blank">https://ofertemutare.ro/mutari/piatra-neamt</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">64</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/slatina" target="_blank">https://ofertemutare.ro/mutari/slatina</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">65</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/satu-mare" target="_blank">https://ofertemutare.ro/mutari/satu-mare</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">66</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/zalau" target="_blank">https://ofertemutare.ro/mutari/zalau</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">67</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/sibiu" target="_blank">https://ofertemutare.ro/mutari/sibiu</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">68</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/suceava" target="_blank">https://ofertemutare.ro/mutari/suceava</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">69</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/alexandria" target="_blank">https://ofertemutare.ro/mutari/alexandria</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">70</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/tulcea" target="_blank">https://ofertemutare.ro/mutari/tulcea</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">71</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/vaslui" target="_blank">https://ofertemutare.ro/mutari/vaslui</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">72</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ramnicu-valcea" target="_blank">https://ofertemutare.ro/mutari/ramnicu-valcea</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">73</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/focsani" target="_blank">https://ofertemutare.ro/mutari/focsani</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">74</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/deva" target="_blank">https://ofertemutare.ro/mutari/deva</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">75</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/miercurea-ciuc" target="_blank">https://ofertemutare.ro/mutari/miercurea-ciuc</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">76</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/targu-jiu" target="_blank">https://ofertemutare.ro/mutari/targu-jiu</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">77</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/giurgiu" target="_blank">https://ofertemutare.ro/mutari/giurgiu</a></span><span class="link-priority">0.9</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MUTĂRI RUTE TIER 1 (90) ═══════════════════════ -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">Mutări — Rute Tier 1 (Orașe Mari x Orașe Mari)</span>
+    <span class="section-count">90</span>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="link-row"><span class="link-num">78</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/bucuresti/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">79</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/timisoara" target="_blank">https://ofertemutare.ro/mutari/bucuresti/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">80</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/iasi" target="_blank">https://ofertemutare.ro/mutari/bucuresti/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">81</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/constanta" target="_blank">https://ofertemutare.ro/mutari/bucuresti/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">82</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/brasov" target="_blank">https://ofertemutare.ro/mutari/bucuresti/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">83</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/craiova" target="_blank">https://ofertemutare.ro/mutari/bucuresti/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">84</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/galati" target="_blank">https://ofertemutare.ro/mutari/bucuresti/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">85</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/oradea" target="_blank">https://ofertemutare.ro/mutari/bucuresti/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">86</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/ploiesti" target="_blank">https://ofertemutare.ro/mutari/bucuresti/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">87</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/bucuresti" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">88</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/timisoara" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">89</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/iasi" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">90</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/constanta" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">91</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/brasov" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">92</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/craiova" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">93</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/galati" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">94</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/oradea" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">95</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/cluj-napoca/ploiesti" target="_blank">https://ofertemutare.ro/mutari/cluj-napoca/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">96</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/bucuresti" target="_blank">https://ofertemutare.ro/mutari/timisoara/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">97</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/timisoara/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">98</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/iasi" target="_blank">https://ofertemutare.ro/mutari/timisoara/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">99</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/constanta" target="_blank">https://ofertemutare.ro/mutari/timisoara/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">100</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/brasov" target="_blank">https://ofertemutare.ro/mutari/timisoara/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">101</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/craiova" target="_blank">https://ofertemutare.ro/mutari/timisoara/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">102</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/galati" target="_blank">https://ofertemutare.ro/mutari/timisoara/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">103</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/oradea" target="_blank">https://ofertemutare.ro/mutari/timisoara/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">104</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/timisoara/ploiesti" target="_blank">https://ofertemutare.ro/mutari/timisoara/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">105</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/bucuresti" target="_blank">https://ofertemutare.ro/mutari/iasi/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">106</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/iasi/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">107</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/timisoara" target="_blank">https://ofertemutare.ro/mutari/iasi/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">108</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/constanta" target="_blank">https://ofertemutare.ro/mutari/iasi/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">109</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/brasov" target="_blank">https://ofertemutare.ro/mutari/iasi/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">110</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/craiova" target="_blank">https://ofertemutare.ro/mutari/iasi/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">111</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/galati" target="_blank">https://ofertemutare.ro/mutari/iasi/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">112</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/oradea" target="_blank">https://ofertemutare.ro/mutari/iasi/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">113</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/iasi/ploiesti" target="_blank">https://ofertemutare.ro/mutari/iasi/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">114</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/bucuresti" target="_blank">https://ofertemutare.ro/mutari/constanta/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">115</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/constanta/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">116</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/timisoara" target="_blank">https://ofertemutare.ro/mutari/constanta/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">117</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/iasi" target="_blank">https://ofertemutare.ro/mutari/constanta/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">118</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/brasov" target="_blank">https://ofertemutare.ro/mutari/constanta/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">119</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/craiova" target="_blank">https://ofertemutare.ro/mutari/constanta/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">120</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/galati" target="_blank">https://ofertemutare.ro/mutari/constanta/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">121</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/oradea" target="_blank">https://ofertemutare.ro/mutari/constanta/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">122</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/constanta/ploiesti" target="_blank">https://ofertemutare.ro/mutari/constanta/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">123</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/bucuresti" target="_blank">https://ofertemutare.ro/mutari/brasov/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">124</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/brasov/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">125</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/timisoara" target="_blank">https://ofertemutare.ro/mutari/brasov/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">126</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/iasi" target="_blank">https://ofertemutare.ro/mutari/brasov/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">127</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/constanta" target="_blank">https://ofertemutare.ro/mutari/brasov/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">128</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/craiova" target="_blank">https://ofertemutare.ro/mutari/brasov/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">129</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/galati" target="_blank">https://ofertemutare.ro/mutari/brasov/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">130</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/oradea" target="_blank">https://ofertemutare.ro/mutari/brasov/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">131</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/brasov/ploiesti" target="_blank">https://ofertemutare.ro/mutari/brasov/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">132</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/bucuresti" target="_blank">https://ofertemutare.ro/mutari/craiova/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">133</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/craiova/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">134</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/timisoara" target="_blank">https://ofertemutare.ro/mutari/craiova/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">135</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/iasi" target="_blank">https://ofertemutare.ro/mutari/craiova/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">136</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/constanta" target="_blank">https://ofertemutare.ro/mutari/craiova/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">137</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/brasov" target="_blank">https://ofertemutare.ro/mutari/craiova/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">138</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/galati" target="_blank">https://ofertemutare.ro/mutari/craiova/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">139</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/oradea" target="_blank">https://ofertemutare.ro/mutari/craiova/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">140</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/craiova/ploiesti" target="_blank">https://ofertemutare.ro/mutari/craiova/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">141</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/bucuresti" target="_blank">https://ofertemutare.ro/mutari/galati/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">142</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/galati/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">143</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/timisoara" target="_blank">https://ofertemutare.ro/mutari/galati/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">144</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/iasi" target="_blank">https://ofertemutare.ro/mutari/galati/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">145</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/constanta" target="_blank">https://ofertemutare.ro/mutari/galati/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">146</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/brasov" target="_blank">https://ofertemutare.ro/mutari/galati/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">147</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/craiova" target="_blank">https://ofertemutare.ro/mutari/galati/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">148</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/oradea" target="_blank">https://ofertemutare.ro/mutari/galati/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">149</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/galati/ploiesti" target="_blank">https://ofertemutare.ro/mutari/galati/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">150</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/bucuresti" target="_blank">https://ofertemutare.ro/mutari/oradea/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">151</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/oradea/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">152</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/timisoara" target="_blank">https://ofertemutare.ro/mutari/oradea/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">153</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/iasi" target="_blank">https://ofertemutare.ro/mutari/oradea/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">154</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/constanta" target="_blank">https://ofertemutare.ro/mutari/oradea/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">155</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/brasov" target="_blank">https://ofertemutare.ro/mutari/oradea/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">156</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/craiova" target="_blank">https://ofertemutare.ro/mutari/oradea/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">157</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/galati" target="_blank">https://ofertemutare.ro/mutari/oradea/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">158</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/oradea/ploiesti" target="_blank">https://ofertemutare.ro/mutari/oradea/ploiesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">159</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/bucuresti" target="_blank">https://ofertemutare.ro/mutari/ploiesti/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">160</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/cluj-napoca" target="_blank">https://ofertemutare.ro/mutari/ploiesti/cluj-napoca</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">161</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/timisoara" target="_blank">https://ofertemutare.ro/mutari/ploiesti/timisoara</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">162</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/iasi" target="_blank">https://ofertemutare.ro/mutari/ploiesti/iasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">163</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/constanta" target="_blank">https://ofertemutare.ro/mutari/ploiesti/constanta</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">164</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/brasov" target="_blank">https://ofertemutare.ro/mutari/ploiesti/brasov</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">165</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/craiova" target="_blank">https://ofertemutare.ro/mutari/ploiesti/craiova</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">166</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/galati" target="_blank">https://ofertemutare.ro/mutari/ploiesti/galati</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">167</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ploiesti/oradea" target="_blank">https://ofertemutare.ro/mutari/ploiesti/oradea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════ MUTĂRI RUTE TIER 2 (62) ═══════════════════════ -->
+<div class="section">
+  <div class="section-header" onclick="toggleSection(this)">
+    <span class="section-title">Mutări — Rute Tier 2 (Oraș ↔ București)</span>
+    <span class="section-count">62</span>
+  </div>
+  <div class="section-body" style="display:none">
+    <div class="link-row"><span class="link-num">168</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/alba-iulia" target="_blank">https://ofertemutare.ro/mutari/bucuresti/alba-iulia</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">169</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/alba-iulia/bucuresti" target="_blank">https://ofertemutare.ro/mutari/alba-iulia/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">170</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/arad" target="_blank">https://ofertemutare.ro/mutari/bucuresti/arad</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">171</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/arad/bucuresti" target="_blank">https://ofertemutare.ro/mutari/arad/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">172</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/pitesti" target="_blank">https://ofertemutare.ro/mutari/bucuresti/pitesti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">173</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/pitesti/bucuresti" target="_blank">https://ofertemutare.ro/mutari/pitesti/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">174</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/bacau" target="_blank">https://ofertemutare.ro/mutari/bucuresti/bacau</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">175</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bacau/bucuresti" target="_blank">https://ofertemutare.ro/mutari/bacau/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">176</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/bistrita" target="_blank">https://ofertemutare.ro/mutari/bucuresti/bistrita</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">177</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bistrita/bucuresti" target="_blank">https://ofertemutare.ro/mutari/bistrita/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">178</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/botosani" target="_blank">https://ofertemutare.ro/mutari/bucuresti/botosani</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">179</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/botosani/bucuresti" target="_blank">https://ofertemutare.ro/mutari/botosani/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">180</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/braila" target="_blank">https://ofertemutare.ro/mutari/bucuresti/braila</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">181</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/braila/bucuresti" target="_blank">https://ofertemutare.ro/mutari/braila/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">182</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/buzau" target="_blank">https://ofertemutare.ro/mutari/bucuresti/buzau</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">183</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/buzau/bucuresti" target="_blank">https://ofertemutare.ro/mutari/buzau/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">184</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/resita" target="_blank">https://ofertemutare.ro/mutari/bucuresti/resita</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">185</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/resita/bucuresti" target="_blank">https://ofertemutare.ro/mutari/resita/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">186</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/calarasi" target="_blank">https://ofertemutare.ro/mutari/bucuresti/calarasi</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">187</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/calarasi/bucuresti" target="_blank">https://ofertemutare.ro/mutari/calarasi/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">188</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/sfantu-gheorghe" target="_blank">https://ofertemutare.ro/mutari/bucuresti/sfantu-gheorghe</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">189</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/sfantu-gheorghe/bucuresti" target="_blank">https://ofertemutare.ro/mutari/sfantu-gheorghe/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">190</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/targoviste" target="_blank">https://ofertemutare.ro/mutari/bucuresti/targoviste</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">191</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/targoviste/bucuresti" target="_blank">https://ofertemutare.ro/mutari/targoviste/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">192</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/slobozia" target="_blank">https://ofertemutare.ro/mutari/bucuresti/slobozia</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">193</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/slobozia/bucuresti" target="_blank">https://ofertemutare.ro/mutari/slobozia/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">194</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/baia-mare" target="_blank">https://ofertemutare.ro/mutari/bucuresti/baia-mare</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">195</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/baia-mare/bucuresti" target="_blank">https://ofertemutare.ro/mutari/baia-mare/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">196</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/drobeta-turnu-severin" target="_blank">https://ofertemutare.ro/mutari/bucuresti/drobeta-turnu-severin</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">197</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/drobeta-turnu-severin/bucuresti" target="_blank">https://ofertemutare.ro/mutari/drobeta-turnu-severin/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">198</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/targu-mures" target="_blank">https://ofertemutare.ro/mutari/bucuresti/targu-mures</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">199</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/targu-mures/bucuresti" target="_blank">https://ofertemutare.ro/mutari/targu-mures/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">200</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/piatra-neamt" target="_blank">https://ofertemutare.ro/mutari/bucuresti/piatra-neamt</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">201</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/piatra-neamt/bucuresti" target="_blank">https://ofertemutare.ro/mutari/piatra-neamt/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">202</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/slatina" target="_blank">https://ofertemutare.ro/mutari/bucuresti/slatina</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">203</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/slatina/bucuresti" target="_blank">https://ofertemutare.ro/mutari/slatina/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">204</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/satu-mare" target="_blank">https://ofertemutare.ro/mutari/bucuresti/satu-mare</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">205</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/satu-mare/bucuresti" target="_blank">https://ofertemutare.ro/mutari/satu-mare/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">206</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/zalau" target="_blank">https://ofertemutare.ro/mutari/bucuresti/zalau</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">207</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/zalau/bucuresti" target="_blank">https://ofertemutare.ro/mutari/zalau/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+    <div class="link-row"><span class="link-num">208</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/sibiu" target="_blank">https://ofertemutare.ro/mutari/bucuresti/sibiu</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">209</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/sibiu/bucuresti" target="_blank">https://ofertemutare.ro/mutari/sibiu/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">210</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/suceava" target="_blank">https://ofertemutare.ro/mutari/bucuresti/suceava</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">211</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/suceava/bucuresti" target="_blank">https://ofertemutare.ro/mutari/suceava/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">212</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/alexandria" target="_blank">https://ofertemutare.ro/mutari/bucuresti/alexandria</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">213</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/alexandria/bucuresti" target="_blank">https://ofertemutare.ro/mutari/alexandria/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">214</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/tulcea" target="_blank">https://ofertemutare.ro/mutari/bucuresti/tulcea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">215</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/tulcea/bucuresti" target="_blank">https://ofertemutare.ro/mutari/tulcea/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">216</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/vaslui" target="_blank">https://ofertemutare.ro/mutari/bucuresti/vaslui</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">217</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/vaslui/bucuresti" target="_blank">https://ofertemutare.ro/mutari/vaslui/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">218</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/ramnicu-valcea" target="_blank">https://ofertemutare.ro/mutari/bucuresti/ramnicu-valcea</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">219</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/ramnicu-valcea/bucuresti" target="_blank">https://ofertemutare.ro/mutari/ramnicu-valcea/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">220</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/focsani" target="_blank">https://ofertemutare.ro/mutari/bucuresti/focsani</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">221</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/focsani/bucuresti" target="_blank">https://ofertemutare.ro/mutari/focsani/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">222</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/deva" target="_blank">https://ofertemutare.ro/mutari/bucuresti/deva</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">223</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/deva/bucuresti" target="_blank">https://ofertemutare.ro/mutari/deva/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">224</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/miercurea-ciuc" target="_blank">https://ofertemutare.ro/mutari/bucuresti/miercurea-ciuc</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">225</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/miercurea-ciuc/bucuresti" target="_blank">https://ofertemutare.ro/mutari/miercurea-ciuc/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">226</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/targu-jiu" target="_blank">https://ofertemutare.ro/mutari/bucuresti/targu-jiu</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">227</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/targu-jiu/bucuresti" target="_blank">https://ofertemutare.ro/mutari/targu-jiu/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">228</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/bucuresti/giurgiu" target="_blank">https://ofertemutare.ro/mutari/bucuresti/giurgiu</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()"></span></div>
+    <div class="link-row"><span class="link-num">229</span><span class="link-url"><a href="https://ofertemutare.ro/mutari/giurgiu/bucuresti" target="_blank">https://ofertemutare.ro/mutari/giurgiu/bucuresti</a></span><span class="link-priority">0.8</span><span class="link-check"><input type="checkbox" onchange="updateProgress()" checked></span></div>
+  </div>
+</div>
+
+<script>
+  function toggleSection(header) {
+    const body = header.nextElementSibling;
+    body.style.display = body.style.display === 'none' ? '' : 'none';
+  }
+
+  function updateProgress() {
+    const total = document.querySelectorAll('input[type="checkbox"]').length;
+    const checked = document.querySelectorAll('input[type="checkbox"]:checked').length;
+    document.getElementById('checkedCount').textContent = checked;
+    document.getElementById('checkedPercent').textContent = Math.round((checked / total) * 100);
+    document.getElementById('progressFill').style.width = ((checked / total) * 100) + '%';
+    localStorage.setItem('om-indexing-state', JSON.stringify(getState()));
+  }
+
+  function checkAll() {
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+    updateProgress();
+  }
+
+  function uncheckAll() {
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    updateProgress();
+  }
+
+  function copyUnchecked() {
+    const urls = [];
+    document.querySelectorAll('.link-row').forEach(row => {
+      const cb = row.querySelector('input[type="checkbox"]');
+      if (!cb.checked) {
+        const a = row.querySelector('a');
+        urls.push(a.href);
+      }
+    });
+    navigator.clipboard.writeText(urls.join('\n')).then(() => {
+      alert('Copiate ' + urls.length + ' URL-uri ne-indexate!');
+    });
+  }
+
+  function exportCSV() {
+    let csv = 'Nr,URL,Priority,Indexed\n';
+    document.querySelectorAll('.link-row').forEach(row => {
+      const num = row.querySelector('.link-num').textContent.trim();
+      const url = row.querySelector('a').href;
+      const priority = row.querySelector('.link-priority').textContent.trim();
+      const checked = row.querySelector('input[type="checkbox"]').checked ? 'Da' : 'Nu';
+      csv += `${num},"${url}",${priority},${checked}\n`;
+    });
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ofertemutare-indexing-status.csv';
+    a.click();
+  }
+
+  function getState() {
+    const state = [];
+    document.querySelectorAll('input[type="checkbox"]').forEach(cb => state.push(cb.checked));
+    return state;
+  }
+
+  function restoreState() {
+    const saved = localStorage.getItem('om-indexing-state');
+    if (saved) {
+      const state = JSON.parse(saved);
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      // Merge: keep checked if EITHER the HTML has it checked OR localStorage has it checked
+      state.forEach((wasChecked, i) => {
+        if (checkboxes[i]) {
+          checkboxes[i].checked = checkboxes[i].hasAttribute('checked') || wasChecked;
+        }
+      });
+    }
+    updateProgress();
+  }
+
+  // Clear any stale localStorage so the hardcoded checked attributes take effect
+  localStorage.removeItem('om-indexing-state');
+  restoreState();
+</script>
+
+</body>
+</html>
