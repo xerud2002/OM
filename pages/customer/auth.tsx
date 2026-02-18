@@ -33,13 +33,16 @@ export default function CustomerAuthPage() {
   const linkGuestRequests = async (user: any) => {
     try {
       const token = await user.getIdToken();
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
       await fetch("/api/requests/linkToAccount", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
-      });
+        signal: controller.signal,
+      }).finally(() => clearTimeout(timeout));
     } catch (err) {
       logger.warn("Failed to link guest requests:", err);
       // Non-critical, don't show error to user
