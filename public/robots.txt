@@ -10,7 +10,6 @@ Disallow: /company/
 Disallow: /customer/
 Disallow: /upload/
 Disallow: /reviews/
-Disallow: /docs/
 
 # Block API & internal routes
 Disallow: /api/
