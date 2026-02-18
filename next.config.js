@@ -113,7 +113,18 @@ const nextConfig = {
         permanent: true,
       },
       // Article URL path consolidation (Feb 2026)
-      // All articles now under /articole/
+      // Direct shortcuts to avoid redirect chains (articles → final destination)
+      {
+        source: "/articles/impachetare",
+        destination: "/servicii/impachetare/profesionala",
+        permanent: true,
+      },
+      {
+        source: "/articles/survey",
+        destination: "/articole/evaluare-mutare",
+        permanent: true,
+      },
+      // All other /articles/ slugs → /articole/
       {
         source: "/articles/:slug",
         destination: "/articole/:slug",
