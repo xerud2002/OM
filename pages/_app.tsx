@@ -37,7 +37,6 @@ export function reportWebVitals({
 
 // Dev error suppressor loaded only in development (tree-shaken in production)
 if (process.env.NODE_ENV === "development") {
-   
   require("@/utils/devErrorSuppressor");
 }
 import { pageView } from "@/utils/analytics";
@@ -211,7 +210,16 @@ export default function App({ Component, pageProps }: AppProps) {
       <CookieConsentBanner />
 
       {/* Toasts (success/error/info) from anywhere in the app - loaded after hydration */}
-      <Toaster richColors position="top-right" closeButton />
+      <Toaster
+        richColors
+        position="top-center"
+        closeButton
+        expand
+        toastOptions={{
+          className: "sonner-toast-custom",
+          duration: 4000,
+        }}
+      />
     </ErrorBoundary>
   );
 }

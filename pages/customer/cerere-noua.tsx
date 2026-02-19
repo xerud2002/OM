@@ -30,7 +30,7 @@ const HomeRequestForm = dynamic(
       </div>
     ),
     ssr: false,
-  }
+  },
 );
 
 const navigation = [
@@ -38,11 +38,6 @@ const navigation = [
     name: "Cererile Mele",
     href: "/customer/dashboard",
     icon: DocumentTextIcon,
-  },
-  {
-    name: "Cerere Nouă",
-    href: "/customer/cerere-noua",
-    icon: DocumentPlusIcon,
   },
   {
     name: "Setări",
@@ -99,7 +94,8 @@ export default function CerereNoua() {
               </span>
             </h1>
             <p className="mt-1 text-sm text-gray-500">
-              Completează formularul pentru a primi oferte de la firme de mutări verificate.
+              Completează formularul pentru a primi oferte de la firme de mutări
+              verificate.
             </p>
           </div>
 
@@ -114,8 +110,12 @@ export default function CerereNoua() {
                       <DocumentPlusIcon className="h-4.5 w-4.5 text-white" />
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-800">Formular cerere</p>
-                      <p className="text-xs text-gray-500">Câțiva pași rapizi, durează ~2 minute</p>
+                      <p className="text-sm font-semibold text-gray-800">
+                        Formular cerere
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Câțiva pași rapizi, durează ~2 minute
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -135,17 +135,30 @@ export default function CerereNoua() {
                   <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-amber-100">
                     <LightBulbIcon className="h-4 w-4 text-amber-600" />
                   </div>
-                  <h3 className="text-sm font-bold text-gray-800">Sfaturi pentru preț mai bun</h3>
+                  <h3 className="text-sm font-bold text-gray-800">
+                    Sfaturi pentru preț mai bun
+                  </h3>
                 </div>
                 <div className="space-y-2.5">
                   {tips.map((tip) => (
-                    <div key={tip.title} className="flex items-start gap-2.5 rounded-xl bg-white p-2.5 shadow-sm">
-                      <div className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${tip.color.split(" ")[1]}`}>
-                        <tip.icon className={`h-4 w-4 ${tip.color.split(" ")[0]}`} />
+                    <div
+                      key={tip.title}
+                      className="flex items-start gap-2.5 rounded-xl bg-white p-2.5 shadow-sm"
+                    >
+                      <div
+                        className={`mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg ${tip.color.split(" ")[1]}`}
+                      >
+                        <tip.icon
+                          className={`h-4 w-4 ${tip.color.split(" ")[0]}`}
+                        />
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-gray-700">{tip.title}</p>
-                        <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">{tip.desc}</p>
+                        <p className="text-xs font-semibold text-gray-700">
+                          {tip.title}
+                        </p>
+                        <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
+                          {tip.desc}
+                        </p>
                       </div>
                     </div>
                   ))}
@@ -154,19 +167,35 @@ export default function CerereNoua() {
 
               {/* Trust badges */}
               <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
-                <h3 className="mb-3 text-sm font-bold text-gray-700">De ce să alegi ofertemutare.ro?</h3>
+                <h3 className="mb-3 text-sm font-bold text-gray-700">
+                  De ce să alegi ofertemutare.ro?
+                </h3>
                 <div className="space-y-2.5">
                   {[
-                    { icon: ShieldCheckIcon, label: "Firme verificate", desc: "Parteneri atent selectați și verificați" },
-                    { icon: ClockIcon, label: "Oferte în max. 24h", desc: "Primești răspuns rapid de la firme" },
-                    { icon: DocumentPlusIcon, label: "100% gratuit", desc: "Nu plătești nimic pentru a primi oferte" },
+                    {
+                      icon: ShieldCheckIcon,
+                      label: "Firme verificate",
+                      desc: "Parteneri atent selectați și verificați",
+                    },
+                    {
+                      icon: ClockIcon,
+                      label: "Oferte în max. 24h",
+                      desc: "Primești răspuns rapid de la firme",
+                    },
+                    {
+                      icon: DocumentPlusIcon,
+                      label: "100% gratuit",
+                      desc: "Nu plătești nimic pentru a primi oferte",
+                    },
                   ].map((badge) => (
                     <div key={badge.label} className="flex items-start gap-2.5">
                       <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-emerald-50">
                         <badge.icon className="h-4 w-4 text-emerald-600" />
                       </div>
                       <div>
-                        <p className="text-xs font-semibold text-gray-700">{badge.label}</p>
+                        <p className="text-xs font-semibold text-gray-700">
+                          {badge.label}
+                        </p>
                         <p className="text-xs text-gray-500">{badge.desc}</p>
                       </div>
                     </div>

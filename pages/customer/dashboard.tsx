@@ -43,7 +43,10 @@ import {
 } from "firebase/firestore";
 import StarRating from "@/components/reviews/StarRating";
 import { onAuthChange } from "@/services/firebaseHelpers";
-import { useUnreadMessages, countUnreadForRequest } from "@/hooks/useUnreadMessages";
+import {
+  useUnreadMessages,
+  countUnreadForRequest,
+} from "@/hooks/useUnreadMessages";
 
 // Lazy load heavy components
 const ChatWindow = dynamic(() => import("@/components/chat/ChatWindow"), {
@@ -59,6 +62,24 @@ const RequestFullDetails = dynamic(
   },
 );
 
+const HomeRequestForm = dynamic(
+  () => import("@/components/home/HomeRequestForm"),
+  {
+    loading: () => (
+      <div className="animate-pulse space-y-4 p-6">
+        <div className="h-8 w-48 rounded bg-gray-200" />
+        <div className="h-4 w-72 rounded bg-gray-100" />
+        <div className="mt-6 space-y-3">
+          <div className="h-12 rounded-xl bg-gray-100" />
+          <div className="h-12 rounded-xl bg-gray-100" />
+          <div className="h-12 rounded-xl bg-gray-100" />
+        </div>
+      </div>
+    ),
+    ssr: false,
+  },
+);
+
 // Status label mapping
 const STATUS_LABELS: Record<string, string> = {
   active: "Activă",
@@ -67,7 +88,8 @@ const STATUS_LABELS: Record<string, string> = {
   paused: "Pauză",
   cancelled: "Anulată",
 };
-const getStatusLabel = (status?: string) => STATUS_LABELS[status || ""] || status || "Activă";
+const getStatusLabel = (status?: string) =>
+  STATUS_LABELS[status || ""] || status || "Activă";
 
 export default function CustomerDashboard() {
   const router = useRouter();
@@ -80,14 +102,21 @@ export default function CustomerDashboard() {
     null,
   );
   const [chatOffer, setChatOffer] = useState<Offer | null>(null);
-  const [detailModalRequestId, setDetailModalRequestId] = useState<string | null>(null);
-  const detailModalRequest = requests.find((r) => r.id === detailModalRequestId);
+  const [detailModalRequestId, setDetailModalRequestId] = useState<
+    string | null
+  >(null);
+  const detailModalRequest = requests.find(
+    (r) => r.id === detailModalRequestId,
+  );
+  const [showNewRequestModal, setShowNewRequestModal] = useState(false);
   const offerUnsubsRef = useRef<Array<() => void>>([]);
   const requestsUnsubRef = useRef<(() => void) | null>(null);
 
   // Filters
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<"all" | "active" | "accepted" | "closed">("all");
+  const [statusFilter, setStatusFilter] = useState<
+    "all" | "active" | "accepted" | "closed"
+  >("all");
 
   // Company ratings cache
   const [companyRatings, setCompanyRatings] = useState<
@@ -103,7 +132,7 @@ export default function CustomerDashboard() {
         // Unsubscribe all Firestore listeners before clearing state
         requestsUnsubRef.current?.();
         requestsUnsubRef.current = null;
-        offerUnsubsRef.current.forEach(unsub => unsub());
+        offerUnsubsRef.current.forEach((unsub) => unsub());
         offerUnsubsRef.current = [];
         setRequests([]);
         setOffersByRequest({});
@@ -156,7 +185,7 @@ export default function CustomerDashboard() {
           setRequests(reqs);
 
           // Clean up previous offer subscriptions
-          offerUnsubsRef.current.forEach(unsub => unsub());
+          offerUnsubsRef.current.forEach((unsub) => unsub());
           offerUnsubsRef.current = [];
 
           // Subscribe to offers for each request
@@ -186,14 +215,13 @@ export default function CustomerDashboard() {
           setRequests([]);
         },
       );
-
     });
 
     return () => {
       unsubAuth();
       requestsUnsubRef.current?.();
       requestsUnsubRef.current = null;
-      offerUnsubsRef.current.forEach(unsub => unsub());
+      offerUnsubsRef.current.forEach((unsub) => unsub());
       offerUnsubsRef.current = [];
     };
   }, []);
@@ -236,7 +264,10 @@ export default function CustomerDashboard() {
   // Filtered requests
   const filteredRequests = requests.filter((req) => {
     const q = searchQuery.toLowerCase();
-    const matchesSearch = !q || req.fromCity?.toLowerCase().includes(q) || req.toCity?.toLowerCase().includes(q);
+    const matchesSearch =
+      !q ||
+      req.fromCity?.toLowerCase().includes(q) ||
+      req.toCity?.toLowerCase().includes(q);
     const matchesStatus = statusFilter === "all" || req.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
@@ -273,7 +304,10 @@ export default function CustomerDashboard() {
       setCompanyRatings((prev) => {
         const next = { ...prev };
         results.forEach((r) => {
-          next[r.id] = { averageRating: r.averageRating, totalReviews: r.totalReviews };
+          next[r.id] = {
+            averageRating: r.averageRating,
+            totalReviews: r.totalReviews,
+          };
         });
         return next;
       });
@@ -399,11 +433,6 @@ export default function CustomerDashboard() {
       badge: requests.length,
     },
     {
-      name: "Cerere Nouă",
-      href: "/customer/cerere-noua",
-      icon: DocumentPlusIcon,
-    },
-    {
       name: "Setări",
       href: "/customer/settings",
       icon: Cog6ToothIcon,
@@ -414,7 +443,15 @@ export default function CustomerDashboard() {
     <RequireRole allowedRole="customer">
       <DashboardLayout
         role="customer"
-        user={user ? { displayName: user.displayName || undefined, email: user.email || undefined, photoURL: user.photoURL || undefined } : undefined}
+        user={
+          user
+            ? {
+                displayName: user.displayName || undefined,
+                email: user.email || undefined,
+                photoURL: user.photoURL || undefined,
+              }
+            : undefined
+        }
         navigation={navigation}
         showStats={false}
         headerActions={
@@ -435,23 +472,14 @@ export default function CustomerDashboard() {
             {/* Requests sidebar */}
             <aside className="md:col-span-5 lg:col-span-4 xl:col-span-3">
               <div className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-                <div className="flex items-center justify-between border-b border-gray-100 gradient-gray-r px-4 py-3 sm:px-5 sm:py-4">
-                  <div>
-                    <h3 className="text-sm font-bold text-gray-900">
-                      Cererile tale
-                    </h3>
-                    <p className="mt-0.5 text-xs text-gray-500">
-                      {requests.length}{" "}
-                      {requests.length === 1 ? "cerere" : "cereri"}
-                    </p>
-                  </div>
-                  <Link
-                    href="/customer/cerere-noua"
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700 active:bg-emerald-800"
+                <div className="border-b border-gray-100 gradient-gray-r px-4 py-3 sm:px-5 sm:py-4">
+                  <button
+                    onClick={() => setShowNewRequestModal(true)}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-emerald-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-emerald-700 active:bg-emerald-800"
                   >
-                    <DocumentPlusIcon className="h-3.5 w-3.5" />
-                    Nouă
-                  </Link>
+                    <DocumentPlusIcon className="h-4 w-4" />
+                    Cerere Nouă
+                  </button>
                 </div>
                 {/* Filter bar */}
                 <div className="border-b border-gray-100 px-3 py-2 sm:px-4 sm:py-3">
@@ -459,7 +487,9 @@ export default function CustomerDashboard() {
                     <FunnelIcon className="h-3.5 w-3.5 text-gray-400 shrink-0" />
                     <select
                       value={statusFilter}
-                      onChange={(e) => setStatusFilter(e.target.value as typeof statusFilter)}
+                      onChange={(e) =>
+                        setStatusFilter(e.target.value as typeof statusFilter)
+                      }
                       className="w-full rounded-md border border-gray-200 bg-gray-50 px-2 py-1.5 text-xs text-gray-700 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
                     >
                       <option value="all">Toate statusurile</option>
@@ -474,132 +504,174 @@ export default function CustomerDashboard() {
                   {filteredRequests.length === 0 ? (
                     <div className="py-6 text-center">
                       <FunnelIcon className="mx-auto h-8 w-8 text-gray-300" />
-                      <p className="mt-2 text-sm text-gray-500">Nicio cerere găsită</p>
-                      <button onClick={() => { setSearchQuery(""); setStatusFilter("all"); }} className="mt-1 text-xs text-emerald-600 hover:underline">Resetează filtrele</button>
+                      <p className="mt-2 text-sm text-gray-500">
+                        Nicio cerere găsită
+                      </p>
+                      <button
+                        onClick={() => {
+                          setSearchQuery("");
+                          setStatusFilter("all");
+                        }}
+                        className="mt-1 text-xs text-emerald-600 hover:underline"
+                      >
+                        Resetează filtrele
+                      </button>
                     </div>
                   ) : (
-                  <ul className="space-y-2">
-                    {filteredRequests.map((req) => {
-                      const offers = offersByRequest[req.id] || [];
-                      const isSelected = selectedRequestId === req.id;
-                      const hasNewOffers = offers.some(
-                        (o) => o.status === "pending",
-                      );
-                      const hasAccepted = offers.some(
-                        (o) => o.status === "accepted",
-                      );
-                      const reqUnreadCount = countUnreadForRequest(
-                        req.id,
-                        offersByRequest,
-                        unreadOffers,
-                      );
+                    <ul className="space-y-2">
+                      {filteredRequests.map((req) => {
+                        const offers = offersByRequest[req.id] || [];
+                        const isSelected = selectedRequestId === req.id;
+                        const hasNewOffers = offers.some(
+                          (o) => o.status === "pending",
+                        );
+                        const hasAccepted = offers.some(
+                          (o) => o.status === "accepted",
+                        );
+                        const reqUnreadCount = countUnreadForRequest(
+                          req.id,
+                          offersByRequest,
+                          unreadOffers,
+                        );
 
-                      return (
-                        <li key={req.id}>
-                          <div
-                            role="button"
-                            tabIndex={0}
-                            onClick={() => setSelectedRequestId(req.id)}
-                            onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") setSelectedRequestId(req.id); }}
-                            className={`group relative w-full cursor-pointer rounded-xl p-3 sm:p-4 text-left transition-all active:scale-[0.98] ${
-                              isSelected
-                                ? "gradient-emerald-light shadow-sm ring-1 ring-emerald-200"
-                                : "hover:bg-gray-50 active:bg-gray-100"
-                            }`}
-                          >
-                            {/* Status indicator line */}
+                        // Check if move date is within 3 days → urgent
+                        const now = new Date();
+                        const threeDaysFromNow = new Date(
+                          now.getTime() + 3 * 24 * 60 * 60 * 1000,
+                        );
+                        const moveDateStr = req.moveDate || req.moveDateStart;
+                        const moveDateEndStr = req.moveDateEnd;
+                        let isUrgent = false;
+                        if (moveDateStr && req.status === "active") {
+                          const md = new Date(moveDateStr + "T00:00:00");
+                          if (moveDateEndStr) {
+                            // Range: urgent if range start is within 3 days
+                            const mdEnd = new Date(
+                              moveDateEndStr + "T00:00:00",
+                            );
+                            isUrgent = md <= threeDaysFromNow && mdEnd >= now;
+                          } else {
+                            // Exact: urgent if date is within 3 days and not in the past
+                            isUrgent = md >= now && md <= threeDaysFromNow;
+                          }
+                        }
+
+                        return (
+                          <li key={req.id}>
                             <div
-                              className={`absolute left-0 top-2 bottom-2 sm:top-3 sm:bottom-3 w-1 rounded-full transition-all ${
+                              role="button"
+                              tabIndex={0}
+                              onClick={() => setSelectedRequestId(req.id)}
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter" || e.key === " ")
+                                  setSelectedRequestId(req.id);
+                              }}
+                              className={`group relative w-full cursor-pointer rounded-xl p-3 sm:p-4 text-left transition-all active:scale-[0.98] ${
                                 isSelected
-                                  ? "bg-emerald-500"
-                                  : hasAccepted
-                                    ? "bg-emerald-400"
-                                    : hasNewOffers
-                                      ? "bg-blue-400"
-                                      : "bg-gray-200"
+                                  ? "gradient-emerald-light shadow-sm ring-1 ring-emerald-200"
+                                  : "hover:bg-gray-50 active:bg-gray-100"
                               }`}
-                            />
+                            >
+                              {/* Status indicator line */}
+                              <div
+                                className={`absolute left-0 top-2 bottom-2 sm:top-3 sm:bottom-3 w-1 rounded-full transition-all ${
+                                  isSelected
+                                    ? "bg-emerald-500"
+                                    : hasAccepted
+                                      ? "bg-emerald-400"
+                                      : hasNewOffers
+                                        ? "bg-blue-400"
+                                        : "bg-gray-200"
+                                }`}
+                              />
 
-                            <div className="ml-2 sm:ml-3">
-                              <div className="flex items-start justify-between gap-2">
-                                <div className="min-w-0 flex-1">
-                                  <p
-                                    className={`truncate text-sm sm:text-base font-semibold ${isSelected ? "text-emerald-900" : "text-gray-900"}`}
-                                  >
-                                    {req.fromCity} → {req.toCity}
-                                  </p>
-                                  <div className="mt-1 sm:mt-1.5 flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-gray-500">
-                                    <CalendarIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
-                                    <span>
-                                      {formatDateRO(req.createdAt, {
-                                        month: "short",
-                                      }) || "-"}
-                                    </span>
+                              <div className="ml-2 sm:ml-3">
+                                <div className="flex items-start justify-between gap-2">
+                                  <div className="min-w-0 flex-1">
+                                    <p
+                                      className={`truncate text-sm sm:text-base font-semibold ${isSelected ? "text-emerald-900" : "text-gray-900"}`}
+                                    >
+                                      {req.fromCity} → {req.toCity}
+                                    </p>
+                                    <div className="mt-1 sm:mt-1.5 flex items-center gap-1.5 sm:gap-2 text-[11px] sm:text-xs text-gray-500">
+                                      <CalendarIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
+                                      <span>
+                                        {formatDateRO(req.createdAt, {
+                                          month: "short",
+                                        }) || "-"}
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              <div className="mt-2 sm:mt-3 flex items-center justify-between gap-2">
-                                {offers.length > 0 ? (
-                                  <div className="flex items-center gap-1.5">
-                                    <span
-                                      className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold ${
-                                        hasAccepted
-                                          ? "bg-emerald-100 text-emerald-700"
-                                          : hasNewOffers
-                                            ? "bg-blue-100 text-blue-700"
-                                            : "bg-gray-100 text-gray-600"
-                                      }`}
-                                    >
-                                      {hasAccepted && (
-                                        <CheckCircleSolid className="h-3 w-3" />
+                                <div className="mt-2 sm:mt-3 flex items-center justify-between gap-2">
+                                  {offers.length > 0 ? (
+                                    <div className="flex items-center gap-1.5">
+                                      <span
+                                        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold ${
+                                          hasAccepted
+                                            ? "bg-emerald-100 text-emerald-700"
+                                            : hasNewOffers
+                                              ? "bg-blue-100 text-blue-700"
+                                              : "bg-gray-100 text-gray-600"
+                                        }`}
+                                      >
+                                        {hasAccepted && (
+                                          <CheckCircleSolid className="h-3 w-3" />
+                                        )}
+                                        {offers.length}{" "}
+                                        {offers.length === 1
+                                          ? "ofertă"
+                                          : "oferte"}
+                                      </span>
+                                      {reqUnreadCount > 0 && (
+                                        <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-600">
+                                          <MessageSquare className="h-2.5 w-2.5" />
+                                          {reqUnreadCount}
+                                        </span>
                                       )}
-                                      {offers.length}{" "}
-                                      {offers.length === 1 ? "ofertă" : "oferte"}
+                                    </div>
+                                  ) : (
+                                    <span className="text-[10px] sm:text-xs text-gray-400">
+                                      Fără oferte
                                     </span>
-                                    {reqUnreadCount > 0 && (
-                                      <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-600">
-                                        <MessageSquare className="h-2.5 w-2.5" />
-                                        {reqUnreadCount}
+                                  )}
+                                  <div className="flex items-center gap-1.5">
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        setDetailModalRequestId(req.id);
+                                      }}
+                                      className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+                                    >
+                                      <EyeIcon className="h-3 w-3" />
+                                      Detalii
+                                    </button>
+                                    {isUrgent && (
+                                      <span className="shrink-0 rounded-full bg-red-100 px-1.5 py-0.5 sm:px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-red-700 animate-pulse">
+                                        🔥 Urgent
                                       </span>
                                     )}
+                                    <span
+                                      className={`shrink-0 rounded-full px-1.5 py-0.5 sm:px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
+                                        req.status === "closed" ||
+                                        req.status === "accepted"
+                                          ? "bg-emerald-100 text-emerald-700"
+                                          : req.status === "active"
+                                            ? "bg-blue-100 text-blue-700"
+                                            : "bg-gray-100 text-gray-500"
+                                      }`}
+                                    >
+                                      {getStatusLabel(req.status)}
+                                    </span>
                                   </div>
-                                ) : (
-                                  <span className="text-[10px] sm:text-xs text-gray-400">
-                                    Fără oferte
-                                  </span>
-                                )}
-                                <div className="flex items-center gap-1.5">
-                                  <button
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      setDetailModalRequestId(req.id);
-                                    }}
-                                    className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
-                                  >
-                                    <EyeIcon className="h-3 w-3" />
-                                    Detalii
-                                  </button>
-                                  <span
-                                    className={`shrink-0 rounded-full px-1.5 py-0.5 sm:px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
-                                      req.status === "closed" ||
-                                      req.status === "accepted"
-                                        ? "bg-emerald-100 text-emerald-700"
-                                        : req.status === "active"
-                                          ? "bg-blue-100 text-blue-700"
-                                          : "bg-gray-100 text-gray-500"
-                                    }`}
-                                  >
-                                    {getStatusLabel(req.status)}
-                                  </span>
                                 </div>
                               </div>
                             </div>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
+                          </li>
+                        );
+                      })}
+                    </ul>
                   )}
                 </nav>
               </div>
@@ -637,11 +709,40 @@ export default function CustomerDashboard() {
                     {selectedOffers.length === 0 ? (
                       <div className="p-6 sm:p-10 text-center">
                         <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-2xl gradient-emerald-light">
-                          <svg className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-400" viewBox="0 0 48 48" fill="none">
-                            <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="2" strokeDasharray="4 3" opacity="0.5" />
-                            <path d="M16 28l4-4 4 4 8-8" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                            <circle cx="36" cy="14" r="4" fill="#10b981" opacity="0.6">
-                              <animate attributeName="opacity" values="0.6;1;0.6" dur="2s" repeatCount="indefinite" />
+                          <svg
+                            className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-400"
+                            viewBox="0 0 48 48"
+                            fill="none"
+                          >
+                            <circle
+                              cx="24"
+                              cy="24"
+                              r="20"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeDasharray="4 3"
+                              opacity="0.5"
+                            />
+                            <path
+                              d="M16 28l4-4 4 4 8-8"
+                              stroke="currentColor"
+                              strokeWidth="2.5"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                            <circle
+                              cx="36"
+                              cy="14"
+                              r="4"
+                              fill="#10b981"
+                              opacity="0.6"
+                            >
+                              <animate
+                                attributeName="opacity"
+                                values="0.6;1;0.6"
+                                dur="2s"
+                                repeatCount="indefinite"
+                              />
                             </circle>
                           </svg>
                         </div>
@@ -649,12 +750,22 @@ export default function CustomerDashboard() {
                           Așteptăm oferte pentru tine
                         </p>
                         <p className="mt-1 text-xs sm:text-sm text-gray-500 max-w-xs mx-auto">
-                          Firmele verificate analizează cererea ta. Primești oferte în maxim 24h.
+                          Firmele verificate analizează cererea ta. Primești
+                          oferte în maxim 24h.
                         </p>
                         <div className="mt-4 flex items-center justify-center gap-1.5">
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: "0ms" }} />
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: "150ms" }} />
-                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: "300ms" }} />
+                          <span
+                            className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce"
+                            style={{ animationDelay: "0ms" }}
+                          />
+                          <span
+                            className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce"
+                            style={{ animationDelay: "150ms" }}
+                          />
+                          <span
+                            className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-bounce"
+                            style={{ animationDelay: "300ms" }}
+                          />
                         </div>
                       </div>
                     ) : (
@@ -748,10 +859,12 @@ export default function CustomerDashboard() {
                   </div>
                   <div>
                     <h3 className="text-lg font-bold text-gray-900">
-                      {detailModalRequest.fromCity} → {detailModalRequest.toCity}
+                      {detailModalRequest.fromCity} →{" "}
+                      {detailModalRequest.toCity}
                     </h3>
                     <p className="text-xs text-gray-500">
-                      {detailModalRequest.requestCode || `#${detailModalRequest.id.slice(0, 8)}`}
+                      {detailModalRequest.requestCode ||
+                        `#${detailModalRequest.id.slice(0, 8)}`}
                     </p>
                   </div>
                 </div>
@@ -759,6 +872,69 @@ export default function CustomerDashboard() {
                   request={detailModalRequest}
                   isOwner={true}
                 />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* New Request Modal */}
+        <AnimatePresence>
+          {showNewRequestModal && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+              onClick={() => setShowNewRequestModal(false)}
+            >
+              <motion.div
+                initial={{ scale: 0.95, opacity: 0, y: 20 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.95, opacity: 0, y: 20 }}
+                className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white shadow-2xl"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <button
+                  onClick={() => setShowNewRequestModal(false)}
+                  className="absolute right-3 top-3 z-10 rounded-full bg-gray-100 p-2 text-gray-600 transition hover:bg-gray-200"
+                >
+                  <XMarkIcon className="h-5 w-5" />
+                </button>
+                <div className="border-b border-gray-100 bg-gray-50/50 px-5 py-4">
+                  <div className="flex items-center gap-2.5">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-lg gradient-emerald">
+                      <DocumentPlusIcon className="h-4.5 w-4.5 text-white" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-800">
+                        Cerere nouă
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        Completează pentru a primi oferte de la firme verificate
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <HomeRequestForm
+                    user={
+                      user
+                        ? {
+                            displayName: user.displayName || undefined,
+                            email: user.email || undefined,
+                          }
+                        : undefined
+                    }
+                    onSuccess={() => {
+                      setShowNewRequestModal(false);
+                      import("sonner").then(({ toast }) => {
+                        toast.success(
+                          "Cererea a fost trimisă cu succes! Vei primi oferte în maxim 24h.",
+                        );
+                      });
+                    }}
+                  />
+                </div>
               </motion.div>
             </motion.div>
           )}
@@ -806,26 +982,46 @@ export default function CustomerDashboard() {
 const CONTACT_STYLES = {
   pending: {
     chat: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-600 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
-    phone: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-emerald-200 bg-white p-2 sm:p-2.5 text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100",
-    email: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-blue-200 bg-white p-2 sm:p-2.5 text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 active:bg-blue-100",
+    phone:
+      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-emerald-200 bg-white p-2 sm:p-2.5 text-emerald-700 transition hover:border-emerald-300 hover:bg-emerald-50 active:bg-emerald-100",
+    email:
+      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-blue-200 bg-white p-2 sm:p-2.5 text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 active:bg-blue-100",
   },
   accepted: {
     chat: "inline-flex items-center justify-center rounded-lg sm:rounded-xl bg-emerald-600 p-2 sm:p-2.5 text-white shadow-sm transition hover:bg-emerald-700 active:bg-emerald-800",
-    phone: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-emerald-200 bg-emerald-50 p-2 sm:p-2.5 text-emerald-700 transition hover:bg-emerald-100 active:bg-emerald-200",
-    email: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-blue-200 bg-blue-50 p-2 sm:p-2.5 text-blue-700 transition hover:bg-blue-100 active:bg-blue-200",
+    phone:
+      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-emerald-200 bg-emerald-50 p-2 sm:p-2.5 text-emerald-700 transition hover:bg-emerald-100 active:bg-emerald-200",
+    email:
+      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-blue-200 bg-blue-50 p-2 sm:p-2.5 text-blue-700 transition hover:bg-blue-100 active:bg-blue-200",
   },
   declined: {
     chat: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
-    phone: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 active:bg-emerald-100",
-    email: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
+    phone:
+      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 active:bg-emerald-100",
+    email:
+      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
   },
 } as const;
 
-function ContactButtons({ offer, onChat, variant, hasUnread }: { offer: Offer; onChat: () => void; variant: keyof typeof CONTACT_STYLES; hasUnread?: boolean }) {
+function ContactButtons({
+  offer,
+  onChat,
+  variant,
+  hasUnread,
+}: {
+  offer: Offer;
+  onChat: () => void;
+  variant: keyof typeof CONTACT_STYLES;
+  hasUnread?: boolean;
+}) {
   const styles = CONTACT_STYLES[variant];
   return (
     <>
-      <button onClick={onChat} className={`${styles.chat} relative`} title="Chat">
+      <button
+        onClick={onChat}
+        className={`${styles.chat} relative`}
+        title="Chat"
+      >
         <MessageSquare className="h-4 w-4 sm:h-5 sm:w-5" />
         {hasUnread && (
           <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center">
@@ -835,12 +1031,20 @@ function ContactButtons({ offer, onChat, variant, hasUnread }: { offer: Offer; o
         )}
       </button>
       {offer.companyPhone && (
-        <a href={`tel:${offer.companyPhone}`} className={styles.phone} title={offer.companyPhone}>
+        <a
+          href={`tel:${offer.companyPhone}`}
+          className={styles.phone}
+          title={offer.companyPhone}
+        >
           <PhoneIcon className="h-4 w-4 sm:h-5 sm:w-5" />
         </a>
       )}
       {offer.companyEmail && (
-        <a href={`mailto:${offer.companyEmail}`} className={styles.email} title={offer.companyEmail}>
+        <a
+          href={`mailto:${offer.companyEmail}`}
+          className={styles.email}
+          title={offer.companyEmail}
+        >
           <EnvelopeIcon className="h-4 w-4 sm:h-5 sm:w-5" />
         </a>
       )}
@@ -887,9 +1091,15 @@ function OfferCard({
       }`}
     >
       {/* Top status bar */}
-      <div className={`h-1 w-full ${
-        isAccepted ? "bg-emerald-500" : isDeclined ? "bg-gray-300" : "bg-blue-500"
-      }`} />
+      <div
+        className={`h-1 w-full ${
+          isAccepted
+            ? "bg-emerald-500"
+            : isDeclined
+              ? "bg-gray-300"
+              : "bg-blue-500"
+        }`}
+      />
 
       {/* Card body */}
       <div className="flex flex-1 flex-col p-4">
@@ -920,7 +1130,9 @@ function OfferCard({
           </Link>
           <div className="min-w-0 flex-1">
             <Link href={companyProfileHref} className="group">
-              <p className={`truncate text-sm font-bold transition group-hover:text-emerald-600 ${isDeclined ? "text-gray-500" : "text-gray-900"}`}>
+              <p
+                className={`truncate text-sm font-bold transition group-hover:text-emerald-600 ${isDeclined ? "text-gray-500" : "text-gray-900"}`}
+              >
                 {offer.companyName}
               </p>
             </Link>
@@ -1004,7 +1216,14 @@ function OfferCard({
 
           {/* Contact buttons row */}
           <div className="flex items-center justify-center gap-1.5">
-            <ContactButtons offer={offer} onChat={onChat} variant={isAccepted ? "accepted" : isDeclined ? "declined" : "pending"} hasUnread={hasUnread} />
+            <ContactButtons
+              offer={offer}
+              onChat={onChat}
+              variant={
+                isAccepted ? "accepted" : isDeclined ? "declined" : "pending"
+              }
+              hasUnread={hasUnread}
+            />
           </div>
         </div>
       </div>

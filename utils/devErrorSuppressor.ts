@@ -20,7 +20,9 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
       "Abort fetching component for route",
     ];
 
-    const shouldSuppress = suppressedErrors.some((pattern) => errorMessage.includes(pattern));
+    const shouldSuppress = suppressedErrors.some((pattern) =>
+      errorMessage.includes(pattern),
+    );
 
     if (!shouldSuppress) {
       originalConsoleError.apply(console, args);
@@ -35,9 +37,13 @@ if (typeof window !== "undefined" && process.env.NODE_ENV === "development") {
       "was preloaded using link preload",
       "WebSocket connection",
       "Cross origin request detected",
+      "Invalid message",
+      "apple-mobile-web-app-capable",
     ];
 
-    const shouldSuppress = suppressedWarnings.some((pattern) => warnMessage.includes(pattern));
+    const shouldSuppress = suppressedWarnings.some((pattern) =>
+      warnMessage.includes(pattern),
+    );
 
     if (!shouldSuppress) {
       originalConsoleWarn.apply(console, args);

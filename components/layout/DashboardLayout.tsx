@@ -54,10 +54,31 @@ import { useAdminBadges } from "@/hooks/useAdminBadges";
 export type DashboardRole = "customer" | "company" | "admin";
 
 // PWA config per role (module-level constant to avoid useEffect dep issues)
-const pwaConfig: Record<DashboardRole, { sw: string; scope: string; manifest: string; theme: string; title: string }> = {
-  admin: { sw: "/admin-sw.js", scope: "/admin/", manifest: "/admin/manifest.json", theme: "#7c3aed", title: "OM Admin" },
-  customer: { sw: "/customer-sw.js", scope: "/customer/", manifest: "/customer/manifest.json", theme: "#059669", title: "OM Client" },
-  company: { sw: "/company-sw.js", scope: "/company/", manifest: "/company/manifest.json", theme: "#059669", title: "OM Companie" },
+const pwaConfig: Record<
+  DashboardRole,
+  { sw: string; scope: string; manifest: string; theme: string; title: string }
+> = {
+  admin: {
+    sw: "/admin-sw.js",
+    scope: "/admin/",
+    manifest: "/admin/manifest.json",
+    theme: "#7c3aed",
+    title: "OM Admin",
+  },
+  customer: {
+    sw: "/customer-sw.js",
+    scope: "/customer/",
+    manifest: "/customer/manifest.json",
+    theme: "#059669",
+    title: "OM Client",
+  },
+  company: {
+    sw: "/company-sw.js",
+    scope: "/company/",
+    manifest: "/company/manifest.json",
+    theme: "#059669",
+    title: "OM Companie",
+  },
 };
 
 interface NavItem {
@@ -95,11 +116,6 @@ const defaultNavigation: Record<DashboardRole, NavItem[]> = {
       name: "Cererile Mele",
       href: "/customer/dashboard",
       icon: DocumentTextIcon,
-    },
-    {
-      name: "Cerere Nouă",
-      href: "/customer/cerere-noua",
-      icon: DocumentPlusIcon,
     },
     {
       name: "Setări",
@@ -144,17 +160,33 @@ const defaultNavigation: Record<DashboardRole, NavItem[]> = {
     { name: "Rapoarte", href: "/admin/reports", icon: DocumentChartBarIcon },
     { name: "Prețuri", href: "/admin/pricing", icon: CurrencyDollarIcon },
     { name: "SLA", href: "/admin/sla", icon: ClockIcon },
-    { name: "Fraud Flags", href: "/admin/fraud-flags", icon: ShieldExclamationIcon },
+    {
+      name: "Fraud Flags",
+      href: "/admin/fraud-flags",
+      icon: ShieldExclamationIcon,
+    },
     { name: "Spam", href: "/admin/duplicates", icon: NoSymbolIcon },
-    { name: "Audit Log", href: "/admin/audit", icon: ClipboardDocumentCheckIcon },
+    {
+      name: "Audit Log",
+      href: "/admin/audit",
+      icon: ClipboardDocumentCheckIcon,
+    },
     { name: "Sistem", href: "/admin/system", icon: ServerIcon },
     { name: "Tranzacții", href: "/admin/transactions", icon: WalletIcon },
-    { name: "Email Campanii", href: "/admin/email-campaigns", icon: EnvelopeIcon },
+    {
+      name: "Email Campanii",
+      href: "/admin/email-campaigns",
+      icon: EnvelopeIcon,
+    },
     { name: "Roluri Admin", href: "/admin/roles", icon: KeyIcon },
     { name: "Cron Jobs", href: "/admin/cron-jobs", icon: CommandLineIcon },
     { name: "Satisfacție", href: "/admin/satisfaction", icon: FaceSmileIcon },
     { name: "Marketing", href: "/admin/marketing", icon: MegaphoneIcon },
-    { name: "Bulk Ops", href: "/admin/bulk-operations", icon: RectangleStackIcon },
+    {
+      name: "Bulk Ops",
+      href: "/admin/bulk-operations",
+      icon: RectangleStackIcon,
+    },
     { name: "API Analytics", href: "/admin/api-analytics", icon: SignalIcon },
     { name: "Setări", href: "/admin/settings", icon: Cog6ToothIcon },
   ],
@@ -187,18 +219,55 @@ const roleLabels: Record<DashboardRole, string> = {
   admin: "Administrator",
 };
 
-const NAV_ACTIVE_STYLES: Record<DashboardRole, { container: string; icon: string; desktopExtra: string }> = {
-  customer: { container: "bg-emerald-50 text-emerald-700", icon: "text-emerald-600", desktopExtra: "border-l-2 border-emerald-500" },
-  company: { container: "bg-emerald-50 text-emerald-700", icon: "text-emerald-600", desktopExtra: "border-l-2 border-emerald-500" },
-  admin: { container: "bg-purple-50 text-purple-700", icon: "text-purple-600", desktopExtra: "border-l-2 border-purple-500" },
+const NAV_ACTIVE_STYLES: Record<
+  DashboardRole,
+  { container: string; icon: string; desktopExtra: string }
+> = {
+  customer: {
+    container: "bg-emerald-50 text-emerald-700",
+    icon: "text-emerald-600",
+    desktopExtra: "border-l-2 border-emerald-500",
+  },
+  company: {
+    container: "bg-emerald-50 text-emerald-700",
+    icon: "text-emerald-600",
+    desktopExtra: "border-l-2 border-emerald-500",
+  },
+  admin: {
+    container: "bg-purple-50 text-purple-700",
+    icon: "text-purple-600",
+    desktopExtra: "border-l-2 border-purple-500",
+  },
 };
 
-function UserAvatar({ role, photoURL }: { role: DashboardRole; photoURL?: string }) {
+function UserAvatar({
+  role,
+  photoURL,
+}: {
+  role: DashboardRole;
+  photoURL?: string;
+}) {
   if (photoURL && (role === "company" || role === "customer")) {
-    return <Image src={photoURL} alt={role === "company" ? "Logo" : "Avatar"} width={40} height={40} className="h-full w-full rounded-full object-cover" />;
+    return (
+      <Image
+        src={photoURL}
+        alt={role === "company" ? "Logo" : "Avatar"}
+        width={40}
+        height={40}
+        className="h-full w-full rounded-full object-cover"
+      />
+    );
   }
   if (role === "company") {
-    return <Image src="/pics/default-company.svg" alt="Logo" width={40} height={40} className="h-full w-full rounded-full object-cover" />;
+    return (
+      <Image
+        src="/pics/default-company.svg"
+        alt="Logo"
+        width={40}
+        height={40}
+        className="h-full w-full rounded-full object-cover"
+      />
+    );
   }
   if (role === "customer") {
     return <UserCircleIcon className="h-5 w-5 text-white" />;
@@ -278,9 +347,13 @@ export default function DashboardLayout({
       <Head>
         <link rel="manifest" href={pwaConfig[role].manifest} />
         <meta name="theme-color" content={pwaConfig[role].theme} />
+        <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content={pwaConfig[role].title} />
+        <meta
+          name="apple-mobile-web-app-title"
+          content={pwaConfig[role].title}
+        />
       </Head>
       {/* Mobile sidebar */}
       <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -434,7 +507,9 @@ export default function DashboardLayout({
                 <span className="hidden lg:inline">Ofertemutare</span>
                 <span className="lg:hidden">OM</span>
               </span>
-              <sup className="hidden text-[10px] font-bold text-gray-400 lg:inline">.ro</sup>
+              <sup className="hidden text-[10px] font-bold text-gray-400 lg:inline">
+                .ro
+              </sup>
             </Link>
           </div>
 
@@ -487,7 +562,9 @@ export default function DashboardLayout({
                               <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white lg:hidden" />
                             )}
                           </span>
-                          <span className="hidden flex-1 lg:inline">{item.name}</span>
+                          <span className="hidden flex-1 lg:inline">
+                            {item.name}
+                          </span>
                           {/* Number badge on expanded desktop sidebar */}
                           {adminBadges[item.href.split("?")[0]] > 0 && (
                             <span className="ml-auto hidden h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white lg:inline-flex">
@@ -614,12 +691,14 @@ export default function DashboardLayout({
 
         {/* Page content */}
         <main className="py-4">
-          <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${role === "admin" ? "max-w-full" : "max-w-7xl"}`}>
+          <div
+            className={`mx-auto px-4 sm:px-6 lg:px-8 ${role === "admin" ? "max-w-full" : "max-w-7xl"}`}
+          >
             {children || (
               <div className="space-y-4 animate-pulse">
                 <div className="h-8 w-48 rounded-lg bg-gray-200" />
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {[1,2,3].map(i => (
+                  {[1, 2, 3].map((i) => (
                     <div key={i} className="h-32 rounded-xl bg-gray-200" />
                   ))}
                 </div>

@@ -105,12 +105,22 @@ export type MovingRequest = {
   // Services
   serviceMoving?: boolean;
   serviceTransportOnly?: boolean;
+  servicePacking?: boolean;
+  serviceAssembly?: boolean;
+  serviceDisposal?: boolean;
+  servicePackingMaterials?: boolean;
   // Media upload
   mediaUpload?: "now" | "later";
   mediaUploadToken?: string;
   mediaUrls?: string[];
   createdAt: Timestamp;
-  status?: "active" | "closed" | "paused" | "cancelled" | "accepted" | "pending";
+  status?:
+    | "active"
+    | "closed"
+    | "paused"
+    | "cancelled"
+    | "accepted"
+    | "pending";
   archived?: boolean;
   // Admin pricing & approval
   adminApproved?: boolean; // Must be true for request to appear in company dashboard
@@ -126,7 +136,13 @@ export type MovingRequest = {
     fbclid?: string;
     referrer?: string;
     landingPage?: string;
-    channel: "google_ads" | "facebook_ads" | "organic" | "direct" | "referral" | "other";
+    channel:
+      | "google_ads"
+      | "facebook_ads"
+      | "organic"
+      | "direct"
+      | "referral"
+      | "other";
     capturedAt: string;
   };
 };
@@ -199,6 +215,10 @@ export type CreateGuestRequestInput = {
   // Services
   serviceMoving?: boolean;
   serviceTransportOnly?: boolean;
+  servicePacking?: boolean;
+  serviceAssembly?: boolean;
+  serviceDisposal?: boolean;
+  servicePackingMaterials?: boolean;
   // Other
   details?: string;
   volumeM3?: number;

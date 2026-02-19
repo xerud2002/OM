@@ -50,7 +50,9 @@ function LocationAutocomplete({
   const containerRef = useRef<HTMLDivElement>(null);
   const listboxRef = useRef<HTMLUListElement>(null);
   const debounceRef = useRef<NodeJS.Timeout>();
-  const listboxId = useRef(`loc-listbox-${Math.random().toString(36).slice(2,8)}`).current;
+  const listboxId = useRef(
+    `loc-listbox-${Math.random().toString(36).slice(2, 8)}`,
+  ).current;
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -139,10 +141,10 @@ function LocationAutocomplete({
     if (!showDropdown || suggestions.length === 0) return;
     if (e.key === "ArrowDown") {
       e.preventDefault();
-      setActiveIndex(prev => (prev + 1) % suggestions.length);
+      setActiveIndex((prev) => (prev + 1) % suggestions.length);
     } else if (e.key === "ArrowUp") {
       e.preventDefault();
-      setActiveIndex(prev => (prev <= 0 ? suggestions.length - 1 : prev - 1));
+      setActiveIndex((prev) => (prev <= 0 ? suggestions.length - 1 : prev - 1));
     } else if (e.key === "Enter" && activeIndex >= 0) {
       e.preventDefault();
       handleSelect(suggestions[activeIndex]);
@@ -155,7 +157,9 @@ function LocationAutocomplete({
   return (
     <div ref={containerRef} className="relative">
       {label && (
-        <label className={`mb-1 block text-xs font-medium ${hasError ? "text-red-600" : "text-gray-600"}`}>
+        <label
+          className={`mb-1 block text-xs font-medium ${hasError ? "text-red-600" : "text-gray-600"}`}
+        >
           {label}
         </label>
       )}
@@ -170,7 +174,9 @@ function LocationAutocomplete({
           role="combobox"
           aria-expanded={showDropdown && suggestions.length > 0}
           aria-controls={listboxId}
-          aria-activedescendant={activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined}
+          aria-activedescendant={
+            activeIndex >= 0 ? `${listboxId}-${activeIndex}` : undefined
+          }
           aria-autocomplete="list"
           aria-invalid={hasError}
           aria-label={label || placeholder || "Caută oraș sau localitate"}
@@ -178,9 +184,7 @@ function LocationAutocomplete({
             hasError
               ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
               : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
-          } ${
-            value.city && value.county ? "text-gray-900" : "text-gray-700"
-          }`}
+          } ${value.city && value.county ? "text-gray-900" : "text-gray-700"}`}
         />
         {inputValue && (
           <button
@@ -194,16 +198,25 @@ function LocationAutocomplete({
       </div>
 
       {hasError && (
-        <p className="mt-1 text-xs font-medium text-red-600">Câmp obligatoriu</p>
+        <p className="mt-1 text-xs font-medium text-red-600">
+          Câmp obligatoriu
+        </p>
       )}
 
       {/* Dropdown */}
       {showDropdown && (suggestions.length > 0 || isLoading) && (
         <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg">
           {isLoading ? (
-            <div className="px-3 py-2 text-sm text-gray-500" role="status">Se caută...</div>
+            <div className="px-3 py-2 text-sm text-gray-500" role="status">
+              Se caută...
+            </div>
           ) : (
-            <ul ref={listboxRef} id={listboxId} role="listbox" className="max-h-48 overflow-auto py-1">
+            <ul
+              ref={listboxRef}
+              id={listboxId}
+              role="listbox"
+              className="max-h-48 overflow-auto py-1"
+            >
               {suggestions.map((item, idx) => (
                 <li
                   key={item.id}
@@ -332,26 +345,40 @@ function InlineCalendar({
   for (let d = 1; d <= daysInMonth; d++) days.push(d);
 
   const handleCalendarKeyDown = (e: React.KeyboardEvent) => {
-    const current = focusDay || (value ? new Date(`${value}T00:00:00`).getDate() : 1);
+    const current =
+      focusDay || (value ? new Date(`${value}T00:00:00`).getDate() : 1);
     let next = current;
-    if (e.key === "ArrowRight") { e.preventDefault(); next = Math.min(current + 1, daysInMonth); }
-    else if (e.key === "ArrowLeft") { e.preventDefault(); next = Math.max(current - 1, 1); }
-    else if (e.key === "ArrowDown") { e.preventDefault(); next = Math.min(current + 7, daysInMonth); }
-    else if (e.key === "ArrowUp") { e.preventDefault(); next = Math.max(current - 7, 1); }
-    else if (e.key === "Enter" || e.key === " ") {
+    if (e.key === "ArrowRight") {
+      e.preventDefault();
+      next = Math.min(current + 1, daysInMonth);
+    } else if (e.key === "ArrowLeft") {
+      e.preventDefault();
+      next = Math.max(current - 1, 1);
+    } else if (e.key === "ArrowDown") {
+      e.preventDefault();
+      next = Math.min(current + 7, daysInMonth);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      next = Math.max(current - 7, 1);
+    } else if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
       if (!isDateDisabled(current)) handleSelect(current);
       return;
-    }
-    else return;
+    } else return;
     setFocusDay(next);
     // Focus the button
-    const btn = gridRef.current?.querySelector(`[data-day="${next}"]`) as HTMLButtonElement;
+    const btn = gridRef.current?.querySelector(
+      `[data-day="${next}"]`,
+    ) as HTMLButtonElement;
     btn?.focus();
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-3" role="group" aria-label="Calendar selectare dată">
+    <div
+      className="rounded-xl border border-gray-200 bg-white p-3"
+      role="group"
+      aria-label="Calendar selectare dată"
+    >
       {/* Header */}
       <div className="mb-3 flex items-center justify-between">
         <button
@@ -362,7 +389,10 @@ function InlineCalendar({
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <span className="text-sm font-semibold text-gray-800" aria-live="polite">
+        <span
+          className="text-sm font-semibold text-gray-800"
+          aria-live="polite"
+        >
           {roMonthsFull[month]} {year}
         </span>
         <button
@@ -390,7 +420,13 @@ function InlineCalendar({
       </div>
 
       {/* Days grid */}
-      <div ref={gridRef} className="grid grid-cols-7 gap-1" role="grid" aria-label="Zile disponibile" onKeyDown={handleCalendarKeyDown}>
+      <div
+        ref={gridRef}
+        className="grid grid-cols-7 gap-1"
+        role="grid"
+        aria-label="Zile disponibile"
+        onKeyDown={handleCalendarKeyDown}
+      >
         {days.map((day, idx) => {
           if (day === null) {
             return <div key={`empty-${idx}`} className="h-8" />;
@@ -409,7 +445,7 @@ function InlineCalendar({
               role="gridcell"
               aria-selected={selected}
               aria-label={`${day} ${roMonthsFull[month]} ${year}`}
-              tabIndex={selected || (focusDay === day) ? 0 : -1}
+              tabIndex={selected || focusDay === day ? 0 : -1}
               className={`h-8 w-full rounded-lg text-sm font-medium transition ${
                 disabled
                   ? "cursor-not-allowed text-gray-300"
@@ -668,9 +704,14 @@ function InlineRangeCalendar({
 interface HomeRequestFormProps {
   /** When provided (e.g. from customer dashboard), auto-fills contact fields */
   user?: { displayName?: string; email?: string; phoneNumber?: string } | null;
+  /** Called after a successful submission — lets the parent (e.g. modal) react */
+  onSuccess?: (requestCode: string | null) => void;
 }
 
-export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps = {}) {
+export default function HomeRequestForm({
+  user: authUser,
+  onSuccess,
+}: HomeRequestFormProps = {}) {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -686,7 +727,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
     fromCityManual: false,
     fromStreet: "",
     fromNumber: "",
-    fromType: "flat",
+    fromType: "house",
     fromRooms: "",
     fromFloor: "",
     fromElevator: false,
@@ -695,7 +736,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
     toCityManual: false,
     toStreet: "",
     toNumber: "",
-    toType: "flat",
+    toType: "house",
     toRooms: "",
     toFloor: "",
     toElevator: false,
@@ -709,6 +750,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
     email: "",
     serviceMoving: true,
     serviceTransportOnly: false,
+    servicePacking: false,
+    serviceAssembly: false,
+    serviceDisposal: false,
+    servicePackingMaterials: false,
     mediaUpload: "later",
     acceptedTerms: false,
     details: "",
@@ -731,7 +776,11 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
     if (!authUser) return;
     setForm((prev) => {
       const updates: Partial<FormShape> = {};
-      if (!prev.contactFirstName && !prev.contactLastName && authUser.displayName) {
+      if (
+        !prev.contactFirstName &&
+        !prev.contactLastName &&
+        authUser.displayName
+      ) {
         const parts = authUser.displayName.trim().split(/\s+/);
         updates.contactFirstName = parts[0] || "";
         updates.contactLastName = parts.slice(1).join(" ") || "";
@@ -841,7 +890,8 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         if (!form.contactFirstName) errs.contactFirstName = true;
         if (!form.contactLastName) errs.contactLastName = true;
         if (!form.phone || phoneDigits.length < 6) errs.phone = true;
-        if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email)) errs.email = true;
+        if (!form.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email))
+          errs.email = true;
         if (!form.acceptedTerms) errs.acceptedTerms = true;
         setFieldErrors(errs);
         toast.error("Completează câmpurile obligatorii marcate cu roșu.");
@@ -862,7 +912,9 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 const { getLeadSource } = await import("@/utils/leadSource");
                 const ls = getLeadSource();
                 return ls ? { leadSource: ls } : {};
-              } catch { return {}; }
+              } catch {
+                return {};
+              }
             })()),
           }),
         });
@@ -875,9 +927,13 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           throw new Error(result.error || "Eroare la trimiterea cererii");
         }
 
-        // Success! Show modal
+        // Success!
         setSubmittedRequestCode(requestCode);
-        setShowSuccessModal(true);
+        if (onSuccess) {
+          onSuccess(requestCode);
+        } else {
+          setShowSuccessModal(true);
+        }
 
         // Clear form from localStorage
         localStorage.removeItem(STORAGE_KEY);
@@ -889,7 +945,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           fromCityManual: false,
           fromStreet: "",
           fromNumber: "",
-          fromType: "flat",
+          fromType: "house",
           fromRooms: "",
           fromFloor: "",
           fromElevator: false,
@@ -898,7 +954,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           toCityManual: false,
           toStreet: "",
           toNumber: "",
-          toType: "flat",
+          toType: "house",
           toRooms: "",
           toFloor: "",
           toElevator: false,
@@ -912,6 +968,10 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           email: "",
           serviceMoving: true,
           serviceTransportOnly: false,
+          servicePacking: false,
+          serviceAssembly: false,
+          serviceDisposal: false,
+          servicePackingMaterials: false,
           mediaUpload: "later",
           acceptedTerms: false,
           details: "",
@@ -971,6 +1031,17 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
 
     // Validate step 4 before moving to step 5
     if (currentStep === 4) {
+      const hasService =
+        form.serviceMoving ||
+        form.serviceTransportOnly ||
+        form.servicePacking ||
+        form.serviceAssembly ||
+        form.serviceDisposal ||
+        form.servicePackingMaterials;
+      if (!hasService) {
+        toast.error("Selectează cel puțin un tip de serviciu.");
+        return;
+      }
       if (!form.details || form.details.trim().length < 50) {
         setFieldErrors((prev) => ({ ...prev, details: true }));
         toast.error("Adaugă cel puțin 50 de caractere în câmpul de detalii.");
@@ -1002,7 +1073,12 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           value={{ city: form.fromCity || "", county: form.fromCounty || "" }}
           onChange={(city, county) => {
             setForm((s) => ({ ...s, fromCity: city, fromCounty: county }));
-            if (city && county) setFieldErrors((prev) => { const n = { ...prev }; delete n.fromCity; return n; });
+            if (city && county)
+              setFieldErrors((prev) => {
+                const n = { ...prev };
+                delete n.fromCity;
+                return n;
+              });
           }}
           label="Localitate *"
           placeholder="Caută oraș sau localitate..."
@@ -1012,43 +1088,47 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         {/* Details - appear after city is selected */}
         {form.fromCity && (
           <>
-            <div
-              className="grid gap-2"
-              style={{
-                gridTemplateColumns:
-                  form.fromType === "house"
-                    ? "1.4fr 1fr 1fr"
-                    : "1.4fr 1fr 1.2fr",
-              }}
-            >
+            <div className="grid grid-cols-3 gap-2">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-600">
-                  Tip Proprietate *
+                  Tip *
                 </label>
                 <select
-                  value={form.fromType || "flat"}
+                  value={form.fromType || "house"}
                   onChange={(e) =>
                     setForm((s) => ({
                       ...s,
-                      fromType: e.target.value as "house" | "flat" | "office",
+                      fromType: e.target.value as
+                        | "house"
+                        | "flat"
+                        | "office"
+                        | "studio",
                     }))
                   }
                   className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
                 >
-                  <option value="flat">Apartament</option>
                   <option value="house">Casă</option>
-                  <option value="office">Birou / Office</option>
+                  <option value="studio">Garsonieră</option>
+                  <option value="flat">Apartament</option>
+                  <option value="office">Office</option>
                 </select>
               </div>
               <div>
-                <label className={`mb-1 block text-xs font-medium ${fieldErrors.fromRooms ? "text-red-600" : "text-gray-600"}`}>
+                <label
+                  className={`mb-1 block text-xs font-medium ${fieldErrors.fromRooms ? "text-red-600" : "text-gray-600"}`}
+                >
                   Nr. Camere *
                 </label>
                 <select
                   value={form.fromRooms || ""}
                   onChange={(e) => {
                     setForm((s) => ({ ...s, fromRooms: e.target.value }));
-                    if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.fromRooms; return n; });
+                    if (e.target.value)
+                      setFieldErrors((prev) => {
+                        const n = { ...prev };
+                        delete n.fromRooms;
+                        return n;
+                      });
                   }}
                   aria-invalid={!!fieldErrors.fromRooms}
                   className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
@@ -1064,7 +1144,11 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                   <option value="4">4</option>
                   <option value="5+">5+</option>
                 </select>
-                {fieldErrors.fromRooms && <p className="mt-1 text-xs font-medium text-red-600">Selectează nr. camere</p>}
+                {fieldErrors.fromRooms && (
+                  <p className="mt-1 text-xs font-medium text-red-600">
+                    Selectează nr. camere
+                  </p>
+                )}
               </div>
               {form.fromType === "house" && (
                 <div>
@@ -1072,22 +1156,22 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                     Etaje *
                   </label>
                   <select
-                    value={form.fromFloor || ""}
+                    value={form.fromFloor || "Parter"}
                     onChange={(e) =>
                       setForm((s) => ({ ...s, fromFloor: e.target.value }))
                     }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
                   >
-                    <option value="">-</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5+">5+</option>
+                    <option value="Parter">Parter</option>
+                    <option value="Parter+1">Parter+1</option>
+                    <option value="Parter+2">Parter+2</option>
+                    <option value="Parter+3">Parter+3</option>
                   </select>
                 </div>
               )}
-              {(form.fromType === "flat" || form.fromType === "office") && (
+              {(form.fromType === "flat" ||
+                form.fromType === "office" ||
+                form.fromType === "studio") && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">
                     Etaj *
@@ -1111,41 +1195,45 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 </div>
               )}
             </div>
-            {(form.fromType === "flat" || form.fromType === "office") && (
-              <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">
-                  Lift *
-                </label>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm((s) => ({ ...s, fromElevator: true }))
-                    }
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.fromElevator === true
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                        : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
-                    }`}
-                  >
-                    Da
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm((s) => ({ ...s, fromElevator: false }))
-                    }
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.fromElevator === false
-                        ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                        : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
-                    }`}
-                  >
-                    Nu
-                  </button>
+            {(form.fromType === "flat" ||
+              form.fromType === "office" ||
+              form.fromType === "studio") &&
+              form.fromFloor !== "Parter" &&
+              form.fromFloor !== "Demisol" && (
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">
+                    Lift *
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((s) => ({ ...s, fromElevator: true }))
+                      }
+                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                        form.fromElevator === true
+                          ? "border-emerald-500 bg-emerald-50 text-emerald-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
+                      }`}
+                    >
+                      Da
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((s) => ({ ...s, fromElevator: false }))
+                      }
+                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                        form.fromElevator === false
+                          ? "border-red-500 bg-red-50 text-red-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-red-300"
+                      }`}
+                    >
+                      Nu
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </>
         )}
       </div>
@@ -1168,7 +1256,12 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           value={{ city: form.toCity || "", county: form.toCounty || "" }}
           onChange={(city, county) => {
             setForm((s) => ({ ...s, toCity: city, toCounty: county }));
-            if (city && county) setFieldErrors((prev) => { const n = { ...prev }; delete n.toCity; return n; });
+            if (city && county)
+              setFieldErrors((prev) => {
+                const n = { ...prev };
+                delete n.toCity;
+                return n;
+              });
           }}
           label="Localitate *"
           placeholder="Caută oraș sau localitate..."
@@ -1178,41 +1271,47 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         {/* Details - appear after city is selected */}
         {form.toCity && (
           <>
-            <div
-              className="grid gap-2"
-              style={{
-                gridTemplateColumns:
-                  form.toType === "house" ? "1.4fr 1fr 1fr" : "1.4fr 1fr 1.2fr",
-              }}
-            >
+            <div className="grid grid-cols-3 gap-2">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-600">
-                  Tip Proprietate *
+                  Tip *
                 </label>
                 <select
-                  value={form.toType || "flat"}
+                  value={form.toType || "house"}
                   onChange={(e) =>
                     setForm((s) => ({
                       ...s,
-                      toType: e.target.value as "house" | "flat" | "office",
+                      toType: e.target.value as
+                        | "house"
+                        | "flat"
+                        | "office"
+                        | "studio",
                     }))
                   }
                   className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
                 >
-                  <option value="flat">Apartament</option>
                   <option value="house">Casă</option>
-                  <option value="office">Birou / Office</option>
+                  <option value="studio">Garsonieră</option>
+                  <option value="flat">Apartament</option>
+                  <option value="office">Office</option>
                 </select>
               </div>
               <div>
-                <label className={`mb-1 block text-xs font-medium ${fieldErrors.toRooms ? "text-red-600" : "text-gray-600"}`}>
+                <label
+                  className={`mb-1 block text-xs font-medium ${fieldErrors.toRooms ? "text-red-600" : "text-gray-600"}`}
+                >
                   Nr. Camere *
                 </label>
                 <select
                   value={form.toRooms || ""}
                   onChange={(e) => {
                     setForm((s) => ({ ...s, toRooms: e.target.value }));
-                    if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.toRooms; return n; });
+                    if (e.target.value)
+                      setFieldErrors((prev) => {
+                        const n = { ...prev };
+                        delete n.toRooms;
+                        return n;
+                      });
                   }}
                   aria-invalid={!!fieldErrors.toRooms}
                   className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:outline-none ${
@@ -1228,7 +1327,11 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                   <option value="4">4</option>
                   <option value="5+">5+</option>
                 </select>
-                {fieldErrors.toRooms && <p className="mt-1 text-xs font-medium text-red-600">Selectează nr. camere</p>}
+                {fieldErrors.toRooms && (
+                  <p className="mt-1 text-xs font-medium text-red-600">
+                    Selectează nr. camere
+                  </p>
+                )}
               </div>
               {form.toType === "house" && (
                 <div>
@@ -1236,22 +1339,22 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                     Etaje *
                   </label>
                   <select
-                    value={form.toFloor || ""}
+                    value={form.toFloor || "Parter"}
                     onChange={(e) =>
                       setForm((s) => ({ ...s, toFloor: e.target.value }))
                     }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
                   >
-                    <option value="">-</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5+">5+</option>
+                    <option value="Parter">Parter</option>
+                    <option value="Parter+1">Parter+1</option>
+                    <option value="Parter+2">Parter+2</option>
+                    <option value="Parter+3">Parter+3</option>
                   </select>
                 </div>
               )}
-              {(form.toType === "flat" || form.toType === "office") && (
+              {(form.toType === "flat" ||
+                form.toType === "office" ||
+                form.toType === "studio") && (
                 <div>
                   <label className="mb-1 block text-xs font-medium text-gray-600">
                     Etaj *
@@ -1275,39 +1378,45 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
                 </div>
               )}
             </div>
-            {(form.toType === "flat" || form.toType === "office") && (
-              <div>
-                <label className="mb-1 block text-xs font-medium text-gray-600">
-                  Lift *
-                </label>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    onClick={() => setForm((s) => ({ ...s, toElevator: true }))}
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.toElevator === true
-                        ? "border-sky-500 bg-sky-50 text-sky-700"
-                        : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
-                    }`}
-                  >
-                    Da
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() =>
-                      setForm((s) => ({ ...s, toElevator: false }))
-                    }
-                    className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
-                      form.toElevator === false
-                        ? "border-sky-500 bg-sky-50 text-sky-700"
-                        : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
-                    }`}
-                  >
-                    Nu
-                  </button>
+            {(form.toType === "flat" ||
+              form.toType === "office" ||
+              form.toType === "studio") &&
+              form.toFloor !== "Parter" &&
+              form.toFloor !== "Demisol" && (
+                <div>
+                  <label className="mb-1 block text-xs font-medium text-gray-600">
+                    Lift *
+                  </label>
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((s) => ({ ...s, toElevator: true }))
+                      }
+                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                        form.toElevator === true
+                          ? "border-sky-500 bg-sky-50 text-sky-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
+                      }`}
+                    >
+                      Da
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((s) => ({ ...s, toElevator: false }))
+                      }
+                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                        form.toElevator === false
+                          ? "border-red-500 bg-red-50 text-red-700"
+                          : "border-gray-200 bg-white text-gray-600 hover:border-red-300"
+                      }`}
+                    >
+                      Nu
+                    </button>
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
           </>
         )}
       </div>
@@ -1324,10 +1433,9 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         <span className="font-semibold text-gray-800">Când te muți?</span>
       </div>
 
-      <div className="mb-4 grid grid-cols-3 gap-2">
+      <div className="mb-4 grid grid-cols-2 gap-2">
         {[
           { value: "exact", label: "Dată exactă" },
-          { value: "urgent", label: "Urgent" },
           { value: "flexible", label: "Flexibil" },
         ].map((opt) => (
           <button
@@ -1336,7 +1444,7 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
             onClick={() =>
               setForm((s) => ({
                 ...s,
-                moveDateMode: opt.value as "exact" | "flexible" | "urgent",
+                moveDateMode: opt.value as "exact" | "flexible",
               }))
             }
             className={`rounded-lg px-3 py-2.5 text-sm font-medium transition ${
@@ -1350,16 +1458,6 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         ))}
       </div>
 
-      {form.moveDateMode === "urgent" && (
-        <div className="rounded-lg bg-red-50 border border-red-200 p-4 text-center space-y-2">
-          <p className="text-sm font-medium text-red-700">
-            🚨 Mutare urgentă - în următoarele 24-48 ore
-          </p>
-          <p className="text-xs text-red-600">
-            Companiile vor fi notificate imediat și vei primi oferte prioritare.
-          </p>
-        </div>
-      )}
       {form.moveDateMode === "exact" && (
         <div className="space-y-2">
           <InlineCalendar
@@ -1406,57 +1504,59 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         <div className="mb-3 flex items-center gap-2">
           <Package className="h-5 w-5 text-emerald-600" />
           <span className="font-semibold text-gray-800">Tip serviciu</span>
+          <span className="text-xs text-gray-400">
+            (selectează tot ce ai nevoie)
+          </span>
         </div>
 
         <div className="grid grid-cols-1 gap-2">
           {[
             {
-              value: "full",
-              label: "Mutare completă",
-              desc: "Cu ajutor pentru încărcare/descărcare",
+              key: "serviceMoving" as const,
+              label: "Mutare Completă",
+              desc: "Toată proprietatea",
             },
             {
-              value: "transport",
-              label: "Doar câteva lucruri",
-              desc: "Am o lista",
+              key: "serviceTransportOnly" as const,
+              label: "Mutare Parțială",
+              desc: "Doar câteva lucruri",
+            },
+            {
+              key: "servicePacking" as const,
+              label: "Împachetare Lucruri",
+              desc: "În cutii",
+            },
+            {
+              key: "serviceAssembly" as const,
+              label: "Montaj / Dezmembrare",
+              desc: "Mobilă",
+            },
+            {
+              key: "serviceDisposal" as const,
+              label: "Debarasare",
+              desc: "Mobilă, lucruri",
+            },
+            {
+              key: "servicePackingMaterials" as const,
+              label: "Materiale Împachetare",
+              desc: "Cutii, scotch etc.",
             },
           ].map((opt) => (
             <label
-              key={opt.value}
+              key={opt.key}
               className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
-                (opt.value === "full" &&
-                  form.serviceMoving &&
-                  !form.serviceTransportOnly) ||
-                (opt.value === "transport" && form.serviceTransportOnly)
+                form[opt.key]
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
               }`}
             >
               <input
-                type="radio"
-                name="serviceType"
-                checked={
-                  (opt.value === "full" &&
-                    form.serviceMoving &&
-                    !form.serviceTransportOnly) ||
-                  (opt.value === "transport" && form.serviceTransportOnly)
+                type="checkbox"
+                checked={!!form[opt.key]}
+                onChange={() =>
+                  setForm((s) => ({ ...s, [opt.key]: !s[opt.key] }))
                 }
-                onChange={() => {
-                  if (opt.value === "full") {
-                    setForm((s) => ({
-                      ...s,
-                      serviceMoving: true,
-                      serviceTransportOnly: false,
-                    }));
-                  } else {
-                    setForm((s) => ({
-                      ...s,
-                      serviceMoving: false,
-                      serviceTransportOnly: true,
-                    }));
-                  }
-                }}
-                className="h-4 w-4 shrink-0 border-gray-300 text-emerald-600 focus:ring-emerald-500"
+                className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
               />
               <span className="text-sm leading-tight text-gray-700">
                 <span className="font-medium">{opt.label}</span>
@@ -1468,27 +1568,40 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
       </div>
 
       <div>
-        <label className={`mb-1 block text-sm font-medium ${fieldErrors.details ? "text-red-600" : "text-gray-700"}`}>
+        <label
+          className={`mb-1 block text-sm font-medium ${fieldErrors.details ? "text-red-600" : "text-gray-700"}`}
+        >
           Detalii *
         </label>
         <textarea
           value={form.details || ""}
           onChange={(e) => {
             setForm((s) => ({ ...s, details: e.target.value }));
-            if (e.target.value.trim().length >= 50) setFieldErrors((prev) => { const n = { ...prev }; delete n.details; return n; });
+            if (e.target.value.trim().length >= 50)
+              setFieldErrors((prev) => {
+                const n = { ...prev };
+                delete n.details;
+                return n;
+              });
           }}
           rows={3}
           minLength={50}
           aria-invalid={!!fieldErrors.details}
           placeholder="Descrie ce trebuie mutat: mobilier, electrocasnice, cutii, obiecte fragile, acces dificil..."
           className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none ${
-            fieldErrors.details ? "border-red-500 ring-2 ring-red-500/20" : "border-gray-200"
+            fieldErrors.details
+              ? "border-red-500 ring-2 ring-red-500/20"
+              : "border-gray-200"
           }`}
         />
         <div className="mt-1 flex items-center justify-between text-xs">
-          <span className={`${
-            (form.details?.length || 0) < 50 ? "text-red-500" : "text-green-600"
-          }`}>
+          <span
+            className={`${
+              (form.details?.length || 0) < 50
+                ? "text-red-500"
+                : "text-green-600"
+            }`}
+          >
             {form.details?.length || 0}/50 caractere minim
           </span>
         </div>
@@ -1684,14 +1797,21 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
         <div className="space-y-3">
           <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className={`mb-1 block text-xs font-medium ${fieldErrors.contactFirstName ? "text-red-600" : "text-gray-600"}`}>
+              <label
+                className={`mb-1 block text-xs font-medium ${fieldErrors.contactFirstName ? "text-red-600" : "text-gray-600"}`}
+              >
                 Prenume *
               </label>
               <input
                 value={form.contactFirstName || ""}
                 onChange={(e) => {
                   setForm((s) => ({ ...s, contactFirstName: e.target.value }));
-                  if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.contactFirstName; return n; });
+                  if (e.target.value)
+                    setFieldErrors((prev) => {
+                      const n = { ...prev };
+                      delete n.contactFirstName;
+                      return n;
+                    });
                 }}
                 placeholder="Ion"
                 aria-invalid={!!fieldErrors.contactFirstName}
@@ -1703,14 +1823,21 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               />
             </div>
             <div>
-              <label className={`mb-1 block text-xs font-medium ${fieldErrors.contactLastName ? "text-red-600" : "text-gray-600"}`}>
+              <label
+                className={`mb-1 block text-xs font-medium ${fieldErrors.contactLastName ? "text-red-600" : "text-gray-600"}`}
+              >
                 Nume *
               </label>
               <input
                 value={form.contactLastName || ""}
                 onChange={(e) => {
                   setForm((s) => ({ ...s, contactLastName: e.target.value }));
-                  if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.contactLastName; return n; });
+                  if (e.target.value)
+                    setFieldErrors((prev) => {
+                      const n = { ...prev };
+                      delete n.contactLastName;
+                      return n;
+                    });
                 }}
                 placeholder="Popescu"
                 aria-invalid={!!fieldErrors.contactLastName}
@@ -1724,7 +1851,9 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           </div>
 
           <div>
-            <label className={`mb-1 block text-xs font-medium ${fieldErrors.phone ? "text-red-600" : "text-gray-600"}`}>
+            <label
+              className={`mb-1 block text-xs font-medium ${fieldErrors.phone ? "text-red-600" : "text-gray-600"}`}
+            >
               Telefon *
             </label>
             <input
@@ -1732,7 +1861,12 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               value={form.phone || ""}
               onChange={(e) => {
                 setForm((s) => ({ ...s, phone: e.target.value }));
-                if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.phone; return n; });
+                if (e.target.value)
+                  setFieldErrors((prev) => {
+                    const n = { ...prev };
+                    delete n.phone;
+                    return n;
+                  });
               }}
               placeholder="Număr de telefon"
               aria-invalid={!!fieldErrors.phone}
@@ -1745,7 +1879,9 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
           </div>
 
           <div>
-            <label className={`mb-1 block text-xs font-medium ${fieldErrors.email ? "text-red-600" : "text-gray-600"}`}>
+            <label
+              className={`mb-1 block text-xs font-medium ${fieldErrors.email ? "text-red-600" : "text-gray-600"}`}
+            >
               Email *
             </label>
             <input
@@ -1753,7 +1889,12 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               value={form.email || ""}
               onChange={(e) => {
                 setForm((s) => ({ ...s, email: e.target.value }));
-                if (e.target.value) setFieldErrors((prev) => { const n = { ...prev }; delete n.email; return n; });
+                if (e.target.value)
+                  setFieldErrors((prev) => {
+                    const n = { ...prev };
+                    delete n.email;
+                    return n;
+                  });
               }}
               placeholder="exemplu@email.com"
               aria-invalid={!!fieldErrors.email}
@@ -1768,15 +1909,24 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
       </div>
 
       {/* Terms */}
-      <label className={`flex items-start gap-2 rounded-lg border p-3 ${
-        fieldErrors.acceptedTerms ? "border-red-400 bg-red-50" : "border-gray-200 bg-gray-50"
-      }`}>
+      <label
+        className={`flex items-start gap-2 rounded-lg border p-3 ${
+          fieldErrors.acceptedTerms
+            ? "border-red-400 bg-red-50"
+            : "border-gray-200 bg-gray-50"
+        }`}
+      >
         <input
           type="checkbox"
           checked={!!form.acceptedTerms}
           onChange={(e) => {
             setForm((s) => ({ ...s, acceptedTerms: e.target.checked }));
-            if (e.target.checked) setFieldErrors((prev) => { const n = { ...prev }; delete n.acceptedTerms; return n; });
+            if (e.target.checked)
+              setFieldErrors((prev) => {
+                const n = { ...prev };
+                delete n.acceptedTerms;
+                return n;
+              });
           }}
           className="mt-0.5 h-4 w-4 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
         />
@@ -1902,8 +2052,8 @@ export default function HomeRequestForm({ user: authUser }: HomeRequestFormProps
               {/* Message */}
               <div className="mb-6 rounded-lg bg-emerald-50 p-4 text-center">
                 <p className="text-sm text-gray-700">
-                  <strong>Vei primi până la 5 oferte în maxim 24h</strong> de la firme
-                  de mutări verificate.
+                  <strong>Vei primi până la 5 oferte în maxim 24h</strong> de la
+                  firme de mutări verificate.
                 </p>
                 <p className="mt-2 text-sm text-gray-600">
                   Ofertele vor fi trimise pe adresa de email furnizată.
