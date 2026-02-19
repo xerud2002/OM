@@ -12,13 +12,21 @@ import {
   CreditCardIcon,
   ArrowTrendingUpIcon,
   BanknotesIcon,
+  PlusCircleIcon,
+  MinusCircleIcon,
+  AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
+import { logAuditAction } from "@/components/admin/AuditLogger";
 
 export default function AdminFinancial() {
   const { user, dashboardUser } = useAuth();
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [creditModal, setCreditModal] = useState<{ id: string; name: string; balance: number } | null>(null);
+  const [creditAmount, setCreditAmount] = useState<number>(0);
+  const [creditReason, setCreditReason] = useState("");
+  const [creditLoading, setCreditLoading] = useState(false);
 
   useEffect(() => {
     if (!user) return;
@@ -33,9 +41,64 @@ export default function AdminFinancial() {
     })();
   }, [user]);
 
+  const handleCreditAdjust = async () => {
+    if (!creditModal || creditAmount === 0 || creditReason.trim().length < 3) return;
+    setCreditLoading(true);
+    try {
+      const token = await user!.getIdToken();
+      const res = await fetch("/api/admin/adjust-credits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ companyId: creditModal.id, amount: creditAmount, reason: creditReason.trim() }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        // Update local data
+        setData((prev: any) => ({
+          ...prev,
+          topSpenders: prev.topSpenders.map((s: any) =>
+            s.id === creditModal.id ? { ...s, creditBalance: json.data.newBalance } : s
+          ),
+          totalCreditsInSystem: prev.totalCreditsInSystem + creditAmount,
+        }));
+        await logAuditAction({
+          adminUid: user!.uid,
+          adminEmail: user!.email || "",
+          action: "manual_credit_adjustment",
+          targetType: "company",
+          targetId: creditModal.id,
+          details: `${creditAmount > 0 ? "+" : ""}${creditAmount} credite → ${creditModal.name}. Motiv: ${creditReason.trim()}`,
+          metadata: { amount: creditAmount, newBalance: json.data.newBalance },
+        });
+        setCreditModal(null);
+        setCreditAmount(0);
+        setCreditReason("");
+        alert(`Credite actualizate! Sold nou: ${json.data.newBalance}`);
+      } else {
+        alert(`Eroare: ${json.error}`);
+      }
+    } catch {
+      alert("Eroare de rețea");
+    } finally {
+      setCreditLoading(false);
+    }
+  };
+
   const spenderCols: Column<any>[] = [
     { key: "companyName", label: "Companie", sortable: true, render: (c) => <span className="font-medium">{c.companyName}</span> },
     { key: "creditBalance", label: "Credite", sortable: true, render: (c) => <span className="font-semibold text-purple-700">{c.creditBalance}</span> },
+    {
+      key: "actions" as any,
+      label: "Acțiuni",
+      render: (c) => (
+        <button
+          onClick={() => setCreditModal({ id: c.id, name: c.companyName, balance: c.creditBalance })}
+          className="inline-flex items-center gap-1 rounded-lg bg-purple-100 px-2.5 py-1 text-xs font-semibold text-purple-700 hover:bg-purple-200 transition"
+        >
+          <AdjustmentsHorizontalIcon className="h-3.5 w-3.5" /> Ajustează
+        </button>
+      ),
+    },
   ];
 
   return (
@@ -97,6 +160,85 @@ export default function AdminFinancial() {
               </div>
             </>
           ) : null}
+
+          {/* Credit Adjustment Modal */}
+          {creditModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setCreditModal(null)}>
+              <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+                <h3 className="text-lg font-bold text-gray-900 mb-1">Ajustare credite</h3>
+                <p className="text-sm text-gray-500 mb-4">
+                  {creditModal.name} — Sold curent: <span className="font-bold text-purple-700">{creditModal.balance}</span>
+                </p>
+
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Adaugă rapid</label>
+                    <div className="flex flex-wrap gap-2">
+                      {[5, 10, 25, 50, 100].map((v) => (
+                        <button
+                          key={v}
+                          onClick={() => setCreditAmount(v)}
+                          className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition ${creditAmount === v ? "border-purple-500 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-purple-300"}`}
+                        >
+                          +{v}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Sumă (negativ = scădere)</label>
+                    <div className="flex items-center gap-2">
+                      <button onClick={() => setCreditAmount((p) => p - 1)} className="rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-red-50 hover:text-red-600 transition">
+                        <MinusCircleIcon className="h-5 w-5" />
+                      </button>
+                      <input
+                        type="number"
+                        value={creditAmount}
+                        onChange={(e) => setCreditAmount(Number(e.target.value))}
+                        className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-center text-lg font-bold focus:border-purple-500 focus:ring-purple-500"
+                      />
+                      <button onClick={() => setCreditAmount((p) => p + 1)} className="rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-green-50 hover:text-green-600 transition">
+                        <PlusCircleIcon className="h-5 w-5" />
+                      </button>
+                    </div>
+                    {creditAmount !== 0 && (
+                      <p className={`mt-1 text-sm font-medium ${creditAmount > 0 ? "text-green-600" : "text-red-600"}`}>
+                        Sold nou: {creditModal.balance + creditAmount}
+                      </p>
+                    )}
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Motiv *</label>
+                    <input
+                      type="text"
+                      value={creditReason}
+                      onChange={(e) => setCreditReason(e.target.value)}
+                      placeholder="ex: Bonus înregistrare, Corecție, Promoție..."
+                      className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-purple-500"
+                    />
+                  </div>
+                </div>
+
+                <div className="mt-6 flex justify-end gap-3">
+                  <button
+                    onClick={() => { setCreditModal(null); setCreditAmount(0); setCreditReason(""); }}
+                    className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                  >
+                    Anulează
+                  </button>
+                  <button
+                    onClick={handleCreditAdjust}
+                    disabled={creditLoading || creditAmount === 0 || creditReason.trim().length < 3}
+                    className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                  >
+                    {creditLoading ? "Se procesează..." : `${creditAmount > 0 ? "Adaugă" : "Scade"} ${Math.abs(creditAmount)} credite`}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </DashboardLayout>
     </RequireRole>

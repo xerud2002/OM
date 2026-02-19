@@ -17,8 +17,12 @@ import {
   CheckCircleIcon,
   InboxStackIcon,
   DocumentDuplicateIcon,
+  CreditCardIcon,
+  PlusCircleIcon,
+  MinusCircleIcon,
 } from "@heroicons/react/24/outline";
 import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
+import { logAuditAction } from "@/components/admin/AuditLogger";
 
 function fmtDate(ts: any) {
   if (!ts) return "-";
@@ -33,6 +37,10 @@ export default function AdminCompanyDetail() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [showCreditModal, setShowCreditModal] = useState(false);
+  const [creditAmount, setCreditAmount] = useState<number>(0);
+  const [creditReason, setCreditReason] = useState("");
+  const [creditLoading, setCreditLoading] = useState(false);
 
   useEffect(() => {
     if (!id || !user) return;
@@ -50,6 +58,47 @@ export default function AdminCompanyDetail() {
 
   const c = data?.company;
   const m = data?.metrics;
+
+  const handleCreditAdjust = async () => {
+    if (!creditAmount || creditAmount === 0) return alert("Introdu o sumă validă");
+    if (!creditReason || creditReason.trim().length < 3) return alert("Introdu un motiv (min 3 caractere)");
+    setCreditLoading(true);
+    try {
+      const token = await user!.getIdToken();
+      const res = await fetch("/api/admin/adjust-credits", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ companyId: id, amount: creditAmount, reason: creditReason.trim() }),
+      });
+      const json = await res.json();
+      if (json.success) {
+        // Update local data
+        setData((prev: any) => ({
+          ...prev,
+          company: { ...prev.company, creditBalance: json.data.newBalance, credits: json.data.newBalance },
+        }));
+        await logAuditAction({
+          adminUid: user!.uid,
+          adminEmail: user!.email || "",
+          action: "manual_credit_adjustment",
+          targetType: "company",
+          targetId: id as string,
+          details: `${creditAmount > 0 ? "+" : ""}${creditAmount} credite. Motiv: ${creditReason.trim()}`,
+          metadata: { amount: creditAmount, newBalance: json.data.newBalance },
+        });
+        setShowCreditModal(false);
+        setCreditAmount(0);
+        setCreditReason("");
+        alert(`Credite actualizate! Sold nou: ${json.data.newBalance}`);
+      } else {
+        alert(`Eroare: ${json.error}`);
+      }
+    } catch {
+      alert("Eroare de rețea");
+    } finally {
+      setCreditLoading(false);
+    }
+  };
 
   return (
     <RequireRole allowedRole="admin">
@@ -89,7 +138,7 @@ export default function AdminCompanyDetail() {
               </div>
 
               {/* Metrics */}
-              <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+              <div className="grid grid-cols-2 gap-4 sm:grid-cols-5">
                 <div className="rounded-xl border border-gray-200 bg-white p-4 text-center shadow-sm">
                   <InboxStackIcon className="mx-auto h-6 w-6 text-purple-500" />
                   <p className="mt-2 text-2xl font-bold text-gray-900">{m.totalOffers}</p>
@@ -110,7 +159,106 @@ export default function AdminCompanyDetail() {
                   <p className="mt-2 text-2xl font-bold text-gray-900">{m.totalReviews}</p>
                   <p className="text-sm text-gray-500">Recenzii</p>
                 </div>
+                <div className="rounded-xl border-2 border-purple-200 bg-purple-50 p-4 text-center shadow-sm">
+                  <CreditCardIcon className="mx-auto h-6 w-6 text-purple-600" />
+                  <p className="mt-2 text-2xl font-bold text-purple-700">{c.creditBalance || c.credits || 0}</p>
+                  <p className="text-sm text-purple-500">Credite</p>
+                  <button
+                    onClick={() => setShowCreditModal(true)}
+                    className="mt-2 inline-flex items-center gap-1 rounded-lg bg-purple-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-purple-700 transition"
+                  >
+                    <PlusCircleIcon className="h-3.5 w-3.5" /> Ajustează
+                  </button>
+                </div>
               </div>
+
+              {/* Credit Adjustment Modal */}
+              {showCreditModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setShowCreditModal(false)}>
+                  <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl" onClick={(e) => e.stopPropagation()}>
+                    <h3 className="text-lg font-bold text-gray-900 mb-1">Ajustare credite</h3>
+                    <p className="text-sm text-gray-500 mb-4">
+                      {c.companyName || c.displayName} — Sold curent: <span className="font-bold text-purple-700">{c.creditBalance || c.credits || 0}</span>
+                    </p>
+
+                    <div className="space-y-4">
+                      {/* Quick buttons */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-2">Adaugă rapid</label>
+                        <div className="flex flex-wrap gap-2">
+                          {[5, 10, 25, 50, 100].map((v) => (
+                            <button
+                              key={v}
+                              onClick={() => setCreditAmount(v)}
+                              className={`rounded-lg border px-3 py-1.5 text-sm font-medium transition ${creditAmount === v ? "border-purple-500 bg-purple-50 text-purple-700" : "border-gray-200 text-gray-600 hover:border-purple-300"}`}
+                            >
+                              +{v}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Custom amount */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Sumă (negativ = scădere)</label>
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => setCreditAmount((p) => p - 1)}
+                            className="rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-red-50 hover:text-red-600 transition"
+                          >
+                            <MinusCircleIcon className="h-5 w-5" />
+                          </button>
+                          <input
+                            type="number"
+                            value={creditAmount}
+                            onChange={(e) => setCreditAmount(Number(e.target.value))}
+                            className="flex-1 rounded-lg border border-gray-300 px-3 py-2 text-center text-lg font-bold focus:border-purple-500 focus:ring-purple-500"
+                          />
+                          <button
+                            onClick={() => setCreditAmount((p) => p + 1)}
+                            className="rounded-lg border border-gray-200 p-2 text-gray-500 hover:bg-green-50 hover:text-green-600 transition"
+                          >
+                            <PlusCircleIcon className="h-5 w-5" />
+                          </button>
+                        </div>
+                        {creditAmount !== 0 && (
+                          <p className={`mt-1 text-sm font-medium ${creditAmount > 0 ? "text-green-600" : "text-red-600"}`}>
+                            Sold nou: {(c.creditBalance || c.credits || 0) + creditAmount}
+                          </p>
+                        )}
+                      </div>
+
+                      {/* Reason */}
+                      <div>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Motiv *</label>
+                        <input
+                          type="text"
+                          value={creditReason}
+                          onChange={(e) => setCreditReason(e.target.value)}
+                          placeholder="ex: Bonus înregistrare, Corecție, Promoție..."
+                          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-purple-500 focus:ring-purple-500"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="mt-6 flex justify-end gap-3">
+                      <button
+                        onClick={() => { setShowCreditModal(false); setCreditAmount(0); setCreditReason(""); }}
+                        className="rounded-lg border border-gray-200 px-4 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50"
+                      >
+                        Anulează
+                      </button>
+                      <button
+                        onClick={handleCreditAdjust}
+                        disabled={creditLoading || creditAmount === 0 || creditReason.trim().length < 3}
+                        className="inline-flex items-center gap-2 rounded-lg bg-purple-600 px-4 py-2 text-sm font-semibold text-white hover:bg-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                      >
+                        {creditLoading ? "Se procesează..." : `${creditAmount > 0 ? "Adaugă" : "Scade"} ${Math.abs(creditAmount)} credite`}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Offers table */}
               <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
