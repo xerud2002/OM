@@ -728,8 +728,8 @@ export default function HomeRequestForm({
     fromStreet: "",
     fromNumber: "",
     fromType: "house",
-    fromRooms: "",
-    fromFloor: "",
+    fromRooms: "1",
+    fromFloor: "Parter",
     fromElevator: false,
     toCounty: "",
     toCity: "",
@@ -737,8 +737,8 @@ export default function HomeRequestForm({
     toStreet: "",
     toNumber: "",
     toType: "house",
-    toRooms: "",
-    toFloor: "",
+    toRooms: "1",
+    toFloor: "Parter",
     toElevator: false,
     moveDateMode: "exact",
     moveDate: "",
@@ -946,8 +946,8 @@ export default function HomeRequestForm({
           fromStreet: "",
           fromNumber: "",
           fromType: "house",
-          fromRooms: "",
-          fromFloor: "",
+          fromRooms: "1",
+          fromFloor: "Parter",
           fromElevator: false,
           toCounty: "",
           toCity: "",
@@ -955,8 +955,8 @@ export default function HomeRequestForm({
           toStreet: "",
           toNumber: "",
           toType: "house",
-          toRooms: "",
-          toFloor: "",
+          toRooms: "1",
+          toFloor: "Parter",
           toElevator: false,
           moveDateMode: "exact",
           moveDate: "",
@@ -1137,7 +1137,6 @@ export default function HomeRequestForm({
                       : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
                   }`}
                 >
-                  <option value="">-</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -1183,7 +1182,6 @@ export default function HomeRequestForm({
                     }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none"
                   >
-                    <option value="">-</option>
                     <option value="Demisol">Demisol</option>
                     <option value="Parter">Parter</option>
                     {[...Array(10)].map((_, i) => (
@@ -1320,7 +1318,6 @@ export default function HomeRequestForm({
                       : "border-gray-200 focus:border-sky-500 focus:ring-2 focus:ring-sky-500/20"
                   }`}
                 >
-                  <option value="">-</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -1366,7 +1363,6 @@ export default function HomeRequestForm({
                     }
                     className="w-full rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-sm focus:border-sky-500 focus:outline-none"
                   >
-                    <option value="">-</option>
                     <option value="Demisol">Demisol</option>
                     <option value="Parter">Parter</option>
                     {[...Array(10)].map((_, i) => (
