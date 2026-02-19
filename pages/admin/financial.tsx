@@ -26,6 +26,13 @@ export default function AdminFinancial() {
   const [creditAmount, setCreditAmount] = useState<number>(0);
   const [creditReason, setCreditReason] = useState("");
   const [creditLoading, setCreditLoading] = useState(false);
+  const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   useEffect(() => {
     if (!user) return;
@@ -52,7 +59,6 @@ export default function AdminFinancial() {
       });
       const json = await res.json();
       if (json.success) {
-        // Update local data
         setData((prev: any) => ({
           ...prev,
           topSpenders: prev.topSpenders.map((s: any) =>
@@ -60,15 +66,16 @@ export default function AdminFinancial() {
           ),
           totalCreditsInSystem: prev.totalCreditsInSystem + creditAmount,
         }));
+        const name = creditModal.name;
         setCreditModal(null);
         setCreditAmount(0);
         setCreditReason("");
-        alert(`Credite actualizate! Sold nou: ${json.data.newBalance}`);
+        setToast({ type: "success", message: `✅ ${creditAmount > 0 ? "+" : ""}${creditAmount} credite → ${name}. Sold nou: ${json.data.newBalance}` });
       } else {
-        alert(`Eroare: ${json.error}`);
+        setToast({ type: "error", message: json.error });
       }
     } catch {
-      alert("Eroare de rețea");
+      setToast({ type: "error", message: "Eroare de rețea" });
     } finally {
       setCreditLoading(false);
     }
@@ -102,6 +109,17 @@ export default function AdminFinancial() {
             </div>
             {data && <ExportButton data={data.recentTransactions || []} filename="tranzactii" />}
           </div>
+
+          {/* Toast notification */}
+          {toast && (
+            <div className={`fixed top-6 right-6 z-[60] flex items-center gap-3 rounded-xl px-5 py-3.5 shadow-lg transition-all ${
+              toast.type === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"
+            }`}>
+              <span className="text-lg">{toast.type === "success" ? "🎉" : "⚠️"}</span>
+              <span className="text-sm font-medium">{toast.message}</span>
+              <button onClick={() => setToast(null)} className="ml-2 rounded-full p-0.5 hover:bg-white/20 transition">✕</button>
+            </div>
+          )}
 
           {loading ? (
             <LoadingContainer><LoadingSpinner size="lg" color="purple" /></LoadingContainer>

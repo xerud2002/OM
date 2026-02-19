@@ -40,6 +40,13 @@ export default function AdminCompanyDetail() {
   const [creditAmount, setCreditAmount] = useState<number>(0);
   const [creditReason, setCreditReason] = useState("");
   const [creditLoading, setCreditLoading] = useState(false);
+  const [toast, setToast] = useState<{ type: "success" | "error"; message: string } | null>(null);
+
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => setToast(null), 4000);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   useEffect(() => {
     if (!id || !user) return;
@@ -59,8 +66,8 @@ export default function AdminCompanyDetail() {
   const m = data?.metrics;
 
   const handleCreditAdjust = async () => {
-    if (!creditAmount || creditAmount === 0) return alert("Introdu o sumă validă");
-    if (!creditReason || creditReason.trim().length < 3) return alert("Introdu un motiv (min 3 caractere)");
+    if (!creditAmount || creditAmount === 0) return setToast({ type: "error", message: "Introdu o sumă validă" });
+    if (!creditReason || creditReason.trim().length < 3) return setToast({ type: "error", message: "Introdu un motiv (min 3 caractere)" });
     setCreditLoading(true);
     try {
       const token = await user!.getIdToken();
@@ -71,7 +78,6 @@ export default function AdminCompanyDetail() {
       });
       const json = await res.json();
       if (json.success) {
-        // Update local data
         setData((prev: any) => ({
           ...prev,
           company: { ...prev.company, creditBalance: json.data.newBalance, credits: json.data.newBalance },
@@ -79,12 +85,12 @@ export default function AdminCompanyDetail() {
         setShowCreditModal(false);
         setCreditAmount(0);
         setCreditReason("");
-        alert(`Credite actualizate! Sold nou: ${json.data.newBalance}`);
+        setToast({ type: "success", message: `✅ ${creditAmount > 0 ? "+" : ""}${creditAmount} credite → Sold nou: ${json.data.newBalance}` });
       } else {
-        alert(`Eroare: ${json.error}`);
+        setToast({ type: "error", message: json.error });
       }
     } catch {
-      alert("Eroare de rețea");
+      setToast({ type: "error", message: "Eroare de rețea" });
     } finally {
       setCreditLoading(false);
     }
@@ -94,6 +100,17 @@ export default function AdminCompanyDetail() {
     <RequireRole allowedRole="admin">
       <DashboardLayout role="admin" user={dashboardUser}>
         <div className="space-y-6">
+          {/* Toast notification */}
+          {toast && (
+            <div className={`fixed top-6 right-6 z-[60] flex items-center gap-3 rounded-xl px-5 py-3.5 shadow-lg animate-in slide-in-from-top-2 transition-all ${
+              toast.type === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"
+            }`}>
+              <span className="text-lg">{toast.type === "success" ? "🎉" : "⚠️"}</span>
+              <span className="text-sm font-medium">{toast.message}</span>
+              <button onClick={() => setToast(null)} className="ml-2 rounded-full p-0.5 hover:bg-white/20 transition">✕</button>
+            </div>
+          )}
+
           <button onClick={() => router.push("/admin/companies")} className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-gray-700">
             <ArrowLeftIcon className="h-4 w-4" /> Înapoi la companii
           </button>
