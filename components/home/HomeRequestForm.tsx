@@ -1052,7 +1052,7 @@ export default function HomeRequestForm({
 
     // Validate step 6 (Detalii) before moving to step 7
     if (currentStep === 6) {
-      if (!form.details || form.details.trim().length < 50) {
+      if (!form.details || form.details.trim().length < 100) {
         setFieldErrors((prev) => ({ ...prev, details: true }));
         toast.error("Adaugă cel puțin 50 de caractere în câmpul de detalii.");
         return;
@@ -1772,7 +1772,7 @@ export default function HomeRequestForm({
           value={form.details || ""}
           onChange={(e) => {
             setForm((s) => ({ ...s, details: e.target.value }));
-            if (e.target.value.trim().length >= 50)
+            if (e.target.value.trim().length >= 100)
               setFieldErrors((prev) => {
                 const n = { ...prev };
                 delete n.details;
@@ -1780,7 +1780,7 @@ export default function HomeRequestForm({
               });
           }}
           rows={4}
-          minLength={50}
+          minLength={100}
           aria-invalid={!!fieldErrors.details}
           placeholder="Descrie ce trebuie mutat: mobilier, electrocasnice, cutii, obiecte fragile, acces dificil..."
           className={`w-full rounded-lg border bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
@@ -1792,12 +1792,12 @@ export default function HomeRequestForm({
         <div className="mt-1 flex items-center justify-between text-xs">
           <span
             className={`${
-              (form.details?.length || 0) < 50
+              (form.details?.length || 0) < 100
                 ? "text-red-500"
                 : "text-green-600"
             }`}
           >
-            {form.details?.length || 0}/50 caractere minim
+            {form.details?.length || 0}/100 caractere minim
           </span>
         </div>
       </div>
