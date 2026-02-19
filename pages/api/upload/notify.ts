@@ -50,7 +50,9 @@ export default async function handler(
     const ownsViaEmail =
       userEmail &&
       (requestData?.customerEmail?.toLowerCase() === userEmail ||
-        requestData?.guestEmail?.toLowerCase() === userEmail);
+        requestData?.guestEmail?.toLowerCase() === userEmail ||
+        requestData?.email?.toLowerCase() === userEmail ||
+        requestData?.contactEmail?.toLowerCase() === userEmail);
 
     if (!ownsViaId && !ownsViaEmail) {
       return res

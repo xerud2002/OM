@@ -15,6 +15,12 @@ import {
   CheckCircleIcon as CheckCircle,
   XMarkIcon as X,
   EnvelopeIcon as Mail,
+  TruckIcon,
+  ArchiveBoxIcon,
+  WrenchScrewdriverIcon,
+  TrashIcon,
+  ScissorsIcon,
+  InboxStackIcon,
 } from "@heroicons/react/24/outline";
 import type { FormShape } from "@/components/customer/RequestForm";
 import { logger } from "@/utils/logger";
@@ -249,7 +255,7 @@ const formatYMD = (d: Date) => {
 };
 
 const STORAGE_KEY = "homeRequestForm";
-const TOTAL_STEPS = 6;
+const TOTAL_STEPS = 7;
 
 // Inline Calendar Component
 function InlineCalendar({
@@ -1042,6 +1048,10 @@ export default function HomeRequestForm({
         toast.error("Selectează cel puțin un tip de serviciu.");
         return;
       }
+    }
+
+    // Validate step 6 (Detalii) before moving to step 7
+    if (currentStep === 6) {
       if (!form.details || form.details.trim().length < 50) {
         setFieldErrors((prev) => ({ ...prev, details: true }));
         toast.error("Adaugă cel puțin 50 de caractere în câmpul de detalii.");
@@ -1511,95 +1521,56 @@ export default function HomeRequestForm({
               key: "serviceMoving" as const,
               label: "Mutare Completă",
               desc: "Toată proprietatea",
+              icon: TruckIcon,
             },
             {
               key: "serviceTransportOnly" as const,
               label: "Mutare Parțială",
               desc: "Doar câteva lucruri",
+              icon: ArchiveBoxIcon,
             },
             {
               key: "servicePacking" as const,
               label: "Împachetare Lucruri",
               desc: "În cutii",
+              icon: InboxStackIcon,
             },
             {
               key: "serviceAssembly" as const,
               label: "Montaj / Dezmembrare",
               desc: "Mobilă",
+              icon: WrenchScrewdriverIcon,
             },
             {
               key: "serviceDisposal" as const,
               label: "Debarasare",
               desc: "Mobilă, lucruri",
+              icon: TrashIcon,
             },
             {
               key: "servicePackingMaterials" as const,
               label: "Materiale Împachetare",
               desc: "Cutii, scotch etc.",
+              icon: ScissorsIcon,
             },
           ].map((opt) => (
-            <label
+            <button
+              type="button"
               key={opt.key}
+              onClick={() => setForm((s) => ({ ...s, [opt.key]: !s[opt.key] }))}
               className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
                 form[opt.key]
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
               }`}
             >
-              <input
-                type="checkbox"
-                checked={!!form[opt.key]}
-                onChange={() =>
-                  setForm((s) => ({ ...s, [opt.key]: !s[opt.key] }))
-                }
-                className="h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
-              />
-              <span className="text-sm leading-tight text-gray-700">
+              <opt.icon className={`h-5 w-5 shrink-0 ${form[opt.key] ? "text-emerald-600" : "text-gray-400"}`} />
+              <span className="text-left text-sm leading-tight text-gray-700">
                 <span className="font-medium">{opt.label}</span>
                 <span className="block text-xs text-gray-500">{opt.desc}</span>
               </span>
-            </label>
+            </button>
           ))}
-        </div>
-      </div>
-
-      <div>
-        <label
-          className={`mb-1 block text-sm font-medium ${fieldErrors.details ? "text-red-600" : "text-gray-700"}`}
-        >
-          Detalii *
-        </label>
-        <textarea
-          value={form.details || ""}
-          onChange={(e) => {
-            setForm((s) => ({ ...s, details: e.target.value }));
-            if (e.target.value.trim().length >= 50)
-              setFieldErrors((prev) => {
-                const n = { ...prev };
-                delete n.details;
-                return n;
-              });
-          }}
-          rows={3}
-          minLength={50}
-          aria-invalid={!!fieldErrors.details}
-          placeholder="Descrie ce trebuie mutat: mobilier, electrocasnice, cutii, obiecte fragile, acces dificil..."
-          className={`w-full rounded-lg border bg-white px-3 py-1.5 text-sm focus:border-emerald-500 focus:outline-none ${
-            fieldErrors.details
-              ? "border-red-500 ring-2 ring-red-500/20"
-              : "border-gray-200"
-          }`}
-        />
-        <div className="mt-1 flex items-center justify-between text-xs">
-          <span
-            className={`${
-              (form.details?.length || 0) < 50
-                ? "text-red-500"
-                : "text-green-600"
-            }`}
-          >
-            {form.details?.length || 0}/50 caractere minim
-          </span>
         </div>
       </div>
     </div>
@@ -1779,8 +1750,62 @@ export default function HomeRequestForm({
     );
   };
 
-  // Step 6: Contact
+  // Step 6: Detalii
   const renderStep6 = () => (
+    <div className="space-y-4">
+      <div className="rounded-xl border border-gray-200 bg-white p-4">
+        <div className="mb-3 flex items-center gap-2">
+          <svg className="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          </svg>
+          <span className="font-semibold text-gray-800">Detalii mutare</span>
+        </div>
+        <p className="mb-3 text-xs text-gray-500">
+          Descrie cât mai detaliat ce trebuie mutat pentru oferte precise
+        </p>
+        <label
+          className={`mb-1 block text-sm font-medium ${fieldErrors.details ? "text-red-600" : "text-gray-700"}`}
+        >
+          Detalii *
+        </label>
+        <textarea
+          value={form.details || ""}
+          onChange={(e) => {
+            setForm((s) => ({ ...s, details: e.target.value }));
+            if (e.target.value.trim().length >= 50)
+              setFieldErrors((prev) => {
+                const n = { ...prev };
+                delete n.details;
+                return n;
+              });
+          }}
+          rows={4}
+          minLength={50}
+          aria-invalid={!!fieldErrors.details}
+          placeholder="Descrie ce trebuie mutat: mobilier, electrocasnice, cutii, obiecte fragile, acces dificil..."
+          className={`w-full rounded-lg border bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none ${
+            fieldErrors.details
+              ? "border-red-500 ring-2 ring-red-500/20"
+              : "border-gray-200"
+          }`}
+        />
+        <div className="mt-1 flex items-center justify-between text-xs">
+          <span
+            className={`${
+              (form.details?.length || 0) < 50
+                ? "text-red-500"
+                : "text-green-600"
+            }`}
+          >
+            {form.details?.length || 0}/50 caractere minim
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Step 7: Contact
+  const renderStep7 = () => (
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
@@ -1970,6 +1995,7 @@ export default function HomeRequestForm({
           {currentStep === 4 && renderStep4()}
           {currentStep === 5 && renderStep5()}
           {currentStep === 6 && renderStep6()}
+          {currentStep === 7 && renderStep7()}
         </div>
 
         {/* Navigation */}
