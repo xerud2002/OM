@@ -180,7 +180,7 @@ function LocationAutocomplete({
           aria-autocomplete="list"
           aria-invalid={hasError}
           aria-label={label || placeholder || "Caută oraș sau localitate"}
-          className={`w-full rounded-lg border bg-white px-3 py-2 pr-8 text-sm focus:outline-none ${
+          className={`w-full rounded-lg border bg-white px-3 py-1.5 pr-8 text-sm focus:outline-none ${
             hasError
               ? "border-red-500 ring-2 ring-red-500/20 focus:border-red-500 focus:ring-2 focus:ring-red-500/30"
               : "border-gray-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20"
@@ -207,7 +207,7 @@ function LocationAutocomplete({
       {showDropdown && (suggestions.length > 0 || isLoading) && (
         <div className="absolute z-50 mt-1 w-full rounded-lg border border-gray-200 bg-white shadow-lg">
           {isLoading ? (
-            <div className="px-3 py-2 text-sm text-gray-500" role="status">
+            <div className="px-3 py-2 text-xs text-gray-500" role="status">
               Se caută...
             </div>
           ) : (
@@ -224,7 +224,7 @@ function LocationAutocomplete({
                   role="option"
                   aria-selected={idx === activeIndex}
                   onClick={() => handleSelect(item)}
-                  className={`cursor-pointer px-3 py-2 text-sm flex items-center justify-between ${idx === activeIndex ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50"}`}
+                  className={`cursor-pointer px-3 py-2 text-xs flex items-center justify-between ${idx === activeIndex ? "bg-emerald-50 text-emerald-800" : "hover:bg-emerald-50"}`}
                 >
                   <span className="font-medium text-gray-800">{item.name}</span>
                   <span className="text-xs text-gray-500 ml-2">
@@ -1088,7 +1088,7 @@ export default function HomeRequestForm({
         {/* Details - appear after city is selected */}
         {form.fromCity && (
           <>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-[1.36fr_0.68fr_1.15fr] gap-2">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-600">
                   Tip *
@@ -1117,7 +1117,7 @@ export default function HomeRequestForm({
                 <label
                   className={`mb-1 block text-xs font-medium ${fieldErrors.fromRooms ? "text-red-600" : "text-gray-600"}`}
                 >
-                  Nr. Camere *
+                  Camere *
                 </label>
                 <select
                   value={form.fromRooms || ""}
@@ -1208,7 +1208,7 @@ export default function HomeRequestForm({
                       onClick={() =>
                         setForm((s) => ({ ...s, fromElevator: true }))
                       }
-                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      className={`flex-1 rounded-lg border py-1.5 text-xs font-medium transition ${
                         form.fromElevator === true
                           ? "border-emerald-500 bg-emerald-50 text-emerald-700"
                           : "border-gray-200 bg-white text-gray-600 hover:border-emerald-300"
@@ -1221,7 +1221,7 @@ export default function HomeRequestForm({
                       onClick={() =>
                         setForm((s) => ({ ...s, fromElevator: false }))
                       }
-                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      className={`flex-1 rounded-lg border py-1.5 text-xs font-medium transition ${
                         form.fromElevator === false
                           ? "border-red-500 bg-red-50 text-red-700"
                           : "border-gray-200 bg-white text-gray-600 hover:border-red-300"
@@ -1269,7 +1269,7 @@ export default function HomeRequestForm({
         {/* Details - appear after city is selected */}
         {form.toCity && (
           <>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-[1.36fr_0.68fr_1.15fr] gap-2">
               <div>
                 <label className="mb-1 block text-xs font-medium text-gray-600">
                   Tip *
@@ -1298,7 +1298,7 @@ export default function HomeRequestForm({
                 <label
                   className={`mb-1 block text-xs font-medium ${fieldErrors.toRooms ? "text-red-600" : "text-gray-600"}`}
                 >
-                  Nr. Camere *
+                  Camere *
                 </label>
                 <select
                   value={form.toRooms || ""}
@@ -1389,7 +1389,7 @@ export default function HomeRequestForm({
                       onClick={() =>
                         setForm((s) => ({ ...s, toElevator: true }))
                       }
-                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      className={`flex-1 rounded-lg border py-1.5 text-xs font-medium transition ${
                         form.toElevator === true
                           ? "border-sky-500 bg-sky-50 text-sky-700"
                           : "border-gray-200 bg-white text-gray-600 hover:border-sky-300"
@@ -1402,7 +1402,7 @@ export default function HomeRequestForm({
                       onClick={() =>
                         setForm((s) => ({ ...s, toElevator: false }))
                       }
-                      className={`flex-1 rounded-lg border py-1.5 text-sm font-medium transition ${
+                      className={`flex-1 rounded-lg border py-1.5 text-xs font-medium transition ${
                         form.toElevator === false
                           ? "border-red-500 bg-red-50 text-red-700"
                           : "border-gray-200 bg-white text-gray-600 hover:border-red-300"
