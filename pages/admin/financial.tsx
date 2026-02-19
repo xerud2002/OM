@@ -112,12 +112,14 @@ export default function AdminFinancial() {
 
           {/* Toast notification */}
           {toast && (
-            <div className={`fixed top-6 right-6 z-[60] flex items-center gap-3 rounded-xl px-5 py-3.5 shadow-lg transition-all ${
-              toast.type === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"
-            }`}>
-              <span className="text-lg">{toast.type === "success" ? "🎉" : "⚠️"}</span>
-              <span className="text-sm font-medium">{toast.message}</span>
-              <button onClick={() => setToast(null)} className="ml-2 rounded-full p-0.5 hover:bg-white/20 transition">✕</button>
+            <div className="fixed inset-0 z-[60] flex items-center justify-center pointer-events-none">
+              <div className={`pointer-events-auto flex items-center gap-3 rounded-2xl px-6 py-4 shadow-2xl transition-all ${
+                toast.type === "success" ? "bg-green-600 text-white" : "bg-red-600 text-white"
+              }`}>
+                <span className="text-2xl">{toast.type === "success" ? "🎉" : "⚠️"}</span>
+                <span className="text-base font-semibold">{toast.message}</span>
+                <button onClick={() => setToast(null)} className="ml-3 rounded-full p-1 hover:bg-white/20 transition">✕</button>
+              </div>
             </div>
           )}
 
