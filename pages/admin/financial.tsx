@@ -17,7 +17,6 @@ import {
   AdjustmentsHorizontalIcon,
 } from "@heroicons/react/24/outline";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, LineChart, Line } from "recharts";
-import { logAuditAction } from "@/components/admin/AuditLogger";
 
 export default function AdminFinancial() {
   const { user, dashboardUser } = useAuth();
@@ -61,15 +60,6 @@ export default function AdminFinancial() {
           ),
           totalCreditsInSystem: prev.totalCreditsInSystem + creditAmount,
         }));
-        await logAuditAction({
-          adminUid: user!.uid,
-          adminEmail: user!.email || "",
-          action: "manual_credit_adjustment",
-          targetType: "company",
-          targetId: creditModal.id,
-          details: `${creditAmount > 0 ? "+" : ""}${creditAmount} credite → ${creditModal.name}. Motiv: ${creditReason.trim()}`,
-          metadata: { amount: creditAmount, newBalance: json.data.newBalance },
-        });
         setCreditModal(null);
         setCreditAmount(0);
         setCreditReason("");

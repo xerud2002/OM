@@ -22,7 +22,6 @@ import {
   MinusCircleIcon,
 } from "@heroicons/react/24/outline";
 import LoadingSpinner, { LoadingContainer } from "@/components/ui/LoadingSpinner";
-import { logAuditAction } from "@/components/admin/AuditLogger";
 
 function fmtDate(ts: any) {
   if (!ts) return "-";
@@ -77,15 +76,6 @@ export default function AdminCompanyDetail() {
           ...prev,
           company: { ...prev.company, creditBalance: json.data.newBalance, credits: json.data.newBalance },
         }));
-        await logAuditAction({
-          adminUid: user!.uid,
-          adminEmail: user!.email || "",
-          action: "manual_credit_adjustment",
-          targetType: "company",
-          targetId: id as string,
-          details: `${creditAmount > 0 ? "+" : ""}${creditAmount} credite. Motiv: ${creditReason.trim()}`,
-          metadata: { amount: creditAmount, newBalance: json.data.newBalance },
-        });
         setShowCreditModal(false);
         setCreditAmount(0);
         setCreditReason("");
