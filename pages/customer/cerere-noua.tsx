@@ -13,6 +13,7 @@ import {
   CubeIcon,
   CameraIcon,
   LightBulbIcon,
+  HomeIcon,
 } from "@heroicons/react/24/outline";
 
 const HomeRequestForm = dynamic(
@@ -34,6 +35,11 @@ const HomeRequestForm = dynamic(
 );
 
 const navigation = [
+  {
+    name: "Ghid",
+    href: "/customer/dashboard?tab=welcome",
+    icon: HomeIcon,
+  },
   {
     name: "Cererile Mele",
     href: "/customer/dashboard",

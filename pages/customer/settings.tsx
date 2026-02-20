@@ -18,6 +18,7 @@ import {
   DocumentTextIcon,
   DocumentPlusIcon,
   Cog6ToothIcon,
+  HomeIcon,
   UserCircleIcon,
   BellIcon,
   ShieldCheckIcon,
@@ -27,6 +28,11 @@ import {
 } from "@heroicons/react/24/outline";
 
 const navigation = [
+  {
+    name: "Ghid",
+    href: "/customer/dashboard?tab=welcome",
+    icon: HomeIcon,
+  },
   {
     name: "Cererile Mele",
     href: "/customer/dashboard",

@@ -122,12 +122,12 @@ export default function RequestFullDetails({
             <div className="pl-7 sm:pl-0">
               <p className="text-sm sm:text-base font-bold text-gray-900 leading-snug">
                 {request.fromCity || request.fromCounty}
-                {request.fromCounty && request.fromCity && (
-                  <span className="text-gray-400 font-semibold">
-                    , {request.fromCounty}
-                  </span>
-                )}
               </p>
+              {request.fromCounty && (
+                <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wide">
+                  {request.fromCounty}
+                </p>
+              )}
               {request.fromAddress && (
                 <p className="mt-0.5 text-xs sm:text-sm text-gray-600">
                   {request.fromAddress}
@@ -197,12 +197,12 @@ export default function RequestFullDetails({
             <div className="pl-7 sm:pl-0">
               <p className="text-sm sm:text-base font-bold text-gray-900 leading-snug">
                 {request.toCity || request.toCounty}
-                {request.toCounty && request.toCity && (
-                  <span className="text-gray-400 font-semibold">
-                    , {request.toCounty}
-                  </span>
-                )}
               </p>
+              {request.toCounty && (
+                <p className="text-xs sm:text-sm font-semibold text-gray-400 uppercase tracking-wide">
+                  {request.toCounty}
+                </p>
+              )}
               {request.toAddress && (
                 <p className="mt-0.5 text-xs sm:text-sm text-gray-600">
                   {request.toAddress}
