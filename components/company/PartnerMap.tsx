@@ -96,7 +96,6 @@ export default function PartnerMap() {
           defaultZoom={7}
           gestureHandling="cooperative"
           disableDefaultUI
-          mapId="partner-map"
           style={{ width: "100%", height: "100%" }}
         >
           <CityMarkers />

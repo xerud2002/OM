@@ -1403,14 +1403,14 @@ export default function RequestsView({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4"
             onClick={() => setDetailRequest(null)}
           >
             <motion.div
               initial={{ scale: 0.95, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.95, opacity: 0, y: 20 }}
-              className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-4 sm:p-6 shadow-2xl"
+              className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl sm:rounded-2xl bg-white p-3 sm:p-6 shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button

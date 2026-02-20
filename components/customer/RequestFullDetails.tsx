@@ -101,6 +101,18 @@ export default function RequestFullDetails({
         <div className="h-px flex-1 bg-gray-100"></div>
       </div>
 
+      {/* Route Map */}
+      {request.fromCity && request.toCity && (
+        <RouteMap
+          fromCity={request.fromCity}
+          fromCounty={request.fromCounty}
+          toCity={request.toCity}
+          toCounty={request.toCounty}
+          companyCity={companyCity}
+          companyCounty={companyCounty}
+        />
+      )}
+
       {/* Route Section */}
       <div className="rounded-xl sm:rounded-2xl border border-gray-100 bg-white p-3 sm:p-5 shadow-sm">
         <div className="mb-3 sm:mb-4 flex items-center gap-2">
@@ -256,18 +268,6 @@ export default function RequestFullDetails({
           </div>
         </div>
       </div>
-
-      {/* Route Map */}
-      {request.fromCity && request.toCity && (
-        <RouteMap
-          fromCity={request.fromCity}
-          fromCounty={request.fromCounty}
-          toCity={request.toCity}
-          toCounty={request.toCounty}
-          companyCity={companyCity}
-          companyCounty={companyCounty}
-        />
-      )}
 
       {/* Info Grid */}
       <div className="grid grid-cols-2 gap-3">

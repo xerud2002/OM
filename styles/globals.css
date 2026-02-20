@@ -92,6 +92,11 @@ select:focus {
   animation: fadeIn 0.5s ease-in-out forwards;
 }
 
+@keyframes gleam {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;

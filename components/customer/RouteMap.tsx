@@ -55,7 +55,7 @@ function DirectionsRenderer({
       map,
       suppressMarkers: true,
       polylineOptions: {
-        strokeColor: "#2563eb",
+        strokeColor: "#eab308",
         strokeOpacity: 0.85,
         strokeWeight: 5,
       },
@@ -100,8 +100,8 @@ function DirectionsRenderer({
                 zIndex: 10,
               });
 
-            makeMarker(leg.start_location, "A", "#2563eb"); // blue
-            makeMarker(leg.end_location, "B", "#059669"); // green
+            makeMarker(leg.start_location, "A", "#eab308"); // yellow
+            makeMarker(leg.end_location, "B", "#2563eb"); // blue
 
             stableOnResult({
               distance: leg.distance?.text || "",
@@ -127,12 +127,13 @@ function DirectionsRenderer({
 /* ------------------------------------------------------------------ */
 /*  Company pin on the map + dashed line to pickup (A)                */
 /* ------------------------------------------------------------------ */
-function CompanyMarker({ address, originAddress }: { address: string; originAddress: string }) {
+function CompanyMarker({ address, originAddress, destAddress }: { address: string; originAddress: string; destAddress: string }) {
   const map = useMap();
   const routesLib = useMapsLibrary("routes");
   const geocodingLib = useMapsLibrary("geocoding");
   const markerRef = useRef<google.maps.Marker | null>(null);
   const rendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
+  const returnRendererRef = useRef<google.maps.DirectionsRenderer | null>(null);
 
   useEffect(() => {
     if (!map || !geocodingLib || !routesLib || !address) return;
@@ -168,7 +169,7 @@ function CompanyMarker({ address, originAddress }: { address: string; originAddr
         title: "Sediu firmă",
         icon: {
           path: vanPath,
-          fillColor: "#059669",   // emerald-600
+          fillColor: "#dc2626",   // red-600
           fillOpacity: 1,
           strokeColor: "#fff",
           strokeWeight: 1.5,
@@ -185,7 +186,7 @@ function CompanyMarker({ address, originAddress }: { address: string; originAddr
         suppressMarkers: true,
         preserveViewport: true,
         polylineOptions: {
-          strokeColor: "#059669",   // emerald-600
+          strokeColor: "#dc2626",   // red-600
           strokeOpacity: 0.6,
           strokeWeight: 4,
         },
@@ -206,13 +207,40 @@ function CompanyMarker({ address, originAddress }: { address: string; originAddr
           }
         },
       );
+
+      // Return route: B (destination) back to company — yellow
+      const returnRenderer = new routesLib.DirectionsRenderer({
+        map,
+        suppressMarkers: true,
+        preserveViewport: true,
+        polylineOptions: {
+          strokeColor: "#2563eb",   // blue-600
+          strokeOpacity: 0.7,
+          strokeWeight: 4,
+        },
+      });
+      returnRendererRef.current = returnRenderer;
+
+      svc.route(
+        {
+          origin: destAddress,
+          destination: address,
+          travelMode: google.maps.TravelMode.DRIVING,
+        },
+        (result, s) => {
+          if (s === google.maps.DirectionsStatus.OK && result) {
+            returnRenderer.setDirections(result);
+          }
+        },
+      );
     });
 
     return () => {
       if (markerRef.current) markerRef.current.setMap(null);
       if (rendererRef.current) rendererRef.current.setMap(null);
+      if (returnRendererRef.current) returnRendererRef.current.setMap(null);
     };
-  }, [map, geocodingLib, routesLib, address, originAddress]);
+  }, [map, geocodingLib, routesLib, address, originAddress, destAddress]);
 
   return null;
 }
@@ -270,19 +298,19 @@ function CompanyDistances({
     : null;
 
   return (
-    <div className="flex items-center justify-center gap-4 border-t border-gray-100 bg-gray-50/60 px-3 py-2.5 text-xs text-gray-600">
+    <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4 border-t border-gray-100 bg-gray-50/60 px-3 py-2 sm:py-2.5 text-[11px] sm:text-xs text-gray-600">
       {toPickup && (
         <span className="inline-flex items-center gap-1 whitespace-nowrap">
-          <MapPinIcon className="h-3.5 w-3.5 text-orange-500 shrink-0" />
+          <MapPinIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-orange-500 shrink-0" />
           Deplasare la client: <strong className="text-gray-800">{toPickup.text}</strong>
         </span>
       )}
       {toPickup && roundTrip !== null && (
-        <span className="text-gray-300">•</span>
+        <span className="hidden sm:inline text-gray-300">•</span>
       )}
       {roundTrip !== null && (
         <span className="inline-flex items-center gap-1 whitespace-nowrap">
-          <ArrowPathIcon className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+          <ArrowPathIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-500 shrink-0" />
           Dus-întors total: <strong className="text-gray-800">{roundTrip} km</strong>
         </span>
       )}
@@ -322,13 +350,12 @@ export default function RouteMap({
       {/* Map */}
       {/* Hide Google logo & Terms links */}
       <style>{`.route-map-wrap .gm-style a[href*="google"], .route-map-wrap .gm-style a[href*="terms"], .route-map-wrap .gm-style .gmnoscreen, .route-map-wrap .gm-style-cc { display:none!important; } .route-map-wrap .gm-style img[alt="Google"] { display:none!important; }`}</style>
-      <div className="route-map-wrap h-80 sm:h-96">
+      <div className="route-map-wrap h-56 sm:h-96">
           <Map
             defaultCenter={{ lat: 45.9432, lng: 24.9668 }} // Romania center
             defaultZoom={7}
             gestureHandling="cooperative"
             disableDefaultUI
-            mapId="route-map"
             style={{ width: "100%", height: "100%" }}
           >
             <DirectionsRenderer
@@ -344,37 +371,38 @@ export default function RouteMap({
                 }
               }}
             />
-            {companyLoc && <CompanyMarker address={companyLoc} originAddress={origin} />}
+            {companyLoc && <CompanyMarker address={companyLoc} originAddress={origin} destAddress={destination} />}
           </Map>
       </div>
 
       {/* Info banner */}
       {info && (
-        <div className="flex items-center gap-3 bg-linear-to-r from-blue-50 to-emerald-50 px-4 py-3 border-t border-gray-100">
-          <TruckIcon className="h-5 w-5 text-blue-600 shrink-0" />
-          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm">
+        <div className="flex items-center gap-2 sm:gap-3 bg-linear-to-r from-blue-50 to-emerald-50 px-3 sm:px-4 py-2 sm:py-3 border-t border-gray-100">
+          <TruckIcon className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600 shrink-0" />
+          <div className="flex flex-wrap items-center gap-x-2 sm:gap-x-4 gap-y-0.5 text-xs sm:text-sm">
             <span className="font-semibold text-gray-900">
               {info.distance}
             </span>
             <span className="text-gray-400">•</span>
             <span className="text-gray-600">
-              ~{info.duration} cu mașina
+              ~{info.duration}
             </span>
           </div>
           <a
             href={
               companyLoc
-                ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(companyLoc)}&waypoints=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=driving`
+                ? `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(companyLoc)}&waypoints=${encodeURIComponent(origin)}|${encodeURIComponent(destination)}&destination=${encodeURIComponent(companyLoc)}&travelmode=driving`
                 : `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin)}&destination=${encodeURIComponent(destination)}&travelmode=driving`
             }
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-auto inline-flex items-center gap-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 text-xs font-semibold shadow-sm transition-colors whitespace-nowrap"
+            className="group relative ml-auto inline-flex items-center gap-1 sm:gap-1.5 overflow-hidden rounded-lg bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-semibold shadow-sm transition-colors whitespace-nowrap"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5">
+            <span className="pointer-events-none absolute inset-0 -translate-x-full bg-linear-to-r from-transparent via-white/30 to-transparent group-hover:animate-[gleam_1s_ease-in-out] transition-transform" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="h-3.5 w-3.5 relative">
               <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 010-5 2.5 2.5 0 010 5z"/>
             </svg>
-            Navighez
+            <span className="relative">Navighează</span>
           </a>
         </div>
       )}

@@ -882,6 +882,7 @@ export default function CustomerDashboard() {
                             offer={offer}
                             requestId={selectedRequestId!}
                             index={idx}
+                            budgetEstimate={selectedRequest?.budgetEstimate}
                             onAccept={(rId, oId) =>
                               setConfirmAction({
                                 type: "accept",
@@ -986,14 +987,14 @@ export default function CustomerDashboard() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-2 sm:p-4"
               onClick={() => setDetailModalRequestId(null)}
             >
               <motion.div
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-4 sm:p-6 shadow-2xl"
+                className="relative max-h-[90vh] w-full max-w-2xl overflow-y-auto rounded-xl sm:rounded-2xl bg-white p-3 sm:p-6 shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -1225,6 +1226,7 @@ function OfferCard({
   offer,
   requestId,
   index,
+  budgetEstimate,
   onAccept,
   onDecline,
   onChat,
@@ -1234,6 +1236,7 @@ function OfferCard({
   offer: Offer;
   requestId: string;
   index: number;
+  budgetEstimate?: number;
   onAccept: (reqId: string, offerId: string) => void;
   onDecline: (reqId: string, offerId: string) => void;
   onChat: () => void;
@@ -1347,9 +1350,23 @@ function OfferCard({
             </span>
           )}
           {isDeclined && (
-            <span className="mt-1 inline-block rounded-full bg-gray-100 px-3 py-0.5 text-xs font-semibold text-gray-500">
-              Refuzată
-            </span>
+            <div className="mt-1 flex items-center justify-center gap-2 flex-wrap">
+              <span className="inline-block rounded-full bg-gray-100 px-3 py-0.5 text-xs font-semibold text-gray-500">
+                Refuzată
+              </span>
+              {budgetEstimate && (
+                <span className="inline-block rounded-full bg-blue-50 px-3 py-0.5 text-xs font-semibold text-blue-600">
+                  Buget: {budgetEstimate} lei
+                </span>
+              )}
+            </div>
+          )}
+          {!isAccepted && !isDeclined && budgetEstimate && (
+            <div className="mt-1">
+              <span className="inline-block rounded-full bg-blue-50 px-3 py-0.5 text-xs font-semibold text-blue-600">
+                Buget mutare: {budgetEstimate} lei
+              </span>
+            </div>
           )}
         </div>
 
