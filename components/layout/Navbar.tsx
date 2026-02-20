@@ -151,13 +151,14 @@ export default function Navbar() {
           <div className="mx-1 h-5 w-px bg-gray-200" />
 
           {!user ? (
-            <button
-              onClick={handleGetOffers}
-              aria-label="Obține Oferte Gratuite"
+            <Link
+              href="/customer/auth"
+              aria-label="Contul Meu"
               className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md active:scale-[0.98]"
             >
-              Obține Oferte
-            </button>
+              <User className="h-4 w-4" />
+              Contul Meu
+            </Link>
           ) : (
             <div className="flex items-center gap-2">
               {/* Smart Dashboard Link */}
@@ -189,12 +190,13 @@ export default function Navbar() {
         {/* === MOBILE: CTA + HAMBURGER === */}
         <div className="flex items-center gap-2 lg:hidden">
           {!user && (
-            <button
-              onClick={handleGetOffers}
-              className="rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 sm:text-sm"
+            <Link
+              href="/customer/auth"
+              className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 sm:text-sm"
             >
-              Obține Oferte
-            </button>
+              <User className="h-3.5 w-3.5" />
+              Contul Meu
+            </Link>
           )}
           <button
             onClick={() => setIsOpen((prev) => !prev)}
