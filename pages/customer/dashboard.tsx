@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useMemo } from "react";
+import { useEffect, useState, useRef, useMemo, useCallback } from "react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
@@ -6,7 +6,7 @@ import { useRouter } from "next/router";
 import { logger } from "@/utils/logger";
 import RequireRole from "@/components/auth/RequireRole";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import CustomerWelcome from "@/components/customer/CustomerWelcome";
+import ConfirmModal from "@/components/ConfirmModal";
 import CustomerNotificationBell from "@/components/customer/CustomerNotificationBell";
 import {
   InboxIcon,
@@ -24,6 +24,7 @@ import {
   Cog6ToothIcon,
   DocumentTextIcon,
   FunnelIcon,
+  HomeIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import type { User } from "firebase/auth";
@@ -80,13 +81,25 @@ const HomeRequestForm = dynamic(
   },
 );
 
+const CustomerWelcome = dynamic(
+  () => import("@/components/customer/CustomerWelcome"),
+  {
+    loading: () => (
+      <div className="animate-pulse space-y-4 p-6">
+        <div className="h-8 w-48 rounded bg-gray-200" />
+        <div className="h-4 w-64 rounded bg-gray-100" />
+      </div>
+    ),
+    ssr: false,
+  },
+);
+
 // Status label mapping
 const STATUS_LABELS: Record<string, string> = {
   active: "Activă",
   closed: "Finalizată",
   accepted: "Acceptată",
   paused: "Pauză",
-  cancelled: "Anulată",
 };
 const getStatusLabel = (status?: string) =>
   STATUS_LABELS[status || ""] || status || "Activă";
@@ -95,6 +108,7 @@ export default function CustomerDashboard() {
   const router = useRouter();
   const [user, setUser] = useState<User | null>(null);
   const [requests, setRequests] = useState<MovingRequest[]>([]);
+  const [loadingRequests, setLoadingRequests] = useState(true);
   const [offersByRequest, setOffersByRequest] = useState<
     Record<string, Offer[]>
   >({});
@@ -135,6 +149,7 @@ export default function CustomerDashboard() {
         offerUnsubsRef.current = [];
         setRequests([]);
         setOffersByRequest({});
+        setLoadingRequests(false);
         return;
       }
 
@@ -181,6 +196,7 @@ export default function CustomerDashboard() {
             (d) => ({ id: d.id, ...d.data() }) as MovingRequest,
           );
           setRequests(reqs);
+          setLoadingRequests(false);
 
           // Clean up previous offer subscriptions
           offerUnsubsRef.current.forEach((unsub) => unsub());
@@ -211,6 +227,7 @@ export default function CustomerDashboard() {
           logger.error("Error loading requests", err);
           // Clear requests on error to show empty state
           setRequests([]);
+          setLoadingRequests(false);
         },
       );
     });
@@ -244,10 +261,19 @@ export default function CustomerDashboard() {
           const targetOffer = offers.find((o) => o.id === openChatOfferId);
           if (targetOffer) {
             handleOpenChat(targetOffer);
+          } else {
+            // Offers not loaded yet — store pending chat to open later
+            pendingChatRef.current = {
+              requestId: queryRequestId,
+              offerId: openChatOfferId,
+            };
           }
         }
-        // Clear the query parameter from URL without refresh
-        router.replace("/customer/dashboard", undefined, { shallow: true });
+        // Clear query params from URL, preserving the active tab
+        const tab = (router.query.tab as string) || "requests";
+        router.replace(`/customer/dashboard?tab=${tab}`, undefined, {
+          shallow: true,
+        });
         return;
       }
     }
@@ -321,7 +347,7 @@ export default function CustomerDashboard() {
   }, [selectedOffers]);
 
   // Track unread chat messages
-  const requestIdsList = requests.map((r) => r.id);
+  const requestIdsList = useMemo(() => requests.map((r) => r.id), [requests]);
   const { unreadOffers, markRead } = useUnreadMessages(
     requestIdsList,
     offersByRequest,
@@ -336,6 +362,31 @@ export default function CustomerDashboard() {
 
   // Total unread across all requests
   const totalUnreadChats = unreadOffers.size;
+
+  // Pending chat ref — deferred open when offers load
+  const pendingChatRef = useRef<{ requestId: string; offerId: string } | null>(
+    null,
+  );
+
+  // Resolve pending chat once offers arrive
+  useEffect(() => {
+    if (!pendingChatRef.current) return;
+    const { requestId: pReqId, offerId: pOfferId } = pendingChatRef.current;
+    const offers = offersByRequest[pReqId] || [];
+    const target = offers.find((o) => o.id === pOfferId);
+    if (target) {
+      pendingChatRef.current = null;
+      handleOpenChat(target);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [offersByRequest]);
+
+  // Confirmation modal state for accept/decline
+  const [confirmAction, setConfirmAction] = useState<{
+    type: "accept" | "decline";
+    requestId: string;
+    offerId: string;
+  } | null>(null);
 
   // Accept/Decline handlers
   const handleAccept = async (
@@ -462,10 +513,17 @@ export default function CustomerDashboard() {
     }
   };
 
+  const activeTab = (router.query.tab as string) || "requests";
+
   const navigation = [
     {
+      name: "Ghid",
+      href: "/customer/dashboard?tab=welcome",
+      icon: HomeIcon,
+    },
+    {
       name: "Cererile Mele",
-      href: "/customer/dashboard",
+      href: "/customer/dashboard?tab=requests",
       icon: DocumentTextIcon,
       badge: requests.length,
     },
@@ -490,6 +548,7 @@ export default function CustomerDashboard() {
             : undefined
         }
         navigation={navigation}
+        activeTab={activeTab}
         showStats={false}
         headerActions={
           user?.uid ? (
@@ -500,8 +559,35 @@ export default function CustomerDashboard() {
           ) : null
         }
       >
-        {requests.length === 0 ? (
-          // Welcome state for new users - all content is in CustomerWelcome
+        {activeTab === "welcome" ? (
+          <CustomerWelcome userName={user?.displayName} />
+        ) : loadingRequests ? (
+          // Skeleton while Firestore data loads
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-12 items-start animate-pulse">
+            <div className="md:col-span-5 lg:col-span-4 xl:col-span-3">
+              <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-4 space-y-3">
+                <div className="h-10 rounded-xl bg-gray-100" />
+                <div className="h-8 rounded-lg bg-gray-50" />
+                <div className="space-y-2">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-20 rounded-xl bg-gray-50" />
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div className="md:col-span-7 lg:col-span-8 xl:col-span-9">
+              <div className="rounded-2xl border border-gray-100 bg-white shadow-sm p-6 space-y-4">
+                <div className="h-6 w-40 rounded bg-gray-100" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                  {[1, 2, 3].map((i) => (
+                    <div key={i} className="h-52 rounded-xl bg-gray-50" />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        ) : requests.length === 0 ? (
+          // No requests yet — show welcome with hint
           <CustomerWelcome userName={user?.displayName} />
         ) : (
           // Main content grid
@@ -795,8 +881,20 @@ export default function CustomerDashboard() {
                             offer={offer}
                             requestId={selectedRequestId!}
                             index={idx}
-                            onAccept={handleAccept}
-                            onDecline={handleDecline}
+                            onAccept={(rId, oId) =>
+                              setConfirmAction({
+                                type: "accept",
+                                requestId: rId,
+                                offerId: oId,
+                              })
+                            }
+                            onDecline={(rId, oId) =>
+                              setConfirmAction({
+                                type: "decline",
+                                requestId: rId,
+                                offerId: oId,
+                              })
+                            }
                             onChat={() => handleOpenChat(offer)}
                             hasUnread={unreadOffers.has(offer.id)}
                             rating={companyRatings[offer.companyId]}
@@ -1023,6 +1121,33 @@ export default function CustomerDashboard() {
             </motion.div>
           )}
         </AnimatePresence>
+        {/* Accept / Decline confirmation modal */}
+        <ConfirmModal
+          isOpen={!!confirmAction}
+          onClose={() => setConfirmAction(null)}
+          onConfirm={() => {
+            if (!confirmAction) return;
+            const { type, requestId, offerId } = confirmAction;
+            setConfirmAction(null);
+            if (type === "accept") handleAccept(requestId, offerId);
+            else handleDecline(requestId, offerId);
+          }}
+          title={
+            confirmAction?.type === "accept"
+              ? "Acceptă oferta"
+              : "Refuză oferta"
+          }
+          message={
+            confirmAction?.type === "accept"
+              ? "Ești sigur că vrei să accepți această ofertă? Celelalte oferte vor fi refuzate automat."
+              : "Ești sigur că vrei să refuzi această ofertă? Acțiunea este ireversibilă."
+          }
+          confirmText={
+            confirmAction?.type === "accept" ? "Da, acceptă" : "Da, refuză"
+          }
+          cancelText="Anulează"
+          variant={confirmAction?.type === "accept" ? "warning" : "danger"}
+        />
       </DashboardLayout>
     </RequireRole>
   );
@@ -1043,13 +1168,6 @@ const CONTACT_STYLES = {
       "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-emerald-200 bg-emerald-50 p-2 sm:p-2.5 text-emerald-700 transition hover:bg-emerald-100 active:bg-emerald-200",
     email:
       "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-blue-200 bg-blue-50 p-2 sm:p-2.5 text-blue-700 transition hover:bg-blue-100 active:bg-blue-200",
-  },
-  declined: {
-    chat: "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
-    phone:
-      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-emerald-300 hover:bg-emerald-50 hover:text-emerald-700 active:bg-emerald-100",
-    email:
-      "inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-gray-200 bg-white p-2 sm:p-2.5 text-gray-500 transition hover:border-blue-300 hover:bg-blue-50 hover:text-blue-700 active:bg-blue-100",
   },
 } as const;
 
@@ -1115,8 +1233,8 @@ function OfferCard({
   offer: Offer;
   requestId: string;
   index: number;
-  onAccept: (reqId: string, offerId: string) => Promise<void>;
-  onDecline: (reqId: string, offerId: string) => Promise<void>;
+  onAccept: (reqId: string, offerId: string) => void;
+  onDecline: (reqId: string, offerId: string) => void;
   onChat: () => void;
   hasUnread?: boolean;
   rating?: { averageRating: number; totalReviews: number };
