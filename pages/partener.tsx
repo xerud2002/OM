@@ -1,9 +1,17 @@
 import Head from "next/head";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import Layout from "@/components/layout/Layout";
 import { logger } from "@/utils/logger";
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
+
+const PartnerMap = dynamic(() => import("@/components/company/PartnerMap"), {
+  ssr: false,
+  loading: () => (
+    <div className="h-72 sm:h-96 w-full animate-pulse rounded-2xl bg-gray-100" />
+  ),
+});
 import {
   CheckCircleIcon as CheckCircle,
   UsersIcon as Users,
@@ -601,6 +609,26 @@ export default function PartenerPage({
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ═══════════ MAP SECTION ═══════════ */}
+      <section className="border-b border-gray-100 bg-linear-to-b from-gray-50 to-white py-14 sm:py-16">
+        <div className="mx-auto max-w-6xl px-4">
+          <div className="mb-8 text-center">
+            <h2 className="text-2xl font-extrabold text-slate-900 sm:text-3xl">
+              Acoperire{" "}
+              <span className="bg-linear-to-r from-emerald-600 to-teal-500 bg-clip-text text-transparent">
+                Națională
+              </span>
+            </h2>
+            <p className="mt-2 text-base text-slate-500 sm:text-lg">
+              Primești cereri de mutare din toată România
+            </p>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-gray-200 shadow-lg">
+            <PartnerMap />
           </div>
         </div>
       </section>
