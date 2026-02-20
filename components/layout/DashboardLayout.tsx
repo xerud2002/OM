@@ -86,6 +86,7 @@ interface NavItem {
   href: string;
   icon: React.ComponentType<{ className?: string }>;
   current?: boolean;
+  onClick?: () => void;
 }
 
 interface DashboardLayoutProps {
@@ -453,28 +454,46 @@ export default function DashboardLayout({
                       <li>
                         <ul role="list" className="space-y-1">
                           {navWithCurrent.map((item) => {
+                            const navClass = `group flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
+                              item.current
+                                ? NAV_ACTIVE_STYLES[role].container
+                                : "text-gray-600 hover:bg-gray-50"
+                            }`;
+                            const navContent = (
+                              <>
+                                <item.icon
+                                  className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400"}`}
+                                  aria-hidden="true"
+                                />
+                                <span className="flex-1">{item.name}</span>
+                                {adminBadges[item.href.split("?")[0]] > 0 && (
+                                  <span className="ml-auto inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
+                                    {adminBadges[item.href.split("?")[0]]}
+                                  </span>
+                                )}
+                              </>
+                            );
                             return (
                               <li key={item.name}>
-                                <Link
-                                  href={item.href}
-                                  onClick={() => setSidebarOpen(false)}
-                                  className={`group flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium ${
-                                    item.current
-                                      ? NAV_ACTIVE_STYLES[role].container
-                                      : "text-gray-600 hover:bg-gray-50"
-                                  }`}
-                                >
-                                  <item.icon
-                                    className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400"}`}
-                                    aria-hidden="true"
-                                  />
-                                  <span className="flex-1">{item.name}</span>
-                                  {adminBadges[item.href.split("?")[0]] > 0 && (
-                                    <span className="ml-auto inline-flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white">
-                                      {adminBadges[item.href.split("?")[0]]}
-                                    </span>
-                                  )}
-                                </Link>
+                                {item.onClick ? (
+                                  <button
+                                    onClick={() => {
+                                      item.onClick!();
+                                      setSidebarOpen(false);
+                                    }}
+                                    className={`w-full text-left ${navClass}`}
+                                  >
+                                    {navContent}
+                                  </button>
+                                ) : (
+                                  <Link
+                                    href={item.href}
+                                    onClick={() => setSidebarOpen(false)}
+                                    className={navClass}
+                                  >
+                                    {navContent}
+                                  </Link>
+                                )}
                               </li>
                             );
                           })}
@@ -550,37 +569,53 @@ export default function DashboardLayout({
               <li>
                 <ul role="list" className="space-y-1">
                   {navWithCurrent.map((item) => {
+                    const deskClass = `group relative flex items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium transition-all lg:justify-start lg:px-3 ${
+                      item.current
+                        ? `${NAV_ACTIVE_STYLES[role].container} ${NAV_ACTIVE_STYLES[role].desktopExtra}`
+                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    }`;
+                    const deskContent = (
+                      <>
+                        <span className="relative">
+                          <item.icon
+                            className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400 group-hover:text-gray-600"}`}
+                            aria-hidden="true"
+                          />
+                          {/* Dot badge on collapsed tablet sidebar */}
+                          {adminBadges[item.href.split("?")[0]] > 0 && (
+                            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white lg:hidden" />
+                          )}
+                        </span>
+                        <span className="hidden flex-1 lg:inline">
+                          {item.name}
+                        </span>
+                        {/* Number badge on expanded desktop sidebar */}
+                        {adminBadges[item.href.split("?")[0]] > 0 && (
+                          <span className="ml-auto hidden h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white lg:inline-flex">
+                            {adminBadges[item.href.split("?")[0]]}
+                          </span>
+                        )}
+                      </>
+                    );
                     return (
                       <li key={item.name}>
-                        <Link
-                          href={item.href}
-                          title={item.name}
-                          className={`group relative flex items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium transition-all lg:justify-start lg:px-3 ${
-                            item.current
-                              ? `${NAV_ACTIVE_STYLES[role].container} ${NAV_ACTIVE_STYLES[role].desktopExtra}`
-                              : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
-                          }`}
-                        >
-                          <span className="relative">
-                            <item.icon
-                              className={`h-5 w-5 shrink-0 ${item.current ? NAV_ACTIVE_STYLES[role].icon : "text-gray-400 group-hover:text-gray-600"}`}
-                              aria-hidden="true"
-                            />
-                            {/* Dot badge on collapsed tablet sidebar */}
-                            {adminBadges[item.href.split("?")[0]] > 0 && (
-                              <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white lg:hidden" />
-                            )}
-                          </span>
-                          <span className="hidden flex-1 lg:inline">
-                            {item.name}
-                          </span>
-                          {/* Number badge on expanded desktop sidebar */}
-                          {adminBadges[item.href.split("?")[0]] > 0 && (
-                            <span className="ml-auto hidden h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-red-500 px-1.5 text-[10px] font-bold text-white lg:inline-flex">
-                              {adminBadges[item.href.split("?")[0]]}
-                            </span>
-                          )}
-                        </Link>
+                        {item.onClick ? (
+                          <button
+                            onClick={() => item.onClick!()}
+                            title={item.name}
+                            className={`w-full text-left ${deskClass}`}
+                          >
+                            {deskContent}
+                          </button>
+                        ) : (
+                          <Link
+                            href={item.href}
+                            title={item.name}
+                            className={deskClass}
+                          >
+                            {deskContent}
+                          </Link>
+                        )}
                       </li>
                     );
                   })}

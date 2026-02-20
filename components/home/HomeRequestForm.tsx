@@ -1803,8 +1803,12 @@ export default function HomeRequestForm({
         <textarea
           value={form.details || ""}
           onChange={(e) => {
-            setForm((s) => ({ ...s, details: e.target.value }));
-            if (e.target.value.trim().length >= 100)
+            // Break words longer than 25 characters
+            const sanitized = e.target.value.replace(/\S{26,}/g, (match) =>
+              match.match(/.{1,25}/g)!.join(" "),
+            );
+            setForm((s) => ({ ...s, details: sanitized }));
+            if (sanitized.trim().length >= 100)
               setFieldErrors((prev) => {
                 const n = { ...prev };
                 delete n.details;

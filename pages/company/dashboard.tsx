@@ -128,7 +128,7 @@ export default function CompanyDashboard() {
           setCompanyData(data);
           setCompanyName(data?.companyName || "");
           setCompanyLogo(data?.logoUrl || null);
-          
+
           // Show onboarding wizard if not completed
           if (data?.onboardingCompleted === false) {
             setShowOnboarding(true);
@@ -276,7 +276,9 @@ export default function CompanyDashboard() {
       setOffers((prev) => prev.filter((o) => o.id !== offer.id));
     } catch (e: unknown) {
       logger.error("Failed to withdraw offer", e);
-      setOfferError(e instanceof Error ? e.message : "Eroare la retragerea ofertei.");
+      setOfferError(
+        e instanceof Error ? e.message : "Eroare la retragerea ofertei.",
+      );
     }
   }
 
@@ -287,6 +289,12 @@ export default function CompanyDashboard() {
 
   // Navigation with dynamic current tab
   const navigation = [
+    {
+      name: "Ghid de start",
+      href: "#onboarding",
+      icon: RocketLaunchIcon,
+      onClick: () => setShowOnboarding(true),
+    },
     {
       name: "Cereri Disponibile",
       href: "/company/dashboard?tab=requests",
@@ -309,14 +317,6 @@ export default function CompanyDashboard() {
   // Header actions (credits + notifications)
   const headerActions = (
     <div className="flex items-center gap-3">
-      <button
-        onClick={() => setShowOnboarding(true)}
-        title="Ghid de start"
-        className="flex items-center gap-1.5 rounded-lg border border-emerald-200 bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 transition hover:bg-emerald-100"
-      >
-        <RocketLaunchIcon className="h-4 w-4" />
-        <span className="hidden sm:inline">Ghid de start</span>
-      </button>
       {company && <CreditBalance companyId={company.uid} />}
     </div>
   );
@@ -341,7 +341,7 @@ export default function CompanyDashboard() {
           onSkip={() => setShowOnboarding(false)}
         />
       )}
-      
+
       <DashboardLayout
         role="company"
         user={
@@ -438,7 +438,8 @@ export default function CompanyDashboard() {
                     className={`flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-md ${
                       offer.status === "accepted"
                         ? "border-emerald-200"
-                        : offer.status === "rejected" || offer.status === "declined"
+                        : offer.status === "rejected" ||
+                            offer.status === "declined"
                           ? "border-gray-200 opacity-70"
                           : "border-gray-200"
                     }`}
@@ -448,7 +449,8 @@ export default function CompanyDashboard() {
                       className={`h-1 w-full ${
                         offer.status === "accepted"
                           ? "bg-emerald-500"
-                          : offer.status === "rejected" || offer.status === "declined"
+                          : offer.status === "rejected" ||
+                              offer.status === "declined"
                             ? "bg-red-500"
                             : "bg-amber-500"
                       }`}
@@ -459,9 +461,13 @@ export default function CompanyDashboard() {
                       {(offer.fromCity || offer.toCity) && (
                         <div className="mb-2 flex items-center gap-1.5 text-xs font-bold text-gray-800">
                           <TruckIcon className="h-3.5 w-3.5 text-blue-500 shrink-0" />
-                          <span className="truncate">{offer.fromCity || "-"}</span>
+                          <span className="truncate">
+                            {offer.fromCity || "-"}
+                          </span>
                           <span className="text-gray-400">→</span>
-                          <span className="truncate">{offer.toCity || "-"}</span>
+                          <span className="truncate">
+                            {offer.toCity || "-"}
+                          </span>
                         </div>
                       )}
 
@@ -475,15 +481,29 @@ export default function CompanyDashboard() {
                           className={`inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] font-semibold ${
                             offer.status === "accepted"
                               ? "bg-emerald-100 text-emerald-700"
-                              : offer.status === "rejected" || offer.status === "declined"
+                              : offer.status === "rejected" ||
+                                  offer.status === "declined"
                                 ? "bg-red-100 text-red-700"
                                 : "bg-amber-100 text-amber-700"
                           }`}
                         >
-                          {offer.status === "accepted" && <CheckCircleIcon className="h-3 w-3" />}
-                          {(offer.status === "rejected" || offer.status === "declined") && <XCircleIcon className="h-3 w-3" />}
-                          {(!offer.status || offer.status === "pending") && <ClockIcon className="h-3 w-3" />}
-                          {offer.status === "accepted" ? "Acceptată" : offer.status === "rejected" ? "Respinsă" : offer.status === "declined" ? "Declinată" : "În așteptare"}
+                          {offer.status === "accepted" && (
+                            <CheckCircleIcon className="h-3 w-3" />
+                          )}
+                          {(offer.status === "rejected" ||
+                            offer.status === "declined") && (
+                            <XCircleIcon className="h-3 w-3" />
+                          )}
+                          {(!offer.status || offer.status === "pending") && (
+                            <ClockIcon className="h-3 w-3" />
+                          )}
+                          {offer.status === "accepted"
+                            ? "Acceptată"
+                            : offer.status === "rejected"
+                              ? "Respinsă"
+                              : offer.status === "declined"
+                                ? "Declinată"
+                                : "În așteptare"}
                         </span>
                       </div>
 
@@ -509,7 +529,9 @@ export default function CompanyDashboard() {
                         {editingId === offer.id ? (
                           <div className="space-y-2 rounded-lg border border-blue-200 bg-blue-50/50 p-3">
                             <div>
-                              <label className="mb-1 block text-[10px] font-semibold text-gray-700">Preț (lei)</label>
+                              <label className="mb-1 block text-[10px] font-semibold text-gray-700">
+                                Preț (lei)
+                              </label>
                               <input
                                 type="number"
                                 value={editPrice}
@@ -518,7 +540,9 @@ export default function CompanyDashboard() {
                               />
                             </div>
                             <div>
-                              <label className="mb-1 block text-[10px] font-semibold text-gray-700">Mesaj</label>
+                              <label className="mb-1 block text-[10px] font-semibold text-gray-700">
+                                Mesaj
+                              </label>
                               <textarea
                                 value={editMessage}
                                 onChange={(e) => setEditMessage(e.target.value)}
@@ -530,7 +554,10 @@ export default function CompanyDashboard() {
                               <button
                                 onClick={async () => {
                                   setSavingId(offer.id);
-                                  await updateOffer(offer, { price: Number(editPrice), message: editMessage });
+                                  await updateOffer(offer, {
+                                    price: Number(editPrice),
+                                    message: editMessage,
+                                  });
                                   setSavingId(null);
                                   setEditingId(null);
                                 }}
@@ -538,13 +565,21 @@ export default function CompanyDashboard() {
                                 className="inline-flex items-center gap-1 rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-semibold text-white hover:bg-blue-700 disabled:opacity-50"
                               >
                                 <CheckIcon className="h-3.5 w-3.5" />
-                                {savingId === offer.id ? "Se salvează..." : "Salvează"}
+                                {savingId === offer.id
+                                  ? "Se salvează..."
+                                  : "Salvează"}
                               </button>
-                              <button onClick={() => setEditingId(null)} className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50">
+                              <button
+                                onClick={() => setEditingId(null)}
+                                className="inline-flex items-center gap-1 rounded-lg border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                              >
                                 <XMarkIcon className="h-3.5 w-3.5" />
                                 Anulează
                               </button>
-                              <button onClick={() => setWithdrawOffer(offer)} className="inline-flex items-center gap-1 rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50">
+                              <button
+                                onClick={() => setWithdrawOffer(offer)}
+                                className="inline-flex items-center gap-1 rounded-lg border border-red-300 bg-white px-3 py-1.5 text-xs font-medium text-red-600 hover:bg-red-50"
+                              >
                                 <TrashIcon className="h-3.5 w-3.5" />
                                 Retrage
                               </button>
@@ -575,17 +610,34 @@ export default function CompanyDashboard() {
                               </div>
                             )}
                             <div className="flex items-center justify-center gap-1.5">
-                              <span className="text-[10px] text-gray-400">Contactează:</span>
+                              <span className="text-[10px] text-gray-400">
+                                Contactează:
+                              </span>
                               {offer.customerPhone && (
-                                <a href={`tel:${offer.customerPhone}`} className="inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 p-1.5 text-emerald-700 transition hover:bg-emerald-100" title={offer.customerPhone}>
+                                <a
+                                  href={`tel:${offer.customerPhone}`}
+                                  className="inline-flex items-center justify-center rounded-lg border border-emerald-200 bg-emerald-50 p-1.5 text-emerald-700 transition hover:bg-emerald-100"
+                                  title={offer.customerPhone}
+                                >
                                   <PhoneIcon className="h-3.5 w-3.5" />
                                 </a>
                               )}
-                              <button onClick={() => router.push(`/company/chat?requestId=${offer.requestId}&offerId=${offer.id}`)} className="inline-flex items-center justify-center rounded-lg border border-purple-200 bg-purple-50 p-1.5 text-purple-700 transition hover:bg-purple-100">
+                              <button
+                                onClick={() =>
+                                  router.push(
+                                    `/company/chat?requestId=${offer.requestId}&offerId=${offer.id}`,
+                                  )
+                                }
+                                className="inline-flex items-center justify-center rounded-lg border border-purple-200 bg-purple-50 p-1.5 text-purple-700 transition hover:bg-purple-100"
+                              >
                                 <ChatBubbleLeftRightIcon className="h-3.5 w-3.5" />
                               </button>
                               {offer.customerEmail && (
-                                <a href={`mailto:${offer.customerEmail}`} className="inline-flex items-center justify-center rounded-lg border border-blue-200 bg-blue-50 p-1.5 text-blue-700 transition hover:bg-blue-100" title={offer.customerEmail}>
+                                <a
+                                  href={`mailto:${offer.customerEmail}`}
+                                  className="inline-flex items-center justify-center rounded-lg border border-blue-200 bg-blue-50 p-1.5 text-blue-700 transition hover:bg-blue-100"
+                                  title={offer.customerEmail}
+                                >
                                   <EnvelopeIcon className="h-3.5 w-3.5" />
                                 </a>
                               )}

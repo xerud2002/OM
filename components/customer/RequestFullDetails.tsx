@@ -410,7 +410,7 @@ export default function RequestFullDetails({
               Alte detalii
             </h3>
           </div>
-          <p className="whitespace-pre-wrap text-sm text-gray-700 leading-relaxed bg-gray-50 p-3 sm:p-4 rounded-lg sm:rounded-xl">
+          <p className="whitespace-pre-wrap break-words overflow-hidden text-sm text-gray-700 leading-relaxed bg-gray-50 p-3 sm:p-4 rounded-lg sm:rounded-xl">
             {request.details}
           </p>
         </div>
