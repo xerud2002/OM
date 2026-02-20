@@ -8,7 +8,11 @@ import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 import { calculateRequestCost } from "@/utils/costCalculator";
 import { FieldValue } from "firebase-admin/firestore";
 
-const isRateLimited = createRateLimiter({ name: "placeOffer", max: 10, windowMs: 60_000 });
+const isRateLimited = createRateLimiter({
+  name: "placeOffer",
+  max: 10,
+  windowMs: 60_000,
+});
 
 export default async function handler(
   req: NextApiRequest,
@@ -21,7 +25,9 @@ export default async function handler(
 
   const { requestId, price, message } = req.body || {};
   if (!requestId || price == null) {
-    return res.status(400).json(apiError("Missing required fields: requestId, price"));
+    return res
+      .status(400)
+      .json(apiError("Missing required fields: requestId, price"));
   }
 
   if (typeof price !== "number" || price <= 0) {
@@ -29,13 +35,17 @@ export default async function handler(
   }
 
   if (message && (typeof message !== "string" || message.length > 5000)) {
-    return res.status(400).json(apiError("Message must be a string of max 5000 characters"));
+    return res
+      .status(400)
+      .json(apiError("Message must be a string of max 5000 characters"));
   }
 
   // Rate limiting
   const clientIp = getClientIp(req);
   if (isRateLimited(clientIp)) {
-    return res.status(429).json(apiError("Too many requests. Please try again later."));
+    return res
+      .status(429)
+      .json(apiError("Too many requests. Please try again later."));
   }
 
   const authResult = await verifyAuth(req);
@@ -49,12 +59,20 @@ export default async function handler(
     const companyRef = adminDb.doc(`companies/${uid}`);
     const companySnap = await companyRef.get();
     if (!companySnap.exists) {
-      return res.status(403).json(apiError("Profilul companiei nu a fost găsit."));
+      return res
+        .status(403)
+        .json(apiError("Profilul companiei nu a fost găsit."));
     }
 
     const companyData = companySnap.data()!;
     if (companyData.verificationStatus !== "verified") {
-      return res.status(403).json(apiError("Contul tău trebuie să fie verificat (KYC) pentru a trimite oferte."));
+      return res
+        .status(403)
+        .json(
+          apiError(
+            "Contul tău trebuie să fie verificat (KYC) pentru a trimite oferte.",
+          ),
+        );
     }
 
     // 2. Verify request exists and is active
@@ -69,14 +87,20 @@ export default async function handler(
       return res.status(400).json(apiError("Cererea a fost arhivată."));
     }
     if (requestData.status === "closed" || requestData.status === "cancelled") {
-      return res.status(400).json(apiError(
-        `Cererea este ${requestData.status === "closed" ? "închisă" : "anulată"}.`
-      ));
+      return res
+        .status(400)
+        .json(
+          apiError(
+            `Cererea este ${requestData.status === "closed" ? "închisă" : "anulată"}.`,
+          ),
+        );
     }
 
     // Verify request has been approved by admin
     if (!requestData.adminApproved) {
-      return res.status(400).json(apiError("Această cerere nu a fost încă aprobată de admin."));
+      return res
+        .status(400)
+        .json(apiError("Această cerere nu a fost încă aprobată de admin."));
     }
 
     // 3. Check if company already has an offer on this request
@@ -87,7 +111,9 @@ export default async function handler(
       .get();
 
     if (!existingOffers.empty) {
-      return res.status(409).json(apiError("Ai trimis deja o ofertă pentru această cerere."));
+      return res
+        .status(409)
+        .json(apiError("Ai trimis deja o ofertă pentru această cerere."));
     }
 
     // 4. Calculate cost and check credits
@@ -95,9 +121,13 @@ export default async function handler(
     const currentCredits = Number(companyData.credits) || 0;
 
     if (currentCredits < cost) {
-      return res.status(400).json(apiError(
-        `Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${currentCredits}.`
-      ));
+      return res
+        .status(400)
+        .json(
+          apiError(
+            `Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${currentCredits}.`,
+          ),
+        );
     }
 
     // 5. Execute atomically via Firestore transaction
@@ -109,19 +139,24 @@ export default async function handler(
       const freshCompany = await transaction.get(companyRef);
       const freshCredits = Number(freshCompany.data()?.credits) || 0;
       if (freshCredits < cost) {
-        throw new Error(`Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${freshCredits}.`);
+        throw new Error(
+          `Fonduri insuficiente. Ai nevoie de ${cost} credite, dar ai doar ${freshCredits}.`,
+        );
       }
 
       // Deduct credits
-      transaction.update(companyRef, { credits: Math.round(freshCredits - cost) });
+      transaction.update(companyRef, {
+        credits: Math.round(freshCredits - cost),
+      });
 
       // Create offer
       transaction.set(offerRef, {
         requestId,
         requestCode: requestData.requestCode || requestId,
         companyId: uid,
-        companyName: companyData.companyName || companyData.displayName || "Companie",
-        companyLogo: companyData.logoUrl || companyData.photoURL || "/pics/default-company.svg",
+        companyName:
+          companyData.companyName || companyData.displayName || "Companie",
+        companyLogo: companyData.logoUrl || "/pics/default-company.svg",
         companyPhone: companyData.phone || null,
         companyEmail: companyData.email || null,
         price,
@@ -190,13 +225,17 @@ ${message ? `<div style="background:#f9fafb;border-left:4px solid #10b981;paddin
       }
     }
 
-    return res.status(200).json(apiSuccess({
-      offerId: offerRef.id,
-      cost,
-      remainingCredits: currentCredits - cost,
-    }));
+    return res.status(200).json(
+      apiSuccess({
+        offerId: offerRef.id,
+        cost,
+        remainingCredits: currentCredits - cost,
+      }),
+    );
   } catch (error: any) {
     logger.error("[offers/place] Error:", error);
-    return res.status(500).json(apiError(error.message || "Eroare la trimiterea ofertei."));
+    return res
+      .status(500)
+      .json(apiError(error.message || "Eroare la trimiterea ofertei."));
   }
 }

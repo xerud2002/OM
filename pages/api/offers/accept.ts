@@ -6,7 +6,11 @@ import { logger } from "@/utils/logger";
 import { sendEmail } from "@/services/email";
 import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 
-const isRateLimited = createRateLimiter({ name: "acceptOffer", max: 5, windowMs: 60_000 });
+const isRateLimited = createRateLimiter({
+  name: "acceptOffer",
+  max: 5,
+  windowMs: 60_000,
+});
 
 type RequestDoc = {
   customerId: string;
@@ -48,7 +52,9 @@ export default async function handler(
   // Rate limiting
   const clientIp = getClientIp(req);
   if (isRateLimited(clientIp)) {
-    return res.status(429).json(apiError("Too many requests. Please try again later."));
+    return res
+      .status(429)
+      .json(apiError("Too many requests. Please try again later."));
   }
 
   const authResult = await verifyAuth(req);
@@ -90,11 +96,23 @@ export default async function handler(
       logger.warn("Could not fetch company email:", err);
     }
 
-    // Accept only the selected offer (each offer is treated individually)
-    await acceptedOfferRef.set({ status: "accepted" }, { merge: true });
+    // Accept the selected offer and update request status
+    const batch = adminDb.batch();
+    batch.set(acceptedOfferRef, { status: "accepted" }, { merge: true });
+    batch.update(requestRef, { status: "accepted", updatedAt: new Date() });
 
-    // TODO: Send emails to declined companies when accept/decline feature is enabled
-    // setImmediate(async () => { ... });
+    // Auto-decline all other pending offers
+    const otherOffers = await adminDb
+      .collection(`requests/${requestId}/offers`)
+      .where("status", "==", "pending")
+      .get();
+    otherOffers.docs.forEach((d) => {
+      if (d.id !== offerId) {
+        batch.update(d.ref, { status: "declined" });
+      }
+    });
+
+    await batch.commit();
 
     // Send personalized email to company
     if (companyEmail) {

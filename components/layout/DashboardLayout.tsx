@@ -247,10 +247,19 @@ function UserAvatar({
   role: DashboardRole;
   photoURL?: string;
 }) {
-  if (photoURL && (role === "company" || role === "customer")) {
+  // For companies, only show explicitly uploaded logos, not Google avatars
+  const effectivePhoto =
+    role === "company" &&
+    photoURL &&
+    (photoURL.includes("googleusercontent.com") ||
+      photoURL.includes("google.com/a/"))
+      ? undefined
+      : photoURL;
+
+  if (effectivePhoto && (role === "company" || role === "customer")) {
     return (
       <Image
-        src={photoURL}
+        src={effectivePhoto}
         alt={role === "company" ? "Logo" : "Avatar"}
         width={40}
         height={40}
