@@ -15,7 +15,11 @@ import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 import { withErrorHandler } from "@/lib/apiAuth";
 
 // Rate limiter: max 5 requests per minute per IP
-const isRateLimited = createRateLimiter({ name: "createGuest", max: 5, windowMs: 60_000 });
+const isRateLimited = createRateLimiter({
+  name: "createGuest",
+  max: 5,
+  windowMs: 60_000,
+});
 
 // Validate phone number - at least 6 digits (mobile or landline)
 function isValidPhone(phone: string): boolean {
@@ -94,12 +98,18 @@ export default withErrorHandler(async function handler(
     }
 
     // T17: Input length limits to prevent abuse
-    if (data.contactFirstName && data.contactFirstName.length > 100) errors.push("Prenumele este prea lung (max 100)");
-    if (data.contactLastName && data.contactLastName.length > 100) errors.push("Numele este prea lung (max 100)");
-    if (data.email && data.email.length > 254) errors.push("Email-ul este prea lung");
-    if (data.details && data.details.length > 5000) errors.push("Detaliile sunt prea lungi (max 5000)");
-    if (data.fromStreet && data.fromStreet.length > 200) errors.push("Adresa plecare prea lungă (max 200)");
-    if (data.toStreet && data.toStreet.length > 200) errors.push("Adresa destinație prea lungă (max 200)");
+    if (data.contactFirstName && data.contactFirstName.length > 100)
+      errors.push("Prenumele este prea lung (max 100)");
+    if (data.contactLastName && data.contactLastName.length > 100)
+      errors.push("Numele este prea lung (max 100)");
+    if (data.email && data.email.length > 254)
+      errors.push("Email-ul este prea lung");
+    if (data.details && data.details.length > 5000)
+      errors.push("Detaliile sunt prea lungi (max 5000)");
+    if (data.fromStreet && data.fromStreet.length > 200)
+      errors.push("Adresa plecare prea lungă (max 200)");
+    if (data.toStreet && data.toStreet.length > 200)
+      errors.push("Adresa destinație prea lungă (max 200)");
 
     if (errors.length > 0) {
       return res
@@ -162,14 +172,15 @@ export default withErrorHandler(async function handler(
         clean.moveDate = data.moveDateStart;
         clean.moveDateStart = data.moveDateStart;
         clean.moveDateEnd = data.moveDateEnd;
-      } else if (
-        data.moveDateMode === "flexible" &&
-        data.moveDateStart &&
-        data.moveDateFlexDays
-      ) {
+      } else if (data.moveDateMode === "flexible" && data.moveDateStart) {
         clean.moveDate = data.moveDateStart;
         clean.moveDateStart = data.moveDateStart;
-        clean.moveDateFlexDays = data.moveDateFlexDays;
+        if (data.moveDateEnd) {
+          clean.moveDateEnd = data.moveDateEnd;
+        }
+        if (data.moveDateFlexDays) {
+          clean.moveDateFlexDays = data.moveDateFlexDays;
+        }
       }
     }
 
@@ -225,7 +236,11 @@ export default withErrorHandler(async function handler(
     setImmediate(async () => {
       try {
         const now = new Date();
-        const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        const startOfDay = new Date(
+          now.getFullYear(),
+          now.getMonth(),
+          now.getDate(),
+        );
         const endOfDay = new Date(startOfDay.getTime() + 24 * 60 * 60 * 1000);
 
         const todayRequests = await adminDb
@@ -276,7 +291,8 @@ export default withErrorHandler(async function handler(
     if (data.mediaUpload === "later") {
       try {
         const uploadToken = randomBytes(32).toString("hex");
-        const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://ofertemutare.ro";
+        const appUrl =
+          process.env.NEXT_PUBLIC_APP_URL || "https://ofertemutare.ro";
         const uploadLink = `${appUrl}/upload/${uploadToken}`;
 
         const expiresAt = new Date();
@@ -293,10 +309,9 @@ export default withErrorHandler(async function handler(
           uploadedAt: null,
         });
 
-        await adminDb.doc(`requests/${requestRef.id}`).set(
-          { mediaUploadToken: uploadToken },
-          { merge: true },
-        );
+        await adminDb
+          .doc(`requests/${requestRef.id}`)
+          .set({ mediaUploadToken: uploadToken }, { merge: true });
 
         // Send upload link email (fire-and-forget)
         sendEmail({
@@ -311,7 +326,10 @@ export default withErrorHandler(async function handler(
           if (r.success) {
             logger.log(`Sent upload link email to ${email} for ${requestCode}`);
           } else {
-            logger.error(`Failed to send upload link email to ${email}:`, r.error);
+            logger.error(
+              `Failed to send upload link email to ${email}:`,
+              r.error,
+            );
           }
         });
       } catch (uploadErr) {

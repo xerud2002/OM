@@ -19,7 +19,7 @@ import {
   where,
 } from "firebase/firestore";
 import { motion, AnimatePresence } from "framer-motion";
-import { formatMoveDateDisplay } from "@/utils/date";
+import { formatMoveDateDisplay, isMoveDateUrgent } from "@/utils/date";
 import { onAuthChange } from "@/services/firebaseHelpers";
 import { calculateRequestCost } from "@/utils/costCalculator";
 import OfferModal from "@/components/company/OfferModal";
@@ -49,7 +49,7 @@ import counties from "@/data/counties";
 
 const RequestFullDetails = dynamic(
   () => import("@/components/customer/RequestFullDetails"),
-  { ssr: false }
+  { ssr: false },
 );
 
 import type { MovingRequest, CompanyUser } from "@/types";
@@ -58,16 +58,47 @@ import type { MovingRequest, CompanyUser } from "@/types";
 
 // County abbreviations mapping
 const COUNTY_ABBREV: Record<string, string> = {
-  "Alba": "AB", "Arad": "AR", "Argeș": "AG", "Bacău": "BC", "Bihor": "BH",
-  "Bistrița-Năsăud": "BN", "Botoșani": "BT", "Brașov": "BV", "Brăila": "BR",
-  "București": "B", "Buzău": "BZ", "Caraș-Severin": "CS", "Cluj": "CJ",
-  "Constanța": "CT", "Covasna": "CV", "Dâmbovița": "DB", "Dolj": "DJ",
-  "Galați": "GL", "Giurgiu": "GR", "Gorj": "GJ", "Harghita": "HR",
-  "Hunedoara": "HD", "Ialomița": "IL", "Iași": "IS", "Ilfov": "IF",
-  "Maramureș": "MM", "Mehedinți": "MH", "Mureș": "MS", "Neamț": "NT",
-  "Olt": "OT", "Prahova": "PH", "Satu Mare": "SM", "Sălaj": "SJ",
-  "Sibiu": "SB", "Suceava": "SV", "Teleorman": "TR", "Timiș": "TM",
-  "Tulcea": "TL", "Vaslui": "VS", "Vâlcea": "VL", "Vrancea": "VN",
+  Alba: "AB",
+  Arad: "AR",
+  Argeș: "AG",
+  Bacău: "BC",
+  Bihor: "BH",
+  "Bistrița-Năsăud": "BN",
+  Botoșani: "BT",
+  Brașov: "BV",
+  Brăila: "BR",
+  București: "B",
+  Buzău: "BZ",
+  "Caraș-Severin": "CS",
+  Cluj: "CJ",
+  Constanța: "CT",
+  Covasna: "CV",
+  Dâmbovița: "DB",
+  Dolj: "DJ",
+  Galați: "GL",
+  Giurgiu: "GR",
+  Gorj: "GJ",
+  Harghita: "HR",
+  Hunedoara: "HD",
+  Ialomița: "IL",
+  Iași: "IS",
+  Ilfov: "IF",
+  Maramureș: "MM",
+  Mehedinți: "MH",
+  Mureș: "MS",
+  Neamț: "NT",
+  Olt: "OT",
+  Prahova: "PH",
+  "Satu Mare": "SM",
+  Sălaj: "SJ",
+  Sibiu: "SB",
+  Suceava: "SV",
+  Teleorman: "TR",
+  Timiș: "TM",
+  Tulcea: "TL",
+  Vaslui: "VS",
+  Vâlcea: "VL",
+  Vrancea: "VN",
 };
 
 function JobCard({
@@ -80,9 +111,9 @@ function JobCard({
 }: {
   request: MovingRequest;
   hasMine: false | { offerId: string; status: string };
-   
+
   onOfferClick: (r: MovingRequest) => void;
-   
+
   onChatClick?: (requestId: string, offerId: string) => void;
   onDetailClick?: (r: MovingRequest) => void;
   unreadOfferIds?: Set<string>;
@@ -94,13 +125,23 @@ function JobCard({
   const cardStyle = !hasMine
     ? { bg: "bg-blue-50/40", border: "border-blue-200", bar: "bg-blue-500" }
     : hasMine.status === "accepted"
-      ? { bg: "bg-emerald-50/40", border: "border-emerald-200", bar: "bg-emerald-500" }
+      ? {
+          bg: "bg-emerald-50/40",
+          border: "border-emerald-200",
+          bar: "bg-emerald-500",
+        }
       : hasMine.status === "declined" || hasMine.status === "rejected"
         ? { bg: "bg-red-50/40", border: "border-red-200", bar: "bg-red-400" }
-        : { bg: "bg-amber-50/40", border: "border-amber-200", bar: "bg-amber-400" };
+        : {
+            bg: "bg-amber-50/40",
+            border: "border-amber-200",
+            bar: "bg-amber-400",
+          };
 
   return (
-    <div className={`relative flex flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-lg`}>
+    <div
+      className={`relative flex flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-lg`}
+    >
       {/* Top Status Bar */}
       <div
         className={`absolute left-0 top-0 right-0 h-1 rounded-t-xl ${cardStyle.bar}`}
@@ -109,9 +150,16 @@ function JobCard({
       {/* Header: Code, Date & Move Date */}
       <div className="flex items-center justify-between border-b border-gray-100 px-3 sm:px-4 pt-3 sm:pt-4 pb-2 sm:pb-3">
         <div className="flex flex-col">
-          <span className="font-mono text-[10px] sm:text-xs font-bold text-gray-500">
-            {r.requestCode || r.id.substring(0, 8)}
-          </span>
+          <div className="flex items-center gap-1.5">
+            <span className="font-mono text-[10px] sm:text-xs font-bold text-gray-500">
+              {r.requestCode || r.id.substring(0, 8)}
+            </span>
+            {isMoveDateUrgent(r as any) && (
+              <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
+                ⚡ Urgent
+              </span>
+            )}
+          </div>
           <span className="text-[9px] sm:text-[10px] text-gray-400">
             {(() => {
               const ts = r.createdAt;
@@ -144,14 +192,32 @@ function JobCard({
           <span>
             {(() => {
               const mode = r.moveDateMode;
+              const hasDate = (fmt: Record<string, unknown>) => {
+                const v = formatMoveDateDisplay(fmt, { month: "short" });
+                return v && v !== "-" ? v : null;
+              };
+              if (mode === "flexible") {
+                const d = formatMoveDateDisplay(r as any, {
+                  month: "short",
+                  noYear: true,
+                });
+                const ok = d && d !== "-";
+                return ok ? `Flexibil ${d}` : "Flexibil";
+              }
+              if (mode === "exact") {
+                const d = formatMoveDateDisplay(r as any, {
+                  month: "short",
+                  noYear: true,
+                });
+                const ok = d && d !== "-";
+                return ok ? `Dată fixă · ${d}` : "Dată fixă";
+              }
               const d = formatMoveDateDisplay(r as any, { month: "short" });
-              const hasDate = d && d !== "-";
-              if (mode === "flexible") return hasDate ? `Flexibil · ${d}` : "Flexibil";
-              if (mode === "exact") return hasDate ? `Dată fixă · ${d}` : "Dată fixă";
-              if (mode === "range") return hasDate ? `${d}` : "Interval";
+              const dOk = d && d !== "-";
+              if (mode === "range") return dOk ? `${d}` : "Interval";
               if (mode === "none") return "Fără dată";
               // legacy fallback
-              return hasDate ? d : "Flexibil";
+              return dOk ? d : "Flexibil";
             })()}
           </span>
         </div>
@@ -160,11 +226,17 @@ function JobCard({
       {/* Route */}
       <div className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-bold text-gray-800">
         <span className="line-clamp-1 text-right max-w-[40%]">
-          {r.fromCity}{r.fromCounty && COUNTY_ABBREV[r.fromCounty] ? `, ${COUNTY_ABBREV[r.fromCounty]}` : ""}
+          {r.fromCity}
+          {r.fromCounty && COUNTY_ABBREV[r.fromCounty]
+            ? `, ${COUNTY_ABBREV[r.fromCounty]}`
+            : ""}
         </span>
         <TruckIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4 shrink-0 text-blue-500" />
         <span className="line-clamp-1 text-left max-w-[40%]">
-          {r.toCity}{r.toCounty && COUNTY_ABBREV[r.toCounty] ? `, ${COUNTY_ABBREV[r.toCounty]}` : ""}
+          {r.toCity}
+          {r.toCounty && COUNTY_ABBREV[r.toCounty]
+            ? `, ${COUNTY_ABBREV[r.toCounty]}`
+            : ""}
         </span>
       </div>
 
@@ -177,7 +249,11 @@ function JobCard({
           <span className="font-medium">
             {r.fromType === "house" ? "Casă" : "Apartament"}
           </span>
-          {r.fromRooms && <span>{r.fromRooms} {r.fromRooms === 1 ? "cameră" : "camere"}</span>}
+          {r.fromRooms && (
+            <span>
+              {r.fromRooms} {r.fromRooms === 1 ? "cameră" : "camere"}
+            </span>
+          )}
           {r.fromFloor && <span>Etaj {r.fromFloor}</span>}
           <span
             className={
@@ -197,10 +273,12 @@ function JobCard({
           <span className="font-medium">
             {r.toType === "house" ? "Casă" : "Apartament"}
           </span>
-          {r.toRooms && <span>{r.toRooms} {r.toRooms === 1 ? "cameră" : "camere"}</span>}
-          {r.toFloor !== undefined && (
-            <span>Etaj {r.toFloor}</span>
+          {r.toRooms && (
+            <span>
+              {r.toRooms} {r.toRooms === 1 ? "cameră" : "camere"}
+            </span>
           )}
+          {r.toFloor !== undefined && <span>Etaj {r.toFloor}</span>}
           <span
             className={
               r.toElevator
@@ -215,8 +293,7 @@ function JobCard({
       </div>
 
       {/* Additional Details */}
-      {(r.volumeM3 ||
-        r.budgetEstimate) && (
+      {(r.volumeM3 || r.budgetEstimate) && (
         <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs text-gray-600">
           {r.volumeM3 && (
             <div className="flex items-center gap-1 mb-1">
@@ -227,9 +304,7 @@ function JobCard({
           {r.budgetEstimate && (
             <div className="flex items-center gap-1 mb-1">
               <span className="text-gray-400">Buget:</span>
-              <span className="font-medium">
-                {r.budgetEstimate} RON
-              </span>
+              <span className="font-medium">{r.budgetEstimate} RON</span>
             </div>
           )}
         </div>
@@ -240,10 +315,22 @@ function JobCard({
         <div className="border-t border-gray-100 px-3 sm:px-4 py-2">
           <div className="flex gap-1 overflow-x-auto">
             {r.mediaUrls.slice(0, 4).map((url: string, i: number) => {
-              const isVid = /\.(mp4|mov|webm|avi|mkv)(\?|$)/i.test(url) || (url.includes("%2F") && /\.(mp4|mov|webm|avi|mkv)(%|&|$)/i.test(url));
+              const isVid =
+                /\.(mp4|mov|webm|avi|mkv)(\?|$)/i.test(url) ||
+                (url.includes("%2F") &&
+                  /\.(mp4|mov|webm|avi|mkv)(%|&|$)/i.test(url));
               return isVid ? (
-                <div key={i} className="relative h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 rounded bg-gray-800 flex items-center justify-center">
-                  <video src={url} muted playsInline preload="metadata" className="absolute inset-0 h-full w-full rounded object-cover" />
+                <div
+                  key={i}
+                  className="relative h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 rounded bg-gray-800 flex items-center justify-center"
+                >
+                  <video
+                    src={url}
+                    muted
+                    playsInline
+                    preload="metadata"
+                    className="absolute inset-0 h-full w-full rounded object-cover"
+                  />
                   <PlayIcon className="relative h-4 w-4 text-white drop-shadow" />
                 </div>
               ) : (
@@ -268,17 +355,46 @@ function JobCard({
 
       {/* Service type - show all selected services */}
       <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 border-t border-gray-100 px-3 sm:px-4 py-2">
-        {([
-          { key: "serviceMoving" as const, label: "Mutare completă", icon: TruckIcon },
-          { key: "serviceTransportOnly" as const, label: "Doar câteva lucruri", icon: ArchiveBoxIcon },
-          { key: "servicePacking" as const, label: "Împachetare", icon: InboxStackIcon },
-          { key: "serviceAssembly" as const, label: "Montaj / Demontare", icon: WrenchScrewdriverIcon },
-          { key: "serviceDisposal" as const, label: "Debarasare", icon: TrashIcon },
-          { key: "servicePackingMaterials" as const, label: "Materiale", icon: ScissorsIcon },
-        ] as const)
+        {(
+          [
+            {
+              key: "serviceMoving" as const,
+              label: "Mutare completă",
+              icon: TruckIcon,
+            },
+            {
+              key: "serviceTransportOnly" as const,
+              label: "Doar câteva lucruri",
+              icon: ArchiveBoxIcon,
+            },
+            {
+              key: "servicePacking" as const,
+              label: "Împachetare",
+              icon: InboxStackIcon,
+            },
+            {
+              key: "serviceAssembly" as const,
+              label: "Montaj / Demontare",
+              icon: WrenchScrewdriverIcon,
+            },
+            {
+              key: "serviceDisposal" as const,
+              label: "Debarasare",
+              icon: TrashIcon,
+            },
+            {
+              key: "servicePackingMaterials" as const,
+              label: "Materiale",
+              icon: ScissorsIcon,
+            },
+          ] as const
+        )
           .filter((s) => r[s.key])
           .map((s) => (
-            <span key={s.key} className="flex items-center gap-0.5 sm:gap-1 rounded bg-blue-50 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-blue-700">
+            <span
+              key={s.key}
+              className="flex items-center gap-0.5 sm:gap-1 rounded bg-blue-50 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-blue-700"
+            >
               <s.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
               {s.label}
             </span>
@@ -288,8 +404,10 @@ function JobCard({
       {/* Notes Section - Always visible, 3 lines fixed */}
       <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs">
         <span className="text-gray-400">Note:</span>
-        <p className={`mt-0.5 line-clamp-3 min-h-12 sm:min-h-15 ${r.details ? 'text-gray-700' : 'text-gray-300 italic'}`}>
-          {r.details || 'Nicio notă adăugată'}
+        <p
+          className={`mt-0.5 line-clamp-3 min-h-12 sm:min-h-15 ${r.details ? "text-gray-700" : "text-gray-300 italic"}`}
+        >
+          {r.details || "Nicio notă adăugată"}
         </p>
       </div>
 
@@ -297,68 +415,68 @@ function JobCard({
       <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3">
         {hasMine ? (
           <>
-          <div className="flex flex-wrap items-center justify-center gap-2">
-            <button
-              onClick={() => onDetailClick?.(r)}
-              className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
-            >
-              <EyeIcon className="h-3.5 w-3.5" />
-              Detalii
-            </button>
-            {hasMine.status === "accepted" ? (
-              <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
-                <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                Ofertă Acceptată
-              </span>
-            ) : hasMine.status === "declined" ||
-              hasMine.status === "rejected" ? (
-              <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-red-600">
-                <XMarkIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                Ofertă Refuzată
-              </span>
-            ) : (
-              <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
-                <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                Ofertă Trimisă
-              </span>
-            )}
-          </div>
-          {/* Contact icons row: phone - chat - email */}
-          <div className="flex items-center justify-center gap-2 mt-2">
-            {r.phone && (
-              <a
-                href={`tel:${r.phone}`}
-                className="rounded-lg bg-blue-50 p-1.5 sm:p-2 text-blue-600 hover:bg-blue-100 transition active:scale-95"
-                title={r.phone}
-              >
-                <PhoneIcon className="h-4 w-4" />
-              </a>
-            )}
-            {hasMine.offerId && onChatClick && (
+            <div className="flex flex-wrap items-center justify-center gap-2">
               <button
-                onClick={() => onChatClick(r.id, hasMine.offerId)}
-                className="relative rounded-lg bg-emerald-50 p-1.5 sm:p-2 text-emerald-600 hover:bg-emerald-100 transition active:scale-95"
-                title="Chat"
+                onClick={() => onDetailClick?.(r)}
+                className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
               >
-                <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
-                {unreadOfferIds?.has(hasMine.offerId) && (
-                  <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-                    <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
-                  </span>
-                )}
+                <EyeIcon className="h-3.5 w-3.5" />
+                Detalii
               </button>
-            )}
-            {(r.customerEmail || r.guestEmail) && (
-              <a
-                href={`mailto:${r.customerEmail || r.guestEmail}`}
-                className="rounded-lg bg-purple-50 p-1.5 sm:p-2 text-purple-600 hover:bg-purple-100 transition active:scale-95"
-                title={r.customerEmail || r.guestEmail}
-              >
-                <EnvelopeIcon className="h-4 w-4" />
-              </a>
-            )}
-          </div>
+              {hasMine.status === "accepted" ? (
+                <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
+                  <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+                  Ofertă Acceptată
+                </span>
+              ) : hasMine.status === "declined" ||
+                hasMine.status === "rejected" ? (
+                <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-red-600">
+                  <XMarkIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+                  Ofertă Refuzată
+                </span>
+              ) : (
+                <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
+                  <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+                  Ofertă Trimisă
+                </span>
+              )}
+            </div>
+            {/* Contact icons row: phone - chat - email */}
+            <div className="flex items-center justify-center gap-2 mt-2">
+              {r.phone && (
+                <a
+                  href={`tel:${r.phone}`}
+                  className="rounded-lg bg-blue-50 p-1.5 sm:p-2 text-blue-600 hover:bg-blue-100 transition active:scale-95"
+                  title={r.phone}
+                >
+                  <PhoneIcon className="h-4 w-4" />
+                </a>
+              )}
+              {hasMine.offerId && onChatClick && (
+                <button
+                  onClick={() => onChatClick(r.id, hasMine.offerId)}
+                  className="relative rounded-lg bg-emerald-50 p-1.5 sm:p-2 text-emerald-600 hover:bg-emerald-100 transition active:scale-95"
+                  title="Chat"
+                >
+                  <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
+                  {unreadOfferIds?.has(hasMine.offerId) && (
+                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+                    </span>
+                  )}
+                </button>
+              )}
+              {(r.customerEmail || r.guestEmail) && (
+                <a
+                  href={`mailto:${r.customerEmail || r.guestEmail}`}
+                  className="rounded-lg bg-purple-50 p-1.5 sm:p-2 text-purple-600 hover:bg-purple-100 transition active:scale-95"
+                  title={r.customerEmail || r.guestEmail}
+                >
+                  <EnvelopeIcon className="h-4 w-4" />
+                </a>
+              )}
+            </div>
           </>
         ) : (
           <div className="flex flex-col gap-2">
@@ -371,16 +489,16 @@ function JobCard({
                 Detalii
               </button>
             </div>
-          <button
-            onClick={() => onOfferClick(r)}
-            className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-blue-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
-          >
-            <PaperAirplaneIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-            <span>Trimite Ofertă</span>
-            <span className="rounded bg-white/20 px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-white">
-              {cost}
-            </span>
-          </button>
+            <button
+              onClick={() => onOfferClick(r)}
+              className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-blue-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+            >
+              <PaperAirplaneIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+              <span>Trimite Ofertă</span>
+              <span className="rounded bg-white/20 px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-white">
+                {cost}
+              </span>
+            </button>
           </div>
         )}
       </div>
@@ -410,7 +528,9 @@ export default function RequestsView({
     Record<string, false | { offerId: string; status: string }>
   >({});
   const [sortBy, setSortBy] = useState<"date-desc" | "date-asc">("date-desc");
-  const [detailRequest, setDetailRequest] = useState<MovingRequest | null>(null);
+  const [detailRequest, setDetailRequest] = useState<MovingRequest | null>(
+    null,
+  );
 
   // Filter State
   const [showFilters, setShowFilters] = useState(false);
@@ -443,7 +563,9 @@ export default function RequestsView({
     try {
       const raw = localStorage.getItem("om_chat_read_ts");
       return raw ? JSON.parse(raw) : {};
-    } catch { return {}; }
+    } catch {
+      return {};
+    }
   };
 
   // Track unread messages for company offers
@@ -479,10 +601,14 @@ export default function RequestsView({
           if (snap.empty) return;
           const lastMsg = snap.docs[0].data();
           const isFromCustomer =
-            lastMsg.senderId !== company.uid && lastMsg.senderRole !== "company";
+            lastMsg.senderId !== company.uid &&
+            lastMsg.senderRole !== "company";
 
           // Check if message is newer than last read timestamp
-          const msgTime = lastMsg.createdAt?.toMillis?.() || lastMsg.createdAt?.seconds * 1000 || 0;
+          const msgTime =
+            lastMsg.createdAt?.toMillis?.() ||
+            lastMsg.createdAt?.seconds * 1000 ||
+            0;
           const lastRead = readTs[offerInfo.offerId] || 0;
 
           setUnreadOfferIds((prev) => {
@@ -495,7 +621,9 @@ export default function RequestsView({
             return next;
           });
         },
-        () => {/* ignore errors for missing collections */},
+        () => {
+          /* ignore errors for missing collections */
+        },
       );
 
       currentSubs.set(key, unsub);
@@ -853,12 +981,20 @@ export default function RequestsView({
       // Success - optimistic update
       setHasMineMap((prev) => ({
         ...prev,
-        [activeOfferRequest.id]: { offerId: result.data?.offerId || "temp", status: "pending" },
+        [activeOfferRequest.id]: {
+          offerId: result.data?.offerId || "temp",
+          status: "pending",
+        },
       }));
       checkMyOffers([activeOfferRequest], company.uid);
     } catch (err: unknown) {
       logger.error("Failed to place offer", err);
-      const msg = typeof err === "string" ? err : (err instanceof Error ? err.message : "Eroare la trimiterea ofertei.");
+      const msg =
+        typeof err === "string"
+          ? err
+          : err instanceof Error
+            ? err.message
+            : "Eroare la trimiterea ofertei.";
       alert(msg);
       throw err; // Re-throw so OfferModal keeps the form open for retry
     } finally {
@@ -873,7 +1009,9 @@ export default function RequestsView({
         {/* Sort */}
         <select
           value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as "date-desc" | "date-asc")}
+          onChange={(e) =>
+            setSortBy(e.target.value as "date-desc" | "date-asc")
+          }
           aria-label="Sortare cereri"
           className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none"
         >
@@ -931,12 +1069,16 @@ export default function RequestsView({
 
               <div className="flex flex-col gap-4">
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Serviciu</label>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
+                    Serviciu
+                  </label>
                   <select
                     value={filterService}
                     onChange={(e) => setFilterService(e.target.value)}
                     className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                      filterService ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                      filterService
+                        ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                        : "border-gray-200 bg-white text-gray-600"
                     }`}
                   >
                     <option value="">Toate</option>
@@ -951,12 +1093,18 @@ export default function RequestsView({
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-600">Proprietate</label>
+                    <label className="mb-1.5 block text-sm font-medium text-gray-600">
+                      Proprietate
+                    </label>
                     <select
                       value={filterPropertyType}
-                      onChange={(e) => setFilterPropertyType(e.target.value as any)}
+                      onChange={(e) =>
+                        setFilterPropertyType(e.target.value as any)
+                      }
                       className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterPropertyType ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                        filterPropertyType
+                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                          : "border-gray-200 bg-white text-gray-600"
                       }`}
                     >
                       <option value="">Oricare</option>
@@ -965,12 +1113,16 @@ export default function RequestsView({
                     </select>
                   </div>
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-600">Lift</label>
+                    <label className="mb-1.5 block text-sm font-medium text-gray-600">
+                      Lift
+                    </label>
                     <select
                       value={filterElevator}
                       onChange={(e) => setFilterElevator(e.target.value as any)}
                       className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterElevator ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                        filterElevator
+                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                          : "border-gray-200 bg-white text-gray-600"
                       }`}
                     >
                       <option value="">Oricare</option>
@@ -981,28 +1133,38 @@ export default function RequestsView({
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Județ</label>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
+                    Județ
+                  </label>
                   <select
                     value={filterCounty}
                     onChange={(e) => setFilterCounty(e.target.value)}
                     className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                      filterCounty ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                      filterCounty
+                        ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                        : "border-gray-200 bg-white text-gray-600"
                     }`}
                   >
                     <option value="">Toate</option>
                     {counties.map((c) => (
-                      <option key={c} value={c}>{c}</option>
+                      <option key={c} value={c}>
+                        {c}
+                      </option>
                     ))}
                   </select>
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Status</label>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
+                    Status
+                  </label>
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value as any)}
                     className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                      filterStatus ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                      filterStatus
+                        ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                        : "border-gray-200 bg-white text-gray-600"
                     }`}
                   >
                     <option value="">Toate</option>
@@ -1012,7 +1174,9 @@ export default function RequestsView({
                 </div>
 
                 <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">Perioadă mutare</label>
+                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
+                    Perioadă mutare
+                  </label>
                   <div className="grid grid-cols-2 gap-3">
                     <input
                       type="date"
@@ -1020,7 +1184,9 @@ export default function RequestsView({
                       onChange={(e) => setFilterDateFrom(e.target.value)}
                       placeholder="De la"
                       className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterDateFrom ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                        filterDateFrom
+                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                          : "border-gray-200 bg-white text-gray-600"
                       }`}
                     />
                     <input
@@ -1029,7 +1195,9 @@ export default function RequestsView({
                       onChange={(e) => setFilterDateTo(e.target.value)}
                       placeholder="Până la"
                       className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterDateTo ? "border-emerald-400 bg-emerald-50 text-emerald-700" : "border-gray-200 bg-white text-gray-600"
+                        filterDateTo
+                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                          : "border-gray-200 bg-white text-gray-600"
                       }`}
                     />
                   </div>
@@ -1049,7 +1217,8 @@ export default function RequestsView({
                   onClick={() => setShowFilters(false)}
                   className="ml-auto rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700"
                 >
-                  Aplică filtre{activeFiltersCount > 0 ? ` (${activeFiltersCount})` : ""}
+                  Aplică filtre
+                  {activeFiltersCount > 0 ? ` (${activeFiltersCount})` : ""}
                 </button>
               </div>
             </motion.div>
@@ -1063,38 +1232,84 @@ export default function RequestsView({
           <span className="text-xs text-gray-400 mr-1">Filtre active:</span>
           {filterService && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              {{moving:"Mutare completă",transport:"Doar câteva lucruri",packing:"Împachetare",assembly:"Montaj / Demontare",disposal:"Debarasare",materials:"Materiale"}[filterService] || filterService}
-              <button onClick={() => setFilterService("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+              {{
+                moving: "Mutare completă",
+                transport: "Doar câteva lucruri",
+                packing: "Împachetare",
+                assembly: "Montaj / Demontare",
+                disposal: "Debarasare",
+                materials: "Materiale",
+              }[filterService] || filterService}
+              <button
+                onClick={() => setFilterService("")}
+                className="hover:text-emerald-900"
+              >
+                <XMarkIcon className="h-3 w-3" />
+              </button>
             </span>
           )}
           {filterPropertyType && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
               {filterPropertyType === "apartment" ? "Apartament" : "Casă"}
-              <button onClick={() => setFilterPropertyType("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+              <button
+                onClick={() => setFilterPropertyType("")}
+                className="hover:text-emerald-900"
+              >
+                <XMarkIcon className="h-3 w-3" />
+              </button>
             </span>
           )}
           {filterElevator && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
               {filterElevator === "yes" ? "Cu lift" : "Fără lift"}
-              <button onClick={() => setFilterElevator("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+              <button
+                onClick={() => setFilterElevator("")}
+                className="hover:text-emerald-900"
+              >
+                <XMarkIcon className="h-3 w-3" />
+              </button>
             </span>
           )}
           {filterCounty && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
               {filterCounty}
-              <button onClick={() => setFilterCounty("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+              <button
+                onClick={() => setFilterCounty("")}
+                className="hover:text-emerald-900"
+              >
+                <XMarkIcon className="h-3 w-3" />
+              </button>
             </span>
           )}
           {filterStatus && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              {filterStatus === "available" ? "Disponibile" : "Ofertate de mine"}
-              <button onClick={() => setFilterStatus("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+              {filterStatus === "available"
+                ? "Disponibile"
+                : "Ofertate de mine"}
+              <button
+                onClick={() => setFilterStatus("")}
+                className="hover:text-emerald-900"
+              >
+                <XMarkIcon className="h-3 w-3" />
+              </button>
             </span>
           )}
           {(filterDateFrom || filterDateTo) && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              {filterDateFrom && filterDateTo ? `${filterDateFrom} - ${filterDateTo}` : filterDateFrom ? `De la ${filterDateFrom}` : `Până la ${filterDateTo}`}
-              <button onClick={() => { setFilterDateFrom(""); setFilterDateTo(""); }} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
+              {filterDateFrom && filterDateTo
+                ? `${filterDateFrom} - ${filterDateTo}`
+                : filterDateFrom
+                  ? `De la ${filterDateFrom}`
+                  : `Până la ${filterDateTo}`}
+              <button
+                onClick={() => {
+                  setFilterDateFrom("");
+                  setFilterDateTo("");
+                }}
+                className="hover:text-emerald-900"
+              >
+                <XMarkIcon className="h-3 w-3" />
+              </button>
             </span>
           )}
           <button
@@ -1188,10 +1403,14 @@ export default function RequestsView({
                     {detailRequest.fromCity} → {detailRequest.toCity}
                   </h2>
                   <p className="text-sm text-gray-500">
-                    {detailRequest.requestCode || `#${detailRequest.id.slice(0, 8)}`}
+                    {detailRequest.requestCode ||
+                      `#${detailRequest.id.slice(0, 8)}`}
                   </p>
                 </div>
-                <button onClick={() => setDetailRequest(null)} className="rounded-full p-1 hover:bg-gray-100">
+                <button
+                  onClick={() => setDetailRequest(null)}
+                  className="rounded-full p-1 hover:bg-gray-100"
+                >
                   <XMarkIcon className="h-5 w-5 text-gray-400" />
                 </button>
               </div>
@@ -1212,7 +1431,11 @@ export default function RequestsView({
             : "Trimite Ofertă"
         }
         isLoading={submittingOffer}
-        offerCost={activeOfferRequest ? calculateRequestCost(activeOfferRequest) : undefined}
+        offerCost={
+          activeOfferRequest
+            ? calculateRequestCost(activeOfferRequest)
+            : undefined
+        }
       />
     </div>
   );

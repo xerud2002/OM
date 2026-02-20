@@ -24,6 +24,8 @@ import {
 } from "@heroicons/react/24/outline";
 import type { FormShape } from "@/components/customer/RequestForm";
 import { logger } from "@/utils/logger";
+import { resetPassword, loginWithGoogle } from "@/services/firebaseHelpers";
+import { useRouter } from "next/router";
 
 // Location Autocomplete Component using localapi.ro
 type LocalApiResult = {
@@ -724,7 +726,10 @@ export default function HomeRequestForm({
   const [submittedRequestCode, setSubmittedRequestCode] = useState<
     string | null
   >(null);
+  const [submittedEmail, setSubmittedEmail] = useState<string>("");
+  const [passwordResetSent, setPasswordResetSent] = useState(false);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
+  const router = useRouter();
 
   // Initialize with default values to avoid hydration mismatch
   const [form, setForm] = useState<FormShape>({
@@ -935,6 +940,8 @@ export default function HomeRequestForm({
 
         // Success!
         setSubmittedRequestCode(requestCode);
+        setSubmittedEmail(form.email || "");
+        setPasswordResetSent(false);
         if (onSuccess) {
           onSuccess(requestCode);
         } else {
@@ -1557,14 +1564,29 @@ export default function HomeRequestForm({
             <button
               type="button"
               key={opt.key}
-              onClick={() => setForm((s) => ({ ...s, [opt.key]: !s[opt.key] }))}
+              onClick={() =>
+                setForm((s) => {
+                  const mutuallyExclusive: Record<string, string> = {
+                    serviceMoving: "serviceTransportOnly",
+                    serviceTransportOnly: "serviceMoving",
+                  };
+                  const next = { ...s, [opt.key]: !s[opt.key] };
+                  // If turning on one of the mutually exclusive pair, turn off the other
+                  if (next[opt.key] && mutuallyExclusive[opt.key]) {
+                    (next as any)[mutuallyExclusive[opt.key]] = false;
+                  }
+                  return next;
+                })
+              }
               className={`flex cursor-pointer items-center gap-3 rounded-lg border p-3 transition ${
                 form[opt.key]
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
               }`}
             >
-              <opt.icon className={`h-5 w-5 shrink-0 ${form[opt.key] ? "text-emerald-600" : "text-gray-400"}`} />
+              <opt.icon
+                className={`h-5 w-5 shrink-0 ${form[opt.key] ? "text-emerald-600" : "text-gray-400"}`}
+              />
               <span className="text-left text-sm leading-tight text-gray-700">
                 <span className="font-medium">{opt.label}</span>
                 <span className="block text-xs text-gray-500">{opt.desc}</span>
@@ -1755,8 +1777,18 @@ export default function HomeRequestForm({
     <div className="space-y-4">
       <div className="rounded-xl border border-gray-200 bg-white p-4">
         <div className="mb-3 flex items-center gap-2">
-          <svg className="h-5 w-5 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+          <svg
+            className="h-5 w-5 text-emerald-600"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={1.5}
+              d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
+            />
           </svg>
           <span className="font-semibold text-gray-800">Detalii mutare</span>
         </div>
@@ -2087,25 +2119,71 @@ export default function HomeRequestForm({
                 <div className="mb-3 flex items-center gap-2">
                   <Mail className="h-5 w-5 text-emerald-600" />
                   <span className="font-semibold text-gray-800">
-                    Creează-ți cont gratuit
+                    Activează-ți contul
                   </span>
                 </div>
                 <p className="mb-3 text-sm text-gray-600">
                   Cu un cont poți vedea toate ofertele, comunica direct cu
                   transportatorii și gestiona mutarea ta.
                 </p>
-                <div className="flex gap-2">
-                  <Link
-                    href="/customer/auth"
-                    className="flex-1 rounded-lg bg-emerald-500 px-4 py-2.5 text-center text-sm font-semibold text-white transition hover:bg-emerald-600"
-                  >
-                    Creează cont
-                  </Link>
+                <div className="flex flex-col gap-2">
                   <button
-                    onClick={() => setShowSuccessModal(false)}
-                    className="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                    onClick={async () => {
+                      if (!submittedEmail) return;
+                      try {
+                        await resetPassword(submittedEmail);
+                        setPasswordResetSent(true);
+                      } catch (err) {
+                        logger.error(
+                          "Failed to send password reset email",
+                          err,
+                        );
+                      }
+                    }}
+                    disabled={passwordResetSent}
+                    className={`w-full rounded-lg px-4 py-2.5 text-center text-sm font-semibold transition ${
+                      passwordResetSent
+                        ? "bg-gray-100 text-gray-500 cursor-default"
+                        : "bg-emerald-500 text-white hover:bg-emerald-600"
+                    }`}
                   >
-                    Mai târziu
+                    {passwordResetSent
+                      ? "✓ Email trimis! Verifică inbox-ul"
+                      : "Setează Parola"}
+                  </button>
+                  <button
+                    onClick={async () => {
+                      try {
+                        const user = await loginWithGoogle("customer");
+                        if (user) {
+                          setShowSuccessModal(false);
+                          router.push("/customer");
+                        }
+                      } catch (err) {
+                        logger.error("Google login failed", err);
+                      }
+                    }}
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+                  >
+                    <svg className="h-4 w-4" viewBox="0 0 24 24">
+                      <path
+                        d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
+                        fill="#4285F4"
+                      />
+                      <path
+                        d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                        fill="#34A853"
+                      />
+                      <path
+                        d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
+                        fill="#FBBC05"
+                      />
+                      <path
+                        d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
+                        fill="#EA4335"
+                      />
+                    </svg>
+                    Login cu Google
                   </button>
                 </div>
               </div>

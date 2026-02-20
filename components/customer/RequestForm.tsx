@@ -471,24 +471,68 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
         </p>
         <div className="grid grid-cols-1 gap-2">
           {[
-            { key: "serviceMoving" as const, label: "Mutare Completă", desc: "Toată proprietatea", icon: TruckIcon },
-            { key: "serviceTransportOnly" as const, label: "Mutare Parțială", desc: "Doar câteva lucruri", icon: ArchiveBoxIcon },
-            { key: "servicePacking" as const, label: "Împachetare Lucruri", desc: "În cutii", icon: InboxStackIcon },
-            { key: "serviceAssembly" as const, label: "Montaj / Dezmembrare", desc: "Mobilă", icon: WrenchScrewdriverIcon },
-            { key: "serviceDisposal" as const, label: "Debarasare", desc: "Mobilă, lucruri", icon: TrashIcon },
-            { key: "servicePackingMaterials" as const, label: "Materiale Împachetare", desc: "Cutii, scotch etc.", icon: ScissorsIcon },
+            {
+              key: "serviceMoving" as const,
+              label: "Mutare Completă",
+              desc: "Toată proprietatea",
+              icon: TruckIcon,
+            },
+            {
+              key: "serviceTransportOnly" as const,
+              label: "Mutare Parțială",
+              desc: "Doar câteva lucruri",
+              icon: ArchiveBoxIcon,
+            },
+            {
+              key: "servicePacking" as const,
+              label: "Împachetare Lucruri",
+              desc: "În cutii",
+              icon: InboxStackIcon,
+            },
+            {
+              key: "serviceAssembly" as const,
+              label: "Montaj / Dezmembrare",
+              desc: "Mobilă",
+              icon: WrenchScrewdriverIcon,
+            },
+            {
+              key: "serviceDisposal" as const,
+              label: "Debarasare",
+              desc: "Mobilă, lucruri",
+              icon: TrashIcon,
+            },
+            {
+              key: "servicePackingMaterials" as const,
+              label: "Materiale Împachetare",
+              desc: "Cutii, scotch etc.",
+              icon: ScissorsIcon,
+            },
           ].map((opt) => (
             <button
               type="button"
               key={opt.key}
-              onClick={() => setForm((s) => ({ ...s, [opt.key]: !(s as any)[opt.key] }))}
+              onClick={() =>
+                setForm((s) => {
+                  const mutuallyExclusive: Record<string, string> = {
+                    serviceMoving: "serviceTransportOnly",
+                    serviceTransportOnly: "serviceMoving",
+                  };
+                  const next = { ...s, [opt.key]: !(s as any)[opt.key] };
+                  if ((next as any)[opt.key] && mutuallyExclusive[opt.key]) {
+                    (next as any)[mutuallyExclusive[opt.key]] = false;
+                  }
+                  return next;
+                })
+              }
               className={`flex items-center gap-3 rounded-lg border p-3 transition ${
                 (form as any)[opt.key]
                   ? "border-emerald-500 bg-emerald-50"
                   : "border-gray-200 hover:border-emerald-200"
               }`}
             >
-              <opt.icon className={`h-5 w-5 shrink-0 ${(form as any)[opt.key] ? "text-emerald-600" : "text-gray-400"}`} />
+              <opt.icon
+                className={`h-5 w-5 shrink-0 ${(form as any)[opt.key] ? "text-emerald-600" : "text-gray-400"}`}
+              />
               <span className="text-left text-sm leading-tight text-gray-700">
                 <span className="font-medium">{opt.label}</span>
                 <span className="block text-xs text-gray-500">{opt.desc}</span>
@@ -686,9 +730,13 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
           onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
           minLength={100}
         />
-        <p className={`mt-1 text-xs ${
-          (form.details?.length || 0) < 100 ? "text-red-500" : "text-green-600"
-        }`}>
+        <p
+          className={`mt-1 text-xs ${
+            (form.details?.length || 0) < 100
+              ? "text-red-500"
+              : "text-green-600"
+          }`}
+        >
           {form.details?.length || 0}/100 caractere minim
         </p>
       </div>
