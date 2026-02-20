@@ -229,6 +229,36 @@ export default withErrorHandler(async function handler(
 
     const requestRef = await adminDb.collection("requests").add(requestData);
 
+    // ── Update customer profile with phone/city/county if missing ──
+    if (customerId) {
+      try {
+        const customerDoc = customersSnapshot.docs[0];
+        const customerData = customerDoc.data();
+        const profileUpdate: Record<string, any> = {};
+
+        if (!customerData.phone && data.phone) {
+          profileUpdate.phone = data.phone;
+        }
+        if (!customerData.city && data.fromCity) {
+          profileUpdate.city = data.fromCity;
+        }
+        if (!customerData.county && data.fromCounty) {
+          profileUpdate.county = data.fromCounty;
+        }
+
+        if (Object.keys(profileUpdate).length > 0) {
+          profileUpdate.updatedAt = FieldValue.serverTimestamp();
+          await adminDb
+            .collection("customers")
+            .doc(customerId)
+            .update(profileUpdate);
+        }
+      } catch (err) {
+        // Non-critical — don't fail the request
+        console.error("Failed to update customer profile:", err);
+      }
+    }
+
     // NOTE: Company notifications (in-app + email) are deferred until admin approval
     // See /api/admin/approve-request.ts
 

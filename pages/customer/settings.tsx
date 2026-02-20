@@ -43,6 +43,7 @@ export default function CustomerSettings() {
     displayName: "",
     phone: "",
     city: "",
+    county: "",
   });
   const [photoURL, setPhotoURL] = useState<string | null>(null);
   const [uploadingPhoto, setUploadingPhoto] = useState(false);
@@ -99,6 +100,7 @@ export default function CustomerSettings() {
         displayName: u.displayName || data?.displayName || "",
         phone: data?.phone || "",
         city: data?.city || "",
+        county: data?.county || "",
       });
       if (data?.notificationPreferences) {
         setNotifPrefs({
@@ -123,6 +125,7 @@ export default function CustomerSettings() {
         displayName: form.displayName,
         phone: form.phone,
         city: form.city,
+        county: form.county,
         updatedAt: serverTimestamp(),
       });
       // Also update Firebase Auth displayName
@@ -354,7 +357,7 @@ export default function CustomerSettings() {
                   {/* City */}
                   <div>
                     <label className="block text-xs font-medium text-gray-600">
-                      Oraș
+                      Localitate
                     </label>
                     <input
                       value={form.city}
@@ -363,6 +366,21 @@ export default function CustomerSettings() {
                       }
                       className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
                       placeholder="București"
+                    />
+                  </div>
+
+                  {/* County */}
+                  <div>
+                    <label className="block text-xs font-medium text-gray-600">
+                      Județ
+                    </label>
+                    <input
+                      value={form.county}
+                      onChange={(e) =>
+                        setForm((s) => ({ ...s, county: e.target.value }))
+                      }
+                      className="mt-1 w-full rounded-lg border border-gray-200 p-2.5 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500/20"
+                      placeholder="Ilfov"
                     />
                   </div>
 

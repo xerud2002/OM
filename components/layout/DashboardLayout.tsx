@@ -9,7 +9,6 @@ import { Dialog, Transition } from "@headlessui/react";
 import {
   Bars3Icon,
   XMarkIcon,
-  HomeIcon,
   DocumentTextIcon,
   DocumentPlusIcon,
   InboxIcon,
@@ -500,14 +499,6 @@ export default function DashboardLayout({
                         </ul>
                       </li>
                       <li className="mt-auto border-t border-gray-100 pt-4">
-                        <Link
-                          href="/"
-                          onClick={() => setSidebarOpen(false)}
-                          className="group flex items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50"
-                        >
-                          <HomeIcon className="h-5 w-5 text-gray-400" />
-                          Înapoi la site
-                        </Link>
                         <button
                           onClick={handleSignOut}
                           className="group flex w-full items-center gap-x-3 rounded-lg px-3 py-2.5 text-sm font-medium text-gray-600 hover:bg-red-50 hover:text-red-600"
@@ -624,14 +615,6 @@ export default function DashboardLayout({
 
               {/* Bottom section */}
               <li className="mt-auto pb-4 space-y-1 border-t border-gray-100 pt-4">
-                <Link
-                  href="/"
-                  title="Înapoi la site"
-                  className="group flex items-center justify-center gap-x-3 rounded-lg px-1.5 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 lg:justify-start lg:px-3"
-                >
-                  <HomeIcon className="h-5 w-5 text-gray-400 group-hover:text-gray-600" />
-                  <span className="hidden lg:inline">Înapoi la site</span>
-                </Link>
                 <button
                   onClick={handleSignOut}
                   title="Deconectare"
