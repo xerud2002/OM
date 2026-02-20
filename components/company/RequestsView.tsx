@@ -518,6 +518,7 @@ export default function RequestsView({
   const [company, setCompany] = useState<CompanyUser>(
     companyFromParent ?? null,
   );
+  const [companyProfile, setCompanyProfile] = useState<{ city?: string; county?: string } | null>(null);
   const PAGE_SIZE = 10;
   const [firstPage, setFirstPage] = useState<MovingRequest[]>([]);
   const [extra, setExtra] = useState<MovingRequest[]>([]);
@@ -645,6 +646,17 @@ export default function RequestsView({
     const unsubAuth = onAuthChange((u) => setCompany(u));
     return () => unsubAuth();
   }, [companyFromParent]);
+
+  // Fetch company profile (city/county) for distance badges
+  useEffect(() => {
+    if (!company?.uid) return;
+    getDoc(doc(db, "companies", company.uid)).then((snap) => {
+      if (snap.exists()) {
+        const d = snap.data();
+        setCompanyProfile({ city: d.city || "", county: d.county || "" });
+      }
+    }).catch(() => {});
+  }, [company?.uid]);
 
   const checkMyOffers = useCallback(
     async (requests: MovingRequest[], companyId: string) => {
@@ -1421,7 +1433,7 @@ export default function RequestsView({
                   </p>
                 </div>
               </div>
-              <RequestFullDetails request={detailRequest} isOwner={false} />
+              <RequestFullDetails request={detailRequest} isOwner={false} companyCity={companyProfile?.city} companyCounty={companyProfile?.county} />
               <div className="mt-4 border-t border-gray-100 pt-4">
                 <button
                   onClick={() => {

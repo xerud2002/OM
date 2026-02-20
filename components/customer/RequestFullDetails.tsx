@@ -31,11 +31,15 @@ const RouteMap = dynamic(() => import("./RouteMap"), { ssr: false });
 type RequestFullDetailsProps = {
   request: MovingRequest;
   isOwner: boolean;
+  companyCity?: string;
+  companyCounty?: string;
 };
 
 export default function RequestFullDetails({
   request,
   isOwner,
+  companyCity,
+  companyCounty,
 }: RequestFullDetailsProps) {
   const [localMediaUrls, setLocalMediaUrls] = useState<string[]>(
     request.mediaUrls || [],
@@ -260,6 +264,8 @@ export default function RequestFullDetails({
           fromCounty={request.fromCounty}
           toCity={request.toCity}
           toCounty={request.toCounty}
+          companyCity={companyCity}
+          companyCounty={companyCounty}
         />
       )}
 
