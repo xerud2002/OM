@@ -18,10 +18,6 @@ import {
   doc,
   getDoc,
   collection,
-  addDoc,
-  updateDoc,
-  increment,
-  serverTimestamp,
   query,
   where,
   getDocs,
@@ -91,7 +87,9 @@ function StarRatingInput({
             {filled ? (
               <StarIconSolid className={`${sizeClasses} text-amber-400`} />
             ) : (
-              <StarIcon className={`${sizeClasses} text-gray-300 hover:text-amber-200`} />
+              <StarIcon
+                className={`${sizeClasses} text-gray-300 hover:text-amber-200`}
+              />
             )}
           </button>
         );
@@ -113,7 +111,9 @@ export default function NewReviewPage() {
 
   // Form state
   const [overallRating, setOverallRating] = useState(0);
-  const [categoryRatings, setCategoryRatings] = useState<Record<string, number>>({});
+  const [categoryRatings, setCategoryRatings] = useState<
+    Record<string, number>
+  >({});
   const [comment, setComment] = useState("");
   const [customerName, setCustomerName] = useState("");
 
@@ -123,9 +123,14 @@ export default function NewReviewPage() {
 
     const fetchCompany = async () => {
       try {
-        const companyDoc = await getDoc(doc(db, "companies", companyId as string));
+        const companyDoc = await getDoc(
+          doc(db, "companies", companyId as string),
+        );
         if (companyDoc.exists()) {
-          setCompany({ ...companyDoc.data(), uid: companyDoc.id } as CompanyProfile);
+          setCompany({
+            ...companyDoc.data(),
+            uid: companyDoc.id,
+          } as CompanyProfile);
         } else {
           setError("Compania nu a fost găsită");
         }
@@ -136,7 +141,7 @@ export default function NewReviewPage() {
             collection(db, "reviews"),
             where("companyId", "==", companyId),
             where("requestId", "==", requestId),
-            where("status", "==", "published")
+            where("status", "==", "published"),
           );
           const reviewsSnapshot = await getDocs(reviewsQuery);
           if (!reviewsSnapshot.empty) {
@@ -176,13 +181,15 @@ export default function NewReviewPage() {
 
     try {
       // Calculate average from category ratings if any
-      const categoryValues = Object.values(categoryRatings).filter((v) => v > 0);
+      const categoryValues = Object.values(categoryRatings).filter(
+        (v) => v > 0,
+      );
       const avgCategoryRating =
         categoryValues.length > 0
           ? categoryValues.reduce((a, b) => a + b, 0) / categoryValues.length
           : overallRating;
 
-      // Create review
+      // Create review via server API (rate-limited, validated server-side)
       const reviewData = {
         companyId: companyId as string,
         requestId: requestId || null,
@@ -192,34 +199,17 @@ export default function NewReviewPage() {
           Object.keys(categoryRatings).length > 0 ? categoryRatings : null,
         avgCategoryRating,
         comment: comment.trim(),
-        createdAt: serverTimestamp(),
-        status: "published", // or "pending" if you want moderation
       };
 
-      await addDoc(collection(db, "reviews"), reviewData);
+      const res = await fetch("/api/reviews/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(reviewData),
+      });
 
-      // Update company's average rating (non-blocking - may fail due to permissions)
-      try {
-        const companyRef = doc(db, "companies", companyId as string);
-        const companySnap = await getDoc(companyRef);
-        
-        if (companySnap.exists()) {
-          const data = companySnap.data();
-          const currentTotal = data.totalReviews || 0;
-          const currentAvg = data.averageRating || 0;
-          
-          // Calculate new average
-          const newTotal = currentTotal + 1;
-          const newAvg = ((currentAvg * currentTotal) + overallRating) / newTotal;
-          
-          await updateDoc(companyRef, {
-            totalReviews: increment(1),
-            averageRating: Math.round(newAvg * 10) / 10, // Round to 1 decimal
-          });
-        }
-      } catch (statsErr) {
-        // Company stats update failed (permission issue) - review is still saved
-        logger.warn("Could not update company stats:", statsErr);
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.error || "Eroare la trimiterea recenziei");
       }
 
       setSubmitted(true);
@@ -266,10 +256,12 @@ export default function NewReviewPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center max-w-md mx-auto px-4">
           <CheckCircleIcon className="h-16 w-16 text-emerald-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold text-gray-900 mb-2">Recenzie deja trimisă</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">
+            Recenzie deja trimisă
+          </h1>
           <p className="text-gray-600 mb-6">
-            Ai trimis deja o recenzie pentru această cerere de mutare.
-            Îți mulțumim pentru feedback!
+            Ai trimis deja o recenzie pentru această cerere de mutare. Îți
+            mulțumim pentru feedback!
           </p>
           <Link
             href="/"
@@ -300,8 +292,8 @@ export default function NewReviewPage() {
                 Îți mulțumim pentru recenzie!
               </h1>
               <p className="text-gray-600 mb-6">
-                Feedback-ul tău ajută alți clienți să ia decizii informate și ajută
-                companiile să își îmbunătățească serviciile.
+                Feedback-ul tău ajută alți clienți să ia decizii informate și
+                ajută companiile să își îmbunătățească serviciile.
               </p>
               <div className="flex items-center justify-center gap-1 mb-6">
                 {[1, 2, 3, 4, 5].map((star) => (
@@ -358,7 +350,8 @@ export default function NewReviewPage() {
                 Cum a fost experiența ta?
               </h1>
               <p className="text-emerald-100">
-                Lasă o recenzie pentru <strong className="text-white">{company?.companyName}</strong>
+                Lasă o recenzie pentru{" "}
+                <strong className="text-white">{company?.companyName}</strong>
               </p>
             </div>
 
@@ -378,7 +371,10 @@ export default function NewReviewPage() {
                   Rating general *
                 </label>
                 <div className="flex justify-center">
-                  <StarRatingInput rating={overallRating} onRatingChange={setOverallRating} />
+                  <StarRatingInput
+                    rating={overallRating}
+                    onRatingChange={setOverallRating}
+                  />
                 </div>
                 <p className="text-sm text-gray-500 mt-2">
                   {overallRating === 0 && "Selectează un rating"}
@@ -393,7 +389,10 @@ export default function NewReviewPage() {
               {/* Category Ratings (Optional) */}
               <div>
                 <label className="block text-lg font-semibold text-gray-900 mb-4">
-                  Evaluează pe categorii <span className="text-gray-400 font-normal text-sm">(opțional)</span>
+                  Evaluează pe categorii{" "}
+                  <span className="text-gray-400 font-normal text-sm">
+                    (opțional)
+                  </span>
                 </label>
                 <div className="grid gap-4 sm:grid-cols-2">
                   {ratingCategories.map((cat) => (
@@ -404,14 +403,21 @@ export default function NewReviewPage() {
                       <div className="flex items-center gap-3">
                         <cat.icon className="h-5 w-5 text-gray-400" />
                         <div>
-                          <div className="font-medium text-gray-900 text-sm">{cat.label}</div>
-                          <div className="text-xs text-gray-500">{cat.description}</div>
+                          <div className="font-medium text-gray-900 text-sm">
+                            {cat.label}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            {cat.description}
+                          </div>
                         </div>
                       </div>
                       <StarRatingInput
                         rating={categoryRatings[cat.key] || 0}
                         onRatingChange={(rating) =>
-                          setCategoryRatings((prev) => ({ ...prev, [cat.key]: rating }))
+                          setCategoryRatings((prev) => ({
+                            ...prev,
+                            [cat.key]: rating,
+                          }))
                         }
                         size="md"
                       />
@@ -422,7 +428,10 @@ export default function NewReviewPage() {
 
               {/* Customer Name */}
               <div>
-                <label htmlFor="customerName" className="block text-lg font-semibold text-gray-900 mb-2">
+                <label
+                  htmlFor="customerName"
+                  className="block text-lg font-semibold text-gray-900 mb-2"
+                >
                   Numele tău *
                 </label>
                 <input
@@ -441,7 +450,10 @@ export default function NewReviewPage() {
 
               {/* Comment */}
               <div>
-                <label htmlFor="comment" className="block text-lg font-semibold text-gray-900 mb-2">
+                <label
+                  htmlFor="comment"
+                  className="block text-lg font-semibold text-gray-900 mb-2"
+                >
                   Recenzia ta *
                 </label>
                 <textarea
@@ -494,7 +506,8 @@ export default function NewReviewPage() {
 
               {/* Info text */}
               <p className="text-center text-sm text-gray-500">
-                Recenzia ta va fi publică și va ajuta alți clienți să ia decizii informate.
+                Recenzia ta va fi publică și va ajuta alți clienți să ia decizii
+                informate.
               </p>
             </form>
           </div>
@@ -502,7 +515,10 @@ export default function NewReviewPage() {
 
         {/* Footer */}
         <footer className="py-8 text-center text-gray-500 text-sm">
-          <p>© {new Date().getFullYear()} OferteMutare.ro - Platforma #1 pentru mutări în România</p>
+          <p>
+            © {new Date().getFullYear()} OferteMutare.ro - Platforma #1 pentru
+            mutări în România
+          </p>
         </footer>
       </div>
     </>

@@ -114,12 +114,7 @@ service cloud.firestore {
       // Customers can create requests linked to their account
       allow create: if isSignedIn() && isCustomer() && request.resource.data.customerId == request.auth.uid;
       
-      // Guest requests (unauthenticated) - requires guestEmail and no customerId
-      allow create: if request.auth == null && 
-        request.resource.data.guestEmail is string &&
-        request.resource.data.guestEmail.size() > 5 &&
-        request.resource.data.customerId == null &&
-        request.resource.data.status == 'active';
+      // Guest requests created via /api/requests/createGuest (Admin SDK) — no client-side rule needed.
 
       // Only request owner can update their request, admin can also update
       allow update: if isSignedIn() && (resource.data.customerId == request.auth.uid || isAdmin());
@@ -204,17 +199,9 @@ service cloud.firestore {
 
     // === UPLOAD TOKENS COLLECTION ===
     match /uploadTokens/{tokenId} {
-      // Keep tokens hidden from clients
+      // All token operations use Admin SDK (/api/upload/*) — client access denied.
       allow get, list: if false;
-      // Allow customers to mark their own token as used (optional; prefer server API)
-      allow update: if isSignedIn() &&
-        // Ensure token is bound to a request owned by the caller
-        get(/databases/$(database)/documents/requests/$(resource.data.requestId)).data.customerId == request.auth.uid &&
-        // Only allow flipping used flag and setting uploadedAt
-        request.resource.data.diff(resource.data).changedKeys().hasOnly(['used','uploadedAt']) &&
-        request.resource.data.used == true;
-      // No creates/deletes from client
-      allow create, delete: if false;
+      allow create, update, delete: if false;
     }
 
     // === ADMINS COLLECTION ===
@@ -239,9 +226,10 @@ service cloud.firestore {
 
     // === ARTICLES COLLECTION (Content Management) ===
     match /articles/{articleId} {
-      // Public read access ONLY for published articles
-      allow read: if resource.data.status == 'published' && 
-                     resource.data.archived != true;
+      // Public read access ONLY for published articles; admin can read all
+      allow read: if (resource.data.status == 'published' && 
+                     resource.data.archived != true) ||
+                     (isSignedIn() && isAdmin());
       
       // Admin write access only - secured for production
       allow create, update: if isSignedIn() && isAdmin();
@@ -255,18 +243,9 @@ service cloud.firestore {
       // Public read access to all published reviews
       allow read: if resource.data.status == 'published';
       
-      // Anyone can create a review (guests via email link); verify company exists to prevent spam
-      allow create: if 
-        exists(/databases/$(database)/documents/companies/$(request.resource.data.companyId)) &&
-        request.resource.data.keys().hasAll(['companyId', 'customerName', 'rating', 'comment', 'createdAt', 'status']) &&
-        request.resource.data.companyId is string &&
-        request.resource.data.customerName is string &&
-        request.resource.data.customerName.size() >= 2 &&
-        request.resource.data.rating >= 1 &&
-        request.resource.data.rating <= 5 &&
-        request.resource.data.comment is string &&
-        request.resource.data.comment.size() >= 10 &&
-        request.resource.data.status == 'published';
+      // Client-side creates blocked — reviews are created via /api/reviews/create (Admin SDK)
+      // which enforces rate-limiting, validation, and sets status server-side.
+      allow create: if false;
       
       // Admin can update reviews (for moderation)
       allow update: if isSignedIn() && isAdmin();
