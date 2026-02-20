@@ -148,12 +148,15 @@ function CompanyMarker({ address, originAddress }: { address: string; originAddr
       if (markerRef.current) markerRef.current.setMap(null);
       if (rendererRef.current) rendererRef.current.setMap(null);
 
-      // Extend bounds to include company
-      const bounds = new google.maps.LatLngBounds();
-      bounds.extend(companyPos);
-      const existing = map.getBounds();
-      if (existing) bounds.union(existing);
-      map.fitBounds(bounds, { top: 40, right: 40, bottom: 40, left: 40 });
+      // Helper to fit all points
+      const fitAll = () => {
+        const b = new google.maps.LatLngBounds();
+        b.extend(companyPos);
+        const cur = map.getBounds();
+        if (cur) b.union(cur);
+        map.fitBounds(b, { top: 50, right: 50, bottom: 50, left: 50 });
+      };
+      fitAll();
 
       // Van SVG path for the marker icon
       const vanPath = "M20 8h-3V4H3c-1.1 0-2 .9-2 2v11h2c0 1.66 1.34 3 3 3s3-1.34 3-3h6c0 1.66 1.34 3 3 3s3-1.34 3-3h2v-5l-3-4zM6 18.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5zm13.5-9l1.96 2.5H17V9.5h2.5zm-1.5 9c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z";
@@ -165,7 +168,7 @@ function CompanyMarker({ address, originAddress }: { address: string; originAddr
         title: "Sediu firmă",
         icon: {
           path: vanPath,
-          fillColor: "#7c3aed",   // violet-600
+          fillColor: "#059669",   // emerald-600
           fillOpacity: 1,
           strokeColor: "#fff",
           strokeWeight: 1.5,
@@ -182,7 +185,7 @@ function CompanyMarker({ address, originAddress }: { address: string; originAddr
         suppressMarkers: true,
         preserveViewport: true,
         polylineOptions: {
-          strokeColor: "#7c3aed",   // violet-600
+          strokeColor: "#059669",   // emerald-600
           strokeOpacity: 0.6,
           strokeWeight: 4,
         },
@@ -198,6 +201,8 @@ function CompanyMarker({ address, originAddress }: { address: string; originAddr
         (result, s) => {
           if (s === google.maps.DirectionsStatus.OK && result) {
             renderer.setDirections(result);
+            // Re-fit after route renders to include all 3 points
+            setTimeout(fitAll, 300);
           }
         },
       );
@@ -317,7 +322,7 @@ export default function RouteMap({
       {/* Map */}
       {/* Hide Google logo & Terms links */}
       <style>{`.route-map-wrap .gm-style a[href*="google"], .route-map-wrap .gm-style a[href*="terms"], .route-map-wrap .gm-style .gmnoscreen, .route-map-wrap .gm-style-cc { display:none!important; } .route-map-wrap .gm-style img[alt="Google"] { display:none!important; }`}</style>
-      <div className="route-map-wrap h-64 sm:h-96">
+      <div className="route-map-wrap h-80 sm:h-96">
           <Map
             defaultCenter={{ lat: 45.9432, lng: 24.9668 }} // Romania center
             defaultZoom={7}
