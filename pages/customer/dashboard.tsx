@@ -28,7 +28,7 @@ import {
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import type { User } from "firebase/auth";
 import { MovingRequest, Offer } from "@/types";
-import { formatDateRO } from "@/utils/date";
+import { formatDateRO, isMoveDateUrgent } from "@/utils/date";
 
 import { motion, AnimatePresence } from "framer-motion";
 import { db } from "@/services/firebase";
@@ -113,9 +113,8 @@ export default function CustomerDashboard() {
   const requestsUnsubRef = useRef<(() => void) | null>(null);
 
   // Filters
-  const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<
-    "all" | "active" | "accepted" | "closed"
+    "all" | "active" | "accepted" | "closed" | "paused"
   >("all");
 
   // Company ratings cache
@@ -140,8 +139,7 @@ export default function CustomerDashboard() {
       }
 
       // Ensure customer profile exists (skip if user is a company)
-      const { doc, getDoc, setDoc, serverTimestamp } =
-        await import("firebase/firestore");
+      const { setDoc, serverTimestamp } = await import("firebase/firestore");
 
       // Guard: if this user is a company, don't create a customer profile
       const companySnap = await getDoc(doc(db, "companies", u.uid));
@@ -263,13 +261,8 @@ export default function CustomerDashboard() {
 
   // Filtered requests
   const filteredRequests = requests.filter((req) => {
-    const q = searchQuery.toLowerCase();
-    const matchesSearch =
-      !q ||
-      req.fromCity?.toLowerCase().includes(q) ||
-      req.toCity?.toLowerCase().includes(q);
     const matchesStatus = statusFilter === "all" || req.status === statusFilter;
-    return matchesSearch && matchesStatus;
+    return matchesStatus;
   });
 
   // Auto-select first filtered request when filter changes
@@ -283,7 +276,7 @@ export default function CustomerDashboard() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [statusFilter, searchQuery]);
+  }, [statusFilter]);
 
   const selectedRequest = requests.find((r) => r.id === selectedRequestId);
   const selectedOffers = useMemo(
@@ -415,7 +408,7 @@ export default function CustomerDashboard() {
     }
   };
 
-  // Reactivate a closed request
+  // Reactivate a closed request (via secure API)
   const handleReactivate = async (requestId: string): Promise<void> => {
     const { toast } = await import("sonner");
     try {
@@ -424,13 +417,17 @@ export default function CustomerDashboard() {
         return;
       }
 
-      const { doc, updateDoc, serverTimestamp } =
-        await import("firebase/firestore");
-      await updateDoc(doc(db, "requests", requestId), {
-        status: "active",
-        updatedAt: serverTimestamp(),
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/requests/updateStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId, status: "active" }),
       });
 
+      if (!resp.ok) throw new Error("Failed");
       toast.success("Cererea a fost reactivată!");
     } catch (err) {
       logger.error("Failed to reactivate request", err);
@@ -438,7 +435,7 @@ export default function CustomerDashboard() {
     }
   };
 
-  // Finalize an accepted request (move completed)
+  // Finalize an accepted request (via secure API)
   const handleFinalize = async (requestId: string): Promise<void> => {
     const { toast } = await import("sonner");
     try {
@@ -447,13 +444,17 @@ export default function CustomerDashboard() {
         return;
       }
 
-      const { doc, updateDoc, serverTimestamp } =
-        await import("firebase/firestore");
-      await updateDoc(doc(db, "requests", requestId), {
-        status: "closed",
-        updatedAt: serverTimestamp(),
+      const token = await user.getIdToken();
+      const resp = await fetch("/api/requests/updateStatus", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ requestId, status: "closed" }),
       });
 
+      if (!resp.ok) throw new Error("Failed");
       toast.success("Cererea a fost finalizată!");
     } catch (err) {
       logger.error("Failed to finalize request", err);
@@ -532,6 +533,7 @@ export default function CustomerDashboard() {
                       <option value="active">Activă</option>
                       <option value="accepted">Acceptată</option>
                       <option value="closed">Finalizată</option>
+                      <option value="paused">Pauză</option>
                     </select>
                   </div>
                 </div>
@@ -545,7 +547,6 @@ export default function CustomerDashboard() {
                       </p>
                       <button
                         onClick={() => {
-                          setSearchQuery("");
                           setStatusFilter("all");
                         }}
                         className="mt-1 text-xs text-emerald-600 hover:underline"
@@ -571,26 +572,8 @@ export default function CustomerDashboard() {
                         );
 
                         // Check if move date is within 3 days → urgent
-                        const now = new Date();
-                        const threeDaysFromNow = new Date(
-                          now.getTime() + 3 * 24 * 60 * 60 * 1000,
-                        );
-                        const moveDateStr = req.moveDate || req.moveDateStart;
-                        const moveDateEndStr = req.moveDateEnd;
-                        let isUrgent = false;
-                        if (moveDateStr && req.status === "active") {
-                          const md = new Date(moveDateStr + "T00:00:00");
-                          if (moveDateEndStr) {
-                            // Range: urgent if range start is within 3 days
-                            const mdEnd = new Date(
-                              moveDateEndStr + "T00:00:00",
-                            );
-                            isUrgent = md <= threeDaysFromNow && mdEnd >= now;
-                          } else {
-                            // Exact: urgent if date is within 3 days and not in the past
-                            isUrgent = md >= now && md <= threeDaysFromNow;
-                          }
-                        }
+                        const isUrgent =
+                          req.status === "active" && isMoveDateUrgent(req, 3);
 
                         return (
                           <li key={req.id}>
@@ -911,7 +894,7 @@ export default function CustomerDashboard() {
                 initial={{ scale: 0.95, opacity: 0, y: 20 }}
                 animate={{ scale: 1, opacity: 1, y: 0 }}
                 exit={{ scale: 0.95, opacity: 0, y: 20 }}
-                className="relative max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl"
+                className="relative max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-2xl bg-white p-4 sm:p-6 shadow-2xl"
                 onClick={(e) => e.stopPropagation()}
               >
                 <button
@@ -1142,8 +1125,6 @@ function OfferCard({
   const isDeclined = offer.status === "declined";
   const isPending = offer.status === "pending" || !offer.status;
 
-  const companyProfileHref = `/reviews/new?company=${offer.companyId}&request=${requestId}`;
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -1172,9 +1153,8 @@ function OfferCard({
       <div className="flex flex-1 flex-col p-4">
         {/* Logo + Company name */}
         <div className="mb-3 flex items-center gap-3">
-          <Link
-            href={companyProfileHref}
-            className={`relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-sm transition hover:opacity-80 ${
+          <div
+            className={`relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-sm ${
               isAccepted
                 ? "ring-2 ring-emerald-500"
                 : isDeclined
@@ -1195,7 +1175,7 @@ function OfferCard({
               height={40}
               className="h-full w-full object-cover"
             />
-          </Link>
+          </div>
           <div className="min-w-0 flex-1">
             <p
               className={`flex items-center gap-1 text-sm font-bold ${isDeclined ? "text-gray-500" : "text-gray-900"}`}
@@ -1207,7 +1187,7 @@ function OfferCard({
               />
             </p>
             <p className="text-xs text-gray-500">
-              {offer.createdAt?.toDate?.()
+              {offer.createdAt
                 ? formatDateRO(offer.createdAt, { month: "short" })
                 : "Ofertă nouă"}
             </p>
@@ -1284,17 +1264,17 @@ function OfferCard({
             </Link>
           )}
 
-          {/* Contact buttons row */}
-          <div className="flex items-center justify-center gap-1.5">
-            <ContactButtons
-              offer={offer}
-              onChat={onChat}
-              variant={
-                isAccepted ? "accepted" : isDeclined ? "declined" : "pending"
-              }
-              hasUnread={hasUnread}
-            />
-          </div>
+          {/* Contact buttons row – hide for declined offers */}
+          {!isDeclined && (
+            <div className="flex items-center justify-center gap-1.5">
+              <ContactButtons
+                offer={offer}
+                onChat={onChat}
+                variant={isAccepted ? "accepted" : "pending"}
+                hasUnread={hasUnread}
+              />
+            </div>
+          )}
         </div>
       </div>
     </motion.div>
