@@ -7,6 +7,10 @@ import {
   UserIcon as User,
   CalculatorIcon,
   WrenchScrewdriverIcon,
+  InformationCircleIcon,
+  EnvelopeIcon,
+  NewspaperIcon,
+  BuildingOfficeIcon,
 } from "@heroicons/react/24/outline";
 import { useRouter } from "next/router";
 import type { User as FirebaseUser } from "firebase/auth";
@@ -86,9 +90,9 @@ export default function Navbar() {
   const navLinks = [
     { href: "/servicii", label: "Servicii", icon: WrenchScrewdriverIcon },
     { href: "/calculator", label: "Calculator", icon: CalculatorIcon },
-    { href: "/about", label: "Despre Noi" },
-    { href: "/contact", label: "Contact" },
-    { href: "/blog", label: "Blog" },
+    { href: "/about", label: "Despre Noi", icon: InformationCircleIcon },
+    { href: "/contact", label: "Contact", icon: EnvelopeIcon },
+    { href: "/blog", label: "Blog", icon: NewspaperIcon },
   ];
 
   return (
@@ -251,6 +255,7 @@ export default function Navbar() {
                 : "text-gray-500 hover:bg-gray-50 hover:text-gray-700"
             }`}
           >
+            <BuildingOfficeIcon className="h-4.5 w-4.5 text-gray-400" />
             Devino Partener
           </Link>
 
