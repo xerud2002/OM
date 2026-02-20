@@ -33,6 +33,7 @@ type RequestFullDetailsProps = {
   isOwner: boolean;
   companyCity?: string;
   companyCounty?: string;
+  onPlaceOffer?: () => void;
 };
 
 export default function RequestFullDetails({
@@ -40,6 +41,7 @@ export default function RequestFullDetails({
   isOwner,
   companyCity,
   companyCounty,
+  onPlaceOffer,
 }: RequestFullDetailsProps) {
   const [localMediaUrls, setLocalMediaUrls] = useState<string[]>(
     request.mediaUrls || [],
@@ -110,6 +112,7 @@ export default function RequestFullDetails({
           toCounty={request.toCounty}
           companyCity={companyCity}
           companyCounty={companyCounty}
+          onPlaceOffer={onPlaceOffer}
         />
       )}
 

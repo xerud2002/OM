@@ -19,6 +19,7 @@ type RouteMapProps = {
   toCounty?: string;
   companyCity?: string;
   companyCounty?: string;
+  onPlaceOffer?: () => void;
 };
 
 const API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "";
@@ -282,11 +283,13 @@ function CompanyDistances({
   originLoc,
   destLoc,
   routeKm,
+  onPlaceOffer,
 }: {
   companyLoc: string;
   originLoc: string;
   destLoc: string;
   routeKm: number;
+  onPlaceOffer?: () => void;
 }) {
   const toPickup = useDistanceCalc(companyLoc, originLoc);
   const backHome = useDistanceCalc(destLoc, companyLoc);
@@ -298,21 +301,32 @@ function CompanyDistances({
     : null;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-4 border-t border-gray-100 bg-gray-50/60 px-3 py-2 sm:py-2.5 text-[11px] sm:text-xs text-gray-600">
+    <div className="flex items-center justify-center gap-2 sm:gap-3 border-t border-gray-100 bg-gray-50/60 px-3 py-2 sm:py-2.5 text-[11px] sm:text-xs text-gray-600 flex-wrap">
       {toPickup && (
         <span className="inline-flex items-center gap-1 whitespace-nowrap">
           <MapPinIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-orange-500 shrink-0" />
-          Deplasare la client: <strong className="text-gray-800">{toPickup.text}</strong>
+          Deplasare: <strong className="text-gray-800">{toPickup.text}</strong>
         </span>
       )}
       {toPickup && roundTrip !== null && (
-        <span className="hidden sm:inline text-gray-300">•</span>
+        <span className="text-gray-300">•</span>
       )}
       {roundTrip !== null && (
         <span className="inline-flex items-center gap-1 whitespace-nowrap">
           <ArrowPathIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-emerald-500 shrink-0" />
-          Dus-întors total: <strong className="text-gray-800">{roundTrip} km</strong>
+          Dus-întors: <strong className="text-gray-800">{roundTrip} km</strong>
         </span>
+      )}
+      {onPlaceOffer && (
+        <>
+          <span className="text-gray-300">•</span>
+          <button
+            onClick={onPlaceOffer}
+            className="inline-flex items-center gap-1 whitespace-nowrap rounded-lg bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-semibold shadow-sm transition-colors"
+          >
+            Plasează ofertă
+          </button>
+        </>
       )}
     </div>
   );
@@ -328,6 +342,7 @@ export default function RouteMap({
   toCounty,
   companyCity,
   companyCounty,
+  onPlaceOffer,
 }: RouteMapProps) {
   const [info, setInfo] = useState<{
     distance: string;
@@ -420,6 +435,7 @@ export default function RouteMap({
           originLoc={origin}
           destLoc={destination}
           routeKm={routeKm}
+          onPlaceOffer={onPlaceOffer}
         />
       )}
     </div>

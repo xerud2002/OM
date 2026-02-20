@@ -1433,7 +1433,7 @@ export default function RequestsView({
                   </p>
                 </div>
               </div>
-              <RequestFullDetails request={detailRequest} isOwner={false} companyCity={companyProfile?.city} companyCounty={companyProfile?.county} />
+              <RequestFullDetails request={detailRequest} isOwner={false} companyCity={companyProfile?.city} companyCounty={companyProfile?.county} onPlaceOffer={() => { setActiveOfferRequest(detailRequest); setDetailRequest(null); }} />
               <div className="mt-4 border-t border-gray-100 pt-4">
                 <button
                   onClick={() => {
