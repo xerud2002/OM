@@ -15,6 +15,9 @@ import {
   TruckIcon,
   PlayIcon,
   PhotoIcon,
+  ArchiveBoxIcon,
+  InboxStackIcon,
+  ScissorsIcon,
 } from "@heroicons/react/24/outline";
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
@@ -248,7 +251,7 @@ export default function RequestFullDetails({
       </div>
 
       {/* Services */}
-      {(request.serviceMoving || request.serviceTransportOnly) && (
+      {(request.serviceMoving || request.serviceTransportOnly || request.servicePacking || request.serviceAssembly || request.serviceDisposal || request.servicePackingMaterials) && (
           <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
               <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-orange-50">
@@ -257,18 +260,31 @@ export default function RequestFullDetails({
               <h3 className="text-lg font-semibold text-gray-900">Tip Serviciu</h3>
             </div>
             <div className="flex flex-wrap gap-2">
-              {request.serviceMoving && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-blue-200 bg-blue-50 px-3 py-1.5 text-sm font-medium text-blue-700">
-                  <TruckIcon className="h-4 w-4" />
-                  Mutare completă
-                </span>
-              )}
-              {request.serviceTransportOnly && (
-                <span className="inline-flex items-center gap-1.5 rounded-lg border border-gray-200 bg-gray-50 px-3 py-1.5 text-sm font-medium text-gray-700">
-                  <TruckIcon className="h-4 w-4" />
-                  Doar câteva lucruri
-                </span>
-              )}
+              {([
+                { key: "serviceMoving" as const, label: "Mutare completă", icon: TruckIcon, color: "blue" },
+                { key: "serviceTransportOnly" as const, label: "Doar câteva lucruri", icon: ArchiveBoxIcon, color: "gray" },
+                { key: "servicePacking" as const, label: "Împachetare lucruri", icon: InboxStackIcon, color: "purple" },
+                { key: "serviceAssembly" as const, label: "Montaj / Demontare", icon: WrenchScrewdriverIcon, color: "orange" },
+                { key: "serviceDisposal" as const, label: "Debarasare", icon: TrashIcon, color: "red" },
+                { key: "servicePackingMaterials" as const, label: "Materiale împachetare", icon: ScissorsIcon, color: "green" },
+              ] as const)
+                .filter((s) => request[s.key])
+                .map((s) => {
+                  const colors: Record<string, string> = {
+                    blue: "border-blue-200 bg-blue-50 text-blue-700",
+                    gray: "border-gray-200 bg-gray-50 text-gray-700",
+                    purple: "border-purple-200 bg-purple-50 text-purple-700",
+                    orange: "border-orange-200 bg-orange-50 text-orange-700",
+                    red: "border-red-200 bg-red-50 text-red-700",
+                    green: "border-green-200 bg-green-50 text-green-700",
+                  };
+                  return (
+                    <span key={s.key} className={`inline-flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm font-medium ${colors[s.color]}`}>
+                      <s.icon className="h-4 w-4" />
+                      {s.label}
+                    </span>
+                  );
+                })}
             </div>
           </div>
         )}

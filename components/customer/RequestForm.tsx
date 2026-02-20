@@ -11,6 +11,11 @@ import {
   CloudArrowUpIcon,
   EnvelopeIcon,
   XMarkIcon,
+  ArchiveBoxIcon,
+  InboxStackIcon,
+  WrenchScrewdriverIcon,
+  TrashIcon,
+  ScissorsIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import { toast } from "sonner";
@@ -462,44 +467,33 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
           Servicii căutate <span className="text-red-500">*</span>
         </label>
         <p className="mb-3 text-xs text-gray-500">
-          Selectează serviciile de care ai nevoie
+          Selectează toate serviciile de care ai nevoie
         </p>
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-2">
           {[
-            { id: "serviceMoving", label: "Mutare completă", icon: TruckIcon },
-            {
-              id: "serviceTransportOnly",
-              label: "Doar câteva lucruri",
-              icon: TruckIcon,
-            },
-          ].map((s) => (
-            <label
-              key={s.id}
-              className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3 transition-all ${
-                (form as any)[s.id]
-                  ? "border-purple-500 bg-purple-50 ring-1 ring-purple-500"
-                  : "border-gray-200 bg-white hover:bg-gray-50"
+            { key: "serviceMoving" as const, label: "Mutare Completă", desc: "Toată proprietatea", icon: TruckIcon },
+            { key: "serviceTransportOnly" as const, label: "Mutare Parțială", desc: "Doar câteva lucruri", icon: ArchiveBoxIcon },
+            { key: "servicePacking" as const, label: "Împachetare Lucruri", desc: "În cutii", icon: InboxStackIcon },
+            { key: "serviceAssembly" as const, label: "Montaj / Dezmembrare", desc: "Mobilă", icon: WrenchScrewdriverIcon },
+            { key: "serviceDisposal" as const, label: "Debarasare", desc: "Mobilă, lucruri", icon: TrashIcon },
+            { key: "servicePackingMaterials" as const, label: "Materiale Împachetare", desc: "Cutii, scotch etc.", icon: ScissorsIcon },
+          ].map((opt) => (
+            <button
+              type="button"
+              key={opt.key}
+              onClick={() => setForm((s) => ({ ...s, [opt.key]: !(s as any)[opt.key] }))}
+              className={`flex items-center gap-3 rounded-lg border p-3 transition ${
+                (form as any)[opt.key]
+                  ? "border-emerald-500 bg-emerald-50"
+                  : "border-gray-200 hover:border-emerald-200"
               }`}
             >
-              <input
-                type="checkbox"
-                className="sr-only"
-                checked={!!(form as any)[s.id]}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, [s.id]: e.target.checked }))
-                }
-              />
-              <div
-                className={`flex h-8 w-8 items-center justify-center rounded-lg ${(form as any)[s.id] ? "bg-purple-200 text-purple-700" : "bg-gray-100 text-gray-500"}`}
-              >
-                <s.icon className="h-4 w-4" />
-              </div>
-              <span
-                className={`text-sm font-medium ${(form as any)[s.id] ? "text-purple-900" : "text-gray-700"}`}
-              >
-                {s.label}
+              <opt.icon className={`h-5 w-5 shrink-0 ${(form as any)[opt.key] ? "text-emerald-600" : "text-gray-400"}`} />
+              <span className="text-left text-sm leading-tight text-gray-700">
+                <span className="font-medium">{opt.label}</span>
+                <span className="block text-xs text-gray-500">{opt.desc}</span>
               </span>
-            </label>
+            </button>
           ))}
         </div>
       </div>
@@ -682,15 +676,21 @@ export default function RequestForm({ form, setForm, onSubmit }: Props) {
 
       <div>
         <label className="mb-2 block text-sm font-semibold text-gray-900">
-          Ce obiecte muți?
+          Detalii mutare <span className="text-red-500">*</span>
         </label>
         <textarea
           rows={4}
           className="w-full rounded-xl border-gray-200 bg-gray-50 px-4 py-3 text-sm focus:border-emerald-500 focus:bg-white focus:ring-emerald-500"
-          placeholder="Ex: Canapea, pat, frigider, 20 cutii..."
+          placeholder="Descrie cât mai detaliat ce trebuie mutat pentru oferte precise. Ex: Canapea, pat dublu, frigider, mașină de spălat, 20 cutii..."
           value={form.details || ""}
           onChange={(e) => setForm((s) => ({ ...s, details: e.target.value }))}
+          minLength={100}
         />
+        <p className={`mt-1 text-xs ${
+          (form.details?.length || 0) < 100 ? "text-red-500" : "text-green-600"
+        }`}>
+          {form.details?.length || 0}/100 caractere minim
+        </p>
       </div>
     </div>
   );

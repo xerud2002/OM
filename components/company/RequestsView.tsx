@@ -38,6 +38,11 @@ import {
   PlayIcon,
   PhoneIcon,
   EnvelopeIcon,
+  ArchiveBoxIcon,
+  InboxStackIcon,
+  WrenchScrewdriverIcon,
+  TrashIcon,
+  ScissorsIcon,
 } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import counties from "@/data/counties";
@@ -261,19 +266,23 @@ function JobCard({
         </div>
       )}
 
-      {/* Service type - show only what the client selected */}
+      {/* Service type - show all selected services */}
       <div className="flex flex-wrap items-center gap-1 sm:gap-1.5 border-t border-gray-100 px-3 sm:px-4 py-2">
-        {(() => {
-          const service = r.serviceTransportOnly
-            ? { label: "Doar câteva lucruri", icon: TruckIcon }
-            : { label: "Mutare completă", icon: TruckIcon };
-          return (
-            <span className="flex items-center gap-0.5 sm:gap-1 rounded bg-blue-50 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-blue-700">
-              <service.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
-              {service.label}
+        {([
+          { key: "serviceMoving" as const, label: "Mutare completă", icon: TruckIcon },
+          { key: "serviceTransportOnly" as const, label: "Doar câteva lucruri", icon: ArchiveBoxIcon },
+          { key: "servicePacking" as const, label: "Împachetare", icon: InboxStackIcon },
+          { key: "serviceAssembly" as const, label: "Montaj / Demontare", icon: WrenchScrewdriverIcon },
+          { key: "serviceDisposal" as const, label: "Debarasare", icon: TrashIcon },
+          { key: "servicePackingMaterials" as const, label: "Materiale", icon: ScissorsIcon },
+        ] as const)
+          .filter((s) => r[s.key])
+          .map((s) => (
+            <span key={s.key} className="flex items-center gap-0.5 sm:gap-1 rounded bg-blue-50 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-blue-700">
+              <s.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
+              {s.label}
             </span>
-          );
-        })()}
+          ))}
       </div>
 
       {/* Notes Section - Always visible, 3 lines fixed */}
@@ -703,6 +712,14 @@ export default function RequestsView({
             return r.serviceMoving;
           case "transport":
             return r.serviceTransportOnly;
+          case "packing":
+            return r.servicePacking;
+          case "assembly":
+            return r.serviceAssembly;
+          case "disposal":
+            return r.serviceDisposal;
+          case "materials":
+            return r.servicePackingMaterials;
           default:
             return true;
         }
@@ -925,6 +942,10 @@ export default function RequestsView({
                     <option value="">Toate</option>
                     <option value="moving">Mutare completă</option>
                     <option value="transport">Doar câteva lucruri</option>
+                    <option value="packing">Împachetare</option>
+                    <option value="assembly">Montaj / Demontare</option>
+                    <option value="disposal">Debarasare</option>
+                    <option value="materials">Materiale împachetare</option>
                   </select>
                 </div>
 
@@ -1042,7 +1063,7 @@ export default function RequestsView({
           <span className="text-xs text-gray-400 mr-1">Filtre active:</span>
           {filterService && (
             <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700">
-              {{moving:"Mutare completă",transport:"Doar câteva lucruri"}[filterService] || filterService}
+              {{moving:"Mutare completă",transport:"Doar câteva lucruri",packing:"Împachetare",assembly:"Montaj / Demontare",disposal:"Debarasare",materials:"Materiale"}[filterService] || filterService}
               <button onClick={() => setFilterService("")} className="hover:text-emerald-900"><XMarkIcon className="h-3 w-3" /></button>
             </span>
           )}

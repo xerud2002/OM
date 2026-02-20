@@ -102,10 +102,13 @@ export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   // Check if current route is a dashboard route (no header/footer)
+  // Auth pages get the public Navbar so users can navigate back
+  const isAuthPage = router.pathname.endsWith("/auth");
   const isDashboardRoute =
-    router.pathname.startsWith("/customer") ||
-    router.pathname.startsWith("/company") ||
-    router.pathname.startsWith("/admin");
+    (router.pathname.startsWith("/customer") ||
+      router.pathname.startsWith("/company") ||
+      router.pathname.startsWith("/admin")) &&
+    !isAuthPage;
 
   // Capture UTM / lead source on first page load
   useEffect(() => {

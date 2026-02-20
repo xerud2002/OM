@@ -68,7 +68,9 @@ export default withErrorHandler(async function handler(
       userEmail &&
       (tokenData?.customerEmail?.toLowerCase() === userEmail ||
         requestData?.customerEmail?.toLowerCase() === userEmail ||
-        requestData?.guestEmail?.toLowerCase() === userEmail);
+        requestData?.guestEmail?.toLowerCase() === userEmail ||
+        requestData?.email?.toLowerCase() === userEmail ||
+        requestData?.contactEmail?.toLowerCase() === userEmail);
 
     if (!ownsViaId && !ownsViaEmail) {
       return res

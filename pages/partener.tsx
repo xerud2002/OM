@@ -127,7 +127,7 @@ const steps = [
 ];
 
 const stats = [
-  { value: "Zeci", label: "Firme Partenere" },
+  { value: "50+", label: "Firme Verificate" },
   { value: "Rapid", label: "Conectare cu Clienți" },
   { value: "0 lei", label: "Abonament Lunar" },
   { value: "24h", label: "Timp Răspuns" },
