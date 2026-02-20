@@ -18,7 +18,8 @@
       "./node_modules/tailwindcss/types"
     ],
     "types": [
-      "node"
+      "node",
+      "google.maps"
     ],
     "moduleResolution": "node",
     "resolveJsonModule": true,

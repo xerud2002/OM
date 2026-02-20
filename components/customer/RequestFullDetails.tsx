@@ -22,8 +22,11 @@ import {
 import { MovingRequest } from "../../types";
 import { formatMoveDateDisplay } from "@/utils/date";
 import Image from "next/image";
+import dynamic from "next/dynamic";
 import ConfirmModal from "@/components/ConfirmModal";
 import { logger } from "@/utils/logger";
+
+const RouteMap = dynamic(() => import("./RouteMap"), { ssr: false });
 
 type RequestFullDetailsProps = {
   request: MovingRequest;
@@ -249,6 +252,16 @@ export default function RequestFullDetails({
           </div>
         </div>
       </div>
+
+      {/* Route Map */}
+      {request.fromCity && request.toCity && (
+        <RouteMap
+          fromCity={request.fromCity}
+          fromCounty={request.fromCounty}
+          toCity={request.toCity}
+          toCounty={request.toCounty}
+        />
+      )}
 
       {/* Info Grid */}
       <div className="grid grid-cols-2 gap-3">
