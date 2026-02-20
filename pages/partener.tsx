@@ -229,7 +229,7 @@ function MockJobCard({
           <div className="mb-3 grid grid-cols-2 gap-2 text-xs text-gray-600">
             <div className="flex items-center gap-1.5">
               <HomeModernIcon className="h-3.5 w-3.5 shrink-0 text-gray-400" />
-              {rooms} camere
+              {rooms} {rooms === '1' ? 'cameră' : 'camere'}
             </div>
             <div className="flex items-center gap-1.5">
               <CalendarIcon className="h-3.5 w-3.5 shrink-0 text-gray-400" />
@@ -313,7 +313,7 @@ function MockJobCard({
                   <HomeModernIcon className="h-4 w-4" />
                   Locuință
                 </div>
-                <p className="mt-1 text-sm font-bold text-gray-800">{rooms} camere</p>
+                <p className="mt-1 text-sm font-bold text-gray-800">{rooms} {rooms === '1' ? 'cameră' : 'camere'}</p>
               </div>
               <div className="rounded-lg border border-gray-100 bg-gray-50 p-3">
                 <div className="flex items-center gap-2 text-xs text-gray-500">
