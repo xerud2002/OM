@@ -122,23 +122,23 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
         <title>{`Servicii Mutare ${currentYear} | Împachetare, Montaj, Depozitare, Debarasare`}</title>
         <meta
           name="description"
-          content={`Servicii auxiliare pentru mutare ${currentYear}: împachetare profesională, montaj mobilă, depozitare securizată, debarasare eco. Oferte de la firme verificate, compară gratuit.`}
+          content={`Servicii adiționale pentru mutare ${currentYear}: împachetare profesională, montaj mobilă, depozitare securizată, debarasare eco. Oferte de la firme verificate, compară gratuit.`}
         />
-        <meta name="keywords" content="împachetare profesională, montaj mobilă, depozitare mobilă, materiale ambalare, debarasare, servicii mutare auxiliare" />
+        <meta name="keywords" content="împachetare profesională, montaj mobilă, depozitare mobilă, materiale ambalare, debarasare, servicii mutare adiționale" />
         <link rel="canonical" href="https://ofertemutare.ro/servicii" />
 
         <meta name="robots" content="index, follow, max-image-preview:large" />
 
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://ofertemutare.ro/servicii" />
-        <meta property="og:title" content={`Servicii Auxiliare Mutare ${currentYear}`} />
+        <meta property="og:title" content={`Servicii Adiționale Mutare ${currentYear}`} />
         <meta property="og:description" content="Împachetare, montaj, depozitare, debarasare. Oferte de la firme verificate!" />
         <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
         <meta property="og:locale" content="ro_RO" />
 
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:url" content="https://ofertemutare.ro/servicii" />
-        <meta name="twitter:title" content={`Servicii Auxiliare Mutare ${currentYear}`} />
+        <meta name="twitter:title" content={`Servicii Adiționale Mutare ${currentYear}`} />
         <meta name="twitter:description" content="Împachetare, montaj, depozitare, debarasare. Oferte de la firme verificate!" />
         <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
 
@@ -149,7 +149,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
             __html: JSON.stringify({
               "@context": "https://schema.org",
               "@type": "Service",
-              name: "Servicii Auxiliare pentru Mutări",
+              name: "Servicii Adiționale pentru Mutări",
               serviceType: "Servicii Complementare Mutări",
               broker: {
                 "@type": "Organization",
@@ -174,7 +174,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
                   position: i + 1,
                 })),
               },
-              description: "Compară oferte de la firme partenere verificate pentru servicii auxiliare de mutare: împachetare profesională, montaj mobilă, materiale ambalare, depozitare securizată, debarasare. Prețuri orientative.",
+              description: "Compară oferte de la firme partenere verificate pentru servicii adiționale de mutare: împachetare profesională, montaj mobilă, materiale ambalare, depozitare securizată, debarasare. Prețuri orientative.",
             }),
           }}
         />
@@ -200,7 +200,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
             </div>
 
             <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-slate-900 sm:text-4xl md:text-5xl lg:text-6xl">
-              Servicii Auxiliare
+              Servicii Adiționale
               <br />
               <span className="relative inline-block">
                 <span className="bg-linear-to-r from-emerald-600 via-teal-500 to-sky-600 bg-clip-text text-transparent">
@@ -325,7 +325,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
             <p className="text-gray-700 leading-relaxed">
               O mutare nu înseamnă doar transportul mobilei de la A la B. Cele mai stresante aspecte sunt, de fapt, <strong>pregătirea bunurilor</strong> (împachetare,
               dezasamblare mobilier), <strong>protejarea obiectelor fragile</strong> și <strong>organizarea spațiilor</strong> la noua adresă (montaj, despachetare).
-              Prin adăugarea serviciilor auxiliare, transformi o experiență obositoare într-un proces gestionat profesional.
+              Prin adăugarea serviciilor adiționale, transformi o experiență obositoare într-un proces gestionat profesional.
             </p>
 
             <h3 className="text-xl font-bold text-gray-900 mt-8">Când Merită Împachetarea Profesională?</h3>

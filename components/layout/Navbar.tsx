@@ -24,6 +24,7 @@ export default function Navbar() {
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const router = useRouter();
   const pathname = router.pathname;
+  const isAuthPage = pathname.endsWith("/auth");
 
   /* 🔹 Scroll shadow logic */
   useEffect(() => {
@@ -104,11 +105,22 @@ export default function Navbar() {
       }`}
     >
       <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3">
+        {/* === MOBILE HAMBURGER (before logo) === */}
+        <button
+          onClick={() => setIsOpen((prev) => !prev)}
+          aria-label={isOpen ? "Închide meniu" : "Deschide meniu"}
+          aria-expanded={isOpen}
+          aria-controls="mobile-menu"
+          className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition hover:bg-gray-100 lg:hidden"
+        >
+          {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+        </button>
+
         {/* === LOGO === */}
         <Link
           href="/"
           aria-label="Acasă"
-          className="-ml-2 flex items-center select-none"
+          className="-ml-2 flex items-center select-none lg:-ml-2"
         >
           <div className="bg-linear-to-r from-emerald-600 to-emerald-800 bg-clip-text text-lg font-bold text-transparent sm:text-2xl md:text-3xl">
             <span className="tracking-tight">Oferte</span>
@@ -155,14 +167,16 @@ export default function Navbar() {
           <div className="mx-1 h-5 w-px bg-gray-200" />
 
           {!user ? (
-            <Link
-              href="/customer/auth"
-              aria-label="Contul Meu"
-              className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md active:scale-[0.98]"
-            >
-              <User className="h-4 w-4" />
-              Contul Meu
-            </Link>
+            !isAuthPage && (
+              <Link
+                href="/customer/auth"
+                aria-label="Contul Meu"
+                className="inline-flex items-center gap-2 rounded-full bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 hover:shadow-md active:scale-[0.98]"
+              >
+                <User className="h-4 w-4" />
+                Contul Meu
+              </Link>
+            )
           ) : (
             <div className="flex items-center gap-2">
               {/* Smart Dashboard Link */}
@@ -191,9 +205,9 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* === MOBILE: CTA + HAMBURGER === */}
+        {/* === MOBILE: CTA === */}
         <div className="flex items-center gap-2 lg:hidden">
-          {!user && (
+          {!user && !isAuthPage && (
             <Link
               href="/customer/auth"
               className="inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-2 text-xs font-semibold text-white shadow-sm transition-all hover:bg-emerald-700 sm:text-sm"
@@ -202,15 +216,6 @@ export default function Navbar() {
               Contul Meu
             </Link>
           )}
-          <button
-            onClick={() => setIsOpen((prev) => !prev)}
-            aria-label={isOpen ? "Închide meniu" : "Deschide meniu"}
-            aria-expanded={isOpen}
-            aria-controls="mobile-menu"
-            className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-600 transition hover:bg-gray-100"
-          >
-            {isOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </button>
         </div>
       </div>
 
