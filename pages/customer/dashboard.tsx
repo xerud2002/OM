@@ -1002,11 +1002,11 @@ export default function CustomerDashboard() {
                   <XMarkIcon className="h-5 w-5" />
                 </button>
                 <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
+                  <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-100">
                     <TruckIcon className="h-5 w-5 text-emerald-600" />
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-gray-900">
+                    <h3 className="hidden sm:block text-lg font-bold text-gray-900">
                       {detailModalRequest.fromCity} →{" "}
                       {detailModalRequest.toCity}
                     </h3>
