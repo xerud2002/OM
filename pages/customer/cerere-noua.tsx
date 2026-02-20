@@ -50,14 +50,14 @@ const tips = [
   {
     icon: MapPinIcon,
     color: "text-emerald-500 bg-emerald-50",
-    title: "Adrese exacte",
-    desc: "Include strada, numărul, etajul și scara pentru estimări precise.",
+    title: "Localitate completă",
+    desc: "Selectează județul și localitatea corect pentru estimări precise.",
   },
   {
     icon: CubeIcon,
     color: "text-blue-500 bg-blue-50",
-    title: "Lista obiectelor",
-    desc: "Menționează mobilierul mare, electrocasnicele și obiectele fragile.",
+    title: "Detalii în notă",
+    desc: "Scrie în câmpul 'Alte detalii' ce obiecte ai: canapea, frigider, obiecte fragile etc.",
   },
   {
     icon: CameraIcon,

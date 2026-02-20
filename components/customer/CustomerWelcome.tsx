@@ -122,8 +122,8 @@ export default function CustomerWelcome({ userName, onDismiss }: CustomerWelcome
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {[
-            { icon: MapPinIcon, color: "text-emerald-500", title: "Adrese exacte", desc: "Strada, număr, etaj, scara. Firmele calculează distanța și efortul" },
-            { icon: CubeIcon, color: "text-blue-500", title: "Lista obiectelor", desc: "Menționează mobilierul mare, electrocasnicele și obiectele fragile" },
+            { icon: MapPinIcon, color: "text-emerald-500", title: "Localitate completă", desc: "Selectează județul și localitatea. Firmele estimează distanța și costul" },
+            { icon: CubeIcon, color: "text-blue-500", title: "Detalii în notă", desc: "Scrie în câmpul 'Alte detalii' ce obiecte ai: canapea, frigider, obiecte fragile etc." },
             { icon: CameraIcon, color: "text-purple-500", title: "Adaugă poze", desc: "Fotografiile ajută firmele să estimeze volumul mult mai precis" },
             { icon: ClockIcon, color: "text-orange-500", title: "Data flexibilă?", desc: "Dacă ai flexibilitate, menționează. Poți primi prețuri mai bune" },
           ].map((tip) => (

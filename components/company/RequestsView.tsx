@@ -1422,6 +1422,17 @@ export default function RequestsView({
                 </div>
               </div>
               <RequestFullDetails request={detailRequest} isOwner={false} />
+              <div className="mt-4 border-t border-gray-100 pt-4">
+                <button
+                  onClick={() => {
+                    setActiveOfferRequest(detailRequest);
+                    setDetailRequest(null);
+                  }}
+                  className="w-full rounded-xl bg-green-600 px-4 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-green-700 active:scale-[0.98]"
+                >
+                  Plasează o ofertă
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         )}

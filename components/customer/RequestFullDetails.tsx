@@ -256,6 +256,7 @@ export default function RequestFullDetails({
         {(() => {
           const display = formatMoveDateDisplay(request as any, {
             month: "short",
+            shortYear: true,
           });
           return display && display !== "-" ? (
             <div className="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
@@ -274,20 +275,18 @@ export default function RequestFullDetails({
           ) : null;
         })()}
 
-        {/* Rooms / Volume */}
-        {(request.rooms || request.volumeM3) && (
+        {/* Rooms */}
+        {request.rooms && (
           <div className="flex items-start gap-3 rounded-xl border border-gray-100 bg-white p-3 shadow-sm">
             <div className="flex h-8 w-8 sm:h-9 sm:w-9 shrink-0 items-center justify-center rounded-lg bg-purple-50">
               <CubeIcon className="h-4 w-4 sm:h-5 sm:w-5 text-purple-600" />
             </div>
             <div className="min-w-0">
               <h4 className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-gray-400">
-                Volum / Camere
+                Camere
               </h4>
               <p className="mt-0.5 text-sm sm:text-base font-semibold text-gray-900">
-                {request.rooms ? `${request.rooms} camere` : ""}
-                {request.rooms && request.volumeM3 ? " • " : ""}
-                {request.volumeM3 ? `${request.volumeM3} m³` : ""}
+                {request.rooms} {request.rooms == 1 ? 'cameră' : 'camere'}
               </p>
             </div>
           </div>
