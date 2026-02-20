@@ -25,6 +25,7 @@ import {
   DocumentTextIcon,
   FunnelIcon,
   HomeIcon,
+  FlagIcon,
 } from "@heroicons/react/24/outline";
 import { CheckCircleIcon as CheckCircleSolid } from "@heroicons/react/24/solid";
 import type { User } from "firebase/auth";
@@ -1382,17 +1383,37 @@ function OfferCard({
             </Link>
           )}
 
-          {/* Contact buttons row – hide for declined offers */}
-          {!isDeclined && (
-            <div className="flex items-center justify-center gap-1.5">
-              <ContactButtons
-                offer={offer}
-                onChat={onChat}
-                variant={isAccepted ? "accepted" : "pending"}
-                hasUnread={hasUnread}
-              />
-            </div>
-          )}
+          {/* Contact buttons row */}
+          <div className="flex items-center justify-center gap-1.5">
+            <ContactButtons
+              offer={offer}
+              onChat={onChat}
+              variant={isAccepted ? "accepted" : "pending"}
+              hasUnread={hasUnread}
+            />
+            <button
+              onClick={() => {
+                import("sonner").then(({ toast }) => {
+                  toast.info("Raportul a fost trimis. Vom analiza situația.");
+                });
+                fetch("/api/fraud/track", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    type: "company_report",
+                    companyId: offer.companyId,
+                    companyName: offer.companyName,
+                    offerId: offer.id,
+                    requestId,
+                  }),
+                }).catch(() => {});
+              }}
+              className="inline-flex items-center justify-center rounded-lg sm:rounded-xl border border-red-200 bg-red-50 p-2 sm:p-2.5 text-red-600 transition hover:bg-red-100 active:bg-red-200"
+              title="Raportează"
+            >
+              <FlagIcon className="h-4 w-4 sm:h-5 sm:w-5" />
+            </button>
+          </div>
         </div>
       </div>
     </motion.div>
