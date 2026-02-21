@@ -322,7 +322,7 @@ function JobCard({
       )}
 
       {/* Service type - show all selected services */}
-      <div className="flex flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[5.5rem]">
+      <div className="flex flex-1 flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[5.5rem]">
         {(
           [
             {
@@ -391,11 +391,6 @@ function JobCard({
                 <EyeIcon className="h-3.5 w-3.5" />
                 Detalii
               </button>
-              {isMoveDateUrgent(r as any) && (
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
-                  ⚡ Urgent
-                </span>
-              )}
               {hasMine.status === "accepted" ? (
                 <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
                   <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
