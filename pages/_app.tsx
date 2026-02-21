@@ -5,10 +5,7 @@ import dynamic from "next/dynamic";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { Inter } from "next/font/google";
-import { loadGoogleAnalytics } from "@/utils/interactionLoader";
-import { hasConsent } from "@/utils/cookies";
-// Inline the event name to avoid importing the full CookieConsent module
-const CONSENT_EVENT = "om:consent-update";
+// GA4 is now loaded via Google Tag Manager (GTM-NN2XXQVV) — no direct gtag.js needed
 // Vercel Analytics removed - site is self-hosted on VPS, not Vercel
 import "../styles/globals.css";
 // react-day-picker CSS removed - custom InlineCalendar uses Tailwind, not rdp styles
@@ -126,25 +123,7 @@ export default function App({ Component, pageProps }: AppProps) {
     };
   }, [router.events]);
 
-  // Load Google Analytics only if user has consented to analytics cookies
-  useEffect(() => {
-    const GA_ID = "G-6624X6E5GQ";
-
-    // Load now if consent already exists (returning visitor)
-    if (hasConsent("analytics")) {
-      loadGoogleAnalytics(GA_ID);
-    }
-
-    // Listen for consent updates (new visitor clicks accept)
-    const onConsent = (e: Event) => {
-      const consent = (e as CustomEvent).detail;
-      if (consent?.analytics) {
-        loadGoogleAnalytics(GA_ID);
-      }
-    };
-    window.addEventListener(CONSENT_EVENT, onConsent);
-    return () => window.removeEventListener(CONSENT_EVENT, onConsent);
-  }, []);
+  // GA4 is loaded via GTM (GTM-NN2XXQVV) — no direct script injection needed
 
   return (
     <ErrorBoundary>
