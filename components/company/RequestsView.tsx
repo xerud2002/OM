@@ -232,7 +232,7 @@ function JobCard({
       </div>
 
       {/* Specs: Colectie & Livrare */}
-      <div className="grid grid-cols-2 gap-3 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs text-gray-600">
+      <div className="grid grid-cols-2 gap-3 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[7.5rem] text-[11px] sm:text-xs text-gray-600">
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] sm:text-[11px] font-bold uppercase text-gray-400">
             Colecție
@@ -302,7 +302,7 @@ function JobCard({
       )}
 
       {/* Service type - show all selected services */}
-      <div className="flex flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[2.5rem]">
+      <div className="flex flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[4.5rem]">
         {(
           [
             {
