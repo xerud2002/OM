@@ -16,7 +16,12 @@ Disallow: /api/
 Disallow: /_next/data/
 Disallow: /404
 
-# Crawl delay (respected by Bing/Yandex)
+# Crawl delay for Bing
+User-agent: Bingbot
+Crawl-delay: 1
+
+# Crawl delay for Yandex
+User-agent: Yandex
 Crawl-delay: 1
 
 # ─── Block AI Training Bots ───
