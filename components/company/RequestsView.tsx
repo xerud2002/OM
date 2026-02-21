@@ -246,16 +246,20 @@ function JobCard({
             </span>
           )}
           {r.fromFloor && <span>Etaj {r.fromFloor}</span>}
-          <span
-            className={
-              r.fromElevator
-                ? "text-emerald-600 font-medium"
-                : "text-rose-500 font-medium"
-            }
-          >
-            {r.fromElevator !== undefined &&
-              (r.fromElevator ? "✓ Lift" : "✗ Fără lift")}
-          </span>
+          {r.fromType !== "house" &&
+            r.fromFloor &&
+            !/^(parter|demisol)$/i.test(String(r.fromFloor)) &&
+            r.fromElevator !== undefined && (
+              <span
+                className={
+                  r.fromElevator
+                    ? "text-emerald-600 font-medium"
+                    : "text-rose-500 font-medium"
+                }
+              >
+                {r.fromElevator ? "✓ Lift" : "✗ Fără lift"}
+              </span>
+            )}
         </div>
         <div className="flex flex-col gap-0.5">
           <span className="text-[10px] sm:text-[11px] font-bold uppercase text-gray-400">
@@ -270,16 +274,20 @@ function JobCard({
             </span>
           )}
           {r.toFloor !== undefined && <span>Etaj {r.toFloor}</span>}
-          <span
-            className={
-              r.toElevator
-                ? "text-emerald-600 font-medium"
-                : "text-rose-500 font-medium"
-            }
-          >
-            {r.toElevator !== undefined &&
-              (r.toElevator ? "✓ Lift" : "✗ Fără lift")}
-          </span>
+          {r.toType !== "house" &&
+            r.toFloor !== undefined &&
+            !/^(parter|demisol)$/i.test(String(r.toFloor)) &&
+            r.toElevator !== undefined && (
+              <span
+                className={
+                  r.toElevator
+                    ? "text-emerald-600 font-medium"
+                    : "text-rose-500 font-medium"
+                }
+              >
+                {r.toElevator ? "✓ Lift" : "✗ Fără lift"}
+              </span>
+            )}
         </div>
       </div>
 
