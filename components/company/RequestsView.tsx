@@ -138,7 +138,7 @@ function JobCard({
 
   return (
     <div
-      className={`relative flex h-full min-h-[540px] flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-md overflow-hidden`}
+      className={`relative flex h-full flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-md overflow-hidden`}
     >
       {/* Top Status Bar */}
       <div
@@ -215,7 +215,7 @@ function JobCard({
       </div>
 
       {/* Route */}
-      <div className="flex items-center justify-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 text-[13px] sm:text-sm font-bold text-gray-800 leading-tight">
+      <div className="flex items-center justify-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[3.5rem] text-[13px] sm:text-sm font-bold text-gray-800 leading-tight">
         <span className="text-right">
           {r.fromCity}
           {r.fromCounty && COUNTY_ABBREV[r.fromCounty]
