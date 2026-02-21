@@ -89,21 +89,35 @@ export const adminAuth = admin.auth();
 export const adminReady = globalThis._firebaseAdminHasCredentials ?? false;
 
 /** Fetch aggregate review stats for SEO schema. Safe to call at build time. */
-let _reviewCache: { data: { ratingValue: number; reviewCount: number }; ts: number } | null = null;
+let _reviewCache: {
+  data: { ratingValue: number; reviewCount: number };
+  ts: number;
+} | null = null;
 const REVIEW_CACHE_TTL = 10 * 60 * 1000; // 10 minutes
 
-export async function getReviewStats(): Promise<{ ratingValue: number; reviewCount: number }> {
+export async function getReviewStats(): Promise<{
+  ratingValue: number;
+  reviewCount: number;
+}> {
   if (!adminReady) return { ratingValue: 0, reviewCount: 0 };
-  if (_reviewCache && Date.now() - _reviewCache.ts < REVIEW_CACHE_TTL) return _reviewCache.data;
+  if (_reviewCache && Date.now() - _reviewCache.ts < REVIEW_CACHE_TTL)
+    return _reviewCache.data;
   try {
-    const snap = await adminDb.collection("reviews").where("status", "==", "published").select("rating").get();
+    const snap = await adminDb
+      .collection("reviews")
+      .where("status", "==", "published")
+      .select("rating")
+      .get();
     if (snap.empty) return { ratingValue: 0, reviewCount: 0 };
 
     let total = 0;
     let count = 0;
     snap.docs.forEach((doc) => {
       const rating = Number(doc.data().rating);
-      if (rating >= 1 && rating <= 5) { total += rating; count++; }
+      if (rating >= 1 && rating <= 5) {
+        total += rating;
+        count++;
+      }
     });
 
     const result = {

@@ -98,7 +98,8 @@ export default function Articles() {
             </span>
           </h2>
           <p className="text-base text-slate-600 sm:text-lg">
-            Articole practice, sfaturi de la experți și tot ce trebuie să știi pentru a economisi timp și bani.
+            Articole practice, sfaturi de la experți și tot ce trebuie să știi
+            pentru a economisi timp și bani.
           </p>
         </motion.div>
 
@@ -187,5 +188,3 @@ export default function Articles() {
     </section>
   );
 }
-
-

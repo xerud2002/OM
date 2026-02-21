@@ -11,14 +11,32 @@ import {
 import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import { getReviewStats } from "@/lib/firebaseAdmin";
 import { SERVICE_FAQS } from "@/data/faqData";
-import { BuildingOffice2Icon as Building, ArrowRightIcon as ArrowRight, ShieldCheckIcon as Shield, TruckIcon as Truck, CubeIcon as Package, ClockIcon as Clock, CurrencyDollarIcon as DollarSign, ComputerDesktopIcon as Monitor, ServerIcon as Server, CalendarIcon as Calendar, UsersIcon as Users, DocumentTextIcon as FileText, BriefcaseIcon as Briefcase, PhoneIcon as Phone } from "@heroicons/react/24/outline";
+import {
+  BuildingOffice2Icon as Building,
+  ArrowRightIcon as ArrowRight,
+  ShieldCheckIcon as Shield,
+  TruckIcon as Truck,
+  CubeIcon as Package,
+  ClockIcon as Clock,
+  CurrencyDollarIcon as DollarSign,
+  ComputerDesktopIcon as Monitor,
+  ServerIcon as Server,
+  CalendarIcon as Calendar,
+  UsersIcon as Users,
+  DocumentTextIcon as FileText,
+  BriefcaseIcon as Briefcase,
+  PhoneIcon as Phone,
+} from "@heroicons/react/24/outline";
 
 interface MutariCompaniiPageProps {
   currentYear: number;
   reviewStats: { ratingValue: number; reviewCount: number };
 }
 
-export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariCompaniiPageProps) {
+export default function MutariCompaniiPage({
+  currentYear,
+  reviewStats,
+}: MutariCompaniiPageProps) {
   const faqItems = SERVICE_FAQS.birouri;
 
   return (
@@ -33,21 +51,45 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
           name="keywords"
           content="mutări birouri, mutare firmă, relocare companie, transport echipamente IT, mutări office, mutare sediu social, mutări corporative"
         />
-        <link rel="canonical" href="https://ofertemutare.ro/mutari/tipuri/birouri" />
+        <link
+          rel="canonical"
+          href="https://ofertemutare.ro/mutari/tipuri/birouri"
+        />
 
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://ofertemutare.ro/mutari/tipuri/birouri" />
-        <meta property="og:title" content={`Mutări Birouri și Companii ${currentYear}`} />
+        <meta
+          property="og:url"
+          content="https://ofertemutare.ro/mutari/tipuri/birouri"
+        />
+        <meta
+          property="og:title"
+          content={`Mutări Birouri și Companii ${currentYear}`}
+        />
         <meta
           property="og:description"
           content="Relocare firme profesionale. Transport echipamente IT, zero downtime!"
         />
-        <meta property="og:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta
+          property="og:image"
+          content="https://ofertemutare.ro/pics/index.webp"
+        />
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:url" content="https://ofertemutare.ro/mutari/tipuri/birouri" />
-        <meta name="twitter:title" content={`Mutări Birouri și Companii ${currentYear}`} />
-        <meta name="twitter:description" content="Relocare firme profesionale. Transport echipamente IT, zero downtime!" />
-        <meta name="twitter:image" content="https://ofertemutare.ro/pics/index.webp" />
+        <meta
+          name="twitter:url"
+          content="https://ofertemutare.ro/mutari/tipuri/birouri"
+        />
+        <meta
+          name="twitter:title"
+          content={`Mutări Birouri și Companii ${currentYear}`}
+        />
+        <meta
+          name="twitter:description"
+          content="Relocare firme profesionale. Transport echipamente IT, zero downtime!"
+        />
+        <meta
+          name="twitter:image"
+          content="https://ofertemutare.ro/pics/index.webp"
+        />
       </Head>
 
       {/* Schema Markup */}
@@ -63,7 +105,10 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
           ]}
         />
         {reviewStats.reviewCount > 0 && (
-          <AggregateRatingSchema ratingValue={reviewStats.ratingValue} reviewCount={reviewStats.reviewCount} />
+          <AggregateRatingSchema
+            ratingValue={reviewStats.ratingValue}
+            reviewCount={reviewStats.reviewCount}
+          />
         )}
         {/* Hero Section */}
         <section className="relative overflow-hidden bg-gradient-slate py-20">
@@ -77,7 +122,9 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
           <div className="relative mx-auto max-w-6xl px-4">
             <div className="mb-6 flex items-center gap-2">
               <Building className="h-6 w-6 text-slate-300" />
-              <span className="text-sm font-medium text-slate-300">Servicii B2B • Corporativ</span>
+              <span className="text-sm font-medium text-slate-300">
+                Servicii B2B • Corporativ
+              </span>
             </div>
 
             <h1 className="mb-6 text-2xl font-extrabold text-white! md:text-5xl lg:text-6xl">
@@ -88,8 +135,9 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
             </h1>
 
             <p className="mb-8 max-w-2xl text-lg text-slate-300 md:text-xl">
-              Relocare profesională pentru firme, birouri și sedii corporate. Transport echipamente
-              IT, mobilier office, arhive. Planificare pentru downtime minim.
+              Relocare profesională pentru firme, birouri și sedii corporate.
+              Transport echipamente IT, mobilier office, arhive. Planificare
+              pentru downtime minim.
             </p>
 
             {/* Stats */}
@@ -100,7 +148,9 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
               </div>
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">Minim</div>
-                <div className="text-sm text-slate-300">Downtime planificat</div>
+                <div className="text-sm text-slate-300">
+                  Downtime planificat
+                </div>
               </div>
               <div className="rounded-xl bg-white/10 p-4 text-center backdrop-blur-sm">
                 <div className="text-3xl font-bold text-white">✓</div>
@@ -140,17 +190,18 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
             </h2>
             <div className="prose prose-lg max-w-none text-gray-700">
               <p>
-                Mutarea unui <strong>birou sau sediu de companie</strong> este o decizie strategică
-                importantă. Trebuie coordonată perfect pentru a minimiza timpul de inactivitate și a
-                proteja echipamentele valoroase &ndash; de la servere și calculatoare, până la
+                Mutarea unui <strong>birou sau sediu de companie</strong> este o
+                decizie strategică importantă. Trebuie coordonată perfect pentru
+                a minimiza timpul de inactivitate și a proteja echipamentele
+                valoroase &ndash; de la servere și calculatoare, până la
                 mobilierul de birou și arhivele confidențiale.
               </p>
               <p>
-                Pe <strong>OferteMutare.ro</strong>, conectăm companiile cu firme de mutări
-                specializate în relocări corporate. Firmele partenere asigură{" "}
-                <strong>mutări în weekend sau noaptea</strong>
-                pentru zero impact asupra programului de lucru, plus documentație completă și
-                factură fiscală.
+                Pe <strong>OferteMutare.ro</strong>, conectăm companiile cu
+                firme de mutări specializate în relocări corporate. Firmele
+                partenere asigură <strong>mutări în weekend sau noaptea</strong>
+                pentru zero impact asupra programului de lucru, plus
+                documentație completă și factură fiscală.
               </p>
             </div>
           </section>
@@ -167,14 +218,17 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                 <div>
                   <h3 className="font-bold text-gray-900">Echipamente IT</h3>
                   <p className="text-sm text-gray-600">
-                    Calculatoare, monitoare, laptopuri, imprimante, scanere, echipamente rețea
+                    Calculatoare, monitoare, laptopuri, imprimante, scanere,
+                    echipamente rețea
                   </p>
                 </div>
               </div>
               <div className="flex gap-4 rounded-lg bg-white p-4 shadow-sm">
                 <Server className="h-6 w-6 shrink-0 text-purple-500" />
                 <div>
-                  <h3 className="font-bold text-gray-900">Servere & Data Center</h3>
+                  <h3 className="font-bold text-gray-900">
+                    Servere & Data Center
+                  </h3>
                   <p className="text-sm text-gray-600">
                     Servere, rack-uri, UPS-uri, echipamente de telecomunicații
                   </p>
@@ -192,9 +246,12 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
               <div className="flex gap-4 rounded-lg bg-white p-4 shadow-sm">
                 <FileText className="h-6 w-6 shrink-0 text-amber-500" />
                 <div>
-                  <h3 className="font-bold text-gray-900">Arhive & Documente</h3>
+                  <h3 className="font-bold text-gray-900">
+                    Arhive & Documente
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Dosare, arhive fizice, cutii documente, materiale confidențiale
+                    Dosare, arhive fizice, cutii documente, materiale
+                    confidențiale
                   </p>
                 </div>
               </div>
@@ -210,23 +267,38 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition-colors hover:border-emerald-300">
                 <Users className="mx-auto mb-3 h-10 w-10 text-slate-400" />
-                <div className="mb-1 text-sm text-gray-500">Birou mic (5-10 angajați)</div>
-                <div className="text-2xl font-bold text-gray-900">1.500-3.000 lei</div>
+                <div className="mb-1 text-sm text-gray-500">
+                  Birou mic (5-10 angajați)
+                </div>
+                <div className="text-2xl font-bold text-gray-900">
+                  1.500-3.000 lei
+                </div>
               </div>
               <div className="rounded-xl border-2 border-emerald-400 bg-emerald-50 p-6 text-center">
                 <Building className="mx-auto mb-3 h-10 w-10 text-emerald-600" />
-                <div className="mb-1 text-sm text-gray-500">Birou mediu (20-50 angajați)</div>
-                <div className="text-2xl font-bold text-gray-900">4.000-8.000 lei</div>
-                <div className="mt-1 text-xs text-emerald-600">Cel mai frecvent</div>
+                <div className="mb-1 text-sm text-gray-500">
+                  Birou mediu (20-50 angajați)
+                </div>
+                <div className="text-2xl font-bold text-gray-900">
+                  4.000-8.000 lei
+                </div>
+                <div className="mt-1 text-xs text-emerald-600">
+                  Cel mai frecvent
+                </div>
               </div>
               <div className="rounded-xl border-2 border-gray-200 bg-white p-6 text-center transition-colors hover:border-emerald-300">
                 <Building className="mx-auto mb-3 h-10 w-10 text-slate-500" />
-                <div className="mb-1 text-sm text-gray-500">Corporate (100+ angajați)</div>
-                <div className="text-2xl font-bold text-gray-900">Ofertă personalizată</div>
+                <div className="mb-1 text-sm text-gray-500">
+                  Corporate (100+ angajați)
+                </div>
+                <div className="text-2xl font-bold text-gray-900">
+                  Ofertă personalizată
+                </div>
               </div>
             </div>
             <p className="mt-4 text-center text-sm text-gray-600">
-              💼 Toate prețurile includ TVA. Firmele partenere oferă factură fiscală și contract B2B.
+              💼 Toate prețurile includ TVA. Firmele partenere oferă factură
+              fiscală și contract B2B.
             </p>
           </section>
 
@@ -243,10 +315,13 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                     <Clock className="h-5 w-5 text-slate-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Mutări în weekend sau noapte</h3>
+                    <h3 className="font-bold text-gray-900">
+                      Mutări în weekend sau noapte
+                    </h3>
                     <p className="text-gray-600">
-                      Relocare completă vineri seara &rarr; luni dimineața operationali. Zero impact
-                      asupra clienților și angajaților.
+                      Relocare completă vineri seara &rarr; luni dimineața
+                      operationali. Zero impact asupra clienților și
+                      angajaților.
                     </p>
                   </div>
                 </div>
@@ -261,8 +336,8 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                       Asigurare extinsă pentru echipamente
                     </h3>
                     <p className="text-gray-600">
-                      Asigurare cargo pentru servere, echipamente IT și mobilier valoros. Acoperire
-                      completă în caz de daune.
+                      Asigurare cargo pentru servere, echipamente IT și mobilier
+                      valoros. Acoperire completă în caz de daune.
                     </p>
                   </div>
                 </div>
@@ -273,10 +348,12 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                     <FileText className="h-5 w-5 text-blue-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Documentație completă</h3>
+                    <h3 className="font-bold text-gray-900">
+                      Documentație completă
+                    </h3>
                     <p className="text-gray-600">
-                      Factură fiscală, contract de prestări servicii, proces verbal de
-                      predare-primire, inventar detaliat.
+                      Factură fiscală, contract de prestări servicii, proces
+                      verbal de predare-primire, inventar detaliat.
                     </p>
                   </div>
                 </div>
@@ -287,10 +364,12 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                     <Truck className="h-5 w-5 text-purple-600" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900">Echipe dedicate & project manager</h3>
+                    <h3 className="font-bold text-gray-900">
+                      Echipe dedicate & project manager
+                    </h3>
                     <p className="text-gray-600">
-                      Pentru mutări mari, primești un manager de proiect dedicat care coordonează
-                      întreaga operațiune.
+                      Pentru mutări mari, primești un manager de proiect dedicat
+                      care coordonează întreaga operațiune.
                     </p>
                   </div>
                 </div>
@@ -312,8 +391,8 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                 <div>
                   <h3 className="font-bold text-gray-900">Survey la sediu</h3>
                   <p className="text-sm text-gray-600">
-                    Evaluare la fața locului: inventar echipamente, măsurători, identificare
-                    provocări logistice.
+                    Evaluare la fața locului: inventar echipamente, măsurători,
+                    identificare provocări logistice.
                   </p>
                 </div>
               </div>
@@ -322,9 +401,12 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                   2
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Ofertă detaliată & contract</h3>
+                  <h3 className="font-bold text-gray-900">
+                    Ofertă detaliată & contract
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Primești ofertă transparentă cu toate costurile, timeline și responsabilități.
+                    Primești ofertă transparentă cu toate costurile, timeline și
+                    responsabilități.
                   </p>
                 </div>
               </div>
@@ -333,9 +415,12 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                   3
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Planificare & împachetare</h3>
+                  <h3 className="font-bold text-gray-900">
+                    Planificare & împachetare
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Etichetare sistematică, împachetare profesională IT, pregătire documente.
+                    Etichetare sistematică, împachetare profesională IT,
+                    pregătire documente.
                   </p>
                 </div>
               </div>
@@ -344,9 +429,12 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
                   4
                 </div>
                 <div>
-                  <h3 className="font-bold text-gray-900">Relocare & instalare</h3>
+                  <h3 className="font-bold text-gray-900">
+                    Relocare & instalare
+                  </h3>
                   <p className="text-sm text-gray-600">
-                    Transport, montare mobilier, reconectare echipamente. Predare la cheie!
+                    Transport, montare mobilier, reconectare echipamente.
+                    Predare la cheie!
                   </p>
                 </div>
               </div>
@@ -354,13 +442,19 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
           </section>
 
           {/* FAQ Section */}
-          <FAQSection items={faqItems} title="Întrebări Frecvente - Mutări Birouri" />
+          <FAQSection
+            items={faqItems}
+            title="Întrebări Frecvente - Mutări Birouri"
+          />
 
           {/* Final CTA */}
           <section className="rounded-2xl bg-linear-to-r from-slate-800 to-slate-900 p-8 text-center text-white">
-            <h2 className="mb-4 text-3xl font-bold">Relocați biroul în siguranță</h2>
+            <h2 className="mb-4 text-3xl font-bold">
+              Relocați biroul în siguranță
+            </h2>
             <p className="mb-8 text-lg text-slate-300">
-              Solicită o ofertă personalizată pentru compania ta. Răspundem în maxim 24h.
+              Solicită o ofertă personalizată pentru compania ta. Răspundem în
+              maxim 24h.
             </p>
             <Link
               href="/#request-form"
@@ -376,7 +470,9 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
   );
 }
 
-export const getStaticProps: GetStaticProps<MutariCompaniiPageProps> = async () => {
+export const getStaticProps: GetStaticProps<
+  MutariCompaniiPageProps
+> = async () => {
   const reviewStats = await getReviewStats();
   return {
     props: {
@@ -386,6 +482,3 @@ export const getStaticProps: GetStaticProps<MutariCompaniiPageProps> = async () 
     revalidate: 3600,
   };
 };
-
-
-

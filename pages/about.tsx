@@ -35,32 +35,40 @@ export default function AboutPage() {
       title: "Transparență",
       desc: "Fără costuri ascunse, fără surprize. Toate informațiile sunt clare de la început.",
       gradient: "linear-gradient(to bottom right, #3b82f6, #4f46e5)",
-      hoverGradient: "linear-gradient(to bottom right, rgba(59,130,246,0.05), rgba(79,70,229,0.05))",
-      decorGradient: "linear-gradient(to bottom right, rgba(59,130,246,0.1), rgba(79,70,229,0.1))",
+      hoverGradient:
+        "linear-gradient(to bottom right, rgba(59,130,246,0.05), rgba(79,70,229,0.05))",
+      decorGradient:
+        "linear-gradient(to bottom right, rgba(59,130,246,0.1), rgba(79,70,229,0.1))",
     },
     {
       icon: Heart,
       title: "Încredere",
       desc: "Colaborăm doar cu firme verificate care respectă standarde ridicate de calitate.",
       gradient: "linear-gradient(to bottom right, #f43f5e, #db2777)",
-      hoverGradient: "linear-gradient(to bottom right, rgba(244,63,94,0.05), rgba(219,39,119,0.05))",
-      decorGradient: "linear-gradient(to bottom right, rgba(244,63,94,0.1), rgba(219,39,119,0.1))",
+      hoverGradient:
+        "linear-gradient(to bottom right, rgba(244,63,94,0.05), rgba(219,39,119,0.05))",
+      decorGradient:
+        "linear-gradient(to bottom right, rgba(244,63,94,0.1), rgba(219,39,119,0.1))",
     },
     {
       icon: Clock,
       title: "Eficiență",
       desc: "Economisești timp prețios comparând oferte într-un singur loc, rapid și simplu.",
       gradient: "linear-gradient(to bottom right, #10b981, #0d9488)",
-      hoverGradient: "linear-gradient(to bottom right, rgba(16,185,129,0.05), rgba(13,148,136,0.05))",
-      decorGradient: "linear-gradient(to bottom right, rgba(16,185,129,0.1), rgba(13,148,136,0.1))",
+      hoverGradient:
+        "linear-gradient(to bottom right, rgba(16,185,129,0.05), rgba(13,148,136,0.05))",
+      decorGradient:
+        "linear-gradient(to bottom right, rgba(16,185,129,0.1), rgba(13,148,136,0.1))",
     },
     {
       icon: TrendingUp,
       title: "Economie",
       desc: "Clienții noștri economisesc comparând mai multe oferte într-un singur loc.",
       gradient: "linear-gradient(to bottom right, #f59e0b, #ea580c)",
-      hoverGradient: "linear-gradient(to bottom right, rgba(245,158,11,0.05), rgba(234,88,12,0.05))",
-      decorGradient: "linear-gradient(to bottom right, rgba(245,158,11,0.1), rgba(234,88,12,0.1))",
+      hoverGradient:
+        "linear-gradient(to bottom right, rgba(245,158,11,0.05), rgba(234,88,12,0.05))",
+      decorGradient:
+        "linear-gradient(to bottom right, rgba(245,158,11,0.1), rgba(234,88,12,0.1))",
     },
   ];
 
@@ -161,7 +169,9 @@ export default function AboutPage() {
         />
       </Head>
 
-      <Breadcrumbs items={[{ name: "Acasă", href: "/" }, { name: "Despre Noi" }]} />
+      <Breadcrumbs
+        items={[{ name: "Acasă", href: "/" }, { name: "Despre Noi" }]}
+      />
 
       <main className="min-h-screen overflow-x-hidden bg-linear-to-b from-slate-50 via-white to-slate-50">
         {/* Hero Section - Enhanced with Parallax */}
@@ -583,36 +593,41 @@ export default function AboutPage() {
                       },
                     ].map((item, i) => {
                       const gradientMap: Record<string, string> = {
-                        "from-emerald-500 to-teal-600": "linear-gradient(to bottom right, #10b981, #0d9488)",
-                        "from-sky-500 to-indigo-600": "linear-gradient(to bottom right, #0ea5e9, #4f46e5)",
-                        "from-amber-500 to-orange-600": "linear-gradient(to bottom right, #f59e0b, #ea580c)",
+                        "from-emerald-500 to-teal-600":
+                          "linear-gradient(to bottom right, #10b981, #0d9488)",
+                        "from-sky-500 to-indigo-600":
+                          "linear-gradient(to bottom right, #0ea5e9, #4f46e5)",
+                        "from-amber-500 to-orange-600":
+                          "linear-gradient(to bottom right, #f59e0b, #ea580c)",
                       };
-                      const bgGradient = gradientMap[item.gradient] || "linear-gradient(to bottom right, #10b981, #0d9488)";
+                      const bgGradient =
+                        gradientMap[item.gradient] ||
+                        "linear-gradient(to bottom right, #10b981, #0d9488)";
                       return (
-                      <motion.div
-                        key={i}
-                        initial={{ opacity: 0, x: -30 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: i * 0.15 }}
-                        whileHover={{ x: 5 }}
-                        className="group flex gap-5 rounded-2xl border border-slate-100 bg-white p-5 shadow-md transition-all hover:shadow-xl"
-                      >
-                        <div
-                          className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl shadow-lg transition-transform"
-                          style={{ backgroundImage: bgGradient }}
+                        <motion.div
+                          key={i}
+                          initial={{ opacity: 0, x: -30 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: i * 0.15 }}
+                          whileHover={{ x: 5 }}
+                          className="group flex gap-5 rounded-2xl border border-slate-100 bg-white p-5 shadow-md transition-all hover:shadow-xl"
                         >
-                          <item.icon className="h-7 w-7 text-white" />
-                        </div>
-                        <div>
-                          <h3 className="mb-2 text-lg font-bold text-slate-900">
-                            {item.title}
-                          </h3>
-                          <p className="text-sm leading-relaxed text-slate-600">
-                            {item.desc}
-                          </p>
-                        </div>
-                      </motion.div>
+                          <div
+                            className="flex h-14 w-14 shrink-0 items-center justify-center rounded-xl shadow-lg transition-transform"
+                            style={{ backgroundImage: bgGradient }}
+                          >
+                            <item.icon className="h-7 w-7 text-white" />
+                          </div>
+                          <div>
+                            <h3 className="mb-2 text-lg font-bold text-slate-900">
+                              {item.title}
+                            </h3>
+                            <p className="text-sm leading-relaxed text-slate-600">
+                              {item.desc}
+                            </p>
+                          </div>
+                        </motion.div>
                       );
                     })}
                   </div>
@@ -663,7 +678,10 @@ export default function AboutPage() {
                           <div className="flex items-center gap-3">
                             <div
                               className="flex h-12 w-12 items-center justify-center rounded-xl shadow-lg"
-                              style={{ backgroundImage: "linear-gradient(to bottom right, #f59e0b, #ea580c)" }}
+                              style={{
+                                backgroundImage:
+                                  "linear-gradient(to bottom right, #f59e0b, #ea580c)",
+                              }}
                             >
                               <Award className="h-6 w-6 text-white" />
                             </div>
