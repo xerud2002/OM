@@ -138,7 +138,7 @@ function JobCard({
 
   return (
     <div
-      className={`relative flex h-full flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-md`}
+      className={`relative flex h-full min-h-[540px] flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-md overflow-hidden`}
     >
       {/* Top Status Bar */}
       <div
@@ -1327,7 +1327,10 @@ export default function RequestsView({
           Momentan nu există cereri noi.
         </motion.p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4"
+          style={{ gridAutoRows: "1fr" }}
+        >
           <AnimatePresence>
             {sortedRequests.map((r, index) => (
               <motion.div
