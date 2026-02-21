@@ -6,16 +6,28 @@ export default function Document() {
       <Head>
         {/* Theme color for mobile browser chrome */}
         <meta name="theme-color" content="#059669" />
-        <meta name="theme-color" content="#059669" media="(prefers-color-scheme: light)" />
+        <meta
+          name="theme-color"
+          content="#059669"
+          media="(prefers-color-scheme: light)"
+        />
 
         {/* Favicon - REQUIRED for Google search results */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.webp" />
+        <link
+          rel="icon"
+          type="image/png"
+          sizes="32x32"
+          href="/favicon-32x32.webp"
+        />
         <link rel="apple-touch-icon" href="/favicon-32x32.webp" />
 
         {/* DNS prefetch for Firebase (loaded on interaction, not critical path) */}
         <link rel="dns-prefetch" href="https://omro-e5a88.firebaseapp.com" />
-        <link rel="dns-prefetch" href="https://identitytoolkit.googleapis.com" />
+        <link
+          rel="dns-prefetch"
+          href="https://identitytoolkit.googleapis.com"
+        />
         <link rel="dns-prefetch" href="https://www.googleapis.com" />
         <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
         <link rel="dns-prefetch" href="https://www.google-analytics.com" />
@@ -32,6 +44,13 @@ export default function Document() {
         />
 
         {/* Google Analytics - loaded via @next/third-parties in _app.tsx */}
+
+        {/* Ahrefs Web Analytics */}
+        <script
+          src="https://analytics.ahrefs.com/analytics.js"
+          data-key="qq/hQQbdCPHs3jKxFxfMkg"
+          async
+        />
       </Head>
       <body>
         <Main />
@@ -40,5 +59,3 @@ export default function Document() {
     </Html>
   );
 }
-
-
