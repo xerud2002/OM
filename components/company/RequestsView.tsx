@@ -303,49 +303,6 @@ function JobCard({
         </div>
       )}
 
-      {/* Media thumbnails */}
-      {r.mediaUrls && r.mediaUrls.length > 0 && (
-        <div className="border-t border-gray-100 px-3 sm:px-4 py-2">
-          <div className="flex gap-1 overflow-x-auto">
-            {r.mediaUrls.slice(0, 4).map((url: string, i: number) => {
-              const isVid =
-                /\.(mp4|mov|webm|avi|mkv)(\?|$)/i.test(url) ||
-                (url.includes("%2F") &&
-                  /\.(mp4|mov|webm|avi|mkv)(%|&|$)/i.test(url));
-              return isVid ? (
-                <div
-                  key={i}
-                  className="relative h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 rounded bg-gray-800 flex items-center justify-center"
-                >
-                  <video
-                    src={url}
-                    muted
-                    playsInline
-                    preload="metadata"
-                    className="absolute inset-0 h-full w-full rounded object-cover"
-                  />
-                  <PlayIcon className="relative h-4 w-4 text-white drop-shadow" />
-                </div>
-              ) : (
-                <Image
-                  key={i}
-                  src={url}
-                  alt=""
-                  width={48}
-                  height={48}
-                  className="h-10 w-10 sm:h-12 sm:w-12 rounded object-cover"
-                />
-              );
-            })}
-            {r.mediaUrls.length > 4 && (
-              <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded bg-gray-100 text-[10px] sm:text-xs text-gray-500">
-                +{r.mediaUrls.length - 4}
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
       {/* Service type - show all selected services */}
       <div className="flex flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[2.5rem]">
         {(
@@ -518,7 +475,14 @@ export default function RequestsView({
   const [company, setCompany] = useState<CompanyUser>(
     companyFromParent ?? null,
   );
-  const [companyProfile, setCompanyProfile] = useState<{ city?: string; county?: string } | null>(null);
+  const [companyProfile, setCompanyProfile] = useState<{
+    city?: string;
+    county?: string;
+  } | null>(null);
+  const [geoLatLng, setGeoLatLng] = useState<{
+    lat: number;
+    lng: number;
+  } | null>(null);
   const PAGE_SIZE = 10;
   const [firstPage, setFirstPage] = useState<MovingRequest[]>([]);
   const [extra, setExtra] = useState<MovingRequest[]>([]);
@@ -650,13 +614,29 @@ export default function RequestsView({
   // Fetch company profile (city/county) for distance badges
   useEffect(() => {
     if (!company?.uid) return;
-    getDoc(doc(db, "companies", company.uid)).then((snap) => {
-      if (snap.exists()) {
-        const d = snap.data();
-        setCompanyProfile({ city: d.city || "", county: d.county || "" });
-      }
-    }).catch(() => {});
+    getDoc(doc(db, "companies", company.uid))
+      .then((snap) => {
+        if (snap.exists()) {
+          const d = snap.data();
+          setCompanyProfile({ city: d.city || "", county: d.county || "" });
+        }
+      })
+      .catch(() => {});
   }, [company?.uid]);
+
+  // Get browser geolocation as fallback for company location
+  useEffect(() => {
+    if (typeof navigator === "undefined" || !navigator.geolocation) {
+      setGeoLatLng({ lat: 45.7983, lng: 24.1256 }); // Sibiu fallback
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      (pos) =>
+        setGeoLatLng({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
+      () => setGeoLatLng({ lat: 45.7983, lng: 24.1256 }), // Sibiu fallback
+      { enableHighAccuracy: false, timeout: 5000, maximumAge: 300000 },
+    );
+  }, []);
 
   const checkMyOffers = useCallback(
     async (requests: MovingRequest[], companyId: string) => {
@@ -1433,7 +1413,19 @@ export default function RequestsView({
                   </p>
                 </div>
               </div>
-              <RequestFullDetails request={detailRequest} isOwner={false} companyCity={companyProfile?.city} companyCounty={companyProfile?.county} onPlaceOffer={() => { setActiveOfferRequest(detailRequest); setDetailRequest(null); }} />
+              <RequestFullDetails
+                request={detailRequest}
+                isOwner={false}
+                companyCity={companyProfile?.city}
+                companyCounty={companyProfile?.county}
+                companyLatLng={
+                  !companyProfile?.city && geoLatLng ? geoLatLng : undefined
+                }
+                onPlaceOffer={() => {
+                  setActiveOfferRequest(detailRequest);
+                  setDetailRequest(null);
+                }}
+              />
               <div className="mt-4 border-t border-gray-100 pt-4">
                 <button
                   onClick={() => {

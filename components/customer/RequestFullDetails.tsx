@@ -26,13 +26,16 @@ import dynamic from "next/dynamic";
 import ConfirmModal from "@/components/ConfirmModal";
 import { logger } from "@/utils/logger";
 
-const RouteMap = dynamic(() => import("./RouteMap"), { ssr: false });
+const RouteMap = dynamic(() => import("@/components/company/RouteMap"), {
+  ssr: false,
+});
 
 type RequestFullDetailsProps = {
   request: MovingRequest;
   isOwner: boolean;
   companyCity?: string;
   companyCounty?: string;
+  companyLatLng?: { lat: number; lng: number };
   onPlaceOffer?: () => void;
 };
 
@@ -41,6 +44,7 @@ export default function RequestFullDetails({
   isOwner,
   companyCity,
   companyCounty,
+  companyLatLng,
   onPlaceOffer,
 }: RequestFullDetailsProps) {
   const [localMediaUrls, setLocalMediaUrls] = useState<string[]>(
@@ -48,6 +52,7 @@ export default function RequestFullDetails({
   );
   const [deletingUrl, setDeletingUrl] = useState<string | null>(null);
   const [deleteMediaUrl, setDeleteMediaUrl] = useState<string | null>(null);
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   // Sync local media when request changes
   useEffect(() => {
@@ -112,6 +117,7 @@ export default function RequestFullDetails({
           toCounty={request.toCounty}
           companyCity={companyCity}
           companyCounty={companyCounty}
+          companyLatLng={companyLatLng}
           onPlaceOffer={onPlaceOffer}
         />
       )}
@@ -308,7 +314,7 @@ export default function RequestFullDetails({
                 Camere
               </h4>
               <p className="mt-0.5 text-sm sm:text-base font-semibold text-gray-900">
-                {request.rooms} {request.rooms == 1 ? 'cameră' : 'camere'}
+                {request.rooms} {request.rooms == 1 ? "cameră" : "camere"}
               </p>
             </div>
           </div>
@@ -449,7 +455,7 @@ export default function RequestFullDetails({
             </h3>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
             {localMediaUrls.map((url, index) => {
               const isVideo =
                 /\.(mp4|mov|webm|avi|mkv)(\?|$)/i.test(url) ||
@@ -459,13 +465,13 @@ export default function RequestFullDetails({
               return (
                 <div
                   key={url}
-                  className="group relative aspect-square overflow-hidden rounded-xl border border-gray-200 bg-gray-50 transition-all hover:border-sky-400 hover:shadow-lg hover:shadow-sky-100"
+                  className="group relative overflow-hidden rounded-xl border border-gray-200 bg-gray-50 transition-all hover:border-sky-400 hover:shadow-lg hover:shadow-sky-100 cursor-pointer"
                 >
                   {isVideo ? (
                     <>
                       <video
                         src={url}
-                        className="h-full w-full object-cover"
+                        className="w-full h-auto max-h-48 object-contain bg-black/5"
                         muted
                         playsInline
                         preload="metadata"
@@ -485,25 +491,21 @@ export default function RequestFullDetails({
                       </div>
                     </>
                   ) : (
-                    <Image
+                    <img
                       src={url}
                       alt={`Media ${index + 1}`}
-                      fill
-                      sizes="(max-width: 640px) 45vw, (max-width: 768px) 30vw, 200px"
-                      className="object-cover transition-transform duration-500 group-hover:scale-110"
+                      className="w-full h-auto max-h-48 object-contain bg-gray-100"
                       loading="lazy"
-                      quality={75}
                     />
                   )}
 
                   {/* Overlay actions */}
                   <div className="absolute inset-0 bg-black/0 transition-colors group-hover:bg-black/10" />
 
-                  <a
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="absolute inset-0 z-10"
+                  <button
+                    type="button"
+                    onClick={() => setLightboxIndex(index)}
+                    className="absolute inset-0 z-10 cursor-pointer"
                     aria-label={`Deschide ${isVideo ? "video" : "imagine"} ${index + 1}`}
                   />
 
@@ -532,6 +534,126 @@ export default function RequestFullDetails({
           </div>
         </div>
       )}
+
+      {/* Lightbox Modal */}
+      {lightboxIndex !== null &&
+        localMediaUrls[lightboxIndex] &&
+        (() => {
+          const url = localMediaUrls[lightboxIndex];
+          const isVideo =
+            /\.(mp4|mov|webm|avi|mkv)(\?|$)/i.test(url) ||
+            (url.includes("%2F") &&
+              /\.(mp4|mov|webm|avi|mkv)(%|&|$)/i.test(url));
+          const hasPrev = lightboxIndex > 0;
+          const hasNext = lightboxIndex < localMediaUrls.length - 1;
+          return (
+            <div
+              className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/80 backdrop-blur-sm"
+              onClick={() => setLightboxIndex(null)}
+            >
+              {/* Close button */}
+              <button
+                onClick={() => setLightboxIndex(null)}
+                className="absolute top-4 right-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                aria-label="Închide"
+              >
+                <XCircleIcon className="h-7 w-7" />
+              </button>
+
+              {/* Counter */}
+              <div className="absolute top-4 left-1/2 -translate-x-1/2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+                {lightboxIndex + 1} / {localMediaUrls.length}
+              </div>
+
+              {/* Previous */}
+              {hasPrev && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightboxIndex(lightboxIndex - 1);
+                  }}
+                  className="absolute left-3 sm:left-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                  aria-label="Anterior"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                    stroke="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 19.5L8.25 12l7.5-7.5"
+                    />
+                  </svg>
+                </button>
+              )}
+
+              {/* Next */}
+              {hasNext && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setLightboxIndex(lightboxIndex + 1);
+                  }}
+                  className="absolute right-3 sm:right-6 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white hover:bg-white/20 transition-colors"
+                  aria-label="Următorul"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={2.5}
+                    stroke="currentColor"
+                    className="h-5 w-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                    />
+                  </svg>
+                </button>
+              )}
+
+              {/* Content */}
+              <div
+                className="relative flex items-center justify-center p-4"
+                style={{ width: "90vw", height: "85vh" }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                {isVideo ? (
+                  <video
+                    key={url}
+                    src={url}
+                    controls
+                    autoPlay
+                    className="rounded-xl shadow-2xl"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                ) : (
+                  <img
+                    src={url}
+                    alt={`Media ${lightboxIndex + 1}`}
+                    className="rounded-xl shadow-2xl"
+                    style={{
+                      maxWidth: "100%",
+                      maxHeight: "100%",
+                      objectFit: "contain",
+                    }}
+                  />
+                )}
+              </div>
+            </div>
+          );
+        })()}
 
       {/* Delete Media Confirmation */}
       <ConfirmModal
