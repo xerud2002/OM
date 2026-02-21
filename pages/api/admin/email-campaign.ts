@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import { adminDb, adminReady } from "@/lib/firebaseAdmin";
 import { verifyAuth, withErrorHandler, requireAdmin } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
-import { sendEmail } from "@/services/email";
+import { sendEmail, emailTemplates } from "@/services/email";
 
 async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!adminReady) return res.status(503).json(apiError("Firebase not ready"));
@@ -45,6 +45,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
       }).filter((r) => r.email);
     }
 
+    // Wrap body in branded layout
+    const wrappedHtml = emailTemplates.campaignWrapper(body);
+
     // Batch send (limit to 100 to stay safe)
     const batch = recipients.slice(0, 100);
     let sent = 0;
@@ -52,7 +55,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
 
     for (const r of batch) {
       try {
-        await sendEmail({ to: r.email, subject, html: body });
+        await sendEmail({ to: r.email, subject, html: wrappedHtml });
         sent++;
       } catch {
         failed++;

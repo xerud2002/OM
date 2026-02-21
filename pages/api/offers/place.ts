@@ -3,7 +3,7 @@ import { adminDb } from "@/lib/firebaseAdmin";
 import { verifyAuth, sendAuthError } from "@/lib/apiAuth";
 import { apiError, apiSuccess } from "@/types/api";
 import { logger } from "@/utils/logger";
-import { sendEmail, escapeHtml } from "@/services/email";
+import { sendEmail, emailTemplates } from "@/services/email";
 import { createRateLimiter, getClientIp } from "@/lib/rateLimit";
 import { calculateRequestCost } from "@/utils/costCalculator";
 import { FieldValue } from "firebase-admin/firestore";
@@ -190,35 +190,16 @@ export default async function handler(
         await sendEmail({
           to: customerEmail,
           subject: `📩 Ai primit o ofertă nouă pentru mutarea ta - ${requestCode}`,
-          html: `
-<!DOCTYPE html>
-<html>
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"></head>
-<body style="margin:0;padding:0;font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;background-color:#f3f4f6;">
-<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f3f4f6;padding:40px 20px;">
-<tr><td align="center">
-<table width="600" cellpadding="0" cellspacing="0" style="background-color:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-<tr><td style="background:linear-gradient(135deg,#10b981 0%,#0ea5e9 100%);padding:30px;text-align:center;">
-<h1 style="margin:0;color:#fff;font-size:24px;">📩 Ofertă nouă primită!</h1>
-<p style="margin:8px 0 0;color:#e0f2fe;font-size:15px;">Cererea ${requestCode}: ${fromCity} → ${toCity}</p>
-</td></tr>
-<tr><td style="padding:30px;">
-<p style="color:#374151;font-size:15px;line-height:1.6;">Bună ziua,</p>
-<p style="color:#374151;font-size:15px;line-height:1.6;"><strong>${companyName}</strong> ți-a trimis o ofertă de <strong>${price} RON</strong> pentru mutarea ta.</p>
-${message ? `<div style="background:#f9fafb;border-left:4px solid #10b981;padding:15px;margin:20px 0;border-radius:0 8px 8px 0;"><p style="margin:0;color:#6b7280;font-size:13px;">Mesajul firmei:</p><p style="margin:5px 0 0;color:#374151;font-size:14px;">${escapeHtml(String(message))}</p></div>` : ""}
-<div style="text-align:center;margin:25px 0;">
-<a href="https://ofertemutare.ro/customer/dashboard" style="display:inline-block;background:linear-gradient(135deg,#10b981,#0ea5e9);color:#fff;padding:14px 30px;border-radius:10px;text-decoration:none;font-weight:bold;font-size:15px;">Vezi oferta →</a>
-</div>
-<p style="color:#9ca3af;font-size:13px;text-align:center;">Poți accepta, refuza sau discuta cu firma direct din contul tău.</p>
-</td></tr>
-<tr><td style="background:#f9fafb;padding:20px;text-align:center;border-top:1px solid #e5e7eb;">
-<p style="margin:0;color:#9ca3af;font-size:12px;">© OferteMutare.ro - Mutări simple, rapide.</p>
-</td></tr>
-</table>
-</td></tr>
-</table>
-</body>
-</html>`,
+          html: emailTemplates.newOffer({
+            requestCode,
+            requestId,
+            companyName,
+            companyMessage: message ? String(message) : undefined,
+            price,
+            fromCity,
+            toCity,
+            dashboardUrl: "https://ofertemutare.ro/customer/dashboard",
+          }),
         });
       } catch (emailErr) {
         logger.error("Failed to send offer notification email:", emailErr);

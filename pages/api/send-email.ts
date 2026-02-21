@@ -135,116 +135,27 @@ export default withErrorHandler(async function handler(
         break;
 
       case "reviewRequest":
-        {
-          const safeName = escapeHtml(data.customerName || "");
-          const safeCompany = escapeHtml(data.companyName || "");
-          const safeUrl = escapeHtml(data.reviewUrl || "");
-          emailResult = await sendEmail({
-            to: data.customerEmail,
-            subject: `Cum a fost experiența ta cu ${safeCompany}? Lasă o recenzie!`,
-            html: `
-            <!DOCTYPE html>
-            <html lang="ro">
-              <head>
-                <meta charset="utf-8">
-                <style>
-                  body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-                  .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                  .header { background: linear-gradient(135deg, #10b981, #0ea5e9); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-                  .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-                  .highlight { background: #f0fdf4; border-left: 4px solid #10b981; padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0; }
-                  .button { display: inline-block; background: #10b981; color: white; padding: 14px 35px; text-decoration: none; border-radius: 8px; margin: 20px 0; font-weight: bold; }
-                  .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-                  .stars { margin: 15px 0; }
-                  .star { display: inline-block; width: 28px; height: 28px; margin: 0 3px; }
-                </style>
-              </head>
-              <body>
-                <div class="container">
-                  <div class="header">
-                    <div class="stars">
-                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                      <svg class="star" viewBox="0 0 24 24" fill="#fbbf24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    </div>
-                    <h1 style="margin: 0;">Părerea ta contează!</h1>
-                  </div>
-                  <div class="content">
-                    <p>Bună ${safeName},</p>
-                    
-                    <p>Ai ales oferta de la <strong>${safeCompany}</strong> pentru mutarea ta. Sperăm că totul a decurs conform așteptărilor!</p>
-                    
-                    <div class="highlight">
-                      <p style="margin: 0;"><strong>🎯 Te rugăm să lași o recenzie pentru ${safeCompany}</strong></p>
-                      <p style="margin: 10px 0 0 0; font-size: 14px;">Feedback-ul tău ajută alți clienți să ia decizii informate și ajută companiile să își îmbunătățească serviciile.</p>
-                    </div>
-                    
-                    <p>Durează doar 1-2 minute și înseamnă foarte mult pentru comunitatea noastră!</p>
-                    
-                    <p style="text-align: center;">
-                      <a href="${safeUrl}" class="button">✍️ Lasă o Recenzie Acum</a>
-                    </p>
-                    
-                    <p style="color: #6b7280; font-size: 14px;">Poți evalua: profesionalismul echipei, punctualitatea, grija față de obiectele tale și raportul calitate-preț.</p>
-                  </div>
-                  <div class="footer">
-                    <p>Îți mulțumim pentru încredere!</p>
-                    <p><strong>OferteMutare.ro</strong> - Platforma #1 pentru mutări în România</p>
-                  </div>
-                </div>
-              </body>
-            </html>
-          `,
-          });
-        }
+        emailResult = await sendEmail({
+          to: data.customerEmail,
+          subject: `Cum a fost experiența ta cu ${escapeHtml(data.companyName || "")}? Lasă o recenzie!`,
+          html: emailTemplates.reviewRequest(
+            data.customerName || "",
+            data.companyName || "",
+            data.reviewUrl || "",
+          ),
+        });
         break;
 
       case "uploadReminder":
-        {
-          const safeName = escapeHtml(data.name || "");
-          const safeCode = escapeHtml(data.requestCode || "");
-          const safeUploadUrl = escapeHtml(data.uploadUrl || "");
-          emailResult = await sendEmail({
-            to: data.email,
-            subject: `📸 Reminder: Încarcă poze pentru cererea ${safeCode}`,
-            html: `
-            <!DOCTYPE html>
-            <html lang="ro">
-              <head>
-                <meta charset="utf-8">
-                <style>
-                  body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-                  .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                  .header { background: linear-gradient(135deg, #10b981, #0ea5e9); padding: 30px; text-align: center; color: white; border-radius: 8px 8px 0 0; }
-                  .content { background: #fff; padding: 30px; border: 1px solid #e5e7eb; border-top: none; }
-                  .button { display: inline-block; background: #10b981; color: white; padding: 12px 30px; text-decoration: none; border-radius: 6px; margin: 20px 0; }
-                  .footer { text-align: center; padding: 20px; color: #6b7280; font-size: 14px; }
-                </style>
-              </head>
-              <body>
-                <div class="container">
-                  <div class="header">
-                    <h1>📸 Nu uita să încarci pozele!</h1>
-                  </div>
-                  <div class="content">
-                    <p>Bună ${safeName},</p>
-                    <p>Te rugăm să încarci poze cu obiectele de mutat pentru cererea <strong>${safeCode}</strong>.</p>
-                    <p>Pozele ajută companiile să îți ofere prețuri mai precise.</p>
-                    <p style="text-align: center;">
-                      <a href="${safeUploadUrl}" class="button">Încarcă Poze Acum</a>
-                    </p>
-                  </div>
-                  <div class="footer">
-                    <p><strong>OferteMutare.ro</strong></p>
-                  </div>
-                </div>
-              </body>
-            </html>
-          `,
-          });
-        }
+        emailResult = await sendEmail({
+          to: data.email,
+          subject: `📸 Reminder: Încarcă poze pentru cererea ${escapeHtml(data.requestCode || "")}`,
+          html: emailTemplates.uploadReminder(
+            data.name || "",
+            data.requestCode || "",
+            data.uploadUrl || "",
+          ),
+        });
         break;
 
       case "newRequestNotification":
