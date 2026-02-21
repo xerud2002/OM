@@ -122,21 +122,19 @@ function JobCard({
   const cost = calculateRequestCost(r);
 
   // Determine card colors based on offer status
-  const cardStyle = !hasMine
-    ? { bg: "bg-blue-50/40", border: "border-blue-200", bar: "bg-blue-500" }
+  const barColor = !hasMine
+    ? "bg-blue-500"
     : hasMine.status === "accepted"
-      ? {
-          bg: "bg-emerald-50/40",
-          border: "border-emerald-200",
-          bar: "bg-emerald-500",
-        }
+      ? "bg-emerald-500"
       : hasMine.status === "declined" || hasMine.status === "rejected"
-        ? { bg: "bg-red-50/40", border: "border-red-200", bar: "bg-red-400" }
-        : {
-            bg: "bg-amber-50/40",
-            border: "border-amber-200",
-            bar: "bg-amber-400",
-          };
+        ? "bg-red-400"
+        : "bg-amber-400";
+
+  const cardStyle = {
+    bg: "bg-white",
+    border: "border-gray-200",
+    bar: barColor,
+  };
 
   return (
     <div
@@ -217,15 +215,15 @@ function JobCard({
       </div>
 
       {/* Route */}
-      <div className="flex items-center justify-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-bold text-gray-800">
-        <span className="line-clamp-1 text-right max-w-[40%]">
+      <div className="flex items-center justify-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 text-[13px] sm:text-sm font-bold text-gray-800 leading-tight">
+        <span className="text-right">
           {r.fromCity}
           {r.fromCounty && COUNTY_ABBREV[r.fromCounty]
             ? `, ${COUNTY_ABBREV[r.fromCounty]}`
             : ""}
         </span>
         <TruckIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4 shrink-0 text-blue-500" />
-        <span className="line-clamp-1 text-left max-w-[40%]">
+        <span className="text-left">
           {r.toCity}
           {r.toCounty && COUNTY_ABBREV[r.toCounty]
             ? `, ${COUNTY_ABBREV[r.toCounty]}`
@@ -451,7 +449,7 @@ function JobCard({
             </div>
             <button
               onClick={() => onOfferClick(r)}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-[0.98]"
             >
               <PaperAirplaneIcon className="h-4 w-4" />
               <span>Trimite Ofertă</span>

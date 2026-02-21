@@ -27,7 +27,7 @@ export default function MutariCompaniiPage({ currentYear, reviewStats }: MutariC
         <title>{`Mutări Birouri ${currentYear} | Relocare Firme`}</title>
         <meta
           name="description"
-          content="Mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier, arhivă. Planificare pentru downtime minim. Primești până la 5 oferte gratuite în 24h."
+          content="Mutări birouri și companii în România. Relocare completă: echipamente IT, mobilier, arhivă. Primești până la 5 oferte gratuite în 24h."
         />
         <meta
           name="keywords"

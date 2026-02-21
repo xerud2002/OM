@@ -96,7 +96,7 @@ export default function AboutPage() {
         <meta name="author" content="Ofertemutare Ltd" />
         <meta
           name="description"
-          content="Povestea OferteMutare.ro, operată de Ofertemutare Ltd, platforma care conectează clienții cu firme de mutări verificate din România. Transparență și prețuri corecte."
+          content="Povestea OferteMutare.ro, platforma care conectează clienții cu firme de mutări verificate din România. Transparență și prețuri corecte."
         />
         <meta
           name="keywords"

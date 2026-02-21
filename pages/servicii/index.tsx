@@ -122,7 +122,7 @@ export default function ServiciiIndexPage({ currentYear, reviewStats }: Servicii
         <title>{`Servicii Mutare ${currentYear} | Împachetare, Montaj, Depozitare, Debarasare`}</title>
         <meta
           name="description"
-          content={`Servicii adiționale pentru mutare ${currentYear}: împachetare profesională, montaj mobilă, depozitare securizată, debarasare eco. Oferte de la firme verificate, compară gratuit.`}
+          content={`Servicii mutare ${currentYear}: împachetare profesională, montaj mobilă, depozitare securizată, debarasare eco. Compară oferte gratuit.`}
         />
         <meta name="keywords" content="împachetare profesională, montaj mobilă, depozitare mobilă, materiale ambalare, debarasare, servicii mutare adiționale" />
         <link rel="canonical" href="https://ofertemutare.ro/servicii" />

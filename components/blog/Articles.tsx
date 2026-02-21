@@ -41,7 +41,7 @@ const articles = [
   {
     title: "Top 5 trucuri pentru împachetarea obiectelor fragile",
     desc: "Află cum să eviți deteriorarea obiectelor tale preferate prin tehnici folosite de profesioniști.",
-    link: "/servicii/impachetare-profesionala",
+    link: "/servicii/impachetare/profesionala",
     readTime: "5 min",
     category: "Împachetare",
     gradient: "linear-gradient(to right, #3b82f6, #4f46e5)",

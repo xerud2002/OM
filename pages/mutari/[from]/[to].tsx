@@ -25,7 +25,9 @@ interface RoutePageProps {
 export default function RoutePage({ routeData, formattedDate, reviewStats }: RoutePageProps) {
     const { fromCity, toCity, distanceKm, durationHrs, priceEstimate } = routeData;
 
-    const title = `Mutări ${fromCity.name} - ${toCity.name} | Preț & Durată | OferteMutare.ro`;
+    const fullTitle = `Mutări ${fromCity.name} - ${toCity.name} | Preț & Durată | OferteMutare.ro`;
+    const shortTitle = `Mutări ${fromCity.name} - ${toCity.name} | OferteMutare.ro`;
+    const title = fullTitle.length > 60 ? shortTitle : fullTitle;
     const description = `Transport mobilă ${fromCity.name} - ${toCity.name}. Distanță ${distanceKm} km, durată ${durationHrs}h. Prețuri estimative de la ${priceEstimate.studio}. Compară oferte gratuite.`;
 
     return (
