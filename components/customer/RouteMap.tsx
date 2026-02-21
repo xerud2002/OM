@@ -301,7 +301,7 @@ function CompanyDistances({
     : null;
 
   return (
-    <div className="flex items-center justify-center gap-2 sm:gap-3 border-t border-gray-100 bg-gray-50/60 px-3 py-2 sm:py-2.5 text-[11px] sm:text-xs text-gray-600 flex-wrap">
+    <div className="flex items-center gap-2 sm:gap-3 border-t border-gray-100 bg-gray-50/60 px-3 sm:px-4 py-2 sm:py-2.5 text-[11px] sm:text-xs text-gray-600">
       {toPickup && (
         <span className="inline-flex items-center gap-1 whitespace-nowrap">
           <MapPinIcon className="h-3 w-3 sm:h-3.5 sm:w-3.5 text-orange-500 shrink-0" />
@@ -318,15 +318,12 @@ function CompanyDistances({
         </span>
       )}
       {onPlaceOffer && (
-        <>
-          <span className="text-gray-300">•</span>
-          <button
-            onClick={onPlaceOffer}
-            className="inline-flex items-center gap-1 whitespace-nowrap rounded-lg bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-semibold shadow-sm transition-colors"
-          >
-            Plasează ofertă
-          </button>
-        </>
+        <button
+          onClick={onPlaceOffer}
+          className="ml-auto inline-flex items-center gap-1 whitespace-nowrap rounded-lg bg-green-600 hover:bg-green-700 text-white px-2.5 py-1 sm:px-3 sm:py-1.5 text-[11px] sm:text-xs font-semibold shadow-sm transition-colors"
+        >
+          Plasează ofertă
+        </button>
       )}
     </div>
   );

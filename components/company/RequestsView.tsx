@@ -140,20 +140,20 @@ function JobCard({
 
   return (
     <div
-      className={`relative flex h-full flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-lg`}
+      className={`relative flex h-full flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-md`}
     >
       {/* Top Status Bar */}
       <div
-        className={`absolute left-0 top-0 right-0 h-1 rounded-t-xl ${cardStyle.bar}`}
+        className={`absolute left-0 top-0 right-0 h-1.5 rounded-t-xl ${cardStyle.bar}`}
       />
 
       {/* Header: Code, Date & Move Date */}
-      <div className="flex items-center justify-between border-b border-gray-100 px-3 sm:px-4 pt-3 sm:pt-4 pb-2 sm:pb-3">
+      <div className="flex items-center justify-between border-b border-gray-100 px-3 sm:px-4 pt-4 sm:pt-5 pb-2.5 sm:pb-3">
         <div className="flex flex-col min-w-0">
-          <span className="font-mono text-[10px] sm:text-xs font-bold text-gray-500 truncate">
+          <span className="font-mono text-[11px] sm:text-xs font-bold text-gray-500 truncate">
             {r.requestCode || r.id.substring(0, 8)}
           </span>
-          <span className="text-[9px] sm:text-[10px] text-gray-400">
+          <span className="text-[10px] sm:text-[11px] text-gray-400">
             {(() => {
               const ts = r.createdAt;
               if (!ts) return "-";
@@ -180,7 +180,7 @@ function JobCard({
             })()}
           </span>
         </div>
-        <div className="flex items-center gap-1 sm:gap-1.5 rounded-md bg-amber-50 px-1.5 sm:px-2 py-1 text-[9px] sm:text-[10px] font-bold text-amber-700 ring-1 ring-amber-100">
+        <div className="flex items-center gap-1 sm:gap-1.5 rounded-lg bg-amber-50 px-2 sm:px-2.5 py-1 sm:py-1.5 text-[10px] sm:text-[11px] font-bold text-amber-700 ring-1 ring-amber-100">
           <CalendarIcon className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
           <span>
             {(() => {
@@ -217,7 +217,7 @@ function JobCard({
       </div>
 
       {/* Route */}
-      <div className="flex items-center justify-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-bold text-gray-800">
+      <div className="flex items-center justify-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base font-bold text-gray-800">
         <span className="line-clamp-1 text-right max-w-[40%]">
           {r.fromCity}
           {r.fromCounty && COUNTY_ABBREV[r.fromCounty]
@@ -234,9 +234,9 @@ function JobCard({
       </div>
 
       {/* Specs: Colectie & Livrare */}
-      <div className="grid grid-cols-2 gap-2 border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs text-gray-600">
+      <div className="grid grid-cols-2 gap-3 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs text-gray-600">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-bold uppercase text-gray-400">
+          <span className="text-[10px] sm:text-[11px] font-bold uppercase text-gray-400">
             Colecție
           </span>
           <span className="font-medium">
@@ -260,7 +260,7 @@ function JobCard({
           </span>
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] font-bold uppercase text-gray-400">
+          <span className="text-[10px] sm:text-[11px] font-bold uppercase text-gray-400">
             Livrare
           </span>
           <span className="font-medium">
@@ -287,7 +287,7 @@ function JobCard({
 
       {/* Additional Details */}
       {(r.volumeM3 || r.budgetEstimate) && (
-        <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs text-gray-600">
+        <div className="border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs text-gray-600">
           {r.volumeM3 && (
             <div className="flex items-center gap-1 mb-1">
               <span className="text-gray-400">Volum:</span>
@@ -347,7 +347,7 @@ function JobCard({
       )}
 
       {/* Service type - show all selected services */}
-      <div className="flex flex-wrap items-start content-start gap-1 sm:gap-1.5 border-t border-gray-100 px-3 sm:px-4 py-2 h-[3.25rem] overflow-hidden">
+      <div className="flex flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[2.5rem]">
         {(
           [
             {
@@ -386,7 +386,7 @@ function JobCard({
           .map((s) => (
             <span
               key={s.key}
-              className="flex items-center gap-0.5 sm:gap-1 rounded bg-blue-50 px-1.5 sm:px-2 py-0.5 text-[9px] sm:text-[10px] font-medium text-blue-700"
+              className="flex items-center gap-1 rounded-md bg-blue-50 px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-medium text-blue-700"
             >
               <s.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
               {s.label}
@@ -394,18 +394,18 @@ function JobCard({
           ))}
       </div>
 
-      {/* Notes Section - Always visible, 3 lines fixed */}
-      <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3 text-[10px] sm:text-xs">
-        <span className="text-gray-400">Note:</span>
+      {/* Notes Section - Always visible, 3 lines max */}
+      <div className="border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs">
+        <span className="text-gray-400 font-medium">Note:</span>
         <p
-          className={`mt-0.5 line-clamp-3 h-[3.25rem] ${r.details ? "text-gray-700" : "text-gray-300 italic"}`}
+          className={`mt-0.5 line-clamp-3 min-h-[2.5rem] ${r.details ? "text-gray-700" : "text-gray-300 italic"}`}
         >
           {r.details || "Nicio notă adăugată"}
         </p>
       </div>
 
       {/* Detail + Status Row */}
-      <div className="border-t border-gray-100 px-3 sm:px-4 py-2 sm:py-3">
+      <div className="mt-auto border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3">
         {hasMine ? (
           <>
             <div className="flex flex-wrap items-center justify-center gap-2">
@@ -417,23 +417,23 @@ function JobCard({
                 Detalii
               </button>
               {isMoveDateUrgent(r as any) && (
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
                   ⚡ Urgent
                 </span>
               )}
               {hasMine.status === "accepted" ? (
-                <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
+                <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
                   <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                   Ofertă Acceptată
                 </span>
               ) : hasMine.status === "declined" ||
                 hasMine.status === "rejected" ? (
-                <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-red-600">
+                <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold text-red-600">
                   <XMarkIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                   Ofertă Refuzată
                 </span>
               ) : (
-                <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2 sm:px-3 py-1.5 text-[10px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
+                <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
                   <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
                   Ofertă Trimisă
                 </span>
@@ -487,18 +487,18 @@ function JobCard({
                 Detalii
               </button>
               {isMoveDateUrgent(r as any) && (
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
                   ⚡ Urgent
                 </span>
               )}
             </div>
             <button
               onClick={() => onOfferClick(r)}
-              className="flex w-full items-center justify-center gap-1.5 sm:gap-2 rounded-lg bg-blue-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
             >
-              <PaperAirplaneIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
+              <PaperAirplaneIcon className="h-4 w-4" />
               <span>Trimite Ofertă</span>
-              <span className="rounded bg-white/20 px-1 sm:px-1.5 py-0.5 text-[9px] sm:text-[10px] font-medium text-white">
+              <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] sm:text-[11px] font-medium text-white">
                 {cost}
               </span>
             </button>

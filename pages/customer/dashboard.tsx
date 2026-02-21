@@ -680,7 +680,7 @@ export default function CustomerDashboard() {
                             >
                               {/* Status indicator line */}
                               <div
-                                className={`absolute left-0 top-2 bottom-2 sm:top-3 sm:bottom-3 w-1 rounded-full transition-all ${
+                                className={`absolute left-0 top-2 bottom-2 sm:top-3 sm:bottom-3 w-1.5 rounded-full transition-all ${
                                   isSelected
                                     ? "bg-emerald-500"
                                     : hasAccepted
@@ -707,7 +707,7 @@ export default function CustomerDashboard() {
                                         }) || "-"}
                                       </span>
                                       {isUrgent && (
-                                        <span className="shrink-0 rounded-full bg-red-100 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-red-700 animate-pulse">
+                                        <span className="shrink-0 rounded-full bg-red-100 px-2 py-0.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-red-700 animate-pulse">
                                           🔥 Urgent
                                         </span>
                                       )}
@@ -719,7 +719,7 @@ export default function CustomerDashboard() {
                                   {offers.length > 0 ? (
                                     <div className="flex items-center gap-1.5">
                                       <span
-                                        className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold ${
+                                        className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-semibold ${
                                           hasAccepted
                                             ? "bg-emerald-100 text-emerald-700"
                                             : hasNewOffers
@@ -736,14 +736,14 @@ export default function CustomerDashboard() {
                                           : "oferte"}
                                       </span>
                                       {reqUnreadCount > 0 && (
-                                        <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-bold text-red-600">
+                                        <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-[11px] font-bold text-red-600">
                                           <MessageSquare className="h-2.5 w-2.5" />
                                           {reqUnreadCount}
                                         </span>
                                       )}
                                     </div>
                                   ) : (
-                                    <span className="text-[10px] sm:text-xs text-gray-400">
+                                    <span className="text-[11px] sm:text-xs text-gray-400">
                                       Fără oferte
                                     </span>
                                   )}
@@ -753,13 +753,13 @@ export default function CustomerDashboard() {
                                         e.stopPropagation();
                                         setDetailModalRequestId(req.id);
                                       }}
-                                      className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2 py-0.5 sm:px-2.5 sm:py-1 text-[10px] sm:text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+                                      className="inline-flex items-center gap-1 rounded-full bg-gray-100 px-2.5 py-0.5 sm:px-3 sm:py-1 text-[11px] sm:text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
                                     >
                                       <EyeIcon className="h-3 w-3" />
                                       Detalii
                                     </button>
                                     <span
-                                      className={`shrink-0 rounded-full px-1.5 py-0.5 sm:px-2 text-[9px] sm:text-[10px] font-bold uppercase tracking-wider ${
+                                      className={`shrink-0 rounded-full px-2 py-0.5 sm:px-2.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider ${
                                         req.status === "closed" ||
                                         req.status === "accepted"
                                           ? "bg-emerald-100 text-emerald-700"
@@ -1252,17 +1252,17 @@ function OfferCard({
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className={`relative flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-md ${
+      className={`relative flex h-full flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-md ${
         isAccepted
           ? "border-emerald-200 ring-2 ring-emerald-500/20"
           : isDeclined
-            ? "border-gray-200 opacity-70"
+            ? "border-gray-200 bg-gray-50/60"
             : "border-gray-200"
       }`}
     >
       {/* Top status bar */}
       <div
-        className={`h-1 w-full ${
+        className={`h-1.5 w-full ${
           isAccepted
             ? "bg-emerald-500"
             : isDeclined
@@ -1272,11 +1272,11 @@ function OfferCard({
       />
 
       {/* Card body */}
-      <div className="flex flex-1 flex-col p-4">
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
         {/* Logo + Company name */}
         <div className="mb-3 flex items-center gap-3">
           <div
-            className={`relative flex h-10 w-10 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-sm ${
+            className={`relative flex h-11 w-11 sm:h-12 sm:w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl shadow-sm ${
               isAccepted
                 ? "ring-2 ring-emerald-500"
                 : isDeclined
@@ -1293,8 +1293,8 @@ function OfferCard({
                   : "/pics/default-company.svg"
               }
               alt={offer.companyName || "Logo companie"}
-              width={40}
-              height={40}
+              width={48}
+              height={48}
               className="h-full w-full object-cover"
             />
           </div>
@@ -1317,7 +1317,7 @@ function OfferCard({
             {rating && (
               <div className="mt-0.5 flex items-center gap-1">
                 <StarRating rating={rating.averageRating} size="sm" />
-                <span className="text-[10px] text-gray-400">
+                <span className="text-[11px] text-gray-400">
                   {rating.averageRating > 0
                     ? `${rating.averageRating.toFixed(1)} (${rating.totalReviews})`
                     : "Fără recenzii"}
@@ -1329,11 +1329,11 @@ function OfferCard({
 
         {/* Price - centered, prominent */}
         <div className="mb-4 text-center">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-gray-400">
+          <p className="text-[11px] font-medium uppercase tracking-wider text-gray-400">
             Preț ofertat
           </p>
           <p
-            className={`mt-0.5 text-2xl font-bold ${
+            className={`mt-0.5 text-xl sm:text-2xl font-bold ${
               isAccepted
                 ? "text-emerald-600"
                 : isDeclined
@@ -1371,19 +1371,19 @@ function OfferCard({
         </div>
 
         {/* Actions - at the bottom */}
-        <div className="mt-auto space-y-2">
+        <div className="mt-auto space-y-2.5 pt-2 border-t border-gray-100">
           {isPending && (
             <div className="flex gap-2">
               <button
                 onClick={() => onAccept(requestId, offer.id)}
-                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
+                className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-emerald-700"
               >
                 <CheckCircleIcon className="h-3.5 w-3.5" />
                 Acceptă
               </button>
               <button
                 onClick={() => onDecline(requestId, offer.id)}
-                className="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
+                className="inline-flex items-center justify-center rounded-lg border border-gray-200 bg-white px-3 py-2.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50"
               >
                 Refuză
               </button>
@@ -1393,7 +1393,7 @@ function OfferCard({
           {isAccepted && (
             <Link
               href={`/reviews/new?company=${offer.companyId}&request=${requestId}`}
-              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2 text-xs font-semibold text-white shadow-sm transition hover:bg-amber-600"
+              className="inline-flex w-full items-center justify-center gap-1.5 rounded-lg bg-amber-500 px-3 py-2.5 text-xs font-semibold text-white shadow-sm transition hover:bg-amber-600"
             >
               <StarIcon className="h-3.5 w-3.5" />
               Lasă un review
