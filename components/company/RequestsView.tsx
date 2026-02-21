@@ -310,7 +310,7 @@ function JobCard({
       )}
 
       {/* Service type - show all selected services */}
-      <div className="flex flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[4.5rem]">
+      <div className="flex flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[5.5rem]">
         {(
           [
             {
