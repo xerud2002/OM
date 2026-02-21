@@ -242,10 +242,16 @@ function JobCard({
           </span>
           {r.fromRooms && (
             <span>
-              {r.fromRooms} {r.fromRooms === 1 ? "cameră" : "camere"}
+              {r.fromRooms} {Number(r.fromRooms) === 1 ? "cameră" : "camere"}
             </span>
           )}
-          {r.fromFloor && <span>Etaj {r.fromFloor}</span>}
+          {r.fromFloor && (
+            <span>
+              {/^(parter|demisol)$/i.test(String(r.fromFloor))
+                ? r.fromFloor
+                : `Etaj ${r.fromFloor}`}
+            </span>
+          )}
           {r.fromType !== "house" &&
             r.fromFloor &&
             !/^(parter|demisol)$/i.test(String(r.fromFloor)) &&
@@ -270,10 +276,16 @@ function JobCard({
           </span>
           {r.toRooms && (
             <span>
-              {r.toRooms} {r.toRooms === 1 ? "cameră" : "camere"}
+              {r.toRooms} {Number(r.toRooms) === 1 ? "cameră" : "camere"}
             </span>
           )}
-          {r.toFloor !== undefined && <span>Etaj {r.toFloor}</span>}
+          {r.toFloor !== undefined && (
+            <span>
+              {/^(parter|demisol)$/i.test(String(r.toFloor))
+                ? r.toFloor
+                : `Etaj ${r.toFloor}`}
+            </span>
+          )}
           {r.toType !== "house" &&
             r.toFloor !== undefined &&
             !/^(parter|demisol)$/i.test(String(r.toFloor)) &&
