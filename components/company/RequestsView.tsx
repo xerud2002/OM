@@ -43,6 +43,11 @@ import {
   WrenchScrewdriverIcon,
   TrashIcon,
   ScissorsIcon,
+  MagnifyingGlassIcon,
+  MapPinIcon,
+  HomeModernIcon,
+  ArrowPathIcon,
+  PhotoIcon,
 } from "@heroicons/react/24/outline";
 import dynamic from "next/dynamic";
 import counties from "@/data/counties";
@@ -121,37 +126,39 @@ function JobCard({
   const r = request;
   const cost = calculateRequestCost(r);
 
-  // Determine card colors based on offer status
-  const barColor = !hasMine
-    ? "bg-blue-500"
+  // Card accent based on offer status
+  const accent = !hasMine
+    ? { bar: "from-blue-500 to-indigo-500", ring: "ring-blue-100", glow: "hover:shadow-blue-100/50" }
     : hasMine.status === "accepted"
-      ? "bg-emerald-500"
+      ? { bar: "from-emerald-500 to-teal-500", ring: "ring-emerald-100", glow: "hover:shadow-emerald-100/50" }
       : hasMine.status === "declined" || hasMine.status === "rejected"
-        ? "bg-red-400"
-        : "bg-amber-400";
+        ? { bar: "from-rose-400 to-red-400", ring: "ring-rose-100", glow: "hover:shadow-rose-100/50" }
+        : { bar: "from-amber-400 to-orange-400", ring: "ring-amber-100", glow: "hover:shadow-amber-100/50" };
 
-  const cardStyle = {
-    bg: "bg-white",
-    border: "border-gray-200",
-    bar: barColor,
+  // Service badge color per type
+  const svcColors: Record<string, string> = {
+    serviceMoving: "bg-indigo-50 text-indigo-700 ring-indigo-200/60",
+    serviceTransportOnly: "bg-slate-50 text-slate-700 ring-slate-200/60",
+    servicePacking: "bg-violet-50 text-violet-700 ring-violet-200/60",
+    serviceAssembly: "bg-amber-50 text-amber-700 ring-amber-200/60",
+    serviceDisposal: "bg-rose-50 text-rose-700 ring-rose-200/60",
+    servicePackingMaterials: "bg-teal-50 text-teal-700 ring-teal-200/60",
   };
 
   return (
     <div
-      className={`relative flex h-full flex-col rounded-xl border ${cardStyle.border} ${cardStyle.bg} shadow-sm transition-all hover:shadow-md overflow-hidden`}
+      className={`group relative flex h-full flex-col rounded-2xl border border-gray-200/80 bg-white shadow-sm transition-all duration-200 ${accent.glow} hover:shadow-lg overflow-hidden`}
     >
-      {/* Top Status Bar */}
-      <div
-        className={`absolute left-0 top-0 right-0 h-1.5 rounded-t-xl ${cardStyle.bar}`}
-      />
+      {/* Gradient accent bar */}
+      <div className={`h-1 bg-gradient-to-r ${accent.bar}`} />
 
-      {/* Header: Code, Date & Move Date */}
-      <div className="flex items-center justify-between border-b border-gray-100 px-3 sm:px-4 pt-4 sm:pt-5 pb-2.5 sm:pb-3">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-2 px-4 pt-3.5 pb-3">
         <div className="flex flex-col min-w-0">
-          <span className="font-mono text-[11px] sm:text-xs font-bold text-gray-500 truncate">
+          <span className="font-mono text-[11px] sm:text-xs font-semibold text-gray-400 tracking-wide">
             {r.requestCode || r.id.substring(0, 8)}
           </span>
-          <span className="text-[10px] sm:text-[11px] text-gray-400">
+          <span className="text-[10px] text-gray-400/80 mt-0.5">
             {(() => {
               const ts = r.createdAt;
               if (!ts) return "-";
@@ -178,8 +185,8 @@ function JobCard({
             })()}
           </span>
         </div>
-        <div className="flex items-center gap-1 sm:gap-1.5 rounded-lg bg-amber-50 px-2 sm:px-2.5 py-1 sm:py-1.5 text-[10px] sm:text-[11px] font-bold text-amber-700 ring-1 ring-amber-100">
-          <CalendarIcon className="h-3 sm:h-3.5 w-3 sm:w-3.5" />
+        <div className="flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold text-amber-700 ring-1 ring-amber-200/50 whitespace-nowrap">
+          <CalendarIcon className="h-3 sm:h-3.5 w-3 sm:w-3.5 opacity-70" />
           <span>
             {(() => {
               const mode = r.moveDateMode;
@@ -215,38 +222,43 @@ function JobCard({
       </div>
 
       {/* Route */}
-      <div className="flex items-center justify-center gap-2 sm:gap-2.5 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[3.5rem] text-[13px] sm:text-sm font-bold text-gray-800 leading-tight">
-        <span className="text-right">
+      <div className="flex items-center justify-center gap-3 px-4 py-3 min-h-[3.5rem]">
+        <span className="text-right text-[13px] sm:text-sm font-bold text-gray-800 leading-tight">
           {r.fromCity}
           {r.fromCounty && COUNTY_ABBREV[r.fromCounty]
-            ? `, ${COUNTY_ABBREV[r.fromCounty]}`
+            ? <span className="text-gray-400 font-medium">{`, ${COUNTY_ABBREV[r.fromCounty]}`}</span>
             : ""}
         </span>
-        <TruckIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4 shrink-0 text-blue-500" />
-        <span className="text-left">
+        <div className="flex items-center justify-center h-7 w-7 rounded-full bg-gradient-to-br from-blue-50 to-indigo-50 ring-1 ring-blue-200/40 shrink-0">
+          <TruckIcon className="h-3.5 w-3.5 text-blue-500" />
+        </div>
+        <span className="text-left text-[13px] sm:text-sm font-bold text-gray-800 leading-tight">
           {r.toCity}
           {r.toCounty && COUNTY_ABBREV[r.toCounty]
-            ? `, ${COUNTY_ABBREV[r.toCounty]}`
+            ? <span className="text-gray-400 font-medium">{`, ${COUNTY_ABBREV[r.toCounty]}`}</span>
             : ""}
         </span>
       </div>
 
-      {/* Specs: Colectie & Livrare */}
-      <div className="grid grid-cols-2 gap-3 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[7.5rem] text-[11px] sm:text-xs text-gray-600">
+      {/* Divider */}
+      <div className="mx-4 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+      {/* Specs: Colecție & Livrare */}
+      <div className="grid grid-cols-2 gap-3 px-4 py-3 min-h-[7.5rem] text-[11px] sm:text-xs text-gray-600">
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase text-gray-400">
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
             Colecție
           </span>
-          <span className="font-medium">
+          <span className="font-semibold text-gray-700">
             {r.fromType === "house" ? "Casă" : "Apartament"}
           </span>
           {r.fromRooms && (
-            <span>
+            <span className="text-gray-500">
               {r.fromRooms} {Number(r.fromRooms) === 1 ? "cameră" : "camere"}
             </span>
           )}
           {r.fromFloor && (
-            <span>
+            <span className="text-gray-500">
               {/^(parter|demisol)$/i.test(String(r.fromFloor))
                 ? r.fromFloor
                 : `Etaj ${r.fromFloor}`}
@@ -257,30 +269,30 @@ function JobCard({
             !/^(parter|demisol)$/i.test(String(r.fromFloor)) &&
             r.fromElevator !== undefined && (
               <span
-                className={
+                className={`text-[10px] font-semibold ${
                   r.fromElevator
-                    ? "text-emerald-600 font-medium"
-                    : "text-rose-500 font-medium"
-                }
+                    ? "text-emerald-600"
+                    : "text-rose-500"
+                }`}
               >
                 {r.fromElevator ? "✓ Lift" : "✗ Fără lift"}
               </span>
             )}
         </div>
         <div className="flex flex-col gap-0.5">
-          <span className="text-[10px] sm:text-[11px] font-bold uppercase text-gray-400">
+          <span className="text-[9px] sm:text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">
             Livrare
           </span>
-          <span className="font-medium">
+          <span className="font-semibold text-gray-700">
             {r.toType === "house" ? "Casă" : "Apartament"}
           </span>
           {r.toRooms && (
-            <span>
+            <span className="text-gray-500">
               {r.toRooms} {Number(r.toRooms) === 1 ? "cameră" : "camere"}
             </span>
           )}
           {r.toFloor !== undefined && (
-            <span>
+            <span className="text-gray-500">
               {/^(parter|demisol)$/i.test(String(r.toFloor))
                 ? r.toFloor
                 : `Etaj ${r.toFloor}`}
@@ -291,11 +303,11 @@ function JobCard({
             !/^(parter|demisol)$/i.test(String(r.toFloor)) &&
             r.toElevator !== undefined && (
               <span
-                className={
+                className={`text-[10px] font-semibold ${
                   r.toElevator
-                    ? "text-emerald-600 font-medium"
-                    : "text-rose-500 font-medium"
-                }
+                    ? "text-emerald-600"
+                    : "text-rose-500"
+                }`}
               >
                 {r.toElevator ? "✓ Lift" : "✗ Fără lift"}
               </span>
@@ -305,24 +317,30 @@ function JobCard({
 
       {/* Additional Details */}
       {(r.volumeM3 || r.budgetEstimate) && (
-        <div className="border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs text-gray-600">
-          {r.volumeM3 && (
-            <div className="flex items-center gap-1 mb-1">
-              <span className="text-gray-400">Volum:</span>
-              <span className="font-medium">{r.volumeM3} m³</span>
-            </div>
-          )}
-          {r.budgetEstimate && (
-            <div className="flex items-center gap-1 mb-1">
-              <span className="text-gray-400">Buget:</span>
-              <span className="font-medium">{r.budgetEstimate} RON</span>
-            </div>
-          )}
-        </div>
+        <>
+          <div className="mx-4 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+          <div className="px-4 py-2.5 text-[11px] sm:text-xs text-gray-500 flex items-center gap-4">
+            {r.volumeM3 && (
+              <span>
+                <span className="text-gray-400">Volum</span>{" "}
+                <span className="font-semibold text-gray-700">{r.volumeM3} m³</span>
+              </span>
+            )}
+            {r.budgetEstimate && (
+              <span>
+                <span className="text-gray-400">Buget</span>{" "}
+                <span className="font-semibold text-gray-700">{r.budgetEstimate} RON</span>
+              </span>
+            )}
+          </div>
+        </>
       )}
 
-      {/* Service type - show all selected services */}
-      <div className="flex flex-1 flex-wrap items-start content-start gap-1.5 sm:gap-2 border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 min-h-[5.5rem]">
+      {/* Divider */}
+      <div className="mx-4 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+      {/* Service badges */}
+      <div className="flex flex-1 flex-wrap items-start content-start gap-1.5 px-4 py-3 min-h-[5.5rem]">
         {(
           [
             {
@@ -361,76 +379,79 @@ function JobCard({
           .map((s) => (
             <span
               key={s.key}
-              className="flex items-center gap-1 rounded-md bg-blue-50 px-2 sm:px-2.5 py-0.5 sm:py-1 text-[10px] sm:text-[11px] font-medium text-blue-700"
+              className={`inline-flex items-center gap-1 rounded-full ring-1 px-2.5 py-0.5 text-[10px] sm:text-[11px] font-medium ${svcColors[s.key]}`}
             >
-              <s.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3" />
+              <s.icon className="h-2.5 sm:h-3 w-2.5 sm:w-3 opacity-70" />
               {s.label}
             </span>
           ))}
       </div>
 
-      {/* Notes Section - Always visible, 3 lines max */}
-      <div className="border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 text-[11px] sm:text-xs">
-        <span className="text-gray-400 font-medium">Note:</span>
+      {/* Divider */}
+      <div className="mx-4 h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+
+      {/* Notes */}
+      <div className="px-4 py-3 text-[11px] sm:text-xs">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">Note</span>
         <p
-          className={`mt-0.5 line-clamp-3 min-h-[2.5rem] ${r.details ? "text-gray-700" : "text-gray-300 italic"}`}
+          className={`mt-1 line-clamp-3 min-h-[2.5rem] leading-relaxed ${r.details ? "text-gray-600" : "text-gray-300 italic"}`}
         >
           {r.details || "Nicio notă adăugată"}
         </p>
       </div>
 
-      {/* Detail + Status Row */}
-      <div className="mt-auto border-t border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3">
+      {/* Footer actions */}
+      <div className="mt-auto border-t border-gray-100 bg-gray-50/50 px-4 py-3">
         {hasMine ? (
           <>
             <div className="flex flex-wrap items-center justify-center gap-2">
               <button
                 onClick={() => onDetailClick?.(r)}
-                className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+                className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-gray-600 shadow-sm ring-1 ring-gray-200/80 transition hover:bg-gray-50 hover:shadow active:scale-[0.97]"
               >
                 <EyeIcon className="h-3.5 w-3.5" />
                 Detalii
               </button>
               {hasMine.status === "accepted" ? (
-                <span className="flex items-center gap-1 rounded-lg bg-green-100 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold text-green-700 ring-1 ring-green-200">
+                <span className="flex items-center gap-1.5 rounded-lg bg-emerald-50 px-3 py-1.5 text-[11px] sm:text-xs font-bold text-emerald-700 ring-1 ring-emerald-200/60">
                   <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                  Ofertă Acceptată
+                  Acceptată
                 </span>
               ) : hasMine.status === "declined" ||
                 hasMine.status === "rejected" ? (
-                <span className="flex items-center gap-1 rounded-lg bg-red-50 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold text-red-600">
+                <span className="flex items-center gap-1.5 rounded-lg bg-rose-50 px-3 py-1.5 text-[11px] sm:text-xs font-bold text-rose-600 ring-1 ring-rose-200/60">
                   <XMarkIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                  Ofertă Refuzată
+                  Refuzată
                 </span>
               ) : (
-                <span className="flex items-center gap-1 rounded-lg bg-amber-50 px-2.5 sm:px-3 py-1.5 text-[11px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200">
+                <span className="flex items-center gap-1.5 rounded-lg bg-amber-50 px-3 py-1.5 text-[11px] sm:text-xs font-bold text-amber-700 ring-1 ring-amber-200/60">
                   <CheckBadgeIcon className="h-3.5 sm:h-4 w-3.5 sm:w-4" />
-                  Ofertă Trimisă
+                  Trimisă
                 </span>
               )}
             </div>
-            {/* Contact icons row: phone - chat - email */}
-            <div className="flex items-center justify-center gap-2 mt-2">
+            {/* Contact row */}
+            <div className="flex items-center justify-center gap-2 mt-2.5">
               {r.phone && (
                 <a
                   href={`tel:${r.phone}`}
-                  className="rounded-lg bg-blue-50 p-1.5 sm:p-2 text-blue-600 hover:bg-blue-100 transition active:scale-95"
+                  className="flex items-center justify-center h-8 w-8 rounded-full bg-white text-blue-600 shadow-sm ring-1 ring-gray-200/80 hover:bg-blue-50 hover:ring-blue-200 transition active:scale-95"
                   title={r.phone}
                 >
-                  <PhoneIcon className="h-4 w-4" />
+                  <PhoneIcon className="h-3.5 w-3.5" />
                 </a>
               )}
               {hasMine.offerId && onChatClick && (
                 <button
                   onClick={() => onChatClick(r.id, hasMine.offerId)}
-                  className="relative rounded-lg bg-emerald-50 p-1.5 sm:p-2 text-emerald-600 hover:bg-emerald-100 transition active:scale-95"
+                  className="relative flex items-center justify-center h-8 w-8 rounded-full bg-white text-emerald-600 shadow-sm ring-1 ring-gray-200/80 hover:bg-emerald-50 hover:ring-emerald-200 transition active:scale-95"
                   title="Chat"
                 >
-                  <ChatBubbleLeftEllipsisIcon className="h-4 w-4" />
+                  <ChatBubbleLeftEllipsisIcon className="h-3.5 w-3.5" />
                   {unreadOfferIds?.has(hasMine.offerId) && (
-                    <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span className="absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-400 opacity-75" />
-                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500" />
+                      <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-red-500 ring-2 ring-white" />
                     </span>
                   )}
                 </button>
@@ -438,37 +459,37 @@ function JobCard({
               {(r.customerEmail || r.guestEmail) && (
                 <a
                   href={`mailto:${r.customerEmail || r.guestEmail}`}
-                  className="rounded-lg bg-purple-50 p-1.5 sm:p-2 text-purple-600 hover:bg-purple-100 transition active:scale-95"
+                  className="flex items-center justify-center h-8 w-8 rounded-full bg-white text-violet-600 shadow-sm ring-1 ring-gray-200/80 hover:bg-violet-50 hover:ring-violet-200 transition active:scale-95"
                   title={r.customerEmail || r.guestEmail}
                 >
-                  <EnvelopeIcon className="h-4 w-4" />
+                  <EnvelopeIcon className="h-3.5 w-3.5" />
                 </a>
               )}
             </div>
           </>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2.5">
             <div className="flex items-center justify-center gap-2">
               <button
                 onClick={() => onDetailClick?.(r)}
-                className="flex items-center gap-1 rounded-lg bg-gray-100 px-3 py-1.5 text-xs font-semibold text-gray-600 transition hover:bg-gray-200"
+                className="flex items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-xs font-semibold text-gray-600 shadow-sm ring-1 ring-gray-200/80 transition hover:bg-gray-50 hover:shadow active:scale-[0.97]"
               >
                 <EyeIcon className="h-3.5 w-3.5" />
                 Detalii
               </button>
               {isMoveDateUrgent(r as any) && (
-                <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
+                <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-red-700 ring-1 ring-red-200 animate-pulse">
                   ⚡ Urgent
                 </span>
               )}
             </div>
             <button
               onClick={() => onOfferClick(r)}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-emerald-600 px-3 sm:px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 active:scale-[0.98]"
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 px-4 py-2.5 text-xs sm:text-sm font-bold text-white shadow-md shadow-emerald-200/50 transition hover:shadow-lg hover:shadow-emerald-200/50 active:scale-[0.98]"
             >
               <PaperAirplaneIcon className="h-4 w-4" />
               <span>Trimite Ofertă</span>
-              <span className="rounded bg-white/20 px-1.5 py-0.5 text-[10px] sm:text-[11px] font-medium text-white">
+              <span className="rounded-md bg-white/20 px-1.5 py-0.5 text-[10px] sm:text-[11px] font-medium text-white/90">
                 {cost}
               </span>
             </button>
@@ -523,9 +544,13 @@ export default function RequestsView({
   const [filterDateFrom, setFilterDateFrom] = useState("");
   const [filterDateTo, setFilterDateTo] = useState("");
   const [filterStatus, setFilterStatus] = useState<
-    "" | "available" | "offered"
+    "" | "available" | "offered" | "accepted" | "declined"
   >("");
   const [filterCounty, setFilterCounty] = useState<string>("");
+  const [filterCity, setFilterCity] = useState<string>("");
+  const [filterRooms, setFilterRooms] = useState<"" | "1" | "2" | "3" | "4" | "5+">("");
+  const [filterHasMedia, setFilterHasMedia] = useState<"" | "yes" | "no">("");
+  const [filterFloor, setFilterFloor] = useState<"" | "parter" | "1-3" | "4-7" | "8+">("");
 
   // Modal State
   const [activeOfferRequest, setActiveOfferRequest] =
@@ -888,22 +913,83 @@ export default function RequestsView({
       });
     }
 
+    // Filter by city (text search)
+    if (filterCity) {
+      const search = filterCity.toLowerCase().trim();
+      arr = arr.filter((r) => {
+        return (
+          r.fromCity?.toLowerCase().includes(search) ||
+          r.toCity?.toLowerCase().includes(search)
+        );
+      });
+    }
+
+    // Filter by rooms
+    if (filterRooms) {
+      arr = arr.filter((r) => {
+        const rooms = Math.max(Number(r.fromRooms) || 0, Number(r.toRooms) || 0);
+        switch (filterRooms) {
+          case "1": return rooms === 1;
+          case "2": return rooms === 2;
+          case "3": return rooms === 3;
+          case "4": return rooms === 4;
+          case "5+": return rooms >= 5;
+          default: return true;
+        }
+      });
+    }
+
+    // Filter by floor range
+    if (filterFloor) {
+      arr = arr.filter((r) => {
+        const floors = [r.fromFloor, r.toFloor].filter(Boolean).map(String);
+        if (floors.length === 0) return false;
+        return floors.some((f) => {
+          if (filterFloor === "parter") return /^(parter|demisol|0)$/i.test(f);
+          const num = parseInt(f, 10);
+          if (isNaN(num)) return false;
+          if (filterFloor === "1-3") return num >= 1 && num <= 3;
+          if (filterFloor === "4-7") return num >= 4 && num <= 7;
+          if (filterFloor === "8+") return num >= 8;
+          return true;
+        });
+      });
+    }
+
+    // Filter by media
+    if (filterHasMedia) {
+      arr = arr.filter((r) => {
+        const has = Array.isArray(r.mediaUrls) && r.mediaUrls.length > 0;
+        return filterHasMedia === "yes" ? has : !has;
+      });
+    }
+
     // Filter by move date range
     if (filterDateFrom || filterDateTo) {
       arr = arr.filter((r) => {
-        if (!r.moveDate) return false;
-        const moveDate = new Date(r.moveDate);
+        // Support both legacy moveDate and new moveDateStart/moveDateEnd
+        const dateStr = r.moveDateStart || r.moveDate;
+        if (!dateStr) return false;
+        const moveDate = new Date(dateStr);
         if (filterDateFrom && moveDate < new Date(filterDateFrom)) return false;
-        if (filterDateTo && moveDate > new Date(filterDateTo)) return false;
+        const endStr = r.moveDateEnd || dateStr;
+        const endDate = new Date(endStr);
+        if (filterDateTo && endDate > new Date(filterDateTo)) return false;
         return true;
       });
     }
 
-    // Filter by offer status
+    // Filter by offer status (expanded)
     if (filterStatus) {
       arr = arr.filter((r) => {
-        const hasOffer = hasMineMap[r.id];
-        return filterStatus === "offered" ? hasOffer : !hasOffer;
+        const mine = hasMineMap[r.id];
+        switch (filterStatus) {
+          case "available": return !mine;
+          case "offered": return mine && mine.status !== "accepted" && mine.status !== "declined" && mine.status !== "rejected";
+          case "accepted": return mine && mine.status === "accepted";
+          case "declined": return mine && (mine.status === "declined" || mine.status === "rejected");
+          default: return true;
+        }
       });
     }
 
@@ -920,6 +1006,10 @@ export default function RequestsView({
     filterElevator,
     filterPropertyType,
     filterCounty,
+    filterCity,
+    filterRooms,
+    filterFloor,
+    filterHasMedia,
     filterDateFrom,
     filterDateTo,
     filterStatus,
@@ -932,6 +1022,10 @@ export default function RequestsView({
     if (filterElevator) count++;
     if (filterPropertyType) count++;
     if (filterCounty) count++;
+    if (filterCity) count++;
+    if (filterRooms) count++;
+    if (filterFloor) count++;
+    if (filterHasMedia) count++;
     if (filterDateFrom || filterDateTo) count++;
     if (filterStatus) count++;
     return count;
@@ -940,6 +1034,10 @@ export default function RequestsView({
     filterElevator,
     filterPropertyType,
     filterCounty,
+    filterCity,
+    filterRooms,
+    filterFloor,
+    filterHasMedia,
     filterDateFrom,
     filterDateTo,
     filterStatus,
@@ -950,6 +1048,10 @@ export default function RequestsView({
     setFilterElevator("");
     setFilterPropertyType("");
     setFilterCounty("");
+    setFilterCity("");
+    setFilterRooms("");
+    setFilterFloor("");
+    setFilterHasMedia("");
     setFilterDateFrom("");
     setFilterDateTo("");
     setFilterStatus("");
@@ -1054,179 +1156,322 @@ export default function RequestsView({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.15 }}
-            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
             onClick={() => setShowFilters(false)}
           >
             <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              transition={{ duration: 0.15 }}
-              className="w-full max-w-md rounded-2xl bg-white p-6 shadow-xl"
+              initial={{ scale: 0.95, opacity: 0, y: 10 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.95, opacity: 0, y: 10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              className="w-full max-w-lg rounded-2xl bg-white shadow-2xl overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="mb-5 flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-800">Filtre</h3>
+              {/* Modal header */}
+              <div className="flex items-center justify-between border-b border-gray-100 bg-gray-50/80 px-6 py-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-100">
+                    <FunnelIcon className="h-4 w-4 text-emerald-600" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-gray-800">Filtre avansate</h3>
+                    <p className="text-[11px] text-gray-400">{sortedRequests.length} cereri potrivite</p>
+                  </div>
+                </div>
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+                  className="rounded-lg p-1.5 text-gray-400 hover:bg-gray-200/80 hover:text-gray-600 transition"
                 >
                   <XMarkIcon className="h-5 w-5" />
                 </button>
               </div>
 
-              <div className="flex flex-col gap-4">
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
-                    Serviciu
-                  </label>
-                  <select
-                    value={filterService}
-                    onChange={(e) => setFilterService(e.target.value)}
-                    className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                      filterService
-                        ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                        : "border-gray-200 bg-white text-gray-600"
-                    }`}
-                  >
-                    <option value="">Toate</option>
-                    <option value="moving">Mutare completă</option>
-                    <option value="transport">Doar câteva lucruri</option>
-                    <option value="packing">Împachetare</option>
-                    <option value="assembly">Montaj / Demontare</option>
-                    <option value="disposal">Debarasare</option>
-                    <option value="materials">Materiale împachetare</option>
-                  </select>
-                </div>
+              {/* Scrollable filter body */}
+              <div className="max-h-[65vh] overflow-y-auto px-6 py-5">
+                <div className="flex flex-col gap-5">
 
-                <div className="grid grid-cols-2 gap-3">
+                  {/* -- City search -- */}
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-600">
-                      Proprietate
+                    <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                      <MagnifyingGlassIcon className="h-3.5 w-3.5" />
+                      Caută oraș
+                    </label>
+                    <div className="relative">
+                      <MagnifyingGlassIcon className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-300" />
+                      <input
+                        type="text"
+                        value={filterCity}
+                        onChange={(e) => setFilterCity(e.target.value)}
+                        placeholder="Ex: București, Cluj, Timișoara..."
+                        className={`w-full rounded-xl border py-2.5 pl-9 pr-3 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                          filterCity
+                            ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-700 placeholder:text-gray-300"
+                        }`}
+                      />
+                      {filterCity && (
+                        <button
+                          onClick={() => setFilterCity("")}
+                          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-gray-300 hover:bg-gray-100 hover:text-gray-500"
+                        >
+                          <XMarkIcon className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* -- Service type -- */}
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                      <TruckIcon className="h-3.5 w-3.5" />
+                      Tip serviciu
                     </label>
                     <select
-                      value={filterPropertyType}
-                      onChange={(e) =>
-                        setFilterPropertyType(e.target.value as any)
-                      }
-                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterPropertyType
-                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                      value={filterService}
+                      onChange={(e) => setFilterService(e.target.value)}
+                      className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                        filterService
+                          ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
                           : "border-gray-200 bg-white text-gray-600"
                       }`}
                     >
-                      <option value="">Oricare</option>
-                      <option value="apartment">Apartament</option>
-                      <option value="house">Casă</option>
+                      <option value="">Toate serviciile</option>
+                      <option value="moving">🚛 Mutare completă</option>
+                      <option value="transport">📦 Doar câteva lucruri</option>
+                      <option value="packing">📋 Împachetare</option>
+                      <option value="assembly">🔧 Montaj / Demontare</option>
+                      <option value="disposal">🗑️ Debarasare</option>
+                      <option value="materials">✂️ Materiale împachetare</option>
                     </select>
                   </div>
+
+                  {/* -- Location: County -- */}
                   <div>
-                    <label className="mb-1.5 block text-sm font-medium text-gray-600">
-                      Lift
+                    <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                      <MapPinIcon className="h-3.5 w-3.5" />
+                      Județ
                     </label>
                     <select
-                      value={filterElevator}
-                      onChange={(e) => setFilterElevator(e.target.value as any)}
-                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterElevator
-                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
+                      value={filterCounty}
+                      onChange={(e) => setFilterCounty(e.target.value)}
+                      className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                        filterCounty
+                          ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
                           : "border-gray-200 bg-white text-gray-600"
                       }`}
                     >
-                      <option value="">Oricare</option>
-                      <option value="yes">Cu lift</option>
-                      <option value="no">Fără lift</option>
+                      <option value="">Toate județele</option>
+                      {counties.map((c) => (
+                        <option key={c} value={c}>
+                          {c}
+                        </option>
+                      ))}
                     </select>
                   </div>
-                </div>
 
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
-                    Județ
-                  </label>
-                  <select
-                    value={filterCounty}
-                    onChange={(e) => setFilterCounty(e.target.value)}
-                    className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                      filterCounty
-                        ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                        : "border-gray-200 bg-white text-gray-600"
-                    }`}
-                  >
-                    <option value="">Toate</option>
-                    {counties.map((c) => (
-                      <option key={c} value={c}>
-                        {c}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
-                    Status
-                  </label>
-                  <select
-                    value={filterStatus}
-                    onChange={(e) => setFilterStatus(e.target.value as any)}
-                    className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                      filterStatus
-                        ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                        : "border-gray-200 bg-white text-gray-600"
-                    }`}
-                  >
-                    <option value="">Toate</option>
-                    <option value="available">Disponibile</option>
-                    <option value="offered">Ofertate de mine</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="mb-1.5 block text-sm font-medium text-gray-600">
-                    Perioadă mutare
-                  </label>
+                  {/* -- Row: Property + Elevator -- */}
                   <div className="grid grid-cols-2 gap-3">
-                    <input
-                      type="date"
-                      value={filterDateFrom}
-                      onChange={(e) => setFilterDateFrom(e.target.value)}
-                      placeholder="De la"
-                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterDateFrom
-                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                          : "border-gray-200 bg-white text-gray-600"
-                      }`}
-                    />
-                    <input
-                      type="date"
-                      value={filterDateTo}
-                      onChange={(e) => setFilterDateTo(e.target.value)}
-                      placeholder="Până la"
-                      className={`w-full rounded-lg border px-3 py-2.5 text-sm focus:border-emerald-500 focus:outline-none ${
-                        filterDateTo
-                          ? "border-emerald-400 bg-emerald-50 text-emerald-700"
-                          : "border-gray-200 bg-white text-gray-600"
-                      }`}
-                    />
+                    <div>
+                      <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                        <HomeModernIcon className="h-3.5 w-3.5" />
+                        Proprietate
+                      </label>
+                      <select
+                        value={filterPropertyType}
+                        onChange={(e) =>
+                          setFilterPropertyType(e.target.value as "" | "apartment" | "house")
+                        }
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                          filterPropertyType
+                            ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        <option value="">Oricare</option>
+                        <option value="apartment">🏢 Apartament</option>
+                        <option value="house">🏠 Casă</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                        Lift
+                      </label>
+                      <select
+                        value={filterElevator}
+                        onChange={(e) =>
+                          setFilterElevator(e.target.value as "" | "yes" | "no")
+                        }
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                          filterElevator
+                            ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        <option value="">Oricare</option>
+                        <option value="yes">✓ Cu lift</option>
+                        <option value="no">✗ Fără lift</option>
+                      </select>
+                    </div>
                   </div>
+
+                  {/* -- Row: Rooms + Floor -- */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                        Camere
+                      </label>
+                      <select
+                        value={filterRooms}
+                        onChange={(e) =>
+                          setFilterRooms(e.target.value as "" | "1" | "2" | "3" | "4" | "5+")
+                        }
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                          filterRooms
+                            ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        <option value="">Oricare</option>
+                        <option value="1">1 cameră</option>
+                        <option value="2">2 camere</option>
+                        <option value="3">3 camere</option>
+                        <option value="4">4 camere</option>
+                        <option value="5+">5+ camere</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                        Etaj
+                      </label>
+                      <select
+                        value={filterFloor}
+                        onChange={(e) =>
+                          setFilterFloor(e.target.value as "" | "parter" | "1-3" | "4-7" | "8+")
+                        }
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                          filterFloor
+                            ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        <option value="">Oricare</option>
+                        <option value="parter">Parter / Demisol</option>
+                        <option value="1-3">Etaj 1 – 3</option>
+                        <option value="4-7">Etaj 4 – 7</option>
+                        <option value="8+">Etaj 8+</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* -- Row: Status + Media -- */}
+                  <div className="grid grid-cols-2 gap-3">
+                    <div>
+                      <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                        Status ofertă
+                      </label>
+                      <select
+                        value={filterStatus}
+                        onChange={(e) =>
+                          setFilterStatus(e.target.value as "" | "available" | "offered" | "accepted" | "declined")
+                        }
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                          filterStatus
+                            ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        <option value="">Toate</option>
+                        <option value="available">🟢 Disponibile</option>
+                        <option value="offered">🟡 Ofertă trimisă</option>
+                        <option value="accepted">✅ Acceptate</option>
+                        <option value="declined">❌ Refuzate</option>
+                      </select>
+                    </div>
+                    <div>
+                      <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                        <PhotoIcon className="h-3.5 w-3.5" />
+                        Fotografii
+                      </label>
+                      <select
+                        value={filterHasMedia}
+                        onChange={(e) =>
+                          setFilterHasMedia(e.target.value as "" | "yes" | "no")
+                        }
+                        className={`w-full rounded-xl border px-3 py-2.5 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                          filterHasMedia
+                            ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                            : "border-gray-200 bg-white text-gray-600"
+                        }`}
+                      >
+                        <option value="">Oricare</option>
+                        <option value="yes">📷 Cu fotografii</option>
+                        <option value="no">Fără fotografii</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* -- Date range -- */}
+                  <div>
+                    <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-gray-400">
+                      <CalendarIcon className="h-3.5 w-3.5" />
+                      Perioadă mutare
+                    </label>
+                    <div className="grid grid-cols-2 gap-3">
+                      <div className="relative">
+                        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-gray-300 uppercase">De la</span>
+                        <input
+                          type="date"
+                          value={filterDateFrom}
+                          onChange={(e) => setFilterDateFrom(e.target.value)}
+                          className={`w-full rounded-xl border px-3 pt-5 pb-2 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                            filterDateFrom
+                              ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                              : "border-gray-200 bg-white text-gray-600"
+                          }`}
+                        />
+                      </div>
+                      <div className="relative">
+                        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[10px] font-semibold text-gray-300 uppercase">Până la</span>
+                        <input
+                          type="date"
+                          value={filterDateTo}
+                          onChange={(e) => setFilterDateTo(e.target.value)}
+                          className={`w-full rounded-xl border px-3 pt-5 pb-2 text-sm transition focus:border-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 ${
+                            filterDateTo
+                              ? "border-emerald-400 bg-emerald-50/50 text-emerald-700"
+                              : "border-gray-200 bg-white text-gray-600"
+                          }`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
-              <div className="mt-6 flex items-center gap-3">
-                {activeFiltersCount > 0 && (
+              {/* Modal footer */}
+              <div className="flex items-center justify-between border-t border-gray-100 bg-gray-50/80 px-6 py-4">
+                {activeFiltersCount > 0 ? (
                   <button
                     onClick={clearAllFilters}
-                    className="rounded-lg px-4 py-2.5 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                    className="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-500 transition hover:bg-gray-200/80 hover:text-gray-700"
                   >
+                    <ArrowPathIcon className="h-3.5 w-3.5" />
                     Resetează tot
                   </button>
+                ) : (
+                  <span />
                 )}
                 <button
                   onClick={() => setShowFilters(false)}
-                  className="ml-auto rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-emerald-700"
+                  className="rounded-xl bg-emerald-600 px-6 py-2.5 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 hover:shadow active:scale-[0.98]"
                 >
-                  Aplică filtre
-                  {activeFiltersCount > 0 ? ` (${activeFiltersCount})` : ""}
+                  Aplică
+                  {activeFiltersCount > 0 && (
+                    <span className="ml-1.5 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white/20 px-1 text-xs">
+                      {activeFiltersCount}
+                    </span>
+                  )}
                 </button>
               </div>
             </motion.div>
